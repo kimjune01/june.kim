@@ -7,7 +7,7 @@ tags: coding, methodology, epistemology
 keywords: ambiguous specifications, N-version programming, differentiate after optimization, gradient soundness, proof by cases, proto-tests, Enzyme, floating point, abstract interpretation, residue, coding agents
 ---
 
-*Working draft. The claims are scoped and the boundary is stated explicitly; the case-study sweep (§(sweep)) is in progress. This links out casually to its artifacts: code, the gate, and the issues live at [github.com/kimjune01/enzyme-soundness-gate](https://github.com/kimjune01/enzyme-soundness-gate).*
+*Working draft. The claims are scoped and the boundary is stated explicitly; the sweep (§(sweep)) now closes the unary elementwise derivative table. This links out casually to its artifacts: code, the gate, and the issues live at [github.com/kimjune01/enzyme-soundness-gate](https://github.com/kimjune01/enzyme-soundness-gate).*
 
 ## Abstract {-}
 
@@ -118,7 +118,7 @@ Sanctioned residue is **true in the reals, false because floats are not a ring**
 
 (The gradient-at-a-tie residue is a second, analytic source, handled by treating ties as a special class.)
 
-## A finite-cover abstract interpreter {#method}
+## A finite-cover analyzer {#method}
 
 A **proto-test** is a pair *(witnessing input class, predicted verdict)* derived from a rule's structure, not yet a real test because its oracle is model-predicted rather than ground-truth-pinned. It is *promoted* to a regression test by confirming the witness against the real implementation and pinning the expected value.
 
@@ -153,7 +153,11 @@ A **proto-test** is a pair *(witnessing input class, predicted verdict)* derived
   <text x="480" y="124" text-anchor="middle" class="s">only the flagged</text>
 </svg>
 
-The **static generator** is a finite-class-cover abstract interpreter. A rewrite `L &rarr; R` is domain-unsound when `R` is undefined (non-finite) somewhere `L` is defined; the witness is any input in `domain(L) \ domain(R)`, computed by evaluating both expressions on **one representative per class of a fixed cover for the tier-1 operator family (constants and exponents classified symbolically)**. The choice of which inputs to test is therefore *not* hand-authored per rule: the same cover applies to every rule, and only the rule's structure varies. Authoring cost is amortized over the operator semantics (about thirty ops, modeled once) rather than paid per rule. The **dynamic gate** confirms by reimplementing the rule's two forms, enumerating an edge lattice, and comparing value and gradient against the reference, auto-filtering the residue.
+The **static generator** is a finite-class-cover analyzer. A rewrite `L &rarr; R` is domain-unsound when `R` is undefined (non-finite) somewhere `L` is defined; the witness is any input in `domain(L) \ domain(R)`. The choice of which inputs to test is *not* hand-authored per rule: a fixed cover for the tier-1 operator family applies to every rule, and only the rule's structure varies, so authoring cost is amortized over the operator semantics (about thirty ops, modeled once) rather than paid per rule.
+
+**The cover must be refined by the rule's own definedness break-points.** A single sign representative per variable is sound only when the rule's break-points coincide with the class boundaries, that is, when the sole break-point is zero, as in both findings (`log(a*a)`, `cbrt'`): every negative behaves alike, so `a=-2` witnesses the whole class. A rule with an *interior* break-point breaks this: `log((a-3)(a+3)) &rarr; log(a-3)+log(a+3)` is real-valued and unsound for `a<-3` (both factors negative, product positive, but `log` of each factor is NaN), yet a point-sampled `a=-2` agrees on both sides and the rule is wrongly certified sound. Sign is not a uniform partition for it. The sound form, then, is not point-sampling a fixed cover but tracking each subterm's sign/definedness *set* and refining the partition at the constants the rule introduces, a sound over-approximation (this is what the sweep, §(sweep), builds; the shipped point-sampler is its exact instance only on break-point-zero rules). Tier-1 decidability also assumes the exponent in any `pow` is a literal constant: a non-integer exponent narrows the domain on negatives where an integer one does not, and a variable exponent leaves the fragment.
+
+The **dynamic gate** confirms by reimplementing the rule's two forms, enumerating an edge lattice, and comparing value and gradient against the reference, auto-filtering the residue.
 
 ## The result: proof by cases on a bounded fragment {#result}
 
@@ -224,9 +228,13 @@ The two findings below were reported to Enzyme-JAX, and the static analyzer reco
 
 Both are self-adjudicating divergences on ordinary finite inputs, and both fall out of `domain(L) \ domain(R)` over the sign cover.
 
-## The sweep (in progress) {#sweep}
+## The sweep {#sweep}
 
-A parser over the declarative derivative-rule definitions lifts each rule to the analyzer's expression language and predicts a verdict against an autodiff reference, with no execution. Built as a **sound over-approximation** (tracking the set of possible sign/definedness outcomes and flagging any combination that diverges), the sweep yields a completeness statement over the rule set: *of N rules, K are flagged domain-narrowing and gate-confirmed, and the remainder are provably valid in the real field within the stated fragment.* The C++ imperative rewrites need a heavier front end and are left to future work; the declarative derivative table is the clean target.
+A parser over Enzyme-JAX's declarative derivative table (`HLODerivatives.td`) lifts each rule's forward-derivative expression to the analyzer's language and decides domain-narrowing soundness with **no execution**. The analyzer is not the point-sampler of §(method) but its sound form: a **sign + definedness abstract interpreter** that propagates, per subexpression and per input sign class, whether the value is guaranteed finite-real, guaranteed non-finite, or undetermined. A class it cannot certify is reported undetermined and flagged, never silently passed; that is what earns the no-false-negative guarantee. A rule narrows the domain exactly when its derivative is not guaranteed defined on a class where the *true* derivative is.
+
+Run over the real table, the sweep is a completeness statement. Of the **34** derivative rules, **19** are unary; **12** of those are real-elementwise (the fragment), and the analyzer **decides all twelve**: it flags **one**, `CbrtOp`, as domain-narrowing on negatives, which is exactly the gate-confirmed bug [#2571](https://github.com/EnzymeAD/Enzyme-JAX/issues/2571), and it proves the other **eleven** (`log`, `log1p`, `sqrt`, `rsqrt`, `exp`, `expm1`, `sin`, `cos`, `tanh`, `logistic`, `neg`) **definedness-preserving in the real field**. The remaining seven unary rules (`abs`, `real`, `imag`, `reverse`, `convert`, `transpose`, `fft`) are complex or structural and fall outside the elementwise-real fragment by construction. The static verdicts agree with the dynamic `jax.grad` gate everywhere the two overlap (`cbrt` flagged, `sqrt` and `tanh` clean), and the analyzer passes the *correct* #2571 fix (the integer-exponent form `pow(cbrt(x), -2)`) as sound while flagging the buggy non-integer `pow(x, -2/3)`, the same integer-versus-non-integer distinction §(method) names.
+
+So on the unary elementwise fragment the soundness question is not merely cheap to test, it is *closed*: every rule is either a flagged, confirmable domain-narrowing bug or a proof of real-field definedness. The C++ imperative rewrites and the binary/structural rules need a heavier front end and the break-point refinement of §(method), and are left to future work; the unary derivative table is the clean target, and it is done. Code: [`td_sweep.py`](https://github.com/kimjune01/enzyme-soundness-gate).
 
 ## Related work {#related-work}
 
@@ -264,7 +272,7 @@ The contribution is **not a new proof technique**, the case analysis is elementa
 
 ## Limitations {#limitations}
 
-The verdict is about a model, not the system: the analyzer's operator semantics must be faithful, and a flagged witness must still be reachable in the real compiler (discharged by confirmation, not by the case analysis). The fragment is elementwise and finitely partitionable; structural soundness (shape, broadcast, aliasing) and the tier-2 parametric and tier-3 fractal regimes are out of scope. The completeness statement (§(sweep)) is in progress; the imperative C++ rewrites need a heavier front end than the declarative derivative table.
+The verdict is about a model, not the system: the analyzer's operator semantics must be faithful, and a flagged witness must still be reachable in the real compiler (discharged by confirmation, not by the case analysis). The fragment is elementwise and finitely partitionable; structural soundness (shape, broadcast, aliasing) and the tier-2 parametric and tier-3 fractal regimes are out of scope. The completeness statement (§(sweep)) covers the unary elementwise derivative table; the binary, structural, and imperative C++ rewrites need a heavier front end and the break-point refinement of §(method).
 
 ## Conclusion {#conclusion}
 
