@@ -7,9 +7,9 @@ tags: epistemology, cognition, methodology
 keywords: agent-native epistemics, knowledge interop, entitlement, provenance, independent verification, verifiable knowledge, canon, falsifiability, reproducibility, protocol
 ---
 
+<!-- pdf-skip -->
 *The operationalization of What Cannot Be False Cannot Be True, carried to a population of agents. It runs the frame as a protocol; the data structure that instantiates it is The Hypothesis Graph.*
 
-<!-- pdf-skip -->
 *[Download PDF](/assets/verifiable-knowledge.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.20754823](https://doi.org/10.5281/zenodo.20754823) (CC BY-SA-NS).*
 <!-- /pdf-skip -->
 
