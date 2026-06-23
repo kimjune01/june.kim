@@ -2,7 +2,7 @@
 variant: post-paper
 autonumber: true
 title: "Verifiable Knowledge"
-subtitle: "A protocol for knowledge between agents who do not trust each other."
+subtitle: "A protocol for trustless agents."
 tags: epistemology, cognition, methodology
 keywords: agent-native epistemics, knowledge interop, entitlement, provenance, independent verification, verifiable knowledge, canon, falsifiability, reproducibility, protocol
 ---
@@ -25,7 +25,7 @@ Confidence is a vibe, and a vibe doesn't encode. *I'm absolutely sure* has no bi
 
 A contract is the protocol by which a session's verdict survives across agent boundaries and persists between context windows. The obvious move is to store the attested output: keep each artifact with its provenance and trust what's on disk. That is a cache, and a cache is fine as long as a miss can be recomputed. Storing outputs is inert unless it can be regenerated. Coding agents lie: they report a test suite as passing when it is failing, and the bare output inherits the lie. Re-derivability outranks the stored verdict.
 
-Several directions reach this research area at once. A recent DeepMind position paper frames a coming "verification crisis" for *artificial epistemic agents* and calls for "robust falsifiability pipelines" ([Marchal et al. 2026](https://arxiv.org/abs/2603.02960)); systems like NARS ([Wang](https://en.wikipedia.org/wiki/Non-axiomatic_reasoning_system)) and Traxia ([arXiv:2606.08256](https://arxiv.org/abs/2606.08256)) reach it from non-axiomatic reasoning and agent-native publishing. Verifiable knowledge is the standard those efforts presuppose, the contract under which one agent's claim becomes another agent's checkable inheritance. Here, we offer the verification primitive.
+Several directions reach this research area at once. A recent DeepMind position paper names "robust falsifiability" as a core requirement for trustworthy *artificial epistemic agents* ([Marchal et al. 2026](https://arxiv.org/abs/2603.02960)), the verification gap this protocol fills; systems like NARS ([Wang](https://en.wikipedia.org/wiki/Non-axiomatic_reasoning_system)) and Traxia ([arXiv:2606.08256](https://arxiv.org/abs/2606.08256)) reach it from non-axiomatic reasoning and agent-native publishing. Verifiable knowledge is the standard those efforts presuppose, the contract under which one agent's claim becomes another agent's checkable inheritance. Here, we offer the verification primitive.
 
 ## Truth at the edge {#truth-at-the-edge}
 
@@ -201,7 +201,7 @@ Canonical sources verifiable knowledge rests on. The frame's sources are listed 
 - Goertzel, B., Iklé, M., Goertzel, I. & Heljakka, A. (2008). *Probabilistic Logic Networks*. Springer. (OpenCog / PLN)
 - Groth, P., Gibson, A. & Velterop, J. (2010). "The Anatomy of a Nanopublication." *Information Services & Use* 30.
 - Lamport, L. (1978). "Time, Clocks, and the Ordering of Events in a Distributed System." *Communications of the ACM* 21 (7).
-- Marchal et al. (2026). "Artificial Epistemic Agents and the Verification Crisis." arXiv:2603.02960.
+- Marchal et al. (2026). "Architecting Trust in Artificial Epistemic Agents." arXiv:2603.02960.
 - Nagel, T. (1986). *The View from Nowhere*. Oxford University Press.
 - Peirce, C. S. (1877). "The Fixation of Belief"; and (1878) "How to Make Our Ideas Clear." *Popular Science Monthly*.
 - Sellars, W. (1956). "Empiricism and the Philosophy of Mind."

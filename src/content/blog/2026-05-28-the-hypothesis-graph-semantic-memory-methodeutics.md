@@ -1,7 +1,7 @@
 ---
 variant: post-paper
 autonumber: true
-title: "The Hypothesis Graph: Semantic Memory Written by Methodeutics"
+title: "The Hypothesis Graph: A Verifiable Semantic Memory for Coding Agents"
 tags: methodology, epistemology, coding
 keywords: hypothesis graph, methodeutics, abductive inference, agent memory, cognitive architectures, LLM agents, provenance, auditability, falsifiability, machine epistemics, post-cutoff evaluation
 ---
