@@ -4,15 +4,15 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 7: Economy of Research — Methodeutics" favicon="🔭">
+<Layout title="Ch 8: Economy of Research — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Economy of Research</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 7 · Peirce 1879, Chamberlin 1890, Platt 1964, de Kleer 1987, Hintikka 1999</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 8 · Peirce 1879, Chamberlin 1890, Platt 1964, de Kleer 1987, Hintikka 1999</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Ten hypotheses, budget for three experiments. Which three? Chapters 4&ndash;6 formalized the abductive primitive (diff, bi-abduction, tri-abduction). The primitive generates hypotheses. This chapter selects among them.</p>
+      <p class="text-lg" style="max-width:none">Ten hypotheses, budget for three experiments. Which three? Chapters 4&ndash;6 formalized the abductive primitive (diff, bi-abduction, tri-abduction), and chapter 7 framed what to observe. The primitive generates hypotheses; the frame fixes what to look at. This chapter spends the budget: of the experiments the frame allows, which to run.</p>
     </div>
 
     <p>Hypothesis generation is cheap. Testing is expensive. Every experiment costs time, compute, reagents, or attention. A single surprising observation can spawn dozens of candidate explanations. Running all of them is never feasible. Which subset do you test, in what order, and when do you stop?</p>
@@ -71,7 +71,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <h2>De Kleer &amp; Williams: GDE and computed experiment selection (1987)</h2>
 
-    <p>The General Diagnostic Engine (GDE) computed which measurement to take next from the structure of remaining hypotheses. The context was circuit diagnosis: a chip has a fault, multiple components could be responsible, and each probe has a cost.</p>
+    <p>The General Diagnostic Engine (GDE) computed which measurement to take next from the structure of remaining hypotheses. The context was circuit diagnosis. A chip has a fault, multiple components could be responsible, and each probe has a cost.</p>
 
     <p>GDE maintains <em>candidate diagnoses</em>: minimal sets of faulty components consistent with all observations so far. For each possible measurement, it computes how much probing that node reduces the entropy of the diagnosis distribution, then selects the measurement with the highest information gain per unit cost.</p>
 
@@ -260,7 +260,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
       </table>
     </div>
 
-    <p>The third strategy is the best single-step heuristic. GDE uses it. It is still myopic: it optimizes one step ahead without considering the trajectory. Hintikka's game tree optimizes the full sequence, but computing the optimal policy is exponential in the number of experiments. Under independence and uniform costs, information gain is submodular and greedy selection stays within a constant factor of optimal. Correlated outcomes and variable costs weaken this guarantee, but greedy remains hard to beat in practice.</p>
+    <p>The third strategy is the best single-step heuristic. GDE uses it. It is still myopic. It optimizes one step ahead without considering the trajectory. Hintikka's game tree optimizes the full sequence, but computing the optimal policy is exponential in the number of experiments. Under independence and uniform costs, information gain is submodular and greedy selection stays within a constant factor of optimal. Correlated outcomes and variable costs weaken this guarantee, but greedy remains hard to beat in practice.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -270,7 +270,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
 
     <p>A sequence of experiments might produce: evidence for H1, then against H1, then for H1 again. The posterior oscillates. Are you converging or chasing noise? Economy of research cannot answer this. It selects the next experiment but cannot read the trajectory of evidence across experiments.</p>
 
-    <p>That gap motivates Chapter 8. Evidence has a trajectory, and you need tools to read its shape.</p>
+    <p>That gap motivates Chapter 9. Evidence has a trajectory, and you need tools to read its shape.</p>
 
     <Neighbors>
     <ul class="neighbors">
@@ -278,7 +278,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
       <li><a href="/reading/scientific-method/chamberlin-1890/">🔬 Chamberlin 1890</a> &mdash; multiple working hypotheses: the cognitive prerequisite</li>
       <li><a href="/reading/scientific-method/platt-1964/">🔬 Platt 1964</a> &mdash; strong inference: the elimination loop</li>
       <li><a href="/reading/scientific-method/peirce-1878/">🔬 Peirce 1878</a> &mdash; abduction and pragmatism</li>
-      <li><a href="/evidence-has-a-trajectory">Ch 8: Evidence has a trajectory</a> &mdash; what happens after you select the experiment</li>
+      <li><a href="/evidence-has-a-trajectory">Ch 9: Evidence has a trajectory</a> &mdash; what happens after you select the experiment</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
@@ -290,7 +290,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch06-tri-abduction/", label: "Tri-abduction" }} next={{ href: "/reading/methodeutics/ch08-evidence-trajectory/", label: "Evidence trajectory" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch07-origin-of-inquiry/", label: "Origin of Inquiry" }} next={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} />
 
   </main>
 </Layout>

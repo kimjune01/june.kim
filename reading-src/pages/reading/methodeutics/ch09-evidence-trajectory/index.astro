@@ -4,18 +4,18 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 8: Evidence Has a Trajectory — Methodeutics" favicon="🔭">
+<Layout title="Ch 9: Evidence Has a Trajectory — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Evidence Has a Trajectory</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 8 &middot; de Finetti 1937, Ville 1939, Wald 1947, Robbins 1967, Shafer 2021, Ramdas 2023</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 9 &middot; de Finetti 1937, Ville 1939, Wald 1947, Robbins 1967, Shafer 2021, Ramdas 2023</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">You run an A/B test on two code variants. B converts 12% better than A, p &lt; .01, sample size 50,000. You ship B. Six months later, B is worse than A ever was. The snapshot lied. This chapter introduces the e-value, a measure of evidence that preserves the temporal structure the p-value threw away.</p>
     </div>
 
-    <p>Chapters 4&ndash;7 built the abductive primitive. You can generate hypotheses from a surprising observation. You can select which experiment to run next. But after the experiment runs and data arrives, how do you know the hypothesis is right?</p>
+    <p>Chapters 4&ndash;8 built the abductive primitive. You can frame what to observe. You can generate hypotheses from a surprising observation. You can select which experiment to run next. But after the experiment runs and data arrives, how do you know the hypothesis is right?</p>
 
     <p>The standard answer is the p-value: collect a fixed sample, compute a test statistic, compare to a threshold. If p &lt; 0.05, declare significance. The p-value compresses the entire temporal structure of evidence into one number. That compression is mandatory. Peek at the data mid-experiment and the false positive guarantee breaks. The math demands you look once.</p>
 
@@ -37,7 +37,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>The <a href="https://en.wikipedia.org/wiki/Maneuvering_Characteristics_Augmentation_System">Maneuvering Characteristics Augmentation System (MCAS)</a> read a single sensor snapshot: nose too high. Correct response: push it down. Correct logic, wrong sensor. The angle-of-attack sensor was faulty. MCAS pushed the nose down. Pilots trimmed up. MCAS pushed again. Two subsystems fighting. The oscillation diverged. Lion Air Flight 610. Ethiopian Airlines Flight 302. 346 dead.</p>
 
-    <p>Nobody was watching the trajectory. Each MCAS activation was locally correct: the snapshot said "nose too high, push down." The oscillation between MCAS and pilot inputs was the signal. A system that tracked the temporal pattern of its own corrections would have seen the fight. The snapshot saw only the current angle.</p>
+    <p>Nobody was watching the trajectory. Each MCAS activation was locally correct. The snapshot said "nose too high, push down." The oscillation between MCAS and pilot inputs was the signal. A system that tracked the temporal pattern of its own corrections would have seen the fight. The snapshot saw only the current angle.</p>
 
     <h3>Vioxx: delayed cardiovascular risk</h3>
 
@@ -310,13 +310,13 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
 
     <h2>Connection to Part II</h2>
 
-    <p>The economy of research (<a href="/reading/methodeutics/ch07-economy-of-research/">Chapter 7</a>) selects which experiment to run. The e-value tracks what the experiment says over time. The two connect directly:</p>
+    <p>The economy of research (<a href="/reading/methodeutics/ch08-economy-of-research/">Chapter 8</a>) selects which experiment to run. The e-value tracks what the experiment says over time. The two connect directly:</p>
 
     <ol class="list-decimal pl-5 mb-4">
       <li class="mb-2"><em>Generate</em> hypotheses via abduction (Chapters 4&ndash;6).</li>
-      <li class="mb-2"><em>Select</em> the next experiment via information gain per unit cost (Chapter 7).</li>
+      <li class="mb-2"><em>Select</em> the next experiment via information gain per unit cost (Chapter 8).</li>
       <li class="mb-2"><em>Run</em> the experiment and track the e-value trajectory (this chapter).</li>
-      <li class="mb-2"><em>Read</em> the trajectory's shape to classify the system's dynamics (Chapter 9).</li>
+      <li class="mb-2"><em>Read</em> the trajectory's shape to classify the system's dynamics (Chapter 10).</li>
     </ol>
 
     <p>Step 3 is new. Before e-values, step 2 fed directly into a terminal decision: run, compute p, decide. Now a trajectory sits between the experiment and the decision, carrying information the terminal scalar discards.</p>
@@ -329,7 +329,7 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
 
     <p>Structural oscillation (cyclic dynamics in the system) and statistical oscillation (weak effect plus finite-sample noise) look the same in the raw trajectory. The trajectory alone cannot distinguish them.</p>
 
-    <p>Classifying whether evidence is converging, diverging, oscillating, or chaotic requires tools from dynamical systems theory: convergence rates, <a href="https://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponents</a>, stability analysis. These tools apply directly to evidence trajectories. <a href="/reading/methodeutics/ch09-four-bins/">Chapter 9</a> builds the classification scheme.</p>
+    <p>Classifying whether evidence is converging, diverging, oscillating, or chaotic requires tools from dynamical systems theory: convergence rates, <a href="https://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponents</a>, stability analysis. These tools apply directly to evidence trajectories. <a href="/reading/methodeutics/ch10-four-bins/">Chapter 10</a> builds the classification scheme.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -381,8 +381,8 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
-      <li><a href="/reading/methodeutics/ch07-economy-of-research/">Ch 7: Economy of Research</a> &mdash; select which experiment to run</li>
-      <li><a href="/reading/methodeutics/ch09-four-bins/">Ch 9: Four Bins</a> &mdash; how to read the trajectory's shape</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; select which experiment to run</li>
+      <li><a href="/reading/methodeutics/ch10-four-bins/">Ch 10: Four Bins</a> &mdash; how to read the trajectory's shape</li>
       <li><a href="/reading/scientific-method/shafer-2021/">Shafer 2021</a> &mdash; testing by betting</li>
       <li><a href="/reading/scientific-method/ramdas-2023/">Ramdas 2023</a> &mdash; e-values and anytime validity</li>
       <li><a href="/reading/scientific-method/meehl-1967/">Meehl 1967</a> &mdash; snapshot testing's structural flaw</li>
@@ -399,7 +399,7 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch07-economy-of-research/", label: "Economy of research" }} next={{ href: "/reading/methodeutics/ch09-four-bins/", label: "Four bins" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch08-economy-of-research/", label: "Economy of research" }} next={{ href: "/reading/methodeutics/ch10-four-bins/", label: "Four bins" }} />
 
   </main>
 </Layout>

@@ -127,7 +127,7 @@ where:
 
     <p>The key to scaling: <em>compositionality</em>. Infer analyzes each function independently, using bi-abduction to infer its contract, then composes contracts across call boundaries. Function A calls B calls C. Start at C, infer its contract, use that contract when analyzing B, and so on up the call graph. Each function is analyzed once, with dependencies summarized as inferred contracts.</p>
 
-    <p>Bylander et al. (1991) proved that abduction in general is NP-hard: consider all possible explanations for a global observation and the search space explodes. Bi-abduction sidesteps this by reasoning <em>locally</em>: one function at a time, composing summaries up the call graph.</p>
+    <p>Bylander et al. (1991) proved that abduction in general is NP-hard. Consider all possible explanations for a global observation and the search space explodes. Bi-abduction sidesteps this by reasoning <em>locally</em>: one function at a time, composing summaries up the call graph.</p>
 
     <div class="overflow-x-auto my-6">
       <table class="w-full text-sm">
@@ -231,7 +231,7 @@ for key in sorted(touched):
 
     <p>Three properties make bi-abduction work where general abduction doesn't.</p>
 
-    <p><em>Locality.</em> Each function is analyzed in isolation. You don't need the whole program to infer one function's contract. The mechanic diagnoses one subsystem at a time: testing the starting circuit doesn't require understanding the transmission.</p>
+    <p><em>Locality.</em> Each function is analyzed in isolation. You don't need the whole program to infer one function's contract. The mechanic diagnoses one subsystem at a time. Testing the starting circuit doesn't require understanding the transmission.</p>
 
     <p><em>Separation.</em> Frame and footprint are disjoint. What one function touches, another cannot silently depend on. The separating conjunction <code>*</code> is the formal guarantee. Without it, a change in function A could invalidate function B's frame, making local reasoning unsound.</p>
 
@@ -299,7 +299,7 @@ for key in sorted(touched):
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
       <li><a href="/abduction">Abduction</a> &mdash; the blog post that covers bi-abduction, tri-abduction, and three witnesses</li>
-      <li><a href="/reading/methodeutics/ch07-economy-of-research/">Ch 7: Economy of Research</a> &mdash; which hypotheses are worth testing?</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which hypotheses are worth testing?</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>

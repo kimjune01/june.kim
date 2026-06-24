@@ -5,22 +5,22 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 13: Validators — Methodeutics" favicon="🔭">
+<Layout title="Ch 14: Validators — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Validators</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 13 &middot; Four validator types, one interface</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 14 &middot; Four validator types, one interface</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Chapter 12's prereg checklist catches self-deception: double-dipping, post hoc framing, data leakage. But claims come in different kinds, and each kind needs a different validator.</p>
+      <p class="text-lg" style="max-width:none">Chapter 13's prereg checklist catches self-deception: double-dipping, post hoc framing, data leakage. But claims come in different kinds, and each kind needs a different validator.</p>
       <ul class="mt-4 mb-2 space-y-3" style="max-width:none">
         <li><em>Empirical validators</em> run the experiment, measure the outcome. They need perturbation access and fresh data.</li>
         <li><em>Structural validators</em> check that the claim's logical structure holds: consistency, completeness, independence. No new data needed.</li>
         <li><em>Proof validators</em> derive consequences and check if they hold. Schoenfeld's kill conditions: when induction fails, the failure mode names the next technique.</li>
         <li><em>Counterexample validators</em> search for cases that violate the claim. Lakatos's guilty lemma: the counterexample reveals which step was wrong.</li>
       </ul>
-      <p style="max-width:none">This chapter builds out the proof and counterexample validators. Structural validators use the kill condition and symmetry mismatch tables below. Empirical validators belong to chapters 8&ndash;9 (evidence trajectories).</p>
+      <p style="max-width:none">This chapter builds out the proof and counterexample validators. Structural validators use the kill condition and symmetry mismatch tables below. Empirical validators belong to chapters 9&ndash;10 (evidence trajectories).</p>
     </div>
 
     <h2>Wild goose chase</h2>
@@ -117,7 +117,7 @@ import Repl from '../../../../components/Repl';
 
     <p>Read the table vertically. The kill at step N names the technique at step N+1. Induction fails because the residual loses structure; you escalate to a potential method that drops per-step monotonicity. The potential method fails because no monotone potential exists; you escalate to a game equilibrium where the potential is the equilibrium itself. Each failure is a signpost.</p>
 
-    <p>Same mechanism as Chapter 10, different edge of the triangle. There, kill conditions generated edges in the hypothesis graph: a monotone trend test fires but curvature is indeterminate, so the failure mode names the next hypothesis. Here, kill conditions generate edges in the proof graph: induction fails because the residual is non-monotone, so the failure mode names the next technique. Chapter 10 navigated the abductive edge (Observation &rarr; Theory). This chapter navigates the deductive edge (Theory &rarr; Experiment).</p>
+    <p>Same mechanism as Chapter 11, different edge of the triangle. There, kill conditions generated edges in the hypothesis graph: a monotone trend test fires but curvature is indeterminate, so the failure mode names the next hypothesis. Here, kill conditions generate edges in the proof graph: induction fails because the residual is non-monotone, so the failure mode names the next technique. Chapter 11 navigated the abductive edge (Observation &rarr; Theory). This chapter navigates the deductive edge (Theory &rarr; Experiment).</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -169,7 +169,7 @@ import Repl from '../../../../components/Repl';
       </table>
     </div>
 
-    <p>Union-find on a directed graph produces an output. The output is wrong, but it looks right: the algorithm didn't crash, it silently treated a directed edge as undirected. Kill conditions help you fail fast. Symmetry mismatches help you avoid failing silently.</p>
+    <p>Union-find on a directed graph produces an output. The output is wrong, but it looks right. The algorithm didn't crash, it silently treated a directed edge as undirected. Kill conditions help you fail fast. Symmetry mismatches help you avoid failing silently.</p>
 
     <p>In practice: six questions before you start. Is the relation directed? Transitive? Time-varying? Commutative? Local? Linear? Any mismatch with your technique's assumptions is a flag.</p>
 
@@ -177,13 +177,13 @@ import Repl from '../../../../components/Repl';
 
     <h2>Counterexamples indict lemmas, not theorems</h2>
 
-    <p><a href="https://en.wikipedia.org/wiki/Proofs_and_Refutations">Lakatos (1976)</a> described what happens when the counterexample validator fires: the proof breaks in the middle. In <em>Proofs and Refutations</em>, he traces Euler's formula (V - E + F = 2) through a series of proofs, counterexamples, and repairs. Each counterexample doesn't refute the theorem outright; it reveals which <em>lemma</em> was wrong. Lakatos called this the <strong>guilty lemma</strong>.</p>
+    <p><a href="https://en.wikipedia.org/wiki/Proofs_and_Refutations">Lakatos (1976)</a> described what happens when the counterexample validator fires. The proof breaks in the middle. In <em>Proofs and Refutations</em>, he traces Euler's formula (V - E + F = 2) through a series of proofs, counterexamples, and repairs. Each counterexample doesn't refute the theorem outright; it reveals which <em>lemma</em> was wrong. Lakatos called this the <strong>guilty lemma</strong>.</p>
 
     <p>The method is forensic. You have a proof that seemed valid. A counterexample violates the claim. Instead of discarding the entire proof, you trace the counterexample through the argument step by step until it hits a lemma that can't accommodate it. That lemma is guilty. The repair is to restrict it (exclude the counterexample from the domain) or replace it (find a stronger lemma that covers the counterexample).</p>
 
     <p>The counterexample validator and the proof validator are complementary. The kill condition table says: "Induction fails when the residual loses structure." The counterexample validator says: "Here is a specific case where the residual lost structure." Same mechanism, different direction. Structural validators check preconditions up front; counterexample validators find the guilty step after the proof breaks.</p>
 
-    <p>An autonomous system needs all four. Structural validators are pre-flight. Proof validators drive the escalation chain. Counterexample validators are post-crash analysis: the failure trace identifies the guilty step, which names the next technique. Empirical validators close the loop by running the experiment.</p>
+    <p>An autonomous system needs all four. Structural validators are pre-flight. Proof validators drive the escalation chain. Counterexample validators are post-crash analysis. The failure trace identifies the guilty step, which names the next technique. Empirical validators close the loop by running the experiment.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -223,7 +223,7 @@ Diagonalization (Cantor)
 
     <h2>The proof manual is the deductive edge</h2>
 
-    <p>Chapter 10 built the hypothesis graph. Observations produce hypotheses (abduction). Hypotheses predict observables (deduction). Experiments produce observations (induction). Kill conditions generate the edges: when hypothesis A fails, the failure mode names hypothesis B.</p>
+    <p>Chapter 11 built the hypothesis graph. Observations produce hypotheses (abduction). Hypotheses predict observables (deduction). Experiments produce observations (induction). Kill conditions generate the edges. When hypothesis A fails, the failure mode names hypothesis B.</p>
 
     <p>The proof manual occupies the deductive edge of that triangle. You have a hypothesis; you derive consequences and test them. The derivation step, Theory &rarr; Experiment, requires choosing a proof technique. The kill condition table tells you which technique to choose and what to do when it fails.</p>
 
@@ -241,26 +241,26 @@ Diagonalization (Cantor)
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Observation &rarr; Theory</td>
             <td class="pr-3 text-gray-400">Abduction</td>
-            <td class="pr-3 text-gray-400">Ch 10</td>
+            <td class="pr-3 text-gray-400">Ch 11</td>
             <td class="text-gray-400">Next hypothesis from experimental failure</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Theory &rarr; Experiment</td>
             <td class="pr-3 text-gray-400">Deduction</td>
-            <td class="pr-3 text-gray-400">Ch 13</td>
+            <td class="pr-3 text-gray-400">Ch 14</td>
             <td class="text-gray-400">Next technique from proof failure</td>
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Experiment &rarr; Observation</td>
             <td class="pr-3 text-gray-400">Induction</td>
-            <td class="pr-3 text-gray-400">Ch 8&ndash;9</td>
+            <td class="pr-3 text-gray-400">Ch 9&ndash;9</td>
             <td class="text-gray-400">Evidence trajectory classification</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <p>The parallel is exact. In chapter 10, a monotone trend test fires but curvature is indeterminate; "monotone but curvature unknown" names the next hypothesis: test for convexity. In chapter 13, induction fails because the residual loses structure; "non-monotone residual" names the next technique: potential method. Hypothesis graph edges come from experimental failures. Proof graph edges come from technique failures. Both obey the same principle: the shape of the failure names the next step.</p>
+    <p>The parallel is exact. In chapter 11, a monotone trend test fires but curvature is indeterminate; "monotone but curvature unknown" names the next hypothesis: test for convexity. In chapter 14, induction fails because the residual loses structure; "non-monotone residual" names the next technique: potential method. Hypothesis graph edges come from experimental failures. Proof graph edges come from technique failures. Both obey the same principle: the shape of the failure names the next step.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -305,7 +305,7 @@ Diagonalization (Cantor)
       </table>
     </div>
 
-    <p>The grid's rows map to these constructors: existence = &Sigma;, impossibility = &Pi;&rarr;False, construction = &Sigma; with computability. Kill conditions are type errors: your proof term doesn't inhabit the target type. <a href="https://leanprover.github.io/theorem_proving_in_lean4/dependent_type_theory.html">Lean's type checker</a> rejects proofs for the same reasons the kill conditions predict. The kill condition table is a human-readable compilation of type errors.</p>
+    <p>The grid's rows map to these constructors: existence = &Sigma;, impossibility = &Pi;&rarr;False, construction = &Sigma; with computability. Kill conditions are type errors. Your proof term doesn't inhabit the target type. <a href="https://leanprover.github.io/theorem_proving_in_lean4/dependent_type_theory.html">Lean's type checker</a> rejects proofs for the same reasons the kill conditions predict. The kill condition table is a human-readable compilation of type errors.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -466,7 +466,7 @@ print("\\n=== Escalation chain from probabilistic ===")
 chain = escalation_chain("probabilistic")
 print("  " + " -> ".join(chain))`} />
 
-    <p><code>escalation_chain</code> makes the linked-list structure explicit. Start with any technique. When it fails, the kill condition names the next. Follow the chain until you reach a technique with no known kill condition: that's the frontier of the field. The <a href="/data/proof-manual.yml">full YAML grid</a> has over a hundred techniques. The code above is a minimal implementation.</p>
+    <p><code>escalation_chain</code> makes the linked-list structure explicit. Start with any technique. When it fails, the kill condition names the next. Follow the chain until you reach a technique with no known kill condition. That's the frontier of the field. The <a href="/data/proof-manual.yml">full YAML grid</a> has over a hundred techniques. The code above is a minimal implementation.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -476,14 +476,14 @@ print("  " + " -> ".join(chain))`} />
 
     <ol class="list-decimal pl-5 mb-4">
       <li class="mb-1">Observe a surprising fact (abduction &mdash; ch 4&ndash;6).</li>
-      <li class="mb-1">Generate a hypothesis (abduction &mdash; ch 10).</li>
-      <li class="mb-1">Select an experiment (economy &mdash; ch 7).</li>
+      <li class="mb-1">Generate a hypothesis (abduction &mdash; ch 11).</li>
+      <li class="mb-1">Select an experiment (economy &mdash; ch 8).</li>
       <li class="mb-1">Validate the hypothesis &mdash; pick the right validator type, run it (this chapter).</li>
-      <li class="mb-1">Run the experiment, classify the evidence trajectory (induction &mdash; ch 8&ndash;9).</li>
+      <li class="mb-1">Run the experiment, classify the evidence trajectory (induction &mdash; ch 9&ndash;9).</li>
       <li class="mb-1">If the evidence rejects, the failure mode names the next hypothesis. Go to 2.</li>
     </ol>
 
-    <p>Each step has been formalized in a previous chapter. The steps are disconnected. Observe &rarr; classify &rarr; generate &rarr; validate &rarr; test &rarr; repeat: a pipeline. Writing the pipeline down is a different problem from formalizing each step. Chapter 12's checklist protects it from self-deception. Chapter 13's validators populate the deductive edge with four mechanisms sharing one interface. Wiring the validators into a cycle that closes without human intervention is the subject of <a href="/reading/methodeutics/ch14-the-pipeline/">Chapter 14</a>.</p>
+    <p>Each step has been formalized in a previous chapter. The steps are disconnected. Observe &rarr; classify &rarr; generate &rarr; validate &rarr; test &rarr; repeat: a pipeline. Writing the pipeline down is a different problem from formalizing each step. Chapter 13's checklist protects it from self-deception. Chapter 14's validators populate the deductive edge with four mechanisms sharing one interface. Wiring the validators into a cycle that closes without human intervention is the subject of <a href="/reading/methodeutics/ch15-the-pipeline/">Chapter 15</a>.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -524,7 +524,7 @@ print("  " + " -> ".join(chain))`} />
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/the-proof-manual">The Proof Manual</a> &mdash; the blog post this chapter expands</li>
-      <li><a href="/reading/methodeutics/ch14-the-pipeline/">Ch 14: The Pipeline</a> &mdash; wiring the edges into an autonomous cycle</li>
+      <li><a href="/reading/methodeutics/ch15-the-pipeline/">Ch 15: The Pipeline</a> &mdash; wiring the edges into an autonomous cycle</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
@@ -535,7 +535,7 @@ print("  " + " -> ".join(chain))`} />
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch12-protecting-the-loop/", label: "Protecting the loop" }} next={{ href: "/reading/methodeutics/ch14-the-pipeline/", label: "The pipeline" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch13-protecting-the-loop/", label: "Protecting the loop" }} next={{ href: "/reading/methodeutics/ch15-the-pipeline/", label: "The pipeline" }} />
 
   </main>
 </Layout>

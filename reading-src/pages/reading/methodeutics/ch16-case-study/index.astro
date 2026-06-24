@@ -4,16 +4,16 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 15: Case Study — Methodeutics" favicon="🔭">
+<Layout title="Ch 16: Case Study — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Case Study</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 15 &middot; Applying the full pipeline</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 16 &middot; Applying the full pipeline</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">
-        A system that searches without reasoning. It can perturb and observe but never asks why. It tries every combination, times each, keeps the best. No theory, no pruning, no explanation. This chapter applies the full pipeline from chapters 1&ndash;14.
+        A system that searches without reasoning. It can perturb and observe but never asks why. It tries every combination, times each, keeps the best. No theory, no pruning, no explanation. This chapter applies the full pipeline from chapters 1&ndash;15.
       </p>
     </div>
 
@@ -95,7 +95,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       </table>
     </div>
 
-    <p>Two of three edges missing. The system compensates with brute force: time enough configurations and you'll stumble onto a good one.</p>
+    <p>Two of three edges missing. The system compensates with brute force. Time enough configurations and you'll stumble onto a good one.</p>
 
     <!-- ============================== -->
     <h2>2. The diff is the primitive (Ch 4&ndash;6)</h2>
@@ -111,7 +111,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>Tri-abduction (Ch 6) handles forks. Larger tiles help on one workload and hurt on another. The branching condition (memory-bound vs. compute-bound) splits the hypothesis into two. The current system cannot represent this split. It would need to test both branches separately and discover which condition governs.</p>
 
     <!-- ============================== -->
-    <h2>3. Spend budget where uncertainty is highest (Ch 7)</h2>
+    <h2>3. Spend budget where uncertainty is highest (Ch 8)</h2>
 
     <p>200 configuration options. Exhaustive search is infeasible. Beam search samples from the space, but it commits prematurely to a local basin instead of exploring broadly.</p>
 
@@ -127,9 +127,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>If the current hypothesis says "tile size is the bottleneck," the highest-value experiment tests tile size in a new context (different workload shape, different memory pressure), not a knob already known to be irrelevant.</p>
 
     <!-- ============================== -->
-    <h2>4. Measurements are trajectories, not snapshots (Ch 8&ndash;9)</h2>
+    <h2>4. Measurements are trajectories, not snapshots (Ch 9&ndash;9)</h2>
 
-    <p>Each measurement is a point on a trajectory. Chapter 8 introduced e-values for tracking cumulative evidence; Chapter 9 classified trajectories into four bins.</p>
+    <p>Each measurement is a point on a trajectory. Chapter 9 introduced e-values for tracking cumulative evidence; Chapter 10 classified trajectories into four bins.</p>
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -168,9 +168,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>The current system keeps the best time and discards the rest. It cannot distinguish a convergent knob (safe to freeze) from an oscillatory one (masking a deeper structural question). Trajectory classification turns raw measurements into decision procedures.</p>
 
     <!-- ============================== -->
-    <h2>5. Failures name the next experiment (Ch 10)</h2>
+    <h2>5. Failures name the next experiment (Ch 11)</h2>
 
-    <p>Chapter 10's central claim: when a hypothesis fails, the failure mode names the next experiment.</p>
+    <p>Chapter 11's central claim: when a hypothesis fails, the failure mode names the next experiment.</p>
 
     <p>Hypothesis: "This workload is memory-bound. Grouping memory accesses will speed it up." The optimizer tests a grouped-access configuration. It's slower. The hypothesis is killed. But the <em>shape</em> of the failure carries information.</p>
 
@@ -183,13 +183,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>Each failure mode generates a directed edge in the hypothesis graph. The current system has none. Slow configurations get ranked low and forgotten. Failure information, the richest output the system produces, is discarded.</p>
 
     <!-- ============================== -->
-    <h2>6. Stop when you can explain, not when you're exhausted (Ch 11)</h2>
+    <h2>6. Stop when you can explain, not when you're exhausted (Ch 12)</h2>
 
     <p>Two stopping conditions look alike but differ fundamentally. Theory-based: "Tile size 16 is optimal because the working set fits exactly in L1 cache, and the loop order minimizes TLB misses given this tile." Exhaustion-based: "I tried 500 configurations and this one was the fastest."</p>
 
     <p>Exhaustion-based stopping fails silently: the search may be stuck in a local basin, and the system cannot detect this because it has no theory of the search space. Theory-based stopping is falsifiable: if changing cache size should change the optimal tile size but doesn't, the theory is wrong and the search must continue.</p>
 
-    <p>Chapter 11's convergence criterion (the hypothesis graph closes when every open edge resolves) gives a structural stopping condition. The optimizer has converged when:</p>
+    <p>Chapter 12's convergence criterion (the hypothesis graph closes when every open edge resolves) gives a structural stopping condition. The optimizer has converged when:</p>
 
     <ol>
       <li>Every knob has been classified (convergent, divergent, oscillatory, or indeterminate).</li>
@@ -201,9 +201,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>Stronger than "no improvement found," and cheaper in the long run: it prevents wasted budget on basins the system has already explained.</p>
 
     <!-- ============================== -->
-    <h2>7. The optimizer can deceive itself (Ch 12&ndash;13)</h2>
+    <h2>7. The optimizer can deceive itself (Ch 13&ndash;13)</h2>
 
-    <p>Chapter 12's prereg checklist catches self-deception before it compounds.</p>
+    <p>Chapter 13's prereg checklist catches self-deception before it compounds.</p>
 
     <p>The most dangerous failure: <strong>proxy measurement</strong>. The optimizer measures on a benchmark workload and deploys on production. The benchmark is smaller, fits in cache, has regular access patterns. Production is larger, irregular, cold-cache. Rankings do not transfer.</p>
 
@@ -217,10 +217,10 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <li><em>Can the result reproduce on a different machine?</em> If the optimal configuration depends on a specific hardware quirk, it is an artifact, not a theory.</li>
     </ul>
 
-    <p>Chapter 13's proof manual adds structural validation: "If the bottleneck is memory bandwidth, then doubling bandwidth should halve runtime." If the deduction fails, the abduction was wrong. Re-enter the loop.</p>
+    <p>Chapter 14's proof manual adds structural validation: "If the bottleneck is memory bandwidth, then doubling bandwidth should halve runtime." If the deduction fails, the abduction was wrong. Re-enter the loop.</p>
 
     <!-- ============================== -->
-    <h2>8. Wired together (Ch 14)</h2>
+    <h2>8. Wired together (Ch 15)</h2>
 
     <p>The exhaustive search loop:</p>
 
@@ -275,7 +275,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
         # 5. Kill check: does the current theory survive?
         for hyp in graph.active_hypotheses():
             if hyp.prediction_fails(time, config):
-                next_exp = hyp.failure_mode()  # Ch 10
+                next_exp = hyp.failure_mode()  # Ch 11
                 graph.add_edge(hyp, next_exp)
 
         # 6. Baseline guard: never regress
@@ -328,7 +328,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <!-- ============================== -->
     <h2>Three testable predictions</h2>
 
-    <p>If the framework from chapters 1&ndash;14 is correct, the abduction engine beats exhaustive search on the same budget in three measurable ways:</p>
+    <p>If the framework from chapters 1&ndash;15 is correct, the abduction engine beats exhaustive search on the same budget in three measurable ways:</p>
 
     <ol>
       <li><em>Fewer trials to equivalent quality.</em> Theory-guided selection skips irrelevant regions of configuration space. The savings grow with the size of the space.</li>
@@ -352,7 +352,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch14-the-pipeline/", label: "The pipeline" }} next={{ href: "/reading/methodeutics/appendix-peirce-1878/", label: "Peirce 1878" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch15-the-pipeline/", label: "The pipeline" }} next={{ href: "/reading/methodeutics/appendix-peirce-1878/", label: "Peirce 1878" }} />
 
   </main>
 </Layout>

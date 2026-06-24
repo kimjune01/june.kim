@@ -126,7 +126,7 @@ import Repl from '../../../../components/Repl';
 
     <p>Edgar Rubin's doctoral thesis introduced the figure-ground distinction. The <em>Figur</em> is bounded, has shape, appears in front. The <em>Grund</em> is shapeless, extends behind the figure, continues underneath it. Rubin's vase demonstrates: you see either a vase (white figure, black ground) or two faces (black figure, white ground), never both simultaneously.</p>
 
-    <p>Koffka generalized this into a principle of perceptual organization: the visual field partitions into regions of different salience. The partition is not in the stimulus. The same pixels produce vase or faces depending on the observer's state. Figure-ground segregation is something the observer does.</p>
+    <p>Koffka generalized this into a principle of perceptual organization. The visual field partitions into regions of different salience. The partition is not in the stimulus. The same pixels produce vase or faces depending on the observer's state. Figure-ground segregation is something the observer does.</p>
 
     <h3>Equilibration (Piaget 1975/1985)</h3>
 
@@ -147,7 +147,7 @@ import Repl from '../../../../components/Repl';
 
     <p>IRM separates features into two classes: invariant features that predict the label across all environments, and spurious features that predict it in some but not others. A cow on grass is reliably bovine in a farm dataset; on a beach, the grass feature fails. Cow is invariant (figure). Grass is spurious (ground).</p>
 
-    <p>IRM operationalizes the split by training a classifier that performs well across environments simultaneously. Features surviving the distributional shift are figure; features that don't are ground. Same role structure: partition, separate, name the invariant. (IRM is the loosest fit in the table: "ground" here means discarded rather than retained. The role assignment is the same; the fate of the ground component differs.)</p>
+    <p>IRM operationalizes the split by training a classifier that performs well across environments simultaneously. Features surviving the distributional shift are figure; features that don't are ground. Same role structure: partition, separate, name the invariant. (IRM is the loosest fit in the table. "Ground" here means discarded rather than retained. The role assignment is the same; the fate of the ground component differs.)</p>
 
     <h2>Common structure</h2>
 
@@ -188,7 +188,7 @@ footprint, frame = partition(heap_after, heap_before)
 print(f"footprint: {footprint}")
 print(f"frame: {frame}")`} />
 
-    <p>The vocabulary changes (figure/ground, changed/held, footprint/frame) but the role assignment is the same dict comparison every time. The toy flattens real semantics deliberately: it shows the shared role structure, not the domain-specific meaning of each partition. The separation-logic example is the loosest fit: a real frame includes cells read but unchanged, not just cells with different values. The toy version captures the structural roles without full semantics. Chapter 4 formalizes the shared primitive as diff.</p>
+    <p>The vocabulary changes (figure/ground, changed/held, footprint/frame) but the role assignment is the same dict comparison every time. The toy flattens real semantics deliberately. It shows the shared role structure, not the domain-specific meaning of each partition. The separation-logic example is the loosest fit. A real frame includes cells read but unchanged, not just cells with different values. The toy version captures the structural roles without full semantics. Chapter 4 formalizes the shared primitive as diff.</p>
 
     <h2>Why they don't cite each other</h2>
 

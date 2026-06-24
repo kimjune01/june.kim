@@ -5,15 +5,15 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 9: Four Bins — Methodeutics" favicon="🔭">
+<Layout title="Ch 10: Four Bins — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Four Bins</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 9 &middot; Milnor 1985, Strogatz 2014, Ramdas 2023</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 10 &middot; Milnor 1985, Strogatz 2014, Ramdas 2023</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">You have the trajectory. It oscillates. Is the system fighting itself, or is your measurement noisy? <a href="/evidence-has-a-trajectory">Chapter 8</a> gave you e-values that accumulate over time instead of compressing to a scalar. This chapter tells you how to read the shape.</p>
+      <p class="text-lg" style="max-width:none">You have the trajectory. It oscillates. Is the system fighting itself, or is your measurement noisy? <a href="/evidence-has-a-trajectory">Chapter 9</a> gave you e-values that accumulate over time instead of compressing to a scalar. This chapter tells you how to read the shape.</p>
     </div>
 
     <p>An e-value stream is a time series. "Goes up" is not a diagnosis. "Goes up then down then up" is not a diagnosis either. You need a finite set of trajectory shapes, each mapping to a different kind of system and a different next move. Dynamical systems theory provides exactly four.</p>
@@ -34,7 +34,7 @@ import Repl from '../../../../components/Repl';
     <ol class="list-decimal pl-5 mb-4">
       <li class="mb-2"><em>Convergent.</em> The perturbation decays. The system returns to its previous state. A compensating mechanism absorbed the shock.</li>
       <li class="mb-2"><em>Divergent.</em> The perturbation grows. The system moves away and keeps going. No compensating mechanism exists.</li>
-      <li class="mb-2"><em>Oscillatory.</em> The perturbation cycles. Two subsystems push against each other: one compensates, the other overcompensates.</li>
+      <li class="mb-2"><em>Oscillatory.</em> The perturbation cycles. Two subsystems push against each other. One compensates, the other overcompensates.</li>
       <li class="mb-2"><em>Chaotic.</em> The trajectory stays bounded but never repeats. Two nearby starting points diverge exponentially. Deterministic but unpredictable past a short horizon.</li>
     </ol>
 
@@ -141,7 +141,7 @@ import Repl from '../../../../components/Repl';
         # Indeterminate. Collect more data at the same node.
         return current_node</code></pre>
 
-    <p>Each bin maps to a graph operation: move to a neighbor, follow a dependency, test an interface, or decompose further. The bins prescribe, not just classify. Chapter 10 shows how each prescription becomes an edge in the hypothesis graph.</p>
+    <p>Each bin maps to a graph operation: move to a neighbor, follow a dependency, test an interface, or decompose further. The bins prescribe, not just classify. Chapter 11 shows how each prescription becomes an edge in the hypothesis graph.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -193,7 +193,7 @@ import Repl from '../../../../components/Repl';
       </table>
     </div>
 
-    <p>Same system, same perturbation, four responses depending on architecture. Chaotic is the interesting one: you're treating the whole server stack as one component when it's actually several interacting loops.</p>
+    <p>Same system, same perturbation, four responses depending on architecture. Chaotic is the interesting one. You're treating the whole server stack as one component when it's actually several interacting loops.</p>
 
     <h3>Automobile diagnostics</h3>
 
@@ -202,7 +202,7 @@ import Repl from '../../../../components/Repl';
     <ul class="list-disc pl-5 mb-4">
       <li class="mb-1"><em>Convergent:</em> Battery voltage dips to 11.8V, recovers to 12.6V when the alternator reconnects. The battery absorbed the perturbation. The alternator is redundant at current draw.</li>
       <li class="mb-1"><em>Divergent:</em> Voltage drops steadily. The radio dims, the dashboard flickers, the engine stalls. The alternator was the only power source at this draw level. Everything downstream cascaded.</li>
-      <li class="mb-1"><em>Oscillatory:</em> Voltage swings between 11V and 14V with a 2-second period. The voltage regulator and the alternator are fighting: one compensates, the other overcompensates. The fault is in the interface (the regulator), not the alternator itself.</li>
+      <li class="mb-1"><em>Oscillatory:</em> Voltage swings between 11V and 14V with a 2-second period. The voltage regulator and the alternator are fighting. One compensates, the other overcompensates. The fault is in the interface (the regulator), not the alternator itself.</li>
     </ul>
 
     <p>Chaos is rare in simple electrical circuits. Three bins cover most automotive faults. But engine management systems have enough interacting control loops (fuel injection, ignition timing, variable valve timing, turbo boost) that a single sensor failure can produce bounded but aperiodic behavior no single root cause explains.</p>
@@ -213,7 +213,7 @@ import Repl from '../../../../components/Repl';
 
     <ul class="list-disc pl-5 mb-4">
       <li class="mb-1"><em>Convergent:</em> BP drops from 150 to 130 in the first month, stabilizes. The drug works and the effect is stable.</li>
-      <li class="mb-1"><em>Divergent:</em> BP drops to 130, then creeps back to 145, then 155, then 160. The body adapts. The drug works in the snapshot window but the compensatory response overwhelms it. This is Vioxx (<a href="/evidence-has-a-trajectory">chapter 8's opening example</a>).</li>
+      <li class="mb-1"><em>Divergent:</em> BP drops to 130, then creeps back to 145, then 155, then 160. The body adapts. The drug works in the snapshot window but the compensatory response overwhelms it. This is Vioxx (<a href="/evidence-has-a-trajectory">chapter 9's opening example</a>).</li>
       <li class="mb-1"><em>Oscillatory:</em> BP swings between 125 and 155 with a monthly period. The drug suppresses BP for two weeks, the body overshoots for two weeks, the drug wins again. The interface is the feedback loop between drug and compensatory mechanism.</li>
       <li class="mb-1"><em>Chaotic:</em> BP stays between 120 and 160 but follows no pattern. The drug interacts with diet, exercise, stress, sleep, and other medications to produce bounded but unpredictable responses. A single drug-response model is the wrong decomposition; factor out the other variables first.</li>
     </ul>
@@ -303,7 +303,7 @@ for name, series in [("convergent", conv), ("divergent", div),
     result = classify_trajectory(series)
     print(f"{name:<12} -> {result['bin']}")`} />
 
-    <p>Three statistical tests in sequence. The simplicity is deliberate: a classifier that requires tuning 20 parameters costs more to calibrate than the trajectory is worth reading. Three tests, three thresholds, four bins.</p>
+    <p>Three statistical tests in sequence. The simplicity is deliberate. A classifier that requires tuning 20 parameters costs more to calibrate than the trajectory is worth reading. Three tests, three thresholds, four bins.</p>
 
     <h3>Where the classifier fails</h3>
 
@@ -315,7 +315,7 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <h2>E-value trajectories have the same four shapes</h2>
 
-    <p>The e-value stream from Chapter 8 is itself a time series. Apply the classifier to it.</p>
+    <p>The e-value stream from Chapter 9 is itself a time series. Apply the classifier to it.</p>
 
     <p>An e-value that <em>converges</em> to a high value: evidence accumulated and stabilized. Redirect budget elsewhere.</p>
 
@@ -331,7 +331,7 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <p>The classification table has a column labeled "Next experiment." But nothing in the eigenstructure or the Lyapunov exponent tells you <em>which</em> node to test, <em>which</em> dependency to probe, or <em>how</em> to decompose. The four bins tell you what kind of response you got. They do not tell you what to do next.</p>
 
-    <p>That mapping is the claim of chapter 10. Each bin produces a <em>kill condition</em>: a specific, testable statement about what would have to be true for the diagnosis to be wrong. The kill condition generates the next edge in the hypothesis graph.</p>
+    <p>That mapping is the claim of chapter 11. Each bin produces a <em>kill condition</em>: a specific, testable statement about what would have to be true for the diagnosis to be wrong. The kill condition generates the next edge in the hypothesis graph.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -346,7 +346,7 @@ for name, series in [("convergent", conv), ("divergent", div),
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Strogatz 2014</td>
-            <td class="text-gray-400"><em><a href="https://www.westviewpress.com/books/nonlinear-dynamics-and-chaos/">Nonlinear Dynamics and Chaos</a></em> (2nd ed.). The standard textbook. Eigenvalue classification in ch 5&ndash;6, Lyapunov exponents in ch 9, Lorenz system in ch 9.2.</td>
+            <td class="text-gray-400"><em><a href="https://www.westviewpress.com/books/nonlinear-dynamics-and-chaos/">Nonlinear Dynamics and Chaos</a></em> (2nd ed.). The standard textbook. Eigenvalue classification in ch 5&ndash;6, Lyapunov exponents in ch 10, Lorenz system in ch 10.2.</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Lorenz 1963</td>
@@ -358,7 +358,7 @@ for name, series in [("convergent", conv), ("divergent", div),
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Ramdas et al. 2023</td>
-            <td class="text-gray-400"><a href="https://arxiv.org/abs/2103.06476">"Testing by Betting."</a> <em>JRSS-B</em>. E-values and anytime-valid inference. The evidence trajectory framework from Chapter 8.</td>
+            <td class="text-gray-400"><a href="https://arxiv.org/abs/2103.06476">"Testing by Betting."</a> <em>JRSS-B</em>. E-values and anytime-valid inference. The evidence trajectory framework from Chapter 9.</td>
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Mann 1945 / Kendall 1975</td>
@@ -371,9 +371,9 @@ for name, series in [("convergent", conv), ("divergent", div),
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
-      <li><a href="/evidence-has-a-trajectory">Ch 8: Evidence has a trajectory</a> &mdash; e-values and the case for watching evidence over time</li>
-      <li><a href="/reading/methodeutics/ch07-economy-of-research/">Ch 7: Economy of Research</a> &mdash; which experiment to run next</li>
-      <li><a href="/the-hypothesis-graph">Ch 10: Kill conditions generate edges</a> &mdash; from shape classification to next experiment</li>
+      <li><a href="/evidence-has-a-trajectory">Ch 9: Evidence has a trajectory</a> &mdash; e-values and the case for watching evidence over time</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiment to run next</li>
+      <li><a href="/the-hypothesis-graph">Ch 11: Kill conditions generate edges</a> &mdash; from shape classification to next experiment</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
@@ -385,7 +385,7 @@ for name, series in [("convergent", conv), ("divergent", div),
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch08-evidence-trajectory/", label: "Evidence trajectory" }} next={{ href: "/reading/methodeutics/ch10-kill-conditions/", label: "The hypothesis graph" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} next={{ href: "/reading/methodeutics/ch11-kill-conditions/", label: "The hypothesis graph" }} />
 
   </main>
 </Layout>

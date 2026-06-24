@@ -42,7 +42,7 @@ import Repl from '../../../../components/Repl';
 
     <pre class="bg-zinc-800 rounded-lg p-4 text-sm overflow-x-auto my-6"><code class="text-gray-300">diff(state_before, state_after) &rarr; (figure, ground)</code></pre>
 
-    <p>The partition is symmetric: it doesn't matter which snapshot is &ldquo;first.&rdquo; But use is asymmetric. The before-state is the baseline; the after-state is the perturbation. The diff tells you what the perturbation touched.</p>
+    <p>The partition is symmetric. It doesn't matter which snapshot is &ldquo;first.&rdquo; But use is asymmetric. The before-state is the baseline; the after-state is the perturbation. The diff tells you what the perturbation touched.</p>
 
     <p>Caution: diff gives candidates, not causes. A changed variable may be cause, effect, symptom, or coincident noise. The mechanic's diff puts the chief complaint (<em>no crank</em>) next to the diagnostic signs (<em>dim lights</em>, <em>single click</em>, <em>sagging voltage</em>), all in the figure. The diff alone does not know which is upstream. Separating cause from effect requires a dependency graph or an experiment. The diff just names what changed.</p>
 
@@ -119,7 +119,7 @@ for k, v in ground.items():
 
     <p>Five figure entries: no crank, no start, dim lights, a single click from the starter, and a slightly lower resting voltage. Two ground entries: fuel and the security light, both unchanged.</p>
 
-    <p>The hypotheses follow from the figure. Dim lights, a single click, no crank. What connects them? The starting circuit: battery, wiring, the starter motor, the ignition switch. Each can starve a crank, and the battery and wiring sit upstream of the dimming lights and the sagging voltage too. The ground tells the mechanic what to deprioritize: fuel is full and the security light is off, so neither a fuel fault nor an immobilizer lockout is implicated (though that doesn't eliminate them unless the measurement set is complete).</p>
+    <p>The hypotheses follow from the figure. Dim lights, a single click, no crank. What connects them? The starting circuit: battery, wiring, the starter motor, the ignition switch. Each can starve a crank, and the battery and wiring sit upstream of the dimming lights and the sagging voltage too. The ground tells the mechanic what to deprioritize. Fuel is full and the security light is off, so neither a fuel fault nor an immobilizer lockout is implicated (though that doesn't eliminate them unless the measurement set is complete).</p>
 
     <p>This is the contrast primitive. Hypothesis generation, ranking, and testing build on top of it.</p>
 
@@ -344,7 +344,7 @@ for h in hypotheses:
 
     <p>Four candidates from the figure: battery, wiring, starter motor, ignition switch. They don't weigh equally. The battery is upstream of every changed variable (the crank, the lights, the click, the resting voltage), and wiring of most; the starter motor explains the crank and the click, the ignition switch only the crank. The ground (full fuel, security off) keeps the fuel system and the immobilizer off the list. Check the battery and its connections first.</p>
 
-    <p>Notice what the code does <em>not</em> do. It does not test the hypotheses, rank them, or estimate their probability. It generates them. The diff is a hypothesis-generation primitive. Testing is induction. Ranking is economy of research (ch 7). The diff names the candidates.</p>
+    <p>Notice what the code does <em>not</em> do. It does not test the hypotheses, rank them, or estimate their probability. It generates them. The diff is a hypothesis-generation primitive. Testing is induction. Ranking is economy of research (ch 8). The diff names the candidates.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -390,7 +390,7 @@ print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
 
     <p>This is the structural limitation. The unary diff partitions observed state into figure and ground. It cannot reason about unobserved state. The hypothesis space is bounded by what you chose to measure.</p>
 
-    <p>OBD-II shows this concretely: if a failure involves a sensor the ECU doesn't monitor, no code fires. Engineers add more sensors, but you can never instrument everything. Some state will always be unmeasured.</p>
+    <p>OBD-II shows this concretely. If a failure involves a sensor the ECU doesn't monitor, no code fires. Engineers add more sensors, but you can never instrument everything. Some state will always be unmeasured.</p>
 
     <p>Bi-abduction addresses this by inferring the frame: the state the operation <em>must not have touched</em> for the result to be valid. It reasons backward from the postcondition, including state never explicitly observed. The diff goes from "compare what you measured" to "infer what you must have missed."</p>
     <hr class="border-zinc-700 my-8"/>
@@ -432,7 +432,7 @@ print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/reading/methodeutics/ch02-security-uberty/">Ch 2: Security and Uberty</a> &mdash; the tradeoff that makes abduction fertile</li>
-      <li><a href="/reading/methodeutics/ch07-economy-of-research/">Ch 7: Economy of Research</a> &mdash; selecting among the hypotheses this chapter generates</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; selecting among the hypotheses this chapter generates</li>
       <li><a href="/abduction">Abduction</a> &mdash; the blog post this chapter formalizes</li>
     </ul>
 

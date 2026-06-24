@@ -4,15 +4,15 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 14: The Pipeline — Methodeutics" favicon="🔭">
+<Layout title="Ch 15: The Pipeline — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>The Pipeline</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 14 &middot; Calcagno et al. 2009, Wang et al. 2023, Arjovsky et al. 2019</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 15 &middot; Calcagno et al. 2009, Wang et al. 2023, Arjovsky et al. 2019</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Chapter 12 protected the loop from self-deception. Chapter 13 gave escalation rules for validating claims. Now: wire every tool from the textbook into an autonomous pipeline. Five stations, one outer loop, and a contract that makes the stations compose.</p>
+      <p class="text-lg" style="max-width:none">Chapter 13 protected the loop from self-deception. Chapter 14 gave escalation rules for validating claims. Now: wire every tool from the textbook into an autonomous pipeline. Five stations, one outer loop, and a contract that makes the stations compose.</p>
     </div>
 
     <h2>Three independent convergences</h2>
@@ -23,19 +23,19 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Infer takes a code diff and produces bug reports. The pipeline is: observe the change (diff, Ch 4), infer the anti-frame and frame (bi-abduction, Ch 5), compose contracts across call boundaries, report where the inferred precondition conflicts with the calling context. The observation is formal (a code diff). The goal is formal (memory safety). The hypothesis is formal (the anti-frame). Every component is mechanized. No human intervenes between input and output.</p>
 
-    <p>Infer runs on every diff submitted to the Facebook codebase. Millions of lines, every day. The abduction primitive ("what must have been true for this function to succeed?") executes at industrial scale because the decomposition is compositional (Ch 5): each function is analyzed once, in isolation, and the results compose linearly.</p>
+    <p>Infer runs on every diff submitted to the Facebook codebase. Millions of lines, every day. The abduction primitive ("what must have been true for this function to succeed?") executes at industrial scale because the decomposition is compositional (Ch 5). Each function is analyzed once, in isolation, and the results compose linearly.</p>
 
     <h3>Voyager (Wang et al. 2023)</h3>
 
     <p>Voyager is a Minecraft agent. It observes failure (a task it cannot complete), proposes a fix (a new skill program), self-verifies (executes and checks the postcondition), and commits the result to a skill library. The loop is: observe &rarr; hypothesize &rarr; test &rarr; commit. It produced 180 verified skills without human intervention.</p>
 
-    <p>The structure maps onto the textbook. Observation: the agent fails to craft an item. Diff (Ch 4): the gap between the current skill library and the task requirement. Hypothesis: a new code snippet that fills the gap. Test: execute in the environment. Kill condition (Ch 10): if execution fails, the error message names the next hypothesis. Convergence (Ch 11): the skill is added to the library only when it passes verification. The agent has no theory of Minecraft physics. It has a theory of its own capabilities, maintained as a growing library, and that theory guides which tasks to attempt next.</p>
+    <p>The structure maps onto the textbook. Observation: the agent fails to craft an item. Diff (Ch 4): the gap between the current skill library and the task requirement. Hypothesis: a new code snippet that fills the gap. Test: execute in the environment. Kill condition (Ch 11): if execution fails, the error message names the next hypothesis. Convergence (Ch 12): the skill is added to the library only when it passes verification. The agent has no theory of Minecraft physics. It has a theory of its own capabilities, maintained as a growing library, and that theory guides which tasks to attempt next.</p>
 
     <h3>Invariant Risk Minimization (Arjovsky et al. 2019)</h3>
 
     <p>IRM observes that a classifier trained on one environment fails on another. Standard training minimizes loss. IRM minimizes loss subject to a constraint: the learned features must be invariant across training environments. Features that correlate with the label in environment A but not environment B are discarded. Only features that predict in all environments survive.</p>
 
-    <p>Environment variation is the lever for figure-ground separation (Ch 4). Invariant features are the figure: what the system depends on. Spurious correlations are the ground: what holds in one environment but not another. IRM automates the tri-abductive split (Ch 6). When a feature helps in one environment and hurts in another (oscillatory, Ch 9), the branching condition is the environment itself. The system splits the hypothesis without a human identifying the confound.</p>
+    <p>Environment variation is the lever for figure-ground separation (Ch 4). Invariant features are the figure: what the system depends on. Spurious correlations are the ground: what holds in one environment but not another. IRM automates the tri-abductive split (Ch 6). When a feature helps in one environment and hurts in another (oscillatory, Ch 10), the branching condition is the environment itself. The system splits the hypothesis without a human identifying the confound.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -85,38 +85,38 @@ import PrevNext from "../../../../components/PrevNext.astro";
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">1. Hypothesize</td>
             <td class="pr-3 text-gray-400">Hypothesis graph</td>
-            <td class="pr-3 text-gray-400">Diff (Ch 4), bi-abduction (Ch 5), economy of research (Ch 7)</td>
+            <td class="pr-3 text-gray-400">Diff (Ch 4), bi-abduction (Ch 5), economy of research (Ch 8)</td>
             <td class="text-gray-400">No surviving hypothesis &rarr; stop</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">2. Prework</td>
             <td class="pr-3 text-gray-400">Experiment repo</td>
-            <td class="pr-3 text-gray-400">Prereg checklist (Ch 12), proof manual (Ch 13)</td>
+            <td class="pr-3 text-gray-400">Prereg checklist (Ch 13), proof manual (Ch 14)</td>
             <td class="text-gray-400">Extraction script fails to confirm bug &rarr; re-enter station 1</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">3. Benchmark</td>
             <td class="pr-3 text-gray-400">Measurement table</td>
-            <td class="pr-3 text-gray-400">E-values (Ch 8), four bins (Ch 9), kill conditions (Ch 10)</td>
+            <td class="pr-3 text-gray-400">E-values (Ch 9), four bins (Ch 10), kill conditions (Ch 11)</td>
             <td class="text-gray-400">Oscillatory &rarr; split hypothesis, re-enter station 1</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">4. Bug hunt</td>
             <td class="pr-3 text-gray-400">Convergence report</td>
-            <td class="pr-3 text-gray-400">Convergence (Ch 11), proof manual (Ch 13)</td>
+            <td class="pr-3 text-gray-400">Convergence (Ch 12), proof manual (Ch 14)</td>
             <td class="text-gray-400">New bug found &rarr; classify and re-enter station 1</td>
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">5. Ship</td>
             <td class="pr-3 text-gray-400">PR</td>
-            <td class="pr-3 text-gray-400">Prereg checklist (Ch 12)</td>
+            <td class="pr-3 text-gray-400">Prereg checklist (Ch 13)</td>
             <td class="text-gray-400">Conflicts with project vision &rarr; re-enter station 1</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <p>Every kill condition re-enters station 1. This is the outer loop. The pipeline does not branch midstream. It returns to the hypothesis graph, classifies the new observation using the four bins (Ch 9), and the trajectory shape names what happens next: divergent follows the edge (Ch 10), convergent refines the hypothesis (Ch 11), oscillatory splits it (Ch 6), chaotic redesigns the experiment.</p>
+    <p>Every kill condition re-enters station 1. This is the outer loop. The pipeline does not branch midstream. It returns to the hypothesis graph, classifies the new observation using the four bins (Ch 10), and the trajectory shape names what happens next: divergent follows the edge (Ch 11), convergent refines the hypothesis (Ch 12), oscillatory splits it (Ch 6), chaotic redesigns the experiment.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -143,7 +143,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       </table>
     </div>
 
-    <p>The contract is monoidal. Station A's output is Station B's input. The composition is associative: (A ; B) ; C = A ; (B ; C). No station needs to know about any station except its immediate neighbors. This is separation logic's frame rule (Ch 5) applied to the pipeline itself: each station has a footprint (what it reads and writes) and a frame (everything else). The frame passes through untouched.</p>
+    <p>The contract is monoidal. Station A's output is Station B's input. The composition is associative: (A ; B) ; C = A ; (B ; C). No station needs to know about any station except its immediate neighbors. This is separation logic's frame rule (Ch 5) applied to the pipeline itself. Each station has a footprint (what it reads and writes) and a frame (everything else). The frame passes through untouched.</p>
 
     <p>Stations can be replaced, reordered, or run by different agents. The contract is the interface. The implementation is local.</p>
 
@@ -156,9 +156,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>The outer loop terminates when one of three conditions holds:</p>
 
     <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-2"><em>Station 5 succeeds.</em> The PR ships. The hypothesis graph is closed. Every open edge has been resolved (Ch 11).</li>
-      <li class="mb-2"><em>No surviving hypothesis.</em> Station 1 cannot generate a hypothesis that survives the prereg checklist (Ch 12). The investigation concludes: the system is not broken, or the breakage is outside the investigation's scope.</li>
-      <li class="mb-2"><em>Budget exhausted.</em> The economy of research (Ch 7) says the marginal information gain per experiment has dropped below threshold. Further investigation costs more than it returns.</li>
+      <li class="mb-2"><em>Station 5 succeeds.</em> The PR ships. The hypothesis graph is closed. Every open edge has been resolved (Ch 12).</li>
+      <li class="mb-2"><em>No surviving hypothesis.</em> Station 1 cannot generate a hypothesis that survives the prereg checklist (Ch 13). The investigation concludes: the system is not broken, or the breakage is outside the investigation's scope.</li>
+      <li class="mb-2"><em>Budget exhausted.</em> The economy of research (Ch 8) says the marginal information gain per experiment has dropped below threshold. Further investigation costs more than it returns.</li>
     </ol>
 
     <p>Condition 2 is the most informative termination. "No surviving hypothesis after three rounds" teaches you something concrete: the initial observation was misleading, the system's behavior is within spec, or the hypothesis space was too narrow. Each diagnosis is itself a classified observation that can re-enter a higher-level investigation.</p>
@@ -180,12 +180,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <span class="hl-keyword">for</span> round <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(max_rounds):
 
         <span class="hl-comment"># ── Station 1: Hypothesize ──────────────────────────</span>
-        <span class="hl-comment"># Diff (Ch 4), bi-abduction (Ch 5), economy (Ch 7)</span>
+        <span class="hl-comment"># Diff (Ch 4), bi-abduction (Ch 5), economy (Ch 8)</span>
         hypotheses = graph.fan_out()
-        hypotheses = rank_by_info_gain(hypotheses)   <span class="hl-comment"># Ch 7</span>
+        hypotheses = rank_by_info_gain(hypotheses)   <span class="hl-comment"># Ch 8</span>
         best = hypotheses[<span class="hl-number">0</span>]
 
-        <span class="hl-keyword">if</span> <span class="hl-keyword">not</span> prereg_check(best):                   <span class="hl-comment"># Ch 12</span>
+        <span class="hl-keyword">if</span> <span class="hl-keyword">not</span> prereg_check(best):                   <span class="hl-comment"># Ch 13</span>
             graph.kill(best, reason=<span class="hl-string">"failed prereg"</span>)
             <span class="hl-keyword">continue</span>
 
@@ -199,10 +199,10 @@ import PrevNext from "../../../../components/PrevNext.astro";
             <span class="hl-keyword">continue</span>                                    <span class="hl-comment"># re-enter station 1</span>
 
         <span class="hl-comment"># ── Station 3: Benchmark ────────────────────────────</span>
-        <span class="hl-comment"># E-values (Ch 8), four bins (Ch 9), kills (Ch 10)</span>
+        <span class="hl-comment"># E-values (Ch 9), four bins (Ch 10), kills (Ch 11)</span>
         before = measure(system, baseline_config)
         after  = measure(system, repo.candidate_fix)
-        shape  = classify_trajectory(before, after)  <span class="hl-comment"># Ch 9</span>
+        shape  = classify_trajectory(before, after)  <span class="hl-comment"># Ch 10</span>
 
         <span class="hl-keyword">if</span> shape == OSCILLATORY:
             <span class="hl-comment"># Split the hypothesis (Ch 6). Two constraints fighting.</span>
@@ -213,16 +213,16 @@ import PrevNext from "../../../../components/PrevNext.astro";
             <span class="hl-keyword">continue</span>
 
         <span class="hl-comment"># ── Station 4: Bug hunt ─────────────────────────────</span>
-        <span class="hl-comment"># Convergence (Ch 11), proof manual (Ch 13)</span>
+        <span class="hl-comment"># Convergence (Ch 12), proof manual (Ch 14)</span>
         findings = adversarial_review(repo.candidate_fix)
 
         <span class="hl-keyword">while</span> findings:
             <span class="hl-keyword">for</span> bug <span class="hl-keyword">in</span> findings:
-                shape = classify_trajectory(bug)     <span class="hl-comment"># Ch 9</span>
-                graph.add_edge(best, bug, shape)     <span class="hl-comment"># Ch 10</span>
+                shape = classify_trajectory(bug)     <span class="hl-comment"># Ch 10</span>
+                graph.add_edge(best, bug, shape)     <span class="hl-comment"># Ch 11</span>
                 repo.fix(bug)
             findings = adversarial_review(repo.candidate_fix)
-            <span class="hl-comment"># Zero new findings = converged (Ch 11)</span>
+            <span class="hl-comment"># Zero new findings = converged (Ch 12)</span>
 
         <span class="hl-comment"># ── Station 5: Ship ─────────────────────────────────</span>
         <span class="hl-keyword">if</span> <span class="hl-keyword">not</span> aligns_with_vision(repo.candidate_fix, vision):
@@ -234,13 +234,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <span class="hl-comment"># Budget exhausted. Report what was learned.</span>
     <span class="hl-keyword">return</span> graph.summary()</code></pre>
 
-    <p>The <code>continue</code> statements are the outer loop. Every kill re-enters station 1. The hypothesis graph accumulates across rounds: a hypothesis killed in round 2 is not re-proposed in round 3. The graph is the memory. The kills are the edges. The trajectory shape (Ch 9) classifies each edge, and the classification determines whether the next round follows, splits, refines, or stops.</p>
+    <p>The <code>continue</code> statements are the outer loop. Every kill re-enters station 1. The hypothesis graph accumulates across rounds: a hypothesis killed in round 2 is not re-proposed in round 3. The graph is the memory. The kills are the edges. The trajectory shape (Ch 10) classifies each edge, and the classification determines whether the next round follows, splits, refines, or stops.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
     <h2>Every kill teaches the graph something</h2>
 
-    <p>Kill conditions from downstream stations do not discard the hypothesis. They re-enter the hypothesis graph as new observations. The four-bin classification (Ch 9) names what happens next:</p>
+    <p>Kill conditions from downstream stations do not discard the hypothesis. They re-enter the hypothesis graph as new observations. The four-bin classification (Ch 10) names what happens next:</p>
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -255,13 +255,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Prework: extraction fails</td><td class="pr-3 text-gray-400">Flat</td><td class="text-gray-400">Kill hypothesis. The diagnosis was wrong. Prune the branch.</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Benchmark: helps A, hurts B</td><td class="pr-3 text-gray-400">Oscillatory</td><td class="text-gray-400">Split hypothesis (Ch 6). Two constraints fighting. Find the branching condition.</td></tr>
           <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Benchmark: no improvement</td><td class="pr-3 text-gray-400">Flat</td><td class="text-gray-400">Kill hypothesis. The lever doesn't move this system.</td></tr>
-          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Bug hunt: structural flaw</td><td class="pr-3 text-gray-400">Divergent</td><td class="text-gray-400">Follow the edge (Ch 10). The flaw names a deeper problem.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Bug hunt: structural flaw</td><td class="pr-3 text-gray-400">Divergent</td><td class="text-gray-400">Follow the edge (Ch 11). The flaw names a deeper problem.</td></tr>
           <tr><td class="py-2 pr-3 pl-0 text-gray-300">Ship: conflicts with vision</td><td class="pr-3 text-gray-400">Convergent (wrong direction)</td><td class="text-gray-400">Reject. The fix is correct but philosophically wrong. Adjust the heuristic's defaults, don't add a special case.</td></tr>
         </tbody>
       </table>
     </div>
 
-    <p>The oscillatory case is the most instructive: the investigation found a real lever but applied it too broadly. The split produces a simpler, more targeted hypothesis. Investigations that pass through the oscillatory case once almost always converge on the second pass, because the branching condition narrows scope to where the lever actually works.</p>
+    <p>The oscillatory case is the most instructive. The investigation found a real lever but applied it too broadly. The split produces a simpler, more targeted hypothesis. Investigations that pass through the oscillatory case once almost always converge on the second pass, because the branching condition narrows scope to where the lever actually works.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -279,7 +279,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>"The compiler replaces the kernel library." "No vendor primitives." "The search should find it." These are constraints on what counts as a valid fix. A pipeline that reads VISION.md knows to reject its own custom kernel before the maintainer has to. It knows to adjust the heuristic's defaults instead of adding a special case.</p>
 
-    <p>VISION.md is the prereg checklist (Ch 12) applied to the project, not the experiment. It blocks a specific failure mode: the investigation succeeds technically but fails architecturally. Without VISION.md, the pipeline ships the fix and the maintainer rejects the PR. With VISION.md, the pipeline rejects the fix itself, re-enters the hypothesis graph, and searches for a solution that is both correct and aligned.</p>
+    <p>VISION.md is the prereg checklist (Ch 13) applied to the project, not the experiment. It blocks a specific failure mode: the investigation succeeds technically but fails architecturally. Without VISION.md, the pipeline ships the fix and the maintainer rejects the PR. With VISION.md, the pipeline rejects the fix itself, re-enters the hypothesis graph, and searches for a solution that is both correct and aligned.</p>
 
     <p>The human provides direction: what kind of system is this, and what kind of system should it be. The pipeline handles everything else.</p>
 
@@ -319,7 +319,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <hr class="border-zinc-700 my-8"/>
 
-    <h2>The framework predicts it will generalize. Chapter 15 tests that.</h2>
+    <h2>The framework predicts it will generalize. Chapter 16 tests that.</h2>
 
     <p>The pipeline works on one system at a time. One agent, one system, one fix. The contract guarantees isolation. The monoidal structure guarantees composability.</p>
 
@@ -330,8 +330,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
       <li><a href="/reading/methodeutics/ch05-bi-abduction/">Ch 5: Bi-abduction</a> &mdash; the frame rule and compositional analysis</li>
-      <li><a href="/reading/methodeutics/ch07-economy-of-research/">Ch 7: Economy of Research</a> &mdash; which hypotheses are worth testing?</li>
-      <li><a href="/reading/methodeutics/ch15-case-study/">Ch 15: Case Study</a> &mdash; applying the pipeline to a concrete system</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which hypotheses are worth testing?</li>
+      <li><a href="/reading/methodeutics/ch16-case-study/">Ch 16: Case Study</a> &mdash; applying the pipeline to a concrete system</li>
       <li><a href="/investigate">Investigate</a> &mdash; the blog post that implements this pipeline</li>
     </ul>
 
@@ -344,7 +344,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch13-validating-claims/", label: "Validators" }} next={{ href: "/reading/methodeutics/ch15-case-study/", label: "Case study" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch14-validating-claims/", label: "Validators" }} next={{ href: "/reading/methodeutics/ch16-case-study/", label: "Case study" }} />
 
   </main>
 </Layout>

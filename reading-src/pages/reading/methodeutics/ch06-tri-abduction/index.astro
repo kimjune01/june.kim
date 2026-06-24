@@ -18,24 +18,51 @@ import Repl from '../../../../components/Repl';
 
     <h2>Where bi-abduction stops</h2>
 
-    <p>Chapter 5 showed how bi-abduction infers the frame and anti-frame for a single execution path. The checkout function reads some keys, writes others; bi-abduction figures out what must exist beforehand and what stays untouched. Each function analyzed in isolation, results composed across the call graph. Polynomial per function, linear composition.</p>
+    <p>Chapter 5 showed how bi-abduction infers the frame and anti-frame for a single execution path. A function reads some keys and writes others; bi-abduction figures out what must exist beforehand and what stays untouched. Each function analyzed in isolation, results composed across the call graph. Polynomial per function, linear composition.</p>
 
-    <p>But chapter 5 ended on a crack. Consider a function with an <code>if/else</code>:</p>
+    <p>But chapter 5 ended on a crack. Think about making your morning drink. Want coffee, and you need beans and the grinder. Want tea, and you need a teabag and the kettle. Ask what the kitchen must have stocked before you can make your drink, and there is no single answer. It forks on which one you choose. Each needs different things, and the choice between them is the structure that matters.</p>
 
-    <Repl client:visible initialCode={`def process_payment(state):
-    if state["payment_method"] == "credit_card":
-        # Branch A: reads card_number, writes authorization_code
-        validate(state["card_number"])
-        state["authorization_code"] = charge(state["card_number"])
-    else:
-        # Branch B: reads bank_account, writes transfer_id
-        verify(state["bank_account"])
-        state["transfer_id"] = transfer(state["bank_account"])
-`} />
+    <p>The same fork, drawn out:</p>
 
-    <p>Branch A touches <code>{'{'}card_number, authorization_code{'}'}</code>. Branch B touches <code>{'{'}bank_account, transfer_id{'}'}</code>. Run bi-abduction on branch A: the anti-frame says <code>card_number</code> must exist, the frame excludes <code>authorization_code</code>. Run bi-abduction on branch B: the anti-frame says <code>bank_account</code> must exist, the frame excludes <code>transfer_id</code>. Two separate analyses, two separate answers.</p>
+    <!-- Inline SVG: the fork bi-abduction reads one branch at a time (hygraph-styled) -->
+    <div style="margin: 2em auto; max-width: 540px;">
+      <svg viewBox="0 0 520 250" width="100%" class="mdgm" xmlns="http://www.w3.org/2000/svg">
 
-    <p>Which precondition does the caller need to establish? Both? Neither? It depends on which branch executes, which depends on <code>payment_method</code>. Bi-abduction gives you one (anti-frame, frame) pair per path. It cannot tell you how the paths relate to each other: that the branch condition itself determines the outcome, that the <em>choice</em> between paths is the real structure.</p>
+        <!-- shared start / fork point -->
+        <circle cx="260" cy="42" r="30" fill="none" class="s-accent" stroke-width="2" />
+        <text x="260" y="39" text-anchor="middle" class="dark" font-size="9">make a</text>
+        <text x="260" y="51" text-anchor="middle" class="dark" font-size="9">drink</text>
+
+        <!-- radiating branches -->
+        <line x1="237" y1="62" x2="152" y2="103" class="s-green" stroke-width="1.3" />
+        <line x1="283" y1="62" x2="368" y2="103" class="s-amber" stroke-width="1.3" />
+
+        <!-- branch A: coffee -->
+        <rect x="90" y="104" width="120" height="24" rx="4" fill="none" class="s-green" stroke-width="1.5" />
+        <text x="150" y="120" text-anchor="middle" class="dark" font-size="9">coffee</text>
+        <text x="150" y="146" text-anchor="middle" class="green bold" font-size="8">needs beans</text>
+        <text x="150" y="160" text-anchor="middle" font-size="7">+ the grinder</text>
+        <text x="150" y="171" text-anchor="middle" class="muted" font-size="6.5">leaves the teabag alone</text>
+
+        <!-- branch B: tea -->
+        <rect x="310" y="104" width="120" height="24" rx="4" fill="none" class="s-amber" stroke-width="1.5" />
+        <text x="370" y="120" text-anchor="middle" class="dark" font-size="9">tea</text>
+        <text x="370" y="146" text-anchor="middle" class="amber bold" font-size="8">needs a teabag</text>
+        <text x="370" y="160" text-anchor="middle" font-size="7">+ the kettle</text>
+        <text x="370" y="171" text-anchor="middle" class="muted" font-size="6.5">leaves the beans alone</text>
+
+        <!-- dashed frontier: the fork bi-abduction can't relate -->
+        <line x1="150" y1="178" x2="242" y2="205" class="s-red" stroke-width="1" stroke-dasharray="3,2" />
+        <line x1="370" y1="178" x2="278" y2="205" class="s-red" stroke-width="1" stroke-dasharray="3,2" />
+        <rect x="172" y="206" width="176" height="34" rx="4" fill="none" class="s-red" stroke-width="1.3" stroke-dasharray="4,3" />
+        <text x="260" y="222" text-anchor="middle" class="red bold" font-size="8.5">which order?</text>
+        <text x="260" y="234" text-anchor="middle" font-size="6.5">the fork bi-abduction can't relate</text>
+      </svg>
+    </div>
+
+    <p>Read it as two analyses side by side. On the coffee branch, bi-abduction infers that beans must be stocked and that the teabag is left untouched. On the tea branch, it infers the teabag and leaves the beans alone. Two clean answers, one per branch, each correct on its own.</p>
+
+    <p>Which one does the kitchen actually need stocked? Both? Neither? It depends on which branch runs, which depends on the order. Bi-abduction gives you one (anti-frame, frame) pair per path. It cannot tell you how the paths relate to each other: that the branch condition itself determines the outcome, that the <em>choice</em> between paths is the real structure.</p>
 
     <p>The same limitation shows up everywhere programs fork: <code>if/else</code>, <code>try/catch</code>, pattern matching, concurrent threads racing to a shared resource. Each branch has its own footprint. Bi-abduction analyzes them independently. What's missing is the joint analysis: a single precondition valid for <em>all</em> branches.</p>
 
@@ -67,31 +94,20 @@ Such that:
 
     <h2>Mechanic, forked</h2>
 
-    <p>Return to the engine. The mechanic starts from the same state: engine running, all gauges nominal. She performs two perturbations:</p>
+    <p>Return to the engine. The complaint is an intermittent stall, but right now it idles fine. Two wiring connectors on the engine harness are suspect. From the same running state, the mechanic runs a wiggle test, working each connector by hand in turn:</p>
 
-    <p><em>Branch A:</em> Tap the alternator. Engine stalls.</p>
-    <p><em>Branch B:</em> Tap the radiator. Engine keeps running.</p>
+    <p><em>Branch A:</em> Wiggle connector A. The engine stalls.</p>
+    <p><em>Branch B:</em> Wiggle connector B. The engine keeps running.</p>
 
-    <p>Same starting state. Two perturbations. Two outcomes. The unary diff (chapter 4) analyzes each branch in isolation. Branch A's figure: alternator tapped, engine stalled. Branch B's figure: radiator tapped, engine unchanged. Bi-abduction (chapter 5) infers the frame for each branch independently.</p>
+    <p>Same starting state. Two perturbations. Two outcomes. The unary diff (chapter 4) analyzes each branch in isolation. Branch A's figure: connector A wiggled, engine stalled. Branch B's figure: connector B wiggled, engine unchanged. Bi-abduction (chapter 5) infers the frame for each branch independently.</p>
 
-    <p>The diagnostic power is in the <em>comparison between branches</em>. The alternator tap caused a stall. The radiator tap didn't. The engine was running in both cases before the tap. The shared ground (fuel, spark, wiring, battery) was identical across both branches. The only difference is which component was tapped. The divergent outcomes (stall vs. no stall) localize the cause to the alternator, not the radiator.</p>
+    <p>The diagnostic power is in the <em>comparison between branches</em>. Wiggling connector A caused a stall. Wiggling connector B did not. The engine was running in both cases before the wiggle. The shared ground (fuel, spark, the rest of the harness) was identical across both branches. The only difference is which connector was wiggled. The divergent outcomes (stall vs. no stall) localize the cause to connector A, the loose connection, not connector B.</p>
 
-    <p>This is the causal edge: what explains why two experiments from the same starting state produced different results. The branching condition (which component was tapped) is the candidate cause. The divergent outcomes are the evidence. The shared ground is the control.</p>
+    <p>This is the causal edge: what explains why two experiments from the same starting state produced different results. The branching condition (which connector was wiggled) is the candidate cause. The divergent outcomes are the evidence. The shared ground is the control.</p>
 
     <!-- Inline SVG: tri-abduction fork diagram -->
     <div style="margin: 2em auto; max-width: 780px;">
-      <svg viewBox="0 0 800 460" width="100%" xmlns="http://www.w3.org/2000/svg">
-        <style>
-          text {`{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #999; font-size: 11px; }`}
-          .dark {`{ fill: #e0e0e0; }`}
-          .accent {`{ fill: #3b82f6; }`}
-          .green {`{ fill: #4ade80; }`}
-          .red {`{ fill: #f87171; }`}
-          .bold {`{ font-weight: bold; }`}
-          .title {`{ font-size: 12px; letter-spacing: 0.5px; fill: #e0e0e0; font-weight: bold; }`}
-          .label {`{ font-size: 10px; fill: #888; }`}
-          .small {`{ font-size: 9px; }`}
-        </style>
+      <svg viewBox="0 0 800 460" width="100%" class="mdgm" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <marker id="tri-arrow-green" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto">
             <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80" />
@@ -102,69 +118,69 @@ Such that:
         </defs>
 
         <!-- SHARED START -->
-        <rect x="20" y="165" width="140" height="130" fill="none" stroke="#555" stroke-width="1.5" rx="4" />
-        <text x="90" y="188" text-anchor="middle" class="label accent bold">SHARED START</text>
-        <rect x="45" y="205" width="90" height="40" fill="none" stroke="#555" stroke-width="1.5" rx="3" />
-        <text x="90" y="229" text-anchor="middle" class="small dark">ENGINE</text>
-        <circle cx="40" cy="225" r="10" fill="none" stroke="#555" stroke-width="1" />
-        <text x="40" y="229" text-anchor="middle" style="font-size:7px" fill="#888">ALT</text>
-        <rect x="102" y="250" width="25" height="12" fill="none" stroke="#555" stroke-width="0.8" rx="1" />
-        <text x="114" y="260" text-anchor="middle" style="font-size:6px" fill="#888">RAD</text>
-        <circle cx="90" cy="275" r="4" fill="#4ade80" />
-        <text x="90" y="290" text-anchor="middle" class="small green">RUNNING</text>
+        <rect x="20" y="165" width="140" height="130" fill="none" class="s-neutral" stroke-width="1.5" rx="4" />
+        <text x="90" y="188" text-anchor="middle" class="accent bold" font-size="10">SHARED START</text>
+        <rect x="45" y="205" width="90" height="40" fill="none" class="s-neutral" stroke-width="1.5" rx="3" />
+        <text x="90" y="229" text-anchor="middle" class="dark" font-size="9">ENGINE</text>
+        <circle cx="40" cy="225" r="10" fill="none" class="s-neutral" stroke-width="1" />
+        <text x="40" y="229" text-anchor="middle" font-size="7">A</text>
+        <rect x="102" y="250" width="25" height="12" fill="none" class="s-neutral" stroke-width="0.8" rx="1" />
+        <text x="114" y="260" text-anchor="middle" font-size="6">B</text>
+        <circle cx="90" cy="275" r="4" class="green" />
+        <text x="90" y="290" text-anchor="middle" class="green" font-size="9">RUNNING</text>
 
         <!-- Y-FORK -->
-        <path d="M 160 210 C 190 210, 190 115, 220 115" stroke="#4ade80" stroke-width="1.5" fill="none" marker-end="url(#tri-arrow-green)" />
-        <path d="M 160 260 C 190 260, 190 350, 220 350" stroke="#f87171" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#tri-arrow-red)" />
-        <text x="185" y="240" text-anchor="middle" class="small dark bold">FORK</text>
+        <path d="M 160 210 C 190 210, 190 115, 220 115" class="s-green" stroke-width="1.5" fill="none" marker-end="url(#tri-arrow-green)" />
+        <path d="M 160 260 C 190 260, 190 350, 220 350" class="s-red" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#tri-arrow-red)" />
+        <text x="185" y="240" text-anchor="middle" class="dark bold" font-size="9">FORK</text>
 
-        <!-- BRANCH A: TAP ALTERNATOR -->
-        <rect x="225" y="45" width="200" height="140" fill="none" stroke="#4ade80" stroke-width="1.5" rx="4" />
-        <text x="325" y="67" text-anchor="middle" class="label green bold">BRANCH A: Tap alternator</text>
-        <rect x="275" y="85" width="100" height="42" fill="none" stroke="#555" stroke-width="1" rx="3" />
-        <text x="325" y="110" text-anchor="middle" class="small dark">ENGINE</text>
-        <circle cx="268" cy="106" r="12" fill="none" stroke="#3b82f6" stroke-width="2" />
-        <text x="268" y="110" text-anchor="middle" style="font-size:7px" class="accent">ALT</text>
-        <line x1="256" y1="94" x2="280" y2="118" stroke="#3b82f6" stroke-width="1" opacity="0.5" />
-        <rect x="342" y="132" width="22" height="10" fill="none" stroke="#555" stroke-width="0.8" rx="1" />
-        <text x="353" y="140" text-anchor="middle" style="font-size:5px" fill="#888">RAD</text>
-        <circle cx="325" cy="160" r="4" fill="#f87171" />
-        <text x="325" y="177" text-anchor="middle" class="small red bold">STALLED</text>
+        <!-- BRANCH A: WIGGLE CONNECTOR A -->
+        <rect x="225" y="45" width="200" height="140" fill="none" class="s-green" stroke-width="1.5" rx="4" />
+        <text x="325" y="67" text-anchor="middle" class="green bold" font-size="10">BRANCH A: Wiggle connector A</text>
+        <rect x="275" y="85" width="100" height="42" fill="none" class="s-neutral" stroke-width="1" rx="3" />
+        <text x="325" y="110" text-anchor="middle" class="dark" font-size="9">ENGINE</text>
+        <circle cx="268" cy="106" r="12" fill="none" class="s-accent" stroke-width="2" />
+        <text x="268" y="110" text-anchor="middle" class="accent" font-size="7">A</text>
+        <line x1="256" y1="94" x2="280" y2="118" class="s-accent" stroke-width="1" opacity="0.5" />
+        <rect x="342" y="132" width="22" height="10" fill="none" class="s-neutral" stroke-width="0.8" rx="1" />
+        <text x="353" y="140" text-anchor="middle" font-size="5">B</text>
+        <circle cx="325" cy="160" r="4" class="red" />
+        <text x="325" y="177" text-anchor="middle" class="red bold" font-size="9">STALLED</text>
 
-        <!-- BRANCH B: TAP RADIATOR -->
-        <rect x="225" y="280" width="200" height="140" fill="none" stroke="#f87171" stroke-width="1.5" rx="4" stroke-dasharray="5,3" />
-        <text x="325" y="302" text-anchor="middle" class="label red bold">BRANCH B: Tap radiator</text>
-        <rect x="275" y="320" width="100" height="42" fill="none" stroke="#555" stroke-width="1" rx="3" />
-        <text x="325" y="345" text-anchor="middle" class="small dark">ENGINE</text>
-        <circle cx="268" cy="341" r="12" fill="none" stroke="#555" stroke-width="1" />
-        <text x="268" y="345" text-anchor="middle" style="font-size:7px" fill="#888">ALT</text>
-        <rect x="342" y="367" width="22" height="10" fill="none" stroke="#3b82f6" stroke-width="2" rx="1" />
-        <text x="353" y="375" text-anchor="middle" style="font-size:5px" class="accent">RAD</text>
-        <line x1="340" y1="365" x2="366" y2="379" stroke="#3b82f6" stroke-width="1" opacity="0.5" />
-        <circle cx="325" cy="396" r="4" fill="#4ade80" />
-        <text x="325" y="413" text-anchor="middle" class="small green bold">RUNNING</text>
+        <!-- BRANCH B: WIGGLE CONNECTOR B -->
+        <rect x="225" y="280" width="200" height="140" fill="none" class="s-red" stroke-width="1.5" rx="4" stroke-dasharray="5,3" />
+        <text x="325" y="302" text-anchor="middle" class="red bold" font-size="10">BRANCH B: Wiggle connector B</text>
+        <rect x="275" y="320" width="100" height="42" fill="none" class="s-neutral" stroke-width="1" rx="3" />
+        <text x="325" y="345" text-anchor="middle" class="dark" font-size="9">ENGINE</text>
+        <circle cx="268" cy="341" r="12" fill="none" class="s-neutral" stroke-width="1" />
+        <text x="268" y="345" text-anchor="middle" font-size="7">A</text>
+        <rect x="342" y="367" width="22" height="10" fill="none" class="s-accent" stroke-width="2" rx="1" />
+        <text x="353" y="375" text-anchor="middle" class="accent" font-size="5">B</text>
+        <line x1="340" y1="365" x2="366" y2="379" class="s-accent" stroke-width="1" opacity="0.5" />
+        <circle cx="325" cy="396" r="4" class="green" />
+        <text x="325" y="413" text-anchor="middle" class="green bold" font-size="9">RUNNING</text>
 
         <!-- CONVERGENCE ARROWS -->
-        <path d="M 425 125 C 460 125, 460 195, 490 195" stroke="#4ade80" stroke-width="1.5" fill="none" />
-        <path d="M 425 350 C 460 350, 460 270, 490 270" stroke="#f87171" stroke-width="1.5" fill="none" stroke-dasharray="5,3" />
+        <path d="M 425 125 C 460 125, 460 195, 490 195" class="s-green" stroke-width="1.5" fill="none" />
+        <path d="M 425 350 C 460 350, 460 270, 490 270" class="s-red" stroke-width="1.5" fill="none" stroke-dasharray="5,3" />
 
         <!-- CAUSAL EDGE -->
-        <rect x="490" y="150" width="290" height="170" fill="none" stroke="#3b82f6" stroke-width="1.5" rx="4" />
-        <text x="635" y="174" text-anchor="middle" class="title accent">CAUSAL EDGE</text>
-        <rect x="510" y="190" width="140" height="30" fill="rgba(74,222,128,0.08)" stroke="rgba(74,222,128,0.3)" stroke-width="1" rx="3" />
-        <text x="580" y="209" text-anchor="middle" class="small green bold">tap ALT &rarr; STALLED</text>
-        <path d="M 662 197 L 672 209 L 690 193" stroke="#4ade80" stroke-width="2.5" fill="none" />
-        <rect x="510" y="234" width="140" height="30" fill="rgba(248,113,113,0.08)" stroke="rgba(248,113,113,0.3)" stroke-width="1" rx="3" />
-        <text x="580" y="253" text-anchor="middle" class="small red bold">tap RAD &rarr; RUNNING</text>
-        <line x1="665" y1="238" x2="687" y2="260" stroke="#f87171" stroke-width="2.5" />
-        <line x1="687" y1="238" x2="665" y2="260" stroke="#f87171" stroke-width="2.5" />
-        <line x1="510" y1="278" x2="760" y2="278" stroke="#444" stroke-width="1" />
-        <text x="635" y="296" text-anchor="middle" class="small">shared ground: fuel, spark, wiring, battery</text>
-        <text x="635" y="312" text-anchor="middle" class="small accent bold">cause: alternator, not radiator</text>
+        <rect x="490" y="150" width="290" height="170" fill="none" class="s-accent" stroke-width="1.5" rx="4" />
+        <text x="635" y="174" text-anchor="middle" class="accent bold" font-size="12">CAUSAL EDGE</text>
+        <rect x="510" y="190" width="140" height="30" fill="rgba(74,222,128,0.10)" stroke="rgba(74,222,128,0.35)" stroke-width="1" rx="3" />
+        <text x="580" y="209" text-anchor="middle" class="green bold" font-size="9">wiggle A &rarr; STALLED</text>
+        <path d="M 662 197 L 672 209 L 690 193" class="s-green" stroke-width="2.5" fill="none" />
+        <rect x="510" y="234" width="140" height="30" fill="rgba(248,113,113,0.10)" stroke="rgba(248,113,113,0.35)" stroke-width="1" rx="3" />
+        <text x="580" y="253" text-anchor="middle" class="red bold" font-size="9">wiggle B &rarr; RUNNING</text>
+        <line x1="665" y1="238" x2="687" y2="260" class="s-red" stroke-width="2.5" />
+        <line x1="687" y1="238" x2="665" y2="260" class="s-red" stroke-width="2.5" />
+        <line x1="510" y1="278" x2="760" y2="278" class="s-line" stroke-width="1" />
+        <text x="635" y="296" text-anchor="middle" font-size="9">shared ground: fuel, spark, battery</text>
+        <text x="635" y="312" text-anchor="middle" class="accent bold" font-size="9">cause: connector A, not B</text>
       </svg>
     </div>
 
-    <p>The diagram reads left to right. A shared starting state (engine running) forks into two branches. Branch A taps the alternator; engine stalls. Branch B taps the radiator; engine keeps running. The two outcomes converge into the causal edge: the alternator is the candidate cause: only its perturbation changed the outcome. The shared ground (fuel, spark, wiring, battery) rules out confounders.</p>
+    <p>The diagram reads left to right. A shared starting state (engine running) forks into two branches. Branch A wiggles connector A; engine stalls. Branch B wiggles connector B; engine keeps running. The two outcomes converge into the causal edge: connector A, the loose connection, is the candidate cause. Only its perturbation changed the outcome. The shared ground (fuel, spark, the rest of the harness) rules out confounders.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -221,7 +237,7 @@ Such that:
 
     <p>Chapters 1&ndash;3 established abduction as the third mode of reasoning, distinct from deduction and induction: generating hypotheses from surprising observations. Chapter 4 defined the primitive: diff. Chapter 5 automated it: bi-abduction infers the frame without the observer choosing what to snapshot.</p>
 
-    <p>Tri-abduction adds branching. The question moves from "what explains this observation?" to "what explains why this observation differs from that one?" That is the gap between diagnosis and causal inference. Diagnosis says the alternator might be the problem. Causal inference says the alternator <em>is</em> the problem, because tapping it changed the outcome and tapping the radiator didn't.</p>
+    <p>Tri-abduction adds branching. The question moves from "what explains this observation?" to "what explains why this observation differs from that one?" That is the gap between diagnosis and causal inference. Diagnosis says connector A might be the problem. Causal inference says connector A <em>is</em> the problem, because wiggling it changed the outcome and wiggling connector B didn't.</p>
 
     <div class="overflow-x-auto my-6">
       <table class="w-full text-sm">
@@ -333,32 +349,32 @@ def tri_abduce(shared_start, branch_a_end, branch_b_end):
 # --- The mechanic: two perturbations from the same start ---
 
 shared_start = {
-    "engine":     "running",
-    "alternator": "untouched",
-    "radiator":   "untouched",
-    "battery":    "12.6V",
-    "fuel_pump":  "on",
-    "spark":      "firing",
+    "engine":       "running",
+    "connector_a":  "settled",
+    "connector_b":  "settled",
+    "battery":      "12.6V",
+    "fuel_pump":    "on",
+    "spark":        "firing",
 }
 
-# Branch A: tap alternator -> engine stalls
+# Branch A: wiggle connector A -> engine stalls
 branch_a_end = {
-    "engine":     "stalled",
-    "alternator": "tapped",
-    "radiator":   "untouched",
-    "battery":    "12.6V",
-    "fuel_pump":  "on",
-    "spark":      "firing",
+    "engine":       "stalled",
+    "connector_a":  "wiggled",
+    "connector_b":  "settled",
+    "battery":      "12.6V",
+    "fuel_pump":    "on",
+    "spark":        "firing",
 }
 
-# Branch B: tap radiator -> engine keeps running
+# Branch B: wiggle connector B -> engine keeps running
 branch_b_end = {
-    "engine":     "running",
-    "alternator": "untouched",
-    "radiator":   "tapped",
-    "battery":    "12.6V",
-    "fuel_pump":  "on",
-    "spark":      "firing",
+    "engine":       "running",
+    "connector_a":  "settled",
+    "connector_b":  "wiggled",
+    "battery":      "12.6V",
+    "fuel_pump":    "on",
+    "spark":        "firing",
 }
 
 edge = tri_abduce(shared_start, branch_a_end, branch_b_end)
@@ -371,14 +387,14 @@ print(f"\\n  Branch B: {edge.branch_b_perturbation}")
 print(f"    Outcome: {edge.branch_b_outcome}")
 print(f"\\n  Shared ground (control): {list(edge.shared_ground.keys())}")
 print(f"\\n  Causal conclusion:")
-print(f"    alternator perturbation -> stalled")
-print(f"    radiator perturbation -> nominal")
-print(f"    => alternator is causal, radiator is not")
+print(f"    connector A wiggle -> stalled")
+print(f"    connector B wiggle -> nominal")
+print(f"    => connector A is causal, connector B is not")
 `} />
 
-    <p>The function takes three snapshots instead of two. The shared start is the control. The two branch endpoints are the experimental outcomes. The shared ground (battery, fuel pump, spark) is what held across both experiments, ruling out those variables as causes. The divergent keys (alternator, radiator, engine) are the figure. Within the figure, the code identifies which perturbation (alternator vs. radiator) correlates with the outcome change (stalled vs. running).</p>
+    <p>The function takes three snapshots instead of two. The shared start is the control. The two branch endpoints are the experimental outcomes. The shared ground (battery, fuel pump, spark) is what held across both experiments, ruling out those variables as causes. The divergent keys (connector_a, connector_b, engine) are the figure. Within the figure, the code identifies which perturbation (connector A vs. connector B) correlates with the outcome change (stalled vs. running).</p>
 
-    <p>Bi-abduction on branch A alone says: "the alternator changed and the engine stalled." True, but not causal. It could be coincidence. Tri-abduction adds the counterfactual: "the radiator changed and the engine <em>didn't</em> stall." The comparison between branches supports a causal claim: same starting state, different perturbation, different outcome. Under controlled conditions (no hidden confounding, adequate measurement), the perturbation that changed the outcome is the candidate cause.</p>
+    <p>Bi-abduction on branch A alone says: "connector A was wiggled and the engine stalled." True, but not causal. It could be coincidence. Tri-abduction adds the counterfactual: "connector B was wiggled and the engine <em>didn't</em> stall." The comparison between branches supports a causal claim: same starting state, different perturbation, different outcome. Under controlled conditions (no hidden confounding, adequate measurement), the perturbation that changed the outcome is the candidate cause.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -400,7 +416,7 @@ print(f"    => alternator is causal, radiator is not")
 
     <p>Bi-abduction's power came from compositionality: analyze each function once, infer its contract, compose contracts across call boundaries. Does tri-abduction compose the same way?</p>
 
-    <p>Yes, because outcomes separate. If function A branches internally and function B branches internally, their outcome sets multiply. But the separation guarantee means A's branches don't interfere with B's frame. Zilberstein et al. prove this: outcome separation logic inherits the frame rule from standard separation logic. Local reasoning stays sound across branching boundaries.</p>
+    <p>Yes, because outcomes separate. If function A branches internally and function B branches internally, their outcome sets multiply. But the separation guarantee means A's branches don't interfere with B's frame. Zilberstein et al. prove this. Outcome separation logic inherits the frame rule from standard separation logic. Local reasoning stays sound across branching boundaries.</p>
 
     <p>The practical consequence: compositional analysis handles nested branching. Function A has an <code>if/else</code>. It calls function B, which also has an <code>if/else</code>. Outcome separation logic analyzes each function independently, infers preconditions valid for all branches, and composes. The same architecture that scaled bi-abduction to millions of lines in Infer scales tri-abduction to branching programs.</p>
 
@@ -410,7 +426,7 @@ print(f"    => alternator is causal, radiator is not")
 
     <p>The arity grows cleanly. N branches from a shared state produce N outcomes; comparing outcomes isolates the causal branching conditions. The primitive scales. Compositionality holds.</p>
 
-    <p>But now there is a new problem. The mechanic had two branches: tap alternator, tap radiator. A real engine has dozens of components to tap. A compiler has thousands of configurations. A drug trial has millions of candidate molecules. Each is a potential branch. Each produces a candidate causal edge.</p>
+    <p>But now there is a new problem. The mechanic had two branches: wiggle connector A, wiggle connector B. A real harness has dozens of connectors to wiggle. A compiler has thousands of configurations. A drug trial has millions of candidate molecules. Each is a potential branch. Each produces a candidate causal edge.</p>
 
     <p>The primitive generates hypotheses. It does not rank them. Chapters 4&ndash;6 formalized candidate-explanation machinery at increasing arity: one diff, one frame inference, one causal edge. But N possible perturbations yield N candidate hypotheses. Which ones are worth testing?</p>
 
@@ -450,7 +466,7 @@ print(f"    => alternator is causal, radiator is not")
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/reading/methodeutics/ch05-bi-abduction/">Ch 5: Bi-abduction</a> &mdash; the single-path primitive this chapter extends</li>
-      <li><a href="/reading/methodeutics/ch07-economy-of-research/">Ch 7: Economy of Research</a> &mdash; which hypotheses are worth testing?</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which hypotheses are worth testing?</li>
       <li><a href="/abduction">Abduction</a> &mdash; the blog post covering the full arity progression</li>
     </ul>
 
@@ -463,7 +479,7 @@ print(f"    => alternator is causal, radiator is not")
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch05-bi-abduction/", label: "Bi-abduction" }} next={{ href: "/reading/methodeutics/ch07-economy-of-research/", label: "Economy of research" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch05-bi-abduction/", label: "Bi-abduction" }} next={{ href: "/reading/methodeutics/ch07-origin-of-inquiry/", label: "Origin of Inquiry" }} />
 
   </main>
 </Layout>

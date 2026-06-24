@@ -38,7 +38,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p><strong>Induction</strong> (<em>in-ducere</em>, "to lead toward"): given examples, generalise a pattern. Every swan I've seen is white; probably all swans are white. The conclusion extends beyond the observed cases but stays within the same conceptual frame. Bacon elevated it to systematic method in 1620, <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">Fisher</a> and <a href="https://en.wikipedia.org/wiki/Jerzy_Neyman">Neyman</a> formalised it in the twentieth century, and it underpins statistical inference and supervised machine learning.</p>
 
-    <p><strong>Abduction</strong> (<em>ab-ducere</em>, "to lead away"): given a surprising observation, propose what would make it unsurprising. The lawn is wet but it didn't rain; perhaps the sprinkler ran overnight. The conclusion goes beyond both premises and data: it introduces a new idea. Peirce gave it its classic treatment in 1878 under the name <em>hypothesis</em>, later calling it <em>abduction</em> or <em>retroduction</em>. It still lacks a quantitative framework comparable to deductive validity or statistical inference.</p>
+    <p><strong>Abduction</strong> (<em>ab-ducere</em>, "to lead away"): given a surprising observation, propose what would make it unsurprising. The lawn is wet but it didn't rain; perhaps the sprinkler ran overnight. The conclusion goes beyond both premises and data. It introduces a new idea. Peirce gave it its classic treatment in 1878 under the name <em>hypothesis</em>, later calling it <em>abduction</em> or <em>retroduction</em>. It still lacks a quantitative framework comparable to deductive validity or statistical inference.</p>
 
     <h2>Same beans, three syllogisms</h2>
 
@@ -113,7 +113,7 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p><em>Abduction</em>: Observation → Theory. Something surprising — a symptom, a bug, an anomaly — provokes a hypothesis. New ideas enter inquiry through abduction.</p>
 
-    <p><em>Deduction</em>: Theory → Experiment. The hypothesis yields consequences: if this theory holds, we should observe X under conditions Y. Knowledge becomes procedure.</p>
+    <p><em>Deduction</em>: Theory → Experiment. The hypothesis yields consequences. If this theory holds, we should observe X under conditions Y. Knowledge becomes procedure.</p>
 
     <p><em>Induction</em>: Experiment → Observation. Run the experiment, accumulate evidence, compare results to prediction. New observations feed back into the cycle.</p>
 
@@ -131,7 +131,7 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p><em>Debugging.</em> A server returns 500 errors on every third request. The engineer suspects connection pool exhaustion (abduction). If the pool is exhausted, active connections should climb to the limit before failures begin (deduction). She checks the connection count at failure time (induction). Errors persist — wrong hypothesis. She abduces again: maybe a thread-safety issue in the request handler.</p>
 
-    <p><em>Science.</em> <a href="https://en.wikipedia.org/wiki/Charles_Darwin">Darwin</a> observed that finch beak shapes vary across the <a href="https://en.wikipedia.org/wiki/Darwin%27s_finches">Galapagos islands</a>. (The history is messier than this schematic suggests, but the logical structure holds.) He proposed that beak shape tracks food source: different environments select for different beaks (abduction). If natural selection drives beak shape, islands with hard seeds should have finches with stronger beaks (deduction). Decades of field measurement confirmed the correlation (induction).</p>
+    <p><em>Science.</em> <a href="https://en.wikipedia.org/wiki/Charles_Darwin">Darwin</a> observed that finch beak shapes vary across the <a href="https://en.wikipedia.org/wiki/Darwin%27s_finches">Galapagos islands</a>. (The history is messier than this schematic suggests, but the logical structure holds.) He proposed that beak shape tracks food source. Different environments select for different beaks (abduction). If natural selection drives beak shape, islands with hard seeds should have finches with stronger beaks (deduction). Decades of field measurement confirmed the correlation (induction).</p>
 
     <p><em>Everyday life.</em> You flip a light switch and nothing happens. The bulb burned out (abduction). If so, replacing it should restore the light (deduction). You swap the bulb; the light turns on (induction).</p>
 

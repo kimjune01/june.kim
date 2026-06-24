@@ -1,0 +1,283 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+import Repl from '../../../../components/Repl';
+---
+
+<Layout title="Ch 7: Origin of Inquiry — Methodeutics" favicon="🔭">
+  <main>
+    <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
+
+    <h1>Origin of Inquiry</h1>
+    <p class="text-gray-400 text-sm mb-6">Chapter 7 &middot; Dewey 1896, von Uexküll 1934, Simons-Chabris 1999, Gibson 1979, Miller-Galanter-Pribram 1960, Powers 1973, Boyd 1976</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Bi-abduction infers the frame from a function's footprint. The mechanic has no footprint to read. Yet she snapshotted six gauges and not six hundred. Where did her variables come from? Not from a diff. The diff runs on them. They came from what she was trying to do.</p>
+    </div>
+
+    <h2>The unpaid debt</h2>
+
+    <p>Chapter 4 left a debt. The diff partitions state into figure and ground, but only over the variables you chose to snapshot. <em>The diff requires you to know what to observe.</em> Chapter 5 paid half of it: bi-abduction infers the frame without a global snapshot, reading the relevant variables off a function's own reads and writes. That works where the system has a legible footprint. Code does. The mechanic does not.</p>
+
+    <p>Return to her one more time. She watched the dash lights, listened to the starter, metered the resting voltage. Six readings. The car has thousands of measurable quantities: the cabin temperature, the tire pressures, the radio preset, the angle of the wipers. She snapshotted none of them, and she was right not to. But nothing in the diff told her which six to take. Bi-abduction cannot help her. There is no source code to read her footprint off. So the open-world half of chapter 4's debt is still owed. Where does the variable basis come from, when there is no prior contrast to inherit it from?</p>
+
+    <p>The honest answer is one Peirce gestured at but never built. He named the question and pointed to instinct, to guessing, to <em>musement</em>, the free play of mind from which hypotheses are supposed to emerge. He did not say what fixes the variables. The core inversion that does was written down in 1896, in a paper that never mentions abduction.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Dewey: the unit of behavior</h2>
+
+    <p>John Dewey's <a href="https://psychclassics.yorku.ca/Dewey/reflex.htm">"The Reflex Arc Concept in Psychology"</a> (1896), the paper he would later reprint under the name of its thesis as "The Unit of Behavior," attacks a picture everyone took for granted: that a stimulus arrives, and a response follows. Dewey inverts it. The response is not downstream of the stimulus. It is what <em>selects</em> the stimulus in the first place.</p>
+
+    <blockquote>
+      <p>"We begin not with a sensory stimulus, but with a sensori-motor coördination... it is the movement which is primary, and the sensation which is secondary, the movement of body, head and eye muscles determining the quality of what is experienced."</p>
+      <p class="text-sm text-gray-500">&mdash; Dewey, "The Reflex Arc Concept in Psychology" (1896)</p>
+    </blockquote>
+
+    <p>His example is a child and a candle. The standard story: the child sees the flame (stimulus), reaches (response), gets burned. Dewey's correction: the seeing is already an act. The eye moves, fixes, holds the flame because the child is doing something, and the holding is what makes the flame a stimulus at all. Change the act and the same flame stops being the stimulus. A child trying to read by candlelight registers brightness; a child trying to grab registers reachable heat. One candle, two stimuli, and the difference is the act.</p>
+
+    <p>Stated flatly:</p>
+
+    <blockquote>
+      <p>"It is the motor response which assists in discovering and constituting the stimulus... stimulus and response are not distinctions of existence, but teleological distinctions, that is, distinctions of function."</p>
+      <p class="text-sm text-gray-500">&mdash; Dewey (1896)</p>
+    </blockquote>
+
+    <p>That is the missing chapter in one sentence. The stimulus is not given and then attended to. It is <em>constituted</em> by the act, and which features count as the stimulus is a <em>teleological</em> distinction, a distinction of function, of what the act is for. The mechanic's six gauges are not the salient features of the car. They are the features salient <em>to fixing it</em>. Her purpose constituted her basis before any diff could run on it. The variable basis is the wake of the act, just as the figure, three chapters back, was the wake of the change.</p>
+
+    <p>Dewey thought enough of this argument to reprint it thirty-five years later, and renamed it for its thesis instead of its target. "The Reflex Arc Concept" became "The Unit of Behavior." The unit is the coordination: the act and its perception held as one thing, with the stimulus a role inside the act rather than a trigger outside it. That mature title is the one this chapter keeps, because it is the one he meant. The unit of behavior is the act, and the act fixes what is seen.</p>
+
+    <h2>The gorilla</h2>
+
+    <p>Dewey argued it from an armchair. Psychology put it on film. In <a href="http://www.chabris.com/Simons1999.pdf">"Gorillas in Our Midst"</a> (Simons and Chabris, 1999), viewers watch a video and count how many times the players in white pass a basketball. Midway through, a person in a gorilla suit walks into the scene, faces the camera, thumps their chest, and strolls off. They are on screen for nine seconds. About half the viewers never see them.</p>
+
+    <p>The gorilla is the candle, controlled. The counting task is the goal. The goal frames the basis to white shirts and the ball, and a black gorilla is, by that frame, irrelevant. The light from the gorilla lands on every viewer's retina the entire time; the signal is never missing. What is missing is its promotion into task-relevant awareness, the step from present-on-the-retina to noticed. That promotion is what the goal grants or withholds. Without a task to fix relevance there is no figure, only input. The gorilla stays input. <em>It is easy to miss something you are not looking for</em>, which is the slogan <a href="https://www.youtube.com/watch?v=1_UuZQhlZ5k">a later road-safety ad</a> hung on the same effect, and it is also the entire thesis of this chapter.</p>
+
+    <p>The demonstration is iconic, not revolutionary. It dramatized a line that Neisser and Becklen (1975) had opened with overlapping transparent videos, and that Mack and Rock (1998) had named <em>inattentional blindness</em>. The contribution was the vividness: a chest-thumping gorilla is harder to wave away than a transparent ghost, and it made undeniable what the tradition already held. Perception is not a camera that records and then asks what matters. It is an act that fixes what matters and records that. Selection is not a filter applied after seeing. It is the condition of seeing at all.</p>
+
+    <p>Note the double edge, because the chapter ends on it. The same experiment that shows purpose frames perception shows purpose <em>blinds</em> it. The engagement that holds the counting task is the same engagement that hides the gorilla. A sharp frame is a sharp blindness. Hold that; the closing section spends it.</p>
+
+    <h2>Nested acts, nested bases</h2>
+
+    <p>An act is never solitary. The mechanic diagnoses because she means to fix; she fixes because someone means to drive; the driving serves some errand past that. Each act sits inside a larger one, and each frames a narrower basis than the act above it.</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 text-sm overflow-x-auto my-6"><code class="text-gray-300">drive somewhere        basis: roads, fuel, time
+  └ fix the car        basis: the fault, the parts, the repair
+      └ diagnose       basis: crank, lights, click, voltage
+          └ diff(before, after)   ← chapters 4–6 start here</code></pre>
+
+    <p>The test at each level sets the basis at the level below. "Is the car drivable?" is itself a contrast, and resolving it spawns "is it fixed?", which spawns "what is broken?", which finally licenses the six gauges. The diff primitive does not just run once. It runs at every rung, and the basis it runs on is handed down from the rung above. The book formalized the bottom rung and took the rest as given. The "given" was the goal stack.</p>
+
+    <p>This nesting is not a metaphor borrowed for the occasion. It is the recurring structure under every serious account of goal-directed agents.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Five names, one operation</h2>
+
+    <p>Chapter 3 found eight names for the diff. The frame has its own list. Five traditions, none citing the others, each arrives at the claim that an agent does not perceive neutrally. Its purpose selects what counts as relevant. They are analogues, not one machine. But the role is identical.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Tradition</th>
+            <th class="text-left py-2 pr-3 text-gray-400">The claim</th>
+            <th class="text-left py-2 text-gray-400">Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Pragmatism</td>
+            <td class="pr-3 text-gray-400">Dewey: the act constitutes the stimulus; stimulus and response are distinctions of function</td>
+            <td class="text-gray-400">1896</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Biology</td>
+            <td class="pr-3 text-gray-400"><a href="https://en.wikipedia.org/wiki/Umwelt">von Uexküll</a>: the Umwelt is carved by the functional cycle; the tick's world is three cues, no more</td>
+            <td class="text-gray-400">1934</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Ecological perception</td>
+            <td class="pr-3 text-gray-400"><a href="https://en.wikipedia.org/wiki/Affordance">Gibson</a>: we perceive affordances, what the environment offers the act, not neutral properties</td>
+            <td class="text-gray-400">1979</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Cybernetics</td>
+            <td class="pr-3 text-gray-400">Powers: behavior is the control of perception; the controlled variable is the frame, and set-points nest</td>
+            <td class="text-gray-400">1973</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Reinforcement learning</td>
+            <td class="pr-3 text-gray-400">State abstraction: distinctions that never change the optimal action are provably droppable</td>
+            <td class="text-gray-400">2006</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Two of these carry more than corroboration. <strong>Powers' Perceptual Control Theory</strong> states the inversion as a control law: the organism acts to hold a <em>perception</em> at a reference value, so the variable it controls is precisely the variable it frames. And the reference values are layered, high loops setting the set-points of low ones, which is the nesting above written as a control hierarchy. Miller, Galanter and Pribram had already built the same nesting in 1960 as the <strong>TOTE unit</strong> (Test-Operate-Test-Exit). The unit imported the cybernetic loop into psychology as a hierarchy of plans, where each Test fixes what its level observes. Two independent statements of the nested basis, thirteen years apart.</p>
+
+    <p><strong>Reinforcement learning</strong> supplies the one place the claim gets a narrow formal analogue. In the state-abstraction taxonomy of Li, Walsh and Littman (2006), one criterion keeps exactly the distinctions that bear on optimal action and discards the rest: a distinction that never changes what you should do is provably droppable. That is "purpose frames the basis" made precise, in one setting. But read the quantifier carefully. The abstraction is defined <em>relative to a fixed reward and a fixed underlying state space</em>. It compresses a basis you already have. It does not invent one. Which is exactly the seam this chapter sits in.</p>
+
+    <h2>Boyd: orientation frames observation</h2>
+
+    <p>One more witness, from the least academic corner. John Boyd's OODA loop is usually drawn as a cycle, Observe, Orient, Decide, Act. Boyd insisted the drawing lies. In <a href="https://en.wikipedia.org/wiki/OODA_loop">"The Essence of Winning and Losing"</a> (1995&ndash;1996) he makes Orientation dominate the loop and feed back onto Observation itself: orientation, shaped by "genetic heritage, cultural tradition, previous experiences," determines what the observer can even pick up. You see what your orientation lets you see. That is purpose framing the basis, stated in a fighter pilot's idiom, rarely connected to Dewey or to abduction.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Code: the basis is goal-relative</h2>
+
+    <p>Make it concrete. The same world, queried under two goals, yields two bases. Nothing about the car changed. What changed is what the act needs to know.</p>
+
+    <Repl client:visible initialCode={`# A world is a bag of measurable quantities.
+world = {
+    "crank", "dash_lights", "starter_sound", "battery_rest", "battery_load",
+    "fuel_level", "tire_pressure", "cabin_temp", "radio_preset", "wiper_angle",
+    "coolant_temp", "oil_pressure", "odometer", "paint_hue",
+}
+
+# A goal supplies the predicate that decides relevance:
+# a variable is in the basis iff knowing it could change the act.
+GOALS = {
+    "diagnose_no_start": lambda v: v in {
+        "crank", "dash_lights", "starter_sound", "battery_rest", "battery_load",
+    },
+    "plan_a_road_trip": lambda v: v in {
+        "fuel_level", "tire_pressure", "odometer", "coolant_temp",
+    },
+}
+
+def frame(world, goal):
+    """The variable basis is whatever the goal makes action-relevant."""
+    relevant = GOALS[goal]
+    return {v for v in world if relevant(v)}
+
+for goal in GOALS:
+    basis = frame(world, goal)
+    print(f"{goal}:")
+    for v in sorted(basis):
+        print(f"    {v}")
+    print()
+
+# The diff of chapters 4–6 runs AFTER this. It never chose the basis.
+# The goal did. Change the goal, change what there is to diff over.
+`} />
+
+    <p>The relevance predicate is hand-written here, which is the whole point. The book's machinery begins one step to the right of this function. Everything from chapter 4 onward consumes <code>basis</code>. Nothing before this chapter produced it. The producer is the goal.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>No root, and none needed</h2>
+
+    <p>This relocates the cold-start. Does it abolish it? "The goal supplies the basis" pushes the question up a rung. Where does the goal come from? From the goal above it. Diagnose because fix, fix because drive, drive because there is somewhere to be, and the why's keep going. The chain does not end in a final purpose the agent was issued at the factory. It is open. There is no root to reach.</p>
+
+    <p>That looks like a regress problem and is not, because inquiry never needed the root. To fix the basis for the task in front of you, the live purpose one rung up is enough. The mechanic need not justify driving, or living, to know that fixing the car means watching the starting circuit. You frame relative to the purpose you are actually in, not the ultimate one, and you stop climbing the why's the moment the basis is fixed. So the cold-start is not solved but dissolved. There is no frameless first moment to bootstrap from, because an agent is always already inside some live purpose, and a live purpose is enough. Musement was Peirce reaching for a starting frame in a void. There is no void; there is always a why one rung down from the one you are answering.</p>
+
+    <p>The traditions admit as much, in their honest moments. Powers added a process he called <strong>reorganization</strong>: when intrinsic error stays high, the control hierarchy rewires itself, more or less at random, until the error falls. Boyd, in <a href="https://en.wikipedia.org/wiki/John_Boyd_(military_strategist)#Destruction_and_Creation">"Destruction and Creation"</a> (1976), argued from Gödel and the second law that any orientation decays and must be torn down and rebuilt. Both are accounts of where a <em>new</em> basis comes from when the old one fails. And both are <em>undirected</em>: they generate variation and let error select.</p>
+
+    <p>This is where the folk wisdom is sharper than the theory. Necessity is the mother of invention, and a mother does more than trigger a birth at random. The need shapes what gets born. Reorganization says <em>that</em> the agent re-frames under pressure; it does not say the pressure aims the re-framing. The claim worth defending, and the one the prior literature does not quite make, is that the basis invention is <em>directed</em> by the need: motivation does not only select among given frames, it gives birth to the frame the act requires. That is a generation problem, not a selection problem, and it is what separates this chapter from the economy of research that follows, which only ever selects.</p>
+
+    <p>No tradition gets basis invention for free. Predicate invention in <a href="https://en.wikipedia.org/wiki/Inductive_logic_programming">inductive logic programming</a>, <a href="https://en.wikipedia.org/wiki/Eurisko">Lenat's discovery systems</a>, the structure-learning extensions of <a href="https://en.wikipedia.org/wiki/Free_energy_principle">active inference</a>: each invents new terms, and each presupposes a prior search space, a grammar, a body, or a purpose to invent within. The defensible statement is not that the cold-start is unsolved but that it is never frameless: invention always runs inside a frame it did not itself produce, and that frame is whatever purpose is live, never the last one, because there is no last one.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>This chapter and the next are a pair</h2>
+
+    <p>Framing has two halves, and they sit on either side of this seam. This chapter is the observe half: the goal fixes <em>what to look at</em>. The next chapter, the economy of research, is the perturb half: given a basis and a budget, <em>which experiment to spend on</em>. Peirce wrote the second and left the first to musement. Putting them adjacent is the repair. You cannot rank experiments over a basis you have not framed, and framing without a budget to test is contemplation, not inquiry. Observe, then perturb. Dewey, then Peirce.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>What breaks</h2>
+
+    <p>Purpose frames perception. It also <em>blinds</em> it. The same act that constitutes the right stimulus makes the agent unable to register the wrong one, and "wrong" is judged only against the current goal. The mechanic framed for a no-start will not see the slow coolant leak. Her basis is correct for her act and blind to everything outside it.</p>
+
+    <p>Three ways the frame fails, each naming work the next chapters owe:</p>
+
+    <ul>
+      <li><em>The blind spot is structural.</em> A basis is a commitment to ignore. If the real cause lives in a variable the goal made irrelevant, no amount of diffing recovers it, because the diff never sees it. The gorilla showed it: the tighter the frame, the surer the blindness. This is chapter 4's "what breaks" returning one level up: there it was a variable nobody measured; here it is a variable the purpose never framed.</li>
+      <li><em>Salience overrides purpose.</em> Pain, startle, a loud bang: the world sometimes seizes the basis from the bottom up, against the goal. Purpose frames much, not all. An account that makes perception purely top-down cannot explain the interrupt.</li>
+      <li><em>Goals conflict.</em> The agent rarely holds one goal. Diagnose-fast, diagnose-cheaply, and avoid-liability frame three different bases over the same car, and when several drives contest one perception, which one frames? That is the fork, and it is where the fan of branches gets interesting.</li>
+    </ul>
+
+    <p>This is the bind the rest of the book inherits. Purpose is what makes observation <em>finite</em>: without it there is no figure, only the indefinite mass of everything measurable. Purpose is also what makes observation <em>partial</em>: every frame that picks something out is a frame that leaves something out, and the thing left out is chosen by the same goal that picked. The frame is, in Boyd's reading, an attack surface: name what you are looking for and you have named what you are blind to. A method that frames by purpose inherits the vulnerability of purpose. The next chapters spend the budget the frame defines, and then ask what to do when the frame itself is the thing that has to change.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Sources</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Dewey 1896</td>
+            <td class="text-gray-400"><a href="https://psychclassics.yorku.ca/Dewey/reflex.htm">"The Reflex Arc Concept in Psychology."</a> <em>Psychological Review</em> 3(4): 357&ndash;370. Reprinted, slightly abridged, as "The Unit of Behavior" in <em>Philosophy and Civilization</em> (1931); the quotes here are from the 1896 original. The act constitutes the stimulus; stimulus and response are distinctions of function. The pragmatist root.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">von Uexküll 1934</td>
+            <td class="text-gray-400"><em>A Stroll Through the Worlds of Animals and Men.</em> The Umwelt and the functional cycle (Funktionskreis). The tick is the canonical case: out of everything a mammal radiates, its world is three cues, butyric acid, 37&deg;C, and the touch of bare skin. Perception carved by what the creature is for.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Neisser &amp; Becklen 1975</td>
+            <td class="text-gray-400">"Selective looking: Attending to visually specified events." <em>Cognitive Psychology</em>. Overlapping transparent videos; the precursor that established selective looking.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Mack &amp; Rock 1998</td>
+            <td class="text-gray-400"><em>Inattentional Blindness.</em> Names the effect: no perception of an unattended stimulus, however salient, when attention is engaged elsewhere.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Simons &amp; Chabris 1999</td>
+            <td class="text-gray-400"><a href="http://www.chabris.com/Simons1999.pdf">"Gorillas in Our Midst: Sustained Inattentional Blindness for Dynamic Events."</a> <em>Perception</em> 28: 1059&ndash;1074. The counting task frames the basis; roughly half miss the gorilla. The thesis as a controlled experiment.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Gibson 1979</td>
+            <td class="text-gray-400"><em>The Ecological Approach to Visual Perception.</em> Affordances: we perceive what the environment offers action, not neutral properties.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Miller, Galanter &amp; Pribram 1960</td>
+            <td class="text-gray-400"><em>Plans and the Structure of Behavior.</em> The TOTE unit: the cybernetic loop as a hierarchy of plans. The Test fixes what its level observes.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Powers 1973</td>
+            <td class="text-gray-400"><em>Behavior: The Control of Perception.</em> Perceptual Control Theory. The controlled variable is the frame; reference signals nest; reorganization as undirected basis change.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Boyd 1976, 1995</td>
+            <td class="text-gray-400">"Destruction and Creation"; "The Essence of Winning and Losing." Orientation frames observation; frames decay and must be rebuilt, argued from Gödel and the second law.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Li, Walsh &amp; Littman 2006</td>
+            <td class="text-gray-400">"Towards a Unified Theory of State Abstraction for MDPs." The right basis is the coarsest partition preserving optimal action. Purpose-frames-basis as a theorem, but compression of a given basis, not invention.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Varela, Thompson &amp; Rosch 1991</td>
+            <td class="text-gray-400"><em>The Embodied Mind.</em> Enactivism: cognition as the bringing-forth of a world through embodied action. The modern carrier of Dewey's inversion.</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Vervaeke et al. 2012</td>
+            <td class="text-gray-400">"Relevance Realization and the Emerging Framework in Cognitive Science." Names the problem this chapter solves by purpose: how an agent fixes relevance among indefinitely many features.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
+      <li><a href="/reading/methodeutics/ch04-diff/">Ch 4: Diff</a> &mdash; the primitive that runs on the basis this chapter supplies</li>
+      <li><a href="/reading/methodeutics/ch05-bi-abduction/">Ch 5: Bi-abduction</a> &mdash; infers the frame where there is a footprint to read</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Economy of Research</a> &mdash; the perturb half of framing</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://psychclassics.yorku.ca/Dewey/reflex.htm">Dewey 1896, "The Reflex Arc Concept in Psychology" (full text)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Umwelt"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Umwelt (Wikipedia)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/OODA_loop"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>OODA loop (Wikipedia)</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch06-tri-abduction/", label: "Tri-abduction" }} next={{ href: "/reading/methodeutics/ch08-economy-of-research/", label: "Economy of Research" }} />
+
+  </main>
+</Layout>

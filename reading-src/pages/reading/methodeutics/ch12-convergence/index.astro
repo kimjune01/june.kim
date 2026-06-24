@@ -4,18 +4,18 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 11: Convergence — Methodeutics" favicon="🔭">
+<Layout title="Ch 12: Convergence — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Convergence</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 11 &middot; Kelly 1996, Gr&uuml;nwald 2024, Ramdas 2023, Chernoff 1959</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 12 &middot; Kelly 1996, Gr&uuml;nwald 2024, Ramdas 2023, Chernoff 1959</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Five sensor streams, each individually undetectable. Composed e-values classify the forcing pattern at F1&nbsp;=&nbsp;0.996. The math composes. But a human can&rsquo;t run this loop at scale.</p>
     </div>
 
-    <p>Chapters 8&ndash;10 built a pipeline: track evidence as a trajectory (ch&nbsp;8), classify the trajectory&rsquo;s shape into four bins (ch&nbsp;9), and use each classification&rsquo;s failure mode to generate edges in the hypothesis graph (ch&nbsp;10). Each piece works locally: one experiment, one trajectory, one kill condition. Does the graph as a whole converge? When you compose evidence across many experiments, each chosen adaptively based on the last, does the accumulated evidence settle on the truth?</p>
+    <p>Chapters 9&ndash;11 built a pipeline: track evidence as a trajectory (ch&nbsp;9), classify the trajectory&rsquo;s shape into four bins (ch&nbsp;10), and use each classification&rsquo;s failure mode to generate edges in the hypothesis graph (ch&nbsp;11). Each piece works locally: one experiment, one trajectory, one kill condition. Does the graph as a whole converge? When you compose evidence across many experiments, each chosen adaptively based on the last, does the accumulated evidence settle on the truth?</p>
 
     <p>Two theorems, from two different fields, say yes. Neither cites the other.</p>
 
@@ -23,7 +23,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <h2>E-value composition: product rule</h2>
 
-    <p>Chapter 8 introduced e-values as an alternative to p-values: a measure of evidence you can peek at any time without inflating error. E-values compose.</p>
+    <p>Chapter 9 introduced e-values as an alternative to p-values: a measure of evidence you can peek at any time without inflating error. E-values compose.</p>
 
     <p>Run five experiments sequentially, choosing each based on the results of the previous ones. Each experiment produces an e-value E<sub>i</sub>. The product E<sub>1</sub> &times; E<sub>2</sub> &times; &hellip; &times; E<sub>5</sub> is itself a valid e-value. No correction for multiple testing. No penalty for adaptive selection. The product is valid as long as each e-value is constructed conditional on all previous data and decisions.</p>
 
@@ -36,7 +36,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <p class="text-sm text-gray-500">&mdash; Gr&uuml;nwald, Henzi, and Ly, &ldquo;E-values: Calibration, combination, and applications&rdquo; (2024)</p>
     </blockquote>
 
-    <p>The product weights each experiment by its informativeness. An experiment producing E<sub>i</sub> = 12 contributes more than one producing E<sub>i</sub> = 1.1. This is Fisher information weighting in disguise: the likelihood ratio underlying each e-value gives informative experiments more say. The composition theorem says the weighting is valid.</p>
+    <p>The product weights each experiment by its informativeness. An experiment producing E<sub>i</sub> = 12 contributes more than one producing E<sub>i</sub> = 1.1. This is Fisher information weighting in disguise. The likelihood ratio underlying each e-value gives informative experiments more say. The composition theorem says the weighting is valid.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -77,7 +77,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       </table>
     </div>
 
-    <p>The standardized sum fails because it gives each stream equal weight. A Bernoulli stream with subtle frequency shifts and an exponential stream with rate changes carry different amounts of Fisher information. Averaging treats them the same. The e-value product does not: each likelihood ratio scales by the stream&rsquo;s informativeness.</p>
+    <p>The standardized sum fails because it gives each stream equal weight. A Bernoulli stream with subtle frequency shifts and an exponential stream with rate changes carry different amounts of Fisher information. Averaging treats them the same. The e-value product does not. Each likelihood ratio scales by the stream&rsquo;s informativeness.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -156,14 +156,14 @@ cum_composed = np.cumprod(e_normal * e_poisson)
         <span class="hl-keyword">if not</span> graph.open_edges():
             <span class="hl-keyword">break</span>  <span class="hl-comment"># converged: no open questions</span>
 
-        <span class="hl-comment"># Economy (ch 7): pick the cheapest decisive experiment</span>
+        <span class="hl-comment"># Economy (ch 8): pick the cheapest decisive experiment</span>
         edge = min(graph.open_edges(), key=<span class="hl-keyword">lambda</span> e: e.cost / e.info_gain)
 
-        <span class="hl-comment"># Measure and classify (ch 8-9)</span>
+        <span class="hl-comment"># Measure and classify (ch 9-9)</span>
         result = measure(system, edge.perturbation)
         shape = classify(result)
 
-        <span class="hl-comment"># Kill condition (ch 10): failure names the next edge</span>
+        <span class="hl-comment"># Kill condition (ch 11): failure names the next edge</span>
         <span class="hl-keyword">if</span> shape == <span class="hl-string">"convergent"</span>:
             graph.close(edge)
         <span class="hl-keyword">elif</span> shape == <span class="hl-string">"divergent"</span>:
@@ -202,7 +202,7 @@ cum_composed = np.cumprod(e_normal * e_poisson)
       <li class="mb-2">Any method that violates Ockham&rsquo;s razor &mdash; that ever outputs a complex hypothesis when a simpler one is compatible with the data &mdash; incurs strictly more mind-changes in the worst case.</li>
     </ol>
 
-    <p>&ldquo;Simplest&rdquo; here is not aesthetic. It is topological: a hypothesis is simpler if the set of evidence sequences compatible with it has lower topological complexity (fewer alternations between open and closed sets in the evidence topology). The razor is not a preference; it is a convergence guarantee.</p>
+    <p>&ldquo;Simplest&rdquo; here is not aesthetic. It is topological. A hypothesis is simpler if the set of evidence sequences compatible with it has lower topological complexity (fewer alternations between open and closed sets in the evidence topology). The razor is not a preference; it is a convergence guarantee.</p>
 
     <blockquote>
       <p>&ldquo;Departing from Ockham&rsquo;s razor always results in extra retractions or cycles that could have been avoided without sacrificing convergence to the truth.&rdquo;</p>
@@ -282,7 +282,7 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <p>Both are at CMU. No collaboration between them appears in the published literature. Kelly is in the Department of Philosophy; Ramdas is in Statistics and Machine Learning. Their theorems address different halves of the same question: Kelly provides the convergence guarantee, Ramdas provides the evidence-composition mechanism. The hypothesis graph needs both.</p>
 
-    <p>Connect them: an inquiry that follows Ockham&rsquo;s razor, measures evidence with e-values, and composes across adaptive experiments will (1) reach the truth with minimum retractions (Kelly) and (2) maintain valid error control at every step (Ramdas). Kelly says you&rsquo;ll get there efficiently. Ramdas says you&rsquo;ll know where you are while traveling.</p>
+    <p>Connect them. An inquiry that follows Ockham&rsquo;s razor, measures evidence with e-values, and composes across adaptive experiments will (1) reach the truth with minimum retractions (Kelly) and (2) maintain valid error control at every step (Ramdas). Kelly says you&rsquo;ll get there efficiently. Ramdas says you&rsquo;ll know where you are while traveling.</p>
 
     <p>The bridge between topology and measure theory for adaptive inquiry is open. No published theorem crosses it.</p>
 
@@ -343,7 +343,7 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <p><em>Perturbation access</em> is the most fundamental. Sciences that cannot perturb their subject &mdash; astronomy, macroeconomics, paleontology &mdash; cannot close the hypothesis graph. They can observe, classify, and compose evidence, but they cannot run the experiment that would resolve a frontier edge. The graph stays open. This is a boundary condition, not a failure of method. The hypothesis graph works where you can poke.</p>
 
-    <p><em>Independence</em> makes the product rule work. If two sensor streams share a hidden common cause that inflates both signals, the product of their e-values overstates the evidence. Gr&uuml;nwald&rsquo;s theorem requires each e-value be valid conditional on all previous data and decisions. Correlated streams violate this: stream B&rsquo;s data is not conditionally independent of stream A&rsquo;s, given the shared cause.</p>
+    <p><em>Independence</em> makes the product rule work. If two sensor streams share a hidden common cause that inflates both signals, the product of their e-values overstates the evidence. Gr&uuml;nwald&rsquo;s theorem requires each e-value be valid conditional on all previous data and decisions. Correlated streams violate this. Stream B&rsquo;s data is not conditionally independent of stream A&rsquo;s, given the shared cause.</p>
 
     <p><strong>Identifiability</strong> means the truth is findable. If two hypotheses predict identical observations under every possible experiment, no evidence can distinguish them. The graph has a permanent frontier edge between them. Some systems have symmetries that prevent identification: gauge invariances in physics, confounders in causal inference.</p>
 
@@ -377,7 +377,7 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <p>Two earlier results complete the picture.</p>
 
-    <p><em><a href="https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-3/Sequential-Design-of-Experiments/10.1214/aoms/1177706205.full">Chernoff (1959)</a></em> proved that adaptive experiment selection converges to the true hypothesis exponentially fast, at a rate determined by the KL divergence between hypotheses. The optimal policy selects the experiment that maximizes the minimum KL divergence between the current best hypothesis and its nearest competitor. The economy of research (ch&nbsp;7) made asymptotically precise.</p>
+    <p><em><a href="https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-3/Sequential-Design-of-Experiments/10.1214/aoms/1177706205.full">Chernoff (1959)</a></em> proved that adaptive experiment selection converges to the true hypothesis exponentially fast, at a rate determined by the KL divergence between hypotheses. The optimal policy selects the experiment that maximizes the minimum KL divergence between the current best hypothesis and its nearest competitor. The economy of research (ch&nbsp;8) made asymptotically precise.</p>
 
     <p><em><a href="https://jmlr.org/papers/v9/he08a.html">He and Geng (2008)</a></em> proved that adaptive interventions recover the true causal structure under faithfulness and sufficiency assumptions. If you can intervene on any variable, you can distinguish any two causal graphs that produce different interventional distributions.</p>
 
@@ -423,13 +423,13 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <h2>What this chapter establishes</h2>
 
-    <p>The evidence framework from Part III is complete. A practitioner with chapters 8&ndash;11 can:</p>
+    <p>The evidence framework from Part III is complete. A practitioner with chapters 9&ndash;12 can:</p>
 
     <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-2">Track evidence as a trajectory, not a scalar (ch&nbsp;8).</li>
-      <li class="mb-2">Classify the trajectory into four bins: converge, diverge, oscillate, chaos (ch&nbsp;9).</li>
-      <li class="mb-2">Generate the next experiment from the failure mode of the current one (ch&nbsp;10).</li>
-      <li class="mb-2">Compose evidence across experiments, knowing the composition is valid and the inquiry converges (ch&nbsp;11).</li>
+      <li class="mb-2">Track evidence as a trajectory, not a scalar (ch&nbsp;9).</li>
+      <li class="mb-2">Classify the trajectory into four bins: converge, diverge, oscillate, chaos (ch&nbsp;10).</li>
+      <li class="mb-2">Generate the next experiment from the failure mode of the current one (ch&nbsp;11).</li>
+      <li class="mb-2">Compose evidence across experiments, knowing the composition is valid and the inquiry converges (ch&nbsp;12).</li>
     </ol>
 
     <p>Kelly guarantees convergence. Ramdas guarantees composition. Chernoff guarantees rate. He and Geng guarantee identifiability.</p>
@@ -479,8 +479,8 @@ cum_composed = np.cumprod(e_normal * e_poisson)
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
       <li><a href="/the-hypothesis-graph">The Hypothesis Graph</a> &mdash; the blog post where convergence and fixed points were first sketched</li>
-      <li><a href="/evidence-has-a-trajectory">Ch 8: Evidence has a trajectory</a> &mdash; e-values and anytime-valid inference</li>
-      <li><a href="/reading/methodeutics/ch07-economy-of-research/">Ch 7: Economy of Research</a> &mdash; which experiment to run next</li>
+      <li><a href="/evidence-has-a-trajectory">Ch 9: Evidence has a trajectory</a> &mdash; e-values and anytime-valid inference</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiment to run next</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
@@ -493,7 +493,7 @@ cum_composed = np.cumprod(e_normal * e_poisson)
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch10-kill-conditions/", label: "The hypothesis graph" }} next={{ href: "/reading/methodeutics/ch12-protecting-the-loop/", label: "Protecting the loop" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch11-kill-conditions/", label: "The hypothesis graph" }} next={{ href: "/reading/methodeutics/ch13-protecting-the-loop/", label: "Protecting the loop" }} />
 
   </main>
 </Layout>

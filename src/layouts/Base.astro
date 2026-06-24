@@ -239,6 +239,35 @@ const { title, favicon } = Astro.props;
       :root.light .hl-bool { color: #be185d; }
       :root.light .hl-builtin { color: #7c3aed; }
       :root.light .hl-decorator { color: #6d28d9; }
+
+      /* Inline diagrams (.mdgm) — theme-aware. Colour via classes; size stays on font-size attrs. */
+      .mdgm text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #999; }
+      .mdgm .dark { fill: #e0e0e0; }
+      .mdgm .muted { fill: #777; }
+      .mdgm .accent { fill: #3b82f6; }
+      .mdgm .green { fill: #4ade80; }
+      .mdgm .amber { fill: #fbbf24; }
+      .mdgm .red { fill: #f87171; }
+      .mdgm .bold { font-weight: bold; }
+      .mdgm .s-neutral { stroke: #555; }
+      .mdgm .s-line { stroke: #444; }
+      .mdgm .s-accent { stroke: #3b82f6; }
+      .mdgm .s-green { stroke: #4ade80; }
+      .mdgm .s-amber { stroke: #fbbf24; }
+      .mdgm .s-red { stroke: #f87171; }
+      :root.light .mdgm text { fill: #666; }
+      :root.light .mdgm .dark { fill: #1c1917; }
+      :root.light .mdgm .muted { fill: #78716c; }
+      :root.light .mdgm .accent { fill: #2563eb; }
+      :root.light .mdgm .green { fill: #15803d; }
+      :root.light .mdgm .amber { fill: #b45309; }
+      :root.light .mdgm .red { fill: #c43c3c; }
+      :root.light .mdgm .s-neutral { stroke: #d6d3d1; }
+      :root.light .mdgm .s-line { stroke: #d6d3d1; }
+      :root.light .mdgm .s-accent { stroke: #2563eb; }
+      :root.light .mdgm .s-green { stroke: #15803d; }
+      :root.light .mdgm .s-amber { stroke: #b45309; }
+      :root.light .mdgm .s-red { stroke: #c43c3c; }
     </style>
   </head>
   <body class="min-h-screen">
