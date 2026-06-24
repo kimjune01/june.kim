@@ -120,11 +120,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Machine learning has reinvented economy of research under several names, each formalizing "which experiment next?" without citing Peirce or Hintikka.</p>
 
-    <p><strong>Active learning.</strong> Which unlabeled point should an oracle label next? The standard criterion (uncertainty sampling, query-by-committee) selects the point the model is most uncertain about. This is GDE's entropy-reduction criterion restricted to a single model class.</p>
+    <p><em>Active learning.</em> Which unlabeled point should an oracle label next? The standard criterion (uncertainty sampling, query-by-committee) selects the point the model is most uncertain about. This is GDE's entropy-reduction criterion restricted to a single model class.</p>
 
-    <p><strong>Bayesian experimental design.</strong> Choose the experiment that maximizes expected information gain about model parameters. Lindley (1956) formalized this; Chaloner and Verdinelli (1995) surveyed the field. The criterion is GDE's, applied to continuous parameter spaces instead of discrete diagnostic candidates.</p>
+    <p><em>Bayesian experimental design.</em> Choose the experiment that maximizes expected information gain about model parameters. Lindley (1956) formalized this; Chaloner and Verdinelli (1995) surveyed the field. The criterion is GDE's, applied to continuous parameter spaces instead of discrete diagnostic candidates.</p>
 
-    <p><strong>Multi-armed bandits.</strong> Allocate trials across K arms to maximize cumulative reward (exploration-exploitation) or identify the best arm (pure exploration). The pure-exploration variant is Peirce's economy of research: fixed budget, maximize what you learn.</p>
+    <p><em>Multi-armed bandits.</em> Allocate trials across K arms to maximize cumulative reward (exploration-exploitation) or identify the best arm (pure exploration). The pure-exploration variant is Peirce's economy of research: fixed budget, maximize what you learn.</p>
 
     <p>None of these literatures connects experiment selection back to abduction. The hypothesis set is taken as given. This matters because the quality of the hypothesis set determines the ceiling of any selection strategy. Abduction is where that set comes from.</p>
 

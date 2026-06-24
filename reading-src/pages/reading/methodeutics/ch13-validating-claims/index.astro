@@ -15,10 +15,10 @@ import Repl from '../../../../components/Repl';
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Chapter 12's prereg checklist catches self-deception: double-dipping, post hoc framing, data leakage. But claims come in different kinds, and each kind needs a different validator.</p>
       <ul class="mt-4 mb-2 space-y-3" style="max-width:none">
-        <li><strong>Empirical validators</strong> run the experiment, measure the outcome. They need perturbation access and fresh data.</li>
-        <li><strong>Structural validators</strong> check that the claim's logical structure holds: consistency, completeness, independence. No new data needed.</li>
-        <li><strong>Proof validators</strong> derive consequences and check if they hold. Schoenfeld's kill conditions: when induction fails, the failure mode names the next technique.</li>
-        <li><strong>Counterexample validators</strong> search for cases that violate the claim. Lakatos's guilty lemma: the counterexample reveals which step was wrong.</li>
+        <li><em>Empirical validators</em> run the experiment, measure the outcome. They need perturbation access and fresh data.</li>
+        <li><em>Structural validators</em> check that the claim's logical structure holds: consistency, completeness, independence. No new data needed.</li>
+        <li><em>Proof validators</em> derive consequences and check if they hold. Schoenfeld's kill conditions: when induction fails, the failure mode names the next technique.</li>
+        <li><em>Counterexample validators</em> search for cases that violate the claim. Lakatos's guilty lemma: the counterexample reveals which step was wrong.</li>
       </ul>
       <p style="max-width:none">This chapter builds out the proof and counterexample validators. Structural validators use the kill condition and symmetry mismatch tables below. Empirical validators belong to chapters 8&ndash;9 (evidence trajectories).</p>
     </div>
@@ -36,11 +36,11 @@ import Repl from '../../../../components/Repl';
     <p>The <a href="/the-proof-manual">proof manual</a> operationalizes Schoenfeld's control into a five-step procedure:</p>
 
     <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-2"><strong>Classify the claim type.</strong> Existence, bound, construction, uniqueness, impossibility, equivalence. Each has a different proof shape. Existence needs a witness (&Sigma; type). Impossibility needs a function into False (&Pi; type). The classification picks the row.</li>
-      <li class="mb-2"><strong>Classify the domain.</strong> Discrete, continuous, algebraic, geometric, probabilistic, number-theoretic, combinatorial. The domain picks the column.</li>
-      <li class="mb-2"><strong>Grid lookup.</strong> Row-column intersection gives candidate techniques. Scan the whole row, not just your first instinct. The <a href="/data/proof-manual.yml">grid</a> has over 100 entries.</li>
-      <li class="mb-2"><strong>Check kill conditions.</strong> Cross off the dead ones before you start. A kill condition is a structural property that makes a technique provably unable to succeed. Three minutes up front saves three hours of failed attempts.</li>
-      <li class="mb-2"><strong>Check symmetry mismatches.</strong> A technique that assumes a symmetry your problem lacks produces a valid-looking argument with a hidden gap. These fail silently. Check explicitly.</li>
+      <li class="mb-2"><em>Classify the claim type.</em> Existence, bound, construction, uniqueness, impossibility, equivalence. Each has a different proof shape. Existence needs a witness (&Sigma; type). Impossibility needs a function into False (&Pi; type). The classification picks the row.</li>
+      <li class="mb-2"><em>Classify the domain.</em> Discrete, continuous, algebraic, geometric, probabilistic, number-theoretic, combinatorial. The domain picks the column.</li>
+      <li class="mb-2"><em>Grid lookup.</em> Row-column intersection gives candidate techniques. Scan the whole row, not just your first instinct. The <a href="/data/proof-manual.yml">grid</a> has over 100 entries.</li>
+      <li class="mb-2"><em>Check kill conditions.</em> Cross off the dead ones before you start. A kill condition is a structural property that makes a technique provably unable to succeed. Three minutes up front saves three hours of failed attempts.</li>
+      <li class="mb-2"><em>Check symmetry mismatches.</em> A technique that assumes a symmetry your problem lacks produces a valid-looking argument with a hidden gap. These fail silently. Check explicitly.</li>
     </ol>
 
     <p>Try the survivors. When one dies, the failure mode names the next.</p>
@@ -49,7 +49,7 @@ import Repl from '../../../../components/Repl';
 
     <h2>Kill conditions: pre-flight and post-mortem in one table</h2>
 
-    <p>Kill conditions serve two validators. The <strong>structural validator</strong> uses them as a pre-flight check: does the claim's structure satisfy the technique's preconditions? The <strong>proof validator</strong> uses them as a post-mortem: the shape of the failure identifies which technique to try next.</p>
+    <p>Kill conditions serve two validators. The <em>structural validator</em> uses them as a pre-flight check: does the claim's structure satisfy the technique's preconditions? The <em>proof validator</em> uses them as a post-mortem: the shape of the failure identifies which technique to try next.</p>
 
     <div class="overflow-x-auto my-6">
       <table class="w-full text-sm">

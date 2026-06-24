@@ -18,9 +18,9 @@ import Repl from '../../../../components/Repl';
 
     <h2>The mechanic</h2>
 
-    <p>A mechanic taps the alternator and the engine stalls. Two hypotheses fire: test the battery, test the voltage regulator. Nobody taught her a hypothesis-generation algorithm. The shape of the failure named the next experiment.</p>
+    <p>A driver turns the key and gets nothing: no crank, no start. Yesterday the car started fine. The mechanic turns the key herself, watches the dash lights dim and the starter give a single click, and two hypotheses fire: weak battery, or a bad connection at the terminals. Nobody taught her a hypothesis-generation algorithm. The shape of the failure named the next test.</p>
 
-    <p>Where did the hypotheses come from? She compared two states: engine running, engine stalled. She noted what changed (alternator tapped) and what stayed the same (fuel, spark, coolant). The change pointed at the electrical subsystem. The hypotheses followed from the diff.</p>
+    <p>Where did the hypotheses come from? She compared two states: the car that started yesterday, the car that won't crank today. She noted what changed (dim lights, a single click, voltage sagging under load) and what stayed the same (fuel level, security light, the key turning freely). The changes pointed at the starting circuit. The hypotheses followed from the diff.</p>
 
     <p>Diff is computable. The mechanic performed it in her head. OBD-II performs it in silicon. Facebook Infer performs it on code. The representation changes; the operation stays the same.</p>
 
@@ -32,7 +32,7 @@ import Repl from '../../../../components/Repl';
       <p class="text-gray-300" style="max-width:none">Given expected state <strong>E</strong>, observed state <strong>O</strong>, and background frame <strong>B</strong>, partition what differs from what remains invariant.</p>
     </div>
 
-    <p>Abduction then uses that partition to generate candidate causes <strong>H</strong>: minimal revisions to <strong>B</strong> that would make <strong>O</strong> unsurprising. The partition itself is the primitive. All eight names in Chapter 3 instantiate it. The simplest encoding: take two snapshots of a system's state, one before an event and one after. The comparison partitions state into two sets:</p>
+    <p>Abduction then uses that partition to generate candidate causes <strong>H</strong>: minimal revisions to <em>B</em> that would make <em>O</em> unsurprising. The partition itself is the primitive. All eight names in Chapter 3 instantiate it. The simplest encoding: take two snapshots of a system's state, one before an event and one after. The comparison partitions state into two sets:</p>
 
     <p><strong>Figure</strong> &mdash; what changed. Variables whose values differ between snapshots. In Gestalt terms, what pops out against a stable background.</p>
 
@@ -44,7 +44,7 @@ import Repl from '../../../../components/Repl';
 
     <p>The partition is symmetric: it doesn't matter which snapshot is &ldquo;first.&rdquo; But use is asymmetric. The before-state is the baseline; the after-state is the perturbation. The diff tells you what the perturbation touched.</p>
 
-    <p>Caution: diff gives candidates, not causes. A changed variable may be cause, effect, symptom, intervention, or coincident noise. The mechanic's diff puts both <em>alternator tapped</em> (intervention) and <em>engine stalled</em> (effect) in the figure. The diff alone does not know which is which. Separating cause from effect requires a dependency graph or an experiment. The diff just names what changed.</p>
+    <p>Caution: diff gives candidates, not causes. A changed variable may be cause, effect, symptom, or coincident noise. The mechanic's diff puts the chief complaint (<em>no crank</em>) next to the diagnostic signs (<em>dim lights</em>, <em>single click</em>, <em>sagging voltage</em>), all in the figure. The diff alone does not know which is upstream. Separating cause from effect requires a dependency graph or an experiment. The diff just names what changed.</p>
 
     <h2>The XOR</h2>
 
@@ -75,7 +75,7 @@ import Repl from '../../../../components/Repl';
 print("diff() defined")
 `} />
 
-    <p>Apply it to the mechanic's engine:</p>
+    <p>Apply it to the no-start:</p>
 
     <Repl client:visible initialCode={`def diff(before, after):
     all_keys = set(before) | set(after)
@@ -87,21 +87,23 @@ print("diff() defined")
     return figure, ground
 
 before = {
-    "engine":     "running",
-    "alternator": "untouched",
-    "battery":    "12.6V",
-    "fuel_pump":  "on",
-    "spark":      "firing",
-    "coolant":    "92C",
+    "crank":         "strong",
+    "engine":        "starts",
+    "dash_lights":   "bright",
+    "starter_sound": "spins",
+    "battery_rest":  "12.6V",
+    "fuel":          "half",
+    "security":      "off",
 }
 
 after = {
-    "engine":     "stalled",
-    "alternator": "tapped",
-    "battery":    "12.6V",
-    "fuel_pump":  "on",
-    "spark":      "firing",
-    "coolant":    "92C",
+    "crank":         "none",
+    "engine":        "no-start",
+    "dash_lights":   "dim",
+    "starter_sound": "single click",
+    "battery_rest":  "12.1V",
+    "fuel":          "half",
+    "security":      "off",
 }
 
 figure, ground = diff(before, after)
@@ -115,9 +117,9 @@ for k, v in ground.items():
     print(f"  {k}: {v}")
 `} />
 
-    <p>Two figure entries: the alternator (input) and the engine state (output). Four ground entries: battery, fuel pump, spark, coolant, all unchanged.</p>
+    <p>Five figure entries: no crank, no start, dim lights, a single click from the starter, and a slightly lower resting voltage. Two ground entries: fuel and the security light, both unchanged.</p>
 
-    <p>The hypotheses follow from the figure. The alternator was tapped, the engine stalled. What connects them? The electrical subsystem. Battery supplies power; voltage regulator manages alternator output. Both sit upstream of the engine and both fit a tap-induced failure. The ground tells the mechanic what to deprioritize: fuel-pump and spark are unchanged (though that doesn't eliminate them unless the measurement set is complete).</p>
+    <p>The hypotheses follow from the figure. Dim lights, a single click, no crank. What connects them? The starting circuit: battery, wiring, the starter motor, the ignition switch. Each can starve a crank, and the battery and wiring sit upstream of the dimming lights and the sagging voltage too. The ground tells the mechanic what to deprioritize: fuel is full and the security light is off, so neither a fuel fault nor an immobilizer lockout is implicated (though that doesn't eliminate them unless the measurement set is complete).</p>
 
     <p>This is the contrast primitive. Hypothesis generation, ranking, and testing build on top of it.</p>
 
@@ -309,25 +311,24 @@ def abduct(figure: dict, dependencies: dict) -> list[Hypothesis]:
 # --- The mechanic scenario ---
 
 before = {
-    "engine": "running", "alternator": "untouched",
-    "battery": "12.6V", "fuel_pump": "on",
-    "spark": "firing",  "coolant": "92C",
+    "crank": "strong", "engine": "starts",
+    "dash_lights": "bright", "starter_sound": "spins",
+    "battery_rest": "12.6V", "fuel": "half", "security": "off",
 }
 
 after = {
-    "engine": "stalled", "alternator": "tapped",
-    "battery": "12.6V",  "fuel_pump": "on",
-    "spark": "firing",   "coolant": "92C",
+    "crank": "none", "engine": "no-start",
+    "dash_lights": "dim", "starter_sound": "single click",
+    "battery_rest": "12.1V", "fuel": "half", "security": "off",
 }
 
 # Which components can cause each state variable to change?
 dependencies = {
-    "engine":     ["battery", "voltage_regulator", "ECU"],
-    "alternator": ["alternator_belt", "alternator_bearing"],
-    "battery":    ["alternator", "parasitic_drain"],
-    "fuel_pump":  ["fuel_relay", "fuel_filter"],
-    "spark":      ["ignition_coil", "spark_plug"],
-    "coolant":    ["thermostat", "water_pump"],
+    "crank":         ["battery", "wiring", "starter_motor", "ignition_switch"],
+    "dash_lights":   ["battery", "wiring"],
+    "starter_sound": ["starter_motor", "battery", "wiring"],
+    "battery_rest":  ["battery"],
+    # engine "no-start" is downstream of "no crank" — no independent candidates
 }
 
 figure, ground = diff(before, after)
@@ -341,7 +342,7 @@ for h in hypotheses:
     print(f"  [{h.component}] {h.reason}")
 `} />
 
-    <p>Five hypotheses from a two-variable diff. The dependency graph constrains which components are candidates. The ground (fuel pump, spark, coolant) eliminates their upstream components. Battery, voltage regulator, ECU, alternator belt, alternator bearing: the five things to check.</p>
+    <p>Four candidates from the figure: battery, wiring, starter motor, ignition switch. They don't weigh equally. The battery is upstream of every changed variable (the crank, the lights, the click, the resting voltage), and wiring of most; the starter motor explains the crank and the click, the ignition switch only the crank. The ground (full fuel, security off) keeps the fuel system and the immobilizer off the list. Check the battery and its connections first.</p>
 
     <p>Notice what the code does <em>not</em> do. It does not test the hypotheses, rank them, or estimate their probability. It generates them. The diff is a hypothesis-generation primitive. Testing is induction. Ranking is economy of research (ch 7). The diff names the candidates.</p>
 
@@ -351,7 +352,7 @@ for h in hypotheses:
 
     <p>The diff requires you to know what to observe. Every variable was chosen by someone: the mechanic who checked six gauges, the engineer who wired six sensors, the programmer who logged six fields. If the relevant state lives in a variable nobody snapshotted, the diff misses it.</p>
 
-    <p>Return to the mechanic. She checked six variables but not the serpentine belt tension. If the real cause is a worn belt that slipped when she tapped the alternator, the diff cannot find it. The belt isn't in either snapshot. Not in the figure, not in the ground. Absent.</p>
+    <p>Return to the mechanic. She snapshotted resting voltage but never voltage under load. If the real cause is a battery that holds 12.1V at rest yet collapses to 8V the instant the starter pulls current, the diff cannot find it. Load voltage isn't in either snapshot. Not in the figure, not in the ground. Absent.</p>
 
     <Repl client:visible initialCode={`def diff(before, after):
     all_keys = set(before) | set(after)
@@ -364,27 +365,27 @@ for h in hypotheses:
 
 # The variable that matters isn't in the snapshot.
 before = {
-    "engine": "running", "alternator": "untouched",
-    "battery": "12.6V", "fuel_pump": "on",
-    "spark": "firing",  "coolant": "92C",
-    # "belt_tension": "4.2" — not measured!
+    "crank": "strong", "engine": "starts",
+    "dash_lights": "bright", "starter_sound": "spins",
+    "battery_rest": "12.6V", "fuel": "half",
+    # "battery_load": "10.8V" — not measured
 }
 
 after = {
-    "engine": "stalled", "alternator": "tapped",
-    "battery": "12.6V", "fuel_pump": "on",
-    "spark": "firing",  "coolant": "92C",
-    # "belt_tension": "1.1" — would have been figure, but we missed it
+    "crank": "none", "engine": "no-start",
+    "dash_lights": "dim", "starter_sound": "single click",
+    "battery_rest": "12.1V", "fuel": "half",
+    # "battery_load": "8.1V" — would have been the smoking gun, but we missed it
 }
 
 figure, ground = diff(before, after)
 
 # The diff correctly reports what changed among observed variables.
-# But the real cause (belt_tension: 4.2 -> 1.1) is invisible.
-# The diff cannot find what it wasn't told to look at.
+# But the real cause (battery_load: 10.8V -> 8.1V) is invisible.
+# Resting voltage barely moved; the collapse under load was never measured.
 print("Figure:", list(figure.keys()))
 print("Ground:", list(ground.keys()))
-print("Belt tension: not in snapshot. Hypothesis space is incomplete.")
+print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
 `} />
 
     <p>This is the structural limitation. The unary diff partitions observed state into figure and ground. It cannot reason about unobserved state. The hypothesis space is bounded by what you chose to measure.</p>

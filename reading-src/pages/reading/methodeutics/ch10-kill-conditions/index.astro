@@ -35,11 +35,11 @@ import Repl from '../../../../components/Repl';
     <p>The classifier from Chapter 9, as a decision tree. Each branch is annotated by its failure mode.</p>
 
     <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-3"><strong>Test for monotone trend.</strong> Is the trajectory consistently increasing or decreasing? If no trend, skip to step 3 (periodicity).</li>
-      <li class="mb-3"><strong>If monotone, test curvature.</strong> Is the rate of change decelerating (convergent) or constant/accelerating (divergent)?</li>
-      <li class="mb-3"><strong>Test for spectral peaks.</strong> Does the frequency spectrum have a narrow peak? If yes: oscillatory.</li>
-      <li class="mb-3"><strong>Test for aperiodic structure.</strong> Is there structure that isn't periodic? If yes: aperiodic.</li>
-      <li class="mb-3"><strong>Nothing triggered.</strong> Null.</li>
+      <li class="mb-3"><em>Test for monotone trend.</em> Is the trajectory consistently increasing or decreasing? If no trend, skip to step 3 (periodicity).</li>
+      <li class="mb-3"><em>If monotone, test curvature.</em> Is the rate of change decelerating (convergent) or constant/accelerating (divergent)?</li>
+      <li class="mb-3"><em>Test for spectral peaks.</em> Does the frequency spectrum have a narrow peak? If yes: oscillatory.</li>
+      <li class="mb-3"><em>Test for aperiodic structure.</em> Is there structure that isn't periodic? If yes: aperiodic.</li>
+      <li class="mb-3"><em>Nothing triggered.</em> Null.</li>
     </ol>
 
     <p>Five tests. Each test that fires produces a label. Each test that <em>misfires</em> produces a hypothesis: an edge pointing to the experiment that would resolve the ambiguity.</p>
@@ -123,13 +123,13 @@ import Repl from '../../../../components/Repl';
       </table>
     </div>
 
-    <p><strong>Convergent:</strong> something compensated. The perturbation was absorbed. The next question is not "test this node harder" but "test a different node." The absorbing mechanism works; the interesting structure is elsewhere. The label redirects.</p>
+    <p><em>Convergent:</em> something compensated. The perturbation was absorbed. The next question is not "test this node harder" but "test a different node." The absorbing mechanism works; the interesting structure is elsewhere. The label redirects.</p>
 
-    <p><strong>Divergent:</strong> this node is critical and nothing compensated. What depends on it? If it fails, what else fails? The edge points downstream.</p>
+    <p><em>Divergent:</em> this node is critical and nothing compensated. What depends on it? If it fails, what else fails? The edge points downstream.</p>
 
-    <p><strong>Oscillatory:</strong> two constraints are in conflict. The system alternates between satisfying one and violating the other. The edge points to the coupling point between them, not to either subsystem individually.</p>
+    <p><em>Oscillatory:</em> two constraints are in conflict. The system alternates between satisfying one and violating the other. The edge points to the coupling point between them, not to either subsystem individually.</p>
 
-    <p><strong>Aperiodic:</strong> the response has structure but no repeating pattern. The current decomposition can't resolve it into periodic components. The edge points to the analyst's modeling choices, not to the system itself.</p>
+    <p><em>Aperiodic:</em> the response has structure but no repeating pattern. The current decomposition can't resolve it into periodic components. The edge points to the analyst's modeling choices, not to the system itself.</p>
 
     <hr class="border-zinc-700 my-8"/>
 

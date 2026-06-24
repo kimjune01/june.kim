@@ -23,9 +23,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>The optimizer has three moving parts:</p>
 
     <ul>
-      <li>A <strong>combinatorial space</strong> of roughly 200 configuration options: knobs, flags, orderings, tile sizes, data layouts.</li>
-      <li>A <strong>measurement oracle</strong>: run any configuration on hardware, get a wall-clock time.</li>
-      <li>A <strong>search strategy</strong>: beam search. Enumerate candidates, time each, keep the top-k, expand from there.</li>
+      <li>A <em>combinatorial space</em> of roughly 200 configuration options: knobs, flags, orderings, tile sizes, data layouts.</li>
+      <li>A <em>measurement oracle</em>: run any configuration on hardware, get a wall-clock time.</li>
+      <li>A <em>search strategy</em>: beam search. Enumerate candidates, time each, keep the top-k, expand from there.</li>
     </ul>
 
     <p>It finds fast configurations. But it has three structural problems:</p>
@@ -118,8 +118,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>Peirce's economy of research asks: which experiment gives the most information per unit cost?</p>
 
     <ul>
-      <li><strong>Cost</strong> = wall-clock time to run one configuration on hardware.</li>
-      <li><strong>Information gain</strong> = how much the result would change the current hypothesis.</li>
+      <li><em>Cost</em> = wall-clock time to run one configuration on hardware.</li>
+      <li><em>Information gain</em> = how much the result would change the current hypothesis.</li>
     </ul>
 
     <p>A never-varied knob has high information gain: testing it tells you whether it matters at all. A knob tested ten times with consistent results has low information gain: you already know its effect. This criterion replaces beam search's uniform sampling with directed probing.</p>
@@ -212,9 +212,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>Other checklist items:</p>
 
     <ul>
-      <li><strong>Did you abduce from the test data?</strong> If the optimizer generates hypotheses and evaluates them on the same measurements, it is fitting to noise. Hold out a validation set.</li>
-      <li><strong>Is the measurement deterministic?</strong> Thermal throttling, background processes, and memory allocation all inject variance. Control these or account for them in the e-value computation.</li>
-      <li><strong>Can the result reproduce on a different machine?</strong> If the optimal configuration depends on a specific hardware quirk, it is an artifact, not a theory.</li>
+      <li><em>Did you abduce from the test data?</em> If the optimizer generates hypotheses and evaluates them on the same measurements, it is fitting to noise. Hold out a validation set.</li>
+      <li><em>Is the measurement deterministic?</em> Thermal throttling, background processes, and memory allocation all inject variance. Control these or account for them in the e-value computation.</li>
+      <li><em>Can the result reproduce on a different machine?</em> If the optimal configuration depends on a specific hardware quirk, it is an artifact, not a theory.</li>
     </ul>
 
     <p>Chapter 13's proof manual adds structural validation: "If the bottleneck is memory bandwidth, then doubling bandwidth should halve runtime." If the deduction fails, the abduction was wrong. Re-enter the loop.</p>
@@ -331,14 +331,14 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>If the framework from chapters 1&ndash;14 is correct, the abduction engine beats exhaustive search on the same budget in three measurable ways:</p>
 
     <ol>
-      <li><strong>Fewer trials to equivalent quality.</strong> Theory-guided selection skips irrelevant regions of configuration space. The savings grow with the size of the space.</li>
-      <li><strong>Fewer regressions.</strong> The baseline guard prevents deploying configurations known to be slower. Noisy timing and benchmark/production mismatch can still cause regressions, but the guard eliminates the obvious ones.</li>
-      <li><strong>Transferable explanations.</strong> The hypothesis graph from workload A partially transfers to workload B. If the theory says "this workload is memory-bound because of access pattern X," and workload B shares that pattern, the same configuration works without re-searching. Exhaustive search cannot transfer because it produces no theory.</li>
+      <li><em>Fewer trials to equivalent quality.</em> Theory-guided selection skips irrelevant regions of configuration space. The savings grow with the size of the space.</li>
+      <li><em>Fewer regressions.</em> The baseline guard prevents deploying configurations known to be slower. Noisy timing and benchmark/production mismatch can still cause regressions, but the guard eliminates the obvious ones.</li>
+      <li><em>Transferable explanations.</em> The hypothesis graph from workload A partially transfers to workload B. If the theory says "this workload is memory-bound because of access pattern X," and workload B shares that pattern, the same configuration works without re-searching. Exhaustive search cannot transfer because it produces no theory.</li>
     </ol>
 
     <h2>How this textbook fails</h2>
 
-    <p>The framework makes a specific, falsifiable claim: <strong>abduction reduces sample complexity</strong>. Theory-guided search finds configurations of equal or better quality in fewer measurement rounds than theory-free search.</p>
+    <p>The framework makes a specific, falsifiable claim: <em>abduction reduces sample complexity</em>. Theory-guided search finds configurations of equal or better quality in fewer measurement rounds than theory-free search.</p>
 
     <p>If the abduction engine consistently requires <em>more</em> trials than exhaustive search to reach the same quality, the overhead of the hypothesis graph is not justified. The core assumption (that failure structure carries exploitable information) would be wrong. The configuration space would be adversarial to theory: no pattern in the failures, no transferable structure, pure noise.</p>
 

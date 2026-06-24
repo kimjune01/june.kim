@@ -111,11 +111,11 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p>The three modes form a cycle. Each takes one kind of thing and produces another:</p>
 
-    <p><strong>Abduction</strong>: Observation → Theory. Something surprising — a symptom, a bug, an anomaly — provokes a hypothesis. New ideas enter inquiry through abduction.</p>
+    <p><em>Abduction</em>: Observation → Theory. Something surprising — a symptom, a bug, an anomaly — provokes a hypothesis. New ideas enter inquiry through abduction.</p>
 
-    <p><strong>Deduction</strong>: Theory → Experiment. The hypothesis yields consequences: if this theory holds, we should observe X under conditions Y. Knowledge becomes procedure.</p>
+    <p><em>Deduction</em>: Theory → Experiment. The hypothesis yields consequences: if this theory holds, we should observe X under conditions Y. Knowledge becomes procedure.</p>
 
-    <p><strong>Induction</strong>: Experiment → Observation. Run the experiment, accumulate evidence, compare results to prediction. New observations feed back into the cycle.</p>
+    <p><em>Induction</em>: Experiment → Observation. Run the experiment, accumulate evidence, compare results to prediction. New observations feed back into the cycle.</p>
 
     <div style="max-width:min(460px, 100%); margin:1.5em auto;">
       <img src="/assets/modes-of-reason-triangle.svg" alt="Triangle: Observation → Theory (abduction), Theory → Experiment (deduction), Experiment → Observation (induction). Three modes, three edges, one cycle." style="width:100%; display:block;">
@@ -127,27 +127,27 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p>The triangle appears in medicine, engineering, science, and daily life. Vocabulary changes; structure does not.</p>
 
-    <p><strong>Medicine.</strong> A patient presents with fever, joint pain, and a butterfly-shaped facial rash. The doctor proposes <a href="https://en.wikipedia.org/wiki/Lupus">lupus</a> (abduction). If lupus, antinuclear antibodies should be elevated (deduction). The lab runs the <a href="https://en.wikipedia.org/wiki/Antinuclear_antibody">ANA test</a> and reports a high titer. The doctor updates confidence given the test's sensitivity and the patient's presentation (induction). A positive ANA supports but does not confirm lupus; ANA is sensitive, not specific. The new observation narrows the differential or forces a new hypothesis.</p>
+    <p><em>Medicine.</em> A patient presents with fever, joint pain, and a butterfly-shaped facial rash. The doctor proposes <a href="https://en.wikipedia.org/wiki/Lupus">lupus</a> (abduction). If lupus, antinuclear antibodies should be elevated (deduction). The lab runs the <a href="https://en.wikipedia.org/wiki/Antinuclear_antibody">ANA test</a> and reports a high titer. The doctor updates confidence given the test's sensitivity and the patient's presentation (induction). A positive ANA supports but does not confirm lupus; ANA is sensitive, not specific. The new observation narrows the differential or forces a new hypothesis.</p>
 
-    <p><strong>Debugging.</strong> A server returns 500 errors on every third request. The engineer suspects connection pool exhaustion (abduction). If the pool is exhausted, active connections should climb to the limit before failures begin (deduction). She checks the connection count at failure time (induction). Errors persist — wrong hypothesis. She abduces again: maybe a thread-safety issue in the request handler.</p>
+    <p><em>Debugging.</em> A server returns 500 errors on every third request. The engineer suspects connection pool exhaustion (abduction). If the pool is exhausted, active connections should climb to the limit before failures begin (deduction). She checks the connection count at failure time (induction). Errors persist — wrong hypothesis. She abduces again: maybe a thread-safety issue in the request handler.</p>
 
-    <p><strong>Science.</strong> <a href="https://en.wikipedia.org/wiki/Charles_Darwin">Darwin</a> observed that finch beak shapes vary across the <a href="https://en.wikipedia.org/wiki/Darwin%27s_finches">Galapagos islands</a>. (The history is messier than this schematic suggests, but the logical structure holds.) He proposed that beak shape tracks food source: different environments select for different beaks (abduction). If natural selection drives beak shape, islands with hard seeds should have finches with stronger beaks (deduction). Decades of field measurement confirmed the correlation (induction).</p>
+    <p><em>Science.</em> <a href="https://en.wikipedia.org/wiki/Charles_Darwin">Darwin</a> observed that finch beak shapes vary across the <a href="https://en.wikipedia.org/wiki/Darwin%27s_finches">Galapagos islands</a>. (The history is messier than this schematic suggests, but the logical structure holds.) He proposed that beak shape tracks food source: different environments select for different beaks (abduction). If natural selection drives beak shape, islands with hard seeds should have finches with stronger beaks (deduction). Decades of field measurement confirmed the correlation (induction).</p>
 
-    <p><strong>Everyday life.</strong> You flip a light switch and nothing happens. The bulb burned out (abduction). If so, replacing it should restore the light (deduction). You swap the bulb; the light turns on (induction).</p>
+    <p><em>Everyday life.</em> You flip a light switch and nothing happens. The bulb burned out (abduction). If so, replacing it should restore the light (deduction). You swap the bulb; the light turns on (induction).</p>
 
     <h2>Three primitives compose everything</h2>
 
     <p>Complex reasoning decomposes into compositions of the three:</p>
 
-    <p><strong>Analogy</strong> = abduction (notice a surprising similarity across two domains) + induction (generalise the structural correspondence). Peirce analysed it this way. <a href="https://cyber.harvard.edu/bridge/Library/brewer.htm">Brewer's</a> account of legal reasoning supports the same decomposition.</p>
+    <p><em>Analogy</em> = abduction (notice a surprising similarity across two domains) + induction (generalise the structural correspondence). Peirce analysed it this way. <a href="https://cyber.harvard.edu/bridge/Library/brewer.htm">Brewer's</a> account of legal reasoning supports the same decomposition.</p>
 
-    <p><strong>Diagnosis</strong> = abduction (propose what is wrong) + deduction (derive the observable consequences of that fault).</p>
+    <p><em>Diagnosis</em> = abduction (propose what is wrong) + deduction (derive the observable consequences of that fault).</p>
 
-    <p><strong>Scientific method</strong> = abduction (hypothesise) + deduction (predict) + induction (test). The full triangle.</p>
+    <p><em>Scientific method</em> = abduction (hypothesise) + deduction (predict) + induction (test). The full triangle.</p>
 
-    <p><strong>Debugging</strong> = abduction (propose a cause) + deduction (if this cause, then that symptom) + abduction again (it wasn't that; next cause). Debugging is abduction-heavy because the hypothesis space is large and each test eliminates only one candidate.</p>
+    <p><em>Debugging</em> = abduction (propose a cause) + deduction (if this cause, then that symptom) + abduction again (it wasn't that; next cause). Debugging is abduction-heavy because the hypothesis space is large and each test eliminates only one candidate.</p>
 
-    <p><strong>Legal precedent</strong> = abduction (match the current case to a prior case) + induction (generalise a principle from the precedent) + deduction (apply the generalised rule to the current facts).</p>
+    <p><em>Legal precedent</em> = abduction (match the current case to a prior case) + induction (generalise a principle from the precedent) + deduction (apply the generalised rule to the current facts).</p>
 
     <p><a href="https://en.wikipedia.org/wiki/Sherlock_Holmes">Holmes</a>, <a href="https://en.wikipedia.org/wiki/House_(TV_series)">House</a>, <a href="https://en.wikipedia.org/wiki/Ignaz_Semmelweis">Semmelweis</a>, Darwin. Same compositions, different costumes.</p>
 

@@ -69,8 +69,8 @@ Such that:
 
     <p>Return to the engine. The mechanic starts from the same state: engine running, all gauges nominal. She performs two perturbations:</p>
 
-    <p><strong>Branch A:</strong> Tap the alternator. Engine stalls.</p>
-    <p><strong>Branch B:</strong> Tap the radiator. Engine keeps running.</p>
+    <p><em>Branch A:</em> Tap the alternator. Engine stalls.</p>
+    <p><em>Branch B:</em> Tap the radiator. Engine keeps running.</p>
 
     <p>Same starting state. Two perturbations. Two outcomes. The unary diff (chapter 4) analyzes each branch in isolation. Branch A's figure: alternator tapped, engine stalled. Branch B's figure: radiator tapped, engine unchanged. Bi-abduction (chapter 5) infers the frame for each branch independently.</p>
 
@@ -386,11 +386,11 @@ print(f"    => alternator is causal, radiator is not")
 
     <p>The fork structure appears everywhere experiments branch:</p>
 
-    <p><strong>A/B testing.</strong> Randomized comparable populations (shared start), two UI variants (branches), different conversion rates (outcomes). The causal edge is the UI difference explaining the conversion gap. Shared ground: user demographics, time of day, device type.</p>
+    <p><em>A/B testing.</em> Randomized comparable populations (shared start), two UI variants (branches), different conversion rates (outcomes). The causal edge is the UI difference explaining the conversion gap. Shared ground: user demographics, time of day, device type.</p>
 
-    <p><strong>Compiler optimization.</strong> Same source program, two tile sizes in a GPU kernel. One runs in 4ms, the other in 12ms. The causal edge is tile size. Shared ground: instruction count, memory layout, thread count.</p>
+    <p><em>Compiler optimization.</em> Same source program, two tile sizes in a GPU kernel. One runs in 4ms, the other in 12ms. The causal edge is tile size. Shared ground: instruction count, memory layout, thread count.</p>
 
-    <p><strong>Clinical trials.</strong> Randomized comparable groups, drug vs. placebo. Different recovery rates. The branching condition is whether the patient received the drug. Shared ground: age, severity, diet, exercise. Randomization makes the shared ground trustworthy.</p>
+    <p><em>Clinical trials.</em> Randomized comparable groups, drug vs. placebo. Different recovery rates. The branching condition is whether the patient received the drug. Shared ground: age, severity, diet, exercise. Randomization makes the shared ground trustworthy.</p>
 
     <p>Every case has the same structure: shared starting conditions, a fork, divergent outcomes, a causal edge extracted from the comparison. The controlled experiment <em>is</em> tri-abduction. Mill described the method of difference in 1843. Outcome separation logic (Zilberstein et al. 2024) offers a formal framework for reasoning about such branching contrasts.</p>
 

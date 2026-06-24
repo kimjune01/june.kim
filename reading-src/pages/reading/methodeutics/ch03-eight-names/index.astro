@@ -154,16 +154,17 @@ import Repl from '../../../../components/Repl';
     <p>Strip the vocabulary. Every row in the table implements the same three-step operation:</p>
 
     <ol>
-      <li><strong>Observe</strong>: take in a state (heap, visual field, schema, dataset, surprising fact).</li>
-      <li><strong>Partition</strong>: split the state into two parts: what matters (figure, anti-frame, perturbation, treatment variable, surprising fact, invariant feature) and what doesn't (ground, frame, schema, background, settled expectations, spurious feature).</li>
-      <li><strong>Name the difference</strong>: choosing which part is figure is the hypothesis. The ground is everything that choice leaves untouched.</li>
+      <li><em>Observe</em>: take in a state (heap, visual field, schema, dataset, surprising fact).</li>
+      <li><em>Partition</em>: split the state into two parts: what matters (figure, anti-frame, perturbation, treatment variable, surprising fact, invariant feature) and what doesn't (ground, frame, schema, background, settled expectations, spurious feature).</li>
+      <li><em>Name the difference</em>: choosing which part is figure is the hypothesis. The ground is everything that choice leaves untouched.</li>
     </ol>
     <p>This is why the operation is insecure. No deductive guarantee pins down the correct partition. The same observation admits multiple figure-ground splits. Rubin's vase is the literal demonstration: same stimulus, two partitions, both valid, mutually exclusive. Security demands one correct partition. Uberty demands many, each fertile in a different direction.</p>
 
     <Repl client:visible initialCode={`def partition(observation, prior):
-    """The common operation: split observation into salient and retained."""
-    salient = {k: v for k, v in observation.items() if v != prior.get(k)}
-    retained = {k: v for k, v in observation.items() if v == prior.get(k)}
+    """The common operation. Figure is the difference: where observation
+    and prior disagree (XOR). Ground is where they agree."""
+    salient = {k: v for k, v in observation.items() if v != prior.get(k)}   # figure = observation XOR prior
+    retained = {k: v for k, v in observation.items() if v == prior.get(k)}  # ground = where they agree
     return salient, retained
 
 # Gestalt: figure-ground
@@ -193,11 +194,11 @@ print(f"frame: {frame}")`} />
 
     <p>Three causes, and together they explain why the operation stayed unnamed for a century.</p>
 
-    <p><strong>Vocabulary isolation.</strong> Separation logic speaks heap fragments and entailment. Gestalt psychology speaks percepts and phenomenal fields. Causal inference speaks structural equations and counterfactuals. A PL researcher reading Koffka sees psychology; a psychologist reading Calcagno sees notation. Neither sees the same operation.</p>
+    <p><em>Vocabulary isolation.</em> Separation logic speaks heap fragments and entailment. Gestalt psychology speaks percepts and phenomenal fields. Causal inference speaks structural equations and counterfactuals. A PL researcher reading Koffka sees psychology; a psychologist reading Calcagno sees notation. Neither sees the same operation.</p>
 
-    <p><strong>Institutional boundaries.</strong> CS publishes at POPL and PLDI. Psychology publishes in <em>Psychological Review</em>. Causal inference in <em>JRSS-B</em> and <em>Biometrika</em>. Different conferences, different journals, no shared reviewers. Cross-pollination requires fluency in at least two of these languages, and Peirce, who had it, died in 1914, before any of the modern formalizations existed.</p>
+    <p><em>Institutional boundaries.</em> CS publishes at POPL and PLDI. Psychology publishes in <em>Psychological Review</em>. Causal inference in <em>JRSS-B</em> and <em>Biometrika</em>. Different conferences, different journals, no shared reviewers. Cross-pollination requires fluency in at least two of these languages, and Peirce, who had it, died in 1914, before any of the modern formalizations existed.</p>
 
-    <p><strong>The anti-formalism norm.</strong> Philosophy has discussed abduction extensively, but the discussion lives inside the "inference to the best explanation" (IBE) tradition after Harman (1965). IBE debates center on justification: is IBE a legitimate inference rule? "What is the operation, exactly?" strikes philosophers as reductive and engineers as unmotivated. Philosophers who know the history don't formalize; engineers who formalize don't know the history.</p>
+    <p><em>The anti-formalism norm.</em> Philosophy has discussed abduction extensively, but the discussion lives inside the "inference to the best explanation" (IBE) tradition after Harman (1965). IBE debates center on justification: is IBE a legitimate inference rule? "What is the operation, exactly?" strikes philosophers as reductive and engineers as unmotivated. Philosophers who know the history don't formalize; engineers who formalize don't know the history.</p>
 
     <h2>Why it matters</h2>
 

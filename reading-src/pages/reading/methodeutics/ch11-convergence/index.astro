@@ -192,7 +192,7 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <h3>The Ockham efficiency theorem</h3>
 
-    <p>Kelly&rsquo;s central result: <strong>Ockham&rsquo;s razor is necessary and sufficient for cycle-optimal convergence.</strong></p>
+    <p>Kelly&rsquo;s central result: <em>Ockham&rsquo;s razor is necessary and sufficient for cycle-optimal convergence.</em></p>
 
     <p>A <em>mind-change</em> (or retraction) is when the method switches its output from one hypothesis to another. A <em>cycle</em> is a sequence of mind-changes that returns to a hypothesis previously held and retracted. Kelly proved:</p>
 
@@ -297,9 +297,9 @@ cum_composed = np.cumprod(e_normal * e_poisson)
     <p>In the hypothesis graph, the fixed point requires three conditions:</p>
 
     <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-2"><strong>Coverage.</strong> Every reachable node has been visited. No frontier edges point to untested hypotheses.</li>
-      <li class="mb-2"><strong>Consistency.</strong> All classifications are stable. No node oscillates between bins when re-examined.</li>
-      <li class="mb-2"><strong>Composability.</strong> The composed e-values across all experiments preserve the regime&rsquo;s signature. The global trajectory confirms what the local trajectories claim.</li>
+      <li class="mb-2"><em>Coverage.</em> Every reachable node has been visited. No frontier edges point to untested hypotheses.</li>
+      <li class="mb-2"><em>Consistency.</em> All classifications are stable. No node oscillates between bins when re-examined.</li>
+      <li class="mb-2"><em>Composability.</em> The composed e-values across all experiments preserve the regime&rsquo;s signature. The global trajectory confirms what the local trajectories claim.</li>
     </ol>
 
     <p>If all three hold, the graph has converged. The investigation is complete &mdash; not because you ran out of budget, but because the structure has no more questions to ask. Every perturbation classified, every kill condition followed, the composed evidence pointing to a single stable map.</p>
@@ -341,9 +341,9 @@ cum_composed = np.cumprod(e_normal * e_poisson)
       </table>
     </div>
 
-    <p><strong>Perturbation access</strong> is the most fundamental. Sciences that cannot perturb their subject &mdash; astronomy, macroeconomics, paleontology &mdash; cannot close the hypothesis graph. They can observe, classify, and compose evidence, but they cannot run the experiment that would resolve a frontier edge. The graph stays open. This is a boundary condition, not a failure of method. The hypothesis graph works where you can poke.</p>
+    <p><em>Perturbation access</em> is the most fundamental. Sciences that cannot perturb their subject &mdash; astronomy, macroeconomics, paleontology &mdash; cannot close the hypothesis graph. They can observe, classify, and compose evidence, but they cannot run the experiment that would resolve a frontier edge. The graph stays open. This is a boundary condition, not a failure of method. The hypothesis graph works where you can poke.</p>
 
-    <p><strong>Independence</strong> makes the product rule work. If two sensor streams share a hidden common cause that inflates both signals, the product of their e-values overstates the evidence. Gr&uuml;nwald&rsquo;s theorem requires each e-value be valid conditional on all previous data and decisions. Correlated streams violate this: stream B&rsquo;s data is not conditionally independent of stream A&rsquo;s, given the shared cause.</p>
+    <p><em>Independence</em> makes the product rule work. If two sensor streams share a hidden common cause that inflates both signals, the product of their e-values overstates the evidence. Gr&uuml;nwald&rsquo;s theorem requires each e-value be valid conditional on all previous data and decisions. Correlated streams violate this: stream B&rsquo;s data is not conditionally independent of stream A&rsquo;s, given the shared cause.</p>
 
     <p><strong>Identifiability</strong> means the truth is findable. If two hypotheses predict identical observations under every possible experiment, no evidence can distinguish them. The graph has a permanent frontier edge between them. Some systems have symmetries that prevent identification: gauge invariances in physics, confounders in causal inference.</p>
 
@@ -353,11 +353,11 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <p>Convergence requires perturbation. Remove it and the graph cannot close.</p>
 
-    <p><strong>Astronomy.</strong> You cannot perturb a star. You observe its spectrum, motion, variability. You compose evidence across wavelengths, time, and instruments. But if two models of stellar interior predict the same surface observables, no observation can distinguish them. Permanent frontier edge. Astronomers call this &ldquo;model degeneracy.&rdquo; Kelly would call it a topological limitation: the hypothesis class is not separable by the evidence topology.</p>
+    <p><em>Astronomy.</em> You cannot perturb a star. You observe its spectrum, motion, variability. You compose evidence across wavelengths, time, and instruments. But if two models of stellar interior predict the same surface observables, no observation can distinguish them. Permanent frontier edge. Astronomers call this &ldquo;model degeneracy.&rdquo; Kelly would call it a topological limitation: the hypothesis class is not separable by the evidence topology.</p>
 
-    <p><strong>Macroeconomics.</strong> You cannot run a controlled experiment on a national economy. Every observation is confounded by everything else happening simultaneously. The e-value product across economic indicators overstates evidence because the indicators share common causes (monetary policy, global trade, sentiment). The graph is open, and everyone knows it.</p>
+    <p><em>Macroeconomics.</em> You cannot run a controlled experiment on a national economy. Every observation is confounded by everything else happening simultaneously. The e-value product across economic indicators overstates evidence because the indicators share common causes (monetary policy, global trade, sentiment). The graph is open, and everyone knows it.</p>
 
-    <p><strong>Paleontology.</strong> You cannot perturb an extinct organism. Fossils are fragmentary, biased by preservation, separated by millions of years. Each is a single frozen observation. The graph converges only where evidence is rich enough: gross morphology, phylogenetic placement. Fine-grained questions &mdash; behavior, coloration, soft tissue &mdash; remain open edges.</p>
+    <p><em>Paleontology.</em> You cannot perturb an extinct organism. Fossils are fragmentary, biased by preservation, separated by millions of years. Each is a single frozen observation. The graph converges only where evidence is rich enough: gross morphology, phylogenetic placement. Fine-grained questions &mdash; behavior, coloration, soft tissue &mdash; remain open edges.</p>
 
     <p>The open edges tell you <em>why</em> the graph cannot close. &ldquo;Model degeneracy at the stellar interior&rdquo; is a different failure mode from &ldquo;confounded economic indicators.&rdquo; The first requires a new observable (gravitational waves, neutrinos). The second requires a natural experiment (a policy change uncorrelated with other changes). The failure mode names the next question, even when the question is unanswerable with current tools.</p>
 
@@ -377,9 +377,9 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <p>Two earlier results complete the picture.</p>
 
-    <p><strong><a href="https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-3/Sequential-Design-of-Experiments/10.1214/aoms/1177706205.full">Chernoff (1959)</a></strong> proved that adaptive experiment selection converges to the true hypothesis exponentially fast, at a rate determined by the KL divergence between hypotheses. The optimal policy selects the experiment that maximizes the minimum KL divergence between the current best hypothesis and its nearest competitor. The economy of research (ch&nbsp;7) made asymptotically precise.</p>
+    <p><em><a href="https://projecteuclid.org/journals/annals-of-mathematical-statistics/volume-30/issue-3/Sequential-Design-of-Experiments/10.1214/aoms/1177706205.full">Chernoff (1959)</a></em> proved that adaptive experiment selection converges to the true hypothesis exponentially fast, at a rate determined by the KL divergence between hypotheses. The optimal policy selects the experiment that maximizes the minimum KL divergence between the current best hypothesis and its nearest competitor. The economy of research (ch&nbsp;7) made asymptotically precise.</p>
 
-    <p><strong><a href="https://jmlr.org/papers/v9/he08a.html">He and Geng (2008)</a></strong> proved that adaptive interventions recover the true causal structure under faithfulness and sufficiency assumptions. If you can intervene on any variable, you can distinguish any two causal graphs that produce different interventional distributions.</p>
+    <p><em><a href="https://jmlr.org/papers/v9/he08a.html">He and Geng (2008)</a></em> proved that adaptive interventions recover the true causal structure under faithfulness and sufficiency assumptions. If you can intervene on any variable, you can distinguish any two causal graphs that produce different interventional distributions.</p>
 
     <p>Line them up:</p>
 

@@ -105,7 +105,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">2019&ndash;2023</td>
             <td class="pr-3 text-gray-300"><a href="https://arxiv.org/abs/1906.07801">Ramdas</a>, <a href="/reading/scientific-method/shafer-2021/">Shafer</a>, <a href="https://academic.oup.com/jrsssb/article/86/5/1091/7623686">Gr&uuml;nwald</a></td>
-            <td class="text-gray-400">Unified the lineage under the name <strong>e-values</strong>. Proved composability, anytime validity, and connections to game-theoretic probability. Made it usable.</td>
+            <td class="text-gray-400">Unified the lineage under the name <em>e-values</em>. Proved composability, anytime validity, and connections to game-theoretic probability. Made it usable.</td>
           </tr>
         </tbody>
       </table>
@@ -149,11 +149,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Point an e-value stream at a system with feedback. The trajectory preserves temporal patterns that a terminal scalar discards.</p>
 
-    <p><strong>Smoking and stress.</strong> The e-value climbs after each cigarette (relief), falls during withdrawal (stress spikes), climbs on relapse. The oscillation <em>is</em> the addiction cycle. A two-week snapshot says "smoking reduces stress, p &lt; .05." The trajectory shows the loop.</p>
+    <p><em>Smoking and stress.</em> The e-value climbs after each cigarette (relief), falls during withdrawal (stress spikes), climbs on relapse. The oscillation <em>is</em> the addiction cycle. A two-week snapshot says "smoking reduces stress, p &lt; .05." The trajectory shows the loop.</p>
 
-    <p><strong>Ad load.</strong> An e-value stream tracking revenue per session climbs for weeks (more ads = more revenue), flattens (ad blindness developing), then declines (degraded engagement). The inflection point marks the moment the feedback loop activates. A fixed-sample test that ends before the inflection sees only the climb.</p>
+    <p><em>Ad load.</em> An e-value stream tracking revenue per session climbs for weeks (more ads = more revenue), flattens (ad blindness developing), then declines (degraded engagement). The inflection point marks the moment the feedback loop activates. A fixed-sample test that ends before the inflection sees only the climb.</p>
 
-    <p><strong>MCAS.</strong> An e-value tracking "does the correction succeed?" oscillates. Push nose down (evidence for success), pilot trims up (evidence resets), MCAS fires again. The oscillation is two subsystems fighting. A snapshot at any single activation says "correction successful."</p>
+    <p><em>MCAS.</em> An e-value tracking "does the correction succeed?" oscillates. Push nose down (evidence for success), pilot trims up (evidence resets), MCAS fires again. The oscillation is two subsystems fighting. A snapshot at any single activation says "correction successful."</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -286,19 +286,19 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
 
     <p>Three scenarios. Three stories.</p>
 
-    <p><strong>Null is true:</strong> the e-value drops below 1 immediately and keeps falling. By t=100, e = 0.0001. The bet against the null is thoroughly lost. Under the null, honest betting cannot grow in expectation. Individual paths fluctuate, but the trend is downward.</p>
+    <p><em>Null is true:</em> the e-value drops below 1 immediately and keeps falling. By t=100, e = 0.0001. The bet against the null is thoroughly lost. Under the null, honest betting cannot grow in expectation. Individual paths fluctuate, but the trend is downward.</p>
 
-    <p><strong>Alternative is true:</strong> the e-value climbs steadily. By t=100, e = 73,237. You could have stopped at t=50 (e = 69, already strong) or continued. The guarantee held at every peek. Monotone climb: accumulating.</p>
+    <p><em>Alternative is true:</em> the e-value climbs steadily. By t=100, e = 73,237. You could have stopped at t=50 (e = 69, already strong) or continued. The guarantee held at every peek. Monotone climb: accumulating.</p>
 
-    <p><strong>Feedback system:</strong> the Google ad-load scenario. The effect is real for the first 50 observations, then reverses. The e-value climbs to 1,161 at t=50, then <em>collapses</em> as the reversal erodes the accumulated evidence. By t=100, e = 0.003. Meanwhile: p at t=50 = 0.0001 (highly significant), p at t=100 = 0.09 (borderline). Two snapshots, two conclusions, no way to reconcile them. The e-value trajectory tells the whole story: rise, peak, collapse. The shape of the trajectory is the shape of the system.</p>
+    <p><em>Feedback system:</em> the Google ad-load scenario. The effect is real for the first 50 observations, then reverses. The e-value climbs to 1,161 at t=50, then <em>collapses</em> as the reversal erodes the accumulated evidence. By t=100, e = 0.003. Meanwhile: p at t=50 = 0.0001 (highly significant), p at t=100 = 0.09 (borderline). Two snapshots, two conclusions, no way to reconcile them. The e-value trajectory tells the whole story: rise, peak, collapse. The shape of the trajectory is the shape of the system.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
     <h2>The p-value's guarantee demands one look</h2>
 
-    <p>A p-value controls the <strong>type I error rate at a single, predetermined stopping time</strong>. Fix n in advance, compute once: P(p &lt; &alpha; | H<sub>0</sub>) = &alpha;. Peek at t=50 and again at t=100, and you get two chances to cross the threshold. The error rate inflates.</p>
+    <p>A p-value controls the <em>type I error rate at a single, predetermined stopping time</em>. Fix n in advance, compute once: P(p &lt; &alpha; | H<sub>0</sub>) = &alpha;. Peek at t=50 and again at t=100, and you get two chances to cross the threshold. The error rate inflates.</p>
 
-    <p>An e-value controls the error rate <strong>uniformly over all stopping times</strong>. By Markov's inequality and the supermartingale property, for any stopping time &tau;:</p>
+    <p>An e-value controls the error rate <em>uniformly over all stopping times</em>. By Markov's inequality and the supermartingale property, for any stopping time &tau;:</p>
 
     <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>P(e<sub>&tau;</sub> &ge; 1/&alpha;) &le; &alpha; &nbsp;&nbsp; under the null</code></pre>
 
@@ -313,10 +313,10 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
     <p>The economy of research (<a href="/reading/methodeutics/ch07-economy-of-research/">Chapter 7</a>) selects which experiment to run. The e-value tracks what the experiment says over time. The two connect directly:</p>
 
     <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-2"><strong>Generate</strong> hypotheses via abduction (Chapters 4&ndash;6).</li>
-      <li class="mb-2"><strong>Select</strong> the next experiment via information gain per unit cost (Chapter 7).</li>
-      <li class="mb-2"><strong>Run</strong> the experiment and track the e-value trajectory (this chapter).</li>
-      <li class="mb-2"><strong>Read</strong> the trajectory's shape to classify the system's dynamics (Chapter 9).</li>
+      <li class="mb-2"><em>Generate</em> hypotheses via abduction (Chapters 4&ndash;6).</li>
+      <li class="mb-2"><em>Select</em> the next experiment via information gain per unit cost (Chapter 7).</li>
+      <li class="mb-2"><em>Run</em> the experiment and track the e-value trajectory (this chapter).</li>
+      <li class="mb-2"><em>Read</em> the trajectory's shape to classify the system's dynamics (Chapter 9).</li>
     </ol>
 
     <p>Step 3 is new. Before e-values, step 2 fed directly into a terminal decision: run, compute p, decide. Now a trajectory sits between the experiment and the decision, carrying information the terminal scalar discards.</p>

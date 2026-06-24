@@ -18,9 +18,9 @@ import Repl from '../../../../components/Repl';
 
     <h2>Diff requires a choice</h2>
 
-    <p>Chapter 4 defined the primitive: snapshot before, snapshot after, XOR. The figure is what changed; the ground is what held. The mechanic taps the alternator. The engine stalls. The diff between "before tap" and "after tap" is the figure. Everything else &mdash; battery, fuel, spark &mdash; is the ground.</p>
+    <p>Chapter 4 defined the primitive: snapshot before, snapshot after, XOR. The figure is what changed; the ground is what held. The mechanic turns the key and gets no crank, though yesterday it started. The diff between "started" and "won't crank" is the figure: dim lights, a single click, sagging voltage. Everything else, fuel and the security light, is the ground.</p>
 
-    <p>But the mechanic chose what to observe. She chose to look at the engine, not the headlights. She chose to snapshot RPM, not cabin temperature. The diff works on whatever you give it. It cannot tell you what you forgot to give it.</p>
+    <p>But the mechanic chose what to observe. She watched the dash lights and listened to the starter; she never metered the voltage under load. The diff works on whatever you give it. It cannot tell you what you forgot to give it.</p>
 
     <p>Scale breaks this. A function modifies some variables and leaves others untouched. Snapshot all of them, you get the right diff. Miss one, the ground is incomplete, and the hypothesis overgeneralizes. "Tile size 16 is optimal" is a different claim from "tile size 16 is optimal <em>when loop order is column-major and vectorization is enabled</em>." The ground is the qualification that makes the hypothesis precise.</p>
 
@@ -125,7 +125,7 @@ where:
 
     <p><a href="https://fbinfer.com/">Infer</a> is the tool Calcagno and O'Hearn built at Facebook. It runs bi-abduction on every diff submitted to the codebase: millions of lines, every day. For each function, Infer infers the precondition (what must the caller set up?) and the frame (what does the function leave alone?). When the inferred precondition conflicts with the calling context, Infer reports a bug: null dereference, resource leak, race condition.</p>
 
-    <p>The key to scaling: <strong>compositionality</strong>. Infer analyzes each function independently, using bi-abduction to infer its contract, then composes contracts across call boundaries. Function A calls B calls C. Start at C, infer its contract, use that contract when analyzing B, and so on up the call graph. Each function is analyzed once, with dependencies summarized as inferred contracts.</p>
+    <p>The key to scaling: <em>compositionality</em>. Infer analyzes each function independently, using bi-abduction to infer its contract, then composes contracts across call boundaries. Function A calls B calls C. Start at C, infer its contract, use that contract when analyzing B, and so on up the call graph. Each function is analyzed once, with dependencies summarized as inferred contracts.</p>
 
     <p>Bylander et al. (1991) proved that abduction in general is NP-hard: consider all possible explanations for a global observation and the search space explodes. Bi-abduction sidesteps this by reasoning <em>locally</em>: one function at a time, composing summaries up the call graph.</p>
 
@@ -230,11 +230,11 @@ for key in sorted(touched):
 
     <p>Three properties make bi-abduction work where general abduction doesn't.</p>
 
-    <p><strong>Locality.</strong> Each function is analyzed in isolation. You don't need the whole program to infer one function's contract. The mechanic diagnoses one subsystem at a time: checking the alternator doesn't require understanding the transmission.</p>
+    <p><em>Locality.</em> Each function is analyzed in isolation. You don't need the whole program to infer one function's contract. The mechanic diagnoses one subsystem at a time: testing the starting circuit doesn't require understanding the transmission.</p>
 
-    <p><strong>Separation.</strong> Frame and footprint are disjoint. What one function touches, another cannot silently depend on. The separating conjunction <code>*</code> is the formal guarantee. Without it, a change in function A could invalidate function B's frame, making local reasoning unsound.</p>
+    <p><em>Separation.</em> Frame and footprint are disjoint. What one function touches, another cannot silently depend on. The separating conjunction <code>*</code> is the formal guarantee. Without it, a change in function A could invalidate function B's frame, making local reasoning unsound.</p>
 
-    <p><strong>Compositionality.</strong> Inferred contracts compose across boundaries. Function A's postcondition becomes function B's precondition context. The anti-frames and frames chain. The analysis scales linearly in the call graph, not exponentially in the state space.</p>
+    <p><em>Compositionality.</em> Inferred contracts compose across boundaries. Function A's postcondition becomes function B's precondition context. The anti-frames and frames chain. The analysis scales linearly in the call graph, not exponentially in the state space.</p>
 
     <p>The strategy transfers beyond programs, but only where the domain has something like separation: parts whose interactions are explicit enough that local conclusions can compose. Diagnose locally, compose globally.</p>
 

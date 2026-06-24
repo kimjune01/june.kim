@@ -32,10 +32,10 @@ import Repl from '../../../../components/Repl';
     </div>
 
     <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-2"><strong>Convergent.</strong> The perturbation decays. The system returns to its previous state. A compensating mechanism absorbed the shock.</li>
-      <li class="mb-2"><strong>Divergent.</strong> The perturbation grows. The system moves away and keeps going. No compensating mechanism exists.</li>
-      <li class="mb-2"><strong>Oscillatory.</strong> The perturbation cycles. Two subsystems push against each other: one compensates, the other overcompensates.</li>
-      <li class="mb-2"><strong>Chaotic.</strong> The trajectory stays bounded but never repeats. Two nearby starting points diverge exponentially. Deterministic but unpredictable past a short horizon.</li>
+      <li class="mb-2"><em>Convergent.</em> The perturbation decays. The system returns to its previous state. A compensating mechanism absorbed the shock.</li>
+      <li class="mb-2"><em>Divergent.</em> The perturbation grows. The system moves away and keeps going. No compensating mechanism exists.</li>
+      <li class="mb-2"><em>Oscillatory.</em> The perturbation cycles. Two subsystems push against each other: one compensates, the other overcompensates.</li>
+      <li class="mb-2"><em>Chaotic.</em> The trajectory stays bounded but never repeats. Two nearby starting points diverge exponentially. Deterministic but unpredictable past a short horizon.</li>
     </ol>
 
     <p>Milnor (1985) and Strogatz (2014) prove that fixed points, limit cycles, and strange attractors exhaust the attractors of smooth dynamical systems. Applied to finite observed trajectories, the four bins classify <em>evidence behavior</em>, not the true underlying system. A finite trace cannot prove chaos; it can only rule out settling and periodicity within the observed window.</p>
@@ -150,22 +150,22 @@ import Repl from '../../../../components/Repl';
     <p>Given a perturbation time series, three yes/no questions determine the bin:</p>
 
     <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto text-sm"><code>1. Is the trajectory bounded?
-   &boxur;&mdash; NO  &rarr; <strong>DIVERGENT</strong>
+   &boxur;&mdash; NO  &rarr; <em>DIVERGENT</em>
    &boxur;&mdash; YES &rarr; go to 2.
 
 2. Does the trajectory settle to a fixed value?
-   &boxur;&mdash; YES &rarr; <strong>CONVERGENT</strong>
+   &boxur;&mdash; YES &rarr; <em>CONVERGENT</em>
    &boxur;&mdash; NO  &rarr; go to 3.
 
 3. Does the trajectory repeat periodically?
-   &boxur;&mdash; YES &rarr; <strong>OSCILLATORY</strong>
-   &boxur;&mdash; NO  &rarr; <strong>CHAOTIC</strong></code></pre>
+   &boxur;&mdash; YES &rarr; <em>OSCILLATORY</em>
+   &boxur;&mdash; NO  &rarr; <em>CHAOTIC</em></code></pre>
 
-    <p><strong>Bounded?</strong> Run a Mann-Kendall trend test on the absolute values. If the trend is significantly increasing with no sign of flattening, divergent.</p>
+    <p><em>Bounded?</em> Run a Mann-Kendall trend test on the absolute values. If the trend is significantly increasing with no sign of flattening, divergent.</p>
 
-    <p><strong>Settles?</strong> Compare the variance of the last third to the first third. If the late variance is significantly smaller (Levene's test), convergent.</p>
+    <p><em>Settles?</em> Compare the variance of the last third to the first third. If the late variance is significantly smaller (Levene's test), convergent.</p>
 
-    <p><strong>Periodic?</strong> Compute the power spectral density. If a single frequency holds more than 40% of total power, oscillatory. If power is spread across many frequencies with no dominant peak, chaotic.</p>
+    <p><em>Periodic?</em> Compute the power spectral density. If a single frequency holds more than 40% of total power, oscillatory. If power is spread across many frequencies with no dominant peak, chaotic.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -200,9 +200,9 @@ import Repl from '../../../../components/Repl';
     <p>A mechanic suspects the alternator. She disconnects it briefly and watches the electrical system:</p>
 
     <ul class="list-disc pl-5 mb-4">
-      <li class="mb-1"><strong>Convergent:</strong> Battery voltage dips to 11.8V, recovers to 12.6V when the alternator reconnects. The battery absorbed the perturbation. The alternator is redundant at current draw.</li>
-      <li class="mb-1"><strong>Divergent:</strong> Voltage drops steadily. The radio dims, the dashboard flickers, the engine stalls. The alternator was the only power source at this draw level. Everything downstream cascaded.</li>
-      <li class="mb-1"><strong>Oscillatory:</strong> Voltage swings between 11V and 14V with a 2-second period. The voltage regulator and the alternator are fighting: one compensates, the other overcompensates. The fault is in the interface (the regulator), not the alternator itself.</li>
+      <li class="mb-1"><em>Convergent:</em> Battery voltage dips to 11.8V, recovers to 12.6V when the alternator reconnects. The battery absorbed the perturbation. The alternator is redundant at current draw.</li>
+      <li class="mb-1"><em>Divergent:</em> Voltage drops steadily. The radio dims, the dashboard flickers, the engine stalls. The alternator was the only power source at this draw level. Everything downstream cascaded.</li>
+      <li class="mb-1"><em>Oscillatory:</em> Voltage swings between 11V and 14V with a 2-second period. The voltage regulator and the alternator are fighting: one compensates, the other overcompensates. The fault is in the interface (the regulator), not the alternator itself.</li>
     </ul>
 
     <p>Chaos is rare in simple electrical circuits. Three bins cover most automotive faults. But engine management systems have enough interacting control loops (fuel injection, ignition timing, variable valve timing, turbo boost) that a single sensor failure can produce bounded but aperiodic behavior no single root cause explains.</p>
@@ -212,10 +212,10 @@ import Repl from '../../../../components/Repl';
     <p>A drug trial measures blood pressure over 18 months. The perturbation is the drug. The trajectory is the patient's BP over time:</p>
 
     <ul class="list-disc pl-5 mb-4">
-      <li class="mb-1"><strong>Convergent:</strong> BP drops from 150 to 130 in the first month, stabilizes. The drug works and the effect is stable.</li>
-      <li class="mb-1"><strong>Divergent:</strong> BP drops to 130, then creeps back to 145, then 155, then 160. The body adapts. The drug works in the snapshot window but the compensatory response overwhelms it. This is Vioxx (<a href="/evidence-has-a-trajectory">chapter 8's opening example</a>).</li>
-      <li class="mb-1"><strong>Oscillatory:</strong> BP swings between 125 and 155 with a monthly period. The drug suppresses BP for two weeks, the body overshoots for two weeks, the drug wins again. The interface is the feedback loop between drug and compensatory mechanism.</li>
-      <li class="mb-1"><strong>Chaotic:</strong> BP stays between 120 and 160 but follows no pattern. The drug interacts with diet, exercise, stress, sleep, and other medications to produce bounded but unpredictable responses. A single drug-response model is the wrong decomposition; factor out the other variables first.</li>
+      <li class="mb-1"><em>Convergent:</em> BP drops from 150 to 130 in the first month, stabilizes. The drug works and the effect is stable.</li>
+      <li class="mb-1"><em>Divergent:</em> BP drops to 130, then creeps back to 145, then 155, then 160. The body adapts. The drug works in the snapshot window but the compensatory response overwhelms it. This is Vioxx (<a href="/evidence-has-a-trajectory">chapter 8's opening example</a>).</li>
+      <li class="mb-1"><em>Oscillatory:</em> BP swings between 125 and 155 with a monthly period. The drug suppresses BP for two weeks, the body overshoots for two weeks, the drug wins again. The interface is the feedback loop between drug and compensatory mechanism.</li>
+      <li class="mb-1"><em>Chaotic:</em> BP stays between 120 and 160 but follows no pattern. The drug interacts with diet, exercise, stress, sleep, and other medications to produce bounded but unpredictable responses. A single drug-response model is the wrong decomposition; factor out the other variables first.</li>
     </ul>
 
     <p>A 9-month snapshot of the divergent case shows "BP dropped, drug works." The 18-month e-value trajectory shows the evidence reversing. The bin tells you why: the compensatory response overwhelms the drug, and that response is the mechanism to investigate.</p>
@@ -307,9 +307,9 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <h3>Where the classifier fails</h3>
 
-    <p><strong>Transient classification.</strong> A system divergent in the first 100 observations may converge by observation 500. The classifier sees whatever window you give it. Fix: run the classifier on a rolling window and watch whether the bin itself flips. If it does, you're in the transient regime and need more data.</p>
+    <p><em>Transient classification.</em> A system divergent in the first 100 observations may converge by observation 500. The classifier sees whatever window you give it. Fix: run the classifier on a rolling window and watch whether the bin itself flips. If it does, you're in the transient regime and need more data.</p>
 
-    <p><strong>Oscillatory vs. chaotic at the boundary.</strong> A system with a dominant frequency plus significant broadband noise will land on one side or the other of the 40% threshold. This boundary is the least important one. Both bins indicate coupling between subsystems; the difference matters for prediction (oscillatory is predictable, chaotic is not) but not for the next experiment (both say "test the interface" or "decompose").</p>
+    <p><em>Oscillatory vs. chaotic at the boundary.</em> A system with a dominant frequency plus significant broadband noise will land on one side or the other of the 40% threshold. This boundary is the least important one. Both bins indicate coupling between subsystems; the difference matters for prediction (oscillatory is predictable, chaotic is not) but not for the next experiment (both say "test the interface" or "decompose").</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -317,13 +317,13 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <p>The e-value stream from Chapter 8 is itself a time series. Apply the classifier to it.</p>
 
-    <p>An e-value that <strong>converges</strong> to a high value: evidence accumulated and stabilized. Redirect budget elsewhere.</p>
+    <p>An e-value that <em>converges</em> to a high value: evidence accumulated and stabilized. Redirect budget elsewhere.</p>
 
-    <p>An e-value that <strong>diverges</strong>: evidence piling up monotonically. This is the normal "success" mode for anytime-valid inference.</p>
+    <p>An e-value that <em>diverges</em>: evidence piling up monotonically. This is the normal "success" mode for anytime-valid inference.</p>
 
-    <p>An e-value that <strong>oscillates</strong>: evidence swings back and forth periodically. This is the signature of <a href="/evidence-has-a-trajectory">Boeing's MCAS</a>. The hypothesis is not wrong; it is incomplete. It captures one half of a coupled pair.</p>
+    <p>An e-value that <em>oscillates</em>: evidence swings back and forth periodically. This is the signature of <a href="/evidence-has-a-trajectory">Boeing's MCAS</a>. The hypothesis is not wrong; it is incomplete. It captures one half of a coupled pair.</p>
 
-    <p>An e-value that looks <strong>chaotic</strong>: evidence is bounded but never settles and never repeats. Your betting strategy is poorly matched to the system's dynamics. You are testing at the wrong level of abstraction, like asking "does the server have a latency problem?" when the real question requires decomposing into cache, queue, and retry-loop subproblems.</p>
+    <p>An e-value that looks <em>chaotic</em>: evidence is bounded but never settles and never repeats. Your betting strategy is poorly matched to the system's dynamics. You are testing at the wrong level of abstraction, like asking "does the server have a latency problem?" when the real question requires decomposing into cache, queue, and retry-loop subproblems.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
