@@ -16,7 +16,7 @@ import Repl from '../../../../components/Repl';
       <p class="text-lg" style="max-width:none">Chapter 3 showed the same abstract schema under eight names. This chapter defines the primitive: snapshot before, snapshot after, XOR. What flipped is figure; what held is ground. Diff is the contrast that abduction operates over.</p>
     </div>
 
-    <h2>The mechanic</h2>
+    <h2>Mechanic</h2>
 
     <p>A driver turns the key and gets nothing: no crank, no start. Yesterday the car started fine. The mechanic turns the key herself, watches the dash lights dim and the starter give a single click, and two hypotheses fire: weak battery, or a bad connection at the terminals. Nobody taught her a hypothesis-generation algorithm. The shape of the failure named the next test.</p>
 
@@ -24,7 +24,7 @@ import Repl from '../../../../components/Repl';
 
     <p>Diff is computable. The mechanic performed it in her head. OBD-II performs it in silicon. Facebook Infer performs it on code. The representation changes; the operation stays the same.</p>
 
-    <h2>The primitive</h2>
+    <h2>Primitive</h2>
 
     <p>Diff is the substrate of abduction, not abduction entire. It produces the contrast that abduction operates over:</p>
 
@@ -46,7 +46,7 @@ import Repl from '../../../../components/Repl';
 
     <p>Caution: diff gives candidates, not causes. A changed variable may be cause, effect, symptom, or coincident noise. The mechanic's diff puts the chief complaint (<em>no crank</em>) next to the diagnostic signs (<em>dim lights</em>, <em>single click</em>, <em>sagging voltage</em>), all in the figure. The diff alone does not know which is upstream. Separating cause from effect requires a dependency graph or an experiment. The diff just names what changed.</p>
 
-    <h2>The XOR</h2>
+    <h2>XOR</h2>
 
     <p>The simplest instantiation: state is a set of key-value pairs. The figure is every key whose value changed. The ground is every key whose value didn't.</p>
 
@@ -264,7 +264,7 @@ for code in obd_diff(expected, observed):
 
     <p>Three encodings. Handcoded table (OBD-II), automated inference (Infer), learned separation (IRM). IRM is the loosest analogue; it seeks invariant representations rather than literally diffing states. But the structural role holds: partition observations into signal and noise.</p>
 
-    <h2>Code: the full loop</h2>
+    <h2>Code: full loop</h2>
 
     <p>Combine the primitive with hypothesis generation. Given a diff, produce candidate explanations by examining what the figure touches in a dependency graph.</p>
 
@@ -393,9 +393,6 @@ print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
     <p>OBD-II shows this concretely: if a failure involves a sensor the ECU doesn't monitor, no code fires. Engineers add more sensors, but you can never instrument everything. Some state will always be unmeasured.</p>
 
     <p>Bi-abduction addresses this by inferring the frame: the state the operation <em>must not have touched</em> for the result to be valid. It reasons backward from the postcondition, including state never explicitly observed. The diff goes from "compare what you measured" to "infer what you must have missed."</p>
-
-    <p>That is Chapter 5.</p>
-
     <hr class="border-zinc-700 my-8"/>
 
     <h2>Sources</h2>

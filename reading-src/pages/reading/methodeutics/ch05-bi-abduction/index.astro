@@ -28,7 +28,7 @@ import Repl from '../../../../components/Repl';
 
     <hr class="border-zinc-700 my-8"/>
 
-    <h2>Separation logic: the frame rule</h2>
+    <h2>Separation logic: frame rule</h2>
 
     <p>The answer comes from separation logic, a branch of formal verification. The key idea: the heap (all the memory a program can access) separates into two disjoint parts.</p>
 
@@ -159,7 +159,7 @@ where:
 
     <h2>Code: a toy model of bi-abduction bookkeeping</h2>
 
-    <p>A simplified analogue outside verification. A function reads and writes keys in a state dictionary. Given explicitly supplied reads and writes (the hard part, which real bi-abduction infers from code), compute which keys must exist beforehand (anti-frame) and which are untouched (frame).</p>
+    <p>A simplified analogue outside verification. A repair procedure depends on some parts of a car and changes others. Given the parts it reads and writes (the hard part, which real bi-abduction infers from code), compute which parts must already be intact (anti-frame) and which it leaves untouched (frame).</p>
 
     <Repl client:visible initialCode={`def bi_abduce(known_state, reads, writes):
     """Infer the anti-frame and frame for a state-machine transition.
@@ -184,45 +184,46 @@ where:
     return anti_frame, frame
 
 
-# --- Example: a checkout function in an e-commerce state machine ---
+# --- Example: a battery swap on the no-crank car ---
 
-# What we know about the current state
+# What the mechanic has confirmed about the car
 known_state = {
-    "cart": ["item_a", "item_b"],
-    "user_id": 42,
-    "session_token": "abc123",
-    "theme": "dark",
-    "locale": "en-US",
+    "battery": "dead",
+    "terminals": "corroded",
+    "starter": "ok",
+    "headlights": "off",
+    "oil_level": "full",
+    "tire_pressure": "32psi",
 }
 
-# The checkout function reads these keys:
-reads = {"cart", "user_id", "payment_method"}
+# The swap depends on these parts being intact:
+reads = {"battery", "terminals", "ground_strap"}
 
-# And writes these keys:
-writes = {"order_id": "ord_789", "cart": []}
+# And it changes these parts:
+writes = {"battery": "new", "terminals": "clean"}
 
 anti_frame, frame = bi_abduce(known_state, reads, writes)
 
-print("Anti-frame (missing preconditions):")
+print("Anti-frame (must be intact, but unconfirmed):")
 for key in sorted(anti_frame):
-    print(f"  {key} — must exist before checkout runs")
+    print(f"  {key}: must hold for the swap to fix the no-crank")
 
-print("\\nFrame (untouched state):")
+print("\\nFrame (untouched by the swap):")
 for key in sorted(frame):
     print(f"  {key} = {frame[key]!r}")
 
-print("\\nFigure (touched by checkout):")
+print("\\nFigure (touched by the swap):")
 touched = reads | set(writes.keys())
 for key in sorted(touched):
     if key in writes:
         print(f"  {key} -> {writes[key]!r}")
     else:
-        print(f"  {key} (read only)")
+        print(f"  {key} (checked only)")
 `} />
 
-    <p>The function never mentions <code>theme</code>, <code>locale</code>, or <code>session_token</code>, so bi-abduction infers they are untouched: the frame. It reads <code>payment_method</code>, which isn't in the known state, so bi-abduction infers it must exist: the anti-frame. From a known footprint, the system computed the ground and the hypothesis without the observer choosing what to snapshot.</p>
+    <p>The swap never touches the starter, the headlights, the oil, or the tires, so bi-abduction infers they are untouched: the frame. It depends on the <code>ground_strap</code>, which isn't in the known state, so bi-abduction infers it must be intact: the anti-frame. From a known footprint, the system computed the ground and the hypothesis without the mechanic choosing what to snapshot.</p>
 
-    <p>Now compose. The order-confirmation function reads <code>order_id</code> (which checkout wrote) and <code>email</code> (which nobody mentioned). Bi-abduction infers <code>email</code> as a new anti-frame entry. Chain the two: composed anti-frame is <code>{'{'}payment_method, email{'}'}</code>, composed frame is <code>{'{'}theme, locale, session_token{'}'}</code>. Each function analyzed locally; composition is a set union. Infer's actual composition is richer, but the structure is the same.</p>
+    <p>Now compose. The next step, a charging test, reads <code>battery</code> (which the swap just replaced) and <code>drive_belt</code> (which nobody checked). Bi-abduction infers <code>drive_belt</code> as a new anti-frame entry. Chain the two: composed anti-frame is <code>{'{'}ground_strap, drive_belt{'}'}</code>, composed frame is <code>{'{'}starter, oil_level, tire_pressure{'}'}</code>. Each step analyzed locally; composition is a set union. Infer's actual composition is richer, but the structure is the same.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -261,7 +262,7 @@ for key in sorted(touched):
 
     <p>Not a bug in bi-abduction. Its boundary. The primitive handles one path. When execution forks, you need the diff <em>between</em> branches, not just the diff within each branch.</p>
 
-    <p>That is tri-abduction. Chapter 6.</p>
+    <p>That is tri-abduction.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
