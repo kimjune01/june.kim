@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
 <Layout title="Ch 11: Convergence — Methodeutics" favicon="🔭">
@@ -491,6 +492,8 @@ cum_composed = np.cumprod(e_normal * e_poisson)
       <li><a href="https://en.wikipedia.org/wiki/Kevin_T._Kelly_(logician)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Kevin Kelly (Wikipedia)</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch10-kill-conditions/", label: "The hypothesis graph" }} next={{ href: "/reading/methodeutics/ch12-protecting-the-loop/", label: "Protecting the loop" }} />
 
   </main>
 </Layout>

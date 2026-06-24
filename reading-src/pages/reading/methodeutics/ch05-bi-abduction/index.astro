@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
@@ -307,6 +308,8 @@ for key in sorted(touched):
       <li><a href="https://en.wikipedia.org/wiki/Separation_logic"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Separation Logic (Wikipedia)</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch04-diff/", label: "Diff" }} next={{ href: "/reading/methodeutics/ch06-tri-abduction/", label: "Tri-abduction" }} />
 
   </main>
 </Layout>

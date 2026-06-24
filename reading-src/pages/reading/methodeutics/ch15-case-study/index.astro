@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
 <Layout title="Ch 15: Case Study — Methodeutics" favicon="🔭">
@@ -350,5 +351,8 @@ import Neighbors from "../../../../components/Neighbors.astro";
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch14-the-pipeline/", label: "The pipeline" }} next={{ href: "/reading/methodeutics/appendix-peirce-1878/", label: "Peirce 1878" }} />
+
   </main>
 </Layout>

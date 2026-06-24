@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
@@ -489,6 +490,8 @@ graph.summary()`} />
       <li><a href="https://en.wikipedia.org/wiki/Model-based_diagnosis"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Model-based diagnosis (Wikipedia)</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch09-four-bins/", label: "Four bins" }} next={{ href: "/reading/methodeutics/ch11-convergence/", label: "Convergence" }} />
 
   </main>
 </Layout>

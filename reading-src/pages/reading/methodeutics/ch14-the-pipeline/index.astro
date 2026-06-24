@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
 <Layout title="Ch 14: The Pipeline — Methodeutics" favicon="🔭">
@@ -345,6 +346,8 @@ import Neighbors from "../../../../components/Neighbors.astro";
       <li><a href="https://fbinfer.com/">Facebook Infer</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch13-validating-claims/", label: "Validators" }} next={{ href: "/reading/methodeutics/ch15-case-study/", label: "Case study" }} />
 
   </main>
 </Layout>

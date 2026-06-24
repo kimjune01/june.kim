@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
@@ -533,6 +534,8 @@ print("  " + " -> ".join(chain))`} />
       <li><a href="https://leanprover.github.io/theorem_proving_in_lean4/dependent_type_theory.html">Lean 4: Dependent Type Theory</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch12-protecting-the-loop/", label: "Protecting the loop" }} next={{ href: "/reading/methodeutics/ch14-the-pipeline/", label: "The pipeline" }} />
 
   </main>
 </Layout>

@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
@@ -383,6 +384,8 @@ for name, series in [("convergent", conv), ("divergent", div),
       <li><a href="https://doi.org/10.1175/1520-0469(1963)020%3C0130:DNF%3E2.0.CO;2">Lorenz 1963, "Deterministic Nonperiodic Flow" (AMS)</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch08-evidence-trajectory/", label: "Evidence trajectory" }} next={{ href: "/reading/methodeutics/ch10-kill-conditions/", label: "The hypothesis graph" }} />
 
   </main>
 </Layout>

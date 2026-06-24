@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
@@ -73,7 +74,7 @@ import Repl from '../../../../components/Repl';
 
     <p>For an agent running sequential experiments, this kills silently. The agent generates a directional prediction ("increasing X will improve Y"). It collects data. X and Y are positively correlated at n=100. Also at n=1,000. Also at n=10,000. The e-value grows. The agent reports strong evidence. But the crud factor guarantees nonzero correlation everywhere, so "X improves Y" would confirm for any X and any Y in this domain.</p>
 
-    <p>Fix: predictions must be quantitative and precise. Not "X improves Y" but "X improves Y by between 12% and 18%." The second prediction can fail in both directions: the effect could be too small or too large. More data narrows the confidence interval, making it harder for the prediction to survive. Scale is the enemy of a false positive.</p>
+    <p>Fix: predictions must be quantitative and precise. Not "X improves Y" but "X improves Y by between 12% and 18%." The second prediction can fail in both directions: the effect could be too small or too large. More data narrows the confidence interval. Scale is the enemy of a false positive.</p>
 
     <h3>Q16 &mdash; Feynman: How would you fool yourself?</h3>
 
@@ -378,6 +379,8 @@ for name, entry in [("Good prereg", good_prereg), ("Bad prereg", bad_prereg)]:
       <li><a href="https://www.cambridge.org/core/books/mathematical-problem-solving/71E357D32C51F5B4BB279C244ACA6E2F">Schoenfeld 1985, <em>Mathematical Problem Solving</em> (Cambridge)</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch11-convergence/", label: "Convergence" }} next={{ href: "/reading/methodeutics/ch13-validating-claims/", label: "Validators" }} />
 
   </main>
 </Layout>

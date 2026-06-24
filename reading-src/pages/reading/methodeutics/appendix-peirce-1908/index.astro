@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 ---
 <Layout title="Peirce 1908 — A Neglected Argument for the Reality of God" favicon="🔭">
   <main>
@@ -118,5 +119,8 @@ import Neighbors from "../../../../components/Neighbors.astro";
       <li><a href="/reading/methodeutics/appendix-peirce-1878/">Peirce 1878 — Deduction, Induction, and Hypothesis</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/appendix-peirce-1878/", label: "Peirce 1878" }} fin="fin" />
+
   </main>
 </Layout>

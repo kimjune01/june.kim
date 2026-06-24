@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
@@ -444,6 +445,8 @@ print("Belt tension: not in snapshot. Hypothesis space is incomplete.")
       <li><a href="https://arxiv.org/abs/1907.02893">Arjovsky et al. 2019 &mdash; Invariant Risk Minimization (arXiv)</a></li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch03-eight-names/", label: "Eight names" }} next={{ href: "/reading/methodeutics/ch05-bi-abduction/", label: "Bi-abduction" }} />
 
   </main>
 </Layout>

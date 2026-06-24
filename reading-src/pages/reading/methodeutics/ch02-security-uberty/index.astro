@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../../layouts/Base.astro';
 import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
@@ -17,9 +18,9 @@ import Repl from '../../../../components/Repl';
 
     <h2>Discovery needs no logic?</h2>
 
-    <p>In 1934, Karl Popper split science in two. Discovery and justification. Justification is logical — deduce predictions, test them, corroborate or falsify. Discovery is psychological, and where hypotheses come from is irrelevant to their scientific status. "The initial stage, the act of conceiving or inventing a theory, seems to me neither to call for logical analysis nor to be susceptible of it" (<em>The Logic of Scientific Discovery</em>, &sect;2).</p>
+    <p>In 1934, Karl Popper split science in two. Discovery and justification. Justification is logical: deduce predictions, test them, corroborate or falsify. Discovery is psychological, and where hypotheses come from is irrelevant to their scientific status. "The initial stage, the act of conceiving or inventing a theory, seems to me neither to call for logical analysis nor to be susceptible of it" (<em>The Logic of Scientific Discovery</em>, &sect;2).</p>
 
-    <p>Peirce would have granted half of this. Abductive conclusions are insecure — a hypothesis can explain the data perfectly and still be wrong. But he refused the leap from "insecure" to "illogical." Are there better and worse ways to generate hypotheses, ways with describable structure? Peirce said yes. Popper said discovery lies outside logic.</p>
+    <p>Peirce would have granted half of this. Abductive conclusions are insecure: a hypothesis can explain the data perfectly and still be wrong. But he refused the leap from "insecure" to "illogical." Are there better and worse ways to generate hypotheses, ways with describable structure? Peirce said yes. Popper said discovery lies outside logic.</p>
 
     <p>It matters. Even Popper admitted that psychology, heuristics, and scientific taste constrain hypothesis generation. A doctor who sees chest pain, shortness of breath, and elevated <a href="https://en.wikipedia.org/wiki/Troponin">troponin</a> doesn't hypothesize sunburn. The constraints are structural: background knowledge, the shape of the surprise, what would render the observation unsurprising. But without a formal account, you can't give them the same explicit treatment we give deduction and induction.</p>
 
@@ -27,9 +28,9 @@ import Repl from '../../../../components/Repl';
 
     <p>Peirce made the tradeoff explicit in one of his last writings, "An Essay Toward Improving Our Reasoning in Security and in Uberty" (1913). Every inference mode has two properties that vary inversely:</p>
 
-    <p><strong>Security</strong> — how certain is the conclusion, given the premises? Can the conclusion be false when the premises are true?</p>
+    <p><strong>Security</strong>: how certain is the conclusion, given the premises? Can the conclusion be false when the premises are true?</p>
 
-    <p><strong>Uberty</strong> — how much new knowledge does the mode produce? Does the conclusion go beyond what the premises already contain?</p>
+    <p><strong>Uberty</strong>: how much new knowledge does the mode produce? Does the conclusion go beyond what the premises already contain?</p>
 
     <p>The word <em>uberty</em> comes from Latin <em>ubertas</em>: fruitfulness, richness, fertility. Peirce chose it deliberately. The right mode depends on which stage of inquiry you occupy.</p>
 
@@ -140,7 +141,7 @@ for h in hypotheses:
 
     <p>Popper's discovery/justification split dominated philosophy of science for decades. Discovery is psychological, justification is logical, only justification matters. Hanson (1958) and Hintikka (1999) attacked it from opposite ends.</p>
 
-    <p>Hanson showed that observation is theory-laden — what you see depends on what you know, so discovery already has logical structure. Hintikka showed that justification presupposes discovery: you can't test a hypothesis you haven't selected, and selection is itself an inference. Peirce had said the same a century earlier.</p>
+    <p>Hanson showed that observation is theory-laden: what you see depends on what you know, so discovery already has logical structure. Hintikka showed that justification presupposes discovery: you can't test a hypothesis you haven't selected, and selection is itself an inference. Peirce had said the same a century earlier.</p>
 
     <p>The three modes form a cycle: abduction proposes, deduction derives, induction tests. Separating discovery from justification is like separating inhaling from exhaling and calling only exhaling respiration.</p>
 
@@ -152,7 +153,7 @@ for h in hypotheses:
 
     <h2>Thinking before the frame</h2>
 
-    <p>In "A Neglected Argument for the Reality of God" (1908), Peirce called the pre-logical ground of abduction <em>musement</em>: "Pure Play" that is "antipodal to vacancy and dreaminess." The muser stays engaged and alert but holds no target — attention widens instead of narrowing. Musement is not abduction's conclusion; it is the condition under which candidate hypotheses become available.</p>
+    <p>In "A Neglected Argument for the Reality of God" (1908), Peirce called the pre-logical ground of abduction <em>musement</em>: "Pure Play" that is "antipodal to vacancy and dreaminess." The muser stays engaged and alert but holds no target: attention widens instead of narrowing. Musement is not abduction's conclusion; it is the condition under which candidate hypotheses become available.</p>
 
     <p>Directed search works within an existing frame. Musement is what happens before the frame exists. You can't search a space you haven't constructed, and you can't construct it by searching. This is <a href="https://en.wikipedia.org/wiki/Exploration%E2%80%93exploitation_dilemma">explore-exploit</a>: exploitation is induction within the current best model; musement is exploration outside it, guided by aesthetic and analogical affinity rather than formal rules.</p>
 
@@ -160,7 +161,7 @@ for h in hypotheses:
 
     <p>Rich Sutton's "The Bitter Lesson" (2019) argues for induction at scale: general methods that leverage computation beat hand-crafted knowledge. Chess, Go, speech, vision. Each system generalizes from data within a fixed task.</p>
 
-    <p>But induction operates <em>within</em> a research program. Framing language as next-token prediction, or vision as hierarchical feature extraction: those are abductive moves. Someone proposed a frame, and that frame determined which inductive methods would work. The bitter lesson says: once you have the frame, let computation do the rest. It stays silent on where the frame comes from. (Modern ML systems discover representations, but representation learning still occurs inside a chosen objective, architecture, and data regime — the frame is upstream.)</p>
+    <p>But induction operates <em>within</em> a research program. Framing language as next-token prediction, or vision as hierarchical feature extraction: those are abductive moves. Someone proposed a frame, and that frame determined which inductive methods would work. The bitter lesson says: once you have the frame, let computation do the rest. It stays silent on where the frame comes from. (Modern ML systems discover representations, but representation learning still occurs inside a chosen objective, architecture, and data regime. The frame is upstream.)</p>
 
     <div class="overflow-x-auto my-6">
       <table class="w-full text-sm">
@@ -195,7 +196,7 @@ for h in hypotheses:
 
     <h2>A name without a primitive</h2>
 
-    <p>So now we have a vocabulary for the tradeoff. Security and uberty vary inversely, both necessary. Abduction is the fertile mode — insecure but not illogical, operating before the frame exists, generating the research programs within which induction does its work.</p>
+    <p>So now we have a vocabulary for the tradeoff. Security and uberty vary inversely, both necessary. Abduction is the fertile mode: insecure but not illogical, operating before the frame exists, generating the research programs within which induction does its work.</p>
 
     <p>What we lack is a <em>formalization</em>. We can say abduction is "inference to the best explanation" and wave at the tradeoff curve, but we can't write down the operation the way we write <a href="https://en.wikipedia.org/wiki/Modus_ponens">modus ponens</a> for deduction or <a href="https://en.wikipedia.org/wiki/Bayesian_inference">Bayesian update</a> for induction. We have a name and a ranking, not a primitive.</p>
 
@@ -248,5 +249,8 @@ for h in hypotheses:
       <li><a href="/modes-of-reason">Modes of Reason</a> — Chapter 1 of this textbook</li>
     </ul>
     </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch01-three-modes/", label: "Three modes" }} next={{ href: "/reading/methodeutics/ch03-eight-names/", label: "Eight names" }} />
+
   </main>
 </Layout>
