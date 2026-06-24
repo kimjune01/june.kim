@@ -96,46 +96,39 @@ import Repl from '../../../../components/Repl';
 
     <p>Feed the same observations to each mode and watch them produce different conclusions at different levels of security.</p>
 
-    <Repl client:visible initialCode={`# Three modes applied to the same observations.
-# A server's response times over 10 requests (ms):
-times = [120, 118, 125, 122, 119, 980, 115, 121, 117, 123]
+    <Repl client:visible initialCode={`# Three modes applied to the same number series.
+# A sequence whose first five terms are given:
+series = [1, 2, 4, 8, 16]   # n = 1, 2, 3, 4, 5
 
 # --- DEDUCTION ---
-# Given: "If latency > 500ms, the request is anomalous."
-# Certain, but adds nothing you didn't already know.
-threshold = 500
-anomalies = [t for t in times if t > threshold]
-print(f"Deduction: {len(anomalies)} anomalous request(s).")
+# Given the rule: "each term is twice the previous."
+# Certain, but you put the answer in when you chose the rule.
+print(f"Deduction: next term is {2 * series[-1]}.")
 # Security: maximal. Uberty: zero.
 
 # --- INDUCTION ---
-# Generalize from the data: what's the typical range?
-import statistics
-mu = statistics.mean(times)
-sigma = statistics.stdev(times)
-print(f"Induction: mean={mu:.0f}ms, stdev={sigma:.0f}ms")
-print(f"  Normal range: [{mu - 2*sigma:.0f}, {mu + 2*sigma:.0f}]ms")
-# The outlier inflates the estimate. Induction extends but stays
-# inside the data's frame — it doesn't ask *why*.
+# Generalize from the data alone: what's the pattern?
+ratios = [series[i+1] / series[i] for i in range(len(series)-1)]
+print(f"Induction: ratios are {ratios} -> predict {2 * series[-1]}.")
+# Extends beyond the data but stays inside the doubling frame.
 # Security: moderate. Uberty: moderate.
 
 # --- ABDUCTION ---
-# The surprising fact: one request is 8x slower than the rest.
-# What would make this unsurprising?
-hypotheses = [
-    "GC pause — the JVM stopped the world",
-    "Cache miss — cold key after eviction",
-    "Network retry — first packet dropped, TCP retransmit",
-    "Noisy neighbor — co-tenant CPU spike",
-]
-print(f"Abduction: {len(hypotheses)} candidate explanations.")
-for h in hypotheses:
-    print(f"  - {h}")
-# None of these are in the data. Each is a *new idea* that would
-# explain the observation if true.
+# The data underdetermines the rule. What *generates* 1,2,4,8,16?
+from math import comb
+def doubling(n): return 2 ** (n - 1)
+def moser(n):    return comb(n, 4) + comb(n, 2) + 1  # regions cut in a circle
+hypotheses = {
+    "Doubling, 2^(n-1)": [doubling(n) for n in range(1, 7)],
+    "Moser's circle":    [moser(n)    for n in range(1, 7)],
+}
+for name, seq in hypotheses.items():
+    print(f"  {name}: {seq}")
+# Each is a *new idea* not present in the data. Both fit the five
+# terms you've seen and split at the sixth: 32 against 31.
 # Security: minimal. Uberty: maximal.`} />
 
-    <p>Deduction applies a rule and tells you what you already decided counts as anomalous. From the same data, induction computes a summary and tells you what to expect next. Only abduction asks <em>why</em>, and proposes explanations beyond anything in the data. The explanations might be wrong. That's the price of fertility.</p>
+    <p>Deduction applies the rule you supplied and reports what it entails: 32. Certain, but you decided the answer when you chose the rule. Induction generalizes from the data and predicts the same 32, staying inside the doubling frame. Only abduction asks what <em>generates</em> the series, and the data alone can't say. Doubling and <a href="https://en.wikipedia.org/wiki/Dividing_a_circle_into_areas">Moser's circle</a> agree on every term you've seen, then split at the sixth: 32 against 31. The secure extrapolation is the one that's wrong. That's the price, and the point: fertility comes from leaving the frame the data hands you.</p>
 
     <h2>Inhaling is also respiration</h2>
 
@@ -159,9 +152,9 @@ for h in hypotheses:
 
     <h2>Scaling needs a frame first</h2>
 
-    <p>Rich Sutton's "The Bitter Lesson" (2019) argues for induction at scale: general methods that leverage computation beat hand-crafted knowledge. Chess, Go, speech, vision. Each system generalizes from data within a fixed task.</p>
+    <p>Rich Sutton's "The Bitter Lesson" (2019) is the sentence people quote to justify scaling: "general methods that leverage computation are ultimately the most effective, and by a large margin." The two that scale, he says, are "search and learning." Chess, Go, speech, vision. Each scales within a fixed task.</p>
 
-    <p>But induction operates <em>within</em> a research program. Framing language as next-token prediction, or vision as hierarchical feature extraction: those are abductive moves. Someone proposed a frame, and that frame determined which inductive methods would work. The bitter lesson says: once you have the frame, let computation do the rest. It stays silent on where the frame comes from. (Modern ML systems discover representations, but representation learning still occurs inside a chosen objective, architecture, and data regime. The frame is upstream.)</p>
+    <p>But both operate <em>within</em> a research program. Framing language as next-token prediction, or vision as hierarchical feature extraction: those are abductive moves. Someone proposed a frame, and that frame determined which methods would work. The bitter lesson says: once you have the frame, let computation do the rest. It stays silent on where the frame comes from. (Modern ML systems discover representations, but representation learning still occurs inside a chosen objective, architecture, and data regime. The frame is upstream.)</p>
 
     <div class="overflow-x-auto my-6">
       <table class="w-full text-sm">
@@ -235,7 +228,7 @@ for h in hypotheses:
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Sutton 2019</td>
-            <td class="text-gray-400"><a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">"The Bitter Lesson."</a> General methods that leverage computation beat methods that leverage human knowledge. An argument for induction at scale — silent on abduction.</td>
+            <td class="text-gray-400"><a href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html">"The Bitter Lesson."</a> General methods that leverage computation beat methods that leverage human knowledge. An argument for scaling search and learning, silent on abduction.</td>
           </tr>
         </tbody>
       </table>

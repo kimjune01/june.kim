@@ -36,7 +36,6 @@ import Repl from '../../../../components/Repl';
             <th class="text-left py-2 pr-3 text-gray-400">The operation</th>
             <th class="text-left py-2 pr-3 text-gray-400">Salient (selected)</th>
             <th class="text-left py-2 pr-3 text-gray-400">Retained (backgrounded)</th>
-            <th class="text-left py-2 pr-3 text-gray-400">Branching version</th>
             <th class="text-left py-2 text-gray-400">Key ref</th>
           </tr>
         </thead>
@@ -46,15 +45,13 @@ import Repl from '../../../../components/Repl';
             <td class="pr-3 text-gray-300">Bi-abduction</td>
             <td class="pr-3 text-gray-400">Anti-frame (missing precondition)</td>
             <td class="pr-3 text-gray-400">Frame (untouched heap fragment)</td>
-            <td class="pr-3 text-gray-400">Tri-abduction</td>
             <td class="text-gray-400"><a href="https://dl.acm.org/doi/10.1145/1480881.1480917">Calcagno et al. 2009</a>; <a href="https://arxiv.org/abs/2305.04842">Zilberstein et al. 2024</a></td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Cognitive arch (Soar)</td>
             <td class="pr-3 text-gray-300">Chunking</td>
-            <td class="pr-3 text-gray-400">Result (WMEs resolving the impasse)</td>
-            <td class="pr-3 text-gray-400">Superstate conditions (tested WMEs &rarr; chunk LHS)</td>
-            <td class="pr-3 text-gray-400">Operator-tie impasse</td>
+            <td class="pr-3 text-gray-400">Tested WMEs (the result's dependencies)</td>
+            <td class="pr-3 text-gray-400">Untested WMEs (dropped from the rule)</td>
             <td class="text-gray-400"><a href="https://apps.dtic.mil/sti/tr/pdf/ADA188742.pdf">Laird et al. 1987</a></td>
           </tr>
           <tr class="border-b border-zinc-800">
@@ -62,7 +59,6 @@ import Repl from '../../../../components/Repl';
             <td class="pr-3 text-gray-300">Program induction</td>
             <td class="pr-3 text-gray-400">Type (structural program)</td>
             <td class="pr-3 text-gray-400">Token-level variance (marginalized out)</td>
-            <td class="pr-3 text-gray-400">Implicit</td>
             <td class="text-gray-400"><a href="https://www.science.org/doi/10.1126/science.aab3050">Lake et al. 2015</a></td>
           </tr>
           <tr class="border-b border-zinc-800">
@@ -70,7 +66,6 @@ import Repl from '../../../../components/Repl';
             <td class="pr-3 text-gray-300">Figure-ground segregation</td>
             <td class="pr-3 text-gray-400"><em>Figur</em> (bounded, salient)</td>
             <td class="pr-3 text-gray-400"><em>Grund</em> (formless, extending)</td>
-            <td class="pr-3 text-gray-400">Multistability</td>
             <td class="text-gray-400"><a href="https://philpapers.org/rec/RUBSF">Rubin 1915</a>; <a href="https://en.wikipedia.org/wiki/Principles_of_Gestalt_Psychology">Koffka 1935</a></td>
           </tr>
           <tr class="border-b border-zinc-800">
@@ -78,7 +73,6 @@ import Repl from '../../../../components/Repl';
             <td class="pr-3 text-gray-300">Equilibration</td>
             <td class="pr-3 text-gray-400">Perturbation (novel element)</td>
             <td class="pr-3 text-gray-400">Schema (assimilates without changing)</td>
-            <td class="pr-3 text-gray-400">Reflective abstraction</td>
             <td class="text-gray-400"><a href="https://en.wikipedia.org/wiki/Equilibration">Piaget 1975/1985</a></td>
           </tr>
           <tr class="border-b border-zinc-800">
@@ -86,7 +80,6 @@ import Repl from '../../../../components/Repl';
             <td class="pr-3 text-gray-300">Intervention / identification</td>
             <td class="pr-3 text-gray-400">Treatment variable (<em>do(X=x)</em>)</td>
             <td class="pr-3 text-gray-400">Background variables <em>U</em> (held fixed)</td>
-            <td class="pr-3 text-gray-400">Counterfactual contrast <em>Y&#x2081; - Y&#x2080;</em></td>
             <td class="text-gray-400"><a href="https://www.cambridge.org/core/books/causality/B0046844FAE10CBF274D4ACBDAEB5F5B">Pearl 2009</a></td>
           </tr>
           <tr class="border-b border-zinc-800">
@@ -94,7 +87,6 @@ import Repl from '../../../../components/Repl';
             <td class="pr-3 text-gray-300">Abduction (retroduction)</td>
             <td class="pr-3 text-gray-400">Surprising fact <em>C</em></td>
             <td class="pr-3 text-gray-400">Settled expectations</td>
-            <td class="pr-3 text-gray-400">Economy of research</td>
             <td class="text-gray-400"><a href="https://archive.org/details/pragmatismasprin0000peir">Peirce 1903</a></td>
           </tr>
           <tr>
@@ -102,14 +94,13 @@ import Repl from '../../../../components/Repl';
             <td class="pr-3 text-gray-300">Invariant feature separation</td>
             <td class="pr-3 text-gray-400">Invariant features (stable across envs)</td>
             <td class="pr-3 text-gray-400">Spurious features (env-specific)</td>
-            <td class="pr-3 text-gray-400">Counterfactual policy evaluation</td>
             <td class="text-gray-400"><a href="https://arxiv.org/abs/1907.02893">Arjovsky et al. 2019</a></td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <p>Read any row. Take an observation, split it into figure and ground, name the figure. The figure is the hypothesis, the part that explains. The ground is everything else: the heap untouched, the schema unbroken, the background variables held fixed.</p>
+    <p>Read any row. Take an observation, split it into figure and ground. Which part you call figure is the hypothesis; the ground is everything else: the heap untouched, the schema unbroken, the background variables held fixed.</p>
 
     <h2>Reading the entries</h2>
 
@@ -121,9 +112,9 @@ import Repl from '../../../../components/Repl';
 
     <h3>Chunking (Laird, Rosenbloom, Newell 1987)</h3>
 
-    <p>When Soar cannot decide which operator to apply, it hits an impasse and drops into a subgoal, reasoning until it finds a result. Chunking caches that result as a production rule: tested conditions become the left-hand side (ground: superstate conditions already true), and the result becomes the right-hand side (figure: new working-memory elements that resolved the impasse). Next time those conditions arise, the chunk fires directly. No impasse, no subgoal.</p>
+    <p>When Soar cannot decide which operator to apply, it hits an impasse and drops into a subgoal, reasoning until it finds a result. Chunking compiles that result into a production rule. Soar backtraces the dependencies: the working-memory elements the subgoal actually tested become the rule's conditions (figure); the elements that were present but never tested are dropped (ground). Next time those conditions hold, the chunk fires directly. No impasse, no subgoal.</p>
 
-    <p>The figure-ground split is automatic. Soar traces which working-memory elements were tested during the subgoal and which were produced. Tested elements become ground; produced elements become figure. The system doesn't decide what to cache. The architecture decides, by recording what was used and what was created.</p>
+    <p>The partition is real, but it is exact, not fertile. Chunking caches a result the subgoal already derived; it proposes no new hypothesis and cannot be wrong the way an abduction can. This is the secure limit of the operation: deductive compilation (explanation-based generalization), not discovery. The genuinely abductive moment in Soar is upstream, in how the subgoal breaks the impasse, not in the chunk that records the answer. The figure-ground <em>partition</em> is more general than abduction; chunking is what it looks like when the insecurity is gone.</p>
 
     <h3>Program induction (Lake, Salakhutdinov, Tenenbaum 2015)</h3>
 
@@ -146,9 +137,6 @@ import Repl from '../../../../components/Repl';
     <h3>Intervention (Pearl 2009)</h3>
 
     <p>Pearl's <em>do</em>-calculus formalizes the difference between observing and intervening. Observing <em>X=x</em> conditions on it; the causal structure stays intact. Intervening <em>do(X=x)</em> sets it, severing the incoming arrows to <em>X</em>. The treatment variable is figure: what you changed. The background variables <em>U</em> are ground: held fixed across the intervention.</p>
-
-    <p>The counterfactual contrast <em>Y&#x2081; - Y&#x2080;</em> is the branching version: what would have happened under a different intervention? Peirce's economy of research asks which hypothesis to test next; Pearl's counterfactual asks what the outcome would have been. Same question, different notation: which figure-ground split?</p>
-
     <h3>Abduction (Peirce 1903)</h3>
 
     <p>Peirce's formulation is the most general. A surprising fact <em>C</em> is observed. If <em>A</em> were true, <em>C</em> would be a matter of course. Therefore there is reason to suspect <em>A</em>. The surprising fact is figure: what stands out against settled expectations. Settled expectations are ground: the background model against which surprise registers.</p>
@@ -159,7 +147,7 @@ import Repl from '../../../../components/Repl';
 
     <p>IRM separates features into two classes: invariant features that predict the label across all environments, and spurious features that predict it in some but not others. A cow on grass is reliably bovine in a farm dataset; on a beach, the grass feature fails. Cow is invariant (figure). Grass is spurious (ground).</p>
 
-    <p>The branching version is counterfactual policy evaluation: would this feature still predict the outcome in a different environment? IRM operationalizes the split by training a classifier that performs well across environments simultaneously. Features surviving the distributional shift are figure; features that don't are ground. Same role structure: partition, separate, name the invariant. (IRM is the loosest fit in the table: "ground" here means discarded rather than retained. The role assignment is the same; the fate of the ground component differs.)</p>
+    <p>IRM operationalizes the split by training a classifier that performs well across environments simultaneously. Features surviving the distributional shift are figure; features that don't are ground. Same role structure: partition, separate, name the invariant. (IRM is the loosest fit in the table: "ground" here means discarded rather than retained. The role assignment is the same; the fate of the ground component differs.)</p>
 
     <h2>The common structure</h2>
 
@@ -168,11 +156,8 @@ import Repl from '../../../../components/Repl';
     <ol>
       <li><strong>Observe</strong>: take in a state (heap, visual field, schema, dataset, surprising fact).</li>
       <li><strong>Partition</strong>: split the state into two parts: what matters (figure, anti-frame, perturbation, treatment variable, surprising fact, invariant feature) and what doesn't (ground, frame, schema, background, settled expectations, spurious feature).</li>
-      <li><strong>Name the figure</strong>: the figure becomes the hypothesis. The ground is everything the hypothesis doesn't touch.</li>
+      <li><strong>Name the difference</strong>: choosing which part is figure is the hypothesis. The ground is everything that choice leaves untouched.</li>
     </ol>
-
-    <p>The branching column is the fourth step some formulations include: what if the partition were different? Tri-abduction branches on the heap state. Multistability branches on the percept. Reflective abstraction on the schema. Counterfactual contrast on the intervention. Economy of research on the hypothesis. All ask the same question: given that this partition is one of many, which one is right?</p>
-
     <p>This is why the operation is insecure. No deductive guarantee pins down the correct partition. The same observation admits multiple figure-ground splits. Rubin's vase is the literal demonstration: same stimulus, two partitions, both valid, mutually exclusive. Security demands one correct partition. Uberty demands many, each fertile in a different direction.</p>
 
     <Repl client:visible initialCode={`def partition(observation, prior):
