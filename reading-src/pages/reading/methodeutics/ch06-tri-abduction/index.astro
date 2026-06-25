@@ -18,9 +18,9 @@ import Repl from '../../../../components/Repl';
 
     <h2>Where bi-abduction stops</h2>
 
-    <p>Chapter 5 showed how bi-abduction infers the frame and anti-frame for a single execution path. A function reads some keys and writes others; bi-abduction figures out what must exist beforehand and what stays untouched. Each function analyzed in isolation, results composed across the call graph. Polynomial per function, linear composition.</p>
+    <p><a href="/reading/methodeutics/ch05-bi-abduction/">Bi-abduction</a> infers the frame and anti-frame for a single execution path. A function reads some keys and writes others; bi-abduction figures out what must exist beforehand and what stays untouched. Each function analyzed in isolation, results composed across the call graph. Polynomial per function, linear composition.</p>
 
-    <p>But chapter 5 ended on a crack. Think about making your morning drink. Want coffee, and you need beans and the grinder. Want tea, and you need a teabag and the kettle. Ask what the kitchen must have stocked before you can make your drink, and there is no single answer. It forks on which one you choose. Each needs different things, and the choice between them is the structure that matters.</p>
+    <p>But it leaves a crack. Think about making your morning drink. Want coffee, and you need beans and the grinder. Want tea, and you need a teabag and the kettle. Ask what the kitchen must have stocked before you can make your drink, and there is no single answer. It forks on which one you choose. Each needs different things, and the choice between them is the structure that matters.</p>
 
     <p>The same fork, drawn out:</p>
 
@@ -99,7 +99,7 @@ Such that:
     <p><em>Branch A:</em> Wiggle connector A. The engine stalls.</p>
     <p><em>Branch B:</em> Wiggle connector B. The engine keeps running.</p>
 
-    <p>Same starting state. Two perturbations. Two outcomes. The unary diff (chapter 4) analyzes each branch in isolation. Branch A's figure: connector A wiggled, engine stalled. Branch B's figure: connector B wiggled, engine unchanged. Bi-abduction (chapter 5) infers the frame for each branch independently.</p>
+    <p>Same starting state. Two perturbations. Two outcomes. The unary diff (<a href="/reading/methodeutics/ch04-diff/">chapter 4</a>) analyzes each branch in isolation. Branch A's figure: connector A wiggled, engine stalled. Branch B's figure: connector B wiggled, engine unchanged. Bi-abduction (<a href="/reading/methodeutics/ch05-bi-abduction/">chapter 5</a>) infers the frame for each branch independently.</p>
 
     <p>The diagnostic power is in the <em>comparison between branches</em>. Wiggling connector A caused a stall. Wiggling connector B did not. The engine was running in both cases before the wiggle. The shared ground (fuel, spark, the rest of the harness) was identical across both branches. The only difference is which connector was wiggled. The divergent outcomes (stall vs. no stall) localize the cause to connector A, the loose connection, not connector B.</p>
 
@@ -225,7 +225,7 @@ Such that:
       </table>
     </div>
 
-    <p>Chapter 4's diff answers: "what changed?" Chapter 5's bi-abduction answers: "what changed, and what must have been true for it to work?" Chapter 6's tri-abduction answers: "what changed, and why did it change <em>here</em> but not <em>there</em>?"</p>
+    <p>Diff answers: "what changed?" Bi-abduction answers: "what changed, and what must have been true for it to work?" Tri-abduction answers: "what changed, and why did it change <em>here</em> but not <em>there</em>?"</p>
 
     <p>One snapshot pair gives one frame. Two snapshot pairs (actual and counterfactual) give one causal edge. The primitive stays diff; the arity grows. Unary diff partitions state into figure and ground. Bi-abduction infers the partition autonomously. Tri-abduction compares partitions across branches to isolate the cause.</p>
 
@@ -235,7 +235,7 @@ Such that:
 
     <h2>Controlled experiments are tri-abduction</h2>
 
-    <p>Chapters 1&ndash;3 established abduction as the third mode of reasoning, distinct from deduction and induction: generating hypotheses from surprising observations. Chapter 4 defined the primitive: diff. Chapter 5 automated it: bi-abduction infers the frame without the observer choosing what to snapshot.</p>
+    <p><a href="/reading/methodeutics/ch01-three-modes/">Abduction</a> is the third mode of reasoning, distinct from deduction and induction: generating hypotheses from surprising observations. Diff is the primitive; bi-abduction automates it, inferring the frame without the observer choosing what to snapshot.</p>
 
     <p>Tri-abduction adds branching. The question moves from "what explains this observation?" to "what explains why this observation differs from that one?" That is the gap between diagnosis and causal inference. Diagnosis says connector A might be the problem. Causal inference says connector A <em>is</em> the problem, because wiggling it changed the outcome and wiggling connector B didn't.</p>
 
@@ -422,13 +422,13 @@ print(f"    => connector A is causal, connector B is not")
 
     <hr class="border-zinc-700 my-8"/>
 
-    <h2>What breaks</h2>
+    <h2>Too many branches to test</h2>
 
     <p>The arity grows cleanly. N branches from a shared state produce N outcomes; comparing outcomes isolates the causal branching conditions. The primitive scales. Compositionality holds.</p>
 
     <p>But now there is a new problem. The mechanic had two branches: wiggle connector A, wiggle connector B. A real harness has dozens of connectors to wiggle. A compiler has thousands of configurations. A drug trial has millions of candidate molecules. Each is a potential branch. Each produces a candidate causal edge.</p>
 
-    <p>The primitive generates hypotheses. It does not rank them. Chapters 4&ndash;6 formalized candidate-explanation machinery at increasing arity: one diff, one frame inference, one causal edge. But N possible perturbations yield N candidate hypotheses. Which ones are worth testing?</p>
+    <p>The primitive translates observations into hypotheses. It does not rank them. Each step so far produced a single candidate explanation at its own arity: one diff, one frame inference, one causal edge. But N possible perturbations yield N candidate hypotheses. Which ones are worth testing?</p>
 
     <p>Testing is expensive. Every experiment costs time, compute, or reagents. The abductive primitive produces dozens of candidates from a single fork. Running all of them is rarely feasible. We need a theory of which hypotheses to invest in: a theory of the <em>economy of research</em>.</p>
     <hr class="border-zinc-700 my-8"/>
