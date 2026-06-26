@@ -117,6 +117,44 @@ The two questions are one. The high-level layer the world-model surveys want *is
 
 My own grid-puzzle agent is a small worked instance on the keeping side: a learned simulator for `M`, a decomposition library grown by proposal-then-compression, and a content-addressed trace store for `D`. It is one more lineage washing up on the same shore, which is how I came to draw the map.
 
+## References
+
+- Bacon, Harb, Precup. [The Option-Critic Architecture](https://arxiv.org/abs/1609.05140). AAAI, 2017.
+- Bowers, Olausson, Wong, Grand, Tenenbaum, Ellis, Solar-Lezama. [Top-Down Synthesis for Library Learning](https://mlb2251.github.io/stitch.pdf) (Stitch). POPL, 2023.
+- DeJong, Mooney. Explanation-Based Learning: An Alternative View. *Machine Learning* 1(2), 1986.
+- Ellis, Wong, Nye, Sablé-Meyer, Morales, Hewitt, Cary, Solar-Lezama, Tenenbaum. [DreamCoder: Growing Generalizable, Interpretable Knowledge with Wake-Sleep Bayesian Program Learning](https://arxiv.org/abs/2006.08381). 2021.
+- Eysenbach, Gupta, Ibarz, Levine. [Diversity Is All You Need: Learning Skills without a Reward Function](https://arxiv.org/abs/1802.06070) (DIAYN). ICLR, 2019.
+- Fikes, Hart, Nilsson. [Learning and Executing Generalized Robot Plans](https://www.sciencedirect.com/science/article/abs/pii/0004370272900513) (STRIPS MACROPS). *Artificial Intelligence* 3, 1972.
+- Hérail, Bit-Monnot. [Learning Operational Models from Demonstrations: Parameterization and Model Quality Evaluation](https://icaps22.icaps-conference.org/workshops/HPlan/papers/paper-06.pdf). ICAPS HPlan Workshop, 2022.
+- Hérail, Bit-Monnot. [Leveraging Demonstrations for Learning the Structure and Parameters of Hierarchical Task Networks](https://journals.flvc.org/FLAIRS/article/view/133327). FLAIRS, 2023.
+- Hérail. [Learning Hierarchical Models from Demonstrations for Deliberate Planning and Acting](https://laas.hal.science/tel-04692640). PhD thesis, Université de Toulouse, 2024.
+- Hogg, Muñoz-Avila, Kuter. [HTN-MAKER: Learning HTNs with Minimal Additional Knowledge Engineering Required](https://cdn.aaai.org/AAAI/2008/AAAI08-151.pdf). AAAI, 2008.
+- Ilghami, Nau, Muñoz-Avila, Aha. CaMeL: Learning Method Preconditions for HTN Planning. AIPS, 2002.
+- Jiang, Liu, Eysenbach, Kolter, Finn. [Learning Options via Compression](https://proceedings.neurips.cc/paper_files/paper/2022/hash/8567a53e58a9fa4823af356c76ed943c-Abstract-Conference.html) (LOVE). NeurIPS, 2022.
+- Jinnai, Abel, Hershkowitz, Littman, Konidaris. [Finding Options that Minimize Planning Time](https://proceedings.mlr.press/v97/jinnai19a.html). ICML, 2019.
+- Konidaris, Barto. [Skill Discovery in Continuous Reinforcement Learning Domains using Skill Chaining](https://proceedings.neurips.cc/paper/2009/hash/e0cf1f47118daebc5b16269099ad7347-Abstract.html). NeurIPS, 2009.
+- Laird, Rosenbloom, Newell. Chunking in Soar: The Anatomy of a General Learning Mechanism. *Machine Learning* 1, 1986.
+- Lake, Salakhutdinov, Tenenbaum. Human-Level Concept Learning through Probabilistic Program Induction (BPL). *Science* 350, 2015.
+- Lam, Mörchen, Fradkin, Calders. Mining Compressing Sequential Patterns (GoKrimp). *Statistical Analysis and Data Mining* 7(1), 2014.
+- Larsson, Moffat. Off-Line Dictionary-Based Compression (RePair). *Proceedings of the IEEE* 88(11), 2000.
+- Li, Nau, Roberts, Fine-Morris. [Automatically Learning HTN Methods from Landmarks](https://arxiv.org/abs/2404.06325) (CURRICULAMA). 2024.
+- Machado, Bellemare, Bowling. [A Laplacian Framework for Option Discovery in Reinforcement Learning](https://arxiv.org/abs/1703.00956) (eigenoptions). ICML, 2017.
+- McGovern, Barto. Automatic Discovery of Subgoals in Reinforcement Learning using Diverse Density. ICML, 2001.
+- Minton. [Quantitative Results Concerning the Utility of Explanation-Based Learning](https://cdn.aaai.org/AAAI/1988/AAAI88-100.pdf) (PRODIGY). AAAI, 1988.
+- Nejati, Langley, Könik. Learning Hierarchical Task Networks by Observation. ICML, 2006.
+- Nevill-Manning, Witten. [Identifying Hierarchical Structure in Sequences: A Linear-Time Algorithm](https://jair.org/index.php/jair/article/view/10192) (SEQUITUR). *JAIR* 7, 1997.
+- Pickett, Barto. [PolicyBlocks: An Algorithm for Creating Useful Macro-Actions in Reinforcement Learning](https://marcpickett.com/papers/pickettICML2002.pdf). ICML, 2002.
+- Schaul, Quan, Antonoglou, Silver. [Prioritized Experience Replay](https://arxiv.org/abs/1511.05952). ICLR, 2016.
+- Shinn, Cassano, Berman, Gopinath, Narasimhan, Yao. [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366). NeurIPS, 2023.
+- Şimşek, Barto. Skill Characterization Based on Betweenness. NeurIPS, 2008.
+- Solan, Horn, Ruppin, Edelman. Unsupervised Learning of Natural Languages (ADIOS). *PNAS* 102(33), 2005.
+- Sutton, Precup, Singh. Between MDPs and Semi-MDPs: A Framework for Temporal Abstraction in Reinforcement Learning (options). *Artificial Intelligence* 112, 1999.
+- *Understanding World or Predicting Future? A Comprehensive Survey of World Models*. [ACM Computing Surveys](https://arxiv.org/abs/2411.14499), 2025.
+- Wang, Xie, Jiang, Mandlekar, Xiao, Zhu, Fan, Anandkumar. [Voyager: An Open-Ended Embodied Agent with Large Language Models](https://arxiv.org/abs/2305.16291). 2023.
+- Wang, Cai, Liu, Ma, Liang. Describe, Explain, Plan and Select (DEPS). NeurIPS, 2023.
+- [SkillGraph: Skill-Augmented Reinforcement Learning for Agents via Evolving Skill Graphs](https://arxiv.org/abs/2605.12039). 2026.
+- Zhao, Huang, Xu, Lin, Liu, Huang. [ExpeL: LLM Agents Are Experiential Learners](https://arxiv.org/abs/2308.10144). AAAI, 2024.
+
 ---
 
-*Open items: extend the external-validity sweep to a more combinatorial domain (Logistics) and larger Blocksworld to trace the full agreement-to-divergence drift, and an ARC-AGI-3 within-game cross-level demonstration of the live agent; tighten the HRL coverage into its own subsection; verify all citations and add full references; and position against a specific venue (ICAPS HPlan, GenPlan, or an ICLR/NeurIPS world-models workshop).*
+*Open items: extend the external-validity sweep to a more combinatorial domain (Logistics) and larger Blocksworld to trace the full agreement-to-divergence drift, and an ARC-AGI-3 within-game cross-level demonstration of the live agent; tighten the HRL coverage into its own subsection; and position against a specific venue (ICAPS HPlan, GenPlan, or an ICLR/NeurIPS world-models workshop).*
