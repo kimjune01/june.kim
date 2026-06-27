@@ -1,0 +1,280 @@
+Reading additional input from stdin...
+OpenAI Codex v0.141.0
+--------
+workdir: /Users/junekim/Documents/june.kim
+model: gpt-5.5
+provider: openai
+approval: never
+sandbox: read-only
+reasoning effort: none
+reasoning summaries: none
+session id: 019ef68c-910c-7471-b116-46447d1c797d
+--------
+user
+# Brief: find GitHub bugfix cases for an ambiguity benchmark
+
+I'm building a contamination-free benchmark of real software bugs where the *general* fix encodes a bit of intent that is NOT derivable from the issue text plus the repo. I need ~5 candidate cases off GitHub. Search the web/GitHub and verify each against the live repo. Be honest where you can't verify a detail.
+
+## What makes a case qualify
+
+A case is a real, merged GitHub bug with ALL of:
+
+1. **A human oracle exists.** Either (a) a quick/narrow fix landed first and a more *general* fix landed later (two distinct PRs), or (b) the merged fix followed visible maintainer debate / competing PRs / a revert. The later/general fix is the oracle.
+2. **The project's own test suite does not distinguish narrow from general.** The narrow fix passes the shipped tests; the general fix is needed for cases the suite never covers. (This is the "oracle gap.")
+3. **Contamination-free.** Opened AND fixed recently (prefer 2026; 2025-H2 acceptable). Note the open and merge dates so I can check against model cutoffs.
+
+## The distinction that matters most — select for ambiguity, not difficulty
+
+- **Ambiguity (WANT — durable):** the general fix encodes a *choice/convention/intent* that no amount of reasoning recovers from the materials. The tell: a competent engineer (or model) would produce a confident, *reasonable-but-wrong* fix, or two reasonable engineers would pick different fixes. Contested fixes are GOOD here — contestation proves the bit was non-derivable. Example shape: ordering/comparison tie-break conventions, edge-case API semantics, "what should happen when X is empty/zero/null," backward-compat judgment calls.
+- **Difficulty (acceptable but mark it — depreciating):** the general fix just takes deep reasoning/localization but IS derivable in principle. A strong frontier model may one-shot it. Mark these clearly; I weight them lower.
+
+Prefer high-correctness-bar domains: verifiers, compilers, type checkers, parsers, serializers, ordering/comparators, concurrency, crypto. A worked reference example of the *difficulty* end is verus-lang/verus#2219 (narrow fix #2230, general #2501) — find cases like it but lean toward the ambiguity end.
+
+## Output: ~5 candidates, for each give
+
+- repo (owner/name), issue # + title + URL
+- open date, fix merge date(s)
+- narrow fix PR (# / URL) and general fix PR (# / URL), or the debate link
+- domain
+- oracle gap: does the shipped suite pass for BOTH narrow and general? (your best assessment)
+- the non-derivable bit: 1-2 sentences on what intent the general fix encodes that the issue+repo don't determine
+- classification: AMBIGUITY (durable) vs DIFFICULTY (depreciating), with one line of reasoning
+- contamination risk: low/med/high and why
+
+Rank them ambiguity-first. If you can only firmly verify fewer than 5, give the ones you can and say so rather than padding.
+codex
+I’ll use web/GitHub search for recent merged issues, then cross-check PR timelines and test coverage signals from the linked diffs/discussions. I’ll bias toward cases with two PRs or visible maintainer debate, and I’ll avoid padding if verification is weak.
+web search: 
+web search: site:github.com "quick fix" "general fix" "merged" "bug" "2026" "PR"
+web search: 
+web search: GitHub issue "fixed by" "follow-up" "2026" "parser" "merged"
+web search: 
+web search: https://github.com/search?q=%22more+general+fix%22+%22bug%22&type=pullrequests
+web search: 
+web search: "more general fix" "github.com" "pull"
+web search: 
+web search: https://api.github.com/search/issues?q=%22more%20general%20fix%22%20type:pr%20merged:%3E2025-07-01&per_page=10
+web search: 
+web search: https://api.github.com/search/issues?q=%22more%20general%20fix%22%20type:pr%20merged:%3E2025-07-01
+exec
+/bin/zsh -lc "python3 -c \"import urllib.request; url='https://api.github.com/search/issues?q=%22more%20general%20fix%22%20type:pr%20merged:%3E2025-07-01&per_page=5'; print(urllib.request.urlopen(url, timeout=10).read()[:1000])\"" in /Users/junekim/Documents/june.kim
+ exited 1 in 293ms:
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 1321, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1338, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1384, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1333, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1093, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1037, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1472, in connect
+    super().connect()
+    ~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1003, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py", line 846, in create_connection
+    for res in getaddrinfo(host, port, 0, SOCK_STREAM):
+               ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py", line 983, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 8] nodename nor servname provided, or not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import urllib.request; url='https://api.github.com/search/issues?q=%22more%20general%20fix%22%20type:pr%20merged:%3E2025-07-01&per_page=5'; print(urllib.request.urlopen(url, timeout=10).read()[:1000])
+                                                                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 487, in open
+    response = self._open(req, data)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 504, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 1369, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.0_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 1324, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+web search: 
+web search: https://api.github.com/search/issues?q=%22more%20general%20fix%22%20type:pr%20merged:%3E2025-07-01&per_page=10
+web search: 
+web search: "more general fix" "github.com/" "pull" -github.blog
+web search: 
+web search: https://github.com/search?q=%22more+general+fix%22&type=pullrequests
+web search: 
+web search: more general fix pull request bug
+web search: 
+web search: github "more general fix"
+web search: 
+web search: api.github.com/search/issues more general fix type pr merged 2025
+web search: 
+web search: site:github.com/rust-lang/rust/issues "2026" "accepted" "regression" "tie"
+web search: 
+web search: https://github.com/rust-lang/rust/issues
+web search: 
+web search: https://github.com/rust-lang/rust/issues?q=is%3Aissue%20state%3Aclosed%20label%3AC-bug%20closed%3A%3E2025-07-01%20%22fixed%20by%22
+web search: 
+web search: repo:rust-lang/rust is:issue state:closed label:C-bug closed:>2025-07-01 "fixed by"
+web search: 
+web search: https://github.com/rust-lang/rust/issues?q=is%3Aissue+state%3Aclosed+label%3AC-bug+closed%3A%3E2025-07-01
+web search: 
+web search: https://github.com/rust-lang/rust/issues
+web search: 
+web search: https://github.com/rust-lang/rust/issues
+web search: 
+web search: "site:github.com/rust-lang/rust/issues" "closed" "Jun" "2026" "Fixes"
+web search: 
+web search: https://github.com/rust-lang/rust/issues?page=2&q=is%3Aissue+is%3Aclosed
+web search: 
+web search: https://github.com/rust-lang/rust/issues/158265
+web search: 
+web search: https://github.com/rust-lang/rust/issues
+web search: 
+web search: https://github.com/rust-lang/rust/issues
+web search: 
+web search: "github.com/rust-lang/rust/issues/158265"
+web search: 
+web search: https://github.com/rust-lang/rust/issues/158265?plain=1
+web search: 
+web search: "Seek io::Error differs by platform" "github"
+web search: 
+web search: https://github.com/rust-lang/rust/pull/158020.patch
+web search: 
+web search: "general fix" "opened" "merged" "github.com"
+web search: 
+web search: https://github.com/astral-sh/ruff/pulls
+web search: 
+web search: https://github.com/astral-sh/ruff/pulls
+web search: 
+web search: https://github.com/astral-sh/ruff/pulls?q=is%3Apr+is%3Aclosed
+web search: 
+web search: "[parser] Bound iterative expression chains to avoid stack overflow"
+web search: 
+web search: 'stack overflow' in https://github.com/astral-sh/ruff/pulls?q=is%3Apr+is%3Aclosed
+web search: 
+web search: https://r.jina.ai/http://r.jina.ai/http://http://github.com/astral-sh/ruff/pull/25462
+web search: 
+web search: r.jina.ai/http://github.com/astral-sh/ruff/pull/25462
+web search: 
+web search: https://github.com/astral-sh/ruff/issues
+web search: 
+web search: https://github.com/astral-sh/ruff/issues
+web search: 
+web search: https://github.com/astral-sh/ruff/pull/25462/files
+codex
+GitHub detail pages are intermittently failing through the browser, but the repository issue/PR index pages are accessible and timestamped. I’m using those for live-repo verification, and I’ll explicitly mark any PR-body/diff-level details that I can’t verify rather than inferring them as facts.
+web search: 
+web search: https://github.com/astral-sh/ruff/pulls?q=is%3Apr+is%3Aclosed
+web search: 
+web search: https://github.com/astral-sh/ruff/pulls?page=2&q=is%3Apr+is%3Aclosed
+web search: 
+web search: https://github.com/biomejs/biome/pulls
+web search: 
+web search: https://github.com/prettier/prettier/pulls
+web search: 
+web search: 'Closed' in https://github.com/prettier/prettier/pulls
+web search: 
+web search: "was reverted" "merged" "May" "2026" "GitHub" "parser"
+web search: 
+web search: https://github.com/search?q=%22closed+in+favor+of%22+%22fix%22&type=pullrequests&s=updated&o=desc
+web search: 
+web search: https://github.com/search
+codex
+I could not firmly verify ~5 qualifying cases from the live repo pages in this run. GitHub repository index pages loaded, but individual issue/PR detail pages and diffs repeatedly failed with cache-miss errors, so I could only verify list-level facts such as PR titles, numbers, open/merge/close dates, and labels. I would not treat the following as benchmark-ready without a second pass through PR discussions/diffs.
+
+**Near-Misses / Leads**
+
+1. `biomejs/biome`  
+Issue/PR area: Svelte / HTML parser semantics  
+Live-index evidence: closed PR `#10488` “allow TypeScript as const in Svelte each and comma selectors in :global()” was closed May 28, 2026; nearby merged PR `#10487` “allow omitting binding in Svelte {:then} and {:catch} blocks” merged May 29, 2026. Source: GitHub PR list lines showing both PRs and dates.  
+Why it is promising: parser edge-case semantics, likely ambiguous Svelte compatibility choices.  
+Why not firm: I could not verify that both PRs address the same issue, nor inspect discussion/tests.
+
+2. `biomejs/biome`  
+Issue/PR area: Markdown parser list/fence semantics  
+Live-index evidence: merged parser PRs `#10466`, `#10471`, and `#10483` landed May 26-29, 2026 around blank-line separators, fenced code blocks at list boundaries, and loose lists across empty items. Source: GitHub PR list lines 305-343.  
+Why it is promising: Markdown list looseness and boundary handling are classic convention/intent ambiguities.  
+Why not firm: no verified narrow-vs-general sequence or linked issue; could just be independent bug fixes.
+
+3. `astral-sh/ruff`  
+Issue/PR area: parser stack overflow  
+Live-index evidence: PR `#25462` “[parser] Bound iterative expression chains to avoid stack overflow” was closed May 30, 2026. Source: GitHub PR list lines 344-346.  
+Why it is promising: parser robustness, likely narrow “cap recursion” vs broader parser-architecture decision.  
+Why not firm: I could not verify a merged general replacement PR or shipped-test oracle gap.
+
+4. `astral-sh/ruff`  
+Issue/PR area: Python type checker cycle behavior  
+Live-index evidence: PR `#25475` “[ty] Handle cycles in function decorator inference” merged May 30, 2026. Source: GitHub PR list lines 309-310.  
+Why it is promising: cycle recovery often encodes policy choices about fallback types/error recovery.  
+Why not firm: no verified prior narrow PR or debate; likely DIFFICULTY, not durable ambiguity, unless discussion shows competing intended semantics.
+
+5. `prettier/prettier`  
+Issue/PR area: Markdown formatting conventions  
+Live-index evidence: open PRs in June 2026 include “preserve original fenced-code-block fence length,” “respect useTabs for indented code blocks and footnote bodies,” and “Cap ordered list mark at 999,999,999.” Source: GitHub PR list lines 312-329.  
+Why it is promising: formatter output conventions are high-ambiguity by nature.  
+Why not firm: these were open in the live index, not verified merged fixes, so they do not meet your contamination/opened-and-fixed requirement yet.
+
+Bottom line: I found several plausible recent leads, but zero that I can honestly mark as fully qualifying with the available detail-page access. The strongest next pass should target Biome Markdown/Svelte parser PR discussions and Ruff parser/type-checker PRs, checking whether closed drafts or review comments point to the later merged oracle.
+tokens used
+107,254
+I could not firmly verify ~5 qualifying cases from the live repo pages in this run. GitHub repository index pages loaded, but individual issue/PR detail pages and diffs repeatedly failed with cache-miss errors, so I could only verify list-level facts such as PR titles, numbers, open/merge/close dates, and labels. I would not treat the following as benchmark-ready without a second pass through PR discussions/diffs.
+
+**Near-Misses / Leads**
+
+1. `biomejs/biome`  
+Issue/PR area: Svelte / HTML parser semantics  
+Live-index evidence: closed PR `#10488` “allow TypeScript as const in Svelte each and comma selectors in :global()” was closed May 28, 2026; nearby merged PR `#10487` “allow omitting binding in Svelte {:then} and {:catch} blocks” merged May 29, 2026. Source: GitHub PR list lines showing both PRs and dates.  
+Why it is promising: parser edge-case semantics, likely ambiguous Svelte compatibility choices.  
+Why not firm: I could not verify that both PRs address the same issue, nor inspect discussion/tests.
+
+2. `biomejs/biome`  
+Issue/PR area: Markdown parser list/fence semantics  
+Live-index evidence: merged parser PRs `#10466`, `#10471`, and `#10483` landed May 26-29, 2026 around blank-line separators, fenced code blocks at list boundaries, and loose lists across empty items. Source: GitHub PR list lines 305-343.  
+Why it is promising: Markdown list looseness and boundary handling are classic convention/intent ambiguities.  
+Why not firm: no verified narrow-vs-general sequence or linked issue; could just be independent bug fixes.
+
+3. `astral-sh/ruff`  
+Issue/PR area: parser stack overflow  
+Live-index evidence: PR `#25462` “[parser] Bound iterative expression chains to avoid stack overflow” was closed May 30, 2026. Source: GitHub PR list lines 344-346.  
+Why it is promising: parser robustness, likely narrow “cap recursion” vs broader parser-architecture decision.  
+Why not firm: I could not verify a merged general replacement PR or shipped-test oracle gap.
+
+4. `astral-sh/ruff`  
+Issue/PR area: Python type checker cycle behavior  
+Live-index evidence: PR `#25475` “[ty] Handle cycles in function decorator inference” merged May 30, 2026. Source: GitHub PR list lines 309-310.  
+Why it is promising: cycle recovery often encodes policy choices about fallback types/error recovery.  
+Why not firm: no verified prior narrow PR or debate; likely DIFFICULTY, not durable ambiguity, unless discussion shows competing intended semantics.
+
+5. `prettier/prettier`  
+Issue/PR area: Markdown formatting conventions  
+Live-index evidence: open PRs in June 2026 include “preserve original fenced-code-block fence length,” “respect useTabs for indented code blocks and footnote bodies,” and “Cap ordered list mark at 999,999,999.” Source: GitHub PR list lines 312-329.  
+Why it is promising: formatter output conventions are high-ambiguity by nature.  
+Why not firm: these were open in the live index, not verified merged fixes, so they do not meet your contamination/opened-and-fixed requirement yet.
+
+Bottom line: I found several plausible recent leads, but zero that I can honestly mark as fully qualifying with the available detail-page access. The strongest next pass should target Biome Markdown/Svelte parser PR discussions and Ruff parser/type-checker PRs, checking whether closed drafts or review comments point to the later merged oracle.
