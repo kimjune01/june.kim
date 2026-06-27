@@ -6,7 +6,7 @@ tags: methodology, epistemology
 
 > *Nullius in verba.*
 
-I submitted a run to the SWE-bench Verified leaderboard last week. 426 of 500 instances, graded by the official harness, every losing run committed, the score regenerating from the logs with one command. It fails exactly one check. I have no academic affiliation.
+I submitted a run to the SWE-bench Verified leaderboard this spring. 426 of 500 instances, graded by the official harness, every losing run committed, the score regenerating from the logs with one command. It fails exactly one check. I have no academic affiliation.
 
 The policy, dated November 18, 2025, reads:
 
@@ -114,10 +114,14 @@ Call this sour grapes if you want: a guy who got turned away, now telling you th
 
 What is left, once the science language is stripped off, is red tape. A credential check, stapled onto the one instrument in this field whose entire value was that it never needed one. Red tape always arrives wearing the costume of standards. This time the costume is the word rigor, and the body underneath it is a letterhead.
 
-So I expected a rejection on affiliation, and I said as much in the pull request. I named the credential I lack, offered to run the official grader on any random subset they chose, and said I would close it myself if the rule was firm. That was a week ago. The pull request is still open, the ping unanswered, the direct message unanswered. Not a rejection. A rejection is an answer. This is silence.
+So I expected a rejection on affiliation, and I said as much in the pull request. I named the credential I lack, offered to run the official grader on any random subset they chose, and said I would close it myself if the rule was firm. That was over a month ago. The ping went unanswered, the direct message unanswered, the pull request untouched, so I closed it myself, the way I said I would. Not a rejection. A rejection is an answer. The silence made the rule firm, and supplied the only verdict the board would give.
 
 The silence is the truer artifact. The charge was that the gate reaches for letterhead instead of reading the evidence beside it. Handed a one-command verification for free, it did not even reach. It declined to read the evidence at all.
 
 There is a last turn I did not expect to write. While I argued over whether this board would read my run, the field that built the board had already left it. In February 2026, three months before I submitted, OpenAI [announced it would stop reporting](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/) SWE-bench Verified. Its own audit found that most of the failing tests it checked were flawed, and that every frontier model had been contaminated on the solutions. It pointed everyone to SWE-bench Pro instead. The leaderboard still updates; the field has walked off it. So the affiliation gate, bolted on last November, now guards a board the benchmark's most prominent reporter abandoned by winter. The red tape outlived the thing it was taping shut.
 
 That should bother anyone who cares how science gates itself. The credential was never load-bearing for rigor. The contamination that actually killed the bench is exactly the failure affiliation cannot see and a trajectory audit can: the gate kept the signal that catches nothing and waved through the one that brought the board down. *Nullius in verba*: bring the demonstration, not your station. I brought the demonstration. The station never opened, and by the time I knocked, no one was minding the door.
+
+---
+
+*[Edit, 2026-06-27] I closed the pull request myself today, five weeks after submitting it and with no reply on the PR, the ping, or the direct message. I had offered to close it if the rule was firm; silence made it firm. The closing is the last receipt: handed a free one-command verification, the door never even read it.*
