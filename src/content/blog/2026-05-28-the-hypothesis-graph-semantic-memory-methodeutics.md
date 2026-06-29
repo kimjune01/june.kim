@@ -567,6 +567,89 @@ LLMs enter this work in three roles. *Subject of study*: the harness under evalu
 
 We thank John Laird for endorsing this submission, and the flux maintainers for engaging with a stranger's receipts on their hardest open issue.
 
+## References {-}
+
+Works cited above, consolidated. Entries for which the text or the *Extended intellectual lineage* gives only a short name or arXiv identifier are listed at that detail rather than filled out, so nothing here is reconstructed beyond what the paper states. The author's companion essays are listed separately under *Availability and reproducibility* as lineage, not as entitlement.
+
+- Abdaljalil et al. (2025). *Theorem-of-Thought*: typed abductive/deductive/inductive reasoning agents. arXiv:2506.07106.
+- Agarwal (2026). *Refute-or-Promote*: adversarial defect discovery. arXiv:2604.19049.
+- Aleithan et al. (2024). *SWE-Bench+*: a manual audit of SWE-bench (solution leakage and weak tests).
+- Anokhin et al. (2024/25). *AriGraph*: knowledge-graph memory for LLM agents. arXiv:2407.04363.
+- Anthropic / Sumers, T., Yao, S., Narasimhan, K. & Griffiths, T. (2023/24). "Cognitive Architectures for Language Agents" (CoALA). arXiv:2309.02427.
+- Bacon, F. (1620). *Novum Organum*.
+- Bylander et al. (1991). On the computational complexity of abduction. *Artificial Intelligence* 49.
+- Calcagno, C., Distefano, D., O'Hearn, P. & Yang, H. (2009). Compositional shape analysis by means of bi-abduction. *POPL*. (Facebook Infer.)
+- Chroma (2025). Context rot: degradation of in-context reasoning with input length.
+- Clarke, E., Grumberg, O., Jha, S., Lu, Y. & Veith, H. (2000). Counterexample-guided abstraction refinement (CEGAR). *CAV*.
+- *Confucius Code Agent* (2025). arXiv:2512.10398.
+- Cousot, P. & Cousot, R. (1977). Abstract interpretation. *POPL*.
+- de Kleer, J. (1986). "An Assumption-based Truth Maintenance System." *Artificial Intelligence* 28.
+- de Kleer, J. & Williams, B. (1987). Diagnosing multiple faults (the General Diagnostic Engine). *Artificial Intelligence* 32.
+- Deng et al. (2025). *SWE-bench Pro*. arXiv:2509.16941.
+- Dewey, J. (1929). *The Quest for Certainty*. Minton, Balch & Co.
+- Doyle, J. (1979). "A Truth Maintenance System." *Artificial Intelligence* 12.
+- Dung, P. M. (1995). "On the acceptability of arguments and its fundamental role in nonmonotonic reasoning, logic programming and n-person games." *Artificial Intelligence* 77. (Abstract argumentation frameworks.)
+- Feynman, R. (1974). "Cargo Cult Science." Caltech commencement address.
+- *From Agent Traces to Trust* (2026): a provenance survey for agent reasoning. arXiv:2606.04990.
+- *From Hypotheses to Factors* (2026): perturb-and-falsify over an append-only trace in quantitative finance. arXiv:2604.26747.
+- *FVDebug* (2025): a hypothesis graph for debugging with model-selected nodes. arXiv:2510.15906.
+- Gilda, S. & Gilda (2026). *ADI*: a Peircean tripartite protocol over a symbolic knowledge graph. arXiv:2604.15727.
+- Goertzel, B., Iklé, M., Goertzel, I. & Heljakka, A. (2008). *Probabilistic Logic Networks*. Springer. (OpenCog / PLN.)
+- *GradleFixer* (2025). arXiv:2510.08640.
+- Groth, P., Gibson, A. & Velterop, J. (2010). "The Anatomy of a Nanopublication." *Information Services & Use* 30.
+- He et al. (2025). *IDEA*: interactive rule learning with the three Peircean modes. ACL Findings. arXiv:2408.10455.
+- Jain et al. (2024). *LiveCodeBench*: temporal-holdout (post-cutoff) evaluation.
+- Jones, J., Harrold, M. J. & Stasko, J. (2002). Spectrum-based fault localization. *ICSE*.
+- Khalid & Arora (2026). *Cognitive Memory Manager* (CMM): a typed-node DAG mined from agent execution. OpenReview yCsHQnvvWY.
+- Kimball, A. W. (1957); Tukey, J. W. The Type III error: a precise answer to the wrong question.
+- Kirk, J., Wray, R. & Laird, J. (2023). An LLM port of the Soar lineage. *AAAI Spring Symposium*.
+- Laird, J., Newell, A. & Rosenbloom, P. (1987). *Soar*: an architecture for general intelligence. *Artificial Intelligence* 33.
+- Laurie, B., et al. *Certificate Transparency*. RFC 9162.
+- Le Goues, C., Nguyen, T., Forrest, S. & Weimer, W. (2012). GenProg: search-based program repair. *IEEE TSE*.
+- Liang et al. (2023/24). *Multi-Agent Debate*. arXiv:2305.19118.
+- Liblit, B., Naik, M., Zheng, A. X., Aiken, A. & Jordan, M. I. (2005). Statistical debugging. *PLDI*.
+- Liao et al. (2026). *BeliefMem*: candidate sets with Noisy-OR probabilistic update. arXiv:2605.05583.
+- Liu et al. (2024). A survey of LLM-based agents for software engineering. arXiv:2409.02977.
+- Meehl, P. (1967). "Theory-Testing in Psychology and Physics: A Methodological Paradox." *Philosophy of Science* 34.
+- Modgil, S. & Prakken, H. (2014). The ASPIC+ framework for structured argumentation. *Argument & Computation* 5.
+- Monperrus, M. (2018). "Automatic Software Repair: A Bibliography." *ACM Computing Surveys* 51.
+- Moreau, L., et al. (2013). *PROV-DM*: the W3C provenance data model.
+- Necula, G. (1997). "Proof-Carrying Code." *POPL*.
+- O'Hearn, P. (2019). "Incorrectness Logic." *POPL* (separation logic).
+- *OpenAI* (2026). SWE-bench Verified audit (February 2026): flawed tests and exact-gold-patch reproduction; recommends Pro.
+- *ORACLE-SWE* (2026): ablating the oracle and specification signals that leak through a task. arXiv:2604.07789.
+- Pearl, J. (1988). *Probabilistic Reasoning in Intelligent Systems*. Morgan Kaufmann. (Bayesian networks as DAGs.)
+- Pearl, J. (2000/2009). *Causality: Models, Reasoning, and Inference*. Cambridge University Press.
+- Peirce, C. S. (1878). *Illustrations of the Logic of Science*. *Popular Science Monthly*. (The three-mode taxonomy of inquiry.)
+- Peirce, C. S. (1903). *Pragmatism as the Logic of Abduction* (Harvard Lectures on Pragmatism).
+- *POPPER* (2025): agentic sequential hypothesis testing under e-value control. arXiv:2502.09858.
+- Popper, K. (1934/1959). *The Logic of Scientific Discovery*.
+- *Portable Agent Memory* (2026): a Merkle-DAG provenance memory citing the Soar lineage. arXiv:2605.11032.
+- Ramsey, F. P. (1926). "Truth and Probability." In *The Foundations of Mathematics* (1931).
+- Reiter, R. (1987). "A Theory of Diagnosis from First Principles." *Artificial Intelligence* 32.
+- Roychoudhury, A., et al. (2025). Programming with trust: verification, testing, and analysis built into the agent. arXiv:2502.13767.
+- Solar-Lezama, A., et al. (2006). Counterexample-guided inductive synthesis (CEGIS). *ASPLOS*.
+- Stroebl, B., et al. (2025). *HAL*: a cost-transparent agent leaderboard.
+- *SLUMP* (2026): an underspecified-by-design coding benchmark. arXiv:2603.17104.
+- *SWE-Effi* (2025): effectiveness from scaffold-model synergy. arXiv:2509.09853.
+- *SWE-rebench* (2025): post-cutoff filtering as a contamination strategy.
+- *SWT-Bench* (2024): grading generated tests by fail-on-original then pass-after-golden-patch. arXiv:2406.12952.
+- *Traxia* (2026): agent-native scientific publishing. arXiv:2606.08256.
+- Vovk, V. & Wang, R. (2021). "E-values: Calibration, combination, and applications." *Annals of Statistics* 49.
+- Wald, A. (1947). *Sequential Analysis*. Wiley.
+- Wang, P. (2013). *Non-Axiomatic Logic: A Model of Intelligent Reasoning*. World Scientific. (NARS.)
+- Wang et al. (2023). *Voyager*: an open-ended embodied agent with a skill library. arXiv:2305.16291.
+- Wang et al. (2024). *OpenHands* (formerly OpenDevin): an open platform for AI software developers.
+- Wang et al. (2025). A survey of agentic-programming systems (persistent structured memory as an open challenge). arXiv:2508.11126.
+- Wang, X., Pradel, M. & Liu (2026). Plausible patches that pass tests yet diverge from developer intent. *ICSE*.
+- Yang et al. (2024). *SWE-agent*: agent-computer interfaces for software engineering.
+- Yang et al. (2026). *CausaLab*: an evolving structural causal model in a DSL. arXiv:2605.26029.
+- Yao, S., et al. (2023). *ReAct*: synergizing reasoning and acting in language models.
+- Yehudai et al. (2025). Trajectory-level assessment of agents. arXiv:2503.16416.
+- Zeller, A. & Hildebrandt, R. (2002). "Simplifying and Isolating Failure-Inducing Input" (delta debugging). *IEEE TSE* 28.
+- Zhang et al. (2024/25). *AutoCodeRover*: autonomous program improvement.
+- Zilberstein, N., Saliling & Silva, A. (2024). Outcome Separation Logic; tri-abduction for branch composition. arXiv:2305.04842.
+
 ## Novelty and comparative search protocol {.appendix} {#search}
 
 - **Why this section exists.** Several claims here take the form *"we found no prior X."* Such claims are only as honest as the search they rest on. This section publishes the queries so an auditor can re-run the search and either confirm the gap or find what we missed.
