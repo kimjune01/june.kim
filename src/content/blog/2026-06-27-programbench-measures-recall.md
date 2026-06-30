@@ -22,7 +22,7 @@ We defend one proposition. *Because ProgramBench supplies the reference as an ex
 
 The argument is an existence proof, and it reduces to a single witness: one graded behavior that no finite sample identifies and no supplied document supplies is enough to put a task beyond reconstruction. It binds every solver at once, turning on no model's weakness and no scaffold's limit, because what is missing is information. We use *impossible* in the feasibility sense, not the computability sense, and bound it: infeasible with classical computing within the foreseeable future. Every graded behavior is computable; the reference computes it, and a reconstruction exists in principle. But computable is not feasible: the reconstruction we deny is not undecidable. It is unreachable by any classical search a solver could run in this hardware era. Existence is not reachability, and the escape from the search is not capability; it is holding the program's specification in advance.
 
-## The benchmark, defined {#setup}
+## The benchmark {#setup}
 
 ProgramBench (Yang et al., 2026, arXiv:2605.03546; *the paper* hereafter) gives the agent a compiled binary `B` and usage documentation `D`. The source `S` that produced `B` is stripped and withheld, and `B` is set to execute-only permissions, a restriction the paper imposes, in its own words, to "prevent reading or reverse engineering of the binary with a tool like ghidra" (§2.2, Build an inference environment). A solver may run `B` and observe outputs; it may not read its bytes, disassemble it, or instrument it. We assume the sandbox enforces this against all byte access, including runtime memory extraction and tracing; if it does not, the binary can be dumped and the benchmark's own anti-reverse-engineering guarantee fails, which only sharpens the same conclusion. The solver also has no internet: the paper enforces this by running the container without a network, and its system prompt tells the model that "the only source of truth about what the executable does is the executable itself and its bundled documentation" and that it "must not search the internet, package registries, or any external source" (§2.1, §A.2). The same prompt adds a revealing instruction: "even if you recognize what the executable is, you must reimplement it from behavioral observation alone" (§A.2). The clause presumes recognition is common and tries to manage it, which concedes that prior possession of the program is a live channel the benchmark must suppress by instruction.
 
@@ -30,7 +30,7 @@ The solver's inputs are therefore exactly two, the queryable binary and the bund
 
 Two properties of `H` carry the argument, both stated in the benchmark's own construction. First, `H` is produced by a generator with source access: it explores the program, its source, its tests, and its documentation, and uses line coverage of `S` as its objective, adding tests to reach code paths not yet exercised. Second, grading is conjunctive: a single failed test forfeits the task. The solver must reproduce a behavior whose graded points were chosen by reading a source it cannot see, and reproduce all of them at once.
 
-## What the benchmark sets out to do {#strengths}
+## Aims and construction {#strengths}
 
 The aim is specific and worth stating in its own terms. Existing benchmarks, the paper argues, measure "focused, limited tasks such as fixing a single bug or developing a single, specified feature"; ProgramBench instead asks an agent to architect and implement a codebase that matches the reference executable's behavior, offered as "a test of software design, not just implementation alone" (§2.4). The construction is careful where its predecessors were not. Grading is determinate: the reference is a complete, queryable function with one ground-truth answer per behavior, so there is no maintainer's arbitrary choice for a faithful solver to recover and fail on. Grading is implementation-agnostic, checking behavioral equivalence and admitting any language or architecture (§2.1). The suites are filtered: an assertion linter cuts the dummy-pass rate from 18.5% to 3.7% (§5.1), tests that the reference itself fails are discarded, and generated coverage averages 79.7% against the projects' own 56.8% (§5.1, Figure 7). The reporting is candid: a finite suite "necessarily under-approximates" the specification (§2.2), and "% Tests Passed also does not reliably correlate with percentage of working functionality" (§3). These are real improvements, and they address the failures that retired SWE-bench Verified.
 
@@ -97,7 +97,7 @@ assert result.stdout == golden.read_text()
 
 The oracle problem proper is the implementation-pinned case: where the contract leaves the output free, the captured golden fixes one reference's incidentals, and a program that meets the contract through different bytes fails. That is a defect in the oracle itself. The benchmark's other hard cases are not oracle defects; they sit beside this one because the same withheld source produces them. For a hash or a codec the golden is a valid oracle and the value is exactly determined; what fails is the solver, which cannot compute that value without the specification the benchmark denies it. That is an information barrier, recall, and §(oracle) is its proof. And because the suite is hidden and conjunctive, even valid, reachable oracles are demanded all at once across a surface too large to cover (§(coverage)). The three are distinct: an oracle that overspecifies, the case this section makes; a value the solver cannot reach, the recall barrier §(oracle) proves; a surface too large to clear blind, the coverage barrier §(coverage) measures. They fall out of one decision, to grade against a captured reference with the source withheld. Reading the assertions in the public suites and sorting each into one of the three is the whole of our method.
 
-## Why running the reference is not enough {#oracle}
+## Limits of black-box probing {#oracle}
 
 Because `B` is execute-only, the solver's only operation on it is to run it: submit an input, observe the output. Disassembly, symbolic execution, and instrumentation, the tools that would recover a constant or a branch condition, all require reading the binary and are denied by the permission the benchmark sets to block ghidra. The right model of the solver is an algorithm with black-box oracle access, which is the benchmark's actual setting.
 
@@ -165,7 +165,7 @@ That coverage cannot be reached by luck; it has to be imposed. To gain confidenc
 
 This is what makes "reconstruct the program" a quantity rather than a verdict. The behaviors a small specification can be tested for are few, derivable from the spec, coverable: reasonable. The behaviors `sqlite` can be tested for, its query planner, its type coercions, its collations, its error paths, run to the thousands the benchmark itself counts: unreasonable. The recall witnesses are the other barrier, where one behavior's value cannot be obtained at all; this is the coverage barrier, where every value is obtainable and there are too many to cover blind in one shot. A whole-program reconstruction benchmark meets both, and the size of the hidden target surface decides where the second one bites.
 
-## One witness is enough {#examples}
+## The existence proof {#examples}
 
 Because resolution is conjunctive, the task-level claim reduces to a single behavior: if a task's suite contains even one recall-only test, no source-blind solver resolves that task, and the verdict attaches to the whole program. We exhibit such tests directly, because the benchmark's generated suites are public and we read the assertions.
 
@@ -175,13 +175,13 @@ Matching only the finite hidden suite does not lower the bar. The solver is not 
 
 The reading is confirmed against bodies, not inferred, and it cuts both ways. jp2a, which renders a JPEG to ASCII, asserts its output equals a bundled fixture produced by decoding the image through libjpeg, whose inverse-DCT rounding no standard-library decoder reproduces: recall-only. The reverse is as clear. zoxide's apparent "exact-format" tests, which grade a database version byte, a null-byte separator, and an error template, are all discoverable: the solver runs the reference, reads the file it writes and the message it prints, and reproduces them. zoxide is benchable; blake3 and jp2a are not. The appendix carries the program-level verdict with one witness test apiece, read from the suites themselves.
 
-## The selection procedure concentrates difficulty {#asymmetry}
+## Source-guided test selection {#asymmetry}
 
 The asymmetry follows from the selection objective. The generator maximizes line coverage of `S`, which steers test generation toward paths a generic input rarely exercises, the low-frequency tail where the recall-only behaviors sit. The procedure does not target them by name; its reward correlates with reaching them. The benchmark grades a source-blind solver against a source-guided selector whose objective tracks the behaviors the solver cannot reach from the artifact. And it compounds with thoroughness: each test the generator adds is another chance to land on such a behavior, so the more thorough the grader, the larger the share of its tasks that carry one.
 
 This bears on the coverage figure the benchmark reports. Its generated suites reach line coverage near eighty percent, comparable to the projects' own (§5.1, Figure 7). That figure was obtained with source access, by the generator. The figure relevant to solvability is the coverage a source-blind solver can reach from the binary and documentation within budget, and it is not reported. The reported number measures the party holding the map.
 
-## What makes a program unbenchable? {#kind}
+## Predictors of unbenchability {#kind}
 
 A maker reading this will want to know which programs to expect trouble from, and the obvious guess is wrong. Recall-unbenchability is orthogonal to program size. Across the twenty-one recall programs the graded surface runs from `fasttext` at twenty-nine obligations to `gdal` at four thousand, and the largest recall-free program, `pandoc`, pins more obligations (2,746) than all but one of them. The medians barely separate, 268 against 194. Size predicts almost nothing about whether a program is recall-gated.
 
@@ -200,7 +200,7 @@ Part of that is domain, since the heavy media and crypto tools tend to be writte
 
 Size has its own barrier, but it is the other axis: the coverage pressure of §(coverage), which the largest programs run into whether or not any single behavior is recall. A program can be caught by either axis or both. `gdal` is caught by both, a checksum core inside four thousand obligations; `pandoc` by scale alone; `fasttext` by kind alone. The maker's screen, then, is the core's kind and the implementation language first, and size as a separate, second filter.
 
-## The fairness audit checks a different property {#audit}
+## The fairness audit {#audit}
 
 The paper audits all 200 tasks and reports that no test invokes a flag or subcommand absent from the documentation, with five instances where implementation-dependent output could plausibly appear, none realized (§2.2, detailed in §A.3.4). Its premise is that "any behavior a behavioral test expects is discoverable by running that same command" (§2.2). We take the audit at face value. It establishes that the entry points are documented; it does not establish that the graded behavior at those entry points is determined by anything the solver receives. A named flag shows a door exists. It does not fix which room behind it is graded, and the leak is one level below the flag: a behavior at a documented entry point, triggered by a value or combination recorded in the source and absent from the documentation.
 
@@ -208,7 +208,7 @@ FFmpeg makes the gap concrete on two axes. By value: the full manual documents t
 
 The paper raises feasibility directly and answers it, and the answer checks the same kind of property a second time. Its feasibility review (§A.2.4) asks whether a graded behavior is discoverable: whether it is "not communicated or documented via any observable channel," whether it is "entirely absent from the task instance's start state." It reviews all 200 repositories, finds none, and concedes only the case it can already rule out, an executable with "important but entirely undiscoverable functionality." We grant the finding and deny that it settles feasibility, because discoverability is not reconstructability. A hash is observable: run `b3sum`, observe a digest, the behavior is plainly present in an observable channel. It is not reconstructable: the digest of one input fixes nothing about the digest of another, so observing the behavior does not let a solver reproduce it on the hidden test input. The audit rules out behavior with no observable instance; it does not test for behavior that is observable yet not reproducible from feasible observation, and the recall-only class lives exactly there. "This does not mean the task is impossible," the section writes (§A.2.4), and we agree: the task is not impossible, it is recall-gated, which a discoverability review was not built to detect.
 
-## The grader does not implement the analogy {#pm}
+## The grader and the product-manager analogy {#pm}
 
 The product-manager analogy describes a process: query, hypothesize, infer behavior "in the absence of complete specifications" (§2.4). The primary metric scores a result: % Resolved credits a task only when the candidate matches the reference on every hidden test (§2.1). These answer different questions. The analogy justifies the difficulty of the search; it says nothing about which results are admissible, and the grader admits exactly one, byte-identity with the reference on the tested inputs.
 
@@ -216,7 +216,7 @@ Inference under partial specification, taken seriously, would credit a solution 
 
 The paper's own ranking shows which side it stands on. It makes % Resolved primary and downgrades percent of tests passed to a relative measure, noting that "even a single failed test can imply a fundamental flaw" (§3). A benchmark built to reward partial inference would lead with the partial metric; this one leads with the least partial-credit object available. The likeliest explanation is not confusion. It is expedience: a golden-output check is the grader one can build and run at scale, and a contract-level grader that honored the analogy is the one reached for when the deadline has passed. The fork holds either way. If the measured skill is inference under incomplete specification, % Resolved is the wrong primary metric; if % Resolved is right, the product-manager framing is the wrong description. The paper cannot keep both.
 
-## The only feasible channel {#contamination}
+## Prior information as the only channel {#contamination}
 
 No solver restricted to running an execute-only binary, reading the bundled docs, and working offline reconstructs a recall-only behavior: a finite sample does not identify the function, and the specification is withheld and unfetchable. What remains is prior information, and it divides in two. For a behavior fixed by a public standard, a hash, a codec, a published format, general knowledge of that standard supplies the value, but with no internet that knowledge is recalled from training. For a behavior recorded only in the program's own source, program-specific memory is required, and no public standard supplies it either. The benchmark does not distinguish the two, and the argument does not need it to: both are carried from training rather than recovered from the artifact, and both convert the task from reconstruction to lookup.
 
@@ -224,13 +224,13 @@ Therefore, for a recall-only behavior, prior information is the only feasible ch
 
 Prior information is not a confound to be scrubbed away here; for the recall-only behaviors it is the channel the metric reads.
 
-## The published results are consistent with the argument {#evidence}
+## Corroborating evidence {#evidence}
 
 The witness receipts in the appendix carry the argument: a referee who grants one row has granted a recall-gated task, and the case does not rest on what follows. We add three published observations consistent with the reading, as corroboration and not proof, each individually confounded. The benchmark reports a % Resolved floor of zero across all nine models (§4, Table 2), which a large enough task size would also produce. It reports widely cloned utilities scoring highest and large idiosyncratic systems lowest, difficulty largely model-agnostic (§4, Figure 5), though prevalence is confounded with documentation quality and scope.
 
 The strongest is the internet ablation. With the network open, source-code lookup was the dominant behavior, "accounting for 79–95% of flagged runs," with twenty to thirty-six percent of tasks flagged (§4.1, Table 3). The paper reads this as cheating to be blocked; read as solvability it measures how often a model needs the specification, and cutting the internet does not remove the need, it removes the legitimate channel and leaves recall. None of the three separates the reading from "these are merely large, rare programs." The receipts do, and they stand alone.
 
-## The paper's claims, examined {#claims}
+## The benchmark's defenses {#claims}
 
 We have argued the general case; we now hold it against the paper's specific defenses, each quoted and located. Five claims carry its fairness and its reading of the results, and none survives the no-internet, source-blind condition the paper itself imposes.
 
@@ -242,7 +242,7 @@ We have argued the general case; we now hold it against the paper's specific def
 | The bundled "test assets that a model cannot reasonably synthesize on its own" mitigate a conceded "unfair asymmetry" (§2.2, §A.2). | Bundling settles input availability and nothing else. Given the H.265 file, matching the reference's decode still requires the codec; the input is supplied and the algorithm, the half that was never reconstructable, withheld. |
 | The zero floor reads as difficulty: "no model fully solves any single ProgramBench task instance," with "meaningful progress" besides (§4). | A floor of zero across nine models, on a set whose recall-only tasks no source-blind solver can reconstruct, is consistent with a recall gate. It is not a capability frontier. It stays at zero for any solver that does not already hold the missing specifications, because what is absent is information the artifact does not carry. |
 
-## The second axis: the oracle's provenance {#capture}
+## Oracle provenance {#capture}
 
 ### The reference as contract
 
@@ -339,7 +339,7 @@ We do not run that audit here; one recall-only witness per program is the existe
 
 *The benchmark bundles the inputs, so an H.265 video or an obscure binary asset is provided, not synthesized.* True, and the paper does this on purpose, conceding that without it "evaluation uses assets that ... models are unable to generate on their own" and that this is an "unfair asymmetry" (§2.2, §A.2). But a bundled input does not make the behavior reconstructable. Given the H.265 file, matching the reference's decode requires the H.265 codec; given a corpus, matching its output requires the compressor. The asset is the input; the behavior on it is fixed by an algorithm the supplied docs do not contain, that input-output pairs do not reveal, and that no internet can fetch. Bundling settles input availability and leaves the recall barrier untouched.
 
-## Witness receipts, read from the test bodies {.appendix} {#witnesses}
+## Witness receipts {.appendix} {#witnesses}
 
 The benchmark's generated suites are public (`programbench/ProgramBench-Tests`), so a task's verdict need not be inferred; we read its assertions. For each program we look for one recall-only test, a graded assertion no source-blind, offline solver can satisfy, and stop at the first, because the conjunctive metric lets one such test sink the task. The unit a runner excludes is the program; the receipt is the assertion.
 
