@@ -10,7 +10,7 @@ keywords: ProgramBench, behavioral equivalence, query complexity, lower bound, a
 <!-- pdf-skip -->
 *An oracle who withholds all the questions, in the universe of all questions, is an oracle impossible to find.*
 
-*Submitted to the ProgramBench authors for right of reply at [issue link]; data and re-runnable audit at [repo link]; to be archived at [Zenodo DOI]. Corrections will be incorporated and the offer stands.*
+*Submitted to the ProgramBench authors for right of reply at [issue link]; data and re-runnable audit at [github.com/kimjune01/program-bench-audit](https://github.com/kimjune01/program-bench-audit); to be archived at [Zenodo DOI]. Corrections will be incorporated and the offer stands.*
 
 ## Abstract {-}
 
@@ -284,7 +284,7 @@ The twenty-one are a floor, not a count of the unfair set, but they survive a co
 | ov | `test_zstd_decompression` | a screen render that requires zstd-decompressing a bundled fixture; zstd is not in stdlib |
 | csview | `test_cjk_emoji_with_padding` | a CJK and emoji table padded into aligned columns vs a golden; the Unicode width table is not in the Rust stdlib |
 
-Every row is re-derivable from the task's tarball in `programbench/ProgramBench-Tests`: the witness test names the assertion and the bundled golden it cites. The list grows only by addition, since each row is an independent existence proof. The full per-program verdict over all 201 directories, the complete exact-output inventory the witnesses were drawn from, the audit's withdrawn-screen history, and the re-runnable pipeline that regenerates every verdict are in the companion repo, [repo link].
+Every row is re-derivable from the task's tarball in `programbench/ProgramBench-Tests`: the witness test names the assertion and the bundled golden it cites. The list grows only by addition, since each row is an independent existence proof. The full per-program verdict over all 201 directories, the complete exact-output inventory the witnesses were drawn from, the audit's withdrawn-screen history, and the re-runnable pipeline that regenerates every verdict are in the companion repo, [github.com/kimjune01/program-bench-audit](https://github.com/kimjune01/program-bench-audit).
 
 **Adjacent but not recall: the implementation-detail tier.** Three programs fail reconstruction for the *second* reason above, and Table A1 counts them apart. ditaa and typst compare a rendered artifact, a PNG and a PDF, byte for byte against a golden, and ffmpeg pins per-frame MD5s of a rendered clip. Matching any of them demands the reference's exact rasterizer, font embedding or frame pipeline, bytes that are the reference's own and not the contract's, which no independent implementation reproduces. Unlike a recall witness, the repair is local: normalize the golden or assert the contract. Counting them as recall would overstate the floor, so they are tabled separately; the spine stays the un-inferable functions.
 
