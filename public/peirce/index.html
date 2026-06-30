@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peirce Manuscripts — june.kim</title>
+<meta name="description" content="A browsable viewer of Charles S. Peirce's Houghton Library manuscripts, with machine-assisted draft transcriptions. Page images from the Internet Archive (CC0).">
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f7f7f6; --line:#e3e2de; --ink:#1d1d1b;
+    --muted:#8a8a84; --sel:#fffc76; --del:#a8322d; --add:#2a7d4f; --brk:#7a73c0;
+    --sans:-apple-system,'Avenir','Helvetica Neue',Helvetica,Arial,sans-serif;
+    --serif:'Lora',Georgia,'Iowan Old Style',serif;
+    --mono:'Menlo',Consolas,'SF Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{font-family:var(--sans);color:var(--ink);background:var(--bg);
+       display:flex;flex-direction:column;font-size:14px}
+  header{display:flex;align-items:center;gap:12px;padding:8px 14px;
+         border-bottom:1px solid var(--line);background:var(--panel)}
+  header a.home{color:var(--muted);text-decoration:none}
+  header a.home:hover{color:var(--ink)}
+  header .t{font-weight:600;letter-spacing:.03em}
+  header .t small{color:var(--muted);font-weight:400;letter-spacing:0}
+  select,button{font-family:var(--sans);font-size:13px;color:var(--ink);
+    background:#fff;border:1px solid var(--line);border-radius:4px;padding:5px 9px}
+  select{max-width:430px}
+  button{cursor:pointer} button:hover{border-color:var(--ink)}
+  .grow{flex:1}
+  .count{color:var(--muted);min-width:62px;text-align:center;font-variant-numeric:tabular-nums}
+  .nav{padding:5px 10px}
+  .hint{color:var(--muted);font-size:12px}
+  main{flex:1;display:grid;grid-template-columns:108px 1fr 500px;min-height:0}
+  .rail{border-right:1px solid var(--line);overflow-y:auto;background:var(--panel);padding:6px;min-width:0}
+  .thumb{position:relative;display:block;width:100%;border:1px solid var(--line);border-radius:2px;
+         margin-bottom:6px;background:#fff;cursor:pointer;opacity:.8;overflow:hidden}
+  .thumb:hover{opacity:1}
+  .thumb.on{outline:2px solid var(--sel);outline-offset:1px;opacity:1;border-color:var(--ink)}
+  .thumb img{display:block;width:100%;height:calc((100vh - 46px)/6 - 18px);object-fit:contain;background:#fff}
+  .thumb .n{display:block;font-size:9px;color:var(--muted);text-align:center;padding:1px 0 2px}
+  .thumb.has::after{content:"";position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--add)}
+  .imgwrap{overflow:auto;background:#efeeea;display:flex;align-items:flex-start;justify-content:center;min-width:0;min-height:0}
+  .imgwrap img{max-width:100%;height:auto;display:block;background:#fff;margin:14px;
+               box-shadow:0 1px 4px rgba(0,0,0,.12);user-select:none;-webkit-user-drag:none}
+  .imgwrap.zoom{display:block;cursor:grab}
+  .imgwrap.zoom.drag{cursor:grabbing}
+  .imgwrap.zoom img{max-width:none;margin:50vh 50vw}
+  .read{display:flex;flex-direction:column;border-left:1px solid var(--line);min-width:0}
+  .note{padding:7px 14px;border-bottom:1px solid var(--line);background:var(--panel);
+        color:var(--muted);font-size:11.5px;line-height:1.45}
+  .note b{color:var(--ink)}
+  .body{flex:1;overflow:auto;padding:18px 20px;font-family:var(--serif);font-size:16px;
+        line-height:1.6;white-space:pre-wrap;word-break:break-word}
+  .body s{color:var(--del);text-decoration-thickness:1.5px}
+  .body ins{color:var(--add);text-decoration:none;border-bottom:1px solid var(--add)}
+  .body .unc{border-bottom:1px dotted var(--brk);cursor:help}
+  .body .gap{color:var(--brk);font-family:var(--sans);font-size:13px}
+  .body .none{color:var(--muted);font-family:var(--sans);font-style:italic}
+  .src{border-top:1px solid var(--line);background:var(--panel);padding:8px 14px;
+       font-size:11.5px;color:var(--muted);display:flex;gap:14px;align-items:center}
+  .src a{color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <a class="home" href="/" title="june.kim">←</a>
+  <span class="t">Peirce Manuscripts <small>· Houghton Library</small></span>
+  <select id="item"></select>
+  <button class="nav" id="prev" title="Previous page (k)">‹</button>
+  <span class="count" id="count"></span>
+  <button class="nav" id="next" title="Next page (j)">›</button>
+  <span class="grow"></span>
+  <span class="hint">double-click image to zoom</span>
+</header>
+<main>
+  <div class="rail" id="rail"></div>
+  <div class="imgwrap" id="imgwrap"><img id="img" alt="manuscript page"></div>
+  <div class="read">
+    <div class="note" id="note"></div>
+    <div class="body" id="body"></div>
+    <div class="src" id="src"></div>
+  </div>
+</main>
+<script>
+const IIIF=(ia,f,size)=>`https://iiif.archive.org/image/iiif/3/${ia}%2F${f}.jpg/full/${size}/0/default.jpg`;
+const DISP="1400,", THUMB="!200,200", MAX="full";
+let DATA={items:[]}, it=null, i=0, big=false;
+const $=s=>document.querySelector(s);
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+// render diplomatic markup as a reading edition
+function render(t){
+  if(!t) return '<span class="none">— not yet transcribed —</span>';
+  return esc(t)
+    .replace(/\{del\}([\s\S]*?)\{\/del\}/g,'<s>$1</s>')
+    .replace(/\{add\}([\s\S]*?)\{\/add\}/g,'<ins>$1</ins>')
+    .replace(/\[unclear:\s*([\s\S]*?)\??\]/g,'<span class="unc" title="uncertain reading">$1</span>')
+    .replace(/\[illegible\]/g,'<span class="gap">⟦illegible⟧</span>')
+    .replace(/\[diagram:\s*([\s\S]*?)\]/g,'<span class="gap">⟦diagram: $1⟧</span>');
+}
+
+function loadPage(k){
+  i=(k+it.pages.length)%it.pages.length;
+  const pg=it.pages[i];
+  big=false; $("#imgwrap").classList.remove("zoom","drag");
+  $("#img").src=IIIF(it.ia,pg.f,DISP);
+  $("#count").textContent=`${i+1} / ${it.pages.length}`;
+  document.querySelectorAll(".thumb").forEach((t,j)=>t.classList.toggle("on",j===i));
+  const on=document.querySelector(".thumb.on"); if(on) on.scrollIntoView({block:"nearest"});
+  $("#body").innerHTML=render(pg.t);
+  $("#src").innerHTML=`<span>MS Am 1632 (${it.r}), leaf ${pg.f.replace(/^IMG_?/,"")}</span>`
+    +`<a href="https://archive.org/details/${it.ia}" target="_blank" rel="noopener">view on Internet Archive ↗</a>`;
+}
+function selectItem(r){
+  it=DATA.items.find(x=>x.r===r); if(!it) return; i=0;
+  const rail=$("#rail"); rail.innerHTML="";
+  it.pages.forEach((pg,j)=>{
+    const b=document.createElement("div"); b.className="thumb"+(pg.t?" has":"");
+    const im=document.createElement("img"); im.loading="lazy"; im.src=IIIF(it.ia,pg.f,THUMB);
+    const n=document.createElement("span"); n.className="n"; n.textContent=pg.f.replace(/^IMG_?/,"");
+    b.append(im,n); b.onclick=()=>loadPage(j); rail.appendChild(b);
+  });
+  loadPage(0);
+}
+function toggleZoom(e){
+  const iw=$("#imgwrap"), img=$("#img");
+  if(!big){ // zoom in: load full-res, center on click
+    const r=img.getBoundingClientRect();
+    const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
+    big=true; img.src=IIIF(it.ia,it.pages[i].f,MAX); iw.classList.add("zoom");
+    img.onload=()=>{ const z=img.getBoundingClientRect(), w=iw.getBoundingClientRect();
+      iw.scrollLeft+=(z.left+fx*z.width)-(w.left+iw.clientWidth/2);
+      iw.scrollTop +=(z.top +fy*z.height)-(w.top +iw.clientHeight/2); img.onload=null; };
+  } else { big=false; iw.classList.remove("zoom"); img.src=IIIF(it.ia,it.pages[i].f,DISP); }
+}
+
+$("#item").onchange=e=>selectItem(e.target.value);
+$("#prev").onclick=()=>loadPage(i-1);
+$("#next").onclick=()=>loadPage(i+1);
+$("#imgwrap").addEventListener("dblclick",toggleZoom);
+(()=>{ const iw=$("#imgwrap"); let p=null;
+  iw.addEventListener("mousedown",e=>{ if(!iw.classList.contains("zoom"))return;
+    p={x:e.clientX,y:e.clientY,l:iw.scrollLeft,t:iw.scrollTop}; iw.classList.add("drag"); e.preventDefault();});
+  window.addEventListener("mousemove",e=>{ if(!p)return; iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y);});
+  window.addEventListener("mouseup",()=>{ if(p){p=null; iw.classList.remove("drag");}});
+})();
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="SELECT") return;
+  if(e.key==="ArrowDown"||e.key==="j"){loadPage(i+1);e.preventDefault();}
+  if(e.key==="ArrowUp"||e.key==="k"){loadPage(i-1);e.preventDefault();}
+});
+(async()=>{
+  DATA=await (await fetch("/peirce/data.json")).json();
+  $("#note").innerHTML=DATA.note;
+  const sel=$("#item");
+  DATA.items.forEach(x=>{
+    const tr=x.pages.filter(p=>p.t).length;
+    const o=document.createElement("option");
+    o.value=x.r; o.textContent=`R${x.r} · ${x.title} (${x.pages.length} pp${tr?` · ${tr} ✓`:''})`;
+    sel.appendChild(o);
+  });
+  if(DATA.items.length) selectItem(DATA.items[0].r);
+})();
+</script>
+</body>
+</html>
