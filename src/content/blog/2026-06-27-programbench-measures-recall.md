@@ -10,7 +10,7 @@ keywords: ProgramBench, behavioral equivalence, query complexity, lower bound, a
 <!-- pdf-skip -->
 *An oracle who withholds all the questions, in the universe of all questions, is an oracle impossible to find.*
 
-*Submitted to the ProgramBench authors for right of reply at [issue link]; data and re-runnable audit at [github.com/kimjune01/program-bench-audit](https://github.com/kimjune01/program-bench-audit); to be archived at [Zenodo DOI]. Corrections will be incorporated and the offer stands.*
+*Submitted to the ProgramBench authors for right of reply at [issue link]; data and re-runnable audit at [github.com/kimjune01/program-bench-audit](https://github.com/kimjune01/program-bench-audit); archived at [10.5281/zenodo.21083756](https://doi.org/10.5281/zenodo.21083756). Corrections will be incorporated and the offer stands.*
 
 ## Abstract {-}
 
