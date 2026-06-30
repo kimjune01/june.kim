@@ -126,6 +126,25 @@ The asymmetry follows from the selection objective. The generator maximizes line
 
 This bears on the coverage figure the benchmark reports. Its generated suites reach line coverage near eighty percent, comparable to the projects' own (§5.1, Figure 7). That figure was obtained with source access, by the generator. The figure relevant to solvability is the coverage a source-blind solver can reach from the binary and documentation within budget, and it is not reported. The reported number measures the party holding the map.
 
+## Kind, not size {#kind}
+
+A maker reading this will want to know which programs to expect trouble from, and the obvious guess is wrong. Recall-unbenchability is orthogonal to program size. Across the twenty-one recall programs the graded surface runs from `fasttext` at twenty-nine obligations to `gdal` at four thousand, and the largest recall-free program, `pandoc`, pins more obligations (2,746) than all but one of them. The medians barely separate, 268 against 194. Size predicts almost nothing about whether a program is recall-gated.
+
+What predicts it is the kind of the program's core. A program is recall-gated when one graded behavior is an un-inferable function, a hash, a cipher, a codec, a compressor, a binary format, however small or large the program around it. `fasttext` is a small embedder and recall; `pandoc` is a large document converter and recall-free, because its formats, a docx that is a zip of XML, are parseable from the supplied materials and an embedding is not.
+
+The second predictor is the implementation language, through its standard library. The recall rate is several times higher in C and C++ than in Go and Rust:
+
+| language | recall / total |
+|---|---|
+| C | 9 / 33 |
+| C++ | 4 / 12 |
+| Go | 4 / 46 |
+| Rust | 4 / 107 |
+
+Part of that is domain, since the heavy media and crypto tools tend to be written in C, but part is causal and size-independent: C and C++ ship no standard codecs or image decoders, so a job that is benchable in a language whose standard library carries the algorithm becomes recall in one whose does not. The appendix holds the matched pair: `chafa` in C decodes an image and earns a witness, while `ascii-image-converter` in Go does the same job through the standard library's `image/png` and stays benchable. The benchable line moves with the language.
+
+Size has its own barrier, but it is the other axis: the coverage pressure of §(coverage), which the largest programs run into whether or not any single behavior is recall. A program can be caught by either axis or both. `gdal` is caught by both, a checksum core inside four thousand obligations; `pandoc` by scale alone; `fasttext` by kind alone. The maker's screen, then, is the core's kind and the implementation language first, and size as a separate, second filter.
+
 ## The fairness audit checks a different property {#audit}
 
 The paper audits all 200 tasks and reports that no test invokes a flag or subcommand absent from the documentation, with five instances where implementation-dependent output could plausibly appear, none realized (§2.2, detailed in §A.3.4). Its premise is that "any behavior a behavioral test expects is discoverable by running that same command" (§2.2). We take the audit at face value. It establishes that the entry points are documented; it does not establish that the graded behavior at those entry points is determined by anything the solver receives. A named flag shows a door exists. It does not fix which room behind it is graded, and the leak is one level below the flag: a behavior at a documented entry point, triggered by a value or combination recorded in the source and absent from the documentation.
