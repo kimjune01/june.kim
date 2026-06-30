@@ -40,7 +40,11 @@
   .thumb img{display:block;width:100%;height:calc((100vh - 46px)/6 - 18px);object-fit:contain;background:#fff}
   .thumb .n{display:block;font-size:9px;color:var(--muted);text-align:center;padding:1px 0 2px}
   .thumb.has::after{content:"";position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--add)}
-  .imgwrap{overflow:auto;background:#efeeea;display:flex;align-items:flex-start;justify-content:center;min-width:0;min-height:0}
+  .imgwrap{position:relative;overflow:auto;background:#efeeea;display:flex;align-items:flex-start;justify-content:center;min-width:0;min-height:0}
+  .imgwrap.loading::after{content:"";position:absolute;top:50%;left:50%;width:26px;height:26px;margin:-13px 0 0 -13px;
+    border:3px solid rgba(0,0,0,.14);border-top-color:rgba(0,0,0,.5);border-radius:50%;animation:spin .7s linear infinite;z-index:3}
+  .imgwrap.loading img{opacity:.35;transition:opacity .15s}
+  @keyframes spin{to{transform:rotate(360deg)}}
   .imgwrap img{max-width:100%;height:auto;display:block;background:#fff;margin:14px;
                box-shadow:0 1px 4px rgba(0,0,0,.12);user-select:none;-webkit-user-drag:none}
   .imgwrap.zoom{display:block;cursor:grab}
@@ -70,7 +74,8 @@
     box-shadow:0 1px 6px rgba(0,0,0,.28);margin-bottom:14px}
   .card h1{font-family:var(--serif);font-size:21px;font-weight:600;margin:0 0 12px;letter-spacing:.01em}
   .card p{font-family:var(--serif);font-size:14.5px;line-height:1.62;color:#333;margin:0 0 18px;text-align:left}
-  .card .sig{height:40px;width:auto;opacity:.8;margin-bottom:20px}
+  .card .sig{height:52px;width:auto;margin-bottom:20px;
+    filter:grayscale(1) brightness(1.07) contrast(1.5);mix-blend-mode:multiply}
   .card button{font-size:14px;padding:8px 22px}
   .about{padding:5px 9px;color:var(--muted)}
 </style>
@@ -81,7 +86,7 @@
     <img class="seal" src="/peirce/seal.jpg" alt="Peirce's red wax seal, embossed P">
     <h1>The Manuscripts of C. S. Peirce</h1>
     <p>Charles Sanders Peirce (1839–1914) — logician, scientist, the founder of pragmatism — left some hundred thousand pages unpublished at his death. These are his manuscripts at Harvard's Houghton Library, hosted on the Internet Archive in the public domain, shown here with machine-assisted draft transcriptions still under correction. The hand is his, and so are the wax seal above and the signature below.</p>
-    <img class="sig" src="/peirce/signature.png" alt="Signature of Charles S. Peirce">
+    <img class="sig" src="/peirce/signature.jpg" alt="Signature of Charles S. Peirce">
     <div><button id="enter">Enter ›</button></div>
   </div>
 </div>
@@ -123,11 +128,18 @@ function render(t){
     .replace(/\[diagram:\s*([\s\S]*?)\]/g,'<span class="gap">⟦diagram: $1⟧</span>');
 }
 
+function setImg(src, after){
+  const img=$("#img"), iw=$("#imgwrap");
+  iw.classList.add("loading");
+  img.onload=()=>{ iw.classList.remove("loading"); img.onload=null; if(after) after(); };
+  img.onerror=()=>{ iw.classList.remove("loading"); img.onload=null; };
+  img.src=src;
+}
 function loadPage(k){
   i=(k+it.pages.length)%it.pages.length;
   const pg=it.pages[i];
   big=false; $("#imgwrap").classList.remove("zoom","drag");
-  $("#img").src=IIIF(it.ia,pg.f,DISP);
+  setImg(IIIF(it.ia,pg.f,DISP));
   $("#count").textContent=`${i+1} / ${it.pages.length}`;
   document.querySelectorAll(".thumb").forEach((t,j)=>t.classList.toggle("on",j===i));
   const on=document.querySelector(".thumb.on"); if(on) on.scrollIntoView({block:"nearest"});
@@ -151,11 +163,13 @@ function toggleZoom(e){
   if(!big){ // zoom in: load full-res, center on click
     const r=img.getBoundingClientRect();
     const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
-    big=true; img.src=IIIF(it.ia,it.pages[i].f,MAX); iw.classList.add("zoom");
-    img.onload=()=>{ const z=img.getBoundingClientRect(), w=iw.getBoundingClientRect();
+    big=true; iw.classList.add("zoom");
+    setImg(IIIF(it.ia,it.pages[i].f,MAX), ()=>{
+      const z=img.getBoundingClientRect(), w=iw.getBoundingClientRect();
       iw.scrollLeft+=(z.left+fx*z.width)-(w.left+iw.clientWidth/2);
-      iw.scrollTop +=(z.top +fy*z.height)-(w.top +iw.clientHeight/2); img.onload=null; };
-  } else { big=false; iw.classList.remove("zoom"); img.src=IIIF(it.ia,it.pages[i].f,DISP); }
+      iw.scrollTop +=(z.top +fy*z.height)-(w.top +iw.clientHeight/2);
+    });
+  } else { big=false; iw.classList.remove("zoom"); setImg(IIIF(it.ia,it.pages[i].f,DISP)); }
 }
 
 $("#item").onchange=e=>selectItem(e.target.value);
