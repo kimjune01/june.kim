@@ -189,7 +189,7 @@ We have argued the general case; we now hold it against the paper's specific def
 
 ### The reference as contract
 
-Both defects trace to one source. With the source and a specification withheld, the reference implementation is pressed into service as the contract, and a captured reference output is all the grader has to grade against. This is the test oracle problem (§(oracle-problem)): the reference stands in as a pseudo-oracle, graded against its own output with no independent contract. Recall and the oracle's provenance are the two ways that choice surfaces. Recall is about information the solver lacks: the contract encodes a function, a hash or a codec, that no finite probing recovers. Provenance is about authority the contract lacks: the expected value may be nothing more than what one reference build happened to emit. The two are separable, and a test can carry either or both, but they fall out of the same decision. The self-capture pattern of §(oracle-problem), the golden written from the reference run and then asserted against, shows the provenance failure in the open.
+Both defects fall out of one decision. With the source withheld, the reference is pressed into service as the contract (§(oracle-problem)), and that choice surfaces in two ways. Recall is information the solver lacks: the contract encodes a function, a hash or a codec, that no finite probing recovers. Provenance is authority the contract lacks: the expected value may be nothing more than what one reference build happened to emit. A test can carry either or both.
 
 ### The self-capturing golden
 
@@ -227,7 +227,7 @@ The unit is the test, and four changes make a program benchable. First, admit a 
 
 ### The triage rule
 
-The triage is automatable, which matters at 248,853 tests: the maker cannot read them by hand and will reach for the same LLM assistance the suites were generated with. The reading we applied by agent over the public suites runs as one pass per test on a rule sharp enough to hand an agent directly. For each graded assertion, classify how a source-blind, offline solver would obtain the value it checks.
+The triage is automatable, which matters at 248,853 tests: the maker reaches for the same LLM assistance the suites were generated with. One pass per test classifies how a source-blind, offline solver would obtain the value each assertion checks:
 
 | class | how a source-blind solver obtains the value | action |
 |---|---|---|
