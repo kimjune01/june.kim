@@ -28,3 +28,6 @@ public/assets/methodeutic-harness-paper.pdf
 
 # arXiv source bundles (build artifacts; rebuilt by md2arxiv)
 build/
+
+# ProgramBench benchability audit DB (working data, not site content)
+.pb-audit/

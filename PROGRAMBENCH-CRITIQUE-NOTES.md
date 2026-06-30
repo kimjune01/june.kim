@@ -1,7 +1,7 @@
 # ProgramBench critique — durable resume notes
 
 ## 1. The paper (DONE except submission links)
-`/Users/junekim/Documents/june.kim/src/content/blog/2026-06-27-the-unreasonable-largeness-of-behavior.md`
+`/Users/junekim/Documents/june.kim/src/content/blog/2026-06-27-programbench-measures-recall.md`
 Builds clean (`pnpm run build:blog`), em-dash invariant = 0. variant post-paper, autonumber.
 Spine = **recall-only / identifiability**: a graded behavior is recall-only when its value is the output of a function NOT learnable from finite oracle I/O AND not in the offline stdlib; the only feasible channel is prior possession of the spec = recall, not reconstruction. "impossible" used only in controlled feasibility sense (computable != feasible; Go/reality). NOT an "impossible to pass" claim — it's construct-validity (measures recall, not reconstruction).
 Sections: abstract, §claim, §setup (no-internet + no-installs + "even if you recognize…" system-prompt quote), §strengths, Terms (discoverable / brute-searchable / recall-only / benchable), identifiability section ("Why running the reference is not enough"), §asymmetry, §audit (+ §A.2.4 counter: their feasibility review audits *discoverability* not *reconstructability*), §pm (PM-analogy vs golden-grader fork + deadline reading), §contamination, §evidence (corroboration only; 79–95% lookup self-own), §claims-examined (5 claims), §examples (blake3/jp2a/zoxide), §close (+ determinism open-problem scope), §prescribe (TWO audiences: runner cites program list / maker triage rule), agent-feedable 5-way triage rule.
