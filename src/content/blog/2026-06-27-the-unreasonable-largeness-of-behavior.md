@@ -94,15 +94,13 @@ The model counts the odds of covering. It says nothing about the cost of finding
 
 Put numbers on the looking. Give the search the fastest computer that exists, an exascale machine at about `10^18` operations a second, and charge it a single operation per probe, a floor no real execution reaches, since running the reference on one input costs thousands of operations at the least. The resulting wall-clock is a hard lower bound:
 
-| gate width | probes `2^d` | time at `10^18`/s, one op per probe |
-|---|---|---|
-| 64-bit | `1.8 × 10^19` | 18 seconds |
-| 80-bit | `1.2 × 10^24` | 14 days |
-| 96-bit | `7.9 × 10^28` | 2,500 years |
-| 128-bit | `3.4 × 10^38` | 11 trillion years, about 800 times the age of the universe |
-| 256-bit | `1.2 × 10^77` | past any physical clock |
+| value width | probes `2^d` | floor wall-clock | pinned in the suites |
+|---|---|---|---|
+| 64-bit | `1.8 × 10^19` | 18 seconds | a CRC64; XXH64 (7zip) |
+| 128-bit | `3.4 × 10^38` | about 800 times the age of the universe | an MD5; ffmpeg's frame hashes |
+| 256-bit | `1.2 × 10^77` | past any physical clock | BLAKE3 (blake3); GOST (php-src) |
 
-Charge a probe its real cost, the thousands to millions of operations an execution takes, and every row shifts four to six orders of magnitude worse: a single 64-bit gate moves from seconds to months. Past roughly 64 bits the search for one gated behavior already exceeds a one-shot budget, and the values these programs pin are wider, a CRC64 at 64 bits, an MD5 at 128, a SHA-256 or BLAKE3 digest at 256. A more capable model does not move these numbers, because the bottleneck is the looking, and the looking has nowhere to fit.
+Charge a probe its real cost, the thousands to millions of operations an execution takes, and every row shifts four to six orders of magnitude worse: a 64-bit value moves from seconds to months. This is the charitable case, since a brute-searchable gate at least admits search. A recall function admits none, because a hash output is not reachable by probing at all, so these numbers only bound the brute-searchable case and the recall witnesses sit beyond it. A more capable model does not move them, because the bottleneck is the looking, and the looking has nowhere to fit.
 
 That coverage cannot be reached by luck; it has to be imposed. To gain confidence rather than fortune, the solver has to black-box check its own program against `B` over the target surface, and checking means choosing which inputs to exercise, which is building a suite. For a real program the coverage that suite must reach approaches the reference's own. To be sure it has missed no graded behavior the solver has to exercise its reconstruction about as thoroughly as the project exercises itself, and then wider, because it cannot see where the graded boundary falls. SQLite's maintainers built that coverage over years with the source in hand; the solver is asked to approach it blind, in one submission, and because a single uncovered behavior fails the task, it cannot stop at the common cases. It must chase the tail to the end, and the chase has no certificate even there. Finite observation does not single out a behavior: many non-equivalent programs agree on every probed input and part on the next, so a solver that has matched every input it ran still cannot know it matches the one it did not, the inductive gap that identification from examples has studied since [Gold 1967](https://doi.org/10.1016/S0019-9958%2867%2991165-5).
 
