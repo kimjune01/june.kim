@@ -54,6 +54,39 @@ A test needs two things, an input to run and a way to judge the output. The seco
 
 The two kinds of oracle look identical until two correct programs disagree. For a behavior with one right answer, `echo hello`, the reference's captured output and the contract coincide, and a pseudo-oracle is as good as a specified one. The gap opens wherever a task admits more than one correct output. Picture a serializer that emits the same object with its keys in another order, or two renderers that write byte-different files displaying the same page: each is correct, and each fails a pseudo-oracle that pinned one reference's exact bytes. This benchmark furnishes the real version. typst's `test_emphasis_basic` compares a compiled PDF, byte for byte, against the reference's, and ditaa's compares an exact PNG; a faithful reimplementation that renders the identical document but lays its bytes out differently fails, because the golden pins the reference's file with no check on the page's contract. A pseudo-oracle measures agreement with one implementation; only a specified oracle measures the contract, and the two diverge exactly where the contract leaves the output free.
 
+<svg viewBox="0 0 660 312" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:660px;margin:1.6em auto;display:block" role="img" aria-label="A specified oracle accepts the whole region of contract-correct outputs; a pseudo-oracle accepts only the reference's golden point, so a correct program with different bytes fails.">
+  <style>
+    .ttl{font-family:ui-monospace,Menlo,monospace;fill:#333;font-size:14px;font-weight:600}
+    .sub{font-family:ui-monospace,Menlo,monospace;fill:#666;font-size:11px}
+    .lbl{font-family:ui-monospace,Menlo,monospace;fill:#666;font-size:12px}
+    .cap{font-family:ui-monospace,Menlo,monospace;fill:#666;font-size:11px}
+    .mk{font-size:15px;font-weight:700}
+  </style>
+  <text x="170" y="26" text-anchor="middle" class="ttl">specified oracle</text>
+  <text x="170" y="44" text-anchor="middle" class="sub">judges against the contract</text>
+  <ellipse cx="170" cy="174" rx="135" ry="88" fill="#2d7d2d" fill-opacity="0.09" stroke="#2d7d2d" stroke-width="1.5"/>
+  <text x="170" y="106" text-anchor="middle" class="lbl">contract-correct outputs</text>
+  <circle cx="128" cy="190" r="5" fill="#333"/>
+  <text x="128" y="210" text-anchor="middle" class="sub">golden</text>
+  <text x="138" y="186" class="mk" fill="#2d7d2d">&#10003;</text>
+  <circle cx="214" cy="152" r="5" fill="#333"/>
+  <text x="214" y="172" text-anchor="middle" class="sub">candidate</text>
+  <text x="224" y="148" class="mk" fill="#2d7d2d">&#10003;</text>
+  <text x="490" y="26" text-anchor="middle" class="ttl">pseudo-oracle</text>
+  <text x="490" y="44" text-anchor="middle" class="sub">judges against one reference run</text>
+  <ellipse cx="490" cy="174" rx="135" ry="88" fill="none" stroke="#999" stroke-width="1.3" stroke-dasharray="5 4"/>
+  <text x="490" y="106" text-anchor="middle" class="lbl">contract-correct outputs (unchecked)</text>
+  <circle cx="448" cy="190" r="26" fill="#2d7d2d" fill-opacity="0.12" stroke="#2d7d2d" stroke-width="1.3"/>
+  <circle cx="448" cy="190" r="5" fill="#333"/>
+  <text x="448" y="232" text-anchor="middle" class="sub">golden</text>
+  <text x="458" y="186" class="mk" fill="#2d7d2d">&#10003;</text>
+  <circle cx="534" cy="152" r="5" fill="#333"/>
+  <text x="534" y="172" text-anchor="middle" class="sub">candidate</text>
+  <text x="544" y="148" class="mk" fill="#c0392b">&#10007;</text>
+  <text x="330" y="294" text-anchor="middle" class="cap">The contract is a region; the captured golden is a single point.</text>
+  <text x="330" y="308" text-anchor="middle" class="cap">A program correct by the contract but off the golden's bytes fails the pseudo-oracle.</text>
+</svg>
+
 ProgramBench runs on a pseudo-oracle and nothing else. It withholds the source a specification would come from and grades against `B`'s captured output, so its goldens are the reference's own trace, validated into a contract by no independent check. The generated tests show it in the open, writing the golden from the reference run and then asserting against it:
 
 ```python
