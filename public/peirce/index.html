@@ -68,16 +68,20 @@
   .modal{position:fixed;inset:0;z-index:50;background:rgba(28,28,26,.5);
     display:flex;align-items:center;justify-content:center;padding:20px}
   .modal.hidden{display:none}
-  .card{background:#e7d9bb;max-width:432px;width:100%;border:1px solid #cdbb92;
-    border-radius:6px;box-shadow:0 10px 44px rgba(0,0,0,.34);padding:30px 34px 24px;text-align:center}
-  .card h1{color:#2a2419} .card p{color:#403828 !important}
-  .card button{background:#f3ead4;border-color:#cdbb92}
-  .card .seal{width:88px;height:88px;border-radius:50%;object-fit:cover;
-    box-shadow:0 1px 6px rgba(0,0,0,.28);margin-bottom:14px}
-  .card h1{font-family:var(--serif);font-size:21px;font-weight:600;margin:0 0 12px;letter-spacing:.01em}
-  .card p{font-family:var(--serif);font-size:14.5px;line-height:1.62;color:#333;margin:0 0 18px;text-align:left}
-  .card .sig{height:44px;width:auto;margin-bottom:20px}
-  .card button{font-size:14px;padding:8px 22px}
+  .card{background:#e7d9bb;max-width:466px;width:100%;border:1px solid #cdbb92;
+    border-radius:6px;box-shadow:0 12px 46px rgba(0,0,0,.36);padding:26px 30px 22px;text-align:center}
+  .card .seal{width:80px;height:80px;border-radius:50%;object-fit:cover;
+    box-shadow:0 1px 6px rgba(0,0,0,.3);margin-bottom:16px}
+  /* white Houghton-style catalog sticker holding the text */
+  .label{background:#fcfbf7;border:1px solid rgba(0,0,0,.07);border-radius:9px;
+    box-shadow:0 2px 12px rgba(0,0,0,.16);padding:17px 22px 12px;text-align:left;margin:0 0 18px}
+  .lab-call{font-family:var(--sans);font-weight:700;font-size:16px;color:#1b1b19;margin-bottom:9px}
+  .lab-desc{font-family:var(--serif);font-size:13.5px;line-height:1.56;color:#2a2a26;margin:0 0 15px}
+  .lab-foot{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    font-family:var(--serif);font-size:10px;color:#6a6a64}
+  .lab-foot .org{font-weight:700;font-size:11.5px;color:#222;letter-spacing:.03em;white-space:nowrap}
+  .card .sig{height:42px;width:auto;margin:2px 0 18px}
+  .card button{font-size:14px;padding:8px 22px;background:#f3ead4;border-color:#cdbb92}
   .about{padding:5px 9px;color:var(--muted)}
 </style>
 </head>
@@ -85,8 +89,11 @@
 <div class="modal" id="about">
   <div class="card">
     <img class="seal" src="/peirce/seal.jpg" alt="Peirce's red wax seal, embossed P">
-    <h1>The Manuscripts of C. S. Peirce</h1>
-    <p>Charles Sanders Peirce (1839–1914) — logician, scientist, the founder of pragmatism — left some hundred thousand pages unpublished at his death. These are some of his manuscripts at Harvard's Houghton Library, hosted on the Internet Archive in the public domain, shown here with machine-assisted draft transcriptions still under correction. The hand is his, and so are the wax seal above and the signature below.</p>
+    <div class="label">
+      <div class="lab-call">The Manuscripts of C. S. Peirce</div>
+      <p class="lab-desc">Charles Sanders Peirce (1839–1914) — logician, scientist, the founder of pragmatism — left some hundred thousand pages unpublished at his death. These are some of his manuscripts at Harvard's Houghton Library, hosted on the Internet Archive in the public domain, shown here with machine-assisted draft transcriptions still under correction. The hand is his, and so are the wax seal above and the signature below.</p>
+      <div class="lab-foot"><span>bMS Am 1632</span><span class="org">THE HOUGHTON LIBRARY</span><span>public domain · CC0</span></div>
+    </div>
     <img class="sig" src="/peirce/signature.png" alt="Signature of Charles S. Peirce">
     <div><button id="enter">Enter ›</button></div>
   </div>
