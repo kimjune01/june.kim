@@ -229,11 +229,13 @@ The unit is the test, and four changes make a program benchable. First, admit a 
 
 The triage is automatable, which matters at 248,853 tests: the maker cannot read them by hand and will reach for the same LLM assistance the suites were generated with. The reading we applied by agent over the public suites runs as one pass per test on a rule sharp enough to hand an agent directly. For each graded assertion, classify how a source-blind, offline solver would obtain the value it checks.
 
-- **Self-consistent.** The candidate is checked against its own output, as in a roundtrip, compress then decompress, write then read. Keep: any correct implementation passes.
-- **Observable.** The value is a constant or rule read off by running the reference once, a version byte, an error template, a separator, a full-dump listing. Keep: discoverable.
-- **Contract.** The assertion checks a documented property, structure, count, range, exit code, not exact bytes. Keep.
-- **Recall.** The assertion is byte-exact against a golden only an un-inferable function produces, a hash, cipher, codec, or compressor, on an input the solver cannot pre-query. Remove, or move to the knowledge track.
-- **Pinned.** The golden embeds an implementation detail of the reference itself, an exact rendering or a captured frame. Normalize or remove.
+| class | how a source-blind solver obtains the value | action |
+|---|---|---|
+| **Self-consistent** | checked against its own output: a roundtrip, compress then decompress, write then read | keep; any correct implementation passes |
+| **Observable** | a constant or rule read off one reference run: a version byte, an error template, a separator, a full-dump listing | keep; discoverable |
+| **Contract** | a documented property: structure, count, range, exit code | keep |
+| **Recall** | byte-exact against a golden only an un-inferable function produces, a hash, cipher, codec, or compressor, on an input the solver cannot pre-query | remove, or move to a knowledge track |
+| **Pinned** | an implementation detail of the reference itself: an exact rendering or a captured frame | normalize or remove |
 
 The one question that separates Recall from Observable is whether the expected value would change on an unseen input in a way the reference's observable outputs do not reveal. A hash answers yes and is recall; a version byte answers no and is observable. The rule is mechanical enough to run at the suite's scale and specific enough that two agents applying it should agree, which is the property the generation pipeline already relies on.
 
@@ -303,7 +305,18 @@ Every row is re-derivable from the task's tarball in `programbench/ProgramBench-
 
 **Adjacent but not recall: the implementation-detail tier.** Three programs fail reconstruction for the *second* reason above, and Table A1 counts them apart. ditaa and typst compare a rendered artifact, a PNG and a PDF, byte for byte against a golden, and ffmpeg pins per-frame MD5s of a rendered clip. Matching any of them demands the reference's exact rasterizer, font embedding or frame pipeline, bytes that are the reference's own, which no independent implementation reproduces. Unlike a recall witness, the repair is local: normalize the golden or assert the contract. Counting them as recall would overstate the floor, so they are tabled separately; the spine stays the un-inferable functions.
 
-**Excluded from the floor: the contestable tier.** Some programs grade an exact output that is structured yet *derivable* by a competent solver from examples plus general engineering knowledge, so we do not count them as recall: coordinate-projection math (proj), and machine-code or bytecode generation (tinycc, quickjs, luajit, and tree-sitter's compiled WebAssembly). pandoc reads `.docx`, a ZIP of XML the standard library can open, derivable rather than recalled; ascii-image-converter decodes PNG, which is in the Go standard library, where its sibling chafa is C and has no such decoder and so earns a witness above. The Unicode width class divides on inspection: a tool that pads CJK and emoji into aligned columns needs the width table and earns a witness above (csview), while one that cuts single-codepoint characters or truncates an ASCII line passes with the standard library (tuc, solar). A referee could contest the remainder either way; we leave them out rather than inflate the floor. The twenty-one are what survives that conservatism.
+**Excluded from the floor: the contestable tier.** Some programs grade a structured exact output a competent solver could *derive* from examples plus general engineering knowledge, so we do not count them as recall.
+
+| program | graded output | why derivable, not recall |
+|---|---|---|
+| proj | coordinate-projection math | reconstructable from examples and engineering knowledge |
+| tinycc, quickjs, luajit | machine code or bytecode | a known compilation transform |
+| tree-sitter | compiled WebAssembly | a known compilation transform |
+| pandoc | a `.docx` | a ZIP of XML the standard library opens |
+| ascii-image-converter | a decoded PNG | `image/png` is in the Go standard library; its C sibling chafa has none and earns a witness above |
+| tuc, solar | cut codepoints, a truncated ASCII line | the standard library suffices, where csview pads CJK and emoji, needs the width table, and earns a witness above |
+
+A referee could contest the remainder either way; we leave them out rather than inflate the floor. The twenty-one are what survives that conservatism.
 
 There is an uncomfortable reading of grader thoroughness in this. Each test the generator adds is another chance to assert against a golden only the reference produces, so the more thorough the suite, the more of its tasks pass out of reach of reconstruction and into reach only of recall. Thoroughness and unfairness compound.
 
