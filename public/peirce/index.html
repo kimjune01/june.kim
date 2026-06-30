@@ -60,9 +60,31 @@
   .src{border-top:1px solid var(--line);background:var(--panel);padding:8px 14px;
        font-size:11.5px;color:var(--muted);display:flex;gap:14px;align-items:center}
   .src a{color:var(--ink)}
+  /* intro modal */
+  .modal{position:fixed;inset:0;z-index:50;background:rgba(28,28,26,.5);
+    display:flex;align-items:center;justify-content:center;padding:20px}
+  .modal.hidden{display:none}
+  .card{background:#fff;max-width:432px;width:100%;border:1px solid var(--line);
+    border-radius:6px;box-shadow:0 10px 44px rgba(0,0,0,.3);padding:30px 34px 24px;text-align:center}
+  .card .seal{width:88px;height:88px;border-radius:50%;object-fit:cover;
+    box-shadow:0 1px 6px rgba(0,0,0,.28);margin-bottom:14px}
+  .card h1{font-family:var(--serif);font-size:21px;font-weight:600;margin:0 0 12px;letter-spacing:.01em}
+  .card p{font-family:var(--serif);font-size:14.5px;line-height:1.62;color:#333;margin:0 0 18px;text-align:left}
+  .card .sig{height:40px;width:auto;opacity:.8;margin-bottom:20px}
+  .card button{font-size:14px;padding:8px 22px}
+  .about{padding:5px 9px;color:var(--muted)}
 </style>
 </head>
 <body>
+<div class="modal" id="about">
+  <div class="card">
+    <img class="seal" src="/peirce/seal.jpg" alt="Peirce's red wax seal, embossed P">
+    <h1>The Manuscripts of C. S. Peirce</h1>
+    <p>Charles Sanders Peirce (1839–1914) — logician, scientist, the founder of pragmatism — left some hundred thousand pages unpublished at his death. These are his manuscripts at Harvard's Houghton Library, hosted on the Internet Archive in the public domain, shown here with machine-assisted draft transcriptions still under correction. The hand is his, and so are the wax seal above and the signature below.</p>
+    <img class="sig" src="/peirce/signature.png" alt="Signature of Charles S. Peirce">
+    <div><button id="enter">Enter ›</button></div>
+  </div>
+</div>
 <header>
   <a class="home" href="/" title="june.kim">←</a>
   <span class="t">Peirce Manuscripts <small>· Houghton Library</small></span>
@@ -72,6 +94,7 @@
   <button class="nav" id="next" title="Next page (j)">›</button>
   <span class="grow"></span>
   <span class="hint">double-click image to zoom</span>
+  <button class="about" id="aboutBtn" title="About this collection">ⓘ</button>
 </header>
 <main>
   <div class="rail" id="rail"></div>
@@ -145,7 +168,13 @@ $("#imgwrap").addEventListener("dblclick",toggleZoom);
   window.addEventListener("mousemove",e=>{ if(!p)return; iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y);});
   window.addEventListener("mouseup",()=>{ if(p){p=null; iw.classList.remove("drag");}});
 })();
+const modal=$("#about");
+const closeAbout=()=>modal.classList.add("hidden");
+$("#enter").onclick=closeAbout;
+$("#aboutBtn").onclick=()=>modal.classList.remove("hidden");
+modal.addEventListener("click",e=>{ if(e.target===modal) closeAbout(); });
 document.addEventListener("keydown",e=>{
+  if(!modal.classList.contains("hidden")){ if(e.key==="Escape"||e.key==="Enter") closeAbout(); return; }
   if(e.target.tagName==="SELECT") return;
   if(e.key==="ArrowDown"||e.key==="j"){loadPage(i+1);e.preventDefault();}
   if(e.key==="ArrowUp"||e.key==="k"){loadPage(i-1);e.preventDefault();}
