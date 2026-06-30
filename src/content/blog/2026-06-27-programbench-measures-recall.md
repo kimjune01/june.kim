@@ -406,6 +406,10 @@ A referee could contest the remainder either way; we leave them out rather than 
 
 There is an uncomfortable reading of grader thoroughness in this. Each test the generator adds is another chance to assert against a golden only the reference produces, so the more thorough the suite, the more of its tasks pass out of reach of reconstruction and into reach only of recall. Thoroughness and unfairness compound.
 
+## LLM use {-}
+
+This work used a large language model (Claude, Anthropic) in two roles. For the audit, the model read the public test suites and proposed a classification for each graded assertion; the author adjudicated every verdict, and each is a re-fetchable receipt, the cited test and the bundled golden it checks, that a reader can re-derive by grep over the public suites without trusting the model or the author. The prose was drafted and revised with the same model under the author's editing. The model's contribution is extraction and drafting; the warrant for every claim is the re-derivable receipt, not the model's say-so.
+
 ## References {-}
 
 Barr, E.T., Harman, M., McMinn, P., Shahbaz, M., and Yoo, S., 2015. The Oracle Problem in Software Testing: A Survey. *IEEE Transactions on Software Engineering* 41(5):507-525. [doi:10.1109/TSE.2014.2372785](https://doi.org/10.1109/TSE.2014.2372785)
