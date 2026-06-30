@@ -68,8 +68,10 @@
   .modal{position:fixed;inset:0;z-index:50;background:rgba(28,28,26,.5);
     display:flex;align-items:center;justify-content:center;padding:20px}
   .modal.hidden{display:none}
-  .card{background:#fff;max-width:432px;width:100%;border:1px solid var(--line);
-    border-radius:6px;box-shadow:0 10px 44px rgba(0,0,0,.3);padding:30px 34px 24px;text-align:center}
+  .card{background:#e7d9bb;max-width:432px;width:100%;border:1px solid #cdbb92;
+    border-radius:6px;box-shadow:0 10px 44px rgba(0,0,0,.34);padding:30px 34px 24px;text-align:center}
+  .card h1{color:#2a2419} .card p{color:#403828 !important}
+  .card button{background:#f3ead4;border-color:#cdbb92}
   .card .seal{width:88px;height:88px;border-radius:50%;object-fit:cover;
     box-shadow:0 1px 6px rgba(0,0,0,.28);margin-bottom:14px}
   .card h1{font-family:var(--serif);font-size:21px;font-weight:600;margin:0 0 12px;letter-spacing:.01em}
@@ -102,7 +104,7 @@
 </header>
 <main>
   <div class="rail" id="rail"></div>
-  <div class="imgwrap" id="imgwrap"><img id="img" alt="manuscript page"></div>
+  <div class="imgwrap" id="imgwrap"><img id="img" alt="manuscript page" draggable="false"></div>
   <div class="read">
     <div class="note" id="note"></div>
     <div class="body" id="body"></div>
@@ -176,9 +178,11 @@ $("#prev").onclick=()=>loadPage(i-1);
 $("#next").onclick=()=>loadPage(i+1);
 $("#imgwrap").addEventListener("dblclick",toggleZoom);
 (()=>{ const iw=$("#imgwrap"); let p=null;
-  iw.addEventListener("mousedown",e=>{ if(!iw.classList.contains("zoom"))return;
-    p={x:e.clientX,y:e.clientY,l:iw.scrollLeft,t:iw.scrollTop}; iw.classList.add("drag"); e.preventDefault();});
-  window.addEventListener("mousemove",e=>{ if(!p)return; iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y);});
+  // record start on mousedown but DON'T preventDefault (that would swallow dblclick);
+  // the actual pan starts on the first mousemove.
+  iw.addEventListener("mousedown",e=>{ if(iw.classList.contains("zoom")) p={x:e.clientX,y:e.clientY,l:iw.scrollLeft,t:iw.scrollTop}; });
+  window.addEventListener("mousemove",e=>{ if(!p)return; iw.classList.add("drag");
+    iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y);});
   window.addEventListener("mouseup",()=>{ if(p){p=null; iw.classList.remove("drag");}});
 })();
 const modal=$("#about");
