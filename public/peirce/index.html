@@ -120,7 +120,7 @@
 </main>
 <script>
 const IIIF=(ia,f,size)=>`https://iiif.archive.org/image/iiif/3/${ia}%2F${f}.jpg/full/${size}/0/default.jpg`;
-const DISP="1400,", THUMB="!200,200", MAX="full";
+const DISP="1400,", THUMB="!200,200", MAX="max";  // IIIF v3 size keyword is "max", not "full"
 let DATA={items:[]}, it=null, i=0, big=false;
 const $=s=>document.querySelector(s);
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
