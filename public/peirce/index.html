@@ -47,8 +47,9 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .imgwrap img{max-width:100%;height:auto;display:block;background:#fff;margin:14px;
                box-shadow:0 1px 4px rgba(0,0,0,.12);user-select:none;-webkit-user-drag:none}
-  .imgwrap.zoom{display:block;cursor:grab}
-  .imgwrap.zoom.drag{cursor:grabbing}
+  .imgwrap.zoom{display:block}
+  .imgwrap.grab{cursor:grab}
+  .imgwrap.drag{cursor:grabbing}
   .imgwrap.zoom img{max-width:none;margin:50vh 50vw}
   .read{display:flex;flex-direction:column;border-left:1px solid var(--line);min-width:0}
   .note{padding:7px 14px;border-bottom:1px solid var(--line);background:var(--panel);
@@ -139,7 +140,9 @@ function render(t){
 function setImg(src, after){
   const img=$("#img"), iw=$("#imgwrap");
   iw.classList.add("loading");
-  img.onload=()=>{ iw.classList.remove("loading"); img.onload=null; if(after) after(); };
+  img.onload=()=>{ iw.classList.remove("loading"); img.onload=null;
+    iw.classList.toggle("grab", iw.scrollHeight>iw.clientHeight+2 || iw.scrollWidth>iw.clientWidth+2);
+    if(after) after(); };
   img.onerror=()=>{ iw.classList.remove("loading"); img.onload=null; };
   img.src=src;
 }
@@ -187,7 +190,7 @@ $("#next").onclick=()=>loadPage(i+1);
 // dblclick is unreliable here, so detect it ourselves from click timing and
 // ignore clicks that were actually the end of a pan.
 (()=>{ const iw=$("#imgwrap"); let p=null, moved=false, last=0;
-  iw.addEventListener("mousedown",e=>{ if(iw.classList.contains("zoom")){ p={x:e.clientX,y:e.clientY,l:iw.scrollLeft,t:iw.scrollTop}; moved=false; } });
+  iw.addEventListener("mousedown",e=>{ p={x:e.clientX,y:e.clientY,l:iw.scrollLeft,t:iw.scrollTop}; moved=false; });
   window.addEventListener("mousemove",e=>{ if(!p)return;
     if(Math.abs(e.clientX-p.x)+Math.abs(e.clientY-p.y)>3){ moved=true; iw.classList.add("drag"); }
     iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y); });
