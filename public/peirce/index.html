@@ -183,14 +183,19 @@ function toggleZoom(e){
 $("#item").onchange=e=>selectItem(e.target.value);
 $("#prev").onclick=()=>loadPage(i-1);
 $("#next").onclick=()=>loadPage(i+1);
-$("#imgwrap").addEventListener("dblclick",toggleZoom);
-(()=>{ const iw=$("#imgwrap"); let p=null;
-  // record start on mousedown but DON'T preventDefault (that would swallow dblclick);
-  // the actual pan starts on the first mousemove.
-  iw.addEventListener("mousedown",e=>{ if(iw.classList.contains("zoom")) p={x:e.clientX,y:e.clientY,l:iw.scrollLeft,t:iw.scrollTop}; });
-  window.addEventListener("mousemove",e=>{ if(!p)return; iw.classList.add("drag");
-    iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y);});
-  window.addEventListener("mouseup",()=>{ if(p){p=null; iw.classList.remove("drag");}});
+// Zoom on a manual double-click (two quick clicks); pan on drag. The native
+// dblclick is unreliable here, so detect it ourselves from click timing and
+// ignore clicks that were actually the end of a pan.
+(()=>{ const iw=$("#imgwrap"); let p=null, moved=false, last=0;
+  iw.addEventListener("mousedown",e=>{ if(iw.classList.contains("zoom")){ p={x:e.clientX,y:e.clientY,l:iw.scrollLeft,t:iw.scrollTop}; moved=false; } });
+  window.addEventListener("mousemove",e=>{ if(!p)return;
+    if(Math.abs(e.clientX-p.x)+Math.abs(e.clientY-p.y)>3){ moved=true; iw.classList.add("drag"); }
+    iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y); });
+  window.addEventListener("mouseup",()=>{ if(p){ p=null; iw.classList.remove("drag"); } });
+  iw.addEventListener("click",e=>{
+    if(moved){ moved=false; return; }              // that click was a pan
+    if(e.timeStamp-last < 350){ toggleZoom(e); last=0; } else last=e.timeStamp;
+  });
 })();
 const modal=$("#about");
 const closeAbout=()=>modal.classList.add("hidden");
