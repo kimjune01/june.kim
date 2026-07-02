@@ -31,7 +31,11 @@
   .count{color:var(--muted);min-width:62px;text-align:center;font-variant-numeric:tabular-nums}
   .nav{padding:5px 10px}
   .hint{color:var(--muted);font-size:12px}
-  main{flex:1;display:grid;grid-template-columns:108px 1fr 500px;min-height:0}
+  main{flex:1;display:grid;grid-template-columns:108px 1fr 5px var(--readw,500px);min-height:0}
+  .split{cursor:col-resize;background:var(--line);transition:background .12s}
+  .split:hover,.split.on{background:var(--muted)}
+  body.resizing{cursor:col-resize;user-select:none}
+  body.resizing .imgwrap{pointer-events:none}
   .rail{border-right:1px solid var(--line);overflow-y:auto;background:var(--panel);padding:6px;min-width:0}
   .thumb{position:relative;display:block;width:100%;border:1px solid var(--line);border-radius:2px;
          margin-bottom:6px;background:#fff;cursor:pointer;opacity:.8;overflow:hidden}
@@ -115,6 +119,7 @@
 <main>
   <div class="rail" id="rail"></div>
   <div class="imgwrap" id="imgwrap"><img id="img" alt="manuscript page" draggable="false"></div>
+  <div class="split" id="split" title="Drag to resize"></div>
   <div class="read">
     <div class="note" id="note"></div>
     <div class="body" id="body"></div>
@@ -202,6 +207,16 @@ $("#next").onclick=()=>loadPage(i+1);
     if(moved){ moved=false; return; }              // that click was a pan
     if(e.timeStamp-last < 350){ toggleZoom(e); last=0; } else last=e.timeStamp;
   });
+})();
+// draggable boundary between the image and the transcription pane
+(()=>{ const sp=$("#split"), mn=document.querySelector("main"); let on=false;
+  const clamp=w=>Math.max(300,Math.min(w,window.innerWidth-260));
+  sp.addEventListener("mousedown",e=>{ on=true; sp.classList.add("on");
+    document.body.classList.add("resizing"); e.preventDefault(); });
+  window.addEventListener("mousemove",e=>{ if(!on)return;
+    mn.style.setProperty("--readw",clamp(window.innerWidth-e.clientX)+"px"); });
+  window.addEventListener("mouseup",()=>{ if(!on)return; on=false;
+    sp.classList.remove("on"); document.body.classList.remove("resizing"); });
 })();
 const modal=$("#about");
 const closeAbout=()=>modal.classList.add("hidden");
