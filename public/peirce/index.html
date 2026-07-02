@@ -156,7 +156,8 @@ function loadPage(k){
   const on=document.querySelector(".thumb.on"); if(on) on.scrollIntoView({block:"nearest"});
   $("#body").innerHTML=render(pg.t);
   $("#src").innerHTML=`<span>MS Am 1632 (${it.r}), leaf ${pg.f.replace(/^IMG_?/,"")}</span>`
-    +`<a href="https://archive.org/details/${it.ia}" target="_blank" rel="noopener">view on Internet Archive ↗</a>`;
+    +`<a href="https://archive.org/details/${it.ia}" target="_blank" rel="noopener">view on Internet Archive ↗</a>`
+    +(pg.t?`<a href="https://github.com/kimjune01/peirce/blob/master/transcriptions/R${it.r}/${pg.f}.txt" target="_blank" rel="noopener">edit transcription on GitHub ↗</a>`:"");
 }
 function selectItem(r){
   it=DATA.items.find(x=>x.r===r); if(!it) return; i=0;
