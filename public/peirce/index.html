@@ -52,7 +52,11 @@
   .imgwrap.loading img{opacity:.35;transition:opacity .15s}
   @keyframes spin{to{transform:rotate(360deg)}}
   .imgwrap img{max-width:100%;height:auto;display:block;background:#fff;margin:14px;
-               box-shadow:0 1px 4px rgba(0,0,0,.12);user-select:none;-webkit-user-drag:none}
+               box-shadow:0 1px 4px rgba(0,0,0,.12);user-select:none;-webkit-user-drag:none;
+               transition:filter .3s ease}
+  .imgwrap img.lq{filter:blur(9px);width:100%}      /* upscale the small thumb to fill, blur hides pixelation */
+  .imgwrap.loading.haslq::after{display:none}       /* thumb is the feedback; hide the spinner */
+  .imgwrap.loading.haslq img{opacity:1}
   .imgwrap.zoom{display:block}
   .imgwrap.grab{cursor:grab}
   .imgwrap.drag{cursor:grabbing}
@@ -146,12 +150,22 @@ function render(t){
     .replace(/\[diagram:\s*([\s\S]*?)\]/g,'<span class="gap">⟦diagram: $1⟧</span>');
 }
 
-function setImg(src, after){
+function setImg(src, after, low){
   const img=$("#img"), iw=$("#imgwrap");
-  iw.classList.add("loading");
-  img.onload=()=>{ iw.classList.remove("loading"); img.onload=null;
+  const done=()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); img.onload=null;
     iw.classList.toggle("grab", iw.scrollHeight>iw.clientHeight+2 || iw.scrollWidth>iw.clientWidth+2);
     if(after) after(); };
+  if(low){
+    // show the (already rail-cached) thumbnail instantly, blurred, then swap in hi-res
+    img.onload=null;   // don't let the thumbnail trigger a stale done()
+    img.classList.add("lq"); iw.classList.add("loading","haslq"); img.src=low;
+    const hi=new Image();
+    hi.onload=()=>{ img.src=src; done(); };
+    hi.onerror=()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
+    hi.src=src; return;
+  }
+  iw.classList.add("loading");
+  img.onload=done;
   img.onerror=()=>{ iw.classList.remove("loading"); img.onload=null; };
   img.src=src;
 }
@@ -159,7 +173,7 @@ function loadPage(k){
   i=(k+it.pages.length)%it.pages.length;
   const pg=it.pages[i];
   big=false; $("#imgwrap").classList.remove("zoom","drag");
-  setImg(IIIF(it.ia,pg.f,DISP));
+  setImg(IIIF(it.ia,pg.f,DISP), null, IIIF(it.ia,pg.f,THUMB));
   $("#count").textContent=`${i+1} / ${it.pages.length}`;
   document.querySelectorAll(".thumb").forEach((t,j)=>t.classList.toggle("on",j===i));
   const on=document.querySelector(".thumb.on"); if(on) on.scrollIntoView({block:"nearest"});
