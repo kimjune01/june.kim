@@ -33,6 +33,11 @@
   .count{color:var(--muted);min-width:62px;text-align:center;font-variant-numeric:tabular-nums}
   .nav{padding:5px 10px}
   .hint{color:var(--muted);font-size:12px}
+  header .tabs{display:flex;gap:14px;margin-right:4px}
+  header .tab{color:var(--muted);text-decoration:none;font-size:12.5px;padding:2px 1px;
+    border-bottom:2px solid transparent;white-space:nowrap}
+  header .tab:hover{color:var(--ink)}
+  header .tab.on{color:var(--ink);border-bottom-color:var(--del)}
   main{flex:1;display:grid;grid-template-columns:108px 1fr 5px var(--readw,500px);min-height:0}
   .split{cursor:col-resize;background:var(--line);transition:background .12s}
   .split:hover,.split.on{background:var(--muted)}
@@ -120,6 +125,7 @@
   <button class="nav" id="next" title="Next page (j)">›</button>
   <span class="grow"></span>
   <span class="hint">double-click image to zoom</span>
+  <nav class="tabs"><a class="tab on" href="/peirce/">Manuscripts</a><a class="tab" href="/peirce/bibliography/">Bibliography</a></nav>
   <button class="about" id="aboutBtn" title="About this collection">ⓘ</button>
 </header>
 <main>
