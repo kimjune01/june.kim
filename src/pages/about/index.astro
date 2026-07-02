@@ -8,7 +8,7 @@ import '../../styles/blog.css';
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hire June Kim | june.kim</title>
-  <meta name="description" content="June Kim — AI systems / research engineer. Agentic workflows, LLM evaluation, provenance, memory, review loops, developer tools. Anti-credence, pro-merit.">
+  <meta name="description" content="June Kim — AI systems / research engineer. Independent benchmark auditing, agentic workflows, LLM evaluation, provenance, memory, developer tools. Anti-credence, pro-merit.">
   <link rel="canonical" href="https://june.kim/about">
   <link rel="icon" href="/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,9 +37,9 @@ import '../../styles/blog.css';
     <section>
       <h1>Hire June Kim</h1>
 
-      <p>I build research systems that can be inspected, rerun, and judged by their artifacts: agent pipelines, evaluation harnesses, review protocols, and tools that turn AI research questions into working software.</p>
+      <p>I build research systems that can be inspected, rerun, and judged by their artifacts: benchmark audits, agent pipelines, evaluation harnesses, review protocols, and tools that turn AI research questions into working software.</p>
 
-      <p>I am an AI systems / research engineer focused on agentic workflows, LLM quality evaluation, provenance, memory, review loops, and developer tools. I have 10+ years of software engineering experience across Google, Loom, and startups.</p>
+      <p>I am an AI systems / research engineer. The depth is independent evaluation: I audit frontier coding benchmarks for construct validity and find where the headline metric measures the wrong thing, every verdict a re-runnable receipt. The breadth is shipping: 10+ years across Google, Loom, and startups, and fixes landed in dozens of open-source projects across Rust, Go, C++, and Python, which is what lets me read any benchmark's test suite in any stack.</p>
 
       <p>The common thread is anti-credence, pro-merit: replace trust in credentials, affiliation, and polished claims with artifacts that earn trust through evidence, provenance, review, execution, and use.</p>
 
@@ -55,6 +55,7 @@ import '../../styles/blog.css';
 
       <h2>Proof</h2>
       <ul>
+        <li>Benchmark and eval auditing: five public construct-validity audits of frontier coding benchmarks (<a href="/programbench-measures-recall">ProgramBench</a>, <a href="/a-determinacy-audit-of-swebench-pro">SWE-bench Pro</a>, <a href="/auditing-deepswe">DeepSWE</a>, SWE-rebench, SWE-bench Verified), plus <a href="https://github.com/kimjune01/determinacy">determinacy</a>, a reusable auditing tool. Each verdict is a grep-checkable receipt anyone can re-run.</li>
         <li><a href="/the-hypothesis-graph-semantic-memory-methodeutics">The Hypothesis Graph</a>: a harness-layer data structure for coding agents — testable-claim nodes, refutation-condition edges — that makes an agent's reasoning inspectable and reusable. arXiv-shape preprint with reproducible, DOI-archived artifacts.</li>
         <li><a href="/verifiable-knowledge">Verifiable Knowledge</a>: a protocol where each agent presents every claim with a falsifiable, reproducible condition instead of attesting its own work. Accountable failure outranks unaccountable assertion.</li>
         <li><a href="/does-iteration-mitigate-slop-slope">Slop Slope</a>: tested whether adversarial review loops turn test-passing LLM code from coin-flip drafts into merge-ready artifacts.</li>

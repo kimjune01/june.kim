@@ -10,7 +10,7 @@ keywords: hypothesis graph, methodeutics, abductive inference, agent memory, cog
 
 ## Abstract {-}
 
-The **hypothesis graph** is a novel data structure for coding agents that can deepen their reasoning and make it accountable. Implemented at the harness layer, its nodes are testable claims, its edges the conditions that refute them. It updates by inquiry, whose novel mode is abduction, beyond deduction and induction. Here, we demonstrate the mechanism on one contamination-free bugfix that an agent on a minimal prompt could not generalize; we supply the missing comparator that a context-bound agent could not abduct. This enables verifiable accountability, coordinated concurrency and efficient reasoning retention at no additional training cost, usable by any coding-agent harness that can run pinned trials and read their verdicts.
+The **hypothesis graph** is a data structure for coding agents that deepens their reasoning and makes it accountable. Implemented at the harness layer, its nodes are testable claims, its edges the refutations that name the next claim. It updates by inquiry, Peirce's typed loop of abduction, deduction, and induction; what is new is encoding that loop, abduction included, as mechanical harness operations rather than leaving it to a model's undifferentiated prose. We demonstrate the mechanism on one contamination-free bugfix. Six self-attested arms plateau at a narrow fix; an externally verified comparator, the one input a context-bound agent cannot author for itself, carries a weaker model (Sonnet 4.6) to the merged human fix's behavior that the strongest released model (Fable) does not reach without it. This buys verifiable accountability and reasoning that persists past the context window, at no additional training cost, usable by any coding-agent harness that can run pinned trials and read their verdicts.
 
 ## Introduction {#introduction}
 
@@ -30,6 +30,8 @@ We were promised a junior developer with near-infinite patience. All we got was 
 | *Review bottleneck* | Every step *grounded in a trial*: a reviewer accepts the work or resumes where it stuck. |
 
 Here we give the agent a trail of **verifiable knowledge**. The **hypothesis graph** is a semantic memory that holds an agent's reasoning while it works. The fix arrives with the inquiry that produced it: what was hypothesized, what was tested, what was ruled out. Each step carries a trial a stranger can rerun. The promise reverses the trust assumption by shifting the burden of proof outside the agent. The model still reasons, but each node it produces is checkable on its own at the harness layer, independent of the model.
+
+Two contributions run through this, and they are separable. The graph is the accountability substrate, and its value is argued by construction: every node replays. The externalized comparator is the capability mechanism, and its value is shown by ablation. The graph makes reasoning checkable; the comparator supplies the one verdict a self-graded agent cannot author for itself. Keeping them apart is what lets the ablation below read cleanly, where several arms share the graph and only the verdict source moves.
 
 What that buys is not incremental. On one contamination-free bug, an externalized comparator carried a weaker model to a fix the strongest released model could not reach without it (§(right-regime)): a capability lift, where a scaffold usually buys only automation.
 
@@ -101,7 +103,7 @@ What the hypothesis graph adds is their composition in one append-only object: a
 
 ### Semantic memory {#semantic-memory}
 
-This is the data structure for *testable* inquiry, and its entire power is the perturbation surface. Strip the ability to poke the system and read an outcome, and the same shape degrades into a plausibility tree, which is the confabulation failure mode it exists to prevent. It is also not how minds run. Minds run on simulation, fast and compressive and intuitive, but a simulation is not verifiable from outside, so inquiry that has to be checked trades it for an explicit perturbation surface. The hypothesis graph is the verifiable serialization reasoning compiles to, so it can be checked by someone who does not trust you. Proof is to intuition as the hypothesis graph is to inquiry: not the thinking, the residue of the thinking that survives a stranger's replay.
+This is the data structure for *testable* inquiry, and its entire power is the perturbation surface. Strip the ability to poke the system and read an outcome, and the same shape degrades into a plausibility tree, which is the confabulation failure mode it exists to prevent. Intuition is not verifiable from outside, so inquiry that has to be checked trades it for an explicit perturbation surface. The hypothesis graph is the verifiable serialization reasoning compiles to, so it can be checked by someone who does not trust you. Proof is to intuition as the hypothesis graph is to inquiry: not the thinking, the residue of the thinking that survives a stranger's replay.
 
 That residue is what the memory typology calls the `smem`: persistent, typed, queryable, and owned by the harness rather than the model. Those same properties make it an interface for agent interop: because the structure is typed and external, a second agent, a later run, or a human auditor reads and writes against one contract and can rerun any node rather than trust it (§(discussion)). The graph in this work is one markdown file per inquiry.
 
@@ -109,7 +111,7 @@ That residue is what the memory typology calls the `smem`: persistent, typed, qu
 
 Knowing is an act to update the credence of a claim. This is the subject of *Verifiable Knowledge*; the property that matters here, a verdict a model cannot author for itself, is the one §(right-regime) turns into a capability lift. In the Hypothesis Graph, knowledge has the following properties:
 
-- **Three states.** Witnessed is true, a build presently passing; killed is false, a build gone red; open is *untrue*, a conjecture awaiting its test. These are the entitlement ledger's states, scoped here to one node and its kill edge.
+- **Three states.** Witnessed is true, a build presently passing; killed is false, a build gone red; open is *untrue*, a conjecture awaiting its test. These are the states of the entitlement ledger developed in *Verifiable Knowledge*, scoped here to one node and its kill edge.
 - **Credence.** A node carries a credence capped by the mode that earned it, low for abduction, higher once tested (Ramsey 1926), the step a bare LLM skips when it emits uniform confidence with no propagation along the chain.
 - **Survived belief.** A node counts as knowledge only after withstanding a trial, a verificationist criterion (Ayer 1936), indexed to the stakes of acting on it. Before trial, a claim is a hypothesis.
 - **Causal connections.** Each node wires to what it depends on, so claims compose into a derivation, every step caused by an earlier one (Pearl 1988).
@@ -136,7 +138,7 @@ His *Illustrations of the Logic of Science* (1878) and *Pragmatism as the Logic 
 
 No single mode carries a belief to its grade. Abduction proposes content but does not test it; induction tests but introduces no new explanatory content; deduction traces consequences but invents nothing. The credence a node ends up with is what traversing all three earns it, and that is what it means to call the modes typed: each is fixed by what it can't do.
 
-Deduction is where readers balk: why is *abduction* responsible for theory? Isn't that deduction's job? No. Deduction neither generates the theory nor proves it; it unfolds the hypothesis into the predictions it must answer for. The theory was abduced, the predictions deduced, and induction does the testing.
+This is where readers balk: why is *abduction* responsible for theory? Isn't that deduction's job? No. Deduction neither generates the theory nor proves it; it unfolds the hypothesis into the predictions it must answer for. The theory was abduced, the predictions deduced, and induction does the testing.
 
 Keep them separate and each does its one job; collapse them and you get familiar failure modes:
 
@@ -146,7 +148,7 @@ Keep them separate and each does its one job; collapse them and you get familiar
 
 That collapse is exactly what modern LLM agents do by default, since a single forward pass proposes, predicts, evaluates, and rationalizes in undifferentiated prose. Methodeutics, Peirce's term for the methodology of inquiry, is how to conduct the typed-mode loop well. Encoded as skills, it constructs and maintains the `smem`.
 
-*Modes of reason and the irreducible three.* Around the act of testing, philosophy of science built an apparatus of real rigor: Bacon's induction (1620), Popper's falsifiability (1934), Meehl's "soft science" critique (1967), Pearl's causal calculus (2009). Justification got its method, every step of it. But it begins one step too late, taking the hypothesis as given and filing its origin under inspiration. The discipline built an epistemology of justification and none of discovery. Peirce alone named the operation, abduction, and was ignored. The harness runs it as a first-class typed mode.
+*Modes of reason and the irreducible three.* Around the act of testing, philosophy of science built an apparatus of real rigor: Bacon's induction (1620), Popper's falsifiability (1934), Meehl's "soft science" critique (1967), Pearl's causal calculus (2009). Justification got its method, every step of it. But it begins one step too late, taking the hypothesis as given and filing its origin under inspiration. The discipline built an epistemology of justification and little of discovery. Peirce named the missing operation, abduction; the discipline still filed the origin of hypotheses under inspiration. The harness runs it as a first-class typed mode.
 
 ## Methodeutics, applied {#application}
 
@@ -209,7 +211,7 @@ A committed node is a conclusion, and an inquiry that reaches one rarely runs st
 
 > abduction → deduction → kill → abduction → deduction → induction → deduction → induction ⇒ induction
 
-*An in-flight inquiry trace, illustrative: Sonnet 4.6 following the `inquire` skill on the python-dotenv `find_dotenv` v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (induction) and discards this sequence. Full trace: [recon-inflight-dotenv.md](https://june.kim/assets/recon-inflight-dotenv.md). Not a frozen Pro instance.*
+*An in-flight inquiry trace, illustrative: Sonnet 4.6 following the `inquire` skill on the python-dotenv `find_dotenv` v1.0.1 regression (a real, reproducible bug, every command run). The active hypothesis cycles through all three modes and a kill before the inquiry settles; a committed graph records only the terminal node (induction) and discards this sequence. Full trace: [recon-inflight-dotenv.md](https://june.kim/assets/recon-inflight-dotenv.md).*
 
 ### Deterministic gating {#gating}
 
@@ -237,7 +239,7 @@ SWE-bench Pro ([Deng et al. 2025](https://arxiv.org/abs/2509.16941)) is the domi
 
 ![SWE-bench Pro's 728 public tasks by determinacy. The green majority is one-shot, with nothing to discover; the 109-task underdetermined floor (15.0%) grades the author's unstated intent, undiscoverable from the materials.](/assets/swebench-pro-determinacy.svg)
 
-With the tests as oracle, the harness resolves 95.3% of SWE-bench Pro's public split under the official grader ([bench run](https://github.com/kimjune01/swebench-pro)): the specification-to-implementation translation step is largely solved. So the interesting work is now discovery: a bug with a deep, discoverable cause. This is most of software left to do, now that coding agents dominate implementation.
+With the tests as oracle, the harness resolves 95.3% of SWE-bench Pro's public split under the official grader ([bench run](https://github.com/kimjune01/swebench-pro)): what iterating against the answer key buys, an artifact of that regime rather than a leaderboard result, and evidence that the specification-to-implementation translation step is largely solved. So the interesting work is now discovery: a bug with a deep, discoverable cause.
 
 Moreover, Pro's public set carried a risk we were not willing to take: contamination. So we went looking for a post-cutoff bug where discovery is the whole difficulty. Verus #2219 is one: a March 2026 issue, opened and fixed after the solve models' training cutoffs, so the case is contamination-free. The maintainer's narrow fix (PR #2230) passes its shipped test, and a general fix eventually landed too (PR #2501, merged 2026-06-05). The experiment is openly reproducible on [GitHub](https://github.com/kimjune01/hygraph-mechanism), with further analysis within.
 
@@ -310,6 +312,8 @@ Six methods self-attest, one is externally verified, ordered from least to most 
 | *self-verifier* harness | ● | ● | ○ |
 | *abductor*-enabled harness | ● | ● | ● |
 
+The *abduction* and *hypothesis graph* prompt arms carry identical factor settings above; they differ only in whether the run persists the structured graph across iterations, which the results (§(verus)) show makes no difference here. That the graph itself is not the active ingredient is the point: what moves the outcome is the verdict source, not the structure several arms share.
+
 Each arm writes a hypothesis graph by the same loop and runs three times. (Oracle here is metrological: an instrument checked against a reference, distinct from the probability-calibration of confidence scores.) We drew candidates from the localization-hard band the lead case sits in. Before any arm runs, the protocol preregisters one sentence per loop: testing X, predict Y, refuted by Z.
 
 For ecological accuracy, each model resides in its own native agent rather than a uniform rig we impose: Claude models in Claude Code, GPT-5.5 in codex, Composer 2.5 in Cursor. Our harness is a thin wrapper that drives each vendor's CLI non-interactively with the same stage prompt:
@@ -361,11 +365,11 @@ That isolates the mechanism on one model. The headline lift is a slice across tw
 | **Fable 5** (strongest released) | wide-but-broken | #2501 behavior |
 | **Sonnet 4.6** | narrow (#2230) | #2501 behavior |
 
-*Two contamination-clean models, one harness, the gate covering divergence (§(enum-calib)). Without the abductor neither matches the merged fix, and they miss in opposite directions: Fable too wide, Sonnet too narrow. With it both reach #2501's behavior on the committed probes (including #2501's own over-conservatism on the stretch case), which the stronger model cannot reach on its own. One draw per cell.*
+*Two contamination-clean models, one harness, the gate covering divergence (§(enum-calib)). Without the abductor neither matches the merged fix, and they miss in opposite directions: Fable too wide, Sonnet too narrow. With it both reach #2501's behavior on the committed probes (including #2501's own over-conservatism on the stretch case), which the stronger model cannot reach on its own. The comparator returns only pass/fail on candidate behavior, never the patch or the predicate (§(enum-calib)), so the match is reconstruction, not lookup. One draw per cell.*
 
 ### `abductor` {#gate-general}
 
-`abductor` is an open-source command-line tool anyone can run ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)): the abductive XOR of §(application), built as a standalone instrument on the program-analysis lineage that put abduction to work (§(lineage)). On this bug it carried a model past the plateau prompting alone could not clear. Our read of why is that it externalizes that XOR, the symmetric difference between what the model believes and what is true, from the inquiry loop into three domain-general operations with no answer built in:
+`abductor` is an open-source command-line tool anyone can run ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)): the abductive XOR of §(application), built as a standalone instrument on the program-analysis lineage that put abduction to work (§(lineage)). On this bug it carried a model past the plateau prompting alone could not clear. Our read of why is that it externalizes that XOR from the inquiry loop into three domain-general operations with no answer built in:
 
 - It *enumerates* a space of cases closed under the property's type-formers, wider than any one hypothesis.
 - It *calibrates* each case against a known-good baseline, the comparator the model cannot author, so the ground truth is external to it.
@@ -405,7 +409,7 @@ The whole ablation reduces to one causal diagram: across its arms, everything st
 | externally verified — *Composer 2.5* | ● | ● |
 | externally verified — *codex* | ● | ○ |
 
-codex clears the bug arm but walls on the divergence case, an implementation limit the verdicts do not remove.
+codex clears the bug arm but cannot implement the divergence case, an implementation limit the verdicts do not remove.
 
 The convergence is coverage-bound: it shows the fix is reproducible across workflows once the gate covers divergence. It does not show three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
 
