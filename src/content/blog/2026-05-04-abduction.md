@@ -64,3 +64,15 @@ But induction doesn't generate hypotheses. It generalizes from examples someone 
 Every capability curve is a sigmoid. The market prices the steep part and extrapolates a line. When the curve flattens, the marginal return on scaling induction drops. The mechanism that finds the *next* sigmoid: the next architecture, the next question, the next perturbation that starts a new curve. That's mode three. ML has deduction (type checkers, provers) and induction (everything since the perceptron). The third mode is the gap.
 
 What happens when you point it at a human playthrough, or ten thousand RL rollouts?
+
+---
+
+## Edit (2026-07-03): I had the primitive backwards
+
+I identified abduction with the diff, and that was wrong. The diff, figure against ground, XOR, is real, but it is not the abductive act. It is the *surprise*: the place where what I believed and what the world returned diverge. That is the input to abduction, the counterexample, not the leap that answers it. Peirce's schema is the surprising fact C observed, A would explain C, so suspect A. The diff hands you C. Abduction is the guess at A, and no operation above delivers A.
+
+The word fooled me. "Bi-abduction" in separation logic (Infer) is a term of art for inferring a missing frame. It is not Peirce's abduction, and building an arity ladder on the shared word welded two different things together. Most of the species I listed are the surprise machinery, the localization that shows where belief and world part. Voyager is the exception, and it is the exception because the leap lives in the model, unspecified, where it has to.
+
+`abduct_candidates(observation, target) → list[Candidate]` is the eager mistake in one line. It promises to hand back the candidate list. When the search space is not enumerable, no function does. You guess wildly and rank, and the economy of research runs one level down, inside the generation, governing which wild guesses survive. The ranking you can partly write down: cost, testability, breadth. The plausibility call under it, *this one smells right*, you cannot, and it recedes another level each time you reach for it. Whatever I managed to mechanize turned out to be deduction or induction. The residue that resists is abduction.
+
+What still stands is the missing mode. Induction generalizes from examples someone already chose; abduction generates the programs and finds the next sigmoid. That claim survives untouched. I just had the primitive inside out: the diff detects the surprise, and abduction is the leap I cannot reduce to a diff.
