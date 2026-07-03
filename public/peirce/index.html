@@ -101,6 +101,31 @@
   .card .sig{height:42px;width:auto;margin:2px 0 18px}
   .card button{font-size:14px;padding:8px 22px;background:#f8f2e2;border-color:#dccfb2}
   .about{padding:5px 9px;color:var(--muted)}
+  /* full-text search */
+  .search{position:relative}
+  #q{font-family:var(--sans);font-size:13px;color:var(--ink);background:#fff;
+     border:1px solid var(--line);border-radius:4px;padding:5px 26px 5px 9px;width:200px}
+  #q:focus{outline:none;border-color:var(--ink)}
+  .search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;
+     color:var(--muted);font-size:15px;line-height:1;padding:2px 4px;display:none}
+  .search .clr:hover{color:var(--ink)}
+  .search.has .clr{display:block}
+  .results{position:absolute;top:calc(100% + 5px);left:0;width:460px;max-width:74vw;max-height:70vh;
+     overflow-y:auto;background:#fff;border:1px solid var(--line);border-radius:6px;
+     box-shadow:0 8px 30px rgba(0,0,0,.18);z-index:40;display:none}
+  .results.open{display:block}
+  .results .head{padding:6px 12px;border-bottom:1px solid var(--line);background:var(--panel);
+     color:var(--muted);font-size:11px;letter-spacing:.02em;position:sticky;top:0}
+  .results .hit{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);
+     background:none;border-radius:0;padding:8px 12px;cursor:pointer}
+  .results .hit:last-child{border-bottom:0}
+  .results .hit:hover,.results .hit.act{background:#f2f6ff;border-color:var(--line)}
+  .results .hit .meta{font-size:11px;color:var(--muted);margin-bottom:3px;
+     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .results .hit .meta b{color:var(--ink);font-weight:600}
+  .results .hit .snip{font-family:var(--serif);font-size:13px;line-height:1.45;color:var(--ink)}
+  .results .hit mark{background:var(--sel);color:inherit;border-radius:2px}
+  .results .empty{padding:14px 12px;color:var(--muted);font-size:12.5px}
 </style>
 </head>
 <body>
@@ -123,6 +148,12 @@
   <button class="nav" id="prev" title="Previous page (k)">‹</button>
   <span class="count" id="count"></span>
   <button class="nav" id="next" title="Next page (j)">›</button>
+  <span class="search">
+    <input id="q" type="search" autocomplete="off" spellcheck="false"
+           placeholder="search transcriptions…" title="Search all transcriptions (/)">
+    <button class="clr" id="qclr" title="Clear (Esc)" aria-label="Clear search">×</button>
+    <div class="results" id="results"></div>
+  </span>
   <span class="grow"></span>
   <span class="hint">double-click image to zoom</span>
   <nav class="tabs"><a class="tab on" href="/peirce/">Manuscripts</a><a class="tab" href="/peirce/bibliography/">Bibliography</a></nav>
@@ -188,8 +219,9 @@ function loadPage(k){
     +`<a href="https://archive.org/details/${it.ia}" target="_blank" rel="noopener">view on Internet Archive ↗</a>`
     +(pg.t?`<a class="gh" href="https://github.com/kimjune01/peirce/blob/master/transcriptions/R${it.r}/${pg.f}.txt" target="_blank" rel="noopener" title="Edit this transcription on GitHub">edit this <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>`:"");
 }
-function selectItem(r){
+function selectItem(r,page){
   it=DATA.items.find(x=>x.r===r); if(!it) return; i=0;
+  $("#item").value=r;
   const rail=$("#rail"); rail.innerHTML="";
   it.pages.forEach((pg,j)=>{
     const b=document.createElement("div"); b.className="thumb"+(pg.t?" has":"");
@@ -197,7 +229,7 @@ function selectItem(r){
     const n=document.createElement("span"); n.className="n"; n.textContent=pg.f.replace(/^IMG_?/,"");
     b.append(im,n); b.onclick=()=>loadPage(j); rail.appendChild(b);
   });
-  loadPage(0);
+  loadPage(page||0);
 }
 function toggleZoom(e){
   const iw=$("#imgwrap"), img=$("#img");
@@ -240,6 +272,74 @@ $("#next").onclick=()=>loadPage(i+1);
   window.addEventListener("mouseup",()=>{ if(!on)return; on=false;
     sp.classList.remove("on"); document.body.classList.remove("resizing"); });
 })();
+// ---- full-text search over every transcription (data is all client-side) ----
+// strip diplomatic markup so the raw words match and snippets read cleanly
+const plain=t=>t
+  .replace(/\{\/?(?:del|add)\}/g,"")
+  .replace(/\[unclear:\s*([\s\S]*?)\??\]/g,"$1")
+  .replace(/\[illegible\]/g," ")
+  .replace(/\[diagram:\s*([\s\S]*?)\]/g,"$1")
+  .replace(/\s+/g," ").trim();
+let INDEX=[];
+function buildIndex(){
+  INDEX=[];
+  DATA.items.forEach(x=>x.pages.forEach((pg,j)=>{
+    if(!pg.t) return;
+    const p=plain(pg.t);
+    INDEX.push({r:x.r,title:x.title,page:j,leaf:pg.f.replace(/^IMG_?/,""),text:p,low:p.toLowerCase()});
+  }));
+}
+const MAXHITS=80;
+function snippet(text,low,q){
+  const at=low.indexOf(q), s=Math.max(0,at-42), e=Math.min(text.length,at+q.length+90);
+  return (s>0?"…":"")+esc(text.slice(s,at))
+    +"<mark>"+esc(text.slice(at,at+q.length))+"</mark>"
+    +esc(text.slice(at+q.length,e))+(e<text.length?"…":"");
+}
+let hits=[], act=-1;
+function runSearch(raw){
+  const box=$("#results"), q=raw.trim().toLowerCase();
+  $(".search").classList.toggle("has",raw.length>0);
+  if(q.length<2){ box.classList.remove("open"); box.innerHTML=""; hits=[]; act=-1; return; }
+  hits=[];
+  for(const e of INDEX){
+    if(e.low.includes(q)){ hits.push(e); if(hits.length>=MAXHITS) break; }
+  }
+  act=-1;
+  if(!hits.length){ box.innerHTML=`<div class="empty">No matches for “${esc(raw.trim())}”.</div>`; box.classList.add("open"); return; }
+  const cap=hits.length>=MAXHITS?`${MAXHITS}+ pages`:`${hits.length} page${hits.length>1?"s":""}`;
+  box.innerHTML=`<div class="head">${cap}</div>`+hits.map((h,n)=>
+    `<button class="hit" data-n="${n}"><div class="meta">R<b>${h.r}</b> · ${esc(h.title)} · leaf ${esc(h.leaf)}</div>`
+    +`<div class="snip">${snippet(h.text,h.low,q)}</div></button>`).join("");
+  box.classList.add("open");
+}
+function openHit(n){
+  const h=hits[n]; if(!h) return;
+  selectItem(h.r,h.page);
+  $("#results").classList.remove("open");
+}
+function setAct(n){
+  const items=document.querySelectorAll(".results .hit"); if(!items.length) return;
+  act=(n+items.length)%items.length;
+  items.forEach((el,k)=>el.classList.toggle("act",k===act));
+  items[act].scrollIntoView({block:"nearest"});
+}
+(()=>{
+  const q=$("#q"), box=$("#results");
+  let t=null;
+  q.addEventListener("input",()=>{ clearTimeout(t); t=setTimeout(()=>runSearch(q.value),110); });
+  q.addEventListener("focus",()=>{ if(hits.length) box.classList.add("open"); });
+  q.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){ if(box.classList.contains("open")){box.classList.remove("open");} else {q.value="";runSearch("");} e.preventDefault(); return; }
+    if(e.key==="ArrowDown"){ setAct(act+1); e.preventDefault(); }
+    else if(e.key==="ArrowUp"){ setAct(act-1); e.preventDefault(); }
+    else if(e.key==="Enter"){ openHit(act>=0?act:0); e.preventDefault(); }
+  });
+  box.addEventListener("mousedown",e=>{ const b=e.target.closest(".hit"); if(b){ e.preventDefault(); openHit(+b.dataset.n); } });
+  $("#qclr").onclick=()=>{ q.value=""; runSearch(""); q.focus(); };
+  document.addEventListener("mousedown",e=>{ if(!e.target.closest(".search")) box.classList.remove("open"); });
+})();
+
 const modal=$("#about");
 const closeAbout=()=>modal.classList.add("hidden");
 $("#enter").onclick=closeAbout;
@@ -247,7 +347,8 @@ $("#aboutBtn").onclick=()=>modal.classList.remove("hidden");
 modal.addEventListener("click",e=>{ if(e.target===modal) closeAbout(); });
 document.addEventListener("keydown",e=>{
   if(!modal.classList.contains("hidden")){ if(e.key==="Escape"||e.key==="Enter") closeAbout(); return; }
-  if(e.target.tagName==="SELECT") return;
+  if(e.key==="/"&&e.target.tagName!=="INPUT"){$("#q").focus();e.preventDefault();return;}
+  if(e.target.tagName==="SELECT"||e.target.tagName==="INPUT") return;
   if(e.key==="ArrowDown"||e.key==="j"){loadPage(i+1);e.preventDefault();}
   if(e.key==="ArrowUp"||e.key==="k"){loadPage(i-1);e.preventDefault();}
 });
@@ -262,6 +363,7 @@ document.addEventListener("keydown",e=>{
     sel.appendChild(o);
   });
   if(DATA.items.length) selectItem(DATA.items[0].r);
+  buildIndex();
 })();
 </script>
 </body>
