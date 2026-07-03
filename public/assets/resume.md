@@ -4,40 +4,20 @@ Vancouver, Canada · june@june.kim · www.june.kim · 604 356 1191 · github.com
 
 ## Summary
 
-AI systems / research engineer who builds auditable agent systems for software engineering. 10+ years of software engineering experience at Google, Loom, and startups, with recent independent work turning research ideas into preprints, public artifacts, and maintainer-reviewed code. Strongest at moving from ambiguous research questions to working systems with evidence trails.
+Evaluation engineer. I audit frontier coding benchmarks for construct validity, finding where the headline metric measures something other than what it claims, and I ship the receipts as preregistered, re-runnable artifacts with public repos and DOIs. 10+ years of software engineering at Google, Loom, and startups. 111 merged PRs across 89 external open-source repositories in Rust, Go, C++, and Python is how I read a benchmark's test suite in whatever stack it ships.
 
 ## Selected Research & Systems Work
 
-### The Hypothesis Graph: Semantic Memory for Coding Agents
-
-2026
-
-- A novel harness-layer data structure for coding agents: nodes are testable claims, edges are the conditions that refute them. The graph updates by inquiry, including abduction beyond deduction and induction, so an agent's reasoning becomes inspectable, accountable, and reusable across runs at no additional training cost.
-- Published as an arXiv-shape preprint with fully reproducible artifacts, each archived with a DOI (the bench run, the determinacy audit, the mechanism experiment).
-- Paper: https://june.kim/the-hypothesis-graph-semantic-memory-methodeutics
-
-### Verifiable Knowledge: A Protocol for Agents Who Don't Trust Each Other
-
-2026
-
-- A protocol in which each agent presents every claim with a falsifiable, reproducible condition instead of attesting its own work. Accountable failure outranks unaccountable assertion, and verification is transitive, so results cross machine and social boundaries without inherited trust.
-- arXiv-shape preprint, archived with a DOI.
-- Paper: https://june.kim/verifiable-knowledge
-
-### Agentic Open-Source Contribution Pipeline (53% merge rate)
-
-2026
-
-- Built and operated an agentic pipeline for finding open-source issues, generating patches, submitting PRs, and tracking maintainer outcomes across public repositories.
-- Measured merge / rejection outcomes, maintainer feedback, review latency, and failure modes across real PR workflows; case studies include Speedrunning Open Source, Sweep & Triage, (Issue) → PR, and (PR) → merged.
-- Portfolio: https://github.com/kimjune01/
-
-### Public Research: Cognition, Epistemology, and Agentic Systems
+### Independent Evaluation Engineer — Frontier Coding Benchmarks
 
 2026 — present
 
-- A theory-to-artifact research program on abduction, memory, provenance, and review loops, including the Natural Framework (machine-checked in Lean), PageLeft, and runnable textbooks.
-- Writing: https://june.kim
+- SWE-bench Pro, determinacy audit (flagship): audited all 728 tasks; proven 15% underdetermined floor, 3 gold patches fail the benchmark's own verifier. Pro is what OpenAI now recommends over Verified. Preregistered and DOI-archived; findings filed with the maintainers.
+- SWE-bench Pro, harness run: 95.3% (694/728) under the official grader, preregistered and frozen, every verdict re-gradable from a committed diff. Solo, on a $200/month plan.
+- ProgramBench: showed the "% Resolved" metric scores recall of published algorithms, not source-blind reconstruction; 21+ programs gated on recalling a hash, cipher, or codec. Filed with the authors as a right of reply.
+- DeepSWE: applied each reference solution to its own verifier; 4 of 113 fail. Under $1, under an hour, preregistered two-pass protocol.
+- SWE-bench Verified: 426/500 (85.2%), denominator reconciled instance by instance; flags the set as contamination-compromised.
+- SWE-rebench: determinacy audit, 14.5% pointer-checkable claimable spine. Built determinacy, the reusable auditor behind it and the Pro audit.
 
 ## Work Experience
 
@@ -46,43 +26,56 @@ AI systems / research engineer who builds auditable agent systems for software e
 Applied AI Engineer  
 2025 — 2026
 
-- Anyteam.com: Designed and shipped an accessibility data pipeline for the Sales OS and a browser-extension-based web scraper to ingest and query domain knowledge.
-- Buildbetter.ai: Built 4 third-party integrations (Circle.so, Notion, Front, Attio) with incremental sync, OAuth2 flows, and deduplication, expanding the platform's customer data ingestion surface.
-- Developed AI-powered field classification system using LLMs to automatically map import columns with confidence scoring, and prototyped custom AI agents for customer signal analysis.
-- Shipped CI/CD quality gates, E2E testing infrastructure, and reusable developer tooling (Claude Code skills for log querying, migration gen, CI failure analysis).
+- Anyteam.com: Designed and shipped an accessibility data pipeline for the Sales OS and a browser-extension web scraper to ingest and retrieve domain knowledge.
+- Buildbetter.ai: Built third-party integrations (Circle.so, Notion, Front, Attio) with incremental sync, OAuth2, and deduplication, and an LLM field-classification system that maps import columns with confidence scoring.
+- Shipped CI/CD quality gates, E2E test infrastructure, and reusable developer tooling (Claude Code skills for log querying, migration gen, CI failure analysis).
 
 ### Little Bird Software
 
-AI Engineer  
+Applied AI Engineer  
 2024 — 2025
 
-- Designed and implemented agentic data ingestion pipelines, using LLM-based condensation (Claude, GPT-4, Gemini Flash) and deduplication to reduce noise by 90%, directly improving chat grounding.
-- Architected macOS and Chrome integrations (Swift, Tauri, Rust) using Accessibility APIs to enable real-time context injection for AI agents.
-- Developed core Python backend services for prompt orchestration and object deduplication, leading infrastructure migrations with zero user downtime.
-- Built end-to-end context ingestion pipeline: filtered, extracted, parsed, and condensed unstructured desktop accessibility data into a searchable context store.
+- Designed agentic data ingestion pipelines using LLM-based condensation (Claude, GPT-4, Gemini Flash) and deduplication to cut noise 90%, improving retrieval accuracy and chat grounding.
+- Architected macOS and Chrome integrations (Swift, Tauri, Rust) over Accessibility APIs for real-time context injection, and core Python backend services for prompt orchestration and dedup with zero-downtime migrations.
 
 ### Loom
 
 Senior Software Engineer  
 2022 — 2023
 
-- Optimized core video infrastructure, increasing system reliability from 97% to 99.7% via multi-resolution UI implementations and Shaka Player interfacing.
-- Architected a TypeScript refactor of the Electron desktop app, reducing maintenance overhead and improving cross-platform performance.
+- Raised core video reliability from 97% to 99.7% via multiresolution UI and Shaka Player interfacing; led a full TypeScript refactor of the Electron desktop app.
 
 ### YouTube / Google
 
 Software Engineer  
 2019 — 2022
 
-- Directed the launch of a high-visibility Premium sign-up framework, resulting in a 2% lift in conversion rates impacting 50M+ users.
-- Contributed to front-end features promoting YouTube Premium subscriptions, using C++ and Objective-C.
-- Conducted dozens of technical interviews for L3/L4 engineering candidates, helping scale the Music & Premium organization.
+- Re-architected the YouTube iOS app's rendering layer (C++ / TypeScript), cutting UI deployment cycles from months to days.
+- Directed the launch of a Premium sign-up framework, a 2% conversion lift across 50M+ users.
 
-## Earlier Experience
+### Earlier Experience
 
-- Loop Now Technologies (Firework) — React Native & iOS Engineer (2018–2019). Built cross-platform UI features; patented video view technology.
-- Lipsi Technologies — Senior iOS Developer (2016–2018). Scaled anonymous messaging app to #1 Lifestyle on App Store USA and 2.3M users.
-- Nano 3 Labs / Lighthouse Labs / Camvy (2013–2015). iOS development, AR prototyping, teaching, full-stack Rails.
+Software Engineer  
+2013 — 2019
+
+- iOS / mobile: Firework (patented video-view tech), Lipsi (#1 Lifestyle, US App Store, 2.3M users), and others.
+
+## Independent Research & Open Source
+
+### Published Research
+
+2026
+
+- The Hypothesis Graph, Verifiable Knowledge, and What Cannot Be False Cannot Be True: DOI-archived preprints with reproducible artifacts; full record and code at june.kim.
+- Adversarial review loops push test-passing LLM code from 43% to 91% merge-readiness; deployed as 101 real-maintainer PRs.
+- Methodology in public: a 22-question preregistration checklist, a published null result, and a post-mortem of a $1,000 mistake caused by held-out-test leakage.
+
+### Open Source Software
+
+2026
+
+- Enzyme autodiff compiler: a proof-by-cases soundness gate reproduced two compiler bugs from structure alone (filed upstream); separately landed two autodiff fixes (merged).
+- Representative merged fixes: godotengine/godot, hyperium/hyper, envoyproxy/envoy, servo/servo, pingcap/tidb, EnzymeAD/Enzyme, flux-rs/flux, wild-linker/wild.
 
 ## Education
 
@@ -99,3 +92,10 @@ Simon Fraser University, Canada
 2008—2012
 
 - Business administration degree focused on product, operations, strategy, finance, and entrepreneurship.
+
+## Skills
+
+- Evaluation: benchmark auditing, construct validity, LLM evaluation, red-teaming, evaluation harness design, data contamination / decontamination, ground-truth and label-quality audits, preregistration, reproducible artifacts
+- AI/ML: agentic workflows, tool use / function calling, RAG, embeddings, vector databases, Model Context Protocol (MCP), Claude Code
+- Languages: Python, Rust, TypeScript, C/C++, Go, Swift
+- Infrastructure: FastAPI, CI/CD, Git/GitHub
