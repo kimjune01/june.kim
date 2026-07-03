@@ -9,7 +9,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Economy of Research</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 8 · Peirce 1879, Chamberlin 1890, Platt 1964, de Kleer 1987, Hintikka 1999</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 8 · Peirce 1879, 1903, Chamberlin 1890, Platt 1964, de Kleer 1987, Hintikka 1999</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Ten hypotheses, budget for three experiments. Which three? Chapters 4&ndash;6 formalized the abductive primitive (diff, bi-abduction, tri-abduction), and chapter 7 framed what to observe. The primitive generates hypotheses; the frame fixes what to look at. This chapter spends the budget: of the experiments the frame allows, which to run.</p>
@@ -35,6 +35,25 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </blockquote>
 
     <p>Wald (1947) asked: given a stream of data, when should you stop collecting? Peirce asked the prior question: which stream should you open? Wald's work became a field. Peirce's note was ignored until historians rediscovered it in the 1960s.</p>
+
+    <h2>Peirce again: the leading consideration (1903)</h2>
+
+    <p>The 1879 note reads like a budgeting aside. By the 1903 Lowell lecture on abduction it had become the whole doctrine of hypothesis selection: "the leading consideration in Abduction, in all cases, ... is the question of Economy, &mdash; Economy of money, time, thought, and energy" (<a href="/peirce/">MS [R] 475</a>; CP 5.600). Economy is no longer one consideration among several. Peirce argues there are no other serious ones, because "abduction commits us to nothing. It merely causes a hypothesis to be set down upon our docket of cases to be tried." Adding a candidate is free; only testing spends. Whatever ranks the candidates must therefore be an accounting of the testing budget.</p>
+
+    <p>The lecture also states the selection rule this chapter automates:</p>
+
+    <blockquote>
+      <p>"If two hypotheses present themselves, one of which can be satisfactorily tested in two or three days, while the testing of the other might occupy a month, the former should be tried first, even if its apparent likelihood is a good deal less."</p>
+      <p class="text-sm text-gray-500">&mdash; Peirce, Eighth Lowell Lecture (1903), <a href="/peirce/">MS [R] 475</a></p>
+    </blockquote>
+
+    <p>And it takes a side that still divides the field: "It is a very grave mistake to attach much importance to the antecedent likelihood of hypotheses, except in extreme cases; because likelihoods are mostly merely subjective, and have little real value." His extreme case is a man offering to turn lead into gold: "My dear sir, I haven't time to make gold." He prices even that refusal in time. Bayesian experimental design (below) leans on exactly what Peirce refused to lean on.</p>
+
+    <p>The refusal is principled, and he argued it for decades. For Peirce a probability is a ratio of frequencies, and a ratio needs a reference class. The same lecture supplies the image: "If you could put all possible universes into a bag and after shaking them well up could draw out universe after universe, you might form statistics as to the proportion of universes in which the proposition is true. But since you cannot do that, to speak of the probability of the truth of a general proposition ... leaves us at a loss to conjecture what the other term of that ratio can be." A hypothesis has no reference class, so its probability is undefined rather than merely imprecise. "<a href="https://en.wikisource.org/wiki/Popular_Science_Monthly/Volume_12/April_1878/Illustrations_of_the_Logic_of_Science_IV">The Probability of Induction</a>" (1878) makes the case against probability as degree of belief; "<a href="https://archive.org/details/studiesinlogic00peiruoft">A Theory of Probable Inference</a>" (1883) draws the consequence: the conclusion of an ampliative inference carries no probability, and what can be graded is the method that produced it, by how reliably it leads to truth. Which conjecture to spend on next is a question the probability calculus cannot receive. Economy restates it in units the lab has.</p>
+
+    <p>The objection generalizes past Peirce: some questions outrun the data type they are asked of. <a href="https://en.wikisource.org/wiki/An_Enquiry_Concerning_Human_Understanding">Hume</a> observed that causation is never in the data, only conjunction. Statistics compressed that into <em>correlation is not causation</em>; <a href="https://doi.org/10.1080/01621459.1986.10478354">Holland</a>'s "no causation without manipulation" (1986) and <a href="https://en.wikipedia.org/wiki/Nancy_Cartwright_(philosopher)">Cartwright</a>'s "no causes in, no causes out" (1989) sharpened it into slogans; <a href="https://en.wikipedia.org/wiki/Causality_(book)">Pearl</a> made it formal: interventional questions are unanswerable from observational distributions without causal assumptions that observation cannot itself test. The remedy is the same in both cases, and Peirce had already prescribed it: "Every hypothesis should be put to the test by trying, if possible, to make verifiable predictions" (<a href="/peirce/">MS [R] 475</a>). Perturbation is required; the only live question is its price. Buy the answer with an experiment, and buy the cheapest decisive one first.</p>
+
+    <p>The lecture credits <a href="https://en.wikipedia.org/wiki/Ernst_Mach">Ernst Mach</a> as having "done the most to show the importance in logic of the consideration of Economy," while noting he "had written a paper on the subject as early as 1878": the note above, published in 1879.</p>
 
     <h2>Chamberlin: breadth before depth (1890)</h2>
 
@@ -283,7 +302,8 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
     <ul>
-      <li><a href="https://www.jstor.org/stable/25138602">Peirce 1879, "Note on the Theory of the Economy of Research"</a> &mdash; MS [R] 1093, Houghton Library, Harvard. Published in <em>Report of the Superintendent, U.S. Coast Survey</em> (1879), pp. 197&ndash;201; reprinted CP 7.139&ndash;157.</li>
+      <li><a href="https://www.jstor.org/stable/25138602">Peirce 1879, "Note on the Theory of the Economy of Research"</a> &mdash; MS [R] 1093, Houghton Library, Harvard. Published in <em>Report of the Superintendent, U.S. Coast Survey</em> (1879), pp. 197&ndash;201; reprinted CP 7.139&ndash;157. Page images (CC0) and draft transcription <a href="/peirce/">here</a>.</li>
+      <li><a href="/peirce/">Peirce 1903, Eighth Lowell Lecture, "Abduction"</a> &mdash; MS [R] 475, Houghton Library, Harvard; reprinted in part as CP 5.590&ndash;604. Page images (CC0) and draft transcription here, mirrored on the <a href="https://archive.org/details/peirce-msam1632-0475">Internet Archive</a>. Economy as the leading consideration in abduction; cheapest-decisive-first; the case against antecedent likelihoods.</li>
       <li><a href="https://doi.org/10.1016/0004-3702(87)90063-4">de Kleer &amp; Williams 1987, "Diagnosing Multiple Faults" (Artificial Intelligence)</a></li>
       <li><a href="https://doi.org/10.1126/science.146.3642.347">Platt 1964, "Strong Inference" (Science)</a></li>
       <li><a href="https://en.wikipedia.org/wiki/Jaakko_Hintikka"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Jaakko Hintikka (Wikipedia)</a></li>
