@@ -5,20 +5,20 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 11: The Hypothesis Graph — Methodeutics" favicon="🔭">
+<Layout title="Ch 12: The Hypothesis Graph — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>The Hypothesis Graph</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 11 &middot; Kill conditions generate edges</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 12 &middot; Kill conditions generate edges</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">A monotone trend test fires but curvature is indeterminate. Is the system decelerating or drifting? You can&rsquo;t tell from the current data. But you know exactly what to run next: a longer experiment that resolves curvature. The failure mode named the next hypothesis.</p>
     </div>
 
-    <p>Chapter 10 classified trajectories into four bins: convergent, divergent, oscillatory, aperiodic. Given a trajectory, you can assign a label. But a label is a noun, not a verb. It tells you what the system did, not what to do next.</p>
+    <p>Chapter 11 classified trajectories into four bins: convergent, divergent, oscillatory, aperiodic. Given a trajectory, you can assign a label. But a label is a noun, not a verb. It tells you what the system did and leaves the next move unnamed.</p>
 
-    <p>After Chapter 10, you look at a trajectory and say "oscillatory." After this chapter, you say "oscillatory &mdash; test the interface between the two subsystems that are fighting." The label becomes an action. The mechanism is the kill condition.</p>
+    <p>After Chapter 11, you look at a trajectory and say "oscillatory." After this chapter, you say "oscillatory: test the interface between the two subsystems that are fighting." The label becomes an action. The mechanism is the kill condition.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -32,7 +32,7 @@ import Repl from '../../../../components/Repl';
 
     <h2>Kill-condition decision tree</h2>
 
-    <p>The classifier from Chapter 10, as a decision tree. Each branch is annotated by its failure mode.</p>
+    <p>The classifier from Chapter 11, as a decision tree. Each branch is annotated by its failure mode.</p>
 
     <ol class="list-decimal pl-5 mb-4">
       <li class="mb-3"><em>Test for monotone trend.</em> Is the trajectory consistently increasing or decreasing? If no trend, skip to step 3 (periodicity).</li>
@@ -42,7 +42,7 @@ import Repl from '../../../../components/Repl';
       <li class="mb-3"><em>Nothing triggered.</em> Null.</li>
     </ol>
 
-    <p>Five tests. Each test that fires produces a label. Each test that <em>misfires</em> produces a hypothesis: an edge pointing to the experiment that would resolve the ambiguity.</p>
+    <p>Five tests. Each test that fires produces a label. Each test that <em>misfires</em> produces a hypothesis: an arrow pointing to the experiment that would resolve the ambiguity. These arrows are the edges of the graph this chapter builds.</p>
 
     <h2>Misfires are edges</h2>
 
@@ -102,12 +102,12 @@ import Repl from '../../../../components/Repl';
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Convergent</td>
             <td class="pr-3 text-gray-400">Something absorbed the perturbation</td>
-            <td class="text-gray-400">Test a different node &mdash; this one is stabilized</td>
+            <td class="text-gray-400">Test a different node; this one is stabilized</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Divergent</td>
             <td class="pr-3 text-gray-400">Single point of failure</td>
-            <td class="text-gray-400">Test what depends on it &mdash; find the blast radius</td>
+            <td class="text-gray-400">Test what depends on it; find the blast radius</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Oscillatory</td>
@@ -117,19 +117,19 @@ import Repl from '../../../../components/Repl';
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Aperiodic</td>
             <td class="pr-3 text-gray-400">Input exceeds the architecture&rsquo;s capacity for structured response</td>
-            <td class="text-gray-400">Decompose differently &mdash; the current partitioning is wrong</td>
+            <td class="text-gray-400">Decompose differently; the current partitioning is wrong</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <p><em>Convergent:</em> something compensated. The perturbation was absorbed. The next question is not "test this node harder" but "test a different node." The absorbing mechanism works; the interesting structure is elsewhere. The label redirects.</p>
+    <p><em>Convergent:</em> something compensated. The perturbation was absorbed. The next move is a different node. The absorbing mechanism works; the interesting structure is elsewhere. The label redirects.</p>
 
     <p><em>Divergent:</em> this node is critical and nothing compensated. What depends on it? If it fails, what else fails? The edge points downstream.</p>
 
-    <p><em>Oscillatory:</em> two constraints are in conflict. The system alternates between satisfying one and violating the other. The edge points to the coupling point between them, not to either subsystem individually.</p>
+    <p><em>Oscillatory:</em> two constraints are in conflict. The system alternates between satisfying one and violating the other. The edge points to the coupling point between them rather than to either subsystem alone.</p>
 
-    <p><em>Aperiodic:</em> the response has structure but no repeating pattern. The current decomposition can't resolve it into periodic components. The edge points to the analyst's modeling choices, not to the system itself.</p>
+    <p><em>Aperiodic:</em> the response has structure but no repeating pattern. The current decomposition can't resolve it into periodic components. The edge points back at the analyst's own modeling choices.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -159,7 +159,7 @@ import Repl from '../../../../components/Repl';
 
     <p>In <em>Proofs and Refutations</em>, Lakatos describes a recurring pattern: a proof is proposed, a counterexample appears, but the counterexample does not kill the theorem. It reveals which step of the proof was wrong. Lakatos calls this the "guilty lemma." The counterexample points to the specific assumption that fails, and that assumption is the site of the next revision.</p>
 
-    <p>Kill conditions work the same way. A classification test fires but the result is ambiguous. The ambiguity reveals which assumption was insufficient. That assumption is the guilty lemma. The next experiment targets it. Lakatos was describing mathematics, not empirical science, but the structure is identical. A test fails in a way that names the point of failure, and the failure generates the next move.</p>
+    <p>Kill conditions work the same way. A classification test fires but the result is ambiguous. The ambiguity reveals which assumption was insufficient. That assumption is the guilty lemma. The next experiment targets it. Lakatos was describing mathematics rather than empirical science, but the structure is identical. A test fails in a way that names the point of failure, and the failure generates the next move.</p>
 
     <h3>Reiter: model-based diagnosis (1987)</h3>
 
@@ -167,7 +167,7 @@ import Repl from '../../../../components/Repl';
 
     <p>In kill-condition terms: each misfire is a conflict, a set of hypotheses that cannot all hold given the data. The next experiment resolves the conflict by determining which member is faulty. Reiter's hitting-set algorithm is a systematic way to generate the edges.</p>
 
-    <h3>De Kleer &amp; Williams: GDE (1987)</h3>
+    <h3>De Kleer &amp; Williams: the General Diagnostic Engine (1987)</h3>
 
     <p>The General Diagnostic Engine (Chapter 8) computes which measurement maximally discriminates among remaining diagnoses. Kill conditions produce the edges; GDE ranks them by information gain per cost. Together: observe &rarr; classify &rarr; generate edges &rarr; rank edges (GDE) &rarr; run the best one &rarr; observe again.</p>
 
@@ -474,14 +474,30 @@ graph.summary()`} />
 
     <p>Convergence means every frontier edge points to a node already tested and stably classified. With finite structure and stable classifications, the graph should close. But "should" is not a proof. Feedback can create cycles: convergent at node A points to node B, which oscillates, which points back to A with new data that changes A's classification. Classifications are data-dependent.</p>
 
-    <p>The pieces for a convergence proof exist independently: Chernoff (1959) proved adaptive experiment selection converges; Gr&uuml;nwald (2024) proved e-values compose across adaptive experiments. Connecting them to the hypothesis graph is open. That is Chapter 12.</p>
+    <p>The pieces for a convergence proof exist independently: Chernoff (1959) proved adaptive experiment selection converges; Gr&uuml;nwald (2024) proved e-values compose across adaptive experiments. Connecting them to the hypothesis graph is open. That is Chapter 13.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>12.1</strong> In two sentences: what does a fired test give you, what does a misfired test give you, and why does this chapter treat the misfire as the more valuable of the two?</p>
+
+    <p class="mb-3"><strong>12.2</strong> Your sourdough starter won't rise. You double its feeding (the perturbation) and watch bubble activity for three days: activity climbs monotonically, but the watch is too short to tell whether the climb is decelerating toward a plateau or drifting without limit. Write this as a row of the misfire table: what did the curvature test need, and what edge does it generate? You follow the edge, and the longer watch fires convergent. State the structural claim that label makes about the starter, and where the next edge points.</p>
+
+    <p class="mb-3"><strong>12.3</strong> A bicycle light is dead. Build the first three nodes of its hypothesis graph on paper: battery, bulb, wiring. For each node, give one perturbation, the classification you expect if that component is the fault, and the edge it would generate. Then invent one plausible misfire (a perturbation whose result is ambiguous), state what the test lacked, and add its edge to the graph. Which node does your graph test first, and is that choice Chapter 8's or this chapter's?</p>
+
+    <p class="mb-3"><strong>12.4</strong> 💻 The graph code opens exactly one edge per classification. Modify <code>classify_node</code> so an oscillatory result opens two edges, one per suspected interface partner. Rerun the three-round loop with the oscillatory trajectory moved to round two. How many frontier nodes do you end with? Write one sentence on what must be true of closures versus openings for a graph like this to ever converge; you are one sentence away from Chapter 13.</p>
+
+    <p class="mb-3"><strong>12.5</strong> ★ Pick a belief you hold about how something in your life works: what makes you productive, why a friendship cooled, what your manager values. Write its kill condition: a specific observable that, if seen, kills the belief. If after honest effort no such observable exists, apply Peirce's standard from this chapter and write down the mark the belief now carries.</p>
 
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
       <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiments to run first</li>
       <li><a href="/the-hypothesis-graph">The Hypothesis Graph</a> &mdash; the blog post with the full argument</li>
-      <li><a href="/evidence-has-a-trajectory">Ch 9: Evidence has a trajectory</a> &mdash; e-values and temporal structure</li>
+      <li><a href="/reading/methodeutics/ch10-e-values/">Ch 10: E-values</a> &mdash; e-values and temporal structure</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
@@ -494,7 +510,7 @@ graph.summary()`} />
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch10-four-bins/", label: "Four bins" }} next={{ href: "/reading/methodeutics/ch12-convergence/", label: "Convergence" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch11-four-bins/", label: "Four bins" }} next={{ href: "/reading/methodeutics/ch13-convergence/", label: "Convergence" }} />
 
   </main>
 </Layout>

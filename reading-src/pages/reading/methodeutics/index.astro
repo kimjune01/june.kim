@@ -35,22 +35,27 @@ import Neighbors from "../../../components/Neighbors.astro";
 
     <p>Everyone does abduction. Doctors call it diagnosis. Engineers call it debugging. Detectives call it deduction (wrong, but Doyle didn't read Peirce). The pieces have always existed: philosophy, cognitive science, program analysis, causal inference, sequential testing.</p>
 
-    <blockquote class="text-gray-300 text-sm mb-6" style="border-left: 2px solid #555; padding-left: 1rem; font-style: italic;">
-      <p>between vision and root<br/>
-      blooms branches and shoots</p>
-      <p>prune the duds<br/>
-      thence more buds</p>
-      <p>clues for felling<br/>
-      perfuse its telling</p>
-      <p>do trees need an arbor<br/>
-      in light, soil and water?</p>
-    </blockquote>
+    <h2>How to read this book</h2>
+
+    <p>Prerequisites: comfort reading short Python programs, and one encounter with probability at the level of a fair coin. Everything else the book uses (separation logic, martingales, type constructors) is taught where it is first needed.</p>
+
+    <p class="mb-2">The chapters are a single argument and read best in order, but there are three doors:</p>
+
+    <ul class="list-disc pl-5 mb-4 text-gray-300">
+      <li class="mb-1"><strong>From software or engineering:</strong> start at <a href="/reading/methodeutics/ch04-diff/">Chapter 4</a>. The mechanic will feel like debugging because it is debugging. Circle back to Part I when you want to know what the operation is called and why it took a century to name.</li>
+      <li class="mb-1"><strong>From statistics or data science:</strong> start at <a href="/reading/methodeutics/ch09-evidence-trajectory/">Chapter 9</a>, where your field's snapshot habit fails three times in public. Then read Part II to see where the hypotheses come from.</li>
+      <li class="mb-1"><strong>From philosophy:</strong> start at <a href="/reading/methodeutics/ch01-three-modes/">Chapter 1</a> and the appendices, which include the primary Peirce texts in full.</li>
+    </ul>
+
+    <p>Each chapter ends with five exercises: a warm-up, two worked problems, a computer exploration (💻), and an open-ended field problem (★) that points the chapter's tool at a system you already own.</p>
 
     <h2>Chapters</h2>
 
-    <p class="text-gray-400 mb-4 text-sm">Each chapter opens with a system that breaks under the previous chapter's tools. The breakage motivates the new concept. The textbook's structure embodies the method it teaches. The shape of the failure names the next chapter.</p>
+    <p class="text-gray-400 mb-4 text-sm">Each chapter opens with a system that breaks under the previous chapter's tools. The breakage motivates the new concept. The shape of the failure names the next chapter.</p>
 
     <h3 class="text-gray-400 text-sm uppercase tracking-wider mt-6 mb-3">Part I: The trichotomy</h3>
+
+    <p class="text-gray-400 text-sm mb-3">Ground-clearing. What abduction is, why it trades certainty for fertility, and the evidence that six fields keep rediscovering it under different names. No mathematics yet; the object of study has to exist before it can be measured.</p>
 
     <ChapterTable chapters={[
       { href: "/reading/methodeutics/ch01-three-modes/", title: "Three modes", desc: "Holmes and the dog that didn't bark. Doyle called it deduction. It isn't." },
@@ -59,6 +64,8 @@ import Neighbors from "../../../components/Neighbors.astro";
     ]} icon="🔭" />
 
     <h3 class="text-gray-400 text-sm uppercase tracking-wider mt-6 mb-3">Part II: The primitives</h3>
+
+    <p class="text-gray-400 text-sm mb-3">The mechanical core. A diff between expected and observed generates hypotheses, bi- and tri-abduction make the generation algorithmic, framing decides what the diff runs over, and economy decides which candidate to test first. By the end of Part II you can generate and rank. You cannot yet score a test.</p>
 
     <ChapterTable chapters={[
       { href: "/reading/methodeutics/ch04-diff/", title: "Diff", desc: "A mechanic taps the alternator. The engine stalls. Two hypotheses fire. Where did they come from?" },
@@ -70,21 +77,26 @@ import Neighbors from "../../../components/Neighbors.astro";
 
     <h3 class="text-gray-400 text-sm uppercase tracking-wider mt-6 mb-3">Part III: The evidence</h3>
 
+    <p class="text-gray-400 text-sm mb-3">What comes back from the experiment, read while it is still arriving. Evidence becomes a trajectory, a running bet against the hypothesis. Trajectories sort into four bins, the bins drive a hypothesis graph, and composed trajectories either converge or kill.</p>
+
     <ChapterTable chapters={[
       { href: "/reading/methodeutics/ch09-evidence-trajectory/", title: "Evidence has a trajectory", desc: "An A/B test says B is better. You ship. Six months later, B is worse. The snapshot lied." },
-      { href: "/reading/methodeutics/ch10-four-bins/", title: "Four bins", desc: "The trajectory oscillates. Is the system fighting itself, or is your measurement noisy?" },
-      { href: "/reading/methodeutics/ch11-kill-conditions/", title: "The hypothesis graph", desc: "A monotone trend test fires but curvature is indeterminate. The failure mode is the next hypothesis." },
-      { href: "/reading/methodeutics/ch12-convergence/", title: "Convergence", desc: "Five sensor streams, each individually undetectable. Composed e-values classify the forcing pattern." },
+      { href: "/reading/methodeutics/ch10-e-values/", title: "E-values", desc: "E[e] ≤ 1. One inequality buys peeking, stopping, and multiplying across experiments." },
+      { href: "/reading/methodeutics/ch11-four-bins/", title: "Four bins", desc: "The trajectory oscillates. Is the system fighting itself, or is your measurement noisy?" },
+      { href: "/reading/methodeutics/ch12-kill-conditions/", title: "The hypothesis graph", desc: "A monotone trend test fires but curvature is indeterminate. The failure mode is the next hypothesis." },
+      { href: "/reading/methodeutics/ch13-convergence/", title: "Convergence", desc: "Five sensor streams, each individually undetectable. Composed e-values classify the forcing pattern." },
     ]} icon="🔭" startNumber={9} />
 
     <h3 class="text-gray-400 text-sm uppercase tracking-wider mt-6 mb-3">Part IV: The machine</h3>
 
+    <p class="text-gray-400 text-sm mb-3">Assembly. The generate-test-update loop hardened against self-deception, validators that accept proofs and counterexamples alongside data, the full pipeline, and one real system taken apart in public.</p>
+
     <ChapterTable chapters={[
-      { href: "/reading/methodeutics/ch13-protecting-the-loop/", title: "Protecting the loop", desc: "An agent confirms every hypothesis. It abduced from the data and tested on the same data." },
-      { href: "/reading/methodeutics/ch14-validating-claims/", title: "Validators", desc: "Four validator types, one interface. Empirical, structural, proof, counterexample." },
-      { href: "/reading/methodeutics/ch15-the-pipeline/", title: "The pipeline", desc: "Three witnesses (Infer, Voyager, IRM), each closing the loop in a different domain. None cite each other." },
-      { href: "/reading/methodeutics/ch16-case-study/", title: "Case study", desc: "A system that searches without reasoning. It can perturb and observe but never asks why." },
-    ]} icon="🔭" startNumber={13} />
+      { href: "/reading/methodeutics/ch14-protecting-the-loop/", title: "Protecting the loop", desc: "An agent confirms every hypothesis. It abduced from the data and tested on the same data." },
+      { href: "/reading/methodeutics/ch15-validating-claims/", title: "Validators", desc: "Four validator types, one interface. Empirical, structural, proof, counterexample." },
+      { href: "/reading/methodeutics/ch16-the-pipeline/", title: "The pipeline", desc: "Three witnesses (Infer, Voyager, IRM), each closing the loop in a different domain. None cite each other." },
+      { href: "/reading/methodeutics/ch17-case-study/", title: "Case study", desc: "A system that searches without reasoning. It can perturb and observe but never asks why." },
+    ]} icon="🔭" startNumber={14} />
 
     <h3 class="text-gray-400 text-sm uppercase tracking-wider mt-6 mb-3">Appendix: Primary Sources</h3>
     <div class="overflow-x-auto">
@@ -117,7 +129,7 @@ import Neighbors from "../../../components/Neighbors.astro";
           <tr>
             <td class="py-2 pr-1 text-right text-gray-500 tabular-nums whitespace-nowrap align-top">C.</td>
             <td class="py-2 px-2 text-gray-300 align-top"><a href="/peirce/" style="background:transparent;padding:0">Eighth Lowell Lecture: Abduction</a></td>
-            <td class="py-2 px-2 text-gray-400 align-top">MS [R] 475 (1903), from the manuscripts. The mature definitions (Ch 1), the docket line (Ch 11), economy as the leading consideration (Ch 8).</td>
+            <td class="py-2 px-2 text-gray-400 align-top">MS [R] 475 (1903), from the manuscripts. The mature definitions (Ch 1), the docket line (Ch 12), economy as the leading consideration (Ch 8).</td>
             <td class="py-2 pl-1 align-top">
               <a href="/peirce/" style="background:transparent;padding:0">📜</a>
             </td>
@@ -125,6 +137,17 @@ import Neighbors from "../../../components/Neighbors.astro";
         </tbody>
       </table>
     </div>
+
+    <blockquote class="text-gray-300 text-sm my-8" style="border-left: 2px solid #555; padding-left: 1rem; font-style: italic;">
+      <p>between vision and root<br/>
+      blooms branches and shoots</p>
+      <p>prune the duds<br/>
+      thence more buds</p>
+      <p>clues for felling<br/>
+      perfuse its telling</p>
+      <p>do trees need an arbor<br/>
+      in light, soil and water?</p>
+    </blockquote>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -155,9 +178,17 @@ import Neighbors from "../../../components/Neighbors.astro";
 
     <hr class="border-zinc-700 my-8"/>
 
-    <h2>Status</h2>
+    <h2>Status &amp; citation</h2>
 
-    <p>All 16 chapters drafted and copyedited. Codex-reviewed to convergence.</p>
+    <p>Draft. All 17 chapters written, with exercises. Last revised July 2026. Corrections welcome: <a href="mailto:kimjune01@gmail.com">kimjune01@gmail.com</a>.</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto text-sm"><code>@misc&#123;kim2026methodeutics,
+  author = &#123;Kim, June&#125;,
+  title  = &#123;Methodeutics: The Logic of Inquiry&#125;,
+  year   = &#123;2026&#125;,
+  url    = &#123;https://june.kim/reading/methodeutics/&#125;,
+  note   = &#123;Online textbook, draft&#125;
+&#125;</code></pre>
 
     <Neighbors>
 

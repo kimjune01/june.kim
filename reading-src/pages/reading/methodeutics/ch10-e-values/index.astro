@@ -1,0 +1,366 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch 10: E-values — Methodeutics" favicon="🔭">
+  <main>
+    <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
+
+    <h1>E-values</h1>
+    <p class="text-gray-400 text-sm mb-6">Chapter 10 &middot; Doob 1953, Robbins 1967, Shafer 2021, Ramdas 2023, Gr&uuml;nwald 2024</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Chapter 9 left evidence as a bankroll: a live bet against the hypothesis. This chapter makes the bankroll formal. One inequality, E[e] &le; 1, buys everything the casino promised: compute the evidence at every observation, stop whenever you want, multiply across experiments with no correction. Then three simulations whose trajectories tell three different stories.</p>
+    </div>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>E-values: definition from scratch</h2>
+
+    <p>A <strong>p-value</strong> is the probability of seeing data at least as extreme as what you observed, assuming the null hypothesis is true. If p is small, the data is surprising under the null. Smaller p = more evidence against the null.</p>
+
+    <p>An <strong>e-value</strong> is the payoff of a bet against the null hypothesis. If the null is true, the expected payoff is at most 1:</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>E[e] &le; 1 &nbsp;&nbsp; under the null</code></pre>
+
+    <p>That's the entire definition. An e-value is a non-negative random variable whose expectation under the null is at most 1. Large values (e &gt;&gt; 1) mean the null is losing badly. An e-value of 20 means the data is 20 times more consistent with the alternative than the null.</p>
+
+    <p>The constraint E[e] &le; 1 is the <strong>supermartingale property</strong>: the expected future value of the process is at most its current value. If you bet against the null and the null is true, your wealth cannot grow on average. If your wealth grows anyway, the null is losing.</p>
+
+    <h3>Why "at most 1" and not "equals 1"</h3>
+
+    <p>A martingale has E[e] = 1 exactly. A supermartingale relaxes this to E[e] &le; 1. The relaxation matters because it makes e-values composable. If you run two sequential experiments producing e-values e<sub>1</sub> and e<sub>2</sub>, their product e<sub>1</sub> &times; e<sub>2</sub> is also an e-value. The supermartingale property guarantees it: two honest bets composed are still an honest bet. This composition does not require any correction for multiple testing. It is exact.</p>
+
+    <p>P-values do not compose this way. Multiply two p-values and the result is not a valid p-value. Corrections (Bonferroni, Holm, Benjamini-Hochberg) restore validity but throw away statistical power. E-values compose for free.</p>
+
+    <h3>Anytime validity</h3>
+
+    <p>The deepest property: you can compute an e-value at every observation and the guarantee holds at each one. No peeking penalty. No alpha spending, the rationing of your error budget across looks. Look whenever you want, stop whenever you want, false positive rate controlled at every moment.</p>
+
+    <p>This is Doob's optional stopping theorem in action. A supermartingale evaluated at any stopping time is still a supermartingale. The math does not care when you look or why you stopped.</p>
+
+    <p>Contrast with a p-value. Compute p at n=100: 0.06, not significant. Peek again at n=200: 0.04, significant. Your false positive rate is no longer 5%. Peeking twice inflated it. The p-value guarantee requires exactly one look. The e-value guarantee holds at every look.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Trajectories expose feedback loops</h2>
+
+    <p>A p-value compresses evidence into a scalar. An e-value stream preserves evidence over time. The system's dynamics live in the temporal structure. Compress to a scalar and they vanish.</p>
+
+    <p>Point an e-value stream at a system with feedback. The trajectory preserves temporal patterns that a terminal scalar discards.</p>
+
+    <p><em>Smoking and stress.</em> The e-value climbs after each cigarette (relief), falls during withdrawal (stress spikes), climbs on relapse. The oscillation <em>is</em> the addiction cycle. A two-week snapshot says "smoking reduces stress, p &lt; .05." The trajectory shows the loop.</p>
+
+    <p><em>Ad load.</em> An e-value stream tracking revenue per session climbs for weeks (more ads = more revenue), flattens (ad blindness developing), then declines (degraded engagement). The inflection point marks the moment the feedback loop activates. A fixed-sample test that ends before the inflection sees only the climb.</p>
+
+    <p><em>MCAS.</em> An e-value tracking "does the correction succeed?" oscillates. Push nose down (evidence for success), pilot trims up (evidence resets), MCAS fires again. The oscillation is two subsystems fighting. A snapshot at any single activation says "correction successful."</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Evidence compounds across experiments</h2>
+
+    <p>E-values compose multiplicatively across sequential experiments.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Framework</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Method</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Sample size</th>
+            <th class="text-left py-2 text-gray-400">Composition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Frequentist</td><td class="pr-3 text-gray-400">Fixed</td><td class="pr-3 text-gray-400">Fixed</td><td class="text-gray-400">Requires correction (Bonferroni, etc.)</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Bayesian</td><td class="pr-3 text-gray-400">Fixed</td><td class="pr-3 text-gray-400">Variable</td><td class="text-gray-400">Requires shared prior</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">E-value</td><td class="pr-3 text-gray-400">Variable</td><td class="pr-3 text-gray-400">Variable</td><td class="text-gray-400">Multiply. No correction needed.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Run ten small experiments, each isolating one variable. Experiment A gives e<sub>1</sub> = 3 (suggestive). Experiment B gives e<sub>2</sub> = 4 (suggestive). Neither is strong alone. But e<sub>1</sub> &times; e<sub>2</sub> = 12, strong combined evidence, valid with no correction.</p>
+
+    <p>Change your test, your sampling strategy, your hypothesis mid-stream. The evidence still composes. The supermartingale guarantee holds regardless. Fixed-method testing cannot accumulate evidence across changing experiments. E-values can.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Code: e-value trajectory for a sequential test</h2>
+
+    <p>A simple sequential test. Observations arrive one at a time. Under the null they are draws from N(0, 1), the standard normal. Under the alternative, N(&mu;, 1) for some &mu; &gt; 0. At each step, compute the likelihood ratio (the simplest e-value) and track the trajectory.</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code><span class="hl-keyword">import</span> math
+<span class="hl-keyword">import</span> random
+
+<span class="hl-keyword">def</span> <span class="hl-builtin">e_value_trajectory</span>(observations, mu_alt=<span class="hl-number">0.5</span>):
+    <span class="hl-string">"""Compute cumulative e-value trajectory via likelihood ratio.
+
+    E-value at step t = product of likelihood ratios up to t.
+    Under H0: X_i ~ N(0,1). Under H1: X_i ~ N(mu_alt, 1).
+    Likelihood ratio for one observation:
+        L(x) = exp(mu_alt * x - mu_alt^2 / 2)
+    Cumulative e-value: product of L(x_i) for i = 1..t.
+    """</span>
+    trajectory = []
+    log_e = <span class="hl-number">0.0</span>
+
+    <span class="hl-keyword">for</span> x <span class="hl-keyword">in</span> observations:
+        <span class="hl-comment"># Log-likelihood ratio for one observation</span>
+        log_lr = mu_alt * x - (mu_alt ** <span class="hl-number">2</span>) / <span class="hl-number">2</span>
+        log_e += log_lr
+        trajectory.append(math.exp(log_e))
+
+    <span class="hl-keyword">return</span> trajectory
+
+<span class="hl-keyword">def</span> <span class="hl-builtin">p_value_at_t</span>(observations):
+    <span class="hl-string">"""Two-sided z-test p-value computed at the end of the sample."""</span>
+    n = <span class="hl-builtin">len</span>(observations)
+    <span class="hl-keyword">if</span> n == <span class="hl-number">0</span>:
+        <span class="hl-keyword">return</span> <span class="hl-number">1.0</span>
+    mean = <span class="hl-builtin">sum</span>(observations) / n
+    z = mean * math.sqrt(n)
+    <span class="hl-comment"># One-sided p-value via normal CDF approximation</span>
+    p = <span class="hl-number">0.5</span> * math.erfc(z / math.sqrt(<span class="hl-number">2</span>))
+    <span class="hl-keyword">return</span> p
+
+
+<span class="hl-comment"># --- Scenario 1: Null is true (no effect) ---</span>
+random.seed(<span class="hl-number">42</span>)
+null_obs = [random.gauss(<span class="hl-number">0</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">100</span>)]
+null_traj = e_value_trajectory(null_obs)
+
+<span class="hl-builtin">print</span>(<span class="hl-string">"=== Null is true (no real effect) ==="</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=10:  &#123;null_traj[9]:.4f&#125;"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=50:  &#123;null_traj[49]:.4f&#125;"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=100: &#123;null_traj[99]:.4f&#125;"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=100: &#123;p_value_at_t(null_obs):.4f&#125;"</span>)
+<span class="hl-builtin">print</span>()
+
+<span class="hl-comment"># --- Scenario 2: Alternative is true (real effect, mu=0.3) ---</span>
+alt_obs = [random.gauss(<span class="hl-number">0.3</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">100</span>)]
+alt_traj = e_value_trajectory(alt_obs, mu_alt=<span class="hl-number">0.5</span>)
+
+<span class="hl-builtin">print</span>(<span class="hl-string">"=== Alternative is true (mu=0.3) ==="</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=10:  &#123;alt_traj[9]:.4f&#125;"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=50:  &#123;alt_traj[49]:.4f&#125;"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=100: &#123;alt_traj[99]:.4f&#125;"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=100: &#123;p_value_at_t(alt_obs):.4f&#125;"</span>)
+<span class="hl-builtin">print</span>()
+
+<span class="hl-comment"># --- Scenario 3: System with feedback (effect reverses at t=50) ---</span>
+feedback_obs = (
+    [random.gauss(<span class="hl-number">0.5</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">50</span>)] +  <span class="hl-comment"># positive effect</span>
+    [random.gauss(-<span class="hl-number">0.3</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">50</span>)]   <span class="hl-comment"># effect reverses</span>
+)
+feedback_traj = e_value_trajectory(feedback_obs, mu_alt=<span class="hl-number">0.5</span>)
+
+<span class="hl-builtin">print</span>(<span class="hl-string">"=== Feedback system (effect reverses at t=50) ==="</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=25:  &#123;feedback_traj[24]:.4f&#125;  (rising)"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=50:  &#123;feedback_traj[49]:.4f&#125;  (peak)"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=75:  &#123;feedback_traj[74]:.4f&#125;  (falling)"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=100: &#123;feedback_traj[99]:.4f&#125;  (collapsed)"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=50:  &#123;p_value_at_t(feedback_obs[:50]):.4f&#125;  (snapshot at peak)"</span>)
+<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=100: &#123;p_value_at_t(feedback_obs):.4f&#125;  (snapshot at end)"</span>)</code></pre>
+
+    <p class="text-gray-500 text-sm mt-2 mb-6">Output:</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>=== Null is true (no real effect) ===
+E-value at t=10:  0.1432
+E-value at t=50:  0.0005
+E-value at t=100: 0.0001
+P-value at t=100: 0.2802
+
+=== Alternative is true (mu=0.3) ===
+E-value at t=10:  2.3119
+E-value at t=50:  68.6328
+E-value at t=100: 73236.5661
+P-value at t=100: 0.0000
+
+=== Feedback system (effect reverses at t=50) ===
+E-value at t=25:  122.3931  (rising)
+E-value at t=50:  1161.3707  (peak)
+E-value at t=75:  1.5770  (falling)
+E-value at t=100: 0.0027  (collapsed)
+P-value at t=50:  0.0001  (snapshot at peak)
+P-value at t=100: 0.0942  (snapshot at end)</code></pre>
+
+    <figure class="my-8">
+      <div class="overflow-x-auto">
+      <svg viewBox="0 0 790 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three e-value trajectories: null true drifts down, real effect compounds upward, feedback system rises then collapses">
+<g transform="translate(0,0)">
+<text x="139" y="14" text-anchor="middle" fill="#d4d4d8" font-size="13">Null true</text>
+<line x1="34" y1="173.6" x2="244" y2="173.6" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="177.6" text-anchor="end" fill="#71717a" font-size="10">10⁻⁴</text>
+<line x1="34" y1="111.0" x2="244" y2="111.0" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="115.0" text-anchor="end" fill="#71717a" font-size="10">1</text>
+<line x1="34" y1="48.4" x2="244" y2="48.4" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="52.4" text-anchor="end" fill="#71717a" font-size="10">10⁴</text>
+<line x1="34" y1="111.0" x2="244" y2="111.0" stroke="#71717a" stroke-width="1" stroke-dasharray="5,4"/>
+<line x1="34" y1="90.6" x2="244" y2="90.6" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2,3"/>
+<text x="37" y="86.6" fill="#8b5cf6" font-size="10">e = 20</text>
+<line x1="34" y1="196" x2="244" y2="196" stroke="#52525b" stroke-width="1"/>
+<text x="34.0" y="210" text-anchor="middle" fill="#71717a" font-size="10">0</text>
+<text x="140.1" y="210" text-anchor="middle" fill="#71717a" font-size="10">50</text>
+<text x="244.0" y="210" text-anchor="middle" fill="#71717a" font-size="10">100</text>
+<path d="M34.0,112.3 L36.1,113.8 L38.2,115.0 L40.4,113.5 L42.5,114.8 L44.6,120.7 L46.7,120.4 L48.8,122.2 L51.0,123.8 L53.1,124.2 L55.2,124.3 L57.3,121.2 L59.5,119.8 L61.6,120.3 L63.7,123.6 L65.8,127.9 L67.9,127.9 L70.1,124.3 L72.2,125.0 L74.3,126.2 L76.4,125.3 L78.5,131.1 L80.7,133.0 L82.8,132.2 L84.9,130.1 L87.0,131.7 L89.2,131.3 L91.3,131.3 L93.4,129.5 L95.5,134.1 L97.6,133.0 L99.8,139.0 L101.9,148.8 L104.0,151.7 L106.1,155.7 L108.2,153.5 L110.4,152.1 L112.5,157.1 L114.6,155.1 L116.7,159.4 L118.8,160.5 L121.0,162.4 L123.1,162.8 L125.2,160.9 L127.3,159.6 L129.5,159.2 L131.6,157.9 L133.7,157.1 L135.8,160.1 L137.9,163.4 L140.1,165.8 L142.2,165.0 L144.3,166.7 L146.4,159.6 L148.5,163.2 L150.7,167.8 L152.8,166.0 L154.9,162.0 L157.0,161.2 L159.2,159.2 L161.3,155.2 L163.4,156.3 L165.5,162.0 L167.6,164.7 L169.8,162.3 L171.9,168.1 L174.0,168.8 L176.1,168.8 L178.2,170.7 L180.4,169.1 L182.5,168.0 L184.6,160.9 L186.7,159.7 L188.8,162.6 L191.0,165.4 L193.1,169.0 L195.2,166.7 L197.3,169.4 L199.5,170.5 L201.6,168.8 L203.7,172.1 L205.8,174.0 L207.9,181.1 L210.1,185.6 L212.2,188.4 L214.3,187.8 L216.4,184.6 L218.5,185.5 L220.7,185.5 L222.8,185.8 L224.9,182.9 L227.0,180.8 L229.2,180.7 L231.3,185.0 L233.4,182.7 L235.5,182.3 L237.6,179.0 L239.8,179.9 L241.9,174.1 L244.0,176.2" fill="none" stroke="#a1a1aa" stroke-width="1.8"/>
+<text x="140.1" y="222" text-anchor="middle" fill="#71717a" font-size="10">observation t</text>
+</g>
+<g transform="translate(270,0)">
+<text x="139" y="14" text-anchor="middle" fill="#d4d4d8" font-size="13">Real effect</text>
+<line x1="34" y1="173.6" x2="244" y2="173.6" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="177.6" text-anchor="end" fill="#71717a" font-size="10">10⁻⁴</text>
+<line x1="34" y1="111.0" x2="244" y2="111.0" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="115.0" text-anchor="end" fill="#71717a" font-size="10">1</text>
+<line x1="34" y1="48.4" x2="244" y2="48.4" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="52.4" text-anchor="end" fill="#71717a" font-size="10">10⁴</text>
+<line x1="34" y1="111.0" x2="244" y2="111.0" stroke="#71717a" stroke-width="1" stroke-dasharray="5,4"/>
+<line x1="34" y1="90.6" x2="244" y2="90.6" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2,3"/>
+<line x1="34" y1="196" x2="244" y2="196" stroke="#52525b" stroke-width="1"/>
+<text x="34.0" y="210" text-anchor="middle" fill="#71717a" font-size="10">0</text>
+<text x="140.1" y="210" text-anchor="middle" fill="#71717a" font-size="10">50</text>
+<text x="244.0" y="210" text-anchor="middle" fill="#71717a" font-size="10">100</text>
+<path d="M34.0,105.4 L36.1,104.9 L38.2,106.4 L40.4,110.1 L42.5,110.4 L44.6,105.4 L46.7,102.5 L48.8,100.0 L51.0,107.9 L53.1,105.3 L55.2,103.2 L57.3,104.9 L59.5,106.9 L61.6,106.7 L63.7,100.7 L65.8,104.1 L67.9,105.4 L70.1,100.6 L72.2,102.0 L74.3,103.0 L76.4,102.5 L78.5,106.6 L80.7,105.7 L82.8,109.6 L84.9,106.4 L87.0,106.2 L89.2,98.3 L91.3,97.2 L93.4,92.4 L95.5,96.6 L97.6,96.9 L99.8,95.6 L101.9,89.5 L104.0,95.0 L106.1,91.5 L108.2,89.3 L110.4,83.9 L112.5,81.3 L114.6,81.0 L116.7,82.6 L118.8,86.7 L121.0,85.8 L123.1,86.3 L125.2,79.3 L127.3,81.2 L129.5,79.9 L131.6,85.1 L133.7,86.3 L135.8,85.2 L137.9,82.2 L140.1,77.1 L142.2,77.1 L144.3,80.8 L146.4,79.0 L148.5,77.1 L150.7,75.3 L152.8,77.5 L154.9,73.5 L157.0,73.0 L159.2,70.4 L161.3,65.9 L163.4,63.7 L165.5,62.5 L167.6,55.1 L169.8,54.1 L171.9,54.9 L174.0,54.3 L176.1,49.1 L178.2,48.6 L180.4,46.6 L182.5,42.4 L184.6,44.0 L186.7,49.7 L188.8,48.5 L191.0,47.5 L193.1,49.4 L195.2,46.3 L197.3,44.1 L199.5,47.3 L201.6,45.3 L203.7,45.8 L205.8,50.7 L207.9,49.0 L210.1,49.0 L212.2,51.3 L214.3,49.4 L216.4,47.6 L218.5,49.4 L220.7,47.8 L222.8,44.2 L224.9,46.5 L227.0,45.0 L229.2,44.8 L231.3,36.9 L233.4,43.1 L235.5,40.6 L237.6,41.4 L239.8,41.6 L241.9,35.0 L244.0,34.8" fill="none" stroke="#4ade80" stroke-width="1.8"/>
+<text x="140.1" y="222" text-anchor="middle" fill="#71717a" font-size="10">observation t</text>
+</g>
+<g transform="translate(540,0)">
+<text x="139" y="14" text-anchor="middle" fill="#d4d4d8" font-size="13">Feedback system</text>
+<line x1="34" y1="173.6" x2="244" y2="173.6" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="177.6" text-anchor="end" fill="#71717a" font-size="10">10⁻⁴</text>
+<line x1="34" y1="111.0" x2="244" y2="111.0" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="115.0" text-anchor="end" fill="#71717a" font-size="10">1</text>
+<line x1="34" y1="48.4" x2="244" y2="48.4" stroke="#3f3f46" stroke-width="1"/>
+<text x="29" y="52.4" text-anchor="end" fill="#71717a" font-size="10">10⁴</text>
+<line x1="34" y1="111.0" x2="244" y2="111.0" stroke="#71717a" stroke-width="1" stroke-dasharray="5,4"/>
+<line x1="34" y1="90.6" x2="244" y2="90.6" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="2,3"/>
+<line x1="34" y1="196" x2="244" y2="196" stroke="#52525b" stroke-width="1"/>
+<text x="34.0" y="210" text-anchor="middle" fill="#71717a" font-size="10">0</text>
+<text x="140.1" y="210" text-anchor="middle" fill="#71717a" font-size="10">50</text>
+<text x="244.0" y="210" text-anchor="middle" fill="#71717a" font-size="10">100</text>
+<path d="M34.0,102.5 L36.1,103.2 L38.2,101.1 L40.4,102.0 L42.5,103.5 L44.6,102.4 L46.7,102.5 L48.8,101.0 L51.0,107.3 L53.1,99.6 L55.2,99.3 L57.3,92.6 L59.5,95.1 L61.6,93.3 L63.7,81.7 L65.8,83.8 L67.9,88.0 L70.1,89.0 L72.2,86.6 L74.3,83.4 L76.4,78.1 L78.5,78.1 L80.7,82.7 L82.8,83.4 L84.9,78.3 L87.0,75.9 L89.2,81.7 L91.3,81.0 L93.4,75.3 L95.5,67.3 L97.6,64.5 L99.8,62.6 L101.9,66.0 L104.0,68.0 L106.1,67.0 L108.2,64.4 L110.4,61.6 L112.5,62.4 L114.6,65.4 L116.7,67.2 L118.8,70.3 L121.0,67.3 L123.1,74.3 L125.2,74.6 L127.3,72.2 L129.5,66.2 L131.6,65.1 L133.7,60.8 L135.8,61.3 L137.9,63.0 L140.1,67.2 L142.2,63.8 L144.3,62.3 L146.4,62.5 L148.5,53.1 L150.7,55.1 L152.8,54.8 L154.9,55.7 L157.0,58.3 L159.2,52.3 L161.3,49.0 L163.4,55.7 L165.5,58.9 L167.6,59.3 L169.8,58.5 L171.9,65.0 L174.0,74.5 L176.1,82.9 L178.2,85.0 L180.4,87.2 L182.5,87.9 L184.6,92.4 L186.7,98.4 L188.8,107.2 L191.0,107.9 L193.1,108.5 L195.2,107.0 L197.3,106.2 L199.5,108.7 L201.6,106.0 L203.7,108.3 L205.8,112.4 L207.9,116.1 L210.1,119.9 L212.2,129.2 L214.3,130.5 L216.4,131.5 L218.5,134.6 L220.7,138.9 L222.8,139.5 L224.9,135.6 L227.0,137.3 L229.2,140.9 L231.3,144.8 L233.4,146.9 L235.5,153.1 L237.6,155.4 L239.8,157.0 L241.9,152.6 L244.0,151.3" fill="none" stroke="#f59e0b" stroke-width="1.8"/>
+<line x1="140.1" y1="26" x2="140.1" y2="196" stroke="#ef4444" stroke-width="1" stroke-dasharray="2,3"/>
+<text x="140.1" y="222" text-anchor="middle" fill="#ef4444" font-size="10">effect reverses</text>
+</g>
+</svg>
+      </div>
+      <figcaption class="text-gray-500 text-sm mt-2">The three trajectories, plotted from the code above (log scale). Under a true null the bankroll decays. Under a real effect it compounds past e&nbsp;=&nbsp;20 and keeps going. In the feedback system it soars, then gives everything back after the effect reverses at t&nbsp;=&nbsp;50; a snapshot taken at the peak ships the product.</figcaption>
+    </figure>
+
+    <p>Three scenarios. Three stories.</p>
+
+    <p><em>Null is true:</em> the e-value drops below 1 immediately and keeps falling. By t=100, e = 0.0001. The bet against the null is thoroughly lost. Under the null, honest betting cannot grow in expectation. Individual paths fluctuate, but the trend is downward.</p>
+
+    <p><em>Alternative is true:</em> the e-value climbs steadily. By t=100, e = 73,237. You could have stopped at t=50 (e = 69, already strong) or continued. The guarantee held at every peek. Monotone climb: accumulating.</p>
+
+    <p><em>Feedback system:</em> the Google ad-load scenario. The effect is real for the first 50 observations, then reverses. The e-value climbs to 1,161 at t=50, then <em>collapses</em> as the reversal erodes the accumulated evidence. By t=100, e = 0.003. Meanwhile: p at t=50 = 0.0001 (highly significant), p at t=100 = 0.09 (borderline). Two snapshots, two conclusions, no way to reconcile them. The e-value trajectory tells the whole story: rise, peak, collapse. The shape of the trajectory is the shape of the system.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>The p-value's guarantee demands one look</h2>
+
+    <p>A p-value controls the type I error rate, the false positive rate, <em>at a single, predetermined stopping time</em>. Fix n in advance, compute once: P(p &lt; &alpha; | H<sub>0</sub>) = &alpha;. Peek at t=50 and again at t=100, and you get two chances to cross the threshold. The error rate inflates.</p>
+
+    <p>An e-value controls the error rate <em>uniformly over all stopping times</em>. By Markov's inequality and the supermartingale property, for any stopping time &tau;:</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>P(e<sub>&tau;</sub> &ge; 1/&alpha;) &le; &alpha; &nbsp;&nbsp; under the null</code></pre>
+
+    <p>This holds for <em>any</em> stopping time: fixed, random, data-dependent, adversarial. The proof is three lines from Doob's optional stopping theorem. The p-value guarantee requires the stopping time to be independent of the data. The e-value guarantee does not.</p>
+
+    <p>The tradeoff: at any single sample size, a p-value test is more powerful. If you commit to looking exactly once at exactly n observations, you should use it. The e-value pays a constant-factor efficiency loss at each time point. What it buys is the entire trajectory.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Connection to Part II</h2>
+
+    <p>The economy of research (<a href="/reading/methodeutics/ch08-economy-of-research/">Chapter 8</a>) selects which experiment to run. The e-value tracks what the experiment says over time. The two connect directly:</p>
+
+    <ol class="list-decimal pl-5 mb-4">
+      <li class="mb-2"><em>Generate</em> hypotheses via abduction (Chapters 4&ndash;6).</li>
+      <li class="mb-2"><em>Select</em> the next experiment via information gain per unit cost (Chapter 8).</li>
+      <li class="mb-2"><em>Run</em> the experiment and track the e-value trajectory (Chapters 9&ndash;10).</li>
+      <li class="mb-2"><em>Read</em> the trajectory's shape to classify the system's dynamics (Chapter 11).</li>
+    </ol>
+
+    <p>Step 3 is new. Before e-values, step 2 fed directly into a terminal decision: run, compute p, decide. Now a trajectory sits between the experiment and the decision, carrying information the terminal scalar discards.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Trajectory shape is ambiguous without classification</h2>
+
+    <p>You have the trajectory. It oscillates. Is the system fighting itself (MCAS vs. pilots), or is your measurement just noisy?</p>
+
+    <p>Structural oscillation (cyclic dynamics in the system) and statistical oscillation (weak effect plus finite-sample noise) look the same in the raw trajectory. The trajectory alone cannot distinguish them.</p>
+
+    <p>Classifying whether evidence is converging, diverging, oscillating, or chaotic requires tools from dynamical systems theory: convergence rates, <a href="https://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponents</a>, stability analysis. These tools apply directly to evidence trajectories. <a href="/reading/methodeutics/ch11-four-bins/">Chapter 11</a> builds the classification scheme.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>10.1</strong> A colleague reports e = 15 against the null after 40 observations and asks whether looking again at observation 60 would spoil the guarantee, the way peeking spoils a p-value. Answer in two sentences, naming the property that settles the question.</p>
+
+    <p class="mb-3"><strong>10.2</strong> You suspect a coin comes up heads 60% of the time; the null says it is fair. Bet the likelihood ratio each toss: heads multiplies your e-value by 0.6/0.5 = 1.2, tails by 0.4/0.5 = 0.8. The coin comes up H, H, T, H, H. Compute the e-value after each toss. After which toss is the evidence strongest so far? How many consecutive heads from the start would you need to cross e = 20, and what does that number say about how much evidence a 60%-vs-50% distinction carries per toss?</p>
+
+    <p class="mb-3"><strong>10.3</strong> Lab A reports e = 3 against the null that a drug leaves a biomarker unchanged. Lab B, working independently with a different assay, reports e = 4 against the same null. (a) State the combined evidence and the property that licenses the combination. (b) A third lab reports p = 0.04 from a fixed-sample test; explain why it cannot be folded in the same way. (c) Lab B stopped collecting the moment its e-value looked good. Does the product survive? Name the theorem that answers this.</p>
+
+    <p class="mb-3"><strong>10.4</strong> 💻 In the chapter's simulation, move the reversal from t = 50 to t = 90 and rerun. How high does the peak get, and does the collapse finish before t = 100? Then restore the reversal to t = 50 and vary the bet: rerun with mu_alt = 0.1 and mu_alt = 1.0. Which bet loses less of its peak after the reversal? (Hint: a smaller mu_alt is a smaller stake per observation, in both directions.)</p>
+
+    <p class="mb-3"><strong>10.5</strong> ★ Pick a metric you already watch: weekly revenue, resting heart rate, test-suite flake rate. Define a null and a simple alternative, and run a likelihood-ratio bankroll on it for a month. Before you start, write down the e-value at which you will act. At the end, report the trajectory's shape and whether the pre-committed threshold changed how it felt to look at the data every day.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Sources</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Doob 1953</td>
+            <td class="text-gray-400"><em>Stochastic Processes.</em> The optional stopping theorem: supermartingales can't grow in expectation at stopping times.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Robbins &amp; Darling 1967</td>
+            <td class="text-gray-400">"Confidence Sequences for Mean, Variance, and Median." Anytime-valid confidence intervals are achievable.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Shafer 2021</td>
+            <td class="text-gray-400"><a href="/reading/scientific-method/shafer-2021/"><em>Testing by Betting.</em></a> Game-theoretic probability as the foundation for hypothesis testing.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Ramdas et al. 2023</td>
+            <td class="text-gray-400">"<a href="https://arxiv.org/abs/2103.06476">Game-Theoretic Statistics and Safe Anytime-Valid Inference.</a>" Unified treatment of e-values, anytime validity, and composability.</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Gr&uuml;nwald et al. 2024</td>
+            <td class="text-gray-400">"<a href="https://academic.oup.com/jrsssb/article/86/5/1091/7623686">Safe Testing.</a>" E-values as the basis for hypothesis tests that are valid under optional stopping and optional continuation.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/methodeutics/">Methodeutics</a></li>
+      <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 9: Evidence Has a Trajectory</a> &mdash; why snapshots lie, and the casino premise</li>
+      <li><a href="/reading/methodeutics/ch11-four-bins/">Ch 11: Four Bins</a> &mdash; how to read the trajectory's shape</li>
+      <li><a href="/reading/scientific-method/shafer-2021/">Shafer 2021</a> &mdash; testing by betting</li>
+      <li><a href="/reading/scientific-method/ramdas-2023/">Ramdas 2023</a> &mdash; e-values and anytime validity</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
+    <ul>
+      <li><a href="https://arxiv.org/abs/1906.07801">Ramdas et al. 2019, "Admissible Anytime-Valid Sequential Testing" (arXiv)</a></li>
+      <li><a href="https://arxiv.org/abs/2103.06476">Ramdas et al. 2023, "Game-Theoretic Statistics and Safe Anytime-Valid Inference" (arXiv)</a></li>
+      <li><a href="https://academic.oup.com/jrsssb/article/86/5/1091/7623686">Gr&uuml;nwald et al. 2024, "Safe Testing" (JRSS-B)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/E-value_(statistics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>E-value (Wikipedia)</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Martingale_(probability_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Martingale (Wikipedia)</a></li>
+    </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} next={{ href: "/reading/methodeutics/ch11-four-bins/", label: "Four bins" }} />
+
+  </main>
+</Layout>

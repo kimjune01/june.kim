@@ -24,7 +24,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <p style="text-align:right; font-style:normal;">— Arthur Conan Doyle, <em><a href="https://en.wikipedia.org/wiki/The_Adventure_of_Silver_Blaze">The Adventure of Silver Blaze</a></em> (1892)</p>
     </blockquote>
 
-    <p>Holmesian reasoning is usually called deduction. This case is not. You can reconstruct a deductive argument after the fact: dogs bark at strangers; this dog did not bark; therefore the intruder was no stranger. But where did the first premise come from? Holmes knows a thousand things about dogs, stables, night, and strangers. The work is not in the syllogism. It is in selecting which fact to attend to: the silence of the dog rather than the lock, the weather, the groom's alibi, the colour of the horse.</p>
+    <p>Holmesian reasoning is usually called deduction. This case is something else. You can reconstruct a deductive argument after the fact: dogs bark at strangers; this dog did not bark; therefore the intruder was no stranger. But where did the first premise come from? Holmes knows a thousand things about dogs, stables, night, and strangers. The work is not in the syllogism. It is in selecting which fact to attend to: the silence of the dog rather than the lock, the weather, the groom's alibi, the color of the horse.</p>
 
     <p>Absence is the signal; a quiet night is the background. Separating one from the other is the operation the tradition misnamed.</p>
 
@@ -34,9 +34,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Charles Sanders Peirce identified the trichotomy in 1878 and refined it over the next twenty-five years. All three terms derive from Latin <em>ducere</em> ("to lead"):</p>
 
-    <p><strong>Deduction</strong> (<em>de-ducere</em>, "to lead from"): given premises, derive consequences. If all men are mortal and <a href="https://en.wikipedia.org/wiki/Socrates">Socrates</a> is a man, then Socrates is mortal. The conclusion adds nothing not already in the premises. Two millennia of formalisation back it, from Aristotle's syllogisms through <a href="https://en.wikipedia.org/wiki/Gottlob_Frege">Frege</a>'s predicate logic to modern theorem provers, type checkers, and SAT solvers.</p>
+    <p><strong>Deduction</strong> (<em>de-ducere</em>, "to lead from"): given premises, derive consequences. If all men are mortal and <a href="https://en.wikipedia.org/wiki/Socrates">Socrates</a> is a man, then Socrates is mortal. The conclusion adds nothing not already in the premises. Two millennia of formalization back it, from Aristotle's syllogisms through <a href="https://en.wikipedia.org/wiki/Gottlob_Frege">Frege</a>'s predicate logic to modern theorem provers, type checkers, and SAT solvers.</p>
 
-    <p><strong>Induction</strong> (<em>in-ducere</em>, "to lead toward"): given examples, generalise a pattern. Every swan I've seen is white; probably all swans are white. The conclusion extends beyond the observed cases but stays within the same conceptual frame. Bacon elevated it to systematic method in 1620, <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">Fisher</a> and <a href="https://en.wikipedia.org/wiki/Jerzy_Neyman">Neyman</a> formalised it in the twentieth century, and it underpins statistical inference and supervised machine learning.</p>
+    <p><strong>Induction</strong> (<em>in-ducere</em>, "to lead toward"): given examples, generalize a pattern. Every swan I've seen is white; probably all swans are white. The conclusion extends beyond the observed cases but stays within the same conceptual frame. Bacon elevated it to systematic method in 1620, <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">Fisher</a> and <a href="https://en.wikipedia.org/wiki/Jerzy_Neyman">Neyman</a> formalized it in the twentieth century, and it underpins statistical inference and supervised machine learning.</p>
 
     <p><strong>Abduction</strong> (<em>ab-ducere</em>, "to lead away"): given a surprising observation, propose what would make it unsurprising. The lawn is wet but it didn't rain; perhaps the sprinkler ran overnight. The conclusion goes beyond both premises and data. It introduces a new idea. Peirce gave it its classic treatment in 1878 under the name <em>hypothesis</em>, later calling it <em>abduction</em> or <em>retroduction</em>. It still lacks a quantitative framework comparable to deductive validity or statistical inference.</p>
 
@@ -97,7 +97,7 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p>The code makes the symmetry visible: same data, three arrangements, three epistemic statuses.</p>
 
-    <p>The symmetry is also a trap. Peirce fell into it himself: his 1883 Johns Hopkins paper treated hypothesis as a variety of induction, and his 1903 Lowell lecture on abduction says so plainly: "my mind became so preoccupied with Induction that I forgot the peculiarities of Abduction and in that paper I confused it with a particular variety of Induction" (<a href="/peirce/">MS [R] 475</a>). The same lecture states the repaired boundary, and the boundary is temporal:</p>
+    <p>The symmetry is also a trap. Peirce fell into it himself. His 1883 Johns Hopkins paper treated hypothesis as a variety of induction, and his 1903 Lowell lecture on abduction admits it plainly: "my mind became so preoccupied with Induction that I forgot the peculiarities of Abduction and in that paper I confused it with a particular variety of Induction" (<a href="/peirce/">MS [R] 475</a>). The same lecture states the repaired boundary, and the boundary is temporal:</p>
 
     <blockquote>
       <p>"Induction must mean the operation that induces an assent, with or without quantitative modification, to a proposition already put forward ... while Abduction must cover all the operations by which theories and conceptions are engendered."</p>
@@ -114,13 +114,13 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p>Deduction is monadic: it unpacks what the premises already contain. Induction is dyadic: it correlates cases with results. Abduction is triadic: it relates observation, rule, and case irreducibly. Monadic, dyadic, and triadic exhaust the irreducible relation types, so three modes exhaust the kinds of inference.</p>
 
-    <p>Peirce's argument assumes that no relation of arity four or higher is irreducible. Whether that holds depends on how you formalise "irreducible." This book bets that apparent fourth modes reduce to compositions of the three. The claim is empirical, not proven.</p>
+    <p>Peirce's argument assumes that no relation of arity four or higher is irreducible. Whether that holds depends on how you formalise "irreducible." This book bets that apparent fourth modes reduce to compositions of the three. The claim is empirical and still unproven.</p>
 
     <h2>One cycle, self-correcting</h2>
 
     <p>The three modes form a cycle. Each takes one kind of thing and produces another:</p>
 
-    <p><em>Abduction</em>: Observation → Theory. Something surprising — a symptom, a bug, an anomaly — provokes a hypothesis. New ideas enter inquiry through abduction.</p>
+    <p><em>Abduction</em>: Observation → Theory. Something surprising (a symptom, a bug, an anomaly) provokes a hypothesis. New ideas enter inquiry through abduction.</p>
 
     <p><em>Deduction</em>: Theory → Experiment. The hypothesis yields consequences. If this theory holds, we should observe X under conditions Y. Knowledge becomes procedure.</p>
 
@@ -136,9 +136,9 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p>The triangle appears in medicine, engineering, science, and daily life. Vocabulary changes; structure does not.</p>
 
-    <p><em>Medicine.</em> A patient presents with fever, joint pain, and a butterfly-shaped facial rash. The doctor proposes <a href="https://en.wikipedia.org/wiki/Lupus">lupus</a> (abduction). If lupus, antinuclear antibodies should be elevated (deduction). The lab runs the <a href="https://en.wikipedia.org/wiki/Antinuclear_antibody">ANA test</a> and reports a high titer. The doctor updates confidence given the test's sensitivity and the patient's presentation (induction). A positive ANA supports but does not confirm lupus; ANA is sensitive, not specific. The new observation narrows the differential or forces a new hypothesis.</p>
+    <p><em>Medicine.</em> A patient presents with fever, joint pain, and a butterfly-shaped facial rash. The doctor proposes <a href="https://en.wikipedia.org/wiki/Lupus">lupus</a> (abduction). If lupus, antinuclear antibodies should be elevated (deduction). The lab runs the <a href="https://en.wikipedia.org/wiki/Antinuclear_antibody">ANA test</a> and reports a high titer. The doctor updates confidence given the test's sensitivity and the patient's presentation (induction). A positive ANA supports but does not confirm lupus; the test is sensitive but not specific. The new observation narrows the differential or forces a new hypothesis.</p>
 
-    <p><em>Debugging.</em> A server returns 500 errors on every third request. The engineer suspects connection pool exhaustion (abduction). If the pool is exhausted, active connections should climb to the limit before failures begin (deduction). She checks the connection count at failure time (induction). Errors persist — wrong hypothesis. She abduces again: maybe a thread-safety issue in the request handler.</p>
+    <p><em>Debugging.</em> A server returns 500 errors on every third request. The engineer suspects connection pool exhaustion (abduction). If the pool is exhausted, active connections should climb to the limit before failures begin (deduction). She checks the connection count at failure time (induction). The pool is nowhere near its limit: wrong hypothesis. She abduces again: maybe a thread-safety issue in the request handler.</p>
 
     <p><em>Science.</em> <a href="https://en.wikipedia.org/wiki/Charles_Darwin">Darwin</a> observed that finch beak shapes vary across the <a href="https://en.wikipedia.org/wiki/Darwin%27s_finches">Galapagos islands</a>. (The history is messier than this schematic suggests, but the logical structure holds.) He proposed that beak shape tracks food source. Different environments select for different beaks (abduction). If natural selection drives beak shape, islands with hard seeds should have finches with stronger beaks (deduction). Decades of field measurement confirmed the correlation (induction).</p>
 
@@ -212,6 +212,14 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
 
     <p>Abduction keeps getting rediscovered. At least eight entries across six fields describe the same pattern: given an observation, separate what demands attention from what can be held constant. Gestalt psychologists call it <a href="https://en.wikipedia.org/wiki/Figure%E2%80%93ground_(perception)">figure-ground segregation</a>; <a href="https://en.wikipedia.org/wiki/Jean_Piaget">Piaget</a>, equilibration; <a href="https://dl.acm.org/doi/10.1145/1480881.1480917">Calcagno</a>, bi-abduction. Each field coined its own term. Chapter 3 lays out the full table and extracts the common structure.</p>
 
+    <h2>Inference to the best explanation is a different operation</h2>
+
+    <p>Philosophers often treat abduction as a synonym for <a href="https://plato.stanford.edu/entries/abduction/">inference to the best explanation</a>. <a href="https://doi.org/10.2307/2183532">Harman (1965)</a> introduced that phrase and presented it as the modern name for Peirce's abduction, and the equation stuck. The two operations answer different questions, and everything this book builds runs on the difference.</p>
+
+    <p>Inference to the best explanation is a rule of acceptance. Given rival explanations of the evidence, it licenses concluding that the best one is true. Its classic difficulty follows immediately: van Fraassen objected that the best available explanation may be the best of a bad lot, so ranking first among rivals is no ground for belief. Peirce's abduction is a rule of pursuit. Its conclusion is a question mark. "Abduction commits us to nothing," Peirce wrote; "it merely causes a hypothesis to be set down upon our docket of cases to be tried" (<a href="/peirce/">MS [R] 475</a>). Nothing is accepted at the abductive step. Acceptance waits for induction, after the tests run. Notice that the bad-lot objection, fatal to a rule of acceptance, glances off a rule of pursuit: docketing the best of a bad lot costs one test, and the test is what exposes the lot as bad.</p>
+
+    <p>The difference is what gives this book a subject. If abduction ended by accepting the best explanation, Chapter 8's economy of research would have nothing left to do; the ranking would already be a verdict. Because abduction only files candidates, deciding which to test first, at what cost, and when to quit is the entire remaining problem, and the following sixteen chapters are that problem. Where acceptance finally happens, it will be earned by a trajectory of survived tests (Chapter 9), never by explanatory beauty.</p>
+
     <h2>Missing ruler</h2>
 
     <p>Three modes, defined. A cycle connecting them. Cross-field recurrence. Decomposition rules that reduce complex reasoning to compositions of the three.</p>
@@ -221,6 +229,22 @@ print("Abduce:", case,   "  (given rule and result)")</code></pre>
     <p>Peirce addressed this late in life with two terms: <strong>security</strong> (how certain is the conclusion?) and <strong>uberty</strong> (how much new knowledge does it produce?). He claimed security and uberty are inversely related. The tradeoff is structural. If he's right, it constrains the design space of any system that reasons. If he's wrong, abduction is just guessing with extra syllables.</p>
 
     <p>That tradeoff is the subject of <a href="/reading/methodeutics/ch02-security-uberty/">Chapter 2</a>.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>1.1</strong> Peirce's repaired boundary is temporal: induction evaluates a proposition already put forward, abduction is whatever put it there. Apply the already-put-forward test to a jury weighing an alibi and to the detective who first proposed the suspect. Which mode is each performing, and why?</p>
+
+    <p class="mb-3"><strong>1.2</strong> Classify the inference in each scenario as deduction, induction, or abduction, and write it out as a Rule, Case, Result syllogism: (a) your cat sprints to the kitchen at the sound of the can opener; (b) a sommelier tastes an unfamiliar wine and says "volcanic soil, probably Etna"; (c) a compiler rejects your program because the function requires an integer and you passed a string; (d) a poll of 1,200 voters projects the winner of an election. One of the four compresses two modes into a single act; identify which, and separate them.</p>
+
+    <p class="mb-3"><strong>1.3</strong> Peirce rotated one bean example through all three modes. Do the same with a triple from a domain you know well: choose a Rule, a Case, and a Result, write the three arrangements, and mark each conclusion Certain, Probable, or Plausible. Then say which arrangement you perform most often in a normal week.</p>
+
+    <p class="mb-3"><strong>1.4</strong> 💻 The bean code prints three fixed arrangements. Write a program that takes the three propositions as strings, enumerates every way of choosing two as premises and one as conclusion, and prints the distinct inference patterns (hint: there are exactly as many as there are choices of conclusion). Then explain why this counting argument is weaker than Peirce's monadic, dyadic, triadic argument for why the modes number three.</p>
+
+    <p class="mb-3"><strong>1.5</strong> ★ Reconstruct a real inquiry you ran recently (a debugging session, a medical visit, a burnt dinner) as a walk around the triangle: list each step, label its edge as abduction, deduction, or induction, and find at least one place where you skipped an edge. What did the skip cost, or why was it safe?</p>
 
     <hr class="border-zinc-700 my-8"/>
 

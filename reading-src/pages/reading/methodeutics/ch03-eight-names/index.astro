@@ -13,18 +13,18 @@ import Repl from '../../../../components/Repl';
     <p class="text-gray-400 text-sm mb-6">Chapter 3 · Rubin 1915, Koffka 1935, Piaget 1975, Laird et al. 1987, Calcagno et al. 2009, Pearl 2009, Lake et al. 2015, Arjovsky et al. 2019</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Six fields independently formalized operations that share the same role structure: isolate a salient part against a retained background. Each formalized it separately: bi-abduction, figure-ground, equilibration, intervention. Eight names, no crosswalk.</p>
+      <p class="text-lg" style="max-width:none">Six fields independently formalized the same role structure: isolate a salient part against a retained background. Bi-abduction, figure-ground, equilibration, intervention. Eight names, no crosswalk.</p>
     </div>
 
     <h2>Citation gap</h2>
 
-    <p>Calcagno et al. (2009) introduced bi-abduction to scale separation-logic analysis at Facebook. They cite Peirce zero times. Rubin (1915) described figure-ground segregation in visual perception, citing Gestalt colleagues, never the pragmatists. Piaget (1975) formalized equilibration as the mechanism of cognitive development. He cited Piaget. Pearl (2009) built a calculus of interventions for causal inference, citing Rubin (Donald, not Edgar): the statistician, not the psychologist. Laird, Rosenbloom, and Newell (1987) formalized chunking in Soar. Lake et al. (2015) proposed Bayesian program learning for one-shot concept acquisition. Arjovsky et al. (2019) separated invariant from spurious features in domain generalization.</p>
+    <p>Calcagno et al. (2009) introduced bi-abduction to scale separation-logic analysis at Facebook. They cite Peirce zero times. Rubin (1915) described figure-ground segregation in visual perception, citing Gestalt colleagues, never the pragmatists. Piaget (1975) formalized equilibration as the mechanism of cognitive development. He cited Piaget. Pearl (2009) built a calculus of interventions for causal inference, citing a different Rubin: Donald, the statistician. Laird, Rosenbloom, and Newell (1987) formalized chunking in Soar. Lake et al. (2015) proposed Bayesian program learning for one-shot concept acquisition. Arjovsky et al. (2019) separated invariant from spurious features in domain generalization.</p>
 
     <p>Eight entries, six fields, separate citation networks. The pattern recurs: given an observation, separate what demands attention from what can be retained. The words differ: anti-frame, figure, perturbation, treatment variable, surprising fact, invariant feature. The role structure is the same.</p>
 
     <p>Each field defines a concrete mechanism: computational (bi-abduction, IRM), perceptual (figure-ground), or developmental (equilibration). Each takes an input and partitions it: salient (signal, figure, novelty) versus retained (noise, ground, frame). That recurrence is evidence for a shared abstraction. Chapter 4 proposes the formal identity.</p>
 
-    <h2>Table</h2>
+    <h2>The eight rows</h2>
 
     <p>Chapter 2 established that abduction has maximal <a href="/reading/methodeutics/ch02-security-uberty/">uberty</a>: the only mode in Peirce's triad that introduces explanatory hypotheses. The question: is this fertile, insecure mode a single role structure or a family of unrelated operations that happen to look similar? The claim is not that a heap frame, a visual ground, and an exogenous variable are interchangeable. They are not. The claim is that each formalism begins by assigning the same roles inside a state: selected part, retained context, and admissible variation. The table below is the evidence.</p>
 
@@ -50,12 +50,12 @@ import Repl from '../../../../components/Repl';
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Cognitive arch (Soar)</td>
             <td class="pr-3 text-gray-300">Chunking</td>
-            <td class="pr-3 text-gray-400">Tested WMEs (the result's dependencies)</td>
-            <td class="pr-3 text-gray-400">Untested WMEs (dropped from the rule)</td>
+            <td class="pr-3 text-gray-400">Tested working-memory elements (the result's dependencies)</td>
+            <td class="pr-3 text-gray-400">Untested elements (dropped from the rule)</td>
             <td class="text-gray-400"><a href="https://apps.dtic.mil/sti/tr/pdf/ADA188742.pdf">Laird et al. 1987</a></td>
           </tr>
           <tr class="border-b border-zinc-800">
-            <td class="py-2 pr-3 pl-0 text-gray-300">Cognitive arch (BPL)</td>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Cognitive arch (Bayesian program learning)</td>
             <td class="pr-3 text-gray-300">Program induction</td>
             <td class="pr-3 text-gray-400">Type (structural program)</td>
             <td class="pr-3 text-gray-400">Token-level variance (marginalized out)</td>
@@ -114,7 +114,7 @@ import Repl from '../../../../components/Repl';
 
     <p>When Soar cannot decide which operator to apply, it hits an impasse and drops into a subgoal, reasoning until it finds a result. Chunking compiles that result into a production rule. Soar backtraces the dependencies: the working-memory elements the subgoal actually tested become the rule's conditions (figure); the elements that were present but never tested are dropped (ground). Next time those conditions hold, the chunk fires directly. No impasse, no subgoal.</p>
 
-    <p>The partition is real, but it is exact, not fertile. Chunking caches a result the subgoal already derived; it proposes no new hypothesis and cannot be wrong the way an abduction can. This is the secure limit of the operation: deductive compilation (explanation-based generalization), not discovery. The genuinely abductive moment in Soar is upstream, in how the subgoal breaks the impasse, not in the chunk that records the answer. The figure-ground <em>partition</em> is more general than abduction; chunking is what it looks like when the insecurity is gone.</p>
+    <p>The partition is real, but it is exact rather than fertile. Chunking caches a result the subgoal already derived; it proposes no new hypothesis and cannot be wrong the way an abduction can. This is the secure limit of the operation: deductive compilation (explanation-based generalization) with the discovery already finished. The genuinely abductive moment in Soar sits upstream, in how the subgoal breaks the impasse; the chunk only records the answer. The figure-ground <em>partition</em> is more general than abduction; chunking is what it looks like when the insecurity is gone.</p>
 
     <h3>Program induction (Lake, Salakhutdinov, Tenenbaum 2015)</h3>
 
@@ -137,6 +137,7 @@ import Repl from '../../../../components/Repl';
     <h3>Intervention (Pearl 2009)</h3>
 
     <p>Pearl's <em>do</em>-calculus formalizes the difference between observing and intervening. Observing <em>X=x</em> conditions on it; the causal structure stays intact. Intervening <em>do(X=x)</em> sets it, severing the incoming arrows to <em>X</em>. The treatment variable is figure: what you changed. The background variables <em>U</em> are ground: held fixed across the intervention.</p>
+
     <h3>Abduction (Peirce 1903)</h3>
 
     <p>Peirce's formulation is the most general. A surprising fact <em>C</em> is observed. If <em>A</em> were true, <em>C</em> would be a matter of course. Therefore there is reason to suspect <em>A</em>. The surprising fact is figure: what stands out against settled expectations. Settled expectations are ground: the background model against which surprise registers.</p>
@@ -188,7 +189,7 @@ footprint, frame = partition(heap_after, heap_before)
 print(f"footprint: {footprint}")
 print(f"frame: {frame}")`} />
 
-    <p>The vocabulary changes (figure/ground, changed/held, footprint/frame) but the role assignment is the same dict comparison every time. The toy flattens real semantics deliberately. It shows the shared role structure, not the domain-specific meaning of each partition. The separation-logic example is the loosest fit. A real frame includes cells read but unchanged, not just cells with different values. The toy version captures the structural roles without full semantics. Chapter 4 formalizes the shared primitive as diff.</p>
+    <p>The vocabulary changes (figure/ground, changed/held, footprint/frame) but the role assignment is the same dict comparison every time. The toy flattens real semantics deliberately: it shows the shared role structure and drops each domain's meaning. Of the three examples, separation logic is the loosest fit. A real frame also includes cells that are read but unchanged; the toy counts only cells whose values differ. Chapter 4 formalizes the shared primitive as diff.</p>
 
     <h2>Why they don't cite each other</h2>
 
@@ -202,13 +203,29 @@ print(f"frame: {frame}")`} />
 
     <h2>Why it matters</h2>
 
-    <p>One person naming a pattern could be pareidolia. Eight groups across six fields naming the same pattern (different words, different starting points, different motivations) is evidence that the role structure is real, not projected.</p>
+    <p>One person naming a pattern could be pareidolia. Eight groups across six fields naming the same pattern (different words, different starting points, different motivations) is evidence that the role structure is real.</p>
 
-    <p>But "probably real" is far from "formally defined." The table shows the phenomenon exists, not what it <em>is</em>. Eight instances, no definition. A name for each instance, no name for the class. We can point at figure-ground separation but cannot write down the operation the way modus ponens is written down for deduction, or Bayes' rule for induction.</p>
+    <p>But "probably real" is far from "formally defined." The table shows that the phenomenon exists. It does not say what the phenomenon <em>is</em>. Eight instances, no definition. A name for each instance, no name for the class. We can point at figure-ground separation but cannot write down the operation the way modus ponens is written down for deduction, or Bayes' rule for induction.</p>
 
     <p>Part I has been building toward this gap. The missing mode is everywhere in practice: eight names, same structure. What is missing is the formalization.</p>
 
     <p>A table is evidence that a formalization should exist. The next chapter proposes the primitive: <strong>diff</strong>.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>3.1</strong> The chapter denies that a heap frame, a visual ground, and a background variable are interchangeable, yet it claims all eight rows share one operation. State exactly what is claimed to be shared, in one sentence.</p>
+
+    <p class="mb-3"><strong>3.2</strong> Three candidate ninth rows: (a) spot-the-difference puzzles; (b) the control group in a randomized trial; (c) Where's Waldo. For each, either fill in the Salient and Retained columns or argue that it fails to fit, the way chunking fits only as the secure limit of the operation. At least one of the three should fail; say which and why.</p>
+
+    <p class="mb-3"><strong>3.3</strong> Add a ninth row from a field you know: name the operation, fill in all five columns, and grade the fit tight or loose with one sentence of justification, the way the chapter grades IRM the loosest fit.</p>
+
+    <p class="mb-3"><strong>3.4</strong> 💻 The toy <code>partition()</code> counts only cells whose values differ, and the chapter concedes that a real frame also contains cells that are read but unchanged. Extend <code>partition()</code> to accept the set of keys the operation read, and return three parts: changed, read-but-unchanged, and untouched. Rerun the heap example and report which cells the two-part version had misassigned.</p>
+
+    <p class="mb-3"><strong>3.5</strong> ★ Pick two rows of the table from different fields. Skim the two key references and find in each the passage closest to the shared operation. Write a three-sentence crosswalk that a reviewer in either field would accept, citing both. If you discover an existing paper that already cites both traditions, you have refuted part of this chapter; report that too.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -227,7 +244,7 @@ print(f"frame: {frame}")`} />
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Harman 1965</td>
-            <td class="text-gray-400">"The Inference to the Best Explanation." <em>Philosophical Review</em> 74(1). Begins the IBE tradition — abduction as justified inference, not formalized operation.</td>
+            <td class="text-gray-400">"The Inference to the Best Explanation." <em>Philosophical Review</em> 74(1). Begins the IBE tradition: abduction treated as justified inference rather than formalized operation.</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Piaget 1975/1985</td>
@@ -259,7 +276,7 @@ print(f"frame: {frame}")`} />
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Zilberstein et al. 2024</td>
-            <td class="text-gray-400"><a href="https://arxiv.org/abs/2305.04842">"Outcome Logic: A Unifying Foundation for Correctness and Incorrectness Reasoning."</a> Tri-abduction — bi-abduction with a branching degree of freedom.</td>
+            <td class="text-gray-400"><a href="https://arxiv.org/abs/2305.04842">"Outcome Logic: A Unifying Foundation for Correctness and Incorrectness Reasoning."</a> Tri-abduction: bi-abduction with a branching degree of freedom.</td>
           </tr>
         </tbody>
       </table>

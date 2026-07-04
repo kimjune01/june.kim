@@ -49,7 +49,7 @@ import Repl from '../../../../components/Repl';
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Frame</td>
-            <td class="pr-3 text-gray-400">Everything else &mdash; memory the function doesn't touch</td>
+            <td class="pr-3 text-gray-400">Everything else: memory the function doesn't touch</td>
             <td class="text-gray-400">Ground</td>
           </tr>
         </tbody>
@@ -76,6 +76,8 @@ import Repl from '../../../../components/Repl';
       <li class="mb-2"><strong>The anti-frame</strong> (missing precondition): what must be true <em>before</em> the function runs. The heap the function needs but that wasn't stated in the spec.</li>
       <li class="mb-2"><strong>The frame</strong> (untouched heap): what stays true <em>after</em> the function runs. The heap the function doesn't touch.</li>
     </ol>
+
+    <p>Walk it through two lines of code before the symbols arrive. Suppose the analyzer meets <code>close(f); log.append("done")</code> knowing only that <code>log</code> is a live list. The call <code>close(f)</code> needs an open file handle, and nothing in what we know supplies one. So the analyzer hypothesizes the missing piece: <code>f</code> must have been open before this code ran. That guess is the anti-frame. Meanwhile <code>close</code> never touches <code>log</code>, so everything we knew about <code>log</code> survives the call untouched. That leftover is the frame. One pass produced both: the assumption the code silently relies on, and the state it provably leaves alone.</p>
 
     <p>The bi-abduction problem: given <code>A</code> (known heap) and a function requiring precondition <code>P</code>, find <code>M</code> (anti-frame) and <code>F</code> (frame) such that:</p>
 
@@ -123,7 +125,7 @@ where:
 
     <h2>Infer scales bi-abduction to millions of lines</h2>
 
-    <p><a href="https://fbinfer.com/">Infer</a> is the tool Calcagno and O'Hearn built at Facebook. It runs bi-abduction on every diff submitted to the codebase: millions of lines, every day. For each function, Infer infers the precondition (what must the caller set up?) and the frame (what does the function leave alone?). When the inferred precondition conflicts with the calling context, Infer reports a bug: null dereference, resource leak, race condition.</p>
+    <p><a href="https://fbinfer.com/">Infer</a> is the tool Calcagno and O'Hearn built at Facebook. It runs bi-abduction on every code change submitted to the codebase: millions of lines, every day. For each function, Infer infers the precondition (what must the caller set up?) and the frame (what does the function leave alone?). When the inferred precondition conflicts with the calling context, Infer reports a bug: null dereference, resource leak, race condition.</p>
 
     <p>The key to scaling: <em>compositionality</em>. Infer analyzes each function independently, using bi-abduction to infer its contract, then composes contracts across call boundaries. Function A calls B calls C. Start at C, infer its contract, use that contract when analyzing B, and so on up the call graph. Each function is analyzed once, with dependencies summarized as inferred contracts.</p>
 
@@ -153,7 +155,7 @@ where:
       </table>
     </div>
 
-    <p>Abduction becomes tractable when you decompose the problem into local pieces with clear boundaries. Separation logic provides the decomposition. The separating conjunction <code>*</code> guarantees that the pieces don't interfere. Without that guarantee, local reasoning is unsound; a change in one function could silently affect another's frame.</p>
+    <p>Abduction becomes tractable when you decompose the problem into local pieces with clear boundaries. Separation logic provides the decomposition. The separating conjunction <code>*</code> guarantees that the pieces don't interfere.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -258,11 +260,27 @@ for key in sorted(touched):
 
     <p>Branch A touches <code>{'{'}card_number, authorization_code{'}'}</code>. Branch B touches <code>{'{'}bank_account, transfer_id{'}'}</code>. The two branches have different footprints and different frames. Bi-abduction on branch A says <code>card_number</code> must exist. Bi-abduction on branch B says <code>bank_account</code> must exist. Which anti-frame is correct?</p>
 
-    <p>Both, path-conditioned. If <code>payment_method == "credit_card"</code>, require <code>card_number</code>; otherwise require <code>bank_account</code>. The precondition is disjunctive. Bi-abduction gives one answer per path; relating the paths requires understanding that the branch condition itself determines the outcome, that the <em>choice</em> between paths is the real structure.</p>
+    <p>Both, path-conditioned. If <code>payment_method == "credit_card"</code>, require <code>card_number</code>; otherwise require <code>bank_account</code>. The precondition is disjunctive. Bi-abduction gives one answer per path. Relating the paths requires seeing that the branch condition itself determines the outcome: the <em>choice</em> between paths is the real structure.</p>
 
     <p>Not a bug in bi-abduction. Its boundary. The primitive handles one path. When execution forks, you need the diff <em>between</em> branches, not just the diff within each branch.</p>
 
     <p>That is tri-abduction.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>5.1</strong> The battery swap inferred <code>ground_strap</code> into one category and <code>starter</code> into another. In one sentence each: what question does the anti-frame answer, what question does the frame answer, and which of the two is the abductive leap?</p>
+
+    <p class="mb-3"><strong>5.2</strong> A barista's <code>steam_milk</code> routine reads <code>{'{'}milk, steam_wand{'}'}</code> and writes <code>{'{'}milk: steamed{'}'}</code>. The known state of the bar is <code>{'{'}espresso: pulled, cup: clean, milk: cold{'}'}</code>. Compute the anti-frame and the frame by hand. Then compose: the next routine, <code>pour_latte</code>, reads <code>{'{'}espresso, milk, cup, saucer{'}'}</code>. What is the composed anti-frame for the two-step morning, and why does <code>milk</code> stay out of it?</p>
+
+    <p class="mb-3"><strong>5.3</strong> A test in your suite passes when run alone and fails when the whole suite runs. State this bug twice in the chapter's vocabulary: once as a frame violation by some other test, and once as an undeclared anti-frame entry in your own test. Which statement points at the other test's code, and which points at yours?</p>
+
+    <p class="mb-3"><strong>5.4</strong> 💻 Extend the toy model with a <code>compose(known_state, step1, step2)</code> function that chains two (reads, writes) steps: step 2's reads can be satisfied by step 1's writes, and the composed frame is what neither step touches. Check it against the chapter's battery swap plus charging test: the composed anti-frame should be <code>{'{'}ground_strap, drive_belt{'}'}</code> and the composed frame <code>{'{'}starter, oil_level, tire_pressure{'}'}</code>. (Hint: subtract step 1's written keys before collecting step 2's missing reads.)</p>
+
+    <p class="mb-3"><strong>5.5</strong> ★ Pick a function you wrote in the last month. Write its contract by hand: everything it silently requires to be true beforehand, and everything it provably leaves alone. Compare the anti-frame against the function's docstring or comments. Every anti-frame entry the documentation never mentions is a place a caller can break you.</p>
 
     <hr class="border-zinc-700 my-8"/>
 

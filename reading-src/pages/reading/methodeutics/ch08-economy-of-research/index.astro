@@ -36,6 +36,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Wald (1947) asked: given a stream of data, when should you stop collecting? Peirce asked the prior question: which stream should you open? Wald's work became a field. Peirce's note was ignored until historians rediscovered it in the 1960s.</p>
 
+    <p>Two limits kept the note unusable in its own century. Its utility term has no measure: the mathematics assumes you can put a number on the value of knowing something more exactly, and nobody in 1879 could produce one. And it optimizes against utility and cost curves it treats as known before the work begins, when in a real investigation you learn the cost of a result by paying for it, tracing the curve rather than receiving it. Neither limit is fatal, because the note was never delivering a number. It was isolating a form: spend so that marginal value per unit cost is equal across the active lines, and abandon a line when its marginal drops below the common frontier. Shannon's entropy, reaching this problem through Lindley and de Kleer's diagnostic engine below, later supplied the missing information term. The second limit dissolves in Chapter 9, where the sequential reading of evidence lets you quit the instant the running return crosses the frontier, without ever having had to know the frontier in advance.</p>
+
     <h2>Peirce again: the leading consideration (1903)</h2>
 
     <p>The 1879 note reads like a budgeting aside. By the 1903 Lowell lecture on abduction it had become the whole doctrine of hypothesis selection: "the leading consideration in Abduction, in all cases, ... is the question of Economy, &mdash; Economy of money, time, thought, and energy" (<a href="/peirce/">MS [R] 475</a>; CP 5.600). Economy is no longer one consideration among several. Peirce argues there are no other serious ones, because "abduction commits us to nothing. It merely causes a hypothesis to be set down upon our docket of cases to be tried." Adding a candidate is free; only testing spends. Whatever ranks the candidates must therefore be an accounting of the testing budget.</p>
@@ -49,9 +51,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>And it takes a side that still divides the field: "It is a very grave mistake to attach much importance to the antecedent likelihood of hypotheses, except in extreme cases; because likelihoods are mostly merely subjective, and have little real value." His extreme case is a man offering to turn lead into gold: "My dear sir, I haven't time to make gold." He prices even that refusal in time. Bayesian experimental design (below) leans on exactly what Peirce refused to lean on.</p>
 
-    <p>The refusal is principled, and he argued it for decades. For Peirce a probability is a ratio of frequencies, and a ratio needs a reference class. The same lecture supplies the image: "If you could put all possible universes into a bag and after shaking them well up could draw out universe after universe, you might form statistics as to the proportion of universes in which the proposition is true. But since you cannot do that, to speak of the probability of the truth of a general proposition ... leaves us at a loss to conjecture what the other term of that ratio can be." A hypothesis has no reference class, so its probability is undefined rather than merely imprecise. "<a href="https://en.wikisource.org/wiki/Popular_Science_Monthly/Volume_12/April_1878/Illustrations_of_the_Logic_of_Science_IV">The Probability of Induction</a>" (1878) makes the case against probability as degree of belief; "<a href="https://archive.org/details/studiesinlogic00peiruoft">A Theory of Probable Inference</a>" (1883) draws the consequence: the conclusion of an ampliative inference carries no probability, and what can be graded is the method that produced it, by how reliably it leads to truth. Which conjecture to spend on next is a question the probability calculus cannot receive. Economy restates it in units the lab has.</p>
+    <p>The refusal is principled, and he argued it for decades. For Peirce a probability is a ratio of frequencies, and a ratio needs a reference class. The same lecture supplies the image: "If you could put all possible universes into a bag and after shaking them well up could draw out universe after universe, you might form statistics as to the proportion of universes in which the proposition is true. But since you cannot do that, to speak of the probability of the truth of a general proposition ... leaves us at a loss to conjecture what the other term of that ratio can be." A hypothesis has no reference class, so its probability is undefined rather than merely imprecise. "<a href="https://en.wikisource.org/wiki/Popular_Science_Monthly/Volume_12/April_1878/Illustrations_of_the_Logic_of_Science_IV">The Probability of Induction</a>" (1878) makes the case against probability as degree of belief; "<a href="https://archive.org/details/studiesinlogic00peiruoft">A Theory of Probable Inference</a>" (1883) draws the consequence: the conclusion of an ampliative inference, one whose conclusion outruns its premises, carries no probability. What can be graded is the method that produced it, by how reliably it leads to truth. Which conjecture to spend on next is a question the probability calculus cannot receive. Economy restates it in units the lab has.</p>
 
-    <p>The objection generalizes past Peirce: some questions outrun the data type they are asked of. <a href="https://en.wikisource.org/wiki/An_Enquiry_Concerning_Human_Understanding">Hume</a> observed that causation is never in the data, only conjunction. Statistics compressed that into <em>correlation is not causation</em>; <a href="https://doi.org/10.1080/01621459.1986.10478354">Holland</a>'s "no causation without manipulation" (1986) and <a href="https://en.wikipedia.org/wiki/Nancy_Cartwright_(philosopher)">Cartwright</a>'s "no causes in, no causes out" (1989) sharpened it into slogans; <a href="https://en.wikipedia.org/wiki/Causality_(book)">Pearl</a> made it formal: interventional questions are unanswerable from observational distributions without causal assumptions that observation cannot itself test. The remedy is the same in both cases, and Peirce had already prescribed it: "Every hypothesis should be put to the test by trying, if possible, to make verifiable predictions" (<a href="/peirce/">MS [R] 475</a>). Perturbation is required; the only live question is its price. Buy the answer with an experiment, and buy the cheapest decisive one first.</p>
+    <p>The objection generalizes past Peirce: some questions outrun the data type they are asked of. <a href="https://en.wikisource.org/wiki/An_Enquiry_Concerning_Human_Understanding">Hume</a> observed that causation is never in the data, only conjunction. Statistics compressed that into <em>correlation is not causation</em>. <a href="https://doi.org/10.1080/01621459.1986.10478354">Holland</a>'s "no causation without manipulation" (1986) and <a href="https://en.wikipedia.org/wiki/Nancy_Cartwright_(philosopher)">Cartwright</a>'s "no causes in, no causes out" (1989) sharpened it into slogans. <a href="https://en.wikipedia.org/wiki/Causality_(book)">Pearl</a> made it formal: interventional questions are unanswerable from observational distributions without causal assumptions that observation cannot itself test. The remedy is the same in both cases, and Peirce had already prescribed it: "Every hypothesis should be put to the test by trying, if possible, to make verifiable predictions" (<a href="/peirce/">MS [R] 475</a>). Perturbation is required; the only live question is its price. Buy the answer with an experiment, and buy the cheapest decisive one first.</p>
 
     <p>The lecture credits <a href="https://en.wikipedia.org/wiki/Ernst_Mach">Ernst Mach</a> as having "done the most to show the importance in logic of the consideration of Economy," while noting he "had written a paper on the subject as early as 1878": the note above, published in 1879.</p>
 
@@ -86,13 +88,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Crucial experiments are maximally economical. A non-crucial experiment can confirm a hypothesis without eliminating alternatives; it spends budget without shrinking the hypothesis space. A crucial experiment guarantees the space shrinks every round. Platt observed that fields practicing strong inference (molecular biology, particle physics) moved faster than fields that didn't (psychology, ecology). The rate difference tracks the fraction of experiments that are crucial.</p>
 
-    <p>But Platt's framework is qualitative. He tells you what a good experiment looks like, not how to rank several crucial alternatives. For ranking, you need de Kleer.</p>
+    <p>But Platt's framework is qualitative. He tells you what a good experiment looks like. He does not tell you how to rank several crucial alternatives. For ranking, you need de Kleer.</p>
 
     <h2>De Kleer &amp; Williams: GDE and computed experiment selection (1987)</h2>
 
     <p>The General Diagnostic Engine (GDE) computed which measurement to take next from the structure of remaining hypotheses. The context was circuit diagnosis. A chip has a fault, multiple components could be responsible, and each probe has a cost.</p>
 
-    <p>GDE maintains <em>candidate diagnoses</em>: minimal sets of faulty components consistent with all observations so far. For each possible measurement, it computes how much probing that node reduces the entropy of the diagnosis distribution, then selects the measurement with the highest information gain per unit cost.</p>
+    <p>GDE maintains <em>candidate diagnoses</em>: minimal sets of faulty components consistent with all observations so far. For each possible measurement, it computes how much probing that node reduces the entropy of the diagnosis distribution, the remaining uncertainty measured in bits, then selects the measurement with the highest information gain per unit cost.</p>
 
     <p>The algorithm is straightforward:</p>
 
@@ -111,7 +113,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Each question is an abductive act: "If H were true, what would I observe at point X?" The answer supports H or eliminates it. The optimal strategy is economy of research expressed as a game tree.</p>
 
-    <p>The game-theoretic framing captures what information theory misses: the next question depends on previous answers. GDE recomputes from scratch after each measurement. Hintikka encodes the dependency structure. The Inquirer's strategy is a policy (a function from observation history to the next question), not a ranking. This is the difference between a sorted list and a decision tree.</p>
+    <p>The game-theoretic framing captures what information theory misses: the next question depends on previous answers. GDE recomputes from scratch after each measurement. Hintikka encodes the dependency structure. The Inquirer's strategy is a policy, a function from observation history to the next question. This is the difference between a sorted list and a decision tree.</p>
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -143,7 +145,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p><em>Bayesian experimental design.</em> Choose the experiment that maximizes expected information gain about model parameters. Lindley (1956) formalized this; Chaloner and Verdinelli (1995) surveyed the field. The criterion is GDE's, applied to continuous parameter spaces instead of discrete diagnostic candidates.</p>
 
-    <p><em>Multi-armed bandits.</em> Allocate trials across K arms to maximize cumulative reward (exploration-exploitation) or identify the best arm (pure exploration). The pure-exploration variant is Peirce's economy of research: fixed budget, maximize what you learn.</p>
+    <p><em>Multi-armed bandits.</em> Allocate trials across K arms, the candidate options, to maximize cumulative reward (exploration-exploitation) or identify the best arm (pure exploration). The pure-exploration variant is Peirce's economy of research: fixed budget, maximize what you learn.</p>
 
     <p>None of these literatures connects experiment selection back to abduction. The hypothesis set is taken as given. This matters because the quality of the hypothesis set determines the ceiling of any selection strategy. Abduction is where that set comes from.</p>
 
@@ -279,7 +281,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
       </table>
     </div>
 
-    <p>The third strategy is the best single-step heuristic. GDE uses it. It is still myopic. It optimizes one step ahead without considering the trajectory. Hintikka's game tree optimizes the full sequence, but computing the optimal policy is exponential in the number of experiments. Under independence and uniform costs, information gain is submodular and greedy selection stays within a constant factor of optimal. Correlated outcomes and variable costs weaken this guarantee, but greedy remains hard to beat in practice.</p>
+    <p>The third strategy is the best single-step heuristic. GDE uses it. It is still myopic. It optimizes one step ahead without considering the trajectory. Hintikka's game tree optimizes the full sequence, but computing the optimal policy is exponential in the number of experiments. Under independence and uniform costs, information gain is submodular (each added experiment gains less than the one before), and greedy selection stays within a constant factor of optimal. Correlated outcomes and variable costs weaken this guarantee, but greedy remains hard to beat in practice.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -291,13 +293,29 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
 
     <p>That gap motivates Chapter 9. Evidence has a trajectory, and you need tools to read its shape.</p>
 
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>8.1</strong> Peirce says "abduction commits us to nothing. It merely causes a hypothesis to be set down upon our docket of cases to be tried." In two sentences: why does this make economy the leading consideration in hypothesis selection, rather than one consideration among several?</p>
+
+    <p class="mb-3"><strong>8.2</strong> Two lines of inquiry with diminishing returns. Successive dollars spent on X yield 10, 8, 6, 4, 2 units of information; successive dollars on Y yield 9, 7, 5, 3, 1. (a) Allocate a $6 budget dollar by dollar to maximize total information, and verify the final allocation equalizes marginal return across the two lines. (b) A third line Z appears, yielding a constant 5 units per dollar with no diminishing returns. Explain why Y never receives a fourth dollar at any budget, in the chapter's terms: Y's marginal has dropped below the common frontier.</p>
+
+    <p class="mb-3"><strong>8.3</strong> Your sourdough didn't rise. Three hypotheses: dead starter (you rate it likely; the float test takes a day), oven too cool during proofing (unlikely; checking with a thermometer takes 5 minutes), bad flour (moderate; a side-by-side bake takes an hour). Order the tests by Peirce's selection rule and defend the order against the objection that the starter is the most probable culprit. Which of the three failure modes in "Three orderings, three failure modes" does likeliest-first commit here?</p>
+
+    <p class="mb-3"><strong>8.4</strong> 💻 Two extensions to the chapter's code. (a) Design an experiment D with cost and likelihoods that beats A on information gain per unit cost, and explain what makes it cheapest-decisive. (b) Implement the adaptive step: suppose A returns its positive outcome, update the priors by Bayes' rule, and re-rank B, C, D. Does C jump the queue as the chapter predicts?</p>
+
+    <p class="mb-3"><strong>8.5</strong> ★ Write out the open questions in your current project as a docket. For each, estimate its testing cost and a rough information value, then compute the ratio. Find the expensive favorite you were about to run first, and the cheap decisive test Peirce would run instead. Run the cheap one this week and record whether the ranking of everything else changed.</p>
+
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
       <li><a href="/reading/scientific-method/chamberlin-1890/">🔬 Chamberlin 1890</a> &mdash; multiple working hypotheses: the cognitive prerequisite</li>
       <li><a href="/reading/scientific-method/platt-1964/">🔬 Platt 1964</a> &mdash; strong inference: the elimination loop</li>
       <li><a href="/reading/scientific-method/peirce-1878/">🔬 Peirce 1878</a> &mdash; abduction and pragmatism</li>
-      <li><a href="/evidence-has-a-trajectory">Ch 9: Evidence has a trajectory</a> &mdash; what happens after you select the experiment</li>
+      <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 9: Evidence has a trajectory</a> &mdash; what happens after you select the experiment</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>

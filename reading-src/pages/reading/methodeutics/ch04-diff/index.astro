@@ -22,11 +22,13 @@ import Repl from '../../../../components/Repl';
 
     <p>Where did the hypotheses come from? She compared two states: the car that started yesterday, the car that won't crank today. She noted what changed (dim lights, a single click, voltage sagging under load) and what stayed the same (fuel level, security light, the key turning freely). The changes pointed at the starting circuit. The hypotheses followed from the diff.</p>
 
-    <p>Diff is computable. The mechanic performed it in her head. OBD-II performs it in silicon. Facebook Infer performs it on code. The representation changes; the operation stays the same.</p>
+    <p>Diff is computable. The mechanic performed it in her head. OBD-II, the on-board diagnostics port in every car since 1996, performs it in silicon. Facebook Infer performs it on code. The representation changes; the operation stays the same.</p>
 
     <h2>Primitive</h2>
 
-    <p>Diff is the substrate of abduction, not abduction entire. It produces the contrast that abduction operates over:</p>
+    <p>Diff is only the substrate of abduction. It produces the contrast that abduction operates over.</p>
+
+    <p>The mechanic already has every role the definition needs. Her expected state is the car that started yesterday: strong crank, bright lights, a starter that spins. Her observed state is the car in front of her: no crank, dim lights, a single click. Her background frame is everything she trusts to stay put while she reasons, from the fuel level to the behavior of copper wire. And her two hypotheses are small edits to that background (a battery gone weak, a terminal gone loose) that would turn today's observation into an ordinary consequence. The definition below only names these roles:</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-6">
       <p class="text-gray-300" style="max-width:none">Given expected state <strong>E</strong>, observed state <strong>O</strong>, and background frame <strong>B</strong>, partition what differs from what remains invariant.</p>
@@ -34,9 +36,9 @@ import Repl from '../../../../components/Repl';
 
     <p>Abduction then uses that partition to generate candidate causes <strong>H</strong>: minimal revisions to <em>B</em> that would make <em>O</em> unsurprising. The partition itself is the primitive. All eight names in Chapter 3 instantiate it. The simplest encoding: take two snapshots of a system's state, one before an event and one after. The comparison partitions state into two sets:</p>
 
-    <p><strong>Figure</strong> &mdash; what changed. Variables whose values differ between snapshots. In Gestalt terms, what pops out against a stable background.</p>
+    <p><strong>Figure</strong>: what changed. Variables whose values differ between snapshots. In Gestalt terms, what pops out against a stable background.</p>
 
-    <p><strong>Ground</strong> &mdash; what held. Variables whose values stayed the same. The context that remained invariant while the figure shifted. In separation logic, the frame that bi-abduction infers.</p>
+    <p><strong>Ground</strong>: what held. Variables whose values stayed the same. The context that remained invariant while the figure shifted. In separation logic (Chapter 5), this is the frame that bi-abduction infers.</p>
 
     <p>Formally:</p>
 
@@ -172,7 +174,7 @@ for k, v in ground.items():
 
     <p>Three systems, three decades, three fields. Each encodes the diff. They are rarely presented as instances of one operation.</p>
 
-    <h3>OBD-II (1996) &mdash; hardcoded diff</h3>
+    <h3>OBD-II (1996): hardcoded diff</h3>
 
     <p><a href="https://en.wikipedia.org/wiki/On-board_diagnostics#OBD-II">OBD-II</a> reads sensor states, diffs against expected values, and generates fault codes. (Real OBD-II adds thresholds, monitors, and enable conditions; "hardcoded diff" is a simplification of the core logic.) Vehicles have run this since 1996.</p>
 
@@ -211,17 +213,17 @@ for code in obd_diff(expected, observed):
 
     <p>The limitation is the table. Every hypothesis must be written down before the system ships. No table entry, no hypothesis. The diff is there; the inference is manual.</p>
 
-    <h3>Facebook Infer (2009) &mdash; automated diff</h3>
+    <h3>Facebook Infer (2009): automated diff</h3>
 
-    <p><a href="https://fbinfer.com/">Infer</a> (<a href="https://dl.acm.org/doi/10.1145/1480881.1480917">Calcagno et al. 2009</a>) runs bi-abduction on millions of lines of production code. Given a function's precondition and postcondition, it infers the <em>frame</em> (heap the function didn't touch) and the <em>anti-frame</em> (heap that must exist for the function to be safe).</p>
+    <p><a href="https://fbinfer.com/">Infer</a> (<a href="https://dl.acm.org/doi/10.1145/1480881.1480917">Calcagno et al. 2009</a>) runs bi-abduction on millions of lines of production code. Given a function's precondition and postcondition (what must hold before it runs, and what holds after), it infers the <em>frame</em> (the memory the function didn't touch) and the <em>anti-frame</em> (the memory that must exist for the function to be safe).</p>
 
     <p>The figure is what the function modifies; the ground is what it leaves alone. Infer doesn't require the programmer to specify the ground. That's the &ldquo;bi&rdquo;: abduction in both directions, computing what must hold before and what the function preserves.</p>
 
     <p>Infer moved the diff from a hand-authored table (OBD-II) to an automated inference engine. Same primitive, higher automation.</p>
 
-    <h3>IRM (2019) &mdash; learned diff</h3>
+    <h3>Invariant Risk Minimization (2019): learned diff</h3>
 
-    <p><a href="https://arxiv.org/abs/1907.02893">Invariant Risk Minimization</a> (Arjovsky et al. 2019) uses environment variation to force figure/ground separation. Train a model across multiple environments. Features that predict the outcome in all environments are invariant (ground). Features that predict in some but not others are spurious (figure).</p>
+    <p><a href="https://arxiv.org/abs/1907.02893">Invariant Risk Minimization</a> (IRM; Arjovsky et al. 2019) uses environment variation to force figure/ground separation. Train a model across multiple environments. Features that predict the outcome in all environments are invariant (ground). Features that predict in some but not others are spurious (figure).</p>
 
     <p>IRM diffs across environments rather than across time. Instead of comparing two snapshots of one system, it compares the same learning task under different conditions. Invariant features are ground; environment-specific features are figure. (Note the inversion: in IRM, the invariant features are the causal signal you <em>want</em>. Calling them "ground" follows the changed/unchanged definition but reverses the ordinary sense of "figure = thing of interest." The role assignment holds; the valence flips.)</p>
 
@@ -393,6 +395,22 @@ print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
     <p>OBD-II shows this concretely. If a failure involves a sensor the ECU doesn't monitor, no code fires. Engineers add more sensors, but you can never instrument everything. Some state will always be unmeasured.</p>
 
     <p>Bi-abduction addresses this by inferring the frame: the state the operation <em>must not have touched</em> for the result to be valid. It reasons backward from the postcondition, including state never explicitly observed. The diff goes from "compare what you measured" to "infer what you must have missed."</p>
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>4.1</strong> A variable lands in the figure. The chapter warns it may be a cause, an effect, a symptom, or coincident noise. Using the no-crank scenario's five figure entries, give a one-line example of each of the four.</p>
+
+    <p class="mb-3"><strong>4.2</strong> The Case of the Evening Wi-Fi. Before: the laptop holds its connection all day, the microwave is idle, router uptime reads three days, the neighbors' networks are visible. After, every evening around six: the connection drops, the microwave is running, router uptime is unchanged, the neighbors' networks are visible. Compute figure and ground by hand. Build a small dependency map and generate the candidate hypotheses. Then name one variable missing from both snapshots that could carry the real cause, and say how you would measure it.</p>
+
+    <p class="mb-3"><strong>4.3</strong> Pick a machine you use daily (espresso machine, bicycle, printer, a login flow) and write before and after snapshots of six variables for a failure you have actually seen. Build the dependency map, run the abduction by hand, and check that the true cause appears among the candidates. Then delete one measurement from the snapshots so that the true cause becomes invisible, and name the gauge you just removed.</p>
+
+    <p class="mb-3"><strong>4.4</strong> 💻 The chapter's <code>abduct()</code> treats all candidates equally, while the prose ranks the battery first because it sits upstream of every changed variable. Extend <code>abduct()</code> to score each component by how many figure entries it can explain, sort by score, and print the ranking. Confirm that the battery wins and the ignition switch comes last.</p>
+
+    <p class="mb-3"><strong>4.5</strong> ★ For the last thing in your life that broke, write down the two snapshots you implicitly compared, the figure, the ground, and the variable you never measured. Keep the list; Chapter 7 asks where your gauges came from.</p>
+
     <hr class="border-zinc-700 my-8"/>
 
     <h2>Sources</h2>

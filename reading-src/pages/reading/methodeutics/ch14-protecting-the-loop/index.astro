@@ -5,12 +5,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 13: Protecting the Loop — Methodeutics" favicon="🔭">
+<Layout title="Ch 14: Protecting the Loop — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Protecting the Loop</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 13 &middot; Bacon 1620, Peirce 1878, Popper 1934, Meehl 1967, Feynman 1974, Ramdas 2023</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 14 &middot; Bacon 1620, Peirce 1878, Popper 1934, Meehl 1967, Feynman 1974, Ramdas 2023</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">An agent runs the hypothesis graph and "confirms" every hypothesis. It abduced from the data and tested on the same data. Peirce's question 9. Part IV begins here. The framework works mathematically. Can it run unsupervised?</p>
@@ -44,7 +44,7 @@ import Repl from '../../../../components/Repl';
 
     <h2>Five most dangerous questions</h2>
 
-    <h3>Q9 &mdash; Peirce: Did the hypothesis come before the data?</h3>
+    <h3>Q9 (Peirce): Did the hypothesis come before the data?</h3>
 
     <p>Source: <a href="/reading/scientific-method/peirce-1878/">Peirce 1878</a>. What it catches: abductive retrofit.</p>
 
@@ -56,7 +56,7 @@ import Repl from '../../../../components/Repl';
 
     <p>The fix is structural: hold out data. Generate hypotheses from one partition. Test on another. The agent never sees the test partition during generation. Cross-validation applied to abduction. The single most important procedural requirement for autonomous investigation.</p>
 
-    <h3>Q11 &mdash; Popper: What specific observation would prove the hypothesis wrong?</h3>
+    <h3>Q11 (Popper): What specific observation would prove the hypothesis wrong?</h3>
 
     <p>Source: <a href="/reading/scientific-method/popper-1934/">Popper 1934</a>. What it catches: unfalsifiable claims dressed as predictions.</p>
 
@@ -66,17 +66,17 @@ import Repl from '../../../../components/Repl';
 
     <p>Fix: before running a test, the agent writes a falsification condition in the form "if I observe X, the hypothesis is wrong." If it cannot write this sentence, the hypothesis needs sharpening until failure is conceivable.</p>
 
-    <h3>Q15 &mdash; Meehl: Is the prediction specific enough that more data makes the test harder?</h3>
+    <h3>Q15 (Meehl): Is the prediction specific enough that more data makes the test harder?</h3>
 
     <p>Source: <a href="/reading/scientific-method/meehl-1967/">Meehl 1967</a>. What it catches: the crud factor.</p>
 
-    <p>Meehl observed that in soft domains, everything correlates with everything. If your prediction is "X and Y are positively correlated," then given enough data, you will confirm it. The prediction succeeds because the bar is low, not because the hypothesis is right. A good prediction gets <em>harder</em> to satisfy as data accumulates. A bad prediction gets easier.</p>
+    <p>Meehl observed that in soft domains, everything correlates with everything. If your prediction is "X and Y are positively correlated," then given enough data, you will confirm it. The prediction succeeds because the bar is low, whether or not the hypothesis is right. A good prediction gets <em>harder</em> to satisfy as data accumulates. A bad prediction gets easier.</p>
 
     <p>For an agent running sequential experiments, this kills silently. The agent generates a directional prediction ("increasing X will improve Y"). It collects data. X and Y are positively correlated at n=100. Also at n=1,000. Also at n=10,000. The e-value grows. The agent reports strong evidence. But the crud factor guarantees nonzero correlation everywhere, so "X improves Y" would confirm for any X and any Y in this domain.</p>
 
-    <p>Fix: predictions must be quantitative and precise. Not "X improves Y" but "X improves Y by between 12% and 18%." The second prediction can fail in both directions: the effect could be too small or too large. More data narrows the confidence interval. Scale is the enemy of a false positive.</p>
+    <p>Fix: predictions must be quantitative. "X improves Y" becomes "X improves Y by between 12% and 18%." The second prediction can fail in both directions: the effect could be too small or too large. More data narrows the confidence interval. Scale is the enemy of a false positive.</p>
 
-    <h3>Q16 &mdash; Feynman: How would you fool yourself?</h3>
+    <h3>Q16 (Feynman): How would you fool yourself?</h3>
 
     <p>Source: <a href="/reading/scientific-method/feynman-1974/">Feynman 1974</a>. What it catches: cargo-cult rigor.</p>
 
@@ -85,7 +85,7 @@ import Repl from '../../../../components/Repl';
       <p class="text-sm text-gray-500">&mdash; Feynman, Caltech commencement address, 1974</p>
     </blockquote>
 
-    <p>Feynman's question is metacognitive. Not "is the method correct?" but "what is the most likely way it produces a wrong answer?" The agent must simulate its own failure modes before running the experiment.</p>
+    <p>Feynman's question is metacognitive. Instead of "is the method correct?" it asks "what is the most likely way this method produces a wrong answer?" The agent must simulate its own failure modes before running the experiment.</p>
 
     <p>In practice: before running the test, enumerate the artifacts. What could make the result look positive when the hypothesis is false?</p>
 
@@ -98,7 +98,7 @@ import Repl from '../../../../components/Repl';
 
     <p>If the agent cannot enumerate at least one way it might fool itself, it hasn't thought hard enough. Every experimental design has artifacts. You either identify them beforehand or they surprise you in the results.</p>
 
-    <h3>Q22 &mdash; Ramdas: If you peek or expand the sample, does your evidence measure remain valid?</h3>
+    <h3>Q22 (Ramdas): If you peek or expand the sample, does your evidence measure remain valid?</h3>
 
     <p>Source: <a href="/reading/scientific-method/ramdas-2023/">Ramdas 2023</a>. What it catches: optional stopping.</p>
 
@@ -106,7 +106,7 @@ import Repl from '../../../../components/Repl';
 
     <p>A p-value computed at a fixed sample size is valid at that sample size. Compute it at n=50, see p=0.08, collect more data, recompute at n=100 to get p=0.04, and the p=0.04 is invalid. You ran two tests (one at n=50 and one at n=100) and reported the one that worked.</p>
 
-    <p>E-values (Chapter 9) are immune to this. An e-value remains valid regardless of when you stop, how often you peek, or how you decide to collect more data. But the immunity holds only if the e-value is computed correctly, with a proper test martingale against a well-specified null. Change the null hypothesis mid-stream, or change the test statistic after peeking, and the e-value is compromised just like a p-value would be.</p>
+    <p>E-values (Chapter 10) are immune to this. An e-value remains valid regardless of when you stop, how often you peek, or how you decide to collect more data. But the immunity holds only if the e-value is computed correctly, with a proper test martingale (a betting process that is fair under the null) against a well-specified null. Change the null hypothesis mid-stream, or change the test statistic after peeking, and the e-value is compromised just like a p-value would be.</p>
 
     <p>Fix: lock the test specification before data collection begins. The null hypothesis, the alternative, the test martingale, and the stopping rule must be written down and frozen. The agent may peek freely and stop whenever it wants (that is the whole point of anytime-valid inference) but it may not change what it is testing based on what it has seen.</p>
 
@@ -135,7 +135,7 @@ import Repl from '../../../../components/Repl';
             <td class="py-2 pr-3 pl-0 text-gray-300">Q11</td>
             <td class="pr-3 text-gray-400">Popper</td>
             <td class="pr-3 text-gray-400">Unfalsifiability</td>
-            <td class="text-gray-400">No test can fail. The hypothesis is a story, not a claim.</td>
+            <td class="text-gray-400">No test can fail. The hypothesis is a story rather than a claim.</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Q15</td>
@@ -169,11 +169,11 @@ import Repl from '../../../../components/Repl';
 
     <p>So the procedure must do more work. Peer review becomes automated adversarial checking. Reputation becomes a track record of predictions scored against outcomes. The shame of a retraction becomes a kill condition that triggers rollback.</p>
 
-    <p>The dangerous failure mode is an agent that follows a procedure permitting adaptive analysis: choices during the investigation (which data to examine, which tests to run, when to stop, what to report) influenced by results already seen, inflating the apparent strength of the evidence.</p>
+    <p>The dangerous failure mode is a procedure that permits adaptive analysis. Choices made during the investigation (which data to examine, which tests to run, when to stop, what to report) are influenced by results already seen, and the apparent strength of the evidence inflates.</p>
 
     <p>The checklist makes adaptive analysis visible. Each question forces the agent to declare its procedure before execution. When the final report arrives, the reader compares declared procedure to actual procedure. If they diverge, the investigation is suspect.</p>
 
-    <p>A pre-registration that cannot name what would refute the hypothesis is registering a story, not an experiment. One that won't publish the audit trail is asking the reader to trust the part least deserving of trust: the filtered final narrative.</p>
+    <p>A pre-registration that cannot name what would refute the hypothesis is registering a story. One that won't publish the audit trail is asking the reader to trust the part least deserving of trust: the filtered final narrative.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -305,7 +305,7 @@ for name, entry in [("Good prereg", good_prereg), ("Bad prereg", bad_prereg)]:
 
     <h2>The gate sits between generate and test</h2>
 
-    <p>The hypothesis graph has three phases: <strong>generate</strong> (abduce a hypothesis from a surprising observation), <strong>test</strong> (design and run an experiment), and <strong>update</strong> (classify the evidence trajectory and follow the edge). The checklist gates the transition from generate to test. No hypothesis crosses into testing without passing the five questions.</p>
+    <p>The hypothesis graph has three phases: <em>generate</em> (abduce a hypothesis from a surprising observation), <em>test</em> (design and run an experiment), and <em>update</em> (classify the evidence trajectory and follow the edge). The checklist gates the transition from generate to test. No hypothesis crosses into testing without passing the five questions.</p>
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -345,7 +345,7 @@ for name, entry in [("Good prereg", good_prereg), ("Bad prereg", bad_prereg)]:
 
     <hr class="border-zinc-700 my-8"/>
 
-    <h2>The checklist catches self-deception, not strategic paralysis</h2>
+    <h2>What the checklist cannot catch</h2>
 
     <p>The checklist ensures the agent has separated generation from testing, named a falsification condition, specified prediction bounds, enumerated artifacts, and frozen the test specification. If the agent does all of this correctly, the investigation is sound.</p>
 
@@ -357,13 +357,29 @@ for name, entry in [("Good prereg", good_prereg), ("Bad prereg", bad_prereg)]:
 
     <p>The checklist has no answer here. It can tell you whether your hypothesis is well-formed. It cannot tell you which technique to try when your current technique fails. You need a manual that maps failure modes to alternative techniques: a lookup table from "this didn't work" to "try this instead."</p>
 
-    <p>Some claims can't be tested with fresh data; they require structural validation. "Is this the simplest explanation?" is not an empirical question. "Does the residual have structure?" is not an empirical question. These need the deductive edge of the triangle: given a claim, derive what must hold and check whether it does. The proof manual is that edge, systematized.</p>
+    <p>Some claims can't be tested with fresh data; they require structural validation. "Is this the simplest explanation?" is not an empirical question. "Does the residual have structure?" is not an empirical question. These need the deductive edge of the abduction-deduction-induction triangle: given a claim, derive what must hold and check whether it does. The proof manual is that edge, systematized.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>14.1</strong> The chapter claims a human investigator who tests on training data eventually faces consequences, while an agent does not. Name the two layers of protection the human has and the one layer the agent has. Then explain in two sentences why "confirmation is cheaper than falsification" makes the missing layers decisive.</p>
+
+    <p class="mb-3"><strong>14.2</strong> A streaming service's agent investigates why Tuesday-night listeners churn. It scans the full March logs, notices that churners had high skip rates, and hypothesizes that skip rate predicts churn. It then preregisters: hypothesis "skip rate predicts churn"; falsification "if skip rate does not predict churn, reject"; data split "generated from March 1&ndash;15, tested on March 16&ndash;31"; prediction bounds (0.01, 0.99) for the correlation; one self-deception risk ("seasonality"); evidence measure "e-value, spec frozen." The chapter's validator passes this prereg. Find at least three ways it is rotten anyway, and name the question (Q9, Q11, Q15, Q16, or Q22) each rot violates.</p>
+
+    <p class="mb-3"><strong>14.3</strong> Pick a hypothesis about your own routine: the bus runs late when it rains, your Wi-Fi slows at 9 pm, your plants droop two days after fertilizing. Write a complete <code>PreregEntry</code> for it, all five fields, numeric bounds included. Then attack your own falsification condition as a hostile reader: any phrasing that absorbs counterexamples fails the exercise.</p>
+
+    <p class="mb-3"><strong>14.4</strong> 💻 The validator accepts any non-empty falsification string, so "if pigs fly, reject" sails through. Extend <code>validate_prereg</code> with a weasel check: flag falsification conditions containing "probably", "might", or "could", and flag prediction bounds whose width is more than ten times the lower bound (a bound of (0.01, 0.99) is a directional prediction in disguise). Rerun both example preregs and your entry from 13.3.</p>
+
+    <p class="mb-3"><strong>14.5</strong> ★ Audit the last experiment you or your team actually shipped: an A/B test, a benchmark comparison, a before-and-after tweak. Write the prereg entry that should have existed. Which of the five questions would it have failed at the time? What would the honest version of the claim have been?</p>
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/the-prereg-checklist">The Prereg Checklist</a> &mdash; all twenty-two questions</li>
       <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiments to run</li>
-      <li><a href="/the-proof-manual">Ch 14: The Proof Manual</a> &mdash; what to try when your technique fails</li>
+      <li><a href="/reading/methodeutics/ch15-validating-claims/">Ch 15: Validators</a> &mdash; what to try when your technique fails</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
@@ -377,7 +393,7 @@ for name, entry in [("Good prereg", good_prereg), ("Bad prereg", bad_prereg)]:
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch12-convergence/", label: "Convergence" }} next={{ href: "/reading/methodeutics/ch14-validating-claims/", label: "Validators" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch13-convergence/", label: "Convergence" }} next={{ href: "/reading/methodeutics/ch15-validating-claims/", label: "Validators" }} />
 
   </main>
 </Layout>

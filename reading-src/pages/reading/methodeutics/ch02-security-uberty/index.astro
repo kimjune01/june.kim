@@ -10,7 +10,7 @@ import Repl from '../../../../components/Repl';
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Security and Uberty</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 2 · Peirce 1903, 1913, Popper 1934, Dewey 1938, Hanson 1958, Hintikka 1999</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 2 · Peirce 1903, 1913, Popper 1934, Dewey 1938, Hanson 1958, Hintikka 1998</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Every mode of reasoning trades certainty for fertility. Deduction is perfectly secure and adds no information beyond the premises. Abduction is maximally fertile and guarantees nothing. This tradeoff structures inquiry itself.</p>
@@ -130,11 +130,11 @@ for name, seq in hypotheses.items():
 # terms you've seen and split at the sixth: 32 against 31.
 # Security: minimal. Uberty: maximal.`} />
 
-    <p>Deduction applies the rule you supplied and reports what it entails: 32. Certain, but you decided the answer when you chose the rule. Induction generalizes from the data and predicts the same 32, staying inside the doubling frame. Only abduction asks what <em>generates</em> the series, and the data alone can't say. Doubling and <a href="https://en.wikipedia.org/wiki/Dividing_a_circle_into_areas">Moser's circle</a> agree on every term you've seen, then split at the sixth: 32 against 31. The secure extrapolation is the one that's wrong. That's the price, and the point: fertility comes from leaving the frame the data hands you.</p>
+    <p>Deduction applies the rule you supplied and reports what it entails: 32. Certain, but you decided the answer when you chose the rule. Induction generalizes from the data and predicts the same 32, staying inside the doubling frame. Only abduction asks what <em>generates</em> the series, and the data alone can't say. Doubling and <a href="https://en.wikipedia.org/wiki/Dividing_a_circle_into_areas">Moser's circle</a> agree on every term you've seen, then split at the sixth: 32 against 31. And if the generator is Moser's circle, the secure extrapolation is the one that's wrong. That's the price, and the point: fertility comes from leaving the frame the data hands you.</p>
 
     <h2>Inhaling is also respiration</h2>
 
-    <p>Popper's discovery/justification split dominated philosophy of science for decades. Discovery is psychological, justification is logical, only justification matters. Hanson (1958) and Hintikka (1999) attacked it from opposite ends.</p>
+    <p>Popper's discovery/justification split dominated philosophy of science for decades. Discovery is psychological, justification is logical, only justification matters. Hanson (1958) and Hintikka (1998) attacked it from opposite ends.</p>
 
     <p>Hanson showed that observation is theory-laden: what you see depends on what you know, so discovery already has logical structure. Hintikka showed that justification presupposes discovery: you can't test a hypothesis you haven't selected, and selection is itself an inference. Peirce had said the same a century earlier.</p>
 
@@ -142,13 +142,13 @@ for name, seq in hypotheses.items():
 
     <h2>Abduction earns its logic</h2>
 
-    <p>Dewey's <em>Logic: The Theory of Inquiry</em> (1938) sharpened this into one claim. Logical forms arise <em>within</em> inquiry, not prior to it. A mode of inference earns its status by reliably producing results.</p>
+    <p>Dewey's <em>Logic: The Theory of Inquiry</em> (1938) sharpened this into one claim. Logical forms arise <em>within</em> inquiry; they do not precede it. A mode of inference earns its status by reliably producing results.</p>
 
     <p>Abduction is insecure but not random. If hypothesis generation were random, the hit rate would be negligible and science impossible. That plausible hypotheses emerge above chance means abduction has structure, distinct from the institutional filters (replication, peer review, instruments) that catch bad guesses downstream.</p>
 
     <h2>Thinking before the frame</h2>
 
-    <p>In "A Neglected Argument for the Reality of God" (1908), Peirce called the pre-logical ground of abduction <em>musement</em>: "Pure Play" that is "antipodal to vacancy and dreaminess." The muser stays engaged and alert but holds no target: attention widens instead of narrowing. Musement is not abduction's conclusion; it is the condition under which candidate hypotheses become available.</p>
+    <p>In "A Neglected Argument for the Reality of God" (1908), Peirce called the pre-logical ground of abduction <em>musement</em>: "Pure Play" that is "antipodal to vacancy and dreaminess." The muser stays engaged and alert but holds no target: attention widens instead of narrowing. Musement is not abduction's conclusion. It is the condition under which candidate hypotheses become available.</p>
 
     <p>Directed search works within an existing frame. Musement is what happens before the frame exists. You can't search a space you haven't constructed, and you can't construct it by searching. This is <a href="https://en.wikipedia.org/wiki/Exploration%E2%80%93exploitation_dilemma">explore-exploit</a>: exploitation is induction within the current best model; musement is exploration outside it, guided by aesthetic and analogical affinity rather than formal rules.</p>
 
@@ -193,9 +193,25 @@ for name, seq in hypotheses.items():
 
     <p>So now we have a vocabulary for the tradeoff. Security and uberty vary inversely, both necessary. Abduction is the fertile mode: insecure but not illogical, operating before the frame exists, generating the research programs within which induction does its work.</p>
 
-    <p>What we lack is a <em>formalization</em>. We can say abduction is "inference to the best explanation" and wave at the tradeoff curve, but we can't write down the operation the way we write <a href="https://en.wikipedia.org/wiki/Modus_ponens">modus ponens</a> for deduction or <a href="https://en.wikipedia.org/wiki/Bayesian_inference">Bayesian update</a> for induction. We have a name and a ranking, not a primitive.</p>
+    <p>What we lack is a <em>formalization</em>. We can say abduction is "inference to the best explanation" and wave at the tradeoff curve, but we can't write down the operation the way we write <a href="https://en.wikipedia.org/wiki/Modus_ponens">modus ponens</a> for deduction or <a href="https://en.wikipedia.org/wiki/Bayesian_inference">Bayesian update</a> for induction. We have a name and a ranking. The primitive is missing.</p>
 
     <p>Worse, related operations appear under different names in different fields, and nobody cross-cites. <a href="https://dl.acm.org/doi/10.1145/2049697.2049700">Bi-abduction</a> in program analysis, <a href="https://en.wikipedia.org/wiki/Figure%E2%80%93ground_(perception)">figure-ground reversal</a> in Gestalt psychology, equilibration in <a href="https://en.wikipedia.org/wiki/Piaget%27s_theory_of_cognitive_development#Equilibration">Piaget</a>, <a href="https://en.wikipedia.org/wiki/Judea_Pearl">Pearl</a>'s do-calculus in causal inference. The next chapter collects at least eight such names across six fields and asks whether they are analogies or instances of a common deeper operation.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>2.1</strong> Explain in two sentences why no mode of inference can have both maximal security and nonzero uberty. Your answer should say what the conclusion must do relative to the premises in each case.</p>
+
+    <p class="mb-3"><strong>2.2</strong> Place each scenario on the security-uberty curve and name its dominant mode: (a) a crossword solver checks a candidate word against the crossing letters; (b) a weather model predicts tomorrow's rain from decades of data; (c) a physician proposes a new syndrome after seeing three patients with the same unexplained cluster; (d) a founder declares "our real product is the data, the app is a wrapper." Rank the four by uberty, and say which one could be wrong in a way that more data of the same kind would never reveal.</p>
+
+    <p class="mb-3"><strong>2.3</strong> Build your own Moser pair. Find two generating rules that agree on the terms 1, 3, 5, 7 and split on the fifth term. Then argue the general case: for any finite sequence, a rival generator exists that agrees on every term seen so far and disagrees on the next (hint: a polynomial of degree n passes through any n+1 points). State what this means for the security of induction.</p>
+
+    <p class="mb-3"><strong>2.4</strong> 💻 Extend the chapter's REPL: add a third hypothesis for 1, 2, 4, 8, 16 that predicts 42 at n = 6, using the polynomial trick from exercise 2.3. Print terms 1 through 10 of all three generators. At n = 6 the three make three different predictions; describe the cheapest observation policy that decides among them.</p>
+
+    <p class="mb-3"><strong>2.5</strong> ★ Pick a system you know that scaled: a model, a product, a lab technique. Write down the frame someone chose before the scaling worked, as a single sentence of the form "X is Y" (the chapter's example: "language is next-token prediction"). Then propose a rival frame and the cheapest observation that would favor the rival. If you can't find a rival, explain what that says about the frame's security, or about your musement.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -229,7 +245,7 @@ for name, seq in hypotheses.items():
             <td class="text-gray-400"><em>Patterns of Discovery</em>. Observation is theory-laden; the context of discovery has logical structure.</td>
           </tr>
           <tr class="border-b border-zinc-800">
-            <td class="py-2 pr-3 pl-0 text-gray-300">Hintikka 1999</td>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Hintikka 1998</td>
             <td class="text-gray-400">"What Is Abduction? The Fundamental Problem of Contemporary Epistemology." <em>Transactions of the Charles S. Peirce Society</em> 34(3). The discovery/justification dichotomy is incoherent.</td>
           </tr>
           <tr>

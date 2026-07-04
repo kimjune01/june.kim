@@ -20,7 +20,7 @@ import Repl from '../../../../components/Repl';
 
     <p><a href="/reading/methodeutics/ch05-bi-abduction/">Bi-abduction</a> infers the frame and anti-frame for a single execution path. A function reads some keys and writes others; bi-abduction figures out what must exist beforehand and what stays untouched. Each function analyzed in isolation, results composed across the call graph. Polynomial per function, linear composition.</p>
 
-    <p>But it leaves a crack. Think about making your morning drink. Want coffee, and you need beans and the grinder. Want tea, and you need a teabag and the kettle. Ask what the kitchen must have stocked before you can make your drink, and there is no single answer. It forks on which one you choose. Each needs different things, and the choice between them is the structure that matters.</p>
+    <p>But it leaves a crack. Think about making your morning drink. If you want coffee, you need beans and the grinder. If you want tea, you need a teabag and the kettle. Ask what the kitchen must have stocked before you can make your drink, and there is no single answer. It forks on which drink you choose. Each needs different things, and the choice between them is the structure that matters.</p>
 
     <p>The same fork, drawn out:</p>
 
@@ -70,7 +70,7 @@ import Repl from '../../../../components/Repl';
 
     <h2>Outcome separation logic</h2>
 
-    <p>Zilberstein, Saliling, and Silva (2024) introduced <strong>Outcome Separation Logic</strong> at OOPSLA. The key move: extend the separating conjunction from two-part separation (footprint <code>*</code> frame) to <em>n</em>-part separation across outcomes. Where separation logic says "the heap splits into what the function touches and what it doesn't," outcome separation logic says "the heap splits into what each <em>branch</em> touches and what none of them touch." The methodeutic reading below, recasting this as causal inference, is our extrapolation, not theirs.</p>
+    <p>Zilberstein, Saliling, and Silva (2024) introduced <strong>Outcome Separation Logic</strong> at OOPSLA. The key move: extend the separating conjunction (Chapter 5's "and separately" operator <code>*</code>) from two-part separation (footprint <code>*</code> frame) to <em>n</em>-part separation across outcomes. Where separation logic says "the heap splits into what the function touches and what it doesn't," outcome separation logic says "the heap splits into what each <em>branch</em> touches and what none of them touch." The methodeutic reading below, recasting this as causal inference, is our extrapolation, not theirs.</p>
 
     <p>Bi-abduction solves for two unknowns along one execution path: anti-frame and frame. We use <em>tri-abduction</em> as this book's name for the N=2 outcome-separation case. It solves for <em>three</em>: the precondition before the fork, plus the frame and postcondition for each branch. "Tri" because the minimum branching program has three logical parts: shared prefix, branch A, branch B.</p>
 
@@ -101,7 +101,7 @@ Such that:
 
     <p>Same starting state. Two perturbations. Two outcomes. The unary diff (<a href="/reading/methodeutics/ch04-diff/">chapter 4</a>) analyzes each branch in isolation. Branch A's figure: connector A wiggled, engine stalled. Branch B's figure: connector B wiggled, engine unchanged. Bi-abduction (<a href="/reading/methodeutics/ch05-bi-abduction/">chapter 5</a>) infers the frame for each branch independently.</p>
 
-    <p>The diagnostic power is in the <em>comparison between branches</em>. Wiggling connector A caused a stall. Wiggling connector B did not. The engine was running in both cases before the wiggle. The shared ground (fuel, spark, the rest of the harness) was identical across both branches. The only difference is which connector was wiggled. The divergent outcomes (stall vs. no stall) localize the cause to connector A, the loose connection, not connector B.</p>
+    <p>The diagnostic power is in the <em>comparison between branches</em>. Wiggling connector A caused a stall. Wiggling connector B did not. The engine was running in both cases before the wiggle. The shared ground (fuel, spark, the rest of the harness) was identical across both branches. The only difference is which connector was wiggled. The divergent outcomes (stall vs. no stall) localize the cause to connector A and its loose connection.</p>
 
     <p>This is the causal edge: what explains why two experiments from the same starting state produced different results. The branching condition (which connector was wiggled) is the candidate cause. The divergent outcomes are the evidence. The shared ground is the control.</p>
 
@@ -257,7 +257,7 @@ Such that:
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Branching condition</td>
             <td class="pr-3 text-gray-300">Perturbation</td>
-            <td class="text-gray-400">The controlled variable &mdash; what the experimenter varies</td>
+            <td class="text-gray-400">The controlled variable: what the experimenter varies</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Divergent postconditions</td>
@@ -273,7 +273,7 @@ Such that:
       </table>
     </div>
 
-    <p>The controlled experiment is tri-abduction performed by a human. Hold starting conditions constant. Vary one thing. Observe whether the outcome changes. If it does, the varied thing is a candidate cause, subject to confounding, measurement quality, and power. Mill's method of difference, read through a separation logic lens.</p>
+    <p>The controlled experiment is tri-abduction performed by a human. Hold starting conditions constant. Vary one thing. Observe whether the outcome changes. If it does, the varied thing is a candidate cause, subject to confounding, measurement quality, and statistical power. Mill's method of difference (1843), read through a separation logic lens.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -433,6 +433,22 @@ print(f"    => connector A is causal, connector B is not")
     <p>Testing is expensive. Every experiment costs time, compute, or reagents. The abductive primitive produces dozens of candidates from a single fork. Running all of them is rarely feasible. We need a theory of which hypotheses to invest in: a theory of the <em>economy of research</em>.</p>
     <hr class="border-zinc-700 my-8"/>
 
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>6.1</strong> The name counts to three. List the three logical parts of the minimum branching program, and state in one sentence what tri-abduction outputs that bi-abduction, run separately on each branch, cannot.</p>
+
+    <p class="mb-3"><strong>6.2</strong> Two identical plants sit on your windowsill: same pot, same soil, same watering schedule. You move one to the shaded end. A week later it droops while the other thrives. Identify the shared start, the two branches, the divergent outcomes, the shared ground, and the causal edge. Now the twist: the shaded end also sits under the air-conditioning vent. Which requirement of the controlled experiment does this break, and what does the causal edge degrade into?</p>
+
+    <p class="mb-3"><strong>6.3</strong> Construct your own instance. Pick any everyday system that misbehaves intermittently (a laptop that won't wake, a shower that runs cold, a group chat that ignores you) and design a wiggle test: write the three snapshot dicts, <code>shared_start</code>, <code>branch_a_end</code>, <code>branch_b_end</code>, so that <code>tri_abduce</code> would isolate one perturbation as causal and rule the other out. State what your shared ground controls for.</p>
+
+    <p class="mb-3"><strong>6.4</strong> 💻 The chapter claims the primitive generalizes to N branches. Extend <code>tri_abduce</code> to accept a list of branch endpoints instead of two, and return which perturbation keys track the outcome difference across all branches. Test it on a three-connector harness where wiggling connectors A and C stalls the engine and wiggling B does not.</p>
+
+    <p class="mb-3"><strong>6.5</strong> ★ Take the last controlled comparison you actually ran or read: an A/B test, a recipe tweak, a benchmark before and after a patch. Fill in the chapter's four rows for it: shared precondition, branching condition, divergent postconditions, causal edge. Then name one shared-ground variable the comparison assumed constant but never measured. How would you check it?</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
     <h2>Sources</h2>
 
     <div class="overflow-x-auto">
@@ -440,7 +456,7 @@ print(f"    => connector A is causal, connector B is not")
         <tbody>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Zilberstein et al. 2024</td>
-            <td class="text-gray-400">"Outcome Separation Logic: Local Reasoning for Correctness and Incorrectness with Outcomes." Zilberstein, Saliling, Silva. <em>OOPSLA 2024</em>. <a href="https://dl.acm.org/doi/10.1145/3649821">ACM DL</a>. Extends separation logic to handle branching programs with multiple outcomes. The formal basis for tri-abduction.</td>
+            <td class="text-gray-400">"Outcome Separation Logic: Local Reasoning for Correctness and Incorrectness with Computational Effects." Zilberstein, Saliling, Silva. <em>OOPSLA 2024</em>. <a href="https://dl.acm.org/doi/10.1145/3649821">ACM DL</a>. Extends separation logic to handle branching programs with multiple outcomes. The formal basis for tri-abduction.</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Calcagno et al. 2009</td>
@@ -472,7 +488,7 @@ print(f"    => connector A is causal, connector B is not")
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
     <ul>
-      <li><a href="https://dl.acm.org/doi/10.1145/3632921">Zilberstein et al. 2024, "Outcome Separation Logic" (ACM DL)</a></li>
+      <li><a href="https://dl.acm.org/doi/10.1145/3649821">Zilberstein et al. 2024, "Outcome Separation Logic" (ACM DL)</a></li>
       <li><a href="https://dl.acm.org/doi/10.1145/1480881.1480917">Calcagno et al. 2009, "Bi-Abduction" (ACM DL)</a></li>
       <li><a href="https://arxiv.org/abs/2305.04842">Zilberstein et al. 2023, "Outcome Logic" (arXiv)</a></li>
       <li><a href="https://en.wikipedia.org/wiki/Mill%27s_Methods"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Mill's Methods (Wikipedia)</a></li>

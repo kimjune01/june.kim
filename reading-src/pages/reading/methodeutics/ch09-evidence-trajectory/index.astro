@@ -12,14 +12,14 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-gray-400 text-sm mb-6">Chapter 9 &middot; de Finetti 1937, Ville 1939, Wald 1947, Robbins 1967, Shafer 2021, Ramdas 2023</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">You run an A/B test on two code variants. B converts 12% better than A, p &lt; .01, sample size 50,000. You ship B. Six months later, B is worse than A ever was. The snapshot lied. This chapter introduces the e-value, a measure of evidence that preserves the temporal structure the p-value threw away.</p>
+      <p class="text-lg" style="max-width:none">You run an A/B test on two code variants. B converts 12% better than A, p &lt; .01, sample size 50,000. You ship B. Six months later, B is worse than A ever was. The snapshot lied. This chapter shows why snapshots lie, and rebuilds evidence as a wager whose running bankroll keeps the temporal structure the p-value throws away.</p>
     </div>
 
     <p>Chapters 4&ndash;8 built the abductive primitive. You can frame what to observe. You can generate hypotheses from a surprising observation. You can select which experiment to run next. But after the experiment runs and data arrives, how do you know the hypothesis is right?</p>
 
     <p>The standard answer is the p-value: collect a fixed sample, compute a test statistic, compare to a threshold. If p &lt; 0.05, declare significance. The p-value compresses the entire temporal structure of evidence into one number. That compression is mandatory. Peek at the data mid-experiment and the false positive guarantee breaks. The math demands you look once.</p>
 
-    <p>This chapter traces a 90-year lineage of work that removes that demand. The result is a measure of evidence you can compute at every observation, stop whenever you want, and whose error guarantee holds at every moment. The evidence becomes a trajectory. And the trajectory carries temporal patterns that a scalar discards.</p>
+    <p>This chapter traces a 90-year lineage of work that removes that demand, and ends at its premise: evidence is a bet. Chapter 10 makes the bet formal, a measure of evidence you can compute at every observation and stop on whenever you want, with the error guarantee intact at every moment. The evidence becomes a trajectory. And the trajectory carries temporal patterns that a scalar discards.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -59,13 +59,21 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <li class="mb-1">A trajectory that would have revealed the danger, had anyone preserved it.</li>
     </ol>
 
-    <p><a href="/reading/scientific-method/meehl-1967/">Meehl's structural flaw</a> at industrial scale. In 1967 Meehl showed that directional predictions in soft psychology corroborate nothing because the crud factor guarantees significance. The same structure (directional prediction, snapshot window, no trajectory) now ships products and drugs. A/B testing culture inherited the pattern wholesale: directional predictions, fixed sample sizes, ship on significance.</p>
+    <p><a href="/reading/scientific-method/meehl-1967/">Meehl's structural flaw</a> at industrial scale. In 1967 Meehl showed that directional predictions in soft psychology corroborate nothing, because the crud factor, the background reality that everything correlates a little with everything, guarantees significance. The same structure (directional prediction, snapshot window, no trajectory) now ships products and drugs. A/B testing culture inherited the pattern wholesale: directional predictions, fixed sample sizes, ship on significance.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
     <h2>Betting line</h2>
 
-    <p>The alternative to snapshot testing has a 90-year lineage. Six contributions, each building on the last. The thread ran parallel to Fisher's fixed-horizon view for decades before converging.</p>
+    <p>The alternative to snapshot testing has a 90-year lineage that ran parallel to Fisher's fixed-horizon view for decades before converging.</p>
+
+    <p>The lineage is older than ninety years, in two senses. Follow the word: <em>probability</em> descends from the Latin <em>probare</em>, to test or prove, the root behind <em>probe</em>, <em>proof</em>, <em>approve</em>, and <em>probity</em>. At the root, to be probable is to be <em>probe-able</em>, able to withstand a test. Follow the mathematics and it was born at a gaming table. Pascal and Fermat's 1654 letters solved a gambler's problem of how to split the stakes of an interrupted game; Huygens made the exchange the first printed treatise in 1657, <em>On Reckoning in Games of Chance</em>, and its founding quantity, expectation, is simply the fair price of a wager. Probability did not begin as a frequency or as a belief. It began as a bet.</p>
+
+    <p>Ian Hacking's <em>The Emergence of Probability</em> (1975) finds the term arriving already two-faced, one side the aleatory frequency of dice, the other the epistemic sense of an opinion approved and borne out under examination. Boole carried both faces into the algebra of logic when he extended it to probability in the <em>Laws of Thought</em> (1854), and Peirce, reading exactly that treatment, took the testing sense forward into his logic of inference. The twentieth century let the faces drift apart, until <em>probability</em> sounded like nothing but a long-run ratio and both the wager and the probe decayed into dead metaphor.</p>
+
+    <p>That drift is why the frequentist-versus-Bayesian quarrel feels forced: it asks which single face the word really wore, when the word predates both schools. The frequentist reads probability as a ratio and demands a reference class, a population for the ratio to count over; the Bayesian reads it as a degree of belief and demands a prior. The betting line below is neither, and older than either. Its first entry, de Finetti, still read the bet as a degree of belief; Ville kept the wager and dropped the reading, and it is Ville's line the rest of the table extends. In Shafer and Vovk's game-theoretic probability a hypothesis faces one operational question: can a bettor multiply capital against it? No reference class to posit, no prior to assume. An e-value is that bet's payoff, the probe made literal, the running record of how much testing the hypothesis has survived. It reunites the wager and the probe that the modern split drove apart, and returns probability to the gaming table where it was born.</p>
+
+    <p>The modern thread, in six steps:</p>
 
     <div class="overflow-x-auto my-6">
       <table class="w-full text-sm">
@@ -80,7 +88,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">1937</td>
             <td class="pr-3 text-gray-300"><a href="https://en.wikipedia.org/wiki/Bruno_de_Finetti">de Finetti</a></td>
-            <td class="text-gray-400">Probability as coherent betting. If your beliefs can be Dutch-booked, they aren't probabilities. Established that evidence is a bet, not a frequency.</td>
+            <td class="text-gray-400">Probability as coherent betting. If your beliefs can be Dutch-booked, they aren't probabilities. Supplied the betting language of evidence, though he still read the bet as belief.</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">1939</td>
@@ -115,221 +123,31 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <hr class="border-zinc-700 my-8"/>
 
-    <h2>E-values: definition from scratch</h2>
+    <h2>The premise: a casino where the hypothesis is the house</h2>
 
-    <p>A <strong>p-value</strong> is the probability of seeing data at least as extreme as what you observed, assuming the null hypothesis is true. If p is small, the data is surprising under the null. Smaller p = more evidence against the null.</p>
+    <p>Before the formal definition, the picture that motivates it. To test a hypothesis, open a casino in which that hypothesis is the house. The null hypothesis, the claim under test that nothing is going on, sets the odds: if it says the coin is fair, heads pays double; if it says the drug does nothing, recoveries pay out as if they arrive at the placebo rate. You walk in with one dollar and bet on what you actually expect to see. Each round of data settles the wager, and you may let winnings ride into the next round.</p>
 
-    <p>An <strong>e-value</strong> is the payoff of a bet against the null hypothesis. If the null is true, the expected payoff is at most 1:</p>
+    <p>Your bankroll is the evidence. If the null is true, every bet in the house is fair or worse for you, so no strategy grows a dollar on average, and reaching twenty dollars is something a true null allows at most one time in twenty. If the null is false, the odds are mispriced, and a bettor who sees the mispricing compounds. Wealth won against a hypothesis is exactly as hard to come by as the hypothesis is close to true, which makes the bankroll a calibrated evidence meter.</p>
 
-    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>E[e] &le; 1 &nbsp;&nbsp; under the null</code></pre>
+    <p>This is what the bankroll buys over a p-value. A p-value is a verdict issued once, at a sample size fixed in advance; look twice and the guarantee is void. A bankroll is a running quantity. You can watch it every round, cash out whenever you choose, and carry winnings from one table to the next by simple multiplication. Chapter 10 makes the three casino facts formal: what counts as a fair bet (the definition), winnings carrying across tables (composition), and cashing out at will (anytime validity).</p>
 
-    <p>That's the entire definition. An e-value is a non-negative random variable whose expectation under the null is at most 1. Large values (e &gt;&gt; 1) mean the null is losing badly. An e-value of 20 means the data is 20 times more consistent with the alternative than the null.</p>
-
-    <p>The constraint E[e] &le; 1 is the <strong>supermartingale property</strong>: the expected future value of the process is at most its current value. If you bet against the null and the null is true, your wealth cannot grow on average. If your wealth grows anyway, the null is losing.</p>
-
-    <h3>Why "at most 1" and not "equals 1"</h3>
-
-    <p>A martingale has E[e] = 1 exactly. A supermartingale relaxes this to E[e] &le; 1. The relaxation matters because it makes e-values composable. If you run two sequential experiments producing e-values e<sub>1</sub> and e<sub>2</sub>, their product e<sub>1</sub> &times; e<sub>2</sub> is also an e-value. The supermartingale property guarantees it: two honest bets composed are still an honest bet. This composition does not require any correction for multiple testing. It is exact.</p>
-
-    <p>P-values do not compose this way. Multiply two p-values and the result is not a valid p-value. Corrections (Bonferroni, Holm, BH) restore validity but throw away statistical power. E-values compose for free.</p>
-
-    <h3>Anytime validity</h3>
-
-    <p>The deepest property: you can compute an e-value at every observation and the guarantee holds at each one. No peeking penalty. No alpha spending. Look whenever you want, stop whenever you want, false positive rate controlled at every moment.</p>
-
-    <p>This is Doob's optional stopping theorem in action. A supermartingale evaluated at any stopping time is still a supermartingale. The math does not care when you look or why you stopped.</p>
-
-    <p>Contrast with a p-value. Compute p at n=100: 0.06, not significant. Peek again at n=200: 0.04, significant. Your false positive rate is no longer 5%. Peeking twice inflated it. The p-value guarantee requires exactly one look. The e-value guarantee holds at every look.</p>
+    <p>The bankroll also pays Chapter 8's debt. Peirce's economy of research says to spend where marginal information per dollar is highest and to abandon a line of inquiry when its return drops below the common frontier, and the limit was that the return could only be computed after the fact, from utility curves nobody has at the start. The bankroll makes the return a live reading. Run each open line as a wager against its own null and keep a tab of what its experiments cost; the running return is bankroll growth per dollar spent. A line whose bankroll compounds on a small tab is the one to fund. A line whose bankroll has stalled while its bill grows has priced itself out, and you can quit the moment the chart says so. That is the sequential reading of evidence Chapter 8 promised this chapter would deliver.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
-    <h2>Trajectories expose feedback loops</h2>
+    <h2>Exercises</h2>
 
-    <p>A p-value compresses evidence into a scalar. An e-value stream preserves evidence over time. The system's dynamics live in the temporal structure. Compress to a scalar and they vanish.</p>
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
 
-    <p>Point an e-value stream at a system with feedback. The trajectory preserves temporal patterns that a terminal scalar discards.</p>
+    <p class="mb-3"><strong>9.1</strong> In the casino picture, explain in two sentences why a true null cannot grow your bankroll on average, and why reaching twenty dollars from one licenses at most a one-in-twenty false alarm.</p>
 
-    <p><em>Smoking and stress.</em> The e-value climbs after each cigarette (relief), falls during withdrawal (stress spikes), climbs on relapse. The oscillation <em>is</em> the addiction cycle. A two-week snapshot says "smoking reduces stress, p &lt; .05." The trajectory shows the loop.</p>
+    <p class="mb-3"><strong>9.2</strong> A fitness app A/B tests a streak badge and finds a 9% retention lift at week two, p &lt; .01. Users soon learn to open the app for one second at 11:59pm to keep the streak. Write out the five-step skeleton of this failure, one line per step, and mark the step where the feedback enters.</p>
 
-    <p><em>Ad load.</em> An e-value stream tracking revenue per session climbs for weeks (more ads = more revenue), flattens (ad blindness developing), then declines (degraded engagement). The inflection point marks the moment the feedback loop activates. A fixed-sample test that ends before the inflection sees only the climb.</p>
+    <p class="mb-3"><strong>9.3</strong> A streaming service tests autoplay-next-episode against the null "no effect on weekly watch time." The bankroll against the null compounds for the first month, flattens during the second, and collapses during the third. Tell the story of what the users did, in the style of the ad-load case. What would a p-value computed at day 30 have said, what would one computed at day 90 have said, and why can't the two snapshots be reconciled without the trajectory?</p>
 
-    <p><em>MCAS.</em> An e-value tracking "does the correction succeed?" oscillates. Push nose down (evidence for success), pilot trims up (evidence resets), MCAS fires again. The oscillation is two subsystems fighting. A snapshot at any single activation says "correction successful."</p>
+    <p class="mb-3"><strong>9.4</strong> 💻 Build the casino for a die you suspect favors six. The null says the die is fair. Choose the bet the suspicion implies, then simulate 100 rolls under each truth (fair die, loaded die) in a spreadsheet or ten lines of Python, letting winnings ride. Plot both bankrolls. How many rolls does the loaded case need before the bankroll makes the case?</p>
 
-    <hr class="border-zinc-700 my-8"/>
-
-    <h2>Evidence compounds across experiments</h2>
-
-    <p>E-values compose multiplicatively across sequential experiments.</p>
-
-    <div class="overflow-x-auto my-6">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="border-b border-zinc-700">
-            <th class="text-left py-2 pr-3 text-gray-400">Framework</th>
-            <th class="text-left py-2 pr-3 text-gray-400">Method</th>
-            <th class="text-left py-2 pr-3 text-gray-400">Sample size</th>
-            <th class="text-left py-2 text-gray-400">Composition</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Frequentist</td><td class="pr-3 text-gray-400">Fixed</td><td class="pr-3 text-gray-400">Fixed</td><td class="text-gray-400">Requires correction (Bonferroni, etc.)</td></tr>
-          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Bayesian</td><td class="pr-3 text-gray-400">Fixed</td><td class="pr-3 text-gray-400">Variable</td><td class="text-gray-400">Requires shared prior</td></tr>
-          <tr><td class="py-2 pr-3 pl-0 text-gray-300">E-value</td><td class="pr-3 text-gray-400">Variable</td><td class="pr-3 text-gray-400">Variable</td><td class="text-gray-400">Multiply. No correction needed.</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <p>Run ten small experiments, each isolating one variable. Experiment A gives e<sub>1</sub> = 3 (suggestive). Experiment B gives e<sub>2</sub> = 4 (suggestive). Neither is strong alone. But e<sub>1</sub> &times; e<sub>2</sub> = 12, strong combined evidence, valid with no correction.</p>
-
-    <p>Change your test, your sampling strategy, your hypothesis mid-stream. The evidence still composes. The supermartingale guarantee holds regardless. Fixed-method testing cannot accumulate evidence across changing experiments. E-values can.</p>
-
-    <hr class="border-zinc-700 my-8"/>
-
-    <h2>Code: e-value trajectory for a sequential test</h2>
-
-    <p>A simple sequential test. Observations arrive one at a time. Under the null, N(0, 1). Under the alternative, N(&mu;, 1) for some &mu; &gt; 0. At each step, compute the likelihood ratio (the simplest e-value) and track the trajectory.</p>
-
-    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code><span class="hl-keyword">import</span> math
-<span class="hl-keyword">import</span> random
-
-<span class="hl-keyword">def</span> <span class="hl-builtin">e_value_trajectory</span>(observations, mu_alt=<span class="hl-number">0.5</span>):
-    <span class="hl-string">"""Compute cumulative e-value trajectory via likelihood ratio.
-
-    E-value at step t = product of likelihood ratios up to t.
-    Under H0: X_i ~ N(0,1). Under H1: X_i ~ N(mu_alt, 1).
-    Likelihood ratio for one observation:
-        L(x) = exp(mu_alt * x - mu_alt^2 / 2)
-    Cumulative e-value: product of L(x_i) for i = 1..t.
-    """</span>
-    trajectory = []
-    log_e = <span class="hl-number">0.0</span>
-
-    <span class="hl-keyword">for</span> x <span class="hl-keyword">in</span> observations:
-        <span class="hl-comment"># Log-likelihood ratio for one observation</span>
-        log_lr = mu_alt * x - (mu_alt ** <span class="hl-number">2</span>) / <span class="hl-number">2</span>
-        log_e += log_lr
-        trajectory.append(math.exp(log_e))
-
-    <span class="hl-keyword">return</span> trajectory
-
-<span class="hl-keyword">def</span> <span class="hl-builtin">p_value_at_t</span>(observations):
-    <span class="hl-string">"""Two-sided z-test p-value computed at the end of the sample."""</span>
-    n = <span class="hl-builtin">len</span>(observations)
-    <span class="hl-keyword">if</span> n == <span class="hl-number">0</span>:
-        <span class="hl-keyword">return</span> <span class="hl-number">1.0</span>
-    mean = <span class="hl-builtin">sum</span>(observations) / n
-    z = mean * math.sqrt(n)
-    <span class="hl-comment"># One-sided p-value via normal CDF approximation</span>
-    p = <span class="hl-number">0.5</span> * math.erfc(z / math.sqrt(<span class="hl-number">2</span>))
-    <span class="hl-keyword">return</span> p
-
-
-<span class="hl-comment"># --- Scenario 1: Null is true (no effect) ---</span>
-random.seed(<span class="hl-number">42</span>)
-null_obs = [random.gauss(<span class="hl-number">0</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">100</span>)]
-null_traj = e_value_trajectory(null_obs)
-
-<span class="hl-builtin">print</span>(<span class="hl-string">"=== Null is true (no real effect) ==="</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=10:  &#123;null_traj[9]:.4f&#125;"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=50:  &#123;null_traj[49]:.4f&#125;"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=100: &#123;null_traj[99]:.4f&#125;"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=100: &#123;p_value_at_t(null_obs):.4f&#125;"</span>)
-<span class="hl-builtin">print</span>()
-
-<span class="hl-comment"># --- Scenario 2: Alternative is true (real effect, mu=0.3) ---</span>
-alt_obs = [random.gauss(<span class="hl-number">0.3</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">100</span>)]
-alt_traj = e_value_trajectory(alt_obs, mu_alt=<span class="hl-number">0.5</span>)
-
-<span class="hl-builtin">print</span>(<span class="hl-string">"=== Alternative is true (mu=0.3) ==="</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=10:  &#123;alt_traj[9]:.4f&#125;"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=50:  &#123;alt_traj[49]:.4f&#125;"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=100: &#123;alt_traj[99]:.4f&#125;"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=100: &#123;p_value_at_t(alt_obs):.4f&#125;"</span>)
-<span class="hl-builtin">print</span>()
-
-<span class="hl-comment"># --- Scenario 3: System with feedback (effect reverses at t=50) ---</span>
-feedback_obs = (
-    [random.gauss(<span class="hl-number">0.5</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">50</span>)] +  <span class="hl-comment"># positive effect</span>
-    [random.gauss(-<span class="hl-number">0.3</span>, <span class="hl-number">1</span>) <span class="hl-keyword">for</span> _ <span class="hl-keyword">in</span> <span class="hl-builtin">range</span>(<span class="hl-number">50</span>)]   <span class="hl-comment"># effect reverses</span>
-)
-feedback_traj = e_value_trajectory(feedback_obs, mu_alt=<span class="hl-number">0.5</span>)
-
-<span class="hl-builtin">print</span>(<span class="hl-string">"=== Feedback system (effect reverses at t=50) ==="</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=25:  &#123;feedback_traj[24]:.4f&#125;  (rising)"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=50:  &#123;feedback_traj[49]:.4f&#125;  (peak)"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=75:  &#123;feedback_traj[74]:.4f&#125;  (falling)"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"E-value at t=100: &#123;feedback_traj[99]:.4f&#125;  (collapsed)"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=50:  &#123;p_value_at_t(feedback_obs[:50]):.4f&#125;  (snapshot at peak)"</span>)
-<span class="hl-builtin">print</span>(<span class="hl-string">f"P-value at t=100: &#123;p_value_at_t(feedback_obs):.4f&#125;  (snapshot at end)"</span>)</code></pre>
-
-    <p class="text-gray-500 text-sm mt-2 mb-6">Output:</p>
-
-    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>=== Null is true (no real effect) ===
-E-value at t=10:  0.1432
-E-value at t=50:  0.0005
-E-value at t=100: 0.0001
-P-value at t=100: 0.2802
-
-=== Alternative is true (mu=0.3) ===
-E-value at t=10:  2.3119
-E-value at t=50:  68.6328
-E-value at t=100: 73236.5661
-P-value at t=100: 0.0000
-
-=== Feedback system (effect reverses at t=50) ===
-E-value at t=25:  122.3931  (rising)
-E-value at t=50:  1161.3707  (peak)
-E-value at t=75:  1.5770  (falling)
-E-value at t=100: 0.0027  (collapsed)
-P-value at t=50:  0.0001  (snapshot at peak)
-P-value at t=100: 0.0942  (snapshot at end)</code></pre>
-
-    <p>Three scenarios. Three stories.</p>
-
-    <p><em>Null is true:</em> the e-value drops below 1 immediately and keeps falling. By t=100, e = 0.0001. The bet against the null is thoroughly lost. Under the null, honest betting cannot grow in expectation. Individual paths fluctuate, but the trend is downward.</p>
-
-    <p><em>Alternative is true:</em> the e-value climbs steadily. By t=100, e = 73,237. You could have stopped at t=50 (e = 69, already strong) or continued. The guarantee held at every peek. Monotone climb: accumulating.</p>
-
-    <p><em>Feedback system:</em> the Google ad-load scenario. The effect is real for the first 50 observations, then reverses. The e-value climbs to 1,161 at t=50, then <em>collapses</em> as the reversal erodes the accumulated evidence. By t=100, e = 0.003. Meanwhile: p at t=50 = 0.0001 (highly significant), p at t=100 = 0.09 (borderline). Two snapshots, two conclusions, no way to reconcile them. The e-value trajectory tells the whole story: rise, peak, collapse. The shape of the trajectory is the shape of the system.</p>
-
-    <hr class="border-zinc-700 my-8"/>
-
-    <h2>The p-value's guarantee demands one look</h2>
-
-    <p>A p-value controls the <em>type I error rate at a single, predetermined stopping time</em>. Fix n in advance, compute once: P(p &lt; &alpha; | H<sub>0</sub>) = &alpha;. Peek at t=50 and again at t=100, and you get two chances to cross the threshold. The error rate inflates.</p>
-
-    <p>An e-value controls the error rate <em>uniformly over all stopping times</em>. By Markov's inequality and the supermartingale property, for any stopping time &tau;:</p>
-
-    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>P(e<sub>&tau;</sub> &ge; 1/&alpha;) &le; &alpha; &nbsp;&nbsp; under the null</code></pre>
-
-    <p>This holds for <em>any</em> stopping time: fixed, random, data-dependent, adversarial. The proof is three lines from Doob's optional stopping theorem. The p-value guarantee requires the stopping time to be independent of the data. The e-value guarantee does not.</p>
-
-    <p>The tradeoff: at any single sample size, a p-value test is more powerful. If you commit to looking exactly once at exactly n observations, you should use it. The e-value pays a constant-factor efficiency loss at each time point. What it buys is the entire trajectory.</p>
-
-    <hr class="border-zinc-700 my-8"/>
-
-    <h2>Connection to Part II</h2>
-
-    <p>The economy of research (<a href="/reading/methodeutics/ch08-economy-of-research/">Chapter 8</a>) selects which experiment to run. The e-value tracks what the experiment says over time. The two connect directly:</p>
-
-    <ol class="list-decimal pl-5 mb-4">
-      <li class="mb-2"><em>Generate</em> hypotheses via abduction (Chapters 4&ndash;6).</li>
-      <li class="mb-2"><em>Select</em> the next experiment via information gain per unit cost (Chapter 8).</li>
-      <li class="mb-2"><em>Run</em> the experiment and track the e-value trajectory (this chapter).</li>
-      <li class="mb-2"><em>Read</em> the trajectory's shape to classify the system's dynamics (Chapter 10).</li>
-    </ol>
-
-    <p>Step 3 is new. Before e-values, step 2 fed directly into a terminal decision: run, compute p, decide. Now a trajectory sits between the experiment and the decision, carrying information the terminal scalar discards.</p>
-
-    <hr class="border-zinc-700 my-8"/>
-
-    <h2>Trajectory shape is ambiguous without classification</h2>
-
-    <p>You have the trajectory. It oscillates. Is the system fighting itself (MCAS vs. pilots), or is your measurement just noisy?</p>
-
-    <p>Structural oscillation (cyclic dynamics in the system) and statistical oscillation (weak effect plus finite-sample noise) look the same in the raw trajectory. The trajectory alone cannot distinguish them.</p>
-
-    <p>Classifying whether evidence is converging, diverging, oscillating, or chaotic requires tools from dynamical systems theory: convergence rates, <a href="https://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponents</a>, stability analysis. These tools apply directly to evidence trajectories. <a href="/reading/methodeutics/ch10-four-bins/">Chapter 10</a> builds the classification scheme.</p>
+    <p class="mb-3"><strong>9.5</strong> ★ Find a decision you or your team shipped on a snapshot: an A/B test, a diet that "worked" after two weeks, a hiring process change judged after one quarter. Reconstruct the evidence as a trajectory, as far back and forward as your records allow, and sketch its shape: steady decay, steady compounding, or rise-then-collapse like the ad-load case. Would a bankroll-watcher have shipped when you did, earlier, or never?</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -351,24 +169,8 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
             <td class="text-gray-400"><em><a href="https://en.wikipedia.org/wiki/Sequential_analysis">Sequential Analysis.</a></em> Fixed-sample testing is a special case. Optional stopping is the general framework.</td>
           </tr>
           <tr class="border-b border-zinc-800">
-            <td class="py-2 pr-3 pl-0 text-gray-300">Doob 1953</td>
-            <td class="text-gray-400"><em>Stochastic Processes.</em> The optional stopping theorem: supermartingales can't grow in expectation at stopping times.</td>
-          </tr>
-          <tr class="border-b border-zinc-800">
-            <td class="py-2 pr-3 pl-0 text-gray-300">Robbins &amp; Darling 1967</td>
-            <td class="text-gray-400">"Confidence Sequences for Mean, Variance, and Median." Anytime-valid confidence intervals are achievable.</td>
-          </tr>
-          <tr class="border-b border-zinc-800">
-            <td class="py-2 pr-3 pl-0 text-gray-300">Shafer 2021</td>
-            <td class="text-gray-400"><a href="/reading/scientific-method/shafer-2021/"><em>Testing by Betting.</em></a> Game-theoretic probability as the foundation for hypothesis testing.</td>
-          </tr>
-          <tr class="border-b border-zinc-800">
-            <td class="py-2 pr-3 pl-0 text-gray-300">Ramdas et al. 2023</td>
-            <td class="text-gray-400">"<a href="https://arxiv.org/abs/2103.06476">Testing Exchangeability: Game-Theoretic and E-Values.</a>" Unified treatment of e-values, anytime validity, and composability.</td>
-          </tr>
-          <tr class="border-b border-zinc-800">
-            <td class="py-2 pr-3 pl-0 text-gray-300">Gr&uuml;nwald et al. 2024</td>
-            <td class="text-gray-400">"<a href="https://academic.oup.com/jrsssb/article/86/5/1091/7623686">Safe Testing.</a>" E-values as the basis for hypothesis tests that are valid under optional stopping and optional continuation.</td>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Hacking 1975</td>
+            <td class="text-gray-400"><em>The Emergence of Probability.</em> The word arrived two-faced: aleatory frequency and epistemic approval under examination.</td>
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Meehl 1967</td>
@@ -382,24 +184,14 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; select which experiment to run</li>
-      <li><a href="/reading/methodeutics/ch10-four-bins/">Ch 10: Four Bins</a> &mdash; how to read the trajectory's shape</li>
+      <li><a href="/reading/methodeutics/ch10-e-values/">Ch 10: E-values</a> &mdash; the bankroll made formal</li>
       <li><a href="/reading/scientific-method/shafer-2021/">Shafer 2021</a> &mdash; testing by betting</li>
-      <li><a href="/reading/scientific-method/ramdas-2023/">Ramdas 2023</a> &mdash; e-values and anytime validity</li>
       <li><a href="/reading/scientific-method/meehl-1967/">Meehl 1967</a> &mdash; snapshot testing's structural flaw</li>
       <li><a href="/evidence-has-a-trajectory">Blog post: Evidence has a trajectory</a></li>
     </ul>
-
-    <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
-    <ul>
-      <li><a href="https://arxiv.org/abs/1906.07801">Ramdas et al. 2019, "Admissible Anytime-Valid Sequential Testing" (arXiv)</a></li>
-      <li><a href="https://arxiv.org/abs/2103.06476">Ramdas et al. 2023, "Game-Theoretic Statistics and Safe Anytime-Valid Inference" (arXiv)</a></li>
-      <li><a href="https://academic.oup.com/jrsssb/article/86/5/1091/7623686">Gr&uuml;nwald et al. 2024, "Safe Testing" (JRSS-B)</a></li>
-      <li><a href="https://en.wikipedia.org/wiki/E-value_(statistics)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>E-value (Wikipedia)</a></li>
-      <li><a href="https://en.wikipedia.org/wiki/Martingale_(probability_theory)"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Martingale (Wikipedia)</a></li>
-    </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch08-economy-of-research/", label: "Economy of research" }} next={{ href: "/reading/methodeutics/ch10-four-bins/", label: "Four bins" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch08-economy-of-research/", label: "Economy of research" }} next={{ href: "/reading/methodeutics/ch10-e-values/", label: "E-values" }} />
 
   </main>
 </Layout>

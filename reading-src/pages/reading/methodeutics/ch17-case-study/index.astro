@@ -4,12 +4,12 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 16: Case Study — Methodeutics" favicon="🔭">
+<Layout title="Ch 17: Case Study — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Case Study</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 16 &middot; Applying the full pipeline</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 17 &middot; Applying the full pipeline</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">
@@ -59,7 +59,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
       </table>
     </div>
 
-    <p>All three trace to the same absence: the system has Experiment and Observation but no Theory. It runs the bottom edge of the triangle only.</p>
+    <p>All three trace to the same absence: the system has Experiment and Observation but no Theory. It runs only the bottom edge of Peirce's triangle (Ch 1).</p>
 
     <!-- ============================== -->
     <h2>1. Two missing edges (Ch 1&ndash;3)</h2>
@@ -102,7 +102,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Chapter 4's abductive primitive is the diff: given two states with different outcomes, the diff is the set of changes between them.</p>
 
-    <p>Configuration A runs slow, configuration B runs fast. The diff: tile size 4&rarr;16, loop order swapped, vectorization enabled. That diff is the <strong>figure</strong>. Everything unchanged is the <strong>ground</strong>.</p>
+    <p>Configuration A runs slow, configuration B runs fast. The diff: tile size 4&rarr;16, loop order swapped, vectorization enabled. That diff is the <em>figure</em>. Everything unchanged is the <em>ground</em>.</p>
 
     <p>The figure is a candidate explanation: "this workload is faster with larger tiles." The system already produces this diff (it must, to move from A to B) but discards it immediately. It keeps the timing, throws away the structure.</p>
 
@@ -124,12 +124,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>A never-varied knob has high information gain: testing it tells you whether it matters at all. A knob tested ten times with consistent results has low information gain: you already know its effect. This criterion replaces beam search's uniform sampling with directed probing.</p>
 
-    <p>If the current hypothesis says "tile size is the bottleneck," the highest-value experiment tests tile size in a new context (different workload shape, different memory pressure), not a knob already known to be irrelevant.</p>
+    <p>If the current hypothesis says "tile size is the bottleneck," the highest-value experiment tests tile size in a new context (different workload shape, different memory pressure). Testing a knob already known to be irrelevant buys nothing.</p>
 
     <!-- ============================== -->
-    <h2>4. Measurements are trajectories, not snapshots (Ch 9&ndash;9)</h2>
+    <h2>4. Measurements are trajectories, not snapshots (Ch 9&ndash;11)</h2>
 
-    <p>Each measurement is a point on a trajectory. Chapter 9 introduced e-values for tracking cumulative evidence; Chapter 10 classified trajectories into four bins.</p>
+    <p>Each measurement is a point on a trajectory. Chapters 9&ndash;10 introduced e-values for tracking cumulative evidence; Chapter 11 classified trajectories into four bins.</p>
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
@@ -168,9 +168,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>The current system keeps the best time and discards the rest. It cannot distinguish a convergent knob (safe to freeze) from an oscillatory one (masking a deeper structural question). Trajectory classification turns raw measurements into decision procedures.</p>
 
     <!-- ============================== -->
-    <h2>5. Failures name the next experiment (Ch 11)</h2>
+    <h2>5. Failures name the next experiment (Ch 12)</h2>
 
-    <p>Chapter 11's central claim: when a hypothesis fails, the failure mode names the next experiment.</p>
+    <p>Chapter 12's central claim: when a hypothesis fails, the failure mode names the next experiment.</p>
 
     <p>Hypothesis: "This workload is memory-bound. Grouping memory accesses will speed it up." The optimizer tests a grouped-access configuration. It's slower. The hypothesis is killed. But the <em>shape</em> of the failure carries information.</p>
 
@@ -183,13 +183,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>Each failure mode generates a directed edge in the hypothesis graph. The current system has none. Slow configurations get ranked low and forgotten. Failure information, the richest output the system produces, is discarded.</p>
 
     <!-- ============================== -->
-    <h2>6. Stop when you can explain, not when you're exhausted (Ch 12)</h2>
+    <h2>6. Stop when you can explain, before you're exhausted (Ch 13)</h2>
 
     <p>Two stopping conditions look alike but differ fundamentally. Theory-based: "Tile size 16 is optimal because the working set fits exactly in L1 cache, and the loop order minimizes TLB misses given this tile." Exhaustion-based: "I tried 500 configurations and this one was the fastest."</p>
 
     <p>Exhaustion-based stopping fails silently: the search may be stuck in a local basin, and the system cannot detect this because it has no theory of the search space. Theory-based stopping is falsifiable: if changing cache size should change the optimal tile size but doesn't, the theory is wrong and the search must continue.</p>
 
-    <p>Chapter 12's convergence criterion (the hypothesis graph closes when every open edge resolves) gives a structural stopping condition. The optimizer has converged when:</p>
+    <p>Chapter 13's convergence criterion (the hypothesis graph closes when every open edge resolves) gives a structural stopping condition. The optimizer has converged when:</p>
 
     <ol>
       <li>Every knob has been classified (convergent, divergent, oscillatory, or indeterminate).</li>
@@ -201,11 +201,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p>Stronger than "no improvement found," and cheaper in the long run: it prevents wasted budget on basins the system has already explained.</p>
 
     <!-- ============================== -->
-    <h2>7. The optimizer can deceive itself (Ch 13&ndash;13)</h2>
+    <h2>7. The optimizer can deceive itself (Ch 14&ndash;15)</h2>
 
-    <p>Chapter 13's prereg checklist catches self-deception before it compounds.</p>
+    <p>Chapter 14's prereg checklist catches self-deception before it compounds.</p>
 
-    <p>The most dangerous failure: <strong>proxy measurement</strong>. The optimizer measures on a benchmark workload and deploys on production. The benchmark is smaller, fits in cache, has regular access patterns. Production is larger, irregular, cold-cache. Rankings do not transfer.</p>
+    <p>The most dangerous failure is <em>proxy measurement</em>. The optimizer measures on a benchmark workload and deploys on production. The benchmark is smaller, fits in cache, has regular access patterns. Production is larger, irregular, cold-cache. Rankings do not transfer.</p>
 
     <p>The prereg checklist asks: "Is your measurement on the actual workload or a proxy?" If proxy, the entire evidence trajectory is suspect. E-values computed on proxy data do not compose with e-values on production data. Measure on the real workload or explicitly model the gap.</p>
 
@@ -214,13 +214,13 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <ul>
       <li><em>Did you abduce from the test data?</em> If the optimizer generates hypotheses and evaluates them on the same measurements, it is fitting to noise. Hold out a validation set.</li>
       <li><em>Is the measurement deterministic?</em> Thermal throttling, background processes, and memory allocation all inject variance. Control these or account for them in the e-value computation.</li>
-      <li><em>Can the result reproduce on a different machine?</em> If the optimal configuration depends on a specific hardware quirk, it is an artifact, not a theory.</li>
+      <li><em>Can the result reproduce on a different machine?</em> If the optimal configuration depends on a specific hardware quirk, it is an artifact.</li>
     </ul>
 
-    <p>Chapter 14's proof manual adds structural validation: "If the bottleneck is memory bandwidth, then doubling bandwidth should halve runtime." If the deduction fails, the abduction was wrong. Re-enter the loop.</p>
+    <p>Chapter 15's proof manual adds structural validation: "If the bottleneck is memory bandwidth, then doubling bandwidth should halve runtime." If the deduction fails, the abduction was wrong. Re-enter the loop.</p>
 
     <!-- ============================== -->
-    <h2>8. Wired together (Ch 15)</h2>
+    <h2>8. Wired together (Ch 16)</h2>
 
     <p>The exhaustive search loop:</p>
 
@@ -275,7 +275,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
         # 5. Kill check: does the current theory survive?
         for hyp in graph.active_hypotheses():
             if hyp.prediction_fails(time, config):
-                next_exp = hyp.failure_mode()  # Ch 11
+                next_exp = hyp.failure_mode()  # Ch 12
                 graph.add_edge(hyp, next_exp)
 
         # 6. Baseline guard: never regress
@@ -346,13 +346,29 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>That last sentence is the framework applying to itself. The failure mode of this textbook names the next one.</p>
 
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>17.1</strong> Two optimizers stop. One says "tile size 16 is optimal because the working set exactly fits L1 cache." The other says "I tried 500 configurations and this one was fastest." State the falsifiable prediction the first claim makes, then explain why no observation can prove the second claim wrong.</p>
+
+    <p class="mb-3"><strong>17.2</strong> You spend a month optimizing your morning commute, one knob per day. <em>Leave time:</em> departing ten minutes earlier helps on Mondays and Thursdays, hurts on Tuesdays, helps on Wednesdays, hurts on Fridays. <em>Route:</em> the river route wins every trial by a stable margin. <em>Podcast speed:</em> trip times bounce around with no visible relation to the setting. <em>Bike versus bus:</em> each bike trial beats the previous best, and the margin keeps growing. Classify each knob into the four bins, name the action the table prescribes for each, and propose a branching condition worth testing for the oscillatory knob.</p>
+
+    <p class="mb-3"><strong>17.3</strong> Pick a system you can perturb and measure this week: an oven, your running pace, game graphics settings, an espresso grinder. Define its three moving parts from the chapter's opening (combinatorial space, measurement oracle, search strategy you would naively use). Then write the first three hypotheses of its graph, each with a falsification condition that would survive the hostile reader from exercise 13.3.</p>
+
+    <p class="mb-3"><strong>17.4</strong> 💻 Build a synthetic testbed: five knobs and a hidden runtime function with one interaction term (say, tile size only matters when vectorization is on). Implement <code>grid_search</code> from the chapter and a minimal <code>abduction_engine</code> with the six numbered steps. Test prediction 1: count trials to reach within 5 percent of the true optimum at budgets of 20, 50, and 100. Report where the prediction holds and where it does not.</p>
+
+    <p class="mb-3"><strong>17.5</strong> ★ Prediction 3 says explanations transfer. Extend your 16.4 testbed with a workload B that keeps the interaction term but shifts the other knobs' optima, and measure how many trials the abduction engine needs on B when seeded with A's hypothesis graph versus starting cold. Then the field version: run the full case-study method on a real system you own and write the convergence report, stating with numbers which of the three predictions held.</p>
+
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch15-the-pipeline/", label: "The pipeline" }} next={{ href: "/reading/methodeutics/appendix-peirce-1878/", label: "Peirce 1878" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch16-the-pipeline/", label: "The pipeline" }} next={{ href: "/reading/methodeutics/appendix-peirce-1878/", label: "Peirce 1878" }} />
 
   </main>
 </Layout>

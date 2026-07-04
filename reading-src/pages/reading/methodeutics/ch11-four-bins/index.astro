@@ -5,15 +5,15 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 10: Four Bins — Methodeutics" favicon="🔭">
+<Layout title="Ch 11: Four Bins — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Four Bins</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 10 &middot; Milnor 1985, Strogatz 2014, Ramdas 2023</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 11 &middot; Milnor 1985, Strogatz 2014, Ramdas 2023</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">You have the trajectory. It oscillates. Is the system fighting itself, or is your measurement noisy? <a href="/evidence-has-a-trajectory">Chapter 9</a> gave you e-values that accumulate over time instead of compressing to a scalar. This chapter tells you how to read the shape.</p>
+      <p class="text-lg" style="max-width:none">You have the trajectory. It oscillates. Is the system fighting itself, or is your measurement noisy? <a href="/reading/methodeutics/ch10-e-values/">Chapter 10</a> gave you e-values that accumulate over time instead of compressing to a scalar. This chapter tells you how to read the shape.</p>
     </div>
 
     <p>An e-value stream is a time series. "Goes up" is not a diagnosis. "Goes up then down then up" is not a diagnosis either. You need a finite set of trajectory shapes, each mapping to a different kind of system and a different next move. Dynamical systems theory provides exactly four.</p>
@@ -35,14 +35,14 @@ import Repl from '../../../../components/Repl';
       <li class="mb-2"><em>Convergent.</em> The perturbation decays. The system returns to its previous state. A compensating mechanism absorbed the shock.</li>
       <li class="mb-2"><em>Divergent.</em> The perturbation grows. The system moves away and keeps going. No compensating mechanism exists.</li>
       <li class="mb-2"><em>Oscillatory.</em> The perturbation cycles. Two subsystems push against each other. One compensates, the other overcompensates.</li>
-      <li class="mb-2"><em>Chaotic.</em> The trajectory stays bounded but never repeats. Two nearby starting points diverge exponentially. Deterministic but unpredictable past a short horizon.</li>
+      <li class="mb-2"><em>Chaotic.</em> The trajectory stays bounded but never repeats. Two nearby starting points diverge exponentially. Deterministic but unpredictable past a short horizon. Later chapters label this bin <em>aperiodic</em>, after the shape, because bounded-and-never-repeating is what a finite trace can verify; chaos in the strict sense also requires the exponential divergence.</li>
     </ol>
 
-    <p>Milnor (1985) and Strogatz (2014) prove that fixed points, limit cycles, and strange attractors exhaust the attractors of smooth dynamical systems. Applied to finite observed trajectories, the four bins classify <em>evidence behavior</em>, not the true underlying system. A finite trace cannot prove chaos; it can only rule out settling and periodicity within the observed window.</p>
+    <p>Milnor (1985) formalized what counts as an attractor; Strogatz (2014) is the standard treatment of the classification into fixed points, limit cycles, and strange attractors. Applied to a finite observed trajectory, the four bins classify <em>evidence behavior</em>. They do not identify the true underlying system: a finite trace cannot prove chaos, only rule out settling and periodicity within the observed window.</p>
 
     <h2>Eigenvalues determine trajectory shape</h2>
 
-    <p>Linearize the system around an equilibrium point. The Jacobian <em>J</em> has eigenvalues &lambda;, and they determine the bin:</p>
+    <p>Linearize the system around an equilibrium point. The Jacobian <em>J</em>, the matrix of first derivatives that best approximates the system near that point, has eigenvalues &lambda;, and they determine the bin:</p>
 
     <div class="overflow-x-auto my-6">
       <table class="w-full text-sm">
@@ -141,7 +141,7 @@ import Repl from '../../../../components/Repl';
         # Indeterminate. Collect more data at the same node.
         return current_node</code></pre>
 
-    <p>Each bin maps to a graph operation: move to a neighbor, follow a dependency, test an interface, or decompose further. The bins prescribe, not just classify. Chapter 11 shows how each prescription becomes an edge in the hypothesis graph.</p>
+    <p>Each bin maps to a graph operation: move to a neighbor, follow a dependency, test an interface, or decompose further. The bins prescribe the next move as well as classifying the last response. Chapter 12 shows how each prescription becomes an edge in the hypothesis graph.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -161,11 +161,11 @@ import Repl from '../../../../components/Repl';
    &boxur;&mdash; YES &rarr; <em>OSCILLATORY</em>
    &boxur;&mdash; NO  &rarr; <em>CHAOTIC</em></code></pre>
 
-    <p><em>Bounded?</em> Run a Mann-Kendall trend test on the absolute values. If the trend is significantly increasing with no sign of flattening, divergent.</p>
+    <p><em>Bounded?</em> Run a Mann-Kendall trend test, a non-parametric test for a monotone trend, on the absolute values. If the trend is significantly increasing with no sign of flattening, divergent.</p>
 
-    <p><em>Settles?</em> Compare the variance of the last third to the first third. If the late variance is significantly smaller (Levene's test), convergent.</p>
+    <p><em>Settles?</em> Compare the variance of the last third to the first third. If the late variance is significantly smaller (Levene's test, a test for unequal variances), convergent.</p>
 
-    <p><em>Periodic?</em> Compute the power spectral density. If a single frequency holds more than 40% of total power, oscillatory. If power is spread across many frequencies with no dominant peak, chaotic.</p>
+    <p><em>Periodic?</em> Compute the power spectral density, which shows how the signal's energy distributes across frequencies. If a single frequency holds more than 40% of total power, oscillatory. If power is spread across many frequencies with no dominant peak, chaotic.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -202,7 +202,7 @@ import Repl from '../../../../components/Repl';
     <ul class="list-disc pl-5 mb-4">
       <li class="mb-1"><em>Convergent:</em> Battery voltage dips to 11.8V, recovers to 12.6V when the alternator reconnects. The battery absorbed the perturbation. The alternator is redundant at current draw.</li>
       <li class="mb-1"><em>Divergent:</em> Voltage drops steadily. The radio dims, the dashboard flickers, the engine stalls. The alternator was the only power source at this draw level. Everything downstream cascaded.</li>
-      <li class="mb-1"><em>Oscillatory:</em> Voltage swings between 11V and 14V with a 2-second period. The voltage regulator and the alternator are fighting. One compensates, the other overcompensates. The fault is in the interface (the regulator), not the alternator itself.</li>
+      <li class="mb-1"><em>Oscillatory:</em> Voltage swings between 11V and 14V with a 2-second period. The voltage regulator and the alternator are fighting. One compensates, the other overcompensates. The fault is in the interface: the regulator. The alternator itself is fine.</li>
     </ul>
 
     <p>Chaos is rare in simple electrical circuits. Three bins cover most automotive faults. But engine management systems have enough interacting control loops (fuel injection, ignition timing, variable valve timing, turbo boost) that a single sensor failure can produce bounded but aperiodic behavior no single root cause explains.</p>
@@ -213,7 +213,7 @@ import Repl from '../../../../components/Repl';
 
     <ul class="list-disc pl-5 mb-4">
       <li class="mb-1"><em>Convergent:</em> BP drops from 150 to 130 in the first month, stabilizes. The drug works and the effect is stable.</li>
-      <li class="mb-1"><em>Divergent:</em> BP drops to 130, then creeps back to 145, then 155, then 160. The body adapts. The drug works in the snapshot window but the compensatory response overwhelms it. This is Vioxx (<a href="/evidence-has-a-trajectory">chapter 9's opening example</a>).</li>
+      <li class="mb-1"><em>Divergent:</em> BP drops to 130, then creeps back to 145, then 155, then 160. The body adapts. The drug works in the snapshot window but the compensatory response overwhelms it. This is Vioxx (<a href="/reading/methodeutics/ch09-evidence-trajectory/">one of chapter 9's three snapshot cases</a>).</li>
       <li class="mb-1"><em>Oscillatory:</em> BP swings between 125 and 155 with a monthly period. The drug suppresses BP for two weeks, the body overshoots for two weeks, the drug wins again. The interface is the feedback loop between drug and compensatory mechanism.</li>
       <li class="mb-1"><em>Chaotic:</em> BP stays between 120 and 160 but follows no pattern. The drug interacts with diet, exercise, stress, sleep, and other medications to produce bounded but unpredictable responses. A single drug-response model is the wrong decomposition; factor out the other variables first.</li>
     </ul>
@@ -315,13 +315,13 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <h2>E-value trajectories have the same four shapes</h2>
 
-    <p>The e-value stream from Chapter 9 is itself a time series. Apply the classifier to it.</p>
+    <p>The e-value stream from Chapter 10 is itself a time series. Apply the classifier to it.</p>
 
     <p>An e-value that <em>converges</em> to a high value: evidence accumulated and stabilized. Redirect budget elsewhere.</p>
 
     <p>An e-value that <em>diverges</em>: evidence piling up monotonically. This is the normal "success" mode for anytime-valid inference.</p>
 
-    <p>An e-value that <em>oscillates</em>: evidence swings back and forth periodically. This is the signature of <a href="/evidence-has-a-trajectory">Boeing's MCAS</a>. The hypothesis is not wrong; it is incomplete. It captures one half of a coupled pair.</p>
+    <p>An e-value that <em>oscillates</em>: evidence swings back and forth periodically. This is the signature of <a href="/evidence-has-a-trajectory">Boeing's MCAS</a>. The hypothesis is incomplete rather than wrong: it captures one half of a coupled pair.</p>
 
     <p>An e-value that looks <em>chaotic</em>: evidence is bounded but never settles and never repeats. Your betting strategy is poorly matched to the system's dynamics. You are testing at the wrong level of abstraction, like asking "does the server have a latency problem?" when the real question requires decomposing into cache, queue, and retry-loop subproblems.</p>
 
@@ -331,7 +331,23 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <p>The classification table has a column labeled "Next experiment." But nothing in the eigenstructure or the Lyapunov exponent tells you <em>which</em> node to test, <em>which</em> dependency to probe, or <em>how</em> to decompose. The four bins tell you what kind of response you got. They do not tell you what to do next.</p>
 
-    <p>That mapping is the claim of chapter 11. Each bin produces a <em>kill condition</em>: a specific, testable statement about what would have to be true for the diagnosis to be wrong. The kill condition generates the next edge in the hypothesis graph.</p>
+    <p>That mapping is the claim of chapter 12. Each bin produces a <em>kill condition</em>: a specific, testable statement about what would have to be true for the diagnosis to be wrong. The kill condition generates the next edge in the hypothesis graph.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>11.1</strong> Why can a linear system never land in the chaotic bin? Answer in two sentences using the eigenvalue table, then say which single number replaces the eigenvalues when the system is nonlinear.</p>
+
+    <p class="mb-3"><strong>11.2</strong> Bin each trajectory and, using the prescription table, name the next experiment. (a) A group chat erupts after someone posts a hot take; message rate spikes to 40 per minute and is back to its usual 2 per minute by evening. (b) A student's sleep debt grows every week of the term, and each week's deficit is larger than the last. (c) Two roommates share a thermostat; the apartment cycles between 18&deg; and 24&deg; with a reliable daily period. (d) Your phone's battery level over a festival weekend stays between 5% and 80% with no discernible pattern and no repetition.</p>
+
+    <p class="mb-3"><strong>11.3</strong> Pick a system you touch daily (your inbox, a sourdough starter, a shared codebase, your commute) and design one concrete perturbation for it. Predict its bin. Then, for each of the other three bins, state what fact about the system's architecture would have to be true for the trajectory to land there instead. You now hold four rival hypotheses about one system; note that the perturbation was designed before any of them was favored.</p>
+
+    <p class="mb-3"><strong>11.4</strong> 💻 Generate a damped oscillation, <code>5 * np.exp(-0.3 * t) * np.sin(2 * np.pi * 0.5 * t)</code> plus a little noise, and feed it to <code>classify_trajectory</code>. The eigenvalue table calls damped oscillation convergent. If the classifier disagrees, trace which of the three tests fired first, adjust exactly one threshold until the answer matches the table, then rerun the chapter's four demo series. What did your fix break, and what does that trade-off teach about the 40% threshold?</p>
+
+    <p class="mb-3"><strong>11.5</strong> ★ Export any personal time series you can get your hands on: screen time, spending, running pace, caffeine intake. Classify the full series, then classify it again on rolling windows a quarter of its length. If the bin flips between windows, decide whether you are watching a transient regime or an artifact of window size, and design the observation that would tell those apart.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -358,7 +374,7 @@ for name, series in [("convergent", conv), ("divergent", div),
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Ramdas et al. 2023</td>
-            <td class="text-gray-400"><a href="https://arxiv.org/abs/2103.06476">"Testing by Betting."</a> <em>JRSS-B</em>. E-values and anytime-valid inference. The evidence trajectory framework from Chapter 9.</td>
+            <td class="text-gray-400"><a href="https://arxiv.org/abs/2103.06476">"Game-Theoretic Statistics and Safe Anytime-Valid Inference."</a> <em>Statistical Science</em>. E-values and anytime-valid inference. The evidence trajectory framework from Chapters 9&ndash;10.</td>
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Mann 1945 / Kendall 1975</td>
@@ -371,21 +387,22 @@ for name, series in [("convergent", conv), ("divergent", div),
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
-      <li><a href="/evidence-has-a-trajectory">Ch 9: Evidence has a trajectory</a> &mdash; e-values and the case for watching evidence over time</li>
+      <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 9: Evidence has a trajectory</a> &mdash; the case for watching evidence over time</li>
+      <li><a href="/reading/methodeutics/ch10-e-values/">Ch 10: E-values</a> &mdash; the bankroll made formal</li>
       <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiment to run next</li>
-      <li><a href="/the-hypothesis-graph">Ch 11: Kill conditions generate edges</a> &mdash; from shape classification to next experiment</li>
+      <li><a href="/reading/methodeutics/ch12-kill-conditions/">Ch 12: Kill conditions generate edges</a> &mdash; from shape classification to next experiment</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
     <ul>
       <li><a href="https://doi.org/10.1007/BF01217730">Milnor 1985, "On the concept of attractor" (Springer)</a></li>
       <li><a href="https://www.westviewpress.com/books/nonlinear-dynamics-and-chaos/">Strogatz, <em>Nonlinear Dynamics and Chaos</em> (Westview Press)</a></li>
-      <li><a href="https://arxiv.org/abs/2103.06476">Ramdas et al. 2023, "Testing by Betting" (arXiv)</a></li>
+      <li><a href="https://arxiv.org/abs/2103.06476">Ramdas et al. 2023, "Game-Theoretic Statistics and Safe Anytime-Valid Inference" (arXiv)</a></li>
       <li><a href="https://doi.org/10.1175/1520-0469(1963)020%3C0130:DNF%3E2.0.CO;2">Lorenz 1963, "Deterministic Nonperiodic Flow" (AMS)</a></li>
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} next={{ href: "/reading/methodeutics/ch11-kill-conditions/", label: "The hypothesis graph" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch10-e-values/", label: "E-values" }} next={{ href: "/reading/methodeutics/ch12-kill-conditions/", label: "The hypothesis graph" }} />
 
   </main>
 </Layout>
