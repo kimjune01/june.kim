@@ -34,7 +34,7 @@ it to say whether the lump was still right. For a hundred years the most objecti
 in the world rested on a thing that could not be corrected, because nothing general existed to
 correct it against.
 
-## Objectivity is Thirdness you had to build
+## Building objectivity
 
 The kilogram says the two-kinds picture is wrong. Objectivity is not where a claim starts.
 It is a place you drag it to, and the kilogram had not been dragged far enough.
@@ -100,7 +100,7 @@ device carried to the limit, the mark every community must read alike. To object
 belief is to hand it to the community and the meter stick together, and let the two of
 them grind the Firstness off it.
 
-## Metrology is the discipline of the migration
+## The migration
 
 [Metrology](https://en.wikipedia.org/wiki/Metrology) is the science whose entire job is
 this walk. It moves belief from the subjective end of the gradient to the objective by
@@ -124,7 +124,7 @@ hundred years walking its standards off the particulars and onto the laws, Secon
 toward Thirdness, one unit at a time, because an index can go wrong with nothing to
 correct it and a law cannot.
 
-## The untrue is a to-do list
+## The to-do list
 
 I have argued that [the unverifiable is untrue](/what-cannot-be-false-cannot-be-true),
 neither false nor true, because a claim no test can refute is a claim no test can
@@ -150,7 +150,7 @@ state until somebody builds the Thirdness that can return a false on them. The u
 less a graveyard than a to-do list. Each entry reads *no law yet*, and the entries get
 crossed off when someone builds one.
 
-## Where the gradient stops
+## The boundary
 
 But the gradient has a boundary, and it is worth being exact about where. A claim can be
 dragged toward the objective end only if it has the relational structure to bear a law.
@@ -196,7 +196,7 @@ anchor. Fashion would stop being itself the moment it held still long enough to 
 measured. It is not waiting on a gauge. It is the one point on the gradient built to
 outrun every gauge you could bring.
 
-## The honest question about any number
+## The question
 
 The lesson runs back up the gradient. Even the kilogram is a
 [graded belief](/what-cannot-be-false-cannot-be-true), a claim standing on the best
@@ -215,7 +215,7 @@ operation the world will perform for you, the claim is not near the bottom of th
 It is a Firstness no Thirdness reaches, and the honest name for it is
 [untrue](/truly-untrue).
 
-## At the top, and still graded
+## Still graded
 
 Push to the very top and you reach the [speed of
 light](https://en.wikipedia.org/wiki/Speed_of_light), as objective as knowledge gets. The
@@ -248,7 +248,7 @@ hair below one. Maximal objectivity and certainty are different axes, and *c* re
 first without ever touching the second. That is the ceiling of the objective, and the
 kilogram never sat below it in kind, only in degree.
 
-## It ships with its method
+## Its method
 
 A graded belief is still not the same as taking it on faith. A number handed to you is
 faith: you hold it on someone's word. A number that ships with its method is knowledge,
