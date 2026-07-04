@@ -57,7 +57,7 @@ thing anyone who has done lab work already does, pulling a subjective observatio
 a measurement. Peirce only lends the coordinates, and even there I bend him, since his three
 categories are co-present in everything, not stations on a line. The axis is how far behind the panel the anchor sits.
 
-<svg viewBox="0 0 720 190" role="img" aria-label="A gradient from the subjective end (Firstness) to the objective end (Thirdness). Above the axis, what sits behind the panel at each step: nothing, a feeling, a consensus, an artifact, a law. Below it, a measuring device at each degree of objectivity: vibes, asking ChatGPT, a trained panel, a meter stick, an atomic clock. The markers grow from hollow to solid." xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:720px;display:block;margin:1.75rem auto;font-family:inherit;color:inherit">
+<svg viewBox="0 0 720 190" role="img" aria-label="A gradient from the subjective end (Firstness) to the objective end (Thirdness). Above the axis, what sits behind the panel at each step: a feeling, a thought, a consensus, an artifact, a law. Below it, a measuring device at each degree of objectivity: vibes, asking ChatGPT, peer review, a meter stick, an atomic clock. The markers grow from hollow to solid." xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:720px;display:block;margin:1.75rem auto;font-family:inherit;color:inherit">
   <defs>
     <marker id="kg-arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
       <path d="M0,0 L7,3 L0,6 Z" fill="currentColor"/>
@@ -70,8 +70,8 @@ categories are co-present in everything, not stations on a line. The axis is how
   <circle cx="500" cy="92" r="7" fill="currentColor" opacity="0.8"/>
   <circle cx="640" cy="92" r="9" fill="currentColor"/>
   <g fill="currentColor" text-anchor="middle" font-size="15">
-    <text x="95" y="52">nothing</text>
-    <text x="230" y="52">a feeling</text>
+    <text x="95" y="52">a feeling</text>
+    <text x="230" y="52">a thought</text>
     <text x="365" y="52">a consensus</text>
     <text x="500" y="52">an artifact</text>
     <text x="640" y="52">a law</text>
@@ -79,7 +79,7 @@ categories are co-present in everything, not stations on a line. The axis is how
   <g fill="currentColor" text-anchor="middle" font-size="12.5" opacity="0.55" font-style="italic">
     <text x="95" y="121">vibes</text>
     <text x="230" y="121">asking ChatGPT</text>
-    <text x="365" y="121">a trained panel</text>
+    <text x="365" y="121">peer review</text>
     <text x="500" y="121">a meter stick</text>
     <text x="640" y="121">an atomic clock</text>
   </g>
