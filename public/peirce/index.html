@@ -172,6 +172,10 @@
 <script>
 const IIIF=(ia,f,size)=>`https://iiif.archive.org/image/iiif/3/${ia}%2F${f}.jpg/full/${size}/0/default.jpg`;
 const DISP="1400,", THUMB="!200,200", MAX="max";  // IIIF v3 size keyword is "max", not "full"
+// IA's IIIF resizer 504s intermittently; fall back to the plain file. thumb sizes → the ~15KB _thumb, everything else → the full original.
+const DL=(ia,f,size)=>`https://archive.org/download/${ia}/${f}${size===THUMB?"_thumb":""}.jpg`;
+// filmstrip thumbnails are self-hosted (~2.5KB webp, same CDN as this page) — no archive.org dependency for navigation
+const LOCAL=(ia,f)=>`/peirce/thumbs/${ia}/${f}.webp`;
 let DATA={items:[]}, it=null, i=0, big=false;
 const $=s=>document.querySelector(s);
 const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -187,7 +191,7 @@ function render(t){
     .replace(/\[diagram:\s*([\s\S]*?)\]/g,'<span class="gap">⟦diagram: $1⟧</span>');
 }
 
-function setImg(src, after, low){
+function setImg(src, after, low, srcFB, lowFB){
   const img=$("#img"), iw=$("#imgwrap");
   const done=()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); img.onload=null;
     iw.classList.toggle("grab", iw.scrollHeight>iw.clientHeight+2 || iw.scrollWidth>iw.clientWidth+2);
@@ -195,22 +199,31 @@ function setImg(src, after, low){
   if(low){
     // show the (already rail-cached) thumbnail instantly, blurred, then swap in hi-res
     img.onload=null;   // don't let the thumbnail trigger a stale done()
-    img.classList.add("lq"); iw.classList.add("loading","haslq"); img.src=low;
+    img.classList.add("lq"); iw.classList.add("loading","haslq");
+    if(lowFB) img.onerror=()=>{ img.onerror=null; img.src=lowFB; };   // thumb 504'd → plain _thumb
+    img.src=low;
     const hi=new Image();
-    hi.onload=()=>{ img.src=src; done(); };
-    hi.onerror=()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
+    hi.onload=()=>{ img.onerror=null; img.src=src; done(); };
+    hi.onerror=srcFB
+      ? ()=>{ hi.onload=()=>{ img.onerror=null; img.src=srcFB; done(); };
+              hi.onerror=()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
+              hi.src=srcFB; }                                          // hi-res 504'd → full original
+      : ()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
     hi.src=src; return;
   }
   iw.classList.add("loading");
   img.onload=done;
-  img.onerror=()=>{ iw.classList.remove("loading"); img.onload=null; };
+  img.onerror=srcFB
+    ? ()=>{ img.onerror=null; img.onload=done; img.src=srcFB; }
+    : ()=>{ iw.classList.remove("loading"); img.onload=null; };
   img.src=src;
 }
 function loadPage(k){
   i=(k+it.pages.length)%it.pages.length;
   const pg=it.pages[i];
   big=false; $("#imgwrap").classList.remove("zoom","drag");
-  setImg(IIIF(it.ia,pg.f,DISP), null, IIIF(it.ia,pg.f,THUMB));
+  // main pane: 1400px via IIIF (the one real bandwidth win) → falls back to full original; blurred placeholder is the self-hosted webp (archive _thumb only if missing)
+  setImg(IIIF(it.ia,pg.f,DISP), null, LOCAL(it.ia,pg.f), DL(it.ia,pg.f,DISP), DL(it.ia,pg.f,THUMB));
   $("#count").textContent=`${i+1} / ${it.pages.length}`;
   document.querySelectorAll(".thumb").forEach((t,j)=>t.classList.toggle("on",j===i));
   const on=document.querySelector(".thumb.on"); if(on) on.scrollIntoView({block:"nearest"});
@@ -245,7 +258,9 @@ function selectItem(r,page){
   const rail=$("#rail"); rail.innerHTML="";
   it.pages.forEach((pg,j)=>{
     const b=document.createElement("div"); b.className="thumb"+(pg.t?" has":"");
-    const im=document.createElement("img"); im.loading="lazy"; im.src=IIIF(it.ia,pg.f,THUMB);
+    const im=document.createElement("img"); im.loading="lazy";   // native lazy-load: only thumbs near the rail viewport are fetched
+    im.onerror=()=>{ im.onerror=null; im.src=DL(it.ia,pg.f,THUMB); };   // self-hosted webp → archive _thumb only if a file is missing
+    im.src=LOCAL(it.ia,pg.f);
     const n=document.createElement("span"); n.className="n"; n.textContent=pg.f.replace(/^IMG_?/,"");
     b.append(im,n); b.onclick=()=>loadPage(j); rail.appendChild(b);
   });
@@ -257,12 +272,13 @@ function toggleZoom(e){
     const r=img.getBoundingClientRect();
     const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
     big=true; iw.classList.add("zoom");
-    setImg(IIIF(it.ia,it.pages[i].f,MAX), ()=>{
+    // zoom: IIIF "max" is identical to the plain original, so use the reliable endpoint directly and skip the flaky resizer
+    setImg(DL(it.ia,it.pages[i].f,MAX), ()=>{
       const z=img.getBoundingClientRect(), w=iw.getBoundingClientRect();
       iw.scrollLeft+=(z.left+fx*z.width)-(w.left+iw.clientWidth/2);
       iw.scrollTop +=(z.top +fy*z.height)-(w.top +iw.clientHeight/2);
     });
-  } else { big=false; iw.classList.remove("zoom"); setImg(IIIF(it.ia,it.pages[i].f,DISP)); }
+  } else { big=false; iw.classList.remove("zoom"); setImg(IIIF(it.ia,it.pages[i].f,DISP), undefined, undefined, DL(it.ia,it.pages[i].f,DISP)); }
 }
 
 $("#item").onchange=e=>selectItem(e.target.value);

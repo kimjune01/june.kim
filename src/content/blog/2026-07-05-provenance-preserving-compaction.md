@@ -1,11 +1,13 @@
 ---
 variant: post-paper
-title: "Union-Find Compaction: Provenance-Preserving Context Compression for LLM Agents (DRAFT)"
+title: "Union-Find Compaction: Provenance-Preserving Context Compression for LLM Agents at No Cost to Recall"
 tags: methodology, cognition
 autonumber: true
 ---
 
 *Draft. When a conversational agent's context window fills, the standard fix is flat summarization: run a cheap model over the old messages, replace them with a paragraph, discard the sources. That paragraph cannot trace a claim to its origin, cannot be re-expanded, and cannot be retrieved selectively, and every compaction stalls the session while it reprocesses the whole history. We compact instead through a union-find forest, where each old message is a node, similar messages merge into equivalence classes, and each merge is one cheap summarizer call. The result is a free lunch: at no recall regression, provenance-preserving compaction is also cheaper and faster, and it gains four properties flat summarization cannot offer. Provenance, recoverability, incremental graduation, and persistence hold by construction: `find` traces any summary to its sources, `expand` reinflates a cluster, and the forest serializes as integer parent pointers. In a feature-flagged gemini-cli integration over twelve real GitHub-issue conversations, union-find recalls at least as well as flat summarization (+8.3pp, 30.2% vs 21.9%, no significant difference favoring flat) at 0.79x the cost (21% cheaper) and sub-millisecond append and render latency; across a seven-trial controlled study it is tied-or-higher in every trial. Recall is directionally better, significant in one of seven controlled trials but not in the field, and we preregister a higher-powered replication that would upgrade non-regression to improvement. The standing result: the structural and cost wins come free, at no cost to what the agent remembers.*
+
+*[Download PDF](/assets/provenance-preserving-compaction.pdf) · arxiv-shape preprint, rebuilt from this source by [md2arxiv](https://github.com/kimjune01/md2arxiv). · Data: [controlled study](https://doi.org/10.5281/zenodo.21215158) · [field study](https://doi.org/10.5281/zenodo.21215160), each reproducible from its committed artifacts (CC BY-SA 4.0).*
 
 ## Introduction
 
@@ -61,46 +63,7 @@ The union-find forest restores all three because it never overwrites the sources
 
 Context splits into two zones. The **hot** zone is the last *k* messages (default *k* = 10), served raw. When the window overflows, the oldest hot message graduates to the **cold** zone, a union-find forest where each cluster is one summary over its source messages (Figure 1).
 
-<figure style="margin:1.8em auto;max-width:560px">
-<svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
-  <style>
-    text{font-family:ui-monospace,SFMono-Regular,monospace;font-size:13px;fill:currentColor}
-    .s{font-size:11px;opacity:.6}.b{font-weight:bold}
-    rect{fill:none;stroke:currentColor;stroke-width:1}
-    line,path{stroke:currentColor;stroke-width:1;fill:none}
-    polygon{fill:currentColor}
-    .dash{stroke-dasharray:4 3}
-  </style>
-  <text x="16" y="20" class="s b">HOT · last k messages, served raw</text>
-  <rect x="16" y="28" width="588" height="38"/>
-  <text x="34" y="52">m97   m98   m99   m100</text>
-  <text x="546" y="52" class="s">newest</text>
-  <line x1="46" y1="66" x2="46" y2="96"/><polygon points="46,100 41,90 51,90"/>
-  <text x="56" y="88" class="s">graduate oldest</text>
-  <text x="16" y="120" class="s b">COLD · union-find forest, one summary per cluster of sources</text>
-  <rect x="28" y="130" width="150" height="30"/>
-  <text x="103" y="150" text-anchor="middle" class="b">summary A</text>
-  <line x1="66" y1="160" x2="58" y2="192"/><line x1="103" y1="160" x2="103" y2="192"/><line x1="140" y1="160" x2="148" y2="192"/>
-  <text x="58" y="206" text-anchor="middle" class="s">m3</text>
-  <text x="103" y="206" text-anchor="middle" class="s">m7</text>
-  <text x="148" y="206" text-anchor="middle" class="s">m12</text>
-  <rect x="220" y="130" width="150" height="30"/>
-  <text x="295" y="150" text-anchor="middle" class="b">summary B</text>
-  <line x1="258" y1="160" x2="250" y2="192"/><line x1="332" y1="160" x2="340" y2="192"/>
-  <text x="250" y="206" text-anchor="middle" class="s">m5</text>
-  <text x="340" y="206" text-anchor="middle" class="s">m9</text>
-  <line x1="58" y1="192" x2="46" y2="163"/><polygon points="46,159 42,169 52,167"/>
-  <text x="410" y="140" class="b">find(m) up to root</text>
-  <text x="410" y="156" class="s">any message to its summary:</text>
-  <text x="410" y="170" class="s">provenance, auditable</text>
-  <text x="410" y="194" class="b">expand(root) to sources</text>
-  <text x="410" y="210" class="s">reinflate a cluster to raw msgs</text>
-  <text x="256" y="250" text-anchor="middle" class="s b">new cold message</text>
-  <line class="dash" x1="295" y1="244" x2="295" y2="163"/><polygon points="295,159 290,169 300,169"/>
-  <text x="256" y="272" text-anchor="middle" class="s">union if cos(vec, centroid) >= threshold,</text>
-  <text x="256" y="286" text-anchor="middle" class="s">else a new singleton; cap forces a merge</text>
-</svg>
-</figure>
+![](/assets/uf-forest.svg)
 
 *Figure 1. Messages graduate oldest-first from the hot window into the cold forest. Each cluster holds one summary over its sources; `find` recovers a summary's sources, `expand` reinflates a cluster, and a new message joins by `union` when it is close enough to a centroid.*
 
