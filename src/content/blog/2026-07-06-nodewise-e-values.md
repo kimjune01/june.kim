@@ -112,7 +112,7 @@ A relay defeats every per-message filter because its abuse is a property of its 
 
 ## Availability
 
-Simulation code, tests, and the result log are at [return-to-sender](https://github.com/kimjune01/return-to-sender) (AGPL-3.0): under 400 lines of NumPy, six property tests (score unbiasedness for both estimators, supermartingale validity under the null, e-BH correctness), and `run_experiment.py`, which regenerates every number in this paper from fixed seeds in under half a minute on a laptop. This paper is [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/): fork it, formalize it, ship it, and keep it open.
+Simulation code, tests, and the result log are archived on Zenodo at [10.5281/zenodo.21216212](https://doi.org/10.5281/zenodo.21216212) ([return-to-sender](https://github.com/kimjune01/return-to-sender), AGPL-3.0): under 400 lines of NumPy, six property tests (score unbiasedness for both estimators, supermartingale validity under the null, e-BH correctness), and `run_experiment.py`, which regenerates every number in this paper from fixed seeds in under half a minute on a laptop. This paper is [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/): fork it, formalize it, ship it, and keep it open.
 
 ## LLM collaboration disclosure {-}
 
