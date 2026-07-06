@@ -15,7 +15,7 @@ Ad auctions for LLM conversations sell regions of embedding space. The scoring r
 
 Keyword auctions are strategically broken, and the industry monetizes the breakage. [Edelman, Ostrovsky and Schwarz (2007)](https://www.aeaweb.org/articles?id=10.1257/aer.97.1.242) proved that Google's Generalized Second-Price auction has no dominant-strategy equilibrium: your optimal bid depends on bids you cannot see. First-price display auctions require shading by an amount that also depends on bids you cannot see. The response was an autobidding industry, agents running machine learning against each other to approximate what [Vickrey (1961)](https://doi.org/10.2307/2977633) made exact sixty-five years ago: report your value, pay the externality, done.
 
-Embedding-space advertising restarts the design problem from zero, a chance to get the incentives right on day one. The setting: a user's conversation embeds to a point `x` in a real inner product space; each advertiser declares a center `c` (who their customer is), a reach `σ` (how wide a neighborhood they serve), and a bid `b` (what a conversion is worth). The platform scores each advertiser at `x` and the highest score wins. The scoring rule was proposed in a blog series, an open-source exchange implements it, and multi-agent simulations probe its market dynamics.[^1] What was missing is a proof that the mechanism deserves the trust the proposal asks for.
+Embedding-space advertising restarts the design problem, a chance to get the incentives right on day one. The setting: a user's conversation embeds to a point `x` in a real inner product space; each advertiser declares a center `c` (who their customer is), a reach `σ` (how wide a neighborhood they serve), and a bid `b` (what a conversion is worth). The platform scores each advertiser at `x` and the highest score wins. The scoring rule was proposed in a blog series, an open-source exchange implements it, and multi-agent simulations probe its market dynamics.[^1] What was missing is a proof that the mechanism deserves the trust the proposal asks for.
 
 Here we supply the proof, in Lean, so that trust reduces to running a build command. The contribution is one bridge lemma, `score_eq_log_reportedVal`: the scoring rule is the logarithm of the value a report implies, unconditionally. Everything downstream is the classical VCG argument of [Vickrey (1961)](https://doi.org/10.2307/2977633), [Clarke (1971)](https://doi.org/10.1007/BF01726210), and [Groves (1973)](https://doi.org/10.2307/1914085), executed formally. On top of the chain we prove two geometric bookends: the allocation is a power diagram for arbitrary heterogeneous reaches, and the mechanism collapses to Vickrey's sealed-bid second-price auction at any keyword point.
 
@@ -47,11 +47,11 @@ The scoring rule is the embedding-space member of a known family. [Lahaie and Pe
 
 *Figure 1. The allocation is the upper envelope of score parabolas. Winning intervals along the axis are the power-diagram cells; a higher bid raises a parabola, a wider σ flattens it.*
 
-The formalization states everything over an arbitrary real inner product space. No finite-dimension hypothesis appears anywhere in the chain: the theorems hold for a 384-dimensional sentence embedding and for an infinite-dimensional feature space with equal indifference.
+The formalization states everything over an arbitrary real inner product space. No finite-dimension hypothesis appears anywhere in the chain: the theorems hold for a 384-dimensional sentence embedding and for an infinite-dimensional feature space alike.
 
 ## The Bridge
 
-The mechanism-design payload hangs on one identity. Define the value implied by a report, `reportedVal(x) = b · exp(-‖x - c‖²/σ²)`. Then
+The mechanism-design results hang on one identity. Define the value implied by a report, `reportedVal(x) = b · exp(-‖x - c‖²/σ²)`. Then
 
 ```
 score(x) = log(reportedVal(x))

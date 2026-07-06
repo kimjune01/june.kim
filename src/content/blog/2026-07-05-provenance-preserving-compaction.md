@@ -26,7 +26,7 @@ From that one substitution, four properties follow by construction rather than b
 - **Incremental.** Messages graduate one at a time, each in near-O(1). No batch stall, no latency spike; flat summarization reprocesses the entire history per compaction.
 - **Persistent.** The forest serializes as integer parent pointers. Save it, reload it next session, clusters intact.
 
-These four hold by construction: a structure either preserves provenance or it does not, and no significance test establishes them. What remains empirical is the precondition that makes them free. Provenance would be a trade, not a gift, if it cost recall; so the load-bearing claim is that routing compaction through the forest costs no recall against flat summarization, at less money and lower latency. That precondition has to be earned, and earning it is non-regression, not improvement.
+These four hold by construction: a structure either preserves provenance or it does not, and no significance test establishes them. What remains empirical is the precondition that makes them free. Provenance would be a trade, not a gift, if it cost recall; so the decisive claim is that routing compaction through the forest costs no recall against flat summarization, at less money and lower latency. That precondition has to be earned, and earning it is non-regression, not improvement.
 
 **Contributions.** (1) Union-find as the provenance spine for context compaction, with the four structural properties above. (2) A lazy-summarization design that keeps the per-session summarizer cost linear rather than quadratic in cluster growth. (3) Evidence from two studies, a controlled synthetic one and a feature-flagged gemini-cli field integration, that at matched token budget union-find recalls at least as well as flat summarization while costing less: the non-regression that makes the structural properties free. (4) A preregistered higher-powered replication that would upgrade non-regression to a positive recall improvement, stated as the confirmation this draft does not yet claim.
 
@@ -77,7 +77,7 @@ The read path injects the nearest cluster's summary beside the hot window. Unlik
 
 ### Lazy summarization
 
-The naive forest re-summarizes a cluster from its full membership on every merge. Message 90 re-reads 1 through 89; message 91 re-reads 1 through 90. That is quadratic in cluster growth. In an early build it produced roughly 80 summarizer calls per conversation against flat summarization's 2, a 5.2x cost premium that erased the entire point.
+The naive forest re-summarizes a cluster from its full membership on every merge. Message 90 re-reads 1 through 89; message 91 re-reads 1 through 90. That is quadratic in cluster growth. In an early build it produced roughly 80 summarizer calls per conversation against flat summarization's 2, a 5.2x cost premium.
 
 The fix is to summarize lazily. `union` is synchronous and only records that a cluster's inputs are dirty; the actual re-summarization is deferred and coalesced, so a cluster that absorbs ten messages in quick succession pays one summarizer call, not ten. This keeps per-session summarizer cost linear in the number of clusters rather than quadratic in cluster size, and is what moves the method from a cost regression to a cost improvement (see §(field)). Folding two small summaries is cheaper than compressing the whole history, so a cluster of 5 to 20 messages summarizes with a small prompt and a small model.
 
@@ -186,7 +186,7 @@ Each follows from keeping the sources and their structure instead of a paragraph
 
 ## Conclusion
 
-Flat context compaction trades provenance, recoverability, and selective retrieval for a paragraph, and stalls the session to do it. Routing the summarizer calls that were happening anyway through a union-find forest recovers all three by construction, at 0.79x the cost and sub-millisecond latency, and it does so without costing recall: union-find is tied-or-higher in every controlled trial and does not significantly regress in the field, pending the formal non-inferiority test we preregister. The standing result is that the structural and cost wins are free, bought at no measured cost to what the agent remembers. The open one, which we have preregistered, is whether recall also improves outright.
+Flat context compaction trades provenance, recoverability, and selective retrieval for a paragraph, and stalls the session to do it. Routing the summarizer calls that were happening anyway through a union-find forest recovers all three by construction, at 0.79x the cost and sub-millisecond latency, and it does so without costing recall: union-find is tied-or-higher in every controlled trial and does not significantly regress in the field, pending the formal non-inferiority test we preregister. The standing result is that the structural and cost wins are free, at no measured cost to what the agent remembers. The open one, which we have preregistered, is whether recall also improves outright.
 
 ## Availability
 
