@@ -191,7 +191,7 @@ Conversations with Sébastien Lahaie and Mohammad Hajiaghayi sharpened the mecha
 
 *LLM use.* This paper and its artifact were produced with large language models via [Claude Code](https://claude.ai/claude-code). The author directed the research and reviewed every claim; agents wrote the Lean proofs, generated the figures, and drafted the prose, and a separate model ran an adversarial review of the prose against the formalization. No guarantee in this paper rests on any model's judgment: the artifact type-checks with zero `sorry`, and verification reduces to `lake build`.
 
-*Funding.* Self-funded independent research. No external funding, no employer direction, no advertiser or platform relationship. The author maintains the open-source exchange implementation cited above.
+*Funding.* Self-funded independent research. No external funding, no employer direction, no advertiser or platform relationship. The author maintains [openauction](https://github.com/kimjune01/openauction), the open-source exchange implementation.
 
 [^1]: Proposal: [june.kim/power-diagrams-ad-auctions](https://june.kim/power-diagrams-ad-auctions). Implementation: [github.com/kimjune01/openauction](https://github.com/kimjune01/openauction). Simulations: [june.kim/relocation-fee-dividend](https://june.kim/relocation-fee-dividend).
 

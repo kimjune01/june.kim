@@ -26,7 +26,7 @@ From that one substitution, four properties follow by construction rather than b
 - **Incremental.** Messages graduate one at a time, each in near-O(1). No batch stall, no latency spike; flat summarization reprocesses the entire history per compaction.
 - **Persistent.** The forest serializes as integer parent pointers. Save it, reload it next session, clusters intact.
 
-These four hold by construction: a structure either preserves provenance or it does not, and no significance test establishes them. What the rest of the paper establishes empirically is the precondition that makes them free. Provenance would be a trade, not a gift, if it cost recall; so the load-bearing empirical claim is that routing compaction through the forest costs no recall against flat summarization, at less money and lower latency. The properties come on top of a precondition the paper has to earn, and earning it is non-regression, not improvement.
+These four hold by construction: a structure either preserves provenance or it does not, and no significance test establishes them. What remains empirical is the precondition that makes them free. Provenance would be a trade, not a gift, if it cost recall; so the load-bearing claim is that routing compaction through the forest costs no recall against flat summarization, at less money and lower latency. That precondition has to be earned, and earning it is non-regression, not improvement.
 
 **Contributions.** (1) Union-find as the provenance spine for context compaction, with the four structural properties above. (2) A lazy-summarization design that keeps the per-session summarizer cost linear rather than quadratic in cluster growth. (3) Evidence from two studies, a controlled synthetic one and a feature-flagged gemini-cli field integration, that at matched token budget union-find recalls at least as well as flat summarization while costing less: the non-regression that makes the structural properties free. (4) A preregistered higher-powered replication that would upgrade non-regression to a positive recall improvement, stated as the confirmation this draft does not yet claim.
 
@@ -40,7 +40,7 @@ Treat the agent's context manager as a cache with a fixed capacity and an evicti
 
 **Selective retrieval.** A single summary is retrieved whole or not at all. There is no way to pull the one cluster relevant to the current turn while leaving the rest compressed, because there are no clusters, only the block.
 
-The union-find forest restores all three because it never overwrites the sources; it only adds structure over them (Table 1). The remainder of the paper is the design that makes that cheap and an evaluation of whether restoring them costs any recall to get.
+The union-find forest restores all three because it never overwrites the sources; it only adds structure over them (Table 1).
 
 <div class="results-table" markdown="1">
 
@@ -55,7 +55,7 @@ The union-find forest restores all three because it never overwrites the sources
 
 </div>
 
-*Table 1. What each method preserves. The right column holds by construction; the rest of the paper asks whether it also costs any recall (it does not) and what it costs to run (less).*
+*Table 1. What each method preserves. The right column holds by construction; the evaluation asks whether it also costs any recall (it does not) and what it costs to run (less).*
 
 ## Method
 
@@ -83,7 +83,7 @@ The fix is to summarize lazily. `union` is synchronous and only records that a c
 
 ## Evaluation
 
-We ask the one empirical question the structure does not settle on its own: at a matched token budget, does routing compaction through the forest cost any recall the agent would otherwise keep? The structural properties are free only if the answer is no, so non-regression is what the two studies below test, one controlled and one in production. A significant improvement, if it holds, is upside; non-regression is the result the free lunch rests on.
+The structure leaves one empirical question unsettled: at a matched token budget, does routing compaction through the forest cost any recall the agent would otherwise keep? The structural properties are free only if the answer is no, so non-regression is what the two studies below test, one controlled and one in production. A significant improvement, if it holds, is upside; non-regression is the result the free lunch rests on.
 
 ### Controlled study {#controlled}
 
@@ -151,6 +151,8 @@ Where union-find leads, it leads on footnote facts. Flat summarization preserves
 
 **Retrieval-augmented generation** retrieves raw passages per query at read time; union-find pre-merges at write time, giving bounded injected context and no per-turn retrieval call, at the cost of committing to a clustering online.
 
+**Memory benchmarks.** Standard public benchmarks already measure long-horizon recall over multi-session dialogue, notably [LoCoMo](https://arxiv.org/abs/2402.17753) and [LongMemEval](https://arxiv.org/abs/2410.10813), alongside single-input long-context probes (Needle-in-a-Haystack, RULER, LongBench). We measure union-find against flat summarization on our own data rather than on these; running it on an established memory benchmark is the natural next evaluation (§(limits)), not a gap to be filled by a new benchmark.
+
 **Union-find** itself is [Tarjan (1975)](https://doi.org/10.1145/321879.321884); the contribution is not the algorithm or its complexity bound but its use as a provenance spine for context compaction, where `find` supplies message-level lineage and `union` supplies single-message incremental merge.
 
 > Citations in this section are drawn from a prior-art sweep and name concurrent work by topic; the specific arXiv identifiers must be verified against the sources before submission. An earlier form of this work appeared on the author's blog and is the method's only prior public description; a preprint must cite it as such and clear the venue's prior-publication bar.
@@ -167,7 +169,9 @@ We preregister it. A higher-powered replication holds the design fixed and scale
 
 ### Further limits
 
-Three remain. The cost win is measured at one scale (about 120 messages, ten clusters); union-find makes more and smaller summarizer calls than flat's few large ones, and the crossover point where fixed per-call overhead would erase the saving at much longer conversations is uncharacterized. The evaluation compares against flat summarization only, not against the concurrent structured-eviction systems of §(related-work), so the paper shows union-find beats the deployed baseline, not that it beats the nearest structured alternative. And storage grows monotonically: the forest only adds nodes and the source store accumulates, so a long-lived deployment eventually needs a cluster-eviction or archival policy, deferred here. The merge threshold, cluster cap, and hot-window size are fixed defaults whose effect on recall is not characterized.
+The evaluation data is a proxy, not the deployment distribution. The controlled study is a synthetic DevOps conversation and the field study is scraped GitHub issue threads; neither is an agent-native session, which interleaves tool output, code, and agent turns at a density and structure a human issue thread lacks. Issue threads share the property under test (facts scattered across messages, footnotes competing with headlines), so they are a fair testbed, but whether the recall and cost results transfer to real agent context is untested. The fix is not a new benchmark, which this space already has, but a standard one: the higher-powered study should evaluate union-find on [LongMemEval](https://arxiv.org/abs/2410.10813), preferred over [LoCoMo](https://arxiv.org/abs/2402.17753) for its evidence-tagged questions and cleaner answer key, and scored against that tagged evidence rather than by an LLM judge, whose leniency is the weak point of both benchmarks and of our own field study. That is left to future work.
+
+Three more. The cost win is measured at one scale (about 120 messages, ten clusters); union-find makes more and smaller summarizer calls than flat's few large ones, and the crossover point where fixed per-call overhead would erase the saving at much longer conversations is uncharacterized. The evaluation compares against flat summarization only, not against the concurrent structured-eviction systems of §(related-work), so the evidence shows union-find beats the deployed baseline, not that it beats the nearest structured alternative. And storage grows monotonically: the forest only adds nodes and the source store accumulates, so a long-lived deployment eventually needs a cluster-eviction or archival policy, deferred here. The merge threshold, cluster cap, and hot-window size are fixed defaults whose effect on recall is not characterized.
 
 ## What It Unlocks
 
@@ -178,7 +182,7 @@ The forest serializes into a single small store (integer parent pointers, cluste
 - **Concurrent write.** Union-find merges are associative, commutative, and order-independent, so two sessions writing in parallel converge without a referee, the way a [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) does; when two claims contradict, both are filed with provenance and the reader judges. The session is where you work, the forest where you meet.
 - **Branching.** Forking the forest for a what-if conversation inherits all context, giving version-control semantics for conversations.
 
-Each follows from keeping the sources and their structure instead of a paragraph. Governance is a thin layer over the same store: access modes (private, read-only, shared) and a retention policy on unqueried clusters, with the clustering parameters left as convention. The fuller vision of a shared understanding-layer for a team is developed separately ([Union Found](/union-found)); the narrower point here is that the data structure this paper measures already carries the persistence, provenance, and conflict-free merge those capabilities need.
+Each follows from keeping the sources and their structure instead of a paragraph. Governance is a thin layer over the same store: access modes (private, read-only, shared) and a retention policy on unqueried clusters, with the clustering parameters left as convention. The fuller vision of a shared understanding-layer for a team is developed separately ([Union Found](/union-found)); the narrower point is that the data structure measured here already carries the persistence, provenance, and conflict-free merge those capabilities need.
 
 ## Conclusion
 
