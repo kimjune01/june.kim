@@ -1,16 +1,11 @@
 <svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,SFMono-Regular,monospace">
   <style>
     text{font-size:13px;fill:#1a1a1a}
-    .s{font-size:11px;opacity:.6}.b{font-weight:bold}
+    .s{font-size:11px;fill:#555}.b{font-weight:bold}
     rect{fill:none;stroke:#1a1a1a;stroke-width:1}
     line,path{stroke:#1a1a1a;stroke-width:1;fill:none}
     polygon{fill:#1a1a1a}
     .dash{stroke-dasharray:4 3}
-    @media (prefers-color-scheme: dark){
-      text{fill:#e8e8e8}
-      rect,line,path{stroke:#e8e8e8}
-      polygon{fill:#e8e8e8}
-    }
   </style>
   <text x="16" y="20" class="s b">HOT · last k messages, served raw</text>
   <rect x="16" y="28" width="588" height="38"/>
