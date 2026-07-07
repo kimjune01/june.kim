@@ -9,7 +9,7 @@ autonumber: true
 
 ## Abstract {-}
 
-Ad auctions for LLM conversations sell regions of embedding space. The scoring rule `log(b) - ‖x-c‖²/σ²` has circulated as a heuristic for clearing them: embed the conversation, rank advertisers by bid-adjusted proximity, highest score wins. We show the rule is no heuristic. It is VCG. We prove in Lean 4, with zero `sorry`, that the score is a monotone transform of Gaussian advertiser value. The argmax allocation therefore maximizes welfare at every query point, Clarke pivot payments make truthful reporting of bid, center, and reach a dominant strategy, and no allocation rule achieves higher expected welfare. The allocation is a power diagram: in the embedding space itself when reaches are equal, and one dimension up via Aurenhammer's paraboloid lift when they are heterogeneous. At any query point where centers coincide, the mechanism is exactly Vickrey's second-price auction, so keyword auctions are the degenerate case. The proof chain assumes one non-definitional axiom, monotonicity of integration: no dimension bound, no distributional assumption, no bound on the number of bidders. The formalization is archived at [DOI 10.5281/zenodo.21214697](https://doi.org/10.5281/zenodo.21214697).
+Ad auctions for LLM conversations sell regions of embedding space. The scoring rule `log(b) - ‖x-c‖²/σ²` has circulated as a heuristic for clearing them: embed the conversation, rank advertisers by bid-adjusted proximity, highest score wins. We show the rule is no heuristic. It is VCG. We prove in Lean 4, with zero `sorry`, that the score is a monotone transform of Gaussian advertiser value. The argmax allocation therefore maximizes welfare at every query point, Clarke pivot payments make truthful reporting of bid, center, and reach a dominant strategy, and no single-winner rule achieves higher expected welfare. The allocation is a power diagram: in the embedding space itself when reaches are equal, and one dimension up via Aurenhammer's paraboloid lift when they are heterogeneous. At any query point where centers coincide, the mechanism is exactly Vickrey's second-price auction, so keyword auctions are the degenerate case. The proof chain adds one modeling assumption, monotonicity of integration, and no trusted axiom of its own; it needs no dimension bound, no assumption on the query distribution, and no bound on the number of bidders. The formalization is archived at [DOI 10.5281/zenodo.21214697](https://doi.org/10.5281/zenodo.21214697).
 
 ## One-Shot Bidding
 
@@ -17,7 +17,7 @@ Keyword auctions are strategically broken, and the industry monetizes the breaka
 
 Embedding-space advertising restarts the design problem, a chance to get the incentives right on day one. The setting: a user's conversation embeds to a point `x` in a real inner product space; each advertiser declares a center `c` (who their customer is), a reach `σ` (how wide a neighborhood they serve), and a bid `b` (what a conversion is worth). The platform scores each advertiser at `x` and the highest score wins. The scoring rule was proposed in a blog series, an open-source exchange implements it, and multi-agent simulations probe its market dynamics.[^1] What was missing is a proof that the mechanism deserves the trust the proposal asks for.
 
-Here we supply the proof, in Lean, so that trust reduces to running a build command. The contribution is one bridge lemma, `score_eq_log_reportedVal`: the scoring rule is the logarithm of the value a report implies, unconditionally. Everything downstream is the classical VCG argument of [Vickrey (1961)](https://doi.org/10.2307/2977633), [Clarke (1971)](https://doi.org/10.1007/BF01726210), and [Groves (1973)](https://doi.org/10.2307/1914085), executed formally. On top of the chain we prove two geometric bookends: the allocation is a power diagram for arbitrary heterogeneous reaches, and the mechanism collapses to Vickrey's sealed-bid second-price auction at any keyword point.
+Here we supply the proof, in Lean, so that trust in the mechanism reduces to running a build command. The contribution is one bridge lemma, `score_eq_log_reportedVal`: the scoring rule is the logarithm of the value a report implies, unconditionally. Everything downstream is the classical VCG argument of [Vickrey (1961)](https://doi.org/10.2307/2977633), [Clarke (1971)](https://doi.org/10.1007/BF01726210), and [Groves (1973)](https://doi.org/10.2307/1914085), executed formally. On top of the chain we prove two geometric bookends: the allocation is a power diagram for arbitrary heterogeneous reaches, and the mechanism collapses to Vickrey's sealed-bid second-price auction at any keyword point.
 
 ## Model
 
@@ -73,7 +73,7 @@ The name "power diagram auction" is now a theorem at two levels.
 
 ### Equal Reach
 
-When two advertisers share `σ`, comparing scores at `x` is comparing power distances `‖x - c‖² - w` with sites at the centers and weights `w = σ² log(b)` (`score_le_iff_powerDist_le`). The score difference is an affine function of `x` (`score_sub_affine`), so cell boundaries are hyperplanes. That is the classical power diagram of [Aurenhammer (1987)](https://doi.org/10.1137/0216006), with bids setting the weights.
+When two advertisers share `σ`, comparing scores at `x` is comparing power distances `‖x - c‖² - w` with sites at the centers and weights `w = σ² log(b)` (`score_le_iff_powerDist_le`). The score difference is an affine function of `x` (`score_sub_affine`), so cell boundaries are hyperplanes. That is the classical power diagram of [Aurenhammer (1987)](https://doi.org/10.1137/0216006), with bids setting the weights. When every advertiser shares `σ`, the winner rule is that cell assignment in `E` directly: the argmax of score minimizes power distance (`winner_minimizes_powerDist`), no lift required.
 
 ### Heterogeneous Reach
 
@@ -110,13 +110,13 @@ At any point other than its center, a report's score diverges to `-∞` as `σ �
 
 ### The Mechanism
 
-At a query point where all centers coincide, the Gaussian factor is `exp(0) = 1` for every bidder: reported value is the bid, the winner is a highest bidder (`winner_maximizes_bid_of_common_center`), and the Clarke pivot equals the highest competing bid (`vcgPayment_common_center_second_price`). That is Vickrey's sealed-bid second-price auction, allocation and payment both. A keyword auction is what this mechanism does at a point.
+At a query point where all centers coincide, the Gaussian factor is `exp(0) = 1` for every bidder: reported value is the bid, the winner is a highest bidder (`winner_maximizes_bid_of_common_center`), the Clarke pivot equals the highest competing bid (`vcgPayment_common_center_second_price`), and every loser pays nothing (`vcgPayment_eq_zero_of_loser`). That is Vickrey's sealed-bid second-price auction, allocation and payment both. A keyword auction is what this mechanism does at a point.
 
 ## Optimality
 
-Pointwise welfare maximization integrates. For any measure over queries, expected welfare under the score-argmax allocation weakly dominates expected welfare under any allocation rule whatsoever (`integral_efficiency`, `gaussian_optimality`). The capstone, `gaussian_vcg_weakly_dominates`, conjoins the three properties: welfare-optimal, dominant-strategy incentive compatible, equilibrium-efficient. The last is the welfare guarantee evaluated at truthful play, which `vcg_strategyproof` certifies as a Nash equilibrium. The artifact separately proves the equilibrium-decomposition theorem of [Ghani, Hedges, Winschel and Zahn (2018)](https://arxiv.org/abs/1603.04641) (`composed_equilibria_decompose`); whether DSIC itself composes through open games is an open question, and the formalization records it as open instead of assuming it.
+Pointwise welfare maximization integrates. For any measure over queries, expected welfare under the score-argmax allocation weakly dominates expected welfare under any rule that assigns a winner to each query, power-diagram or not (`integral_efficiency`, `gaussian_optimality`). The capstone, `gaussian_vcg_weakly_dominates`, conjoins the three properties: welfare-optimal, dominant-strategy incentive compatible, equilibrium-efficient. The last is the welfare guarantee evaluated at truthful play, which `vcg_strategyproof` certifies as a Nash equilibrium. The artifact separately proves the equilibrium-decomposition theorem of [Ghani, Hedges, Winschel and Zahn (2018)](https://arxiv.org/abs/1603.04641) (`composed_equilibria_decompose`); whether DSIC itself composes through open games is an open question, and the formalization records it as open instead of assuming it.
 
-The chain uses one non-definitional axiom, `QueryMeasure.integral_mono`: the expectation operator respects pointwise inequality. A finite query log satisfies it outright; a measure-theoretic integral satisfies it on the allocation rules it can evaluate. The optimality theorem inherits its strength from that interface, and keeping the axiom abstract lets the theorem quantify over query distributions instead of fixing one.
+The chain uses one modeling assumption, `QueryMeasure.integral_mono`: a monotone expectation operator respects pointwise inequality (no normalization or probability mass required). It is a typeclass field, not a Lean `axiom`: `QueryMeasure.dirac`, a point evaluation, and `QueryMeasure.ofWeightedFinset`, a finite weighted query log, construct the operator and discharge the field by proof, so nothing here rests on a trusted axiom of our own (the artifact audit records the check). A measure-theoretic integral satisfies the same interface on the allocation rules it can evaluate. Keeping the operator abstract lets the optimality theorem quantify over query distributions instead of fixing one, and it inherits exactly this interface's strength.
 
 ## Related Work
 
@@ -144,7 +144,7 @@ The theorems end where the model does, and the model is deliberately narrow.
 |---|---|
 | Embedding space `E` | any real inner product space; dimension unconstrained, infinite allowed |
 | Advertisers | arbitrary finite type; no bound on the count |
-| Query distribution | universally quantified expectation operator; one axiom, monotonicity |
+| Query distribution | universally quantified expectation operator; one assumption, monotonicity |
 | Utility | quasilinear; no budget constraints |
 | True valuations | isotropic Gaussian family |
 | Deviations | any `(center, σ, bid)` triple |
@@ -169,7 +169,7 @@ lake exe cache get
 lake build
 ```
 
-Zero `sorry`. The claims-to-theorems map:
+Zero `sorry`, and no trusted axiom of our own: `#print axioms` on every theorem below returns only Lean's three standard background axioms (`propext`, `Classical.choice`, `Quot.sound`), because the single modeling assumption is a `QueryMeasure` typeclass that concrete instances discharge by proof. The claims-to-theorems map:
 
 | Claim | Lean theorem | File |
 |---|---|---|
@@ -178,10 +178,11 @@ Zero `sorry`. The claims-to-theorems map:
 | truthful reporting is dominant | `vcg_dsic` | Strategyproof.lean |
 | no allocation rule beats VCG | `gaussian_optimality` | GaussianOptimality.lean |
 | capstone conjunction | `gaussian_vcg_weakly_dominates` | GaussianOptimality.lean |
-| equal-σ power diagram, hyperplane bisectors | `score_le_iff_powerDist_le`, `score_sub_affine` | PowerDiagram.lean |
+| equal-σ power diagram, hyperplane bisectors, winner minimizes power distance | `score_le_iff_powerDist_le`, `score_sub_affine`, `winner_minimizes_powerDist` | PowerDiagram.lean |
 | variable-σ power diagram via paraboloid lift | `liftedPowerDist_paraboloid`, `winner_minimizes_liftedPowerDist` | PowerDiagram.lean |
 | keyword limit | `keyword_is_degenerate_limit` | VectorSpace.lean |
 | exact Vickrey at a keyword point | `vcgPayment_common_center_second_price` | SecondPrice.lean |
+| losers pay nothing | `vcgPayment_eq_zero_of_loser` | Strategyproof.lean |
 
 ## Acknowledgments {-}
 
