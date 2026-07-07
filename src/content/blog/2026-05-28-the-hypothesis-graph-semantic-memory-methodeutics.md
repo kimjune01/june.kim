@@ -330,7 +330,7 @@ But external verification is necessary. It is not sufficient. A reference only h
 
 ### Making a tiny bench {#verus-bench}
 
-To attribute the lift to the mechanism, every arm has to be scored on the same mechanical ruler; otherwise "more general" stays an impression no one can check. The project's own suite is no such ruler: it passes for both the narrow and the general fix (§(verus-fit)). So we build one by hand, a tiny answer key. The case is one bug, so the bench is one bug. It holds three compiler states, the buggy commit (base) and the maintainer's narrow and general fixes, plus a handful of small test programs, the *probes*. A correct compiler owes each probe one **correct verdict**: `REJECT` for an unsound program, `ACCEPT` for a sound one. Grading a fix is then mechanical: does it return each probe's correct verdict?
+To attribute the lift to the mechanism, every arm has to be scored on the same mechanical ruler; otherwise "more general" stays an impression no one can check. The project's own suite is no such ruler: it passes for both the narrow and the general fix (§(verus-fit)). So we build one by hand, a tiny answer key. The case is one bug, so the bench is one bug. It holds three compiler states, the buggy commit (base) and the maintainer's narrow and general fixes, plus a handful of small test programs, the *probes*. A correct compiler owes each probe one *correct verdict*: `REJECT` for an unsound program, `ACCEPT` for a sound one. Grading a fix is then mechanical: does it return each probe's correct verdict?
 
 | Probe program | Golden assessment | Who supplied it |
 |---|:-:|---|
@@ -383,7 +383,7 @@ The construction generalizes past this bug, and past verification: the same thre
 
 ### The surprise is not self-generable {#enum-calib}
 
-A model can bootstrap the **enumeration**, the combinatorial breadth, because that is mechanical: handed a vague prompt and no gate, Fable rebuilt one for itself (§(gate-general)). It cannot bootstrap the **correct verdicts**, the human-accepted answers. Its self-built gate labels each case with the very predicate under test, so the one case that needs a truth from outside its own belief, genuine divergence versus ghost-erasure, gets self-mislabeled as handled. One run shows both halves: a wide net the model built, and a blind spot exactly where its own labels could not reach. The claim is scoped to that self-grading circularity. It is not a proof that no model could ever produce a correct verdict some other way.
+A model can bootstrap the *enumeration*, the combinatorial breadth, because that is mechanical: handed a vague prompt and no gate, Fable rebuilt one for itself (§(gate-general)). It cannot bootstrap the *correct verdicts*, the human-accepted answers. Its self-built gate labels each case with the very predicate under test, so the one case that needs a truth from outside its own belief, genuine divergence versus ghost-erasure, gets self-mislabeled as handled. One run shows both halves: a wide net the model built, and a blind spot exactly where its own labels could not reach. The claim is scoped to that self-grading circularity. It is not a proof that no model could ever produce a correct verdict some other way.
 
 So before crediting the verdict source, the cheaper explanations have to fall, and each has a control already in the ablation.
 
