@@ -29,6 +29,8 @@
     background:#fff;border:1px solid var(--line);border-radius:4px;padding:5px 9px}
   select{max-width:430px}
   button{cursor:pointer} button:hover{border-color:var(--ink)}
+  button:focus-visible,a:focus-visible,select:focus-visible,
+  #q:focus-visible,.thumb:focus-visible{outline:2px solid var(--brk);outline-offset:2px}
   .grow{flex:1}
   .count{color:var(--muted);min-width:62px;text-align:center;font-variant-numeric:tabular-nums}
   .nav{padding:5px 10px}
@@ -39,15 +41,18 @@
   header .tab:hover{color:var(--ink)}
   header .tab.on{color:var(--ink);border-bottom-color:var(--del)}
   main{flex:1;display:grid;grid-template-columns:108px 1fr 5px var(--readw,500px);min-height:0}
-  .split{cursor:col-resize;background:var(--line);transition:background .12s}
+  .split{position:relative;cursor:col-resize;background:var(--line);transition:background .12s}
+  .split::before{content:"";position:absolute;top:0;bottom:0;left:-5px;right:-5px}  /* 15px hit area, 5px visual */
   .split:hover,.split.on{background:var(--muted)}
   body.resizing{cursor:col-resize;user-select:none}
   body.resizing .imgwrap{pointer-events:none}
   .rail{border-right:1px solid var(--line);overflow-y:auto;background:var(--panel);padding:6px;min-width:0}
   .thumb{position:relative;display:block;width:100%;border:1px solid var(--line);border-radius:2px;
-         margin-bottom:6px;background:#fff;cursor:pointer;opacity:.8;overflow:hidden}
+         margin:0 0 6px;padding:0;background:#fff;cursor:pointer;opacity:.8;overflow:hidden;
+         font:inherit;color:inherit;text-align:center}
   .thumb:hover{opacity:1}
-  .thumb.on{outline:2px solid var(--sel);outline-offset:1px;opacity:1;border-color:var(--ink)}
+  .thumb.on{outline:2px solid var(--sel);outline-offset:1px;opacity:1;border-color:var(--ink);background:#fffdf0}
+  .thumb.on::before{content:"";position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--del)}  /* shape cue, not color-only */
   .thumb img{display:block;width:100%;height:calc((100vh - 46px)/6 - 18px);object-fit:contain;background:#fff}
   .thumb .n{display:block;font-size:9px;color:var(--muted);text-align:center;padding:1px 0 2px}
   .thumb.has::after{content:"";position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--add)}
@@ -105,7 +110,7 @@
   .search{position:relative}
   #q{font-family:var(--sans);font-size:13px;color:var(--ink);background:#fff;
      border:1px solid var(--line);border-radius:4px;padding:5px 26px 5px 9px;width:200px}
-  #q:focus{outline:none;border-color:var(--ink)}
+  #q:focus{border-color:var(--ink)}
   .search .clr{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;
      color:var(--muted);font-size:15px;line-height:1;padding:2px 4px;display:none}
   .search .clr:hover{color:var(--ink)}
@@ -126,14 +131,43 @@
   .results .hit .snip{font-family:var(--serif);font-size:13px;line-height:1.45;color:var(--ink)}
   .results .hit mark{background:var(--sel);color:inherit;border-radius:2px}
   .results .empty{padding:14px 12px;color:var(--muted);font-size:12.5px}
+  /* explicit zoom control (the double-click/tap gesture is otherwise undiscoverable) */
+  .zoombtn{position:absolute;bottom:12px;right:12px;z-index:4;width:34px;height:34px;padding:0;
+    border-radius:50%;background:rgba(255,255,255,.92);border:1px solid var(--line);font-size:15px;
+    line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 5px rgba(0,0,0,.18)}
+  .zoombtn:hover{border-color:var(--ink)}
+  /* startup / fatal error state */
+  .errbox{margin:auto;max-width:340px;text-align:center;color:var(--muted);font-size:14px;
+    line-height:1.5;padding:24px}
+  .errbox b{color:var(--ink)}
+  .errbox button{margin-top:14px;padding:7px 16px}
+  /* narrow screens: stack image / transcription / rail; drop the drag divider */
+  @media (max-width:760px){
+    header{flex-wrap:wrap;gap:8px 10px;padding:8px 10px}
+    header .t{font-size:13px}
+    select#item{max-width:100%;flex:1 1 100%;order:5}
+    .search{order:6;flex:1 1 100%}
+    #q{width:100%}
+    .results{width:100%;max-width:none;left:0}
+    header .hint{display:none}
+    main{display:flex;flex-direction:column}
+    .split{display:none}
+    .imgwrap{order:1;min-height:46vh;flex:1 1 auto}
+    .read{order:2;border-left:0;border-top:1px solid var(--line);max-height:44vh}
+    .rail{order:3;display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;
+      height:84px;flex:0 0 auto;border-right:0;border-top:1px solid var(--line);padding:6px}
+    .rail .thumb{width:56px;flex:0 0 auto;margin:0 6px 0 0;height:100%}
+    .rail .thumb img{height:54px;width:100%;object-fit:cover}
+    .rail .thumb .n{position:absolute;left:0;right:0;bottom:0;background:rgba(255,255,255,.82);font-size:8px}
+  }
 </style>
 </head>
 <body>
 <div class="modal" id="about">
-  <div class="card">
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
     <img class="seal" src="/peirce/seal.jpg" alt="Peirce's red wax seal, embossed P">
     <div class="label">
-      <div class="lab-call">The Manuscripts of C. S. Peirce</div>
+      <div class="lab-call" id="aboutTitle">The Manuscripts of C. S. Peirce</div>
       <p class="lab-desc">Charles Sanders Peirce (1839–1914) — logician, scientist, the founder of pragmatism — left some hundred thousand pages unpublished at his death. These are some of his manuscripts at Harvard's Houghton Library, hosted on the Internet Archive in the public domain, shown here with machine-assisted draft transcriptions still under correction. The hand is his, and so are the wax seal above and the signature below.</p>
       <div class="lab-foot"><span>bMS Am 1632</span><span class="org">THE HOUGHTON LIBRARY</span><span>public domain · CC0</span></div>
     </div>
@@ -142,26 +176,29 @@
   </div>
 </div>
 <header>
-  <a class="home" href="/" title="june.kim">←</a>
+  <a class="home" href="/" title="june.kim" aria-label="Back to june.kim">←</a>
   <span class="t">Peirce Manuscripts <small>· Houghton Library</small></span>
-  <select id="item"></select>
-  <button class="nav" id="prev" title="Previous page (k)">‹</button>
-  <span class="count" id="count"></span>
-  <button class="nav" id="next" title="Next page (j)">›</button>
+  <select id="item" aria-label="Choose a manuscript"></select>
+  <button class="nav" id="prev" title="Previous page (k)" aria-label="Previous page">‹</button>
+  <span class="count" id="count" aria-live="polite" aria-atomic="true"></span>
+  <button class="nav" id="next" title="Next page (j)" aria-label="Next page">›</button>
   <span class="search">
     <input id="q" type="search" autocomplete="off" spellcheck="false"
-           placeholder="search transcriptions…" title="Search all transcriptions (/)">
+           placeholder="search transcriptions…" title="Search all transcriptions (/)"
+           role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="results">
     <button class="clr" id="qclr" title="Clear (Esc)" aria-label="Clear search">×</button>
-    <div class="results" id="results"></div>
+    <div class="results" id="results" role="listbox" aria-label="Search results"></div>
   </span>
   <span class="grow"></span>
   <span class="hint">double-click image to zoom</span>
   <nav class="tabs"><a class="tab on" href="/peirce/">Manuscripts</a><a class="tab" href="/peirce/bibliography/">Bibliography</a></nav>
-  <button class="about" id="aboutBtn" title="About this collection">ⓘ</button>
+  <button class="about" id="aboutBtn" title="About this collection" aria-label="About this collection">ⓘ</button>
 </header>
 <main>
   <div class="rail" id="rail"></div>
-  <div class="imgwrap" id="imgwrap"><img id="img" alt="manuscript page" draggable="false"></div>
+  <div class="imgwrap" id="imgwrap"><img id="img" alt="manuscript page" draggable="false">
+    <button class="zoombtn" id="zoombtn" title="Zoom (double-click image)" aria-label="Zoom in">⤢</button>
+  </div>
   <div class="split" id="split" title="Drag to resize"></div>
   <div class="read">
     <div class="note" id="note"></div>
@@ -170,15 +207,17 @@
   </div>
 </main>
 <script>
-const IIIF=(ia,f,size)=>`https://iiif.archive.org/image/iiif/3/${ia}%2F${f}.jpg/full/${size}/0/default.jpg`;
-const DISP="1400,", THUMB="!200,200", MAX="max";  // IIIF v3 size keyword is "max", not "full"
-// IA's IIIF resizer 504s intermittently; fall back to the plain file. thumb sizes → the ~15KB _thumb, everything else → the full original.
+const DISP="disp", THUMB="thumb", MAX="max";   // fallback tiers: DISP/MAX → full original, THUMB → the ~15KB _thumb
+// archive.org fallbacks (used only when a self-hosted file is missing): _thumb for the rail, the full original otherwise
 const DL=(ia,f,size)=>`https://archive.org/download/${ia}/${f}${size===THUMB?"_thumb":""}.jpg`;
 // filmstrip thumbnails are self-hosted (~2.5KB webp, same CDN as this page) — no archive.org dependency for navigation
 const LOCAL=(ia,f)=>`/peirce/thumbs/${ia}/${f}.webp`;
-let DATA={items:[]}, it=null, i=0, big=false;
+// main-pane 1400px is self-hosted too (~110KB webp) — retires IA's IIIF resizer (504s at 60s) from the reading path
+const DISP_LOCAL=(ia,f)=>`/peirce/display/${ia}/${f}.webp`;
+let DATA={items:[]}, it=null, i=0, big=false, LOAD=0;
 const $=s=>document.querySelector(s);
-const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const GH_SVG=`<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>`;
 
 // render diplomatic markup as a reading edition
 function render(t){
@@ -193,44 +232,52 @@ function render(t){
 
 function setImg(src, after, low, srcFB, lowFB){
   const img=$("#img"), iw=$("#imgwrap");
-  const done=()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); img.onload=null;
+  const tok=++LOAD;                       // any later setImg bumps LOAD; stale callbacks below no-op
+  const live=()=>tok===LOAD;
+  const done=()=>{ if(!live()) return; iw.classList.remove("loading","haslq"); img.classList.remove("lq"); img.onload=null;
     iw.classList.toggle("grab", iw.scrollHeight>iw.clientHeight+2 || iw.scrollWidth>iw.clientWidth+2);
     if(after) after(); };
   if(low){
     // show the (already rail-cached) thumbnail instantly, blurred, then swap in hi-res
     img.onload=null;   // don't let the thumbnail trigger a stale done()
     img.classList.add("lq"); iw.classList.add("loading","haslq");
-    if(lowFB) img.onerror=()=>{ img.onerror=null; img.src=lowFB; };   // thumb 504'd → plain _thumb
+    if(lowFB) img.onerror=()=>{ if(!live())return; img.onerror=null; img.src=lowFB; };   // thumb 504'd → plain _thumb
     img.src=low;
     const hi=new Image();
-    hi.onload=()=>{ img.onerror=null; img.src=src; done(); };
+    hi.onload=()=>{ if(!live())return; img.onerror=null; img.src=src; done(); };
     hi.onerror=srcFB
-      ? ()=>{ hi.onload=()=>{ img.onerror=null; img.src=srcFB; done(); };
-              hi.onerror=()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
+      ? ()=>{ if(!live())return; hi.onload=()=>{ if(!live())return; img.onerror=null; img.src=srcFB; done(); };
+              hi.onerror=()=>{ if(!live())return; iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
               hi.src=srcFB; }                                          // hi-res 504'd → full original
-      : ()=>{ iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
+      : ()=>{ if(!live())return; iw.classList.remove("loading","haslq"); img.classList.remove("lq"); };
     hi.src=src; return;
   }
   iw.classList.add("loading");
   img.onload=done;
   img.onerror=srcFB
-    ? ()=>{ img.onerror=null; img.onload=done; img.src=srcFB; }
-    : ()=>{ iw.classList.remove("loading"); img.onload=null; };
+    ? ()=>{ if(!live())return; img.onerror=null; img.onload=done; img.src=srcFB; }
+    : ()=>{ if(!live())return; iw.classList.remove("loading"); img.onload=null; };
   img.src=src;
 }
 function loadPage(k){
+  if(!it) return;                       // nav can fire (buttons/keys) before data.json resolves
   i=(k+it.pages.length)%it.pages.length;
-  const pg=it.pages[i];
-  big=false; $("#imgwrap").classList.remove("zoom","drag");
-  // main pane: 1400px via IIIF (the one real bandwidth win) → falls back to full original; blurred placeholder is the self-hosted webp (archive _thumb only if missing)
-  setImg(IIIF(it.ia,pg.f,DISP), null, LOCAL(it.ia,pg.f), DL(it.ia,pg.f,DISP), DL(it.ia,pg.f,THUMB));
+  const pg=it.pages[i], leaf=pg.f.replace(/^IMG_?/,"");
+  big=false; setZoomBtn(false); $("#imgwrap").classList.remove("zoom","drag");
+  // main pane: self-hosted 1400px webp → falls back to the full original on archive.org only if a display file is missing; blurred placeholder is the self-hosted thumb (archive _thumb only if missing)
+  setImg(DISP_LOCAL(it.ia,pg.f), null, LOCAL(it.ia,pg.f), DL(it.ia,pg.f,DISP), DL(it.ia,pg.f,THUMB));
+  $("#img").alt=`Peirce manuscript R${it.r}, leaf ${leaf}`;
   $("#count").textContent=`${i+1} / ${it.pages.length}`;
-  document.querySelectorAll(".thumb").forEach((t,j)=>t.classList.toggle("on",j===i));
+  document.querySelectorAll(".thumb").forEach((t,j)=>{
+    t.classList.toggle("on",j===i);
+    if(j===i) t.setAttribute("aria-current","true"); else t.removeAttribute("aria-current");
+  });
   const on=document.querySelector(".thumb.on"); if(on) on.scrollIntoView({block:"nearest"});
   $("#body").innerHTML=render(pg.t);
-  $("#src").innerHTML=`<span>MS Am 1632 (${it.r}), leaf ${pg.f.replace(/^IMG_?/,"")}</span>`
-    +`<a href="https://archive.org/details/${it.ia}" target="_blank" rel="noopener">view on Internet Archive ↗</a>`
-    +(pg.t?`<a class="gh" href="https://github.com/kimjune01/peirce/blob/master/transcriptions/R${it.r}/${pg.f}.txt" target="_blank" rel="noopener" title="Edit this transcription on GitHub">edit this <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a>`:"");
+  const iaU=encodeURIComponent(it.ia), rU=encodeURIComponent(it.r), fU=encodeURIComponent(pg.f);
+  $("#src").innerHTML=`<span>MS Am 1632 (${esc(it.r)}), leaf ${esc(leaf)}</span>`
+    +`<a href="https://archive.org/details/${iaU}" target="_blank" rel="noopener">view on Internet Archive ↗</a>`
+    +(pg.t?`<a class="gh" href="https://github.com/kimjune01/peirce/blob/master/transcriptions/R${rU}/${fU}.txt" target="_blank" rel="noopener" title="Edit this transcription on GitHub">edit this ${GH_SVG}</a>`:"");
   writeHash();
 }
 // ---- deep links: /peirce/#R460 selects a manuscript by Robin number, #R460/2537 a leaf ----
@@ -255,30 +302,39 @@ function applyHash(){
 function selectItem(r,page){
   it=DATA.items.find(x=>x.r===r); if(!it) return; i=0;
   $("#item").value=r;
-  const rail=$("#rail"); rail.innerHTML="";
+  const rail=$("#rail"), ia=it.ia; rail.innerHTML="";   // capture ia: a fast re-select mustn't repoint this item's thumbs
   it.pages.forEach((pg,j)=>{
-    const b=document.createElement("div"); b.className="thumb"+(pg.t?" has":"");
-    const im=document.createElement("img"); im.loading="lazy";   // native lazy-load: only thumbs near the rail viewport are fetched
-    im.onerror=()=>{ im.onerror=null; im.src=DL(it.ia,pg.f,THUMB); };   // self-hosted webp → archive _thumb only if a file is missing
-    im.src=LOCAL(it.ia,pg.f);
-    const n=document.createElement("span"); n.className="n"; n.textContent=pg.f.replace(/^IMG_?/,"");
+    const leaf=pg.f.replace(/^IMG_?/,"");
+    const b=document.createElement("button"); b.type="button"; b.className="thumb"+(pg.t?" has":"");
+    b.setAttribute("aria-label",`Leaf ${leaf}${pg.t?", transcribed":""}`);
+    const im=document.createElement("img"); im.loading="lazy"; im.alt="";   // decorative: the button carries the name
+    im.onerror=()=>{ im.onerror=null; im.src=DL(ia,pg.f,THUMB); };   // self-hosted webp → archive _thumb only if a file is missing
+    im.src=LOCAL(ia,pg.f);
+    const n=document.createElement("span"); n.className="n"; n.textContent=leaf;
     b.append(im,n); b.onclick=()=>loadPage(j); rail.appendChild(b);
   });
   loadPage(page||0);
 }
-function toggleZoom(e){
+function setZoomBtn(zoomed){
+  const b=$("#zoombtn"); if(!b) return;
+  b.textContent=zoomed?"⤡":"⤢";
+  b.setAttribute("aria-label",zoomed?"Zoom out":"Zoom in");
+}
+// cx,cy: client-space point to center on. Omitted (button/keyboard) → center of the pane.
+function toggleZoom(cx,cy){
   const iw=$("#imgwrap"), img=$("#img");
-  if(!big){ // zoom in: load full-res, center on click
-    const r=img.getBoundingClientRect();
-    const fx=(e.clientX-r.left)/r.width, fy=(e.clientY-r.top)/r.height;
-    big=true; iw.classList.add("zoom");
-    // zoom: IIIF "max" is identical to the plain original, so use the reliable endpoint directly and skip the flaky resizer
+  if(!big){ // zoom in: load the full-res original, centered on the requested point
+    const r=img.getBoundingClientRect(), w=iw.getBoundingClientRect();
+    if(cx==null){ cx=w.left+iw.clientWidth/2; cy=w.top+iw.clientHeight/2; }
+    const fx=(cx-r.left)/r.width, fy=(cy-r.top)/r.height;
+    big=true; setZoomBtn(true); iw.classList.add("zoom");
+    // full-res comes straight from archive.org; if it fails, fall back to the (upscaled) display image so the UI never sticks in a blank zoom
     setImg(DL(it.ia,it.pages[i].f,MAX), ()=>{
-      const z=img.getBoundingClientRect(), w=iw.getBoundingClientRect();
-      iw.scrollLeft+=(z.left+fx*z.width)-(w.left+iw.clientWidth/2);
-      iw.scrollTop +=(z.top +fy*z.height)-(w.top +iw.clientHeight/2);
-    });
-  } else { big=false; iw.classList.remove("zoom"); setImg(IIIF(it.ia,it.pages[i].f,DISP), undefined, undefined, DL(it.ia,it.pages[i].f,DISP)); }
+      const z=img.getBoundingClientRect(), w2=iw.getBoundingClientRect();
+      iw.scrollLeft+=(z.left+fx*z.width)-(w2.left+iw.clientWidth/2);
+      iw.scrollTop +=(z.top +fy*z.height)-(w2.top +iw.clientHeight/2);
+    }, null, DISP_LOCAL(it.ia,it.pages[i].f));
+  } else { big=false; setZoomBtn(false); iw.classList.remove("zoom"); setImg(DISP_LOCAL(it.ia,it.pages[i].f), undefined, undefined, DL(it.ia,it.pages[i].f,DISP)); }
 }
 
 $("#item").onchange=e=>selectItem(e.target.value);
@@ -294,9 +350,11 @@ $("#next").onclick=()=>loadPage(i+1);
     iw.scrollLeft=p.l-(e.clientX-p.x); iw.scrollTop=p.t-(e.clientY-p.y); });
   window.addEventListener("mouseup",()=>{ if(p){ p=null; iw.classList.remove("drag"); } });
   iw.addEventListener("click",e=>{
+    if(e.target.closest(".zoombtn")) return;       // the button has its own handler
     if(moved){ moved=false; return; }              // that click was a pan
-    if(e.timeStamp-last < 350){ toggleZoom(e); last=0; } else last=e.timeStamp;
+    if(e.timeStamp-last < 350){ toggleZoom(e.clientX,e.clientY); last=0; } else last=e.timeStamp;
   });
+  $("#zoombtn").addEventListener("click",e=>{ e.stopPropagation(); toggleZoom(); });
 })();
 // draggable boundary between the image and the transcription pane
 (()=>{ const sp=$("#split"), mn=document.querySelector("main"); let on=false;
@@ -333,64 +391,96 @@ function snippet(text,low,q){
     +esc(text.slice(at+q.length,e))+(e<text.length?"…":"");
 }
 let hits=[], act=-1;
+function openResults(open){
+  $("#results").classList.toggle("open",open);
+  $("#q").setAttribute("aria-expanded",open?"true":"false");
+  if(!open) $("#q").removeAttribute("aria-activedescendant");
+}
 function runSearch(raw){
   const box=$("#results"), q=raw.trim().toLowerCase();
   $(".search").classList.toggle("has",raw.length>0);
-  if(q.length<2){ box.classList.remove("open"); box.innerHTML=""; hits=[]; act=-1; return; }
+  if(q.length<2){ openResults(false); box.innerHTML=""; hits=[]; act=-1; return; }
   hits=[];
   for(const e of INDEX){
     if(e.low.includes(q)){ hits.push(e); if(hits.length>=MAXHITS) break; }
   }
   act=-1;
-  if(!hits.length){ box.innerHTML=`<div class="empty">No matches for “${esc(raw.trim())}”.</div>`; box.classList.add("open"); return; }
+  if(!hits.length){ box.innerHTML=`<div class="empty">No matches for “${esc(raw.trim())}”.</div>`; openResults(true); return; }
   const cap=hits.length>=MAXHITS?`${MAXHITS}+ pages`:`${hits.length} page${hits.length>1?"s":""}`;
   box.innerHTML=`<div class="head">${cap}</div>`+hits.map((h,n)=>
-    `<button class="hit" data-n="${n}"><div class="meta">R<b>${h.r}</b> · ${esc(h.title)} · leaf ${esc(h.leaf)}</div>`
+    `<button class="hit" role="option" id="hit-${n}" aria-selected="false" data-n="${n}"><div class="meta">R<b>${esc(h.r)}</b> · ${esc(h.title)} · leaf ${esc(h.leaf)}</div>`
     +`<div class="snip">${snippet(h.text,h.low,q)}</div></button>`).join("");
-  box.classList.add("open");
+  openResults(true);
 }
 function openHit(n){
   const h=hits[n]; if(!h) return;
   selectItem(h.r,h.page);
-  $("#results").classList.remove("open");
+  openResults(false);
 }
 function setAct(n){
   const items=document.querySelectorAll(".results .hit"); if(!items.length) return;
   act=(n+items.length)%items.length;
-  items.forEach((el,k)=>el.classList.toggle("act",k===act));
+  items.forEach((el,k)=>{ const on=k===act; el.classList.toggle("act",on); el.setAttribute("aria-selected",on?"true":"false"); });
+  $("#q").setAttribute("aria-activedescendant",items[act].id);
   items[act].scrollIntoView({block:"nearest"});
 }
 (()=>{
   const q=$("#q"), box=$("#results");
   let t=null;
   q.addEventListener("input",()=>{ clearTimeout(t); t=setTimeout(()=>runSearch(q.value),110); });
-  q.addEventListener("focus",()=>{ if(hits.length) box.classList.add("open"); });
+  q.addEventListener("focus",()=>{ if(hits.length) openResults(true); });
   q.addEventListener("keydown",e=>{
-    if(e.key==="Escape"){ if(box.classList.contains("open")){box.classList.remove("open");} else {q.value="";runSearch("");} e.preventDefault(); return; }
+    if(e.key==="Escape"){ if(box.classList.contains("open")){openResults(false);} else {q.value="";runSearch("");} e.preventDefault(); return; }
     if(e.key==="ArrowDown"){ setAct(act+1); e.preventDefault(); }
     else if(e.key==="ArrowUp"){ setAct(act-1); e.preventDefault(); }
     else if(e.key==="Enter"){ openHit(act>=0?act:0); e.preventDefault(); }
   });
   box.addEventListener("mousedown",e=>{ const b=e.target.closest(".hit"); if(b){ e.preventDefault(); openHit(+b.dataset.n); } });
   $("#qclr").onclick=()=>{ q.value=""; runSearch(""); q.focus(); };
-  document.addEventListener("mousedown",e=>{ if(!e.target.closest(".search")) box.classList.remove("open"); });
+  document.addEventListener("mousedown",e=>{ if(!e.target.closest(".search")) openResults(false); });
 })();
 
 const modal=$("#about");
-const closeAbout=()=>modal.classList.add("hidden");
+const aboutOpen=()=>!modal.classList.contains("hidden");
+let aboutReturn=null;   // element to restore focus to when the dialog closes
+function openAbout(){ aboutReturn=document.activeElement; modal.classList.remove("hidden"); $("#enter").focus(); }
+function closeAbout(){ modal.classList.add("hidden");
+  try{ localStorage.setItem("peirce_seen","1"); }catch{}          // returning visitors skip the intro
+  if(aboutReturn&&aboutReturn.focus){ aboutReturn.focus(); } aboutReturn=null; }
 $("#enter").onclick=closeAbout;
-$("#aboutBtn").onclick=()=>modal.classList.remove("hidden");
+$("#aboutBtn").onclick=openAbout;
 modal.addEventListener("click",e=>{ if(e.target===modal) closeAbout(); });
+// dialog owns its own keys while open: Escape closes; Tab is trapped inside the card
+modal.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ closeAbout(); e.preventDefault(); return; }
+  if(e.key!=="Tab") return;
+  const f=modal.querySelectorAll('button,a[href],[tabindex]:not([tabindex="-1"])');
+  if(!f.length){ e.preventDefault(); return; }
+  const first=f[0], last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){ last.focus(); e.preventDefault(); }
+  else if(!e.shiftKey&&document.activeElement===last){ first.focus(); e.preventDefault(); }
+});
 document.addEventListener("keydown",e=>{
-  if(!modal.classList.contains("hidden")){ if(e.key==="Escape"||e.key==="Enter") closeAbout(); return; }
+  if(aboutOpen()) return;                            // the dialog handles its own keys
   if(e.key==="/"&&e.target.tagName!=="INPUT"){$("#q").focus();e.preventDefault();return;}
   if(e.target.tagName==="SELECT"||e.target.tagName==="INPUT") return;
   if(e.key==="ArrowDown"||e.key==="j"){loadPage(i+1);e.preventDefault();}
   if(e.key==="ArrowUp"||e.key==="k"){loadPage(i-1);e.preventDefault();}
 });
+function showFatal(){
+  $("#about").classList.add("hidden");
+  document.querySelector("main").innerHTML=
+    `<div class="errbox"><b>Couldn't load the manuscripts.</b><br>`
+    +`The catalog (data.json) failed to load — likely a network hiccup.`
+    +`<br><button type="button" onclick="location.reload()">Retry</button></div>`;
+}
 (async()=>{
-  DATA=await (await fetch("/peirce/data.json")).json();
-  $("#note").innerHTML=DATA.note;
+  try{
+    const res=await fetch("/peirce/data.json");
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    DATA=await res.json();
+  }catch(err){ console.error("peirce: data.json load failed",err); showFatal(); return; }
+  $("#note").textContent=DATA.note||"";           // note is plain text — never inject as HTML
   const sel=$("#item");
   DATA.items.forEach(x=>{
     const tr=x.pages.filter(p=>p.t).length;
@@ -398,8 +488,13 @@ document.addEventListener("keydown",e=>{
     o.value=x.r; o.textContent=`R${x.r} · ${x.title} (${x.pages.length} pp${tr?` · ${tr} ✓`:''})`;
     sel.appendChild(o);
   });
-  if(applyHash()) closeAbout();                    // deep link → jump straight in, skip the intro
-  else if(DATA.items.length) selectItem(DATA.items[0].r);
+  if(applyHash()){ modal.classList.add("hidden"); }   // deep link → jump straight in, skip the intro
+  else{
+    if(DATA.items.length) selectItem(DATA.items[0].r);
+    let seen=false; try{ seen=localStorage.getItem("peirce_seen")==="1"; }catch{}
+    if(seen) modal.classList.add("hidden");           // returning visitor: no blocking intro
+    else $("#enter").focus();                         // first visit: move focus into the dialog
+  }
   buildIndex();
 })();
 window.addEventListener("hashchange",applyHash);   // shared links & back/forward

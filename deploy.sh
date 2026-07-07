@@ -157,7 +157,10 @@ fi
 echo "    $HTML_DELETE_COUNT stale HTML files deleted"
 
 echo "==> Syncing non-HTML to S3"
-aws s3 sync dist/ "s3://$BUCKET/" --delete --size-only --exclude "*.html" --exclude "*.DS_Store" --exclude "*.pytest_cache/*"
+# peirce/display/* is self-hosted separately (~190MB, gitignored, uploaded by
+# scripts/gen-peirce-display.py's push below); exclude it so --delete never wipes
+# the S3 copies and deploys don't re-scan it every time.
+aws s3 sync dist/ "s3://$BUCKET/" --delete --size-only --exclude "*.html" --exclude "*.DS_Store" --exclude "*.pytest_cache/*" --exclude "peirce/display/*"
 
 echo "==> Invalidating CloudFront"
 aws cloudfront create-invalidation \
