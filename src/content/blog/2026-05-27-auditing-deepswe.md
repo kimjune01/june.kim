@@ -4,7 +4,7 @@ title: "Auditing DeepSWE"
 tags: coding, methodology, epistemology, reflecting
 ---
 
-*Last updated 2026-05-31.*
+*Last updated 2026-07-07.*
 
 A benchmark asks us to trust three things: that the tasks are real, that the grader is fair,
 and that the answer key works. This audit asks whether those claims hold.
@@ -185,7 +185,7 @@ instance prompt, verbatim:
 > anything
 > ```
 
-Measured against the native CLIs (`claude-code`, `codex`, `gemini-cli`, `opencode`), that asymmetry sits less in prompt length than in tool surface area. `mini-swe-agent` exposes one tool: `bash`. The native CLIs each ship a typed tool suite (Read, Write, Edit, Grep, Glob, and so on), each with its own schema and ergonomics. Bash can emulate most of what those tools do, but the interfaces differ, and that difference is exactly what a scaffolding study is meant to characterize. A ten-task single-run comparison across that gap is asked to carry the directional claim, and the statistical power is not there.
+Measured against the native CLIs ([`claude-code`](https://github.com/anthropics/claude-code), `codex`, [`gemini-cli`](https://github.com/google-gemini/gemini-cli), [`opencode`](https://github.com/sst/opencode)), that asymmetry sits less in prompt length than in tool surface area. `mini-swe-agent` exposes one tool: `bash`. The native CLIs each ship a typed tool suite (Read, Write, Edit, Grep, Glob, and so on), each with its own schema and ergonomics. Bash can emulate most of what those tools do, but the interfaces differ, and that difference is exactly what a scaffolding study is meant to characterize. A ten-task single-run comparison across that gap is asked to carry the directional claim, and the statistical power is not there.
 
 ## The second read that didn't run
 
@@ -213,7 +213,7 @@ that the tasks are not all gold-verified and the harness comparison is a
 ten-task pilot, asks only for the trust it has earned. A caveat costs nothing and
 breaks no comparability.
 
-So the note is short. Before shipping, run the answer key against its own test and
+Before shipping, run the answer key against its own test and
 let a second reader catch the contradictions. After shipping, if those checks were
 skipped, say so in the limitations. Either way, publish the runs so the next reader
 does not have to find the cracks. The cheapest version of better is plain. It is
@@ -221,7 +221,7 @@ fine to ship unfinished work; it is not fine to call it finished when it is not.
 
 ## Update: the review (2026-05-29)
 
-After this post first ran, I went back and reviewed the artifact directly.
+After this post first ran, I reviewed the artifact directly.
 The single-page React app at [`deepswe.datacurve.ai`](https://deepswe.datacurve.ai/)
 loads its data from five JSON files under `/artifacts/`:
 [`summary.json`](https://deepswe.datacurve.ai/artifacts/summary.json),
@@ -229,9 +229,9 @@ loads its data from five JSON files under `/artifacts/`:
 [`heatmap.json`](https://deepswe.datacurve.ai/artifacts/heatmap.json),
 [`tasks.json`](https://deepswe.datacurve.ai/artifacts/tasks.json), and
 [`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json) (every
-individual rollout, 8852 records). Those files are public, and any reader can
+individual rollout, 8852 records). Those files were public when I ran the review, and any reader could
 check the artifact through them. They are mirrored to
-[the audit repo](https://github.com/kimjune01/deepswe-run/tree/main/external/deepswe-leaderboard/raw).
+[the audit repo](https://github.com/kimjune01/deepswe-run/tree/main/external/deepswe-leaderboard/raw), the durable copy now that the live URLs have 404'd.
 I retract one critique from the section above. Per-task receipts are published,
 just behind URLs the UI doesn't surface. That much is to the maintainers' credit.
 
@@ -383,25 +383,25 @@ never stated.
 
 That makes at least this task's score a specification lottery. It grades whether the model
 guessed the author's unstated convention, not the stated feature alone, and the guess is
-invisible in a single reward; it does not wash out the way infrastructure flake does,
+invisible in a single reward. It does not wash out the way infrastructure flake does,
 because the model is not flaking, it is committing to a reading the grader happens to
 penalize. Real PRDs are vague, and a benchmark drawn from real work inherits that vagueness;
 the defect is not the underspecification but the hidden test resolving it silently and
 scoring the resolution as capability. Getting this one right from the prose is impossible or
 a coin flip, which reads as a due-diligence gap rather than anything worse, the kind a launch
-reviewed as a marketing release produces and a measurement self-audit catches. That
-self-audit is the second-reader check this post already proposes: a model reading the
+reviewed as a marketing release produces and a measurement self-audit catches.
+
+That self-audit is the second-reader check this post already proposes: a model reading the
 instruction beside the test flags the overlay clause as underdetermined before any solver
 runs. One task is worked through here; I make no claim about how many of the 113 share the
 property.
 
 #### A design choice with a short half-life
 
-DeepSWE publishes everything. The tasks, the harness, the verifier code, the
+DeepSWE publishes its substrate. The tasks, the harness, the verifier code, the
 docker images, the reference solutions. That is the design choice that makes
-the benchmark immediately and trivially reproducible by any third party, and
-it is also the choice that gives the benchmark a useful lifetime in the
-single-digit months. Web crawl picks up the tasks. Synthetic-data pipelines
+the benchmark trivially reproducible by any third party, and it is also the
+choice that gives it a useful lifetime in the single-digit months. Web crawl picks up the tasks. Synthetic-data pipelines
 sample from the public artifacts. By the next model generation, the
 contamination-free claim that the benchmark makes about itself as of May 2026
 is no longer empirically defensible.
@@ -467,7 +467,7 @@ themselves: these are not lifted from public PRs or issues, they are
 engineering exercises authored from scratch.
 
 The same publication choice
-that breaks the artifact's measurement life is what gives it its training
+that breaks the artifact's measurement life gives it its training
 life. As a training corpus, the 113 tasks have a longer half-life than three
 months and look like exactly what the team actually built. The audit above
 is about a specific portrayal: that the verdicts are a measurement readers
@@ -508,7 +508,7 @@ and by the readers who cited it. That request was unanswered.
 
 The byline on
 [the leaderboard's blog post](https://deepswe.datacurve.ai/blog) lists four
-authors: **Wenqi Huang, Charley Lee, Leonard Tng, Serena Ge**. They are
+authors: Wenqi Huang, Charley Lee, Leonard Tng, Serena Ge. They are
 Datacurve's team. The two named co-founders are
 Serena Ge ([CEO](https://www.linkedin.com/in/serena-ge-4583731b4/),
 [`@serenaa_ge`](https://x.com/serenaa_ge)) and
@@ -631,10 +631,10 @@ the top model drops, and the `has_model_patch: true` flag whose link is not
 delivered.
 
 Seven are additional methodological catches the audit above does not contain.
-**Credit for these seven is codex's, not mine. I had not surfaced them before
-running the prompt, and would not have without it.**
+*Credit for these seven is codex's, not mine. I had not surfaced them before
+running the prompt, and would not have without it.*
 
-- **The public trial universe is larger than the leaderboard universe.**
+- *The public trial universe is larger than the leaderboard universe.*
   [`summary.json`](https://deepswe.datacurve.ai/artifacts/summary.json)
   reports `counts.trials = 8852`, while
   [`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json)
@@ -645,15 +645,15 @@ running the prompt, and would not have without it.**
   rows that are not in scope for the leaderboard. The trial file's own
   structure does not make the separation obvious to a reader who treats
   it as the source of truth for the leaderboard's verdicts.
-- **Uneven exclusion counts across models.**
+- *Uneven exclusion counts across models.*
   [`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json) shows
   `gemini-3-flash-preview` with 24 excluded full-scope trials, `gpt-5.5`
   with 8, and several models with 0. The exclusion policy is defensible
   only if the underlying errors are infrastructure-random; an uneven
   exclusion distribution shifts the comparison without that being
   apparent from the leaderboard.
-- **[Wilson confidence intervals](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) computed over clustered trials as if
-  they were independent.**
+- *[Wilson confidence intervals](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval) computed over clustered trials as if
+  they were independent.*
   [`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json)'s
   `ci_method` field says "95% Wilson over attempts; each trial is
   treated as one independent unit." Four trials per task share the
@@ -661,22 +661,22 @@ running the prompt, and would not have without it.**
   itself macro-averaged over tasks. Treating attempts as independent
   underrepresents task-level correlation and produces overconfident
   intervals.
-- **`pass_rate` field whose definition diverges from the naïve
-  interpretation.**
+- *`pass_rate` field whose definition diverges from the naïve
+  interpretation.*
   In [`leaderboard.json`](https://deepswe.datacurve.ai/artifacts/leaderboard.json),
   `pass_rate` equals `pass_at_1` (macro-averaged over tasks), not
   `n_passed / n_attempted`. For `claude-sonnet-4-6` the published
   `pass_rate` is 0.3156 while the attempt-level rate is 142/447 =
   0.3177. The duplicated fields invite the reader who skims to use
   the wrong one.
-- **Missing prompts and verifier commands in `tasks.json`.**
+- *Missing prompts and verifier commands in `tasks.json`.*
   [`tasks.json`](https://deepswe.datacurve.ai/artifacts/tasks.json)
   exposes `id`, `repository`, `base_commit_hash`, `display_description`,
   `problem_title`, and `prompt_characters`, but not the full prompt,
   the verifier command, the hidden tests, the docker image, the
   timeout policy, the dependency setup, or the scoring script. A
   reader with the artifacts cannot reconstruct what the grader did.
-- **Mixed-length and short `base_commit_hash` values.**
+- *Mixed-length and short `base_commit_hash` values.*
   Most entries in [`tasks.json`](https://deepswe.datacurve.ai/artifacts/tasks.json)
   are 40-character SHAs. `eicrud-keyset-pagination-cursor` is pinned
   to `68dafce` (7 characters), `langchain-request-coalescing` to
@@ -684,7 +684,7 @@ running the prompt, and would not have without it.**
   string that is neither a full SHA nor a recognizable abbreviation.
   Short SHAs can resolve unambiguously today and silently re-resolve
   later if the upstream repo changes.
-- **Non-normalized `reasoning_effort` across model configurations.**
+- *Non-normalized `reasoning_effort` across model configurations.*
   [`trials.json`](https://deepswe.datacurve.ai/artifacts/trials.json)
   records `gpt-5.5` at `xhigh`, `claude-opus-4.7` at `max`,
   `claude-sonnet-4.6` at `high`, `gemini-3.5-flash` at `medium`, and
@@ -721,8 +721,7 @@ the gold-passes-verifier check that opens this post, even though the
 authors publish the harness and the data that make the check easy. Three
 audits in scope, two of them missing.
 
-What I am witnessing is that
-across every outlet that cited the artifact as authoritative, nobody ran
+Across every outlet that cited the artifact as authoritative, nobody ran
 the five-minute check. Not the
 [VentureBeat](https://venturebeat.com/technology/deepswe-blows-up-the-ai-coding-leaderboard-crowns-gpt-5-5-and-finds-claude-opus-exploiting-a-benchmark-loophole)
 reporter writing the headline. Not the
@@ -777,6 +776,16 @@ prompt before quoting the headline. That is the actual fence around marketing
 artifacts in this field. Not peer review. Not citation politics. Not professional
 society norms. Just every reader running the prompt before reading the headline.
 
+## Update: DeepSWE shipped v1.1
+
+On June 14, 2026, Datacurve shipped [DeepSWE v1.1](https://deepswe.datacurve.ai/blog/deepswe-v1-1),
+a re-graded revision. It closes most of the technical gaps this audit opened, at the
+mechanism rather than with a caveat: the scoring moved from exit-code to node-id, and the
+four golds flagged above turn out to be exactly the tasks the re-grade lifts most, while
+the aggregate barely moves. The disclosure debt is not paid, and a fresh five-minute pass
+still bites. The scorecard is its own post:
+[Auditing DeepSWE v1.1](/auditing-deepswe-v1-1).
+
 ## Attestation and reproducibility
 
 The point of this post is not to be trusted. It is to be checked. So here is everything needed to
@@ -784,19 +793,19 @@ re-derive the quantitative claims above. The benchmark publishes the harness and
 did not publish is the gold-passes-verifier pre-ship check, plus the per-task run artifacts behind
 the leaderboard. Those are below.
 
-**What ran.** The `oracle` agent applies each task's own reference solution, then the task's own
+*What ran.* The `oracle` agent applies each task's own reference solution, then the task's own
 verifier grades it through [Pier](https://github.com/datacurve-ai/pier) `0.2.0`, unmodified. No model
 is involved, so model cost is zero. Subject: `datacurve-ai/deep-swe` pinned at commit
-**`2f0f4125`** (tasks can change after publication; this is the exact version audited), all 113 tasks.
+`2f0f4125` (tasks can change after publication; this is the exact version audited), all 113 tasks.
 Compute: one spot `m7i.8xlarge` in `us-west-2`, ten tasks in parallel, under one dollar, 2026-05-27.
 
-**Protocol.** Preregistered: the procedure was fixed and committed before the run. Pass 1 grades all
-113 in parallel; pass 2 re-runs every non-passing task **sequentially and alone**, so a resource
+*Protocol.* Preregistered: the procedure was fixed and committed before the run. Pass 1 grades all
+113 in parallel; pass 2 re-runs every non-passing task *sequentially and alone*, so a resource
 hiccup is never reported as a defect. A task is flagged only when its gold fails in isolation. The
 first run failed all 113 because of a missing `docker compose` plugin on my own box, disclosed above;
 that fault was fixed before the run that produced these numbers.
 
-**Reproduce it.**
+*Reproduce it.*
 
 ```bash
 git clone https://github.com/datacurve-ai/deep-swe && cd deep-swe && git checkout 2f0f4125
@@ -805,7 +814,7 @@ for t in tasks/*/; do pier run -p "$t" --agent oracle --env docker; done
 # reward.txt == 1 means the gold passes its own verifier; != 1 flags a defect
 ```
 
-**Pointers.** Preregistration, the audit harness (`provision_oracle_ec2.sh`, `box_audit.sh`), the full
+*Pointers.* Preregistration, the audit harness (`provision_oracle_ec2.sh`, `box_audit.sh`), the full
 per-task verdict ledger (`oracle_audit_ec2.jsonl` plus the sequential re-confirmation), and the
 confirmed defect list are all at
 [github.com/kimjune01/deepswe-run](https://github.com/kimjune01/deepswe-run), frozen at tag
