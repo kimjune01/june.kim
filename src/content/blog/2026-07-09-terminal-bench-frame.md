@@ -199,6 +199,10 @@ Terminal-Bench grades what a terminal agent accomplished and cannot see what it 
 
 The whole audit, every per-task receipt, and the code that regenerates these tables are the artifact. This preprint is its readable surface.
 
+## Disclosure {-}
+
+We shared these findings with the Terminal-Bench corresponding authors on July 9, 2026, with a standing right of reply; any response will be linked here. The actionable recommendations are filed as [terminal-bench#1459](https://github.com/harbor-framework/terminal-bench/issues/1459).
+
 ## References {-}
 
 Shaw et al., 2026. Terminal-Bench: Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces. [arXiv:2601.11868](https://arxiv.org/abs/2601.11868). The benchmark under audit; its stated goals are quoted inline.
