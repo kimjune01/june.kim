@@ -110,7 +110,7 @@ At any point other than its center, a report's score diverges to `-∞` as `σ �
 
 ### The Mechanism
 
-At a query point where all centers coincide, the Gaussian factor is `exp(0) = 1` for every bidder: reported value is the bid, the winner is a highest bidder (`winner_maximizes_bid_of_common_center`), the Clarke pivot equals the highest competing bid (`vcgPayment_common_center_second_price`), and every loser pays nothing (`vcgPayment_eq_zero_of_loser`). That is Vickrey's sealed-bid second-price auction, allocation and payment both. A keyword auction is what this mechanism does at a point.
+At a query point that is every advertiser's shared center, the Gaussian factor is `exp(0) = 1` for every bidder: reported value is the bid, the winner is a highest bidder (`winner_maximizes_bid_of_common_center`), the Clarke pivot equals the highest competing bid (`vcgPayment_common_center_second_price`), and every loser pays nothing (`vcgPayment_eq_zero_of_loser`). That is Vickrey's sealed-bid second-price auction, allocation and payment both. A keyword auction is what this mechanism does at a point.
 
 ## Optimality
 
@@ -122,15 +122,23 @@ The chain uses one modeling assumption, `QueryMeasure.integral_mono`: a monotone
 
 ### LLM Ad Auctions
 
+The idea of an auction inside the generation begins with [Dütting, Mirrokni, Paes Leme, Xu and Zuo (2024)](https://arxiv.org/abs/2310.10826), who aggregate advertisers' token distributions into the reply and price the result through a monotonicity condition. MOSAIC and the retrieval-time mechanism are later points on that line; all three keep the ad inside the text the model emits.
+
 [Soumalias, Curry and Seuken (2025)](https://arxiv.org/abs/2405.05905) give the prior LLM ad mechanism with the strongest incentive guarantees. Their MOSAIC auction allocates the reply itself: advertiser reward functions score candidate responses sampled from the model, and softmax selects one. Dominant-strategy incentives come through [Rochet (1987)](https://doi.org/10.1016/0304-4068(87)90007-3) payments, because exact VCG is intractable over the space of token sequences. Auctioning an embedded intent point instead of the reply shrinks the outcome space from token sequences to N known advertisers. Exact VCG becomes one argmax plus one counterfactual argmax, and the guarantees become simple enough for Lean to check. Allocating a separate ad object also removes MOSAIC's deployment costs: no M-fold candidate generation per query, deterministic winners an advertiser can budget against, and a discrete placement that can be attributed and priced.
 
 [Hajiaghayi, Lahaie, Rezaei and Shin (2024)](https://arxiv.org/abs/2406.09459) place the auction at retrieval time instead: ads are probabilistically retrieved per discourse segment by bid and relevance, with incentive-compatible pricing. The outcome space is far smaller than MOSAIC's, but the placement still lives inside the generated text, and the winner is a draw rather than an argmax. The geometric mechanism keeps the retrieval-time simplicity while making the allocation deterministic and the ad a separate object.
 
+[Alaei, Makhdoumi and Malekian (2026)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6212838) share the geometric premise most directly: a user is an unknown preference vector, each advertiser a feature vector, match value their inner product. Their platform learns the vector as the conversation proceeds, trading a sharper estimate against the risk the user leaves. That learning dynamic is exactly what the static model here holds fixed, and fixing the query point and the Gaussian family is what buys the closed-form diagram and the compiled proof.
+
 The other family bakes advertising into the model by training. Alibaba's [LLM-Auction](https://arxiv.org/abs/2512.10551) post-trains the model with preference alignment to balance ad revenue against user experience, encoding commercial incentives directly in the weights. Training is the wrong cadence for an ad market: campaigns change hourly, fine-tuning takes weeks, and retraining per campaign rotation costs more than the campaign. It is also the wrong trust surface. Bias learned in weights cannot be audited from outside, and users cannot police it from inside either: [evaluators shown chatbot responses with embedded ads](https://arxiv.org/abs/2409.15436) failed to detect the ads and preferred the responses that contained them. The mechanism here is the opposite limiting case. The scoring rule is public, the allocation is its argmax, the incentive properties are a compiled theorem, and the audit reduces to a build command.
+
+### Semantic Matching
+
+Advertisers competing in a vector space is not new. [Grbovic et al. (2016)](https://arxiv.org/abs/1607.01869) learned joint query and ad embeddings to match ads beyond literal keywords, and embedding-based retrieval is now standard ad-system infrastructure. In that line the geometry supplies candidates or relevance features to a separate auction. Here the distance function is the valuation, and the auction is the geometry.
 
 ### Formalized Auctions
 
-Kerber, Lange and Rowat ([2016](https://doi.org/10.1016/j.jmateco.2016.06.005)) formalized Vickrey's auction in Isabelle and argued mechanized reasoning should be ordinary practice in economic theory. We extend the practice from a discrete allocation rule to a geometric one: the object verified is a partition of a vector space, and the same artifact checks the auction theorems and the computational-geometry identification.
+[Barthe, Gaboardi, Gallego Arias, Hsu, Roth and Strub (2015)](https://arxiv.org/abs/1502.04052) verified incentive compatibility for VCG in a probabilistic relational calculus, and [Jouvelot and Gallego Arias (2022)](https://github.com/jouvelot/mech.v) built mech.v, a Coq library that proves VCG's incentive properties generically and refines an online-advertising VCG down to that specification. Formalized VCG is not new, and neither is a verified online-ad mechanism. What is new here is the object: the verified allocation is a partition of a vector space, and the same artifact that checks truthfulness checks its identification as a power diagram. Kerber, Lange and Rowat ([2016](https://doi.org/10.1016/j.jmateco.2016.06.005)) formalized Vickrey's auction in Isabelle and argued mechanized reasoning should be ordinary practice in economic theory; this extends the practice from a discrete allocation rule to a geometric one.
 
 ### Filters and Reserves
 
