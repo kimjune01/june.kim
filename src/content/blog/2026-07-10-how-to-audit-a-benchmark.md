@@ -24,7 +24,7 @@ A benchmark is a measurement instrument, and an instrument makes a contract. The
 Each clause can be broken, each break is a distinct sin, and each sin has a check. The checks below are ordered by cost, and the order carries the lesson: every severe defect in these six audits surfaced before any model ran. Cost here means compute and cash; several of the free checks still cost an afternoon of reading.
 
 <div class="table-wrap">
-<table style="max-width:70%; margin:1em auto; font-size:14px;">
+<table style="max-width:100%; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:2em"><col style="width:16em"><col style="width:5em"><col style="width:11em"><col></colgroup>
 <thead><tr><th style="background:#f0f0f0">#</th><th style="background:#f0f0f0">check</th><th style="background:#f0f0f0">cost</th><th style="background:#f0f0f0">sin</th><th style="background:#f0f0f0">exemplar</th></tr></thead>
 <tr><td>1</td><td>read the paper against the repo</td><td>free</td><td>wrong rulebook</td><td>a week and $1,000 on the wrong task</td></tr>
