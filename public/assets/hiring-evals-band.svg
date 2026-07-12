@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 380" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="14">
+  <style>
+    .row-label { fill: #0b0b0b; font-weight: 600; font-size: 14px; text-anchor: end; }
+    .row-sub { fill: #898781; font-size: 12px; text-anchor: end; }
+    .bar-solo { fill: #898781; }
+    .bar-composed { fill: #2a78d6; }
+    .band { fill: #cde2fb; fill-opacity: 0.45; }
+    .band-edge { stroke: #2a78d6; stroke-width: 1; stroke-dasharray: 4,3; }
+    .band-label { fill: #1c5cab; font-weight: 600; font-size: 14px; text-anchor: middle; }
+    .zone-label { fill: #52514e; font-size: 12.5px; text-anchor: middle; }
+    .axis { stroke: #c3c2b7; stroke-width: 1.5; }
+    .axis-label { fill: #52514e; font-size: 13px; }
+    .ceiling { stroke: #898781; stroke-width: 1.5; stroke-dasharray: 2,3; }
+    .ceiling-label { fill: #52514e; font-size: 12.5px; text-anchor: end; }
+    .dash-ext { stroke: #2a78d6; stroke-width: 2; stroke-dasharray: 3,4; }
+  </style>
+
+  <!-- band: from max(solo) x=486 to composed end x=717 -->
+  <rect class="band" x="486" y="52" width="231" height="196"/>
+  <line class="band-edge" x1="486" y1="52" x2="486" y2="248"/>
+  <line class="band-edge" x1="717" y1="52" x2="717" y2="248"/>
+  <text class="band-label" x="601.5" y="40">the band: valid items live here</text>
+
+  <!-- ceiling -->
+  <line class="ceiling" x1="820" y1="52" x2="820" y2="278"/>
+  <text class="ceiling-label" x="828" y="40" text-anchor="middle">ceiling</text>
+
+  <!-- rows -->
+  <!-- human alone: 0..36% -> width 241 -->
+  <text class="row-label" x="140" y="88">human alone</text>
+  <text class="row-sub" x="140" y="104">45-min budget</text>
+  <rect class="bar-solo" x="150" y="72" width="241" height="26" rx="4"/>
+
+  <!-- agent alone: 0..50% -> width 336 -->
+  <text class="row-label" x="140" y="158">agent alone</text>
+  <text class="row-sub" x="140" y="174">same budget, no driver</text>
+  <rect class="bar-solo" x="150" y="142" width="336" height="26" rx="4"/>
+
+  <!-- human + agent: 0..84.6% -> width 567, dashed toward ceiling -->
+  <text class="row-label" x="140" y="228">human + agent</text>
+  <text class="row-sub" x="140" y="244">the system you hire</text>
+  <rect class="bar-composed" x="150" y="212" width="567" height="26" rx="4"/>
+  <line class="dash-ext" x1="723" y1="225" x2="812" y2="225"/>
+
+  <!-- zone annotations -->
+  <text class="zone-label" x="318" y="268">a component passes solo:</text>
+  <text class="zone-label" x="318" y="284">the item measures prompt-typing</text>
+  <text class="zone-label" x="601.5" y="268">only the composed</text>
+  <text class="zone-label" x="601.5" y="284">system passes</text>
+  <text class="zone-label" x="820" y="268">ARC-AGI-3 at 100%:</text>
+  <text class="zone-label" x="820" y="284">nobody, yet</text>
+
+  <!-- axis -->
+  <line class="axis" x1="150" y1="310" x2="850" y2="310"/>
+  <path d="M 850 310 l -9 -4.5 v 9 z" fill="#c3c2b7"/>
+  <text class="axis-label" x="150" y="332">task difficulty</text>
+
+  <!-- floor marker on axis -->
+  <line class="axis" x1="486" y1="305" x2="486" y2="315"/>
+  <text class="axis-label" x="486" y="332" text-anchor="middle">floor</text>
+</svg>
