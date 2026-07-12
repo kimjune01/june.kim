@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <!-- row 1: corporate finance -->
+  <text x="30" y="38" font-size="11" fill="#999" letter-spacing="1.5">CORPORATE FINANCE &#8212; THREE-WAY MATCH</text>
+
+  <g>
+    <rect x="30" y="55" width="220" height="72" rx="8" fill="none" stroke="#666" stroke-width="1.2"/>
+    <text x="140" y="82" text-anchor="middle" font-size="13.5" fill="#1f2937" font-weight="600">purchase order</text>
+    <text x="140" y="103" text-anchor="middle" font-size="12" fill="#666">what you ordered</text>
+
+    <rect x="320" y="55" width="220" height="72" rx="8" fill="none" stroke="#2c8377" stroke-width="1.8"/>
+    <text x="430" y="82" text-anchor="middle" font-size="13.5" fill="#1a6b5f" font-weight="600">receiving report</text>
+    <text x="430" y="103" text-anchor="middle" font-size="12" fill="#666">what arrived, signed at the dock</text>
+
+    <rect x="610" y="55" width="220" height="72" rx="8" fill="none" stroke="#666" stroke-width="1.2"/>
+    <text x="720" y="82" text-anchor="middle" font-size="13.5" fill="#1f2937" font-weight="600">invoice</text>
+    <text x="720" y="103" text-anchor="middle" font-size="12" fill="#666">what you're billed</text>
+
+    <line x1="250" y1="91" x2="320" y2="91" stroke="#999" stroke-width="1.2"/>
+    <line x1="540" y1="91" x2="610" y2="91" stroke="#999" stroke-width="1.2"/>
+  </g>
+  <text x="430" y="155" text-anchor="middle" font-size="12.5" fill="#666">all three must agree before payment</text>
+
+  <!-- row 2: adtech -->
+  <text x="30" y="212" font-size="11" fill="#999" letter-spacing="1.5">ADTECH &#8212; ONE-WAY MATCH</text>
+
+  <g>
+    <rect x="30" y="229" width="220" height="72" rx="8" fill="none" stroke="#666" stroke-width="1.2"/>
+    <text x="140" y="256" text-anchor="middle" font-size="13.5" fill="#1f2937" font-weight="600">campaign</text>
+    <text x="140" y="277" text-anchor="middle" font-size="12" fill="#666">what you ordered</text>
+
+    <rect x="320" y="229" width="220" height="72" rx="8" fill="none" stroke="#bbb" stroke-width="1.4" stroke-dasharray="6 5"/>
+    <text x="430" y="256" text-anchor="middle" font-size="13.5" fill="#999" font-weight="600">receiving report</text>
+    <text x="430" y="277" text-anchor="middle" font-size="12" fill="#999">none</text>
+
+    <rect x="610" y="229" width="220" height="72" rx="8" fill="none" stroke="#666" stroke-width="1.2"/>
+    <text x="720" y="250" text-anchor="middle" font-size="13.5" fill="#1f2937" font-weight="600">dashboard</text>
+    <text x="720" y="270" text-anchor="middle" font-size="12" fill="#666">delivery and outcomes,</text>
+    <text x="720" y="287" text-anchor="middle" font-size="12" fill="#666">reported by the seller</text>
+
+    <line x1="250" y1="265" x2="320" y2="265" stroke="#999" stroke-width="1.2"/>
+    <line x1="540" y1="265" x2="610" y2="265" stroke="#999" stroke-width="1.2"/>
+  </g>
+  <text x="430" y="329" text-anchor="middle" font-size="12.5" fill="#666">payment against the seller's say-so</text>
+  <text x="430" y="360" text-anchor="middle" font-size="12.5" fill="#1a6b5f" font-weight="600">the signed coupon is the missing document</text>
+</svg>
