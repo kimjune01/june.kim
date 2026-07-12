@@ -1,0 +1,62 @@
+<svg viewBox="0 0 650 228" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; fill: #666; font-size: 11px; }
+    .dark { fill: #333; }
+    .accent { fill: #3b82f6; }
+    .green { fill: #2d7d2d; }
+    .bold { font-weight: bold; }
+    .small { font-size: 9px; }
+    .lab { font-size: 9px; fill: #999; }
+    .title { font-size: 15px; fill: #222; font-weight: bold; letter-spacing: 0.4px; }
+  </style>
+  <defs>
+    <marker id="ad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#bbb" />
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3b82f6" />
+    </marker>
+  </defs>
+
+  <!-- title -->
+  <text x="325" y="30" text-anchor="middle" class="title">A causal account of the lift</text>
+
+  <g transform="translate(0,-44)">
+  <!-- edges -->
+  <path d="M 140 123 L 174 147" stroke="#bbb" stroke-width="1.2" marker-end="url(#ad)" fill="none" />
+  <path d="M 140 184 L 174 164" stroke="#3b82f6" stroke-width="2" marker-end="url(#ab)" fill="none" />
+  <path d="M 306 155 L 346 155" stroke="#3b82f6" stroke-width="2" marker-end="url(#ab)" fill="none" />
+  <path d="M 478 155 L 518 155" stroke="#3b82f6" stroke-width="2" marker-end="url(#ab)" fill="none" />
+  <path d="M 140 242 L 518 181" stroke="#cfcfcf" stroke-width="1.1" marker-end="url(#ad)" fill="none" />
+  <text x="372" y="225" text-anchor="middle" class="lab">codex walls here</text>
+
+  <!-- nodes -->
+  <!-- abduce a fix -->
+  <rect x="16" y="104" width="124" height="38" fill="#faf8f4" stroke="#d8d4cc" stroke-width="1.5" rx="5" />
+  <text x="78" y="127" text-anchor="middle" class="dark bold" style="font-size:10.5px">abduce a fix</text>
+
+  <!-- supply the verdicts (treatment) -->
+  <rect x="16" y="164" width="124" height="42" fill="#eef4fb" stroke="#3b82f6" stroke-width="1.8" rx="5" />
+  <text x="78" y="185" text-anchor="middle" class="accent bold">supply the verdicts</text>
+  <text x="78" y="198" text-anchor="middle" class="small accent">the correct answers</text>
+
+  <!-- implement it -->
+  <rect x="16" y="224" width="124" height="36" fill="#fbfaf8" stroke="#e2ded6" stroke-width="1.3" rx="5" />
+  <text x="78" y="246" text-anchor="middle" class="dark bold" style="font-size:10px">implement it</text>
+
+  <!-- refute candidates (abductor gate) -->
+  <rect x="174" y="130" width="132" height="50" fill="#faf8f4" stroke="#cccccc" stroke-width="1.5" rx="5" />
+  <text x="240" y="150" text-anchor="middle" class="dark bold">refute candidates</text>
+  <text x="240" y="165" text-anchor="middle" class="small">comparator gate</text>
+
+  <!-- carve out divergence -->
+  <rect x="346" y="130" width="132" height="50" fill="#faf8f4" stroke="#cccccc" stroke-width="1.5" rx="5" />
+  <text x="412" y="158" text-anchor="middle" class="dark bold" style="font-size:10.5px">carve out divergence</text>
+
+  <!-- match #2501 (outcome) -->
+  <rect x="518" y="128" width="126" height="54" fill="#f0f7f0" stroke="#2d7d2d" stroke-width="2" rx="5" />
+  <text x="581" y="149" text-anchor="middle" class="green bold" style="font-size:11.5px">match #2501</text>
+  <text x="581" y="164" text-anchor="middle" class="small dark">human-level</text>
+  </g>
+
+</svg>

@@ -18,6 +18,8 @@ Ask an org how it knows its hiring works and you get circular validation. We hav
 
 And someone did check. Google studied tens of thousands of interviews, compared interviewer scores from the loop it was then running against job performance, and found [zero relationship](https://www.ere.net/articles/googles-weird-interview-questions-a-complete-waste-of-time) within its own hires, the only people it could study. Laszlo Bock, who ran People Operations, called the brainteasers "a complete waste of time." The one org famous enough to close the loop closed it, got zero, and the industry kept copying the loop anyway.
 
+And this is the industry that A/B tests button colors. The data-driven era instrumented everything that was cheap to instrument; hiring, the most expensive recurring decision in the building, stayed faith-based, even at the company that made data-driven a religion.
+
 ## Everyone knew
 
 The evals world ran the same tautology in public. Everyone knew SWE-bench Verified, the standard benchmark for AI coding ability, was contaminated. It kept getting reported in model cards and launch posts because it was the number everyone else reported. It took until February 2026 for OpenAI to [deprecate it](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/) as saturated and highly contaminated. A model reproduced the exact gold patch from a short problem snippet plus the task ID, and every frontier model tested showed task-specific contamination. The candidate had memorized the answer key, and the interviewers kept asking the questions for two more years, because those were the questions everyone asked.
@@ -42,26 +44,28 @@ The properties are in tension, and a designed eval chooses its tradeoffs on purp
 
 The thesis: hiring is a benchmark evaluation problem, and every pathology you find auditing an AI benchmark already exists in interviews. Benchmark people have names and fixes for them; software hiring runs as if nobody does. The crosswalk:
 
-| Hiring | Agent evals |
-|---|---|
-| Candidate with tools of the job | System under test (model + scaffold) |
-| Interview question | Benchmark task |
-| Interview loop | Eval harness |
-| Interviewer | Grader / judge |
-| Leaked questions (Glassdoor, Blind) | Contamination |
-| Interview prep industry | Training on the test set |
-| Everyone aces LeetCode | Saturation |
-| Referral | Prior eval on the real task distribution |
-| Vibe check | Unstructured human-judge eval |
-| Work trial | Held-out realistic task set |
-| Job performance | Criterion measure (constructed) |
-| Same verdict from different interviewers | Determinacy (inter-rater reliability) |
-| Redesigning the loop on taste | Shipping an unvalidated bench |
-| Retiring a stale question | Benchmark versioning |
-| DP ladder (how far they climbed) | Graded checkpoints, partial credit |
-| Time to verified completion | Outcome-gated latency |
-| Offer/funnel metrics | Leaderboard reporting without audit |
-| Rejected great candidates | False negatives nobody measures |
+<table style="max-width:700px; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:19em"><col></colgroup>
+<thead><tr><th style="background:#f0f0f0">Hiring</th><th style="background:#f0f0f0">Agent evals</th></tr></thead>
+<tr><td>Candidate with tools of the job</td><td>System under test (model + scaffold)</td></tr>
+<tr><td>Interview question</td><td>Benchmark task</td></tr>
+<tr><td>Interview loop</td><td>Eval harness</td></tr>
+<tr><td>Interviewer</td><td>Grader / judge</td></tr>
+<tr><td>Leaked questions (Glassdoor, Blind)</td><td>Contamination</td></tr>
+<tr><td>Interview prep industry</td><td>Training on the test set</td></tr>
+<tr><td>Everyone aces LeetCode</td><td>Saturation</td></tr>
+<tr><td>Referral</td><td>Prior eval on the real task distribution</td></tr>
+<tr><td>Vibe check</td><td>Unstructured human-judge eval</td></tr>
+<tr><td>Work trial</td><td>Held-out realistic task set</td></tr>
+<tr><td>Job performance</td><td>Criterion measure (constructed)</td></tr>
+<tr><td>Same verdict from different interviewers</td><td>Determinacy (inter-rater reliability)</td></tr>
+<tr><td>Redesigning the loop on taste</td><td>Shipping an unvalidated bench</td></tr>
+<tr><td>Retiring a stale question</td><td>Benchmark versioning</td></tr>
+<tr><td>DP ladder (how far they climbed)</td><td>Graded checkpoints, partial credit</td></tr>
+<tr><td>Time to verified completion</td><td>Outcome-gated latency</td></tr>
+<tr><td>Offer/funnel metrics</td><td>Leaderboard reporting without audit</td></tr>
+<tr><td>Rejected great candidates</td><td>False negatives nobody measures</td></tr>
+</table>
 
 Two rows strain, kept on purpose. Job performance is a criterion you construct, never a label waiting to be collected; every proxy is confounded by manager, team, and project, so the construct is really candidate-times-environment. And false negatives are darker in hiring, because a bench can re-run a rejected output and hiring can't re-run a rejected career.
 
@@ -93,7 +97,7 @@ One objection survives the panic. The tool may conceal exactly the component cap
 
 If the talent you want drives coding agents, the construct is *incremental lift over the standardized agent baseline*: same model, same scaffold, same time and retry budget, with and without this human driving. The item-design rule falls out: a valid item must defeat both components solo. The human can't finish it alone in the time, and the agent can't finish it without the human under the same budget ("cannot one-shot" is the cheap automated pre-screen). The baseline must be real: several solo-agent runs per item before any candidate sees it, which costs almost nothing since no human sits in them (runs are stochastic; one cached failure can't separate the candidate's contribution from run variance). Lift is then the distance the pair reaches past the agent's recorded stall point.
 
-Below the band, the item measures prompt-typing. Above the human-solo threshold but agent-solvable, it measures nothing about the human. The ceiling is open: configure an agent to beat [ARC-AGI-3](https://arcprize.org/arc-agi/3) to 100%, which nobody has done. As of March 2026, frontier LLMs score under 1% on the official board while humans solve 100%, and the one team that cleared the public environments used a bespoke multi-agent harness, exactly the configuration skill this item measures. The harness is banned from the official leaderboard, which is fine. The leaderboard measures models; this eval measures the human configuring.
+Below the band, the item measures prompt-typing. Above the human-solo threshold but agent-solvable, it measures nothing about the human. The ceiling is open: configure an agent to beat [ARC-AGI-3](https://arcprize.org/arc-agi/3) to 100%, which nobody has done. As of March 2026, frontier LLMs score under 1% on the official board while humans solve 100%. The best score on the public games, [36% on day one](https://www.symbolica.ai/blog/arc-agi-3) against those sub-1% baselines, came from a bespoke multi-agent harness, exactly the configuration skill this item measures. Harnesses built for the bench are banned from the official leaderboard, which is fine. The leaderboard measures models; this eval measures the human configuring.
 
 A tempting shortcut to reject: grade the *how* instead. But process-grading assumes the candidate's methods are a subset of the interviewer's. The judge's repertoire becomes the ceiling of the eval, and "is this person good" silently becomes "does this person resemble me." The candidates most worth hiring, the ones with methods the interviewer doesn't have, score worst. This is the standing evals argument for outcome grading: a held-out check is method-agnostic. Process observation belongs downstream of a passed outcome, as color on a hit, never as the reason for a miss. One carve-out: integrity violations fail you anywhere. Fabricating results, or being unable to explain your own solution, is not "a method the interviewer doesn't recognize."
 
@@ -159,19 +163,3 @@ Which answers the counterexample sitting in this post's own third section. Bock 
 What's newly possible is a loop that survives its own publication, a floor that re-checks on every model release, items that re-mint from the team's repos faster than they can leak. Bock's instrument couldn't survive being copied. This one is designed to be copied. The prediction is about who ships it first, and it's dated. If none of the three has published by the end of 2027, I was wrong about the mechanism, or about who mints defaults.
 
 The emperor has no evals.
-
-<!-- WORKING NOTES (strip before publish)
-
-Parked decisions for June:
-- Title vs kicker: currently title "Hiring Is Evals", kicker closes. Emperor-as-title still live.
-- "Deprecated on the author's behalf" wrinkle: currently omitted from prose (OpenAI made Verified on Princeton's bench). Reinsert if wanted.
-- Personal receipt inserted (METR + Epoch, named, quotes verbatim-verified against the emails and June's copy of the Epoch doc, 2026-07-10). If relations sour before publish, the anonymous variant is a two-word swap.
-- Trust Is a Cache link is live in the crossover paragraph — verify the companion post ships first (or same day).
-
-TODO before publish:
-- /table-style the crosswalk.
-- Verify/receipt: Symbolica/ARC-AGI-3 primary source; five engineer-hours; coin lean; LeetCode-2012; "nobody versions an interview loop"; everyone-copies-lab-loops; prep-industry-as-decay-cause (dated observable or mechanism flag); Anthropic-loop-leans-work-sample observation.
-- Jargon gloss on first use: Goodharting, held-out, saturation, construct, range restriction (crosswalk placement covers some).
-- /humanize, /not-but, /flow, /em-dash passes.
-- og:image? The band SVG is inline; decide if a social card is wanted.
--->
