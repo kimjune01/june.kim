@@ -9,6 +9,8 @@ description: "v0.1.0"
 
 The publisher-exchange boundary is a contract. OpenAPI makes it auditable and enforceable by the same [coding agents](/skills-over-sdks) that integrate it. Every field that doesn't exist is a promise.
 
+*This post is the design-level view: the privacy-preserving core, three calls. The shipped server exposes a larger surface and the authoritative, machine-readable spec is [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/openapi.yaml) in the adserver repo. Where the two differ, the repo spec is the truth; the endpoint names below have been reconciled to it.*
+
 ## The Flow
 
 A user is chatting with a health chatbot. The chatbot interprets intent locally, computes an embedding, and checks it against a cached advertiser catalog. A candidate matches. The UI surfaces a prompt: "Can I make a recommendation?" The user taps yes. The publisher sends the embedding to the exchange. The exchange runs the auction, returns a winner. The publisher renders the creative. The user taps it. They land on the advertiser's page.
@@ -22,7 +24,7 @@ chat → intent embedding → catalog lookup → UI prompt → user tap
                                                          ↓
                                               render creative (local)
                                                          ↓
-                                                  POST /event/serve
+                                                  POST /event/impression
                                                          ↓
                                                     user taps ad
                                                          ↓
@@ -44,9 +46,9 @@ info:
   description: Publisher-exchange boundary contract.
 
 paths:
-  /catalog:
+  /embeddings:
     get:
-      summary: Fetch advertiser catalog for local caching
+      summary: Fetch advertiser catalog (embeddings + bids) for local caching
       parameters:
         - name: If-None-Match
           in: header
@@ -66,9 +68,12 @@ paths:
         '304':
           description: Not modified
 
+  # Conceptual auction call. Shipped as the encrypted POST /ad-request (production,
+  # privacy-preserving) and the plaintext POST /simulate + POST /openrtb2/auction
+  # (dev/interop). See openapi.yaml for the exact request bodies of each.
   /auction:
     post:
-      summary: Run auction on conversation embedding
+      summary: Run auction on conversation embedding (conceptual; see note above)
       requestBody:
         required: true
         content:
@@ -94,7 +99,7 @@ paths:
           required: true
           schema:
             type: string
-            enum: [serve, click, conversion]
+            enum: [impression, click, viewable]
       requestBody:
         required: true
         content:
@@ -213,13 +218,13 @@ Pre-filtering is the publisher's responsibility. If a health chatbot has 500 pos
 
 ## Events
 
-Three event types: `serve`, `click`, `conversion`. Each is a POST to `/event/{type}` with the `auction_id` and `advertiser_id` from the auction response.
+Three event types: `impression`, `click`, `viewable`. Each is a POST to `/event/{type}` (see [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/openapi.yaml) for the exact body).
 
-`serve` fires when the creative renders. `click` when the user taps it. `conversion` when the advertiser confirms a downstream action via [blind-signed coupons](/croupier).
+`impression` fires when the creative renders (frequency-capped). `click` when the user taps it, which triggers the CPC charge on first click. `viewable` when the creative meets the viewability threshold. Downstream conversions are tracked off this path via [blind-signed coupons](/croupier) — see [attested attribution](/attested-attribution).
 
 These events feed three systems:
 
-1. **Billing.** The VCG price from the auction, matched to a serve event.
+1. **Billing.** The VCG price from the auction, matched to an impression event.
 2. **Sigma auto-tuning.** Distance histograms with minimum bin sizes feed the [sigma controller](/set-it-and-forget-it). The exchange sees aggregate patterns, not individual users.
 3. **Verified conversions.** [Attested attribution](/attested-attribution) proves a sale happened without linking it to a user.
 
@@ -231,9 +236,9 @@ Relevance comes from [embedding proximity](/power-diagrams-ad-auctions). Frequen
 
 The spec is intentionally narrow. Everything not listed is the publisher's domain. The surface area is the promise.
 
-## Skills Read This
+## Agents Read This
 
-The [`install.md`](https://github.com/kimjune01/vectorspace-skills/blob/main/install.md) skill reads this OpenAPI spec and generates integration code into the publisher's codebase. The [`verify.md`](https://github.com/kimjune01/vectorspace-skills/blob/main/verify.md) skill audits compliance against it.
+The authoritative [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/openapi.yaml) is what a coding agent reads to generate an integration client and to audit compliance against the wired routes. Packaged `install` / `verify` skills that wrap this flow are planned; today the spec itself is the interface.
 
 ---
 
