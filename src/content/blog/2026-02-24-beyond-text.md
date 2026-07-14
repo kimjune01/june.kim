@@ -18,7 +18,7 @@ Image and video advertising today follows a familiar pattern: sophisticated unde
 
 **Pinterest** has native visual search. Users tap the camera icon and search by image, not text. 553 million monthly active users. The platform already matches by visual content. It knows that a photo of a campus board is about rock climbing without anyone tagging it. But ad targeting routes through interest labels.
 
-**YouTube CTV** targets ads based on scene-level content analysis, what's happening visually in the video, not just metadata or title keywords. Projected CTV ad revenue: $4.47 billion in 2026. The visual analysis is production-grade. The auction still clears on categories.
+**YouTube CTV** targets ads based on scene-level content analysis: what's happening visually in the video. Projected CTV ad revenue: $4.47 billion in 2026. The visual analysis is production-grade. The auction still clears on categories.
 
 The pattern is identical to the text bottleneck described in [The $200 Billion Bottleneck](/embedding-gap). Every incumbent has multimodal understanding. Every incumbent flattens it at the protocol boundary. None of them will fix it. They built the walled gardens. The fix comes from new platforms that adopt an open protocol before building a proprietary ad system.
 
@@ -26,7 +26,9 @@ The pattern is identical to the text bottleneck described in [The $200 Billion B
 
 Modern multimodal models don't analyze images or audio separately. They place everything in a single shared vector space alongside text.
 
-[CLIP](https://arxiv.org/abs/2103.00020) (OpenAI, 2021) was the breakthrough. Trained on 400 million image-text pairs, it embeds images and text into the same 512-dimensional space. The text "rock climbing finger pulley injury" and a photograph of a swollen A2 pulley land near each other. Measurable cosine similarity, not metaphor. This isn't theoretical: on the Flickr30K benchmark, OpenCLIP ViT-G/14 achieves 94.9% Recall@5 for text-to-image retrieval. Given a text description, the correct image is in the top 5 results 95% of the time. CLIP is open-weight and reproduced under Apache 2.0 via [OpenCLIP](https://github.com/mlfoundations/open_clip). Anyone can run the model and verify the embedding independently.
+[CLIP](https://arxiv.org/abs/2103.00020) (OpenAI, 2021) was the breakthrough. Trained on 400 million image-text pairs, it embeds images and text into the same 512-dimensional space. The text "rock climbing finger pulley injury" and a photograph of a swollen A2 pulley land near each other. Measurable cosine similarity, not metaphor.
+
+This isn't theoretical: on the Flickr30K benchmark, OpenCLIP ViT-G/14 achieves 94.9% Recall@5 for text-to-image retrieval. Given a text description, the correct image is in the top 5 results 95% of the time. CLIP is open-weight and reproduced under Apache 2.0 via [OpenCLIP](https://github.com/mlfoundations/open_clip). Anyone can run the model and verify the embedding independently.
 
 [SigLIP 2](https://arxiv.org/abs/2502.14786) (Google, 2025) pushes further: 85.3% Recall@1 on COCO text-to-image, the correct image is the *top* result 85% of the time. It handles images, video, and text with multilingual support. [ImageBind](https://github.com/facebookresearch/ImageBind) (Meta, 2023) extends to six modalities in a single space: images, text, audio, depth, thermal, IMU. All open-weight.
 
@@ -40,13 +42,15 @@ The scoring function doesn't change:
 score(x) = log(bid) - distance² / σ²
 ```
 
-An advertiser defines their position with a text description, same UX as the text-only case. "Licensed physical therapist specializing in rock climbing finger pulley injuries" embeds to a point in the shared space. When inventory arrives, the auction scores each advertiser by proximity to that embedding. The [power diagram](/power-diagrams-ad-auctions) tiles the space identically regardless of what produced the input vector. One calibration detail: raw cosine similarity between matched text-image pairs typically falls in the 0.20–0.35 range, lower than text-text similarity. The σ parameter would need to be tuned for cross-modal distances (wider than the text-only case), but the scoring function itself is unchanged.
+An advertiser defines their position with a text description, same UX as the text-only case. "Licensed physical therapist specializing in rock climbing finger pulley injuries" embeds to a point in the shared space. When inventory arrives, the auction scores each advertiser by proximity to that embedding. The [power diagram](/power-diagrams-ad-auctions) tiles the space identically regardless of what produced the input vector.
+
+One calibration detail: raw cosine similarity between matched text-image pairs typically falls in the 0.20–0.35 range. That's lower than text-text similarity. The σ parameter would need to be tuned for cross-modal distances (wider than the text-only case), but the scoring function itself is unchanged.
 
 A person pins a photo of a campus board. CLIP embeds the image. The climbing PT's text-defined position is close. The suggestion surfaces. No tags needed. The image content *is* the query.
 
-A YouTube video shows someone struggling with marathon form. SigLIP 2 embeds the frame. A running coach's embedding is nearby. Matched by visual content, not video title keywords.
+A YouTube video shows someone struggling with marathon form. SigLIP 2 embeds the frame. A running coach's embedding is nearby. Matched by visual content.
 
-A podcast discusses freelance tax strategy. ImageBind embeds the audio. The freelance financial planner's position matches. Contextual targeting by what's being *said*, not show-level genre tags.
+A podcast discusses freelance tax strategy. ImageBind embeds the audio. The freelance financial planner's position matches. Contextual targeting by what's being *said*.
 
 ## The Trust Chain Holds
 
@@ -72,7 +76,7 @@ Some of the richest intent signals have no ad system to receive them.
 
 A phone camera pointed at a climbing gym wall. AR glasses scanning a kitchen mid-renovation. An AI image search for "rash that won't go away." A spatial computing app where someone walks through a furniture showroom. These platforms produce multimodal context dense with intent, but there's no marketplace for it. No keywords to bid on. No category taxonomy. No ad exchange has a slot for "what the camera is looking at."
 
-This is the frontier case for embedding-space auctions. The content is visual or spatial. The advertiser's position is defined in text. The shared embedding space connects them without anyone building a bespoke ad product first. The protocol can be there before the marketplace — the same way HTTP was there before anyone built an e-commerce site on top of it.
+This is the frontier case for embedding-space auctions. The content is visual or spatial. The advertiser's position is defined in text. The shared embedding space connects them without anyone building a bespoke ad product first. The protocol can be there before the marketplace, the same way HTTP was there before anyone built an e-commerce site on top of it.
 
 An advertiser defines their position once: "Licensed physical therapist specializing in rock climbing finger pulley injuries." That position already works cross-modally. When a new platform comes online (AR, spatial, visual search), the advertiser's existing bid reaches it. Cross-modal reach is a free side effect of how the models work.
 

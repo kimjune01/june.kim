@@ -24,11 +24,11 @@ Here's the offer:
 
 5. **Full UX control.** The publisher sets [tau](/three-levers), the dial that controls recommendation frequency. They choose the indicator style. They review every PR the skill generates. Their chatbot, their rules.
 
-The downside is zero. They get paid, they keep control, and if it doesn't work, one command removes everything. Who's crazy enough to turn down free money?
+The downside is zero. They get paid, they keep control. If it doesn't work, one command removes everything. Who's crazy enough to turn down free money?
 
 ## Step 2: Give Advertisers Free Traffic
 
-Advertisers don't sign up. They get signed up. The qualification is simple: they're already spending money on Google Ads for related keywords. Search "addiction treatment" or "physical therapy near me" and the advertisers are right there in the sponsored results. The [Ads Transparency Center](https://adstransparency.google.com/) confirms who's running what. If they're buying these keywords, they've already proven willingness to pay for leads. For addiction treatment specifically, Google requires [LegitScript certification](https://www.legitscript.com/) to run ads. The qualification filters for legitimacy, not just spend. Lead gen is a search away.
+Advertisers don't sign up. They get signed up. The qualification is simple: they're already spending money on Google Ads for related keywords, which proves willingness to pay for leads. Search "addiction treatment" or "physical therapy near me" and the advertisers are right there in the sponsored results; the [Ads Transparency Center](https://adstransparency.google.com/) confirms who's running what. For addiction treatment specifically, Google requires [LegitScript certification](https://www.legitscript.com/) to run ads, so the qualification filters for legitimacy, not just spend. Lead gen is a search away.
 
 1. **Scrape and embed.** Scrape the advertiser's homepage, about page, and service descriptions. Embed the marketing copy. The center lands wherever their language puts it in the vector space. Sigma is estimated from how narrow or broad their positioning is. A climbing PT's site talks about one thing. A general practice talks about everything.
 
@@ -95,7 +95,9 @@ The sequence is proven. Most also built moats through lock-in.
 | **AppNexus** | ✅ | ❌ | ✅ | ✅ |
 | **This** | ✅ | ✅ | ✅ | ✅ |
 
-The pattern is proven. The sequence works. What's different here is what's missing: no proprietary SDK, no data extraction, no switching cost. The publisher can leave in one command and take their code with them.
+What's different here is what's missing: no proprietary SDK, no data extraction, no switching cost. The publisher can leave in one command and take their code with them.
+
+## One Bet, Full Transparency
 
 The subsidy is a pilot cost. One publisher, one proof. The attribution reports from that pilot sell the next publisher without a subsidy. The burn rate is a single bet, not a recurring expense.
 

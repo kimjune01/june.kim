@@ -11,9 +11,9 @@ The market will not do this. The migration path demands a regression.
 
 A mesothelioma law firm in Denver generates $50,000/month in conversions from exact-match keywords at $200/click. Their media buyer knows the spend, knows the win rate, knows the ROI to the penny. Tell them their keywords now live in a 3,072-dimensional vector space and they'll fire you by lunch. Even if the new system is strictly better in theory, the transition requires trusting that the new machinery reproduces the old behavior *exactly*. Nobody trusts that on day one.
 
-Every successful platform transition solves this the same way. The new system is a strict superset of the old one. Old behavior is a special case, not a casualty. HTML didn't replace plain text. Plain text is valid HTML. HTTPS didn't replace HTTP. It added a layer.
+Every successful platform transition solves this the same way. The new system is a strict superset of the old one. Old behavior is a special case. HTML didn't replace plain text. Plain text is valid HTML. HTTPS didn't replace HTTP. It added a layer.
 
-I kept looking at this problem and realized: keywords and embeddings already have this relationship. It's hiding in plain sight.
+Keywords and embeddings already have this relationship. I just hadn't looked at it the right way.
 
 ## A Keyword Is a Point with a Very Small Radius
 
@@ -44,7 +44,7 @@ The power diagram makes the radius explicit. You set σ. You see the territory. 
 
 ## Priority Falls Out of the Math
 
-Here's why this is safe. Tight-radius bids take priority at their center point. The score function guarantees it.
+This is safe because tight-radius bids take priority at their center point. The score function guarantees it.
 
 A conversation embedding lands on "mesothelioma lawyer." Two bidders:
 
@@ -74,7 +74,7 @@ I mapped out what each layer of the ad tech stack actually needs to change. It's
 
 **The SSP** makes one promise: keyword demand clears first at keyword points. When a publisher's impression matches a keyword, keyword bidders dominate because their scores are maximally concentrated. Every existing contract clears exactly as before. Embedding adds coverage of the empty space, the majority of LLM conversation impressions that don't match any keyword and currently go unfilled or clear at remnant CPMs. The pitch to publishers: "Your keyword revenue is unchanged. We added a demand layer that fills the gaps."
 
-**The exchange** runs one auction. One score function. Every bidder, keyword or vector, evaluated by the same formula. σ_i ≈ 0 for keywords, σ_i > 0 for vectors. One code path, not two. Two ways to enter:
+**The exchange** runs one auction. One score function. Every bidder, keyword or vector, evaluated by the same formula. σ_i ≈ 0 for keywords, σ_i > 0 for vectors. One code path. Two ways to enter:
 
 A keyword bid:
 
@@ -104,7 +104,7 @@ Both enter the same auction. All demand, at various radii.
 
 ## Who Enforces the Score Function
 
-Open standards in ad tech have a pattern. A spec gets published. Dominant players implement it with proprietary extensions. The "open" part erodes into a lowest-common-denominator compatibility layer. OpenRTB is nominally open, but every major exchange interprets it differently. A score function like `log(b) - d²/σ²` would suffer the same fate, unless the exchange can prove it's running the published code unmodified.
+Open standards in ad tech have a pattern. A spec gets published. Dominant players implement it with proprietary extensions. The "open" part erodes into a lowest-common-denominator compatibility layer. [OpenRTB](https://iabtechlab.com/standards/openrtb/) is nominally open, but every major exchange interprets it differently. A score function like `log(b) - d²/σ²` would suffer the same fate, unless the exchange can prove it's running the published code unmodified.
 
 That's what TEE attestation does. [CloudX](https://github.com/cloudx-io/openauction) is currently the only ad exchange running auction logic inside a TEE, specifically [AWS Nitro Enclaves](https://aws.amazon.com/ec2/nitro/nitro-enclaves/), clearing code open-sourced in Go. The enclave's attestation document proves to every bidder that the published code, and only the published code, processed their bid. DSPs don't trust the exchange. They verify the attestation.
 

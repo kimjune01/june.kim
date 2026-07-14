@@ -18,7 +18,7 @@ Digital advertising has a [$63 billion](https://www.mediapost.com/publications/a
 <tr><td>Track record</td><td>Decade of clean payments</td><td style="opacity:0.35">Launched last month</td></tr>
 <tr><td>Endorsements</td><td>Hundreds of retailers</td><td style="opacity:0.35">Stock photo of a golden retriever</td></tr>
 <tr><td>Supply chain</td><td>Direct relationships with inspected facilities</td><td style="opacity:0.35">White-labeled, origin unknown</td></tr>
-<tr><td>Ad strategy</td><td>Bids conservatively — fraud dilutes ROI</td><td style="opacity:0.35">Bids aggressively — repeat customers don't matter</td></tr>
+<tr><td>Ad strategy</td><td>Bids conservatively: fraud dilutes ROI</td><td style="opacity:0.35">Bids aggressively: repeat customers don't matter</td></tr>
 <tr><td>Growth</td><td>Word of mouth</td><td style="opacity:0.35">Facebook ad budget</td></tr>
 </table>
 
@@ -30,7 +30,9 @@ Bark & Bond has the evidence to prove it's real, but nobody can read their signa
 
 ## What if it worked
 
-Imagine Bark & Bond's decade of clean Stripe history, its hundreds of retailer endorsements, its supplier relationships with inspected facilities. All publicly attested, cryptographically signed, indexed by competing curators. Publishers subscribe to curators who filter the lemons out. Sunny Paws can't fake twenty handshakes with real retailers. It can buy ads, but it can't buy trust signals. Bark & Bond's advertising costs drop because its trust score is high, and Sunny Paws's climb because its graph is thin. Fraud doesn't disappear, but it gets expensive. Trustworthiness becomes measurable.
+Imagine Bark & Bond's decade of clean Stripe history, its hundreds of retailer endorsements, its supplier relationships with inspected facilities. All publicly attested, cryptographically signed, indexed by competing curators. Publishers subscribe to curators who filter the lemons out.
+
+Sunny Paws can't fake twenty handshakes with real retailers. It can buy ads, but it can't buy trust signals. Bark & Bond's advertising costs drop because its trust score is high, and Sunny Paws's climb because its graph is thin. Fraud doesn't disappear, but it gets expensive. Trustworthiness becomes measurable.
 
 But why would Stripe publish Bark & Bond's attestations to a graph that Square can read? They wouldn't.
 
@@ -46,7 +48,7 @@ Once the exchange exists, who attests on Bark & Bond's behalf? Stripe's merchant
 
 But a smaller processor has a different calculus. Fewer merchants, weaker brand, every acquisition matters more. If attesting gets merchants like Bark & Bond better ad placement, attestation is a growth feature. The entrant has nothing to protect and everything to gain.
 
-Bark & Bond sees two options: Stripe, who hoards its data, or the entrant, who will vouch for it publicly. Bark & Bond keeps Stripe and adds the entrant as a second processor — one that comes with attestation.
+Bark & Bond sees two options: Stripe, who hoards its data, or the entrant, who will vouch for it publicly. Bark & Bond keeps Stripe and adds the entrant as a second processor, one that comes with attestation.
 
 ## Why shallow fails
 
@@ -80,7 +82,7 @@ Bark & Bond stays on Stripe. It just asks: *why can't I get attestations like my
 
 1. *An exchange builds the trust graph.* Higher CPMs pay for the infrastructure.
 2. *Bark & Bond attests.* It stops getting lumped in with the shady merchants. Its ad rates improve. The ROI is immediate.
-3. *An entrant payment processor attests on Bark & Bond's behalf.* It's a growth lever — "your merchants get trust-scored ad placement" writes itself.
+3. *An entrant payment processor attests on Bark & Bond's behalf.* It's a growth lever: "your merchants get trust-scored ad placement" writes itself.
 4. *Stripe resists.* Until merchant churn forces their hand. The question changes from "why would Stripe attest?" to "how long can Stripe afford not to?"
 5. *The graph reaches critical mass.* Merchants self-select into transparency because the alternative is paying a fraud tax on every ad dollar.
 

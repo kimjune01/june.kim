@@ -28,11 +28,11 @@ Why does `s = ln(b)`? Rewrite the score: `log_b(price) = ln(price)/ln(b)`, so `s
 | 10 | 0.43 | 2.30 | Strong territorial defense |
 | 50 | 0.26 | 3.91 | Near-Voronoi |
 
-At `b = 1`, distance is completely ignored; the auction ranks purely by price. Higher `b` means distance matters more. At `b = 50`, the auction approaches a Voronoi partition where the closest advertiser wins regardless of bid.
+At `b = 1`, distance is ignored; the auction ranks purely by price. Higher `b` means distance matters more. At `b = 50`, the auction approaches a Voronoi partition where the closest advertiser wins regardless of bid.
 
 ## What the Log Base Controls
 
-[Che (1993)](https://blogs.cuit.columbia.edu/yc2271/files/2017/05/Scoring-auctions.pdf) showed that in multidimensional auctions, under-rewarding quality maximizes short-term revenue while over-rewarding it maximizes buyer surplus. For chatbot platforms, higher `b` is the natural direction, since retention depends on answer quality, not ad revenue per query. The question is how much higher.
+[Che (1993)](https://blogs.cuit.columbia.edu/yc2271/files/2017/05/Scoring-auctions.pdf) showed that in multidimensional auctions, under-rewarding quality maximizes short-term revenue while over-rewarding it maximizes buyer surplus. For chatbot platforms, higher `b` is the natural direction: retention depends on answer quality, not ad revenue per query. How much higher is the harder call.
 
 To overcome one unit of `dist²/σ²`:
 
@@ -47,7 +47,7 @@ The platform has three levers: `b` (continuous weight on relevance), `τ` (hard 
 
 ## Experiment Design
 
-The simulation models a local services market: physical therapists, fitness coaches, wellness professionals. 25 advertisers across 5 clusters in 384-dimensional BGE-small-en-v1.5 embedding space. Each cluster has one generalist and four specialists.
+The simulation models a local services market: physical therapists, fitness coaches, wellness professionals. 25 advertisers across 5 clusters in 384-dimensional [BGE-small-en-v1.5](https://huggingface.co/BAAI/bge-small-en-v1.5) embedding space. Each cluster has one generalist and four specialists.
 
 Assumptions:
 
@@ -96,9 +96,11 @@ The simulation is [open source](https://github.com/kimjune01/openauction/tree/v3
 
 Higher `b` monotonically improves value efficiency, surplus, and winner relevance at the cost of publisher revenue.
 
-Revenue is flat up to `b = e` (all within 1.3%, none significant), then drops: 2% at `b = 5`, 4% at `b = 10`, 7.5% at `b = 50`. Specialist surplus grows 75% from `b = 1.0` to `b = 50` (2.38 → 4.15). Generalists go *negative* at `b ≤ 1.1` because they systematically overpay when distance doesn't protect specialists' territories. Win diversity is flat across the range.
+Revenue is flat up to `b = e` (all within 1.3%, none significant), then drops: 2% at `b = 5`, 4% at `b = 10`, 7.5% at `b = 50`. Specialist surplus grows 75% from `b = 1.0` to `b = 50` (2.38 → 4.15). Generalists go *negative* at `b ≤ 1.1` because they systematically overpay when distance doesn't protect specialists' territories. VCG's no-loss guarantee applies to the value function the mechanism scores; at `b ≤ 1.1` the scoring rule has thrown away the distance decay, so a bid that's honest about peak value overstates value on distant queries, and the payment can exceed what the impression is worth. Win diversity is flat across the range.
 
-The stakeholders want opposite things. Advertisers want lower `b` because it lets them win impressions outside their niche by outbidding closer competitors. Users want higher `b` because it means the ad they see is actually relevant to what they asked. The platform sits in the middle. At `b = 5`, it buys 10% more surplus and 1.3% better value efficiency for a 2% revenue cost, a good trade. At `b = 10`, double the quality gain for double the revenue cost. The curve is smooth enough that the platform can pick its point.
+Users and advertisers both benefit from higher `b`. Matches improve and advertiser surplus rises across the board. The platform pays for those gains through lower auction revenue.
+
+The platform sits in the middle of that tradeoff. At `b = 5`, it buys 10% more surplus and 1.3% better value efficiency for a 2% revenue cost, a good trade. At `b = 10`, double the quality gain for double the revenue cost. The curve is smooth enough that the platform can pick its point.
 
 ### Part B: Discovery Threshold Sweep
 
@@ -111,7 +113,7 @@ The stakeholders want opposite things. Advertisers want lower `b` because it let
 | No-show rate | 0% | 0% | 0% | 0% | **22.1%** |
 | Win diversity | 0.289 | 0.289 | 0.289 | 0.289 | **0.492** |
 
-τ=0.0 through τ=0.5 produce **identical** results (p=1.000). The value decay function `max(0, MaxVal × (cos - threshold))` is already a soft relevance gate. Advertisers don't bid on queries where their expected value falls below 5% of their maximum.
+τ=0.0 through τ=0.5 produce *identical* results (p=1.000). The value decay function `max(0, MaxVal × (cos - threshold))` is already a soft relevance gate. Advertisers don't bid on queries where their expected value falls below 5% of their maximum.
 
 Only τ=0.7 has any effect, and it's dramatic. Value efficiency jumps to 0.930. Winner cosine similarity climbs from 0.712 to 0.797. But 22.1% of queries get no ad at all, because no advertiser clears the bar.
 
@@ -132,13 +134,17 @@ Recommended ranges:
 
 ## What's Still Open
 
-**Should noisy relevance estimates push `b` lower?** [Lahaie and McAfee (2011)](https://link.springer.com/chapter/10.1007/978-3-642-25510-6_22) showed that when quality estimates are noisy, `s < 1` can improve welfare by reducing weight on unreliable signals. Cosine similarity in embedding space is a noisy proxy for true relevance; an advertiser at cosine 0.85 isn't reliably better than one at 0.82. Our simulation assumes perfect cosine-to-value mapping. With noisy estimates, the optimal `b` might be lower than what the clean tradeoff curve suggests.
+**Should noisy relevance estimates push `b` lower?** [Lahaie and McAfee (2011)](https://link.springer.com/chapter/10.1007/978-3-642-25510-6_22) showed that when quality estimates are noisy, `s < 1` can improve welfare by reducing weight on unreliable signals. Cosine similarity in embedding space is a noisy proxy for true relevance; an advertiser at cosine 0.85 isn't reliably better than one at 0.82. Our simulation assumes perfect cosine-to-value mapping. With noisy estimates, the optimal `b` might be lower than what the monotonic tradeoff curve suggests.
 
-**Does the optimal `b` depend on market density?** With 25 advertisers across 5 clusters, the tradeoff is clean. With 250 advertisers, or 5, the shape of the curve might change. More competitors could shift the efficient frontier, making higher `b` less costly in revenue terms.
+**Does the optimal `b` depend on market density?** With 25 advertisers across 5 clusters, the tradeoff is monotonic. With 250 advertisers, or 5, the shape of the curve might change. More competitors could shift the efficient frontier, making higher `b` less costly in revenue terms.
 
-**How does `b` interact with σ adaptation?** In our simulation, σ values are fixed. In a live market, advertisers learn their optimal σ, and the optimal σ depends on `b`. At high `b`, a narrower σ pays off more because proximity matters more. This creates a feedback loop: `b` shapes σ, which shapes clearing prices, which shifts the revenue-quality curve. [Balcan, Sandholm & Vitercik (2016)](https://arxiv.org/abs/1606.04145) showed that the sample complexity of learning optimal auction parameters scales linearly with the parameter dimension, suggesting that learning the joint (b, σ) surface is tractable with enough bid data.
+**How does `b` interact with σ adaptation?** In our simulation, σ values are fixed. In a live market, advertisers learn their optimal σ, and the optimal σ depends on `b`. At high `b`, a narrower σ pays off more because proximity matters more. This creates a feedback loop: `b` shapes σ, which shapes clearing prices, which shifts the revenue-quality curve. In the limit where adaptation completes, changing `b` is a change of units: substituting `σ√ln(b)` for `σ` restores allocation and payments exactly, which is how the sweep is implemented. The tradeoffs measured here are the fixed-σ short run; [three levers](/three-levers) takes the equilibrium view.
 
-**Is there a dynamic `b` that adjusts per query?** A query with 12 qualified advertisers could use lower `b` (more price competition). A query with 2 could use higher `b` (protect the closer match). [Syrgkanis et al. (2017)](https://arxiv.org/abs/1611.01688) showed that oracle-efficient online learning can tune auction parameters like reserves from live data, even against adversarial bidders. The same approach could adapt `b` per-query using bidder context as features. Variable `b` would complicate the mechanism's transparency, since the [attested auction](/perplexity-was-right-to-kill-ads) would need to commit to the adjustment rule, not just the scoring formula.
+[Balcan, Sandholm & Vitercik (2016)](https://arxiv.org/abs/1606.04145) showed that the sample complexity of learning optimal auction parameters scales linearly with the parameter dimension, suggesting that learning the joint (b, σ) surface is tractable with enough bid data.
+
+**Is there a dynamic `b` that adjusts per query?** A query with 12 qualified advertisers could use lower `b` (more price competition). A query with 2 could use higher `b` (protect the closer match). [Syrgkanis et al. (2017)](https://arxiv.org/abs/1611.01688) showed that oracle-efficient online learning can tune auction parameters like reserves from live data, even against adversarial bidders.
+
+The same approach could adapt `b` per-query using bidder context as features. Variable `b` would complicate the mechanism's transparency, since the [attested auction](/perplexity-was-right-to-kill-ads) would need to commit to the adjustment rule, not just the scoring formula.
 
 **The log form gives diminishing returns on price.** Going from $1 to $10 has the same effect as $10 to $100. No major platform uses explicit `log(price)`; they use multiplicative quality scores that achieve a similar compression. Whether the log form is an advantage (prevents runaway bidding) or a limitation (suppresses price signal) depends on market structure.
 

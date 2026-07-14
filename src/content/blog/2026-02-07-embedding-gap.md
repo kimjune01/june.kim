@@ -7,7 +7,7 @@ image: "/assets/embedding_gap.jpg"
 
 ![The bottleneck](/assets/embedding_gap.jpg)
 
-After writing about [power diagrams for ad auctions](/power-diagrams-ad-auctions), I started tracking the companies actually trying to sell ads inside LLM conversations. There are at least half a dozen startups racing to become the DoubleClick of AI advertising. What struck me: no production ad exchange is running auctions in embedding space.
+After writing about [power diagrams for ad auctions](/power-diagrams-ad-auctions), I started tracking the companies actually trying to sell ads inside LLM conversations. There are at least half a dozen startups racing to become the DoubleClick of AI advertising, and no production ad exchange among them is running auctions in embedding space.
 
 Every company on this list talks about "contextual targeting" and "understanding user intent." But when the ad actually needs to be served, nearly all of them run a standard keyword-style auction. The gap between what they promise and what the protocol can carry is the story.
 
@@ -23,11 +23,11 @@ Every company on this list talks about "contextual targeting" and "understanding
 
 ### Incumbents
 
-**[PubMatic](https://en.wikipedia.org/wiki/Pubmatic)** routes AI chatbot inventory through its existing exchange via Kontext. Their EVP said he doesn't see the channel as "very different from the general programmatic benefits." To them, AI chat is just another ad slot, not a fundamentally different kind of inventory.
+**[PubMatic](https://en.wikipedia.org/wiki/Pubmatic)** routes AI chatbot inventory through its existing exchange via Kontext. Their EVP said he doesn't see the channel as "very different from the general programmatic benefits." To them, AI chat is just another ad slot.
 
 **[Criteo](https://en.wikipedia.org/wiki/Criteo)** is repositioning its commerce dataset (720M daily active users, billions of SKUs) as the data layer for LLM recommendations. They built an MCP server so LLMs can query their product data during response generation. Business model still undefined.
 
-**Seedtag** is the most interesting technically. They've been doing embedding-based contextual advertising on the open web for years, with "neuro-contextual" targeting that models interest, emotion, and intent. 3.5x higher engagement versus non-contextual. They have the closest thing to actual embedding-space infrastructure, but they're applying it to display and CTV, not LLM conversations.
+**Seedtag** has the closest thing to actual embedding-space infrastructure. They've been doing embedding-based contextual advertising on the open web for years, with "neuro-contextual" targeting that models interest, emotion, and intent, and 3.5x higher engagement versus non-contextual. They're applying it to display and CTV, though, not LLM conversations.
 
 ### Walled Gardens
 
@@ -39,17 +39,19 @@ Every company on this list talks about "contextual targeting" and "understanding
 
 ## Everyone Falls Back to Categories
 
-Here's what ties all of these together: **at the moment an auction needs to clear, every one falls back to categorical targeting.**
+**Every one of these companies falls back to categorical targeting at the moment an auction needs to clear.**
 
 "Routing AI chatbot inventory through programmatic pipes" concretely means: analyze the conversation, classify it into ~700 IAB taxonomy labels like "Sports > Basketball" or "Technology > Computing," stuff those into an OpenRTB bid request, send to DSPs who bid on categories the same way they've been bidding for fifteen years.
 
-The continuous embedding (the thing that captures the difference between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt") gets collapsed into a single label before entering the auction. The entire embedding gets destroyed at the protocol boundary. The cost goes beyond efficiency. [Sahni & Nair (2020)](https://academic.oup.com/restud/article-abstract/87/3/1529/5583745) showed experimentally that when ads are well-matched, disclosing "this is a paid ad" *increased* engagement by 77%. Consumers treat a precise match as a quality signal. [Sahni & Zhang (2024)](https://link.springer.com/article/10.1007/s11129-023-09270-z) found that reducing ad prominence actually decreased overall search usage, because relevant ads fill information gaps the organic algorithm can't. The signal that categories destroy is the signal that makes ads worth clicking.
+The continuous embedding (the thing that captures the difference between "I'm vaguely curious about running" and "I need marathon training shoes by next week and my knees hurt") gets collapsed into a single label before entering the auction, destroyed at the protocol boundary. The cost goes beyond efficiency.
+
+[Sahni & Nair (2020)](https://academic.oup.com/restud/article-abstract/87/3/1529/5583745) showed experimentally that when ads are well-matched, disclosing "this is a paid ad" *increased* engagement by 77%. Consumers treat a precise match as a quality signal. [Sahni & Zhang (2024)](https://link.springer.com/article/10.1007/s11129-023-09270-z) found that reducing ad prominence actually decreased overall search usage, because relevant ads fill information gaps the organic algorithm can't. The signal that categories destroy is the signal that makes ads worth clicking.
 
 ## The Protocol Problem
 
 The root cause is [OpenRTB](https://github.com/InteractiveAdvertisingBureau/openrtb), the protocol the $200B+ programmatic market runs on.
 
-The [IAB Tech Lab](https://iabtechlab.com/) maintains it. The bid request format has categorical fields for content targeting. There's no field for an embedding vector. You can't express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space." The protocol can't carry an embedding vector — the thing that actually makes LLM conversation targeting better than keywords.
+The [IAB Tech Lab](https://iabtechlab.com/) maintains it. The bid request format has categorical fields for content targeting and no field for an embedding vector. You can't express "this impression lives at coordinates [0.23, -0.41, 0.87, ...] in a 768-dimensional intent space," the representation that actually makes LLM conversation targeting better than keywords.
 
 ```json
 {
@@ -88,7 +90,7 @@ History says option 3. Google didn't wait for the IAB. They built [DoubleClick A
 }
 ```
 
-Everything outside the embedding field is basically OpenRTB as-is. The embedding captures *what the conversation is about*. The metadata captures *context about user and session*. Different information, no reason to force it into the same representation.
+Everything outside the embedding field is OpenRTB as-is. The embedding captures *what the conversation is about*. The metadata captures *context about user and session*. Different information, no reason to force it into the same representation.
 
 The hard problems:
 
@@ -102,10 +104,10 @@ The hard problems:
 
 ## What Happens Next
 
-1. OpenAI launches ads with a proprietary system. It will almost certainly be keyword/category-based at first — that's what their adtech hires know how to build.
+1. OpenAI launches ads with a proprietary system. It will almost certainly be keyword/category-based at first, because that's what their adtech hires know how to build.
 2. Kontext and ZeroClick keep growing as ad networks for the long tail, each with bespoke integrations.
-3. Someone builds the first embedding-native exchange. Seedtag has the closest existing infrastructure; a new entrant has fewer legacy constraints. Either way, it happens.
-4. That exchange demonstrates a measurable lift over categorical targeting in AI conversations — and the lift is large enough to move budgets.
+3. Someone builds the first embedding-native exchange. Seedtag has the closest existing infrastructure, though a new entrant has fewer legacy constraints.
+4. That exchange demonstrates a measurable lift over categorical targeting in AI conversations, large enough to move budgets.
 5. The IAB eventually standardizes whatever won.
 
 The real race is to define the coordinate system.

@@ -32,13 +32,15 @@ Every attempt required building new infrastructure or adding complexity to exist
 
 [DKIM](https://datatracker.ietf.org/doc/html/rfc6376) provides cryptographic signatures. Every mail server checks them. [SMTP](https://datatracker.ietf.org/doc/html/rfc5321) routes between competing servers without a central authority. Most business email uses DKIM. Stripe sends DKIM-signed emails. So does every payment processor, review platform, and business service.
 
-DKIM proves origin, not truth. A DKIM signature proves Stripe's mail server sent the email; it doesn't prove the relationship claim inside is accurate. That gap narrows through structure: bilateral confirmation requires both parties to send emails directly to the exchange (mutual acknowledgement), the exchange publishes the graph publicly (anyone can audit), and curators decide what the topology means (reputation interpretation). The cryptography proves "this came from stripe.com." The bilateral flow attests that "both parties agreed to claim this." The public graph enables "anyone can audit the topology." Curators decide "this pattern suggests trust." Collusion is still possible—the system makes it expensive to fake at scale, not impossible.
+DKIM proves origin, not truth. A DKIM signature proves Stripe's mail server sent the email; it doesn't prove the relationship claim inside is accurate. That gap narrows through structure: bilateral confirmation requires both parties to send emails directly to the exchange (mutual acknowledgement), the exchange publishes the graph publicly (anyone can audit), and curators decide what the topology means (reputation interpretation).
+
+The cryptography proves "this came from stripe.com." The bilateral flow attests that "both parties agreed to claim this." The public graph enables "anyone can audit the topology." Curators decide "this pattern suggests trust." Collusion is still possible. The system makes it expensive to fake at scale, not impossible.
 
 Why direct send, not forwarding? DKIM is transport-layer authentication. When a merchant clicks "Forward" in Gmail, the client creates a new message signed by the merchant's domain; Stripe's DKIM signature is gone. [ARC](https://datatracker.ietf.org/doc/html/rfc8617) preserves authentication chains through forwarding, but requires the exchange to trust the merchant's mail server, which defeats the purpose. So nobody forwards anything. Each party sends their own DKIM-signed email directly. Two first-party messages, both verifiable.
 
 The infrastructure has been running for twenty years. Attestors format claims as JSON in email bodies and send them directly to an exchange. The exchange is a mail server with an append-only log. Curators pull the log and build their own indexes. Publishers compose trust policies from multiple curators.
 
-The pattern is email spam filtering. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), Barracuda, SpamCop), each choosing which lists to trust. No single list controls the ecosystem. Federated curation has worked for twenty years.
+The pattern is email spam filtering. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), [Barracuda](https://www.barracuda.com/glossary/blocklist), [SpamCop](https://www.spamcop.net/)), each choosing which lists to trust. No single list controls the ecosystem. Federated curation has worked for twenty years.
 
 [ads.txt](https://iabtechlab.com/ads-txt/) proved platforms will adopt voluntary protocols if the fraud reduction incentive is clear. The [IAB](https://www.iab.com/) got publishers, exchanges, and platforms to publish machine-readable seller declarations without central enforcement. New requirements: attestors emit structured JSON, exchanges parse and index, parties send attestations directly. Lower barrier than ads.txt: builds on email infrastructure already deployed, no new hosting needed. Bootstrap follows the [stone soup](/stone-soup) pattern: early exchanges publish graphs, early curators publish standards, and each participant shows up for their own fraud-reduction advantage.
 
@@ -171,7 +173,7 @@ Union the allowlists. Subtract the denylists. What remains is the set of adverti
 
 A health vibelogger subscribes to a strict health curator and a local business curator. A general tech blogger subscribes to a general commerce curator. Each publisher takes responsibility for what their audience sees. The trust policy is as public as the content.
 
-Email's curation layer works the same way. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), Barracuda, SpamCop). Each server chooses which lists to trust. No single list controls the ecosystem. The competitive pressure between lists keeps them honest. Twenty years of decentralized policy composition suggests the pattern scales. Imperfectly, with concentration and false positives, but better than any centralized alternative.
+Email's curation layer works the same way. Mail servers subscribe to blocklists ([Spamhaus](https://www.spamhaus.org/blocklists/), [Barracuda](https://www.barracuda.com/glossary/blocklist), [SpamCop](https://www.spamcop.net/)). Each server chooses which lists to trust. No single list controls the ecosystem. The competitive pressure between lists keeps them honest. Twenty years of decentralized policy composition suggests the pattern scales. Imperfectly, with concentration and false positives, but better than any centralized alternative.
 
 ## The stack
 
@@ -216,9 +218,9 @@ Subject: Attestation Revocation
 }
 ```
 
-Either party sends a revocation directly to the exchange. The exchange removes the edge. Unilateral: you don't need the other party's permission.
+Either party sends a revocation directly to the exchange. The exchange appends the revocation record; the edge is marked revoked, not erased. Unilateral: you don't need the other party's permission.
 
-If Stripe detects fraud, they revoke. The merchant's payment processor edge disappears, curators see a thinner topology, the merchant drops from allowlists.
+If Stripe detects fraud, they revoke. The merchant's payment processor edge is marked revoked, curators see a thinner active topology, the merchant drops from allowlists.
 
 If a business relationship ends, either party can unlink. The graph reflects current state, not historical claims.
 
@@ -274,7 +276,7 @@ Every edge is timestamped. The exchange records when attestations arrive, when t
 | Verification: How do I know claims are real? | DKIM proves mail server origin. Public graph enables audit. Anyone can verify signatures and query topology. |
 | Cost: What does participation cost? | Email infrastructure only. No blockchain fees, no token purchases, no transaction costs beyond sending mail. |
 | Gaming: Can this be spammed or abused? | Faking rich topology is expensive when counterparties are costly to compromise. Curators filter weak signals. Topology reveals gaming patterns. |
-| Anti-abuse: DDoS, spam, forged DNS? | Solved problems. Exchange operators import modern web infrastructure—rate limiting, DKIM verification, spam filtering—the same way any mail server does. |
+| Anti-abuse: DDoS, spam, forged DNS? | Solved problems. Exchange operators import modern web infrastructure (rate limiting, DKIM verification, spam filtering) the same way any mail server does. |
 
 ---
 

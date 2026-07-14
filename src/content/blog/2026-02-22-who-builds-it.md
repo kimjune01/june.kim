@@ -21,7 +21,7 @@ The gap: **neither has an embedding-based auction.** Koah uses keyword-based tar
 
 **PubMatic** is making the biggest bet: an [NVIDIA partnership](https://web.archive.org/web/20251112024235/https://pubmatic.com/news/pubmatic-delivers-5x-faster-smarter-advertising-decisions-with-nvidia/) for sub-millisecond inference (October 2025), co-founding [AdCP](https://adcontextprotocol.org/) (October 2025), the first [SSP-to-chatbot bridge](https://web.archive.org/web/20260117190112/https://pubmatic.com/blog/pubmatic-and-kontext-partner-to-open-programmatic-access-to-ai-powered-conversational-inventory/) via Kontext (December 2025), and [AgenticOS](https://web.archive.org/web/20260117194713/https://pubmatic.com/news/pubmatic-launches-agenticos-the-operating-system-for-agent-to-agent-advertising/) for agent-to-agent ad execution (January 2026). They also [sued Google](https://investors.pubmatic.com/news-releases/news-release-details/pubmatic-files-lawsuit-against-google-restore-fair-competition) for antitrust damages.
 
-The Kontext integration is PMP-first: curated deals for scarce inventory with unproven demand. But PMPs are bilateral. They don't scale to thousands of advertisers competing for long-tail conversational queries. As chatbot inventory grows, the pricing mechanism that replaces PMPs will need continuous, high-dimensional matching — an embedding auction.
+The Kontext integration is PMP-first: curated deals for scarce inventory with unproven demand. But PMPs are bilateral. They don't scale to thousands of advertisers competing for long-tail conversational queries. As chatbot inventory grows, the pricing mechanism that replaces PMPs will need continuous, high-dimensional matching: an embedding auction.
 
 **The Trade Desk** launched [OpenAds](https://web.archive.org/web/20260121032229/https://www.thetradedesk.com/resources/openads-enabling-the-most-trusted-efficient-ad-auction) in October 2025, offering auditable auction mechanics with code attestations. The demand side wants transparent, verifiable auctions.
 
@@ -41,9 +41,9 @@ The [Ad Context Protocol](https://adcontextprotocol.org/) launched in October 20
 
 The **IAB Tech Lab** published an [agentic roadmap](https://iabtechlab.com/press-releases/iab-tech-lab-unveils-agentic-roadmap-for-digital-advertising/) in January 2026: extending OpenRTB for agentic execution, open-source reference implementations, and a neutral MCP reference server for advertising. The **IAB CoMP** working group invited OpenAI, Anthropic, Google, Meta, and Perplexity, though [Digiday reported](https://digiday.com/media/the-coalition-of-the-willing-and-unable-publishers-rally-to-wall-off-ais-free-ride/) that only Google and Meta actually participated in initial workshops. The AI companies at the center of the problem did not show up.
 
-The CoMP coalition's proposed monetization model is a hybrid: pay-per-crawl (charge AI companies each time a bot ingests content) plus revenue share when content powers a response. The blocking strategy makes sense; publishers need leverage. But pay-per-crawl has the same problem as pageviews: it rewards being ingested often, not being useful. Content farms will optimize for crawl volume the way they optimized for SEO. An embedding auction scores differently. Payment flows to whoever is semantically closest to the user's actual query — whoever is closest to the problem being solved, not whoever gets scraped the most.
+The CoMP coalition's proposed monetization model is a hybrid: pay-per-crawl (charge AI companies each time a bot ingests content) plus revenue share when content powers a response. The blocking strategy makes sense; publishers need leverage. But pay-per-crawl has the same problem as pageviews: it rewards being ingested often, not being useful. Content farms will optimize for crawl volume the way they optimized for SEO. An embedding auction scores differently. Payment flows to whoever is semantically closest to the user's actual query, to whoever is closest to the problem being solved. Getting scraped the most doesn't buy the win.
 
-The protocol layer is being built. AdCP even has a "[Sponsored Intelligence](https://docs.adcontextprotocol.org/docs/intro)" module for conversational ad sessions with `si_initiate_session` and `si_send_message` tasks. But Sponsored Intelligence is a delivery format: it defines how an ad enters a conversation, not how the auction decides *which* ad wins. No scoring mechanism, no bid-distance tradeoff. The gap is the auction layer itself: the module that takes a query embedding, a set of advertiser positions and bids, and returns a winner with a verifiable score.
+The protocol layer is being built. AdCP even has a "[Sponsored Intelligence](https://docs.adcontextprotocol.org/docs/intro)" module for conversational ad sessions with `si_initiate_session` and `si_send_message` tasks. But Sponsored Intelligence is a delivery format. It defines how an ad enters a conversation. It doesn't decide *which* ad wins. No scoring mechanism, no bid-distance tradeoff. The gap is the auction layer itself: the module that takes a query embedding, a set of advertiser positions and bids, and returns a winner with a verifiable score.
 
 ## The Signal
 
@@ -55,7 +55,7 @@ Agentic traffic makes the case concrete. A user asking an agent "my basement flo
 
 **OpenAI** is [testing ads at $60 CPM](https://web.archive.org/web/20260217041818/https://www.cnbc.com/2026/02/04/anthropic-no-ads-claude-chatbot-openai-chatgpt.html) with a $200K minimum: first-party, opaque, not scalable to the long tail. **Anthropic** ran a [Super Bowl ad](https://web.archive.org/web/20260217041818/https://www.cnbc.com/2026/02/04/anthropic-no-ads-claude-chatbot-openai-chatgpt.html) with the tagline: "Ads are coming to AI. But not to Claude."
 
-First-party chatbot ads either fail (Perplexity) or are expensive and opaque (OpenAI). The SSP model — externalized, transparent, auditable — is the remaining path.
+First-party chatbot ads either fail (Perplexity) or are expensive and opaque (OpenAI). The SSP model (externalized, transparent, auditable) is the remaining path.
 
 ## What's Missing
 
@@ -81,7 +81,7 @@ Google doesn't need to build the embedding auction. They need to make sure nobod
 
 An embedding auction has natural monopoly dynamics: advertisers go where the queries are, queries go where the advertisers are. A single dominant embedding SSP would threaten keyword revenue the way the [Keyword Tax](/keyword-tax) simulation showed: specialists switch to wherever they stop losing money, and the switching incentive compounds. Google's rational response: invest in several competing embedding SSPs and keep the market fragmented. Five small exchanges competing with each other can't achieve the liquidity that makes any one a real alternative to keywords. The threat gets defused by splintering it.
 
-The defense is the open protocol. If every embedding SSP runs the same scoring function and settles through the same protocol, advertisers plant a position once and compete on every exchange simultaneously — the way RTB already works. Without a shared protocol, Google wins by backing five horses and making sure none of them finish.
+The defense is the open protocol. If every embedding SSP runs the same scoring function and settles through the same protocol, advertisers plant a position once and compete on every exchange simultaneously, the way RTB already works. Without a shared protocol, Google wins by backing five horses and making sure none of them finish.
 
 ### Open or Proprietary
 

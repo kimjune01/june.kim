@@ -23,9 +23,9 @@ Discrete categorization works this way. Keywords are finite bins, but expertise 
 
 Embedding space is continuous. The vintage Porsche specialist positions at the point in high-dimensional space that represents exactly what he does; the hybrid battery shop positions somewhere else entirely. They don't compete because they aren't close.
 
-When a user tells a chatbot "my 1987 911 Carrera is losing oil pressure and the engine sounds like it's knocking at high RPM," that query lands in embedding space near the air-cooled Porsche specialist, far from the hybrid shop or Midas. The [scoring function](/power-diagrams-ad-auctions) is `score = log(bid) - distance² / σ²`. Proximity dominates. The specialist wins by being closer to the problem he actually solves.
+When a user tells a chatbot "my 1987 911 Carrera is losing oil pressure and the engine sounds like it's knocking at high RPM," that query lands in embedding space near the air-cooled Porsche specialist, far from the hybrid shop or Midas. The [scoring function](/power-diagrams-ad-auctions) is `score = log(bid) - distance² / σ²`. The log caps what money can do: ten times the bid buys 2.3 points of score, and a well-matched ad's distance advantage is worth more. Midas can still take the query, but only by valuing it more than the specialist's proximity is worth. The specialist wins by being closer to the problem he actually solves.
 
-The [simulation](/keyword-tax) measured this directly. With embedding auctions and [relocation fees](/synthetic-friction), specialist surplus goes from -0.807 (losing money every round) to +0.021 (profitable). Win diversity rises from 0.809 to 0.876 — different specialists win different queries instead of one dominant bidder sweeping the bin.
+The [simulation](/keyword-tax) measured this directly. With embedding auctions and [relocation fees](/synthetic-friction), specialist surplus goes from -0.807 (losing money every round) to +0.021 (profitable). Win diversity rises from 0.809 to 0.876: different specialists win different queries instead of one dominant bidder sweeping the bin.
 
 The mechanism just removes the bottleneck. More businesses survive as a result.
 
@@ -41,7 +41,7 @@ The keyword bottleneck persists partly because search boxes train users to compr
 
 A continuous space with better differentiation is worth nothing if large players can just occupy all the niches. What stops Midas from creating thirty embedding positions and capturing every niche query?
 
-[Bondage and Tenure](/bondage-and-tenure) addresses this with mechanisms borrowed from markets that already work. Position history follows a hashed payment credential across exchanges, so spinning up shell accounts requires separate verified identities and separate bonds for each. Refundable entry deposits make each new identity expensive: one bond for one shop is a temporary cost, but thirty bonds for thirty fake identities is permanent capital drain. Coordinated resets by related accounts cost quadratically (borrowed from Ethereum's proof-of-stake slashing), so five simultaneous resets cost 25x.
+[Bondage and Tenure](/bondage-and-tenure) addresses this with mechanisms borrowed from markets that already work. Position history follows a hashed payment credential across exchanges, so spinning up shell accounts requires separate verified identities and separate bonds for each. Refundable entry deposits make each new identity expensive: one bond for one shop is a temporary cost, but thirty bonds for thirty fake identities is permanent capital drain. Coordinated resets by related accounts cost quadratically (borrowed from [Ethereum's proof-of-stake slashing](https://ethereum.org/developers/docs/consensus-mechanisms/pos/rewards-and-penalties/)), so five simultaneous resets cost 25x.
 
 The economics of niche-squatting don't work when each occupied position requires a verified identity and a locked bond. A chain could legitimately operate thirty locations with thirty specialties, and if each location genuinely serves that niche, the mechanism is working as designed. What breaks is the keyword-era strategy of occupying positions you don't actually serve.
 

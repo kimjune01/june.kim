@@ -43,7 +43,7 @@ The advertiser doesn't need to understand the geometry. Read three example queri
 
 Pick one, the locus moves, new suggestions appear, prices update. Repeat.
 
-At any point, type a free-text refinement instead. "More focused on nutrition." "People who already own a Peloton." The system re-embeds and moves accordingly. This is an escape hatch so it doesn't feel like a choose-your-own-adventure with four choices per page.
+At any point, type a free-text refinement instead. "More focused on nutrition." "People who already own a Peloton." The system re-embeds and moves accordingly. This is an escape hatch so it doesn't feel like a [choose-your-own-adventure](https://en.wikipedia.org/wiki/Choose_Your_Own_Adventure) with four choices per page.
 
 ![Hill-climbing sequence: three steps through embedding space](/assets/07_hill_climbing_sequence.png)
 
@@ -53,9 +53,9 @@ Once you've found your center, the second decision is σ: how broadly you compet
 
 Center is *what you do*. Bid is *what it's worth*. σ is *how far your influence extends*, with decaying strength as distance grows. Keywords have no equivalent.
 
-The scoring function is `log(bid) - distance²/σ²`. Doubling σ cuts the distance penalty by 4x at any given point. Your territory grows, but your competitive strength at any single point drops.
+The scoring function is `log(bid) - distance²/σ²`. Doubling σ cuts the distance penalty by 4x at any given point, so a wider σ only ever grows your territory. What checks it is the bill: you pay for every impression you win, and conversion falls off with distance from your center. Set σ wider than your business actually converts and you're buying traffic that costs more than it returns. σ is a claim about how fast your value decays with distance, and the mechanism [makes the honest claim the profitable one](/formally-verified-vcg-mechanisms).
 
-A climbing PT sets tight σ. She wins every query near "sports injury rehab for athletes" and ignores the rest. A general practice PT sets wide σ. She competes for everything in physical therapy but wins at her center only when nobody more specialized is bidding there. In keyword auctions, this tradeoff is hidden behind match types and quality scores. Here, you see your territory on the map.
+A climbing PT sets tight σ. She wins every query near "sports injury rehab for athletes" and spends nothing on the rest. A general practice PT sets wide σ. She competes for everything in physical therapy and pays for everything she wins; near the climbing specialist's center, she takes the query only by valuing it more than his proximity is worth. In keyword auctions, this tradeoff is hidden behind match types and quality scores. Here, you see your territory on the map.
 
 For the special case when σ approaches zero, the territory collapses to a single point and the auction becomes a [keyword auction](/keywords-are-tiny-circles).
 
@@ -65,7 +65,9 @@ Once you lock in position and reach, the platform shows the competitive landscap
 
 Your territory is where your power diagram score is highest. The platform renders this with impression density overlaid: where you own space, and how much traffic flows through it.
 
-In keyword auctions, competition is invisible. Bid $2, someone bids $2.50, you lose. Here, competition is spatial and legible. Nike owns the running-shoe region. GNC is encroaching from the nutrition side. There's an underserved gap in home fitness where nobody is competing. Move into it, or shape your reach to be narrow on topic and broad on intent, capturing high-intent users across subtopics.
+In keyword auctions, competition is invisible. Bid $2, someone bids $2.50, you lose. Here, competition is spatial and legible. Nike owns the running-shoe region. GNC is encroaching from the nutrition side. There's an underserved gap in home fitness where nobody is competing.
+
+Move into it, or shape your reach to be narrow on topic and broad on intent.
 
 Each direction card's price reflects both traffic density and competitive pressure. An uncrowded region with decent traffic is a deal; a crowded region near a high bidder is expensive. You see this *before* committing.
 
@@ -87,7 +89,7 @@ The core interaction (hill-climbing through language, examples, and prices) scal
 
 The hard UX problems: how do you pick which suggestions to show when the neighborhood is 3,072-dimensional? And how do you generate examples that faithfully represent a high-dimensional region when two nearby-looking points on the 2D projection might be far apart in full space?
 
-The auction mechanism works regardless of dimensionality. The question is building an interface that lets humans make good decisions in a space they can't see. Try the [interactive prototype](/vectorspace-ads/) and see for yourself.
+The auction mechanism works regardless of dimensionality. The hard part is building an interface that lets humans make good decisions in a space they can't see. Try the [interactive prototype](/vectorspace-ads/) and see for yourself.
 
 ---
 

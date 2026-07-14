@@ -73,16 +73,16 @@ Nike wins. Higher bid and closer proximity both contribute. Move the point towar
 Properties:
 
 - **Higher bids = bigger territory.** Double your bid, your boundaries push outward.
-- **Boundaries are where bid-adjusted distances equal.** The border between Nike and Peloton is where Nike's bid advantage exactly offsets Peloton's proximity advantage. These boundaries are hyperplanes (straight lines in 2D).
+- **Boundaries are where bid-adjusted distances equal.** The border between Nike and Peloton is where Nike's bid advantage exactly offsets Peloton's proximity advantage. When both advertisers use the same σ, these boundaries are hyperplanes (straight lines in 2D); with unequal σ, as in the example above, the border bows into a circle around the tighter advertiser.
 - **The math is well-studied.** Power diagrams have been around since the 1980s. Algorithms for constructing, querying, and integrating over them are known and efficient.
 
 The `d²/σ²` penalty is a conversion model. [Gaussian decay](https://en.wikipedia.org/wiki/Radial_basis_function_kernel): `P(convert) = exp(-d²/2σ²)`. Conversion probability is highest at center and drops with distance. If the bid is the advertiser's margin, the scoring function ranks by expected value: `margin × P(conversion)`.
 
-Why Gaussian? If you know two things about a conversion curve (where it peaks and how wide it is), the Gaussian is the [maximum entropy](https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution) distribution: the least biased guess you can make. Anything else imports assumptions you don't have evidence for.
+Why Gaussian? If all you can pin down about a conversion curve is its mean and its variance, the Gaussian is the [maximum entropy](https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution) distribution: the least biased guess that matches those two moments. Anything else imports assumptions you don't have evidence for.
 
 ![Bid Change](/assets/03_bid_change.png)
 
-When Nike doubles its bid from $5 to $10, its territory expands from 30% to nearly 50% of the space — eating into every competitor's region. This is the continuous analog of outbidding someone on a keyword, except it happens along a *frontier*, not at a single point.
+When Nike doubles its bid from $5 to $10, its territory expands from 30% to nearly 50% of the space, eating into every competitor's region. This is the continuous analog of outbidding someone on a keyword, except it happens along a *frontier*, not at a single point.
 
 ## [Three Levers, Three Players](/three-levers)
 
@@ -102,7 +102,7 @@ The clean story holds when advertisers have *isotropic* preferences: they care e
 
 | Preference Type | Boundary Shape | Winner Determination | Incentive Compatible? |
 |---|---|---|---|
-| Isotropic Gaussian | Hyperplanes | O(log N) | Yes (VCG) |
+| Isotropic Gaussian | Hyperplanes (equal σ) | O(log N) | Yes (VCG) |
 | Anisotropic Gaussian | Quadric surfaces | O(N) | Approximately |
 | Mixture of Gaussians | Arbitrary level sets | O(NK) | Open question |
 
@@ -160,9 +160,9 @@ The auction rules create a multi-player game between advertisers, the platform, 
 
 ### Advertiser vs. Advertiser
 
-VCG-like payments make truthful bidding dominant: you can't gain by lying about what an impression is worth. But advertisers don't just choose a bid. They choose *where to plant their flag* and *how wide to cast their net*.
+VCG payments make truthful bidding dominant: you can't gain by lying about what an impression is worth. But advertisers don't just choose a bid. They choose *where to plant their flag* and *how wide to cast their net*.
 
-An advertiser can profitably misreport their center. If impression density peaks at (0.5, 0.4) and Nike's true center is (0.6, 0.3), Nike gains by declaring (0.55, 0.35), shifting toward the traffic. VCG payments penalize this somewhat, but imperfectly.
+An advertiser can profitably misreport their center. If impression density peaks at (0.5, 0.4) and Nike's true center is (0.6, 0.3), Nike gains by declaring (0.55, 0.35), shifting toward the traffic. VCG payments blunt this but don't eliminate it.
 
 The [Hotelling model](https://mindyourdecisions.com/blog/2008/03/25/game-theory-tuesdays-hotelling%E2%80%99s-game-or-why-gas-stations-have-competitors-nearby/) predicts what convergence looks like: advertisers spread out along the most valuable dimension (probably purchase intent) and cluster on secondary ones. Like a commercial strip where every store is on the same street at different addresses.
 

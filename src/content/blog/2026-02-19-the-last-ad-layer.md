@@ -40,7 +40,7 @@ The ad layer that gets installed inside chatbots will shape how billions of peop
 
 Every modern AI model converts text into high-dimensional vectors called embeddings. Similar concepts land near each other. Dissimilar concepts land far apart. This is already running at scale, billions of times a day.
 
-An embedding-space auction lets each advertiser position at a point in this space representing what they do. When a query arrives, the auction scores each advertiser by combining their bid with their proximity to the query — the closer your expertise, the less you bid to win. Keywords are a [special case](/keywords-are-tiny-circles) of this system with zero radius. The extension is purely additive.
+An embedding-space auction lets each advertiser position at a point in this space representing what they do. When a query arrives, the auction scores each advertiser by combining their bid with their proximity to the query: the closer your expertise, the less you bid to win. Keywords are a [special case](/keywords-are-tiny-circles) of this system with zero radius. The extension is purely additive.
 
 A person who asks a chatbot *I need a financial planner who understands freelance translation income* gets matched to someone who actually does that. The targeting comes from the geometry of meaning, from the query itself. The person stated what they need. The auction connects them to it.
 

@@ -15,13 +15,13 @@ Three rules for advertising inside a conversation: respect the user's attention,
 
 The user is chatting with a health chatbot. They mention their back has been hurting. A faint glow appears on the chatbot's avatar with a tooltip like "We found something relevant. Tap to see more." They tap it. A dialog asks if they'd like to see a recommendation from a sponsor. They say yes. A physical therapist's offer appears.
 
-The glow is the entire ad surface. No banner, no interstitial, no injected message. Just a visual change on a UI element the user already looks at, tappable when they're curious, invisible when they're not.
+The glow is the entire ad surface. No banner, interstitial, or injected message. Just a visual change on a UI element the user already looks at, tappable when they're curious, invisible when they're not.
 
 Under the hood, it's a state machine. Visual style is the developer's choice (glowing dot, avatar ring, subtle shimmer, or something custom). Five states, same logic regardless of style.
 
 ### States
 
-**Off.** First message. Nothing happens. Intent extraction runs in the background. No data leaves the publisher's server until the user taps and consents.
+**Off.** First message. No indicator yet. Intent extraction runs in the background. No data leaves the publisher's server until the user taps and consents.
 
 **Semiglow.** The chatbot returns a message. Intent extraction finds a match against an advertiser above tau. A faint glow appears. On the first occurrence ever, pair it with a one-line tooltip (default: "We found something relevant. Tap to see more."). After that, just the glow.
 
@@ -69,7 +69,14 @@ A back button returns to the Yes/No dialog. How this looks is up to the develope
 }
 ```
 
-**After consent:** Cast the current intent into embedding space via [intent extraction](/intent-extraction), send the embedding to the exchange, fetch the winning advertiser's offer, render it as a recommendation card. The card floats over the chat as a dialog: title and subtext, tappable to click through. No image for MVP.
+**After consent:**
+
+1. Cast the current intent into embedding space via [intent extraction](/intent-extraction).
+2. Send the embedding to the exchange.
+3. Fetch the winning advertiser's offer.
+4. Render it as a recommendation card.
+
+The card floats over the chat as a dialog: title and subtext, tappable to click through. No image for MVP.
 
 **Subsequent taps** skip the consent dialog. Permission is already stored.
 

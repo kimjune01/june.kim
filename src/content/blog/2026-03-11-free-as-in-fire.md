@@ -17,17 +17,17 @@ The entire vector-space series is now [CC BY-SA 4.0](https://creativecommons.org
 
 This matters more than usual because the blog isn't documentation. It's [source code](/vibelogging). Point an agent at the posts and it builds a working ad exchange. The posts are the spec, the reasoning, the architecture. The generated code is just the compiled output.
 
-Prometheus didn't give humanity a specific tool. He gave them fire — the thing that lets you make any tool. A spec that an agent can compile is fire. The [auction math](/power-diagrams-ad-auctions), the [privacy architecture](/ask-first), the [billing model](/one-shot-bidding) — these aren't products. They're the capability to build products. Copyleft ensures the fire stays common.
+Prometheus didn't give humanity a specific tool. He gave them fire: the thing that lets you make any tool. A spec that an agent can compile is fire. The [auction math](/power-diagrams-ad-auctions), the [privacy architecture](/ask-first), the [billing model](/one-shot-bidding): none of these are products. They're the capability to build products. Copyleft ensures the fire stays common.
 
 ## The Spec Layer Stays Open
 
-The GPL propagates copyleft through code. CC BY-SA does the same thing for prose. If someone takes these posts, extends the auction mechanism, adds a new privacy layer, improves the billing model, and publishes their version — their extension must stay CC BY-SA. They can't close the spec.
+The [GPL](https://www.gnu.org/licenses/gpl-3.0.en.html) propagates copyleft through code. CC BY-SA does the same thing for prose. If someone takes these posts, extends the auction mechanism, adds a new privacy layer, improves the billing model, and publishes their version, their extension must stay CC BY-SA. They can't close the spec.
 
-This is the [HashiCorp lesson](/paradox-of-open-competition). Terraform was open until it wasn't. The community forked it within two weeks. [Redis went closed and came back](https://kuray.dev/blog/backend-development/rediss-u-turn-abandoning-sspl-and-returning-to-open-source-202505). Every company that tried to enclose an open spec lost. CC BY-SA makes that move structurally impossible. There's no relicensing decision to make because the decision is already made, permanently. Zeus can chain you to a rock, but the fire is already out.
+This is the [HashiCorp lesson](/paradox-of-open-competition). [Terraform](https://en.wikipedia.org/wiki/Terraform_(software)) was open until it wasn't. The community forked it within two weeks. [Redis went closed and came back](https://kuray.dev/blog/backend-development/rediss-u-turn-abandoning-sspl-and-returning-to-open-source-202505). Every company that tried to enclose an open spec lost. CC BY-SA makes that move structurally impossible. There's no relicensing decision to make because the decision is already made, permanently. Zeus can chain you to a rock, but the fire is already out.
 
 ## The Code Layer
 
-Here's the question: someone points an agent at the blog, generates a working ad exchange. Is that code a derivative work of the CC BY-SA posts?
+Someone points an agent at the blog, generates a working ad exchange. Is that code a derivative work of the CC BY-SA posts?
 
 The conventional answer is no. Copyright covers expression, not ideas. The spec describes the system. The code implements it. Different expression.
 

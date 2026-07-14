@@ -19,16 +19,26 @@
 
    Done when ten verbatim answers are written down. Highest information per hour on this list, and the item most likely to get skipped.
 
-3. **Write the hypothesis to falsify.** Draft: *an advertiser will pay for placement inside an AI conversation if the measurement and the answer-integrity are checkable without trusting the platform.* Done when it's one sentence, committed, with what evidence would count against it.
+   *2026-07-13: ledger opened at [vector-space-interviews.md] — 5/10 from the r/PPC thread, plus a candidate pool from sub search.*
 
-4. **Build the smallest checkable artifact.** Not a platform. One conversation, one labeled placement, one receipt proving the answer wasn't shaped by the payment. Small enough to show in a DM to the ten people from item 2. Done when a stranger can check the claim without believing me. Do this AFTER item 2 — shaped by what they say, not by what's fun to build.
+3. **Write the hypothesis to falsify.** Committed 2026-07-13: *an advertiser will repeatedly pay for placement inside an AI conversation when the measurement and the answer-integrity are checkable without trusting the platform.* "Repeatedly" is the load: one dollar proves the machinery, the renewal proves the demand. What counts against it — the two manual tests (codex, 2026-07-13):
+   - *Demand:* ten advertisers in one high-intent vertical, offered "pay only for X, reported from your own system, under this settlement rule," deposit or signed pilot before any more infrastructure. Nobody deposits → refuted at the buyer.
+   - *Supply:* one conversational surface runs one disclosed placement, settled manually with signed event batches. The surface won't run it, users punish it, or the advertiser declines to renew → refuted at the surface.
+   A spreadsheet receipt suffices for the first campaign; the exchange stays frozen until two advertisers compete for the same opportunity or two surfaces need common routing.
+
+4. **Build the smallest checkable artifact.** Not a platform. One conversation, one labeled placement, one receipt proving the answer wasn't shaped by the payment. Small enough to show in a DM to the ten people from item 2. Done when a stranger can check the claim without believing me. *Ungated 2026-07-13: the gate was "shaped by what they say," and they've said it (see [vector-space-interviews.md]) — the receipt must beat the platform's number AND the 30–60-day guess-and-check interval, and survive kaancata's inversion (raw pull as source of truth, dashboard as interpretation). Runs where we already have real traffic; a receipt on unseen inventory proves nothing.*
 
 5. **One advertiser, one dollar.** Not a segment, not a TAM. One Rossmann-shaped business (captive budget, no channel of its own). Done when someone else's money has passed through the checkable thing once.
+
+## The advertiser path (2026-07-13)
+
+Advertisers are simple. Prove ROAS and attribution, validate budget, offer a demo with real traffic. The receipt is the demo; the first campaign is priced so the advertiser risks nothing and the receipt does the convincing. Item 2's interviews retarget from validating pain (validated — the corpus, the folk metrology, retail media pricing the join) to recruiting the item-5 advertiser and the surface with traffic.
 
 ## Don't
 
 - Don't build the self-serve dashboard.
 - Don't write the moat section.
+- Don't compete for the monopolized auction — no SSP, no exchange, no incumbent retrofit. Their refusal to attribute is terrain, not a problem to solve; it's what makes the exit channel sellable.
 - Don't study OpenAI's ads business further — its blind spot is stated policy (no ads near health/mental-health/politics; every chatbot that isn't ChatGPT).
 - Don't do item 4 before item 2.
 
@@ -56,9 +66,24 @@
 
 **The croupier bridge:** comforting as strategy, honest as evidence. The wedge's output for the thesis is a corpus of dated join-breakage receipts — and Google actively removing external verifiability (Enhanced Conversions black-box matching, Data Manager migration) is the best exhibit yet for born-auditable channels. Bridge becomes credible only when customers say unprompted they'd shift spend for independently verifiable conversion evidence.
 
-**"Verifiable attribution" prior art (checked 2026-07-12):** [AdPriva](https://docs.adpriva.com/) (Horizen ecosystem, testnet beta Nov 2025) — headless JS tag emits HMAC-signed View/Click/ConsentProofs, Merkle-batched, ZK-verified, chain-anchored. Not croupier: HMAC = symmetric = trust the platform; proofs attest cheap browser events from publisher-controlled JS; needs consumer consent app + blockchain. Differentiation sentence: they anchor claims about traffic; croupier makes the conversion itself the proof. Risk: crypto-flavored vocabulary pattern-matches to them — always lead with mechanism (blind signatures, costly conversion event, no chain).
+**"Verifiable attribution" prior art (checked 2026-07-12):** [AdPriva](https://docs.adpriva.com/) (Horizen ecosystem, testnet beta Nov 2025) — headless JS tag emits HMAC-signed View/Click/ConsentProofs, Merkle-batched, ZK-verified, chain-anchored. Not croupier: HMAC = symmetric = trust the platform; proofs attest cheap browser events from publisher-controlled JS; needs consumer consent app + blockchain. Differentiation sentence: they anchor claims about traffic; croupier makes the conversion itself the proof. [CloudX](https://new.cloudx.io/) (MoPub/MAX founders, $30M Series A 2025, TEE-isolated auctions, "no games being played") anchors claims about the auction — same stack, one layer up, outcomes still untouched. AdPriva anchors traffic, CloudX anchors the auction, croupier anchors the conversion. Risk: crypto-flavored vocabulary pattern-matches to them — always lead with mechanism (blind signatures, costly conversion event, no chain).
 
 **Competitors checked (Fable):** claude-ads (250+ checks, OSS Claude Code skill), google-ads-skills, marketing-skill directories — all platform-side dashboard reading. Nothing does the cross-source join with a blocking validator and row-level evidence. Differentiator is one sentence; don't market as "AI audits your ads" or die of adjacency.
+
+## Copyedit sweep (2026-07-14)
+
+All 46 Feb–Mar posts through the pipeline; edits sit uncommitted in the june.kim working tree. Direct self-contradiction fixes applied in place (synthetic-friction, the-price-of-relevance, marketing-speak-is-the-protocol, attested-attribution, publisher-ux, stone-soup, proof-of-trust). Flagged and still open, by severity:
+
+1. ~~**Adserver privacy leak.**~~ **Done 2026-07-14.** Landed as vectorspace-adserver commit `6fc8861`: server-side user_id/frequency-cap removed, `FrequencyCapLocal` shipped in sdk-web, wire strip in all four SDKs, docs/OpenAPI updated. Verified: go build/test, sdk-web pnpm test + tsc, swift test, pytest all pass; Android sources changed but unverified (no gradle toolchain). publisher-api.md updated to match (capping is client-side, keyed by advertiser).
+2. **Spec reconciliation.** The glow indicator is described three different ways (ask-first, publisher-ux, spec.md), and publisher-ux's impression/click event ordering doesn't match the Publisher API. One pass against the code, not the prose.
+3. ~~**σ/log(b) formula family.**~~ **Done 2026-07-14**, source of truth the Lean proof (`~/Documents/auction-proof`). buying-space + three-levers: σ has no score-side tradeoff (center score is log(b) for all σ, per `score_at_center`); the tradeoff is payment-side, honest σ dominant (`gaussian_optimality`). room-to-exist: "proximity dominates" qualified with the 2.3-points-per-10x-bid arithmetic and the buyout allowed. power-diagrams: hyperplane boundaries caveated to equal σ; max-entropy claim tightened to mean+variance; "VCG-like" → VCG. price-of-relevance: negative generalist surplus explained (no-loss guarantee applies to the scored value function; b ≤ 1.1 discards the decay term). three-levers keeps the fake-lever conclusion (June's call, confirmed exact: b enters allocation only via σ/√ln(b), the sim implements the sweep as that substitution, Lean tracks the equilibrium claim as S3 pending σ best-response); closing now carries the reparameterization identity, an editor's note on the realization, and routes rent-seeking to relocation fees. price-of-relevance's σ-adaptation open question states the fixed-σ-transient scope explicitly.
+4. **Citation misrepresentations** (most recurring failure): NYSE/NASDAQ (says the opposite), Rochet-Tirole and Coase (stretched), Lahaie & Lubin (iterative, not one-shot), Reese's/AP (misstated), MOSAIC Appendix B.2 (missing-players falsely says the paper ignores competing advertisers). All checkable against source.
+5. **Legal/factual errors.** free-as-in-fire: CC BY-SA propagating through agent-compiled code fails copyright's idea/expression boundary (17 U.S.C. §102(b)); codex's fix keeps the spec-commons thesis, drops the propagation claim. unredactable: "nobody can patent it" is categorically wrong.
+6. **Crypto/TEE overclaims.** croupier conflates blind signatures with confidentiality; bondage-and-tenure's identity binding is naive against card rotation; "the exchange can't see X" exceeds what attestation proves in attested-attribution, beyond-text, the-last-ad-layer.
+7. **Wording fixes, already resolved in principle.** Gaming gap: auctions filter on willingness-to-pay, not truth (the-last-signal, room-to-exist). Relocation-fee exploit: stepwise fees close it. the-price-of-relevance's negative VCG surplus needs to be either fixed or stated as a modeling choice.
+8. **trustworth self-contradiction.** "Depth creates stickiness" vs. public portable attestations — the switching cost only holds if attestations expire or stay proprietary; the post establishes neither. Its fraudlogix citation also reportedly contradicts the claim it supports.
+
+Unverified codex assertions to check before acting: vectorspace-adserver's `make dev` not starting the embedding sidecar, mutable `:latest` Docker tags, unpinned embedding model revision — all reasoned from the post text, never checked against the repo.
 
 ## Weekly metric
 

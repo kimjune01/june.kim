@@ -35,7 +35,7 @@ TEE attestation makes each step in the attribution chain verifiable by every par
 
 *Click.* The user clicks. The publisher signs a click receipt that chains back to the serve receipt. The exchange verifies the chain. No valid serve receipt, no attributed click. You can't fabricate a click for an impression that was never attested. The click receipt carries a signed timestamp that proves priority, so attribution goes to whoever brought the impression first. A late-arriving extension can't backdate a signature. Honey's hijack wouldn't work.
 
-The only data that moves through the chain is timestamps and hashed device identifiers. Enough to prove the same device was present at each step, and useless for profiling. Both sides store their copies. Either side can audit the other's claims. No third-party arbitrator needed.
+Beyond the campaign, creative, and slot metadata already in the receipts, the only additional data carried through the chain is timestamps and hashed device identifiers, enough to prove the same device was present at each step. Both sides store their copies. Either side can audit the other's claims. No third-party arbitrator needed.
 
 ## Opt-In Ads Compress the Chain
 

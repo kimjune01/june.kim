@@ -23,7 +23,7 @@ score_i(x) = log(b_i) - ||x - c_i||² / σ_i²
 
 A climbing physical therapist sets σ tight: only queries about climbing injuries and finger pulley rehab. A general sports PT sets σ wide. Anything sports-related is worth a bid.
 
-The scoring function already rewards accurate positioning: an advertiser closer to the query wins, all else equal. σ controls *how much* of the space around that position they're willing to serve. Tight σ scores high near the center but falls off fast; a wide σ trades peak score for reach.
+The scoring function already rewards accurate positioning: an advertiser closer to the query wins, all else equal. σ controls *how much* of the space around that position they're willing to serve. At the center the score is log(b) regardless of σ; what σ sets is how fast the score decays from there, and how much of what you win you can actually convert. Tight σ spends nothing outside the niche. Wide σ keeps competing far from center and pays for everything it takes.
 
 ## τ Is the Publisher's Lever
 
@@ -70,7 +70,11 @@ Perplexity already demonstrated this: total ad revenue came in at $20,000 agains
 
 Getting τ wrong is fatal: the platform that shows irrelevant ads loses users to one that gets it right. Competition audits the levers continuously.
 
-Which raises a question about log(b). Whatever compression the platform applies to bids, advertisers adjust σ. Widen σ and the distance term shrinks. The bid advantage comes right back. The equilibrium converges to the same allocation regardless of the compression function. So log(b) doesn't protect anyone. It's an inflationary tax. Advertisers bid higher to get the same allocation, and the exchange keeps the difference. A temporary one: once σ finishes adjusting, the compression has no effect on allocation at all. An exchange that controls the compression function would keep changing it. Each adjustment resets σ adaptation and extracts another round of rent before equilibrium catches up. The lever's value is in turning it, not where it points. The scoring function has two levers and a market.
+Which raises a question about log(b). Whatever compression the platform applies, advertisers adjust σ. The base enters the allocation only through one combination: multiply the score through by ln(b) and every auction ranks `ln(bid) - ln(b)·distance²/σ²`. Replace σ with σ·√ln(b) and every score, every boundary, every payment lands exactly where it was. The [log-base sweep](/the-price-of-relevance) even implements its sweep as that substitution, and it holds σ fixed, which is why it measures movement at all: the dial shifts allocation only until advertisers finish rescaling. So log(b) protects no one and earns no rent at equilibrium. It reads the same market in different units.
+
+The lever's value is in the turning. An exchange that controls the compression function shifts allocation only transiently, during the lag while σ adapts. The durable rents are the real-estate kind: the government takes its cut through property taxes, agents take theirs on the switch. Here both collectors are the platform. Auction payments tax the sitting; [relocation fees](/relocation-fees) price the move. The scoring function has two levers and a market.
+
+*Editor's note: I originally read log(b) as the platform's lever, the third of the three in the title. The σ-compensation identity above is what changed my mind. The [formalization](/formally-verified-vcg-mechanisms) tracks the equilibrium version, that advertisers do rescale, as an open claim pending σ best-response theory; the identity itself is arithmetic.*
 
 ---
 

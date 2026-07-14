@@ -5,7 +5,7 @@ tags: vector-space
 image: "/assets/stone.jpg"
 ---
 
-A traveler arrives in a village with nothing but a stone. He puts it in a pot of water over a fire in the village square and announces he's making stone soup. A villager brings carrots. Another brings potatoes. Someone else adds meat. By evening, the whole village is feasting.
+A traveler arrives in a village with nothing but a stone. He puts it in a pot of water over a fire in the village square and announces he's making [stone soup](https://en.wikipedia.org/wiki/Stone_Soup). A villager brings carrots. Another brings potatoes. Someone else adds meat. By evening, the whole village is feasting.
 
 ![A dark stone on an unfolded handkerchief in a cobblestone village square](/assets/stone.jpg)
 
@@ -31,7 +31,7 @@ The pot doesn't recruit. It just sits there, bubbling. Each ingredient is someth
 
 One ingredient added at a time; the fuller the pot, the farther the smell carries.
 
-While a company recruits employees and investors, the open protocol recruits by putting a stone in the pot. Those who show up are converts who found it stirring.
+A company recruits employees and investors. The open protocol just puts a stone in the pot and waits. Those who show up found it on their own.
 
 ## The Feast
 

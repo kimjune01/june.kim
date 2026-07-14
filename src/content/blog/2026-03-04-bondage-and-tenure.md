@@ -77,7 +77,7 @@ Nobody likes paying [relocation fees](/relocation-fees). And fees hit newcomers 
 
 Tenure discounts flip this. Instead of charging for movement, reward staying put. Newcomers are free to explore without penalty. Once they settle, the discount accumulates. The effect on long-run positioning should be similar to fees, but the psychology is different. A discount feels earned. A fee feels punitive.
 
-The closest analog is insurance. [Jean Lemaire](https://link.springer.com/book/10.1007/978-94-011-0631-3) formalized bonus-malus systems in 1995: policyholders earn progressive premium discounts for each claim-free year. A driver with 10 years of no claims pays 40-60% less than a new driver. Filing a claim resets the discount. Equity vesting schedules follow the same shape. Beyond these, the prior art is thin. Nobody has studied tenure discounts in auction markets.
+The closest analog is insurance. [Jean Lemaire](https://link.springer.com/book/10.1007/978-94-011-0631-3) formalized [bonus-malus systems](https://en.wikipedia.org/wiki/Bonus%E2%80%93malus) in 1995: policyholders earn progressive premium discounts for each claim-free year. A driver with 10 years of no claims pays 40-60% less than a new driver. Filing a claim resets the discount. Equity vesting schedules follow the same shape. Beyond these, the prior art is thin. Nobody has studied tenure discounts in auction markets.
 
 The idea in embedding space: an advertiser who holds the same position for 200 rounds accumulates a fee discount. The discount is a financial asset. Whether this actually stabilizes positions in a live auction is untested.
 

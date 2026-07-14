@@ -29,7 +29,9 @@ The cost of settling an [embedding auction](/power-diagrams-ad-auctions) is near
 
 User queries must stay private. That means someone else has to declare their position for matching to work. Google has it backwards: the user's search is exposed to advertisers, while advertiser targeting stays opaque. The [embedding model](/three-levers) flips this. User queries stay inside the [TEE](/monetizing-the-untouchable). Advertisers declare their [center and σ](/buying-space-not-keywords) publicly.
 
-But there's no privacy reason for σ to be public, so it stays hidden inside the exchange. Only the TEE needs it at auction time. But advertisers collectively benefit if σ is public. [Milgrom & Weber (1982)](https://doi.org/10.2307/1911865) proved that in auctions with correlated values, revealing more information reduces the winner's curse and defensive overbidding. A specialist with tight σ is visibly not competing on a generalist's turf. No need to bid defensively. Without visible σ, everyone assumes worst-case competitor reach and [overbids](/keyword-tax). Public σ is a de-escalation signal, a credible commitment to territory size.
+But there's no privacy reason for σ to be public, so it stays hidden inside the exchange. Only the TEE needs it at auction time. But advertisers collectively benefit if σ is public.
+
+[Milgrom & Weber (1982)](https://doi.org/10.2307/1911865) proved that in auctions with correlated values, revealing more information reduces the winner's curse and defensive overbidding. A specialist with tight σ is visibly not competing on a generalist's turf. No need to bid defensively. Without visible σ, everyone assumes worst-case competitor reach and [overbids](/keyword-tax). Public σ is a de-escalation signal, a credible commitment to territory size.
 
 "Market positioning" has always been a metaphor. Here, your position is a coordinate. The metaphor becomes the mechanism.
 
@@ -53,7 +55,9 @@ With transparency, no exchange has a moat. The scoring function is attested, σ 
 
 Advertiser positions are public. Any new exchange can bootstrap by importing the entire advertiser landscape on day one. Advertisers don't re-onboard. Their declarations are portable. The exchange that misbehaves loses its supply side overnight.
 
-If declarations are portable, why would each exchange maintain its own copy? Every duplicate is friction. Every sync protocol is overhead. Exchanges competing on reducing friction converge on a single source of truth for every entity's center and σ. The advertiser updates their position once and every exchange resolves it. The registry does not live inside an exchange. It's a phonebook.
+If declarations are portable, why would each exchange maintain its own copy? Every duplicate is friction. Every sync protocol is overhead.
+
+Exchanges competing on reducing friction converge on a single source of truth for every entity's center and σ. The advertiser updates their position once and every exchange resolves it. The registry does not live inside an exchange. It's a phonebook.
 
 Every legitimate commercial entity already has a domain. The spec writes itself: `example.com/market-position.json`. Center, σ, geolocation if applicable.
 Keywords were never portable. A Google Ads campaign does not translate to Meta or Amazon. An embedding and σ are platform-agnostic.
@@ -72,7 +76,7 @@ This is a prophecy.
 
 [Vickrey (1961)](https://doi.org/10.2307/2977633): truthful mechanisms make strategy unnecessary. [Milgrom & Weber (1982)](https://doi.org/10.2307/1911865): transparency reduces defensive bidding. [Aurenhammer (1987)](https://doi.org/10.1137/0216006): power diagrams partition space in any dimension. The theory was available for sixty years. Market positions represented as embeddings in a continuous vector space made the application real.
 
-For every time in protocol history, open won against closed. TCP/IP over proprietary networks. SMTP over CompuServe. HTTP over AOL. The pattern repeats because the economics are the same: when the value is in the connection, not the intermediary, open protocols outcompete closed platforms on reach. The intermediary's margin is the tax on the connection. Remove the extortion, keep the connection.
+For every time in protocol history, open won against closed. TCP/IP over proprietary networks. SMTP over [CompuServe](https://en.wikipedia.org/wiki/CompuServe). HTTP over [AOL](https://en.wikipedia.org/wiki/AOL). The pattern repeats because the economics are the same: when the value is in the connection, not the intermediary, open protocols outcompete closed platforms on reach. The intermediary's margin is the tax on the connection. Remove the extortion, keep the connection.
 
 The academics were prophets. This blog is the poem. The builder will follow. You now carry this knowledge. So does everyone else reading this. That's common knowledge, and now starts the race.
 

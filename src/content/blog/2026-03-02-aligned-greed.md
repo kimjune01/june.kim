@@ -7,11 +7,11 @@ image: "/assets/aligned_greed.png"
 
 ![Aligned forces](/assets/aligned_greed.png)
 
-Google makes $265 billion a year in ad revenue. They aren't going to stop being greedy. Neither is Meta, neither is OpenAI. The interesting question is whether a system exists where their greed produces good outcomes. [Mechanism design](https://en.wikipedia.org/wiki/Mechanism_design) is the field that studies this: how to build games where the selfish move is the fair move.
+Google makes $265 billion a year in ad revenue. They aren't going to stop being greedy. Neither is Meta, neither is OpenAI. [Mechanism design](https://en.wikipedia.org/wiki/Mechanism_design) studies whether a system exists where their greed produces good outcomes: how to build games where the selfish move is the fair move.
 
 ## What Greed Looks Like Now
 
-Google's [revenue](https://abc.xyz/assets/77/e1/69d1fbc74c26b6b4813d14b7b501/2025q4-alphabet-10k.pdf) comes from keeping people on Google. Every link that sends you somewhere else is lost monetization, and design choices that increase time-on-platform increase revenue. Their greed is perfectly aligned with their own interests alone.
+Google's [revenue](https://abc.xyz/assets/77/e1/69d1fbc74c26b6b4813d14b7b501/2025q4-alphabet-10k.pdf) comes from keeping people on Google. Every link that sends you somewhere else loses monetization, and design choices that increase time-on-platform increase revenue. Their greed is perfectly aligned with their own interests alone.
 
 Meta built a richer model of you than any single query can capture: interests, demographics, purchase history, social graph, years of activity. The precision is real, built on surveillance. Resolution is revenue, and their resolution comes from collecting everything you do across the web.
 
@@ -19,7 +19,7 @@ Perplexity [killed ads](https://web.archive.org/web/20260307185249/https://www.m
 
 ## The Limits of Regulation
 
-The DOJ [proved](https://www.justice.gov/opa/pr/department-justice-prevails-landmark-antitrust-case-against-google) Google monopolized ad tech. The EU fined them billions. Five SSPs filed private suits. Google's ad revenue keeps growing. Regulation can punish specific bad behavior, like [Project Bernanke's](https://www.techpolicy.press/how-google-manipulated-digital-ad-prices-and-hurt-publishers-per-doj/) hidden bid manipulation or demand steering through Project Poirot. Making good behavior profitable is outside its scope. A fine is a cost of doing business when the business makes $265 billion.
+The DOJ [proved](https://www.justice.gov/opa/pr/department-justice-prevails-landmark-antitrust-case-against-google) Google monopolized ad tech. The EU fined them billions. Five SSPs filed private suits. Google's ad revenue keeps growing. Regulation can punish specific bad behavior, like [Project Bernanke's](https://www.techpolicy.press/how-google-manipulated-digital-ad-prices-and-hurt-publishers-per-doj/) hidden bid manipulation or demand steering through [Project Poirot](https://www.adweek.com/programmatic/project-poirot-the-doj-and-the-unintended-consequences-of-googles-divesture/). Making good behavior profitable is outside its scope. A fine is a cost of doing business when the business makes $265 billion.
 
 The underlying problem is structural: if the greedy move is the extractive move, enforcement is whack-a-mole. You penalize one tactic and the next one appears. The game theory doesn't change between rounds.
 
@@ -39,7 +39,7 @@ The customer says what they need. The auction matches it to someone who does tha
 
 Meta's insight was correct: resolution is revenue. Embeddings are shallower on the individual but operate on declared intent. A single query carries less information than Meta's full profile, but it carries the most important information: what this person wants, right now, in their own words.
 
-The [Plumber Test](/the-plumber-test) is the concrete version: "sewage backup residential basement Bloomington" contains enough signal to match the right specialist without knowing the customer's age, income, or browsing history. Whether embeddings can match Meta's raw precision is open. They already beat keywords — keywords are a [special case](/keywords-are-tiny-circles) of embeddings with zero radius.
+The [Plumber Test](/the-plumber-test) is the concrete version: "sewage backup residential basement Bloomington" contains enough signal to match the right specialist without knowing the customer's age, income, or browsing history. Whether embeddings can match Meta's raw precision is open. They already beat keywords: keywords are a [special case](/keywords-are-tiny-circles) of embeddings with zero radius.
 
 ## The Profit Motive
 

@@ -19,7 +19,9 @@ The data exists, after. The publisher reports aggregated distance histograms: ho
 
 Pair the histograms with verified conversions, and the exchange observes conversion rates at different distances. It estimates the [Gaussian decay curve](/power-diagrams-ad-auctions). That curve *is* sigma. The exchange learns it from data the advertiser never had to provide.
 
-Why histograms and not raw data? Because individual embedding points are location data with extra dimensions. [de Montjoye et al. (2013)](https://www.nature.com/articles/srep01376) showed that 4 spatio-temporal data points re-identify 95% of individuals in a 1.5 million person dataset. The FTC has [brought five enforcement actions](https://www.ftc.gov/business-guidance/blog/2022/07/location-health-and-other-sensitive-information-ftc-committed-fully-enforcing-law-against-illegal) against location data brokers since 2022 for claiming "anonymized" data that wasn't. [CMS requires](https://www.hhs.gov/guidance/document/cms-cell-suppression-policy) a minimum cell size of 11 before any count can be reported. [Google's own Ads Data Hub](https://developers.google.com/ads-data-hub/guides/privacy-checks) requires 50 users minimum per query. Histograms with minimum bin sizes satisfy these thresholds by design.
+Why histograms and not raw data? Because individual embedding points are location data with extra dimensions. [de Montjoye et al. (2013)](https://www.nature.com/articles/srep01376) showed that 4 spatio-temporal data points re-identify 95% of individuals in a 1.5 million person dataset.
+
+Regulators already treat that risk as real. The FTC has [brought five enforcement actions](https://www.ftc.gov/business-guidance/blog/2022/07/location-health-and-other-sensitive-information-ftc-committed-fully-enforcing-law-against-illegal) against location data brokers since 2022 for claiming "anonymized" data that wasn't. [CMS requires](https://www.hhs.gov/guidance/document/cms-cell-suppression-policy) a minimum cell size of 11 before any count can be reported. [Google's own Ads Data Hub](https://developers.google.com/ads-data-hub/guides/privacy-checks) requires 50 users minimum per query. Histograms with minimum bin sizes satisfy these thresholds by design.
 
 The advertiser can override sigma anytime. But the default improves with every conversion.
 
@@ -67,7 +69,7 @@ Each side gets one dial. Each dial tunes itself.
 
 In game theory, an [ε-Nash equilibrium](https://en.wikipedia.org/wiki/Epsilon-equilibrium) means every player is within ε of their best response. ε is the size of the mistake. In a typical auction, ε is large because participants guess: guess how far their relevance extends, guess how many ads to show, guess their conversion rate. Every guess is a gap between what they're doing and what they should be doing. Advertisers still guess at margin. But two fewer guesses is two fewer gaps.
 
-Auto-tuning closes those gaps. Sigma converges on the true relevance boundary from conversion data. τ converges on the publisher's declared preference from conversation counts. Neither side needs to anticipate the other's adjustments — the controllers handle that reactively. Each player's declared strategy (margin, percentage) approaches a true best response.
+Auto-tuning closes those gaps. Sigma converges on the true relevance boundary from conversion data. τ converges on the publisher's declared preference from conversation counts. Neither side needs to anticipate the other's adjustments. The controllers handle that reactively. Each player's declared strategy (margin, percentage) approaches a true best response.
 
 ε shrinks toward zero. Not in theory. Mechanically. Set it and forget it.
 

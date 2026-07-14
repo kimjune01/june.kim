@@ -62,15 +62,15 @@ The prompt rewrites this into positioning-speak, which matches against an advert
 </div>
 </div>
 
-The user never said "physical therapist." The user never said "sports injury rehab." The prompt inferred the service from the problem. The qualifier "race eight weeks out" matched an advertiser who specifically positions around staying in training, not generic rehab. The keyword version of this query, "knee pain running," would have lost the marathon context, the timeline, the downhill specificity. The positioning statement preserves all of it.
+The user never said "physical therapist." The user never said "sports injury rehab." The prompt inferred the service from the problem. The qualifier "race eight weeks out" matched an advertiser who specifically positions around staying in training rather than generic rehab. The keyword version of this query, "knee pain running," would have lost the marathon context, the timeline, the downhill specificity. The positioning statement preserves the timeline and the marathon context, though it drops the downhill detail. The extracted intent carries what the advertiser needs to match on. It isn't a full transcript.
 
 ## What Didn't Need to Be Invented
 
 The advertiser submitted a positioning statement. A prompt rewrote user language into advertiser language. The [scoring function](/three-levers) compared the two and picked a winner.
 
-No new taxonomy. No category tree (IAB has 698 categories; nobody uses them correctly). No negative keyword lists to maintain. The only genuinely new concept is [σ](/keywords-are-tiny-circles), the reach parameter that controls how broadly an advertiser matches around their positioning.
+No new taxonomy. No category tree (IAB has 698 categories; nobody uses them correctly). No negative keyword lists to maintain. The only new concept is [σ](/keywords-are-tiny-circles), the reach parameter that controls how broadly an advertiser matches around their positioning.
 
-Compare to the keyword setup flow: research keywords with a planning tool, organize into ad groups, write ads per keyword cluster, set match types per keyword, add negative keywords, adjust bids per keyword, review search term reports weekly. All of that overhead exists because keywords are an impoverished representation of what the advertiser actually means. When the representation is a natural-language positioning statement, most of the overhead disappears.
+Compare to the keyword setup flow: research keywords with a planning tool, organize into ad groups, write ads per keyword cluster, set match types per keyword, add negative keywords, adjust bids per keyword, review search term reports weekly. All of that overhead exists because keywords are an impoverished representation of what the advertiser means. When the representation is a natural-language positioning statement, most of the overhead disappears.
 
 ## Why the Prompt Matters More Than the Model
 

@@ -52,7 +52,7 @@ But what if an authorized publisher's coupons get intercepted? Device binding ti
 
 ### Double-Spend Prevention → Single Attribution
 
-Digital currencies solved the double-spend problem: one coin, one transaction. The first valid claim wins, and the network rejects duplicates.
+Digital currencies solved the [double-spend problem](https://en.wikipedia.org/wiki/Double-spending): one coin, one transaction. The first valid claim wins, and the network rejects duplicates.
 
 Yet even on the right device, multiple publishers could present coupons for the same sale. Single attribution applies the double-spend rule to conversions: one conversion, one coupon wins. If multiple publishers present coupons for the same sale, engagement quality breaks the tie: time on site, scroll depth, interaction sequence. A redirect through a junk site produces a thin engagement signal. A podcast listener who clicks a show-notes link and browses for ten minutes produces a rich one. The [lemons become obvious](/receipts-please).
 
@@ -82,7 +82,7 @@ Three more layers would strengthen the stack, but each has unsolved engineering 
 
 **Content Binding** ([SRI](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) for coupons) would tie each coupon to the hash of the ad creative, so a publisher can't stamp a coupon without loading the real ad. But advertisers run hundreds of variants through dynamic creative optimization and A/B tests. How do you hash a creative that changes per impression?
 
-**Attribution Logs** ([Certificate Transparency](https://certificate.transparency.dev/) for coupons) would log every batch to an append-only Merkle ledger, making off-book issuance detectable. But CT handles ~10 billion certificates total. Programmatic ad serving does hundreds of billions of impressions per day. And CT works because Chrome mandates it. Who mandates an ad issuance log when the incumbents benefit from opacity?
+**Attribution Logs** ([Certificate Transparency](https://certificate.transparency.dev/) for coupons) would log every batch to an append-only [Merkle](https://en.wikipedia.org/wiki/Merkle_tree) ledger, making off-book issuance detectable. But CT handles ~10 billion certificates total. Programmatic ad serving does hundreds of billions of impressions per day. And CT works because Chrome mandates it. Who mandates an ad issuance log when the incumbents benefit from opacity?
 
 **Engagement Proofs** ([ZK proofs](https://en.wikipedia.org/wiki/Zero-knowledge_proof) for viewability) would let a browser prove the user actually saw and interacted with the ad without revealing who they are. But ZK proof generation on every impression costs battery and latency. And once you publish what counts as "engagement," that definition becomes the new attack surface.
 

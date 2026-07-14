@@ -86,7 +86,7 @@ MOSAIC's core mistake is baking advertising into inference. Every assumption fol
 
 Advertising doesn't have to work that way. A chatbot already captures [user intent during conversation](/intent-extraction). The user says what they want, in their own words, before any ad auction fires. That intent signal is richer than a search query and cheaper than twenty candidate generations. Embed it, and it becomes a point in the same [space advertisers already occupy](/buying-space-not-keywords). The [auction runs there](/power-diagrams-ad-auctions), not inside the generation loop.
 
-Run the auction *after* the response, on the intent extracted *during* the conversation, and every assumption changes. Inference cost is zero — the conversation already happened. `τ` disappears because the response isn't steered. Output is deterministic and attribution is trivial: the ad is a separate object the user either saw or didn't. Competitors get discrete placements, not blended text. The user stays because the product wasn't degraded.
+Run the auction *after* the response, on the intent extracted *during* the conversation, and every assumption changes. Inference cost is zero: the conversation already happened. `τ` disappears because the response isn't steered. Output is deterministic and attribution is trivial: the ad is a separate object the user either saw or didn't. Competitors get discrete placements, not blended text. The user stays because the product wasn't degraded.
 
 The mechanism design is clean. The generation loop it runs in is not.
 

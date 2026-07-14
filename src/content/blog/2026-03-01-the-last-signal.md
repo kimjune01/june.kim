@@ -7,13 +7,13 @@ image: "/assets/last_signal.png"
 
 ![Dying signals](/assets/last_signal.png)
 
-In 1993, the New Yorker ran a cartoon: ["On the Internet, nobody knows you're a dog."](https://en.wikipedia.org/wiki/On_the_Internet,_nobody_knows_you%27re_a_dog) It was about freedom. Anonymity meant you could be judged by what you said, not who you were. You'd find a stranger on a forum who shared your niche interest, email them, and they'd email back.
+In 1993, the New Yorker ran a cartoon: ["On the Internet, nobody knows you're a dog."](https://en.wikipedia.org/wiki/On_the_Internet,_nobody_knows_you%27re_a_dog) It was about freedom. Anonymity meant you could be judged by what you said. Who you were didn't matter. You'd find a stranger on a forum who shared your niche interest, email them, and they'd email back.
 
 Now nobody knows if you're a dog, a bot, a fake review, or a GPT-written cold email. The same property that enabled authentic connection now enables infinite noise: no identity verification. Every signal on the internet is dying the same death: the cost of faking it dropped below the cost of producing the real thing. Akerlof called this the [lemons problem](https://en.wikipedia.org/wiki/The_Market_for_Lemons). It's now the operating condition of every channel online.
 
 ## What's Already Dead
 
-**[PageRank](https://en.wikipedia.org/wiki/PageRank)** was a signal of peer endorsement. A link from MIT to your research page meant a human at a credible institution decided your work was worth citing. SEO farms industrialized link production. By 2025, the first page of Google for most commercial queries is content written to rank, not content written to inform. Producing a backlink became cheaper than earning one, and the signal collapsed.
+**[PageRank](https://en.wikipedia.org/wiki/PageRank)** was a signal of peer endorsement. A link from MIT to your research page meant a human at a credible institution decided your work was worth citing. SEO farms industrialized link production. By 2025, the first page of Google for most commercial queries is content written to rank. It's not written to inform. Producing a backlink became cheaper than earning one, and the signal collapsed.
 
 **Reviews** were a signal of customer experience. A five-star review on Amazon meant someone bought the product and liked it. Fake review farms [produce thousands per day](https://www.ftc.gov/news-events/news/press-releases/2023/06/ftc-proposes-new-rule-combat-fake-reviews-testimonials) at pennies each. The FTC fined companies for it. The reviews kept coming. Amazon deletes millions annually and the problem grows faster than the enforcement. You can't trust a stranger's review because you can't tell if the stranger exists.
 
@@ -31,7 +31,7 @@ Same pattern every time. A signal carries real information. The cost of faking i
 
 ## What Survives
 
-Word of mouth. Your neighbor recommends a [plumber](/the-plumber-test) because he fixed her pipes last winter. The signal is perfect because faking it would require infiltrating her social network and planting a recommendation. That doesn't scale — but it's the only signal that has never been killed, because it's the only one that's expensive to counterfeit.
+Word of mouth. Your neighbor recommends a [plumber](/the-plumber-test) because he fixed her pipes last winter. The signal is perfect because faking it would require infiltrating her social network and planting a recommendation. That doesn't scale, but it's the only signal that has never been killed, because it's the only one that's expensive to counterfeit.
 
 ## Position as Signal
 
@@ -47,7 +47,7 @@ Every dead signal relied on external enforcement (moderation, detection algorith
 
 The relocation fee doesn't detect drift and punish it. It charges for it: λ · d² for every move. The honest advertiser pays a small fee for a small adjustment. The gaming advertiser pays a large fee for a large misrepresentation. The mechanism doesn't need to distinguish real from fake, because both pay proportionally to how far they move.
 
-This is the same logic as a carbon tax. You don't detect which emissions are wasteful. You charge for all of them, and the price gradient does the sorting. Honest positioning is cheap. Dishonest positioning is expensive.
+This is the same logic as a [carbon tax](https://en.wikipedia.org/wiki/Carbon_tax). You don't detect which emissions are wasteful. You charge for all of them, and the price gradient does the sorting. Honest positioning is cheap. Dishonest positioning is expensive.
 
 ## The Quiet Ad
 

@@ -7,7 +7,7 @@ description: "v0.1.0"
 
 [`market-position.json`](/market-position-json) defined what the advertiser declares. This post defines what the exchange is allowed to ask for.
 
-The publisher-exchange boundary is a contract. OpenAPI makes it auditable and enforceable by the same [coding agents](/skills-over-sdks) that integrate it. Every field that doesn't exist is a promise.
+The publisher-exchange boundary is a contract. [OpenAPI](https://www.openapis.org/) makes it auditable and enforceable by the same [coding agents](/skills-over-sdks) that integrate it. Every field that doesn't exist is a promise.
 
 *This post is the design-level view: the privacy-preserving core, three calls. The shipped server exposes a larger surface and the authoritative, machine-readable spec is [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/apidocs/openapi.yaml) in the adserver repo. Where the two differ, the repo spec is the truth; the endpoint names below have been reconciled to it.*
 
@@ -48,7 +48,7 @@ info:
 paths:
   /embeddings:
     get:
-      summary: Fetch advertiser catalog (embeddings + bids) for local caching
+      summary: Fetch advertiser catalog (embeddings, not bids) for local caching
       parameters:
         - name: If-None-Match
           in: header
@@ -200,7 +200,7 @@ components:
 
 The catalog is the set of [`market-position.json`](/market-position-json) declarations the exchange has crawled. Advertiser positions are [public by design](/transparency-is-irreversible). The publisher caches the catalog locally and re-syncs via standard HTTP `ETag`.
 
-Phase 1 runs entirely against this cache. Cosine distance between the conversation embedding and every cached position. The exchange doesn't know the user exists until the user taps.
+Phase 1 runs entirely against this cache. Cosine distance between the conversation embedding and every cached position. The exchange doesn't know the user exists until the user taps the consent prompt.
 
 Catalog size is bounded by the number of advertisers. A health chatbot caches hundreds of positions, not millions. This is a set of [positioning statements](/marketing-speak-is-the-protocol) with precomputed vectors.
 
@@ -208,7 +208,7 @@ The catalog carries embeddings, sigma, creative URL, destination URL. Bid prices
 
 ## The Auction Call
 
-Only fires after user consent. The publisher sends the conversation embedding, the candidate IDs that passed local proximity filtering, and a [relevance threshold](/three-levers) tau.
+The auction call only fires after user consent. The publisher sends the conversation embedding, the candidate IDs that passed local proximity filtering, and a [relevance threshold](/three-levers) tau.
 
 The exchange runs [`score = log(bid) - distance² / σ²`](/power-diagrams-ad-auctions) against each candidate, selects the winner by [VCG](/one-shot-bidding), and returns three fields: auction ID, winner ID, price.
 
@@ -220,17 +220,17 @@ Pre-filtering is the publisher's responsibility. If a health chatbot has 500 pos
 
 Three event types: `impression`, `click`, `viewable`. Each is a POST to `/event/{type}` (see [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/apidocs/openapi.yaml) for the exact body).
 
-`impression` fires when the creative renders (frequency-capped). `click` when the user taps it, which triggers the CPC charge on first click. `viewable` when the creative meets the viewability threshold. Downstream conversions are tracked off this path via [blind-signed coupons](/croupier) — see [attested attribution](/attested-attribution).
+`impression` fires when the creative renders (the SDK caps frequency locally, keyed by advertiser, before the event ever fires). `click` when the user taps it, which triggers the CPC charge on first click. `viewable` when the creative meets the viewability threshold. Downstream conversions are tracked off this path via [blind-signed coupons](/croupier).
 
-These events feed three systems:
+Between these events and the separate conversion path, three systems get fed:
 
-1. **Billing.** The VCG price from the auction, matched to an impression event.
+1. **Billing.** The VCG price from the auction, matched to the first click event.
 2. **Sigma auto-tuning.** Distance histograms with minimum bin sizes feed the [sigma controller](/set-it-and-forget-it). The exchange sees aggregate patterns, not individual users.
 3. **Verified conversions.** [Attested attribution](/attested-attribution) proves a sale happened without linking it to a user.
 
 ## What's Not in the Spec
 
-No user targeting endpoint. No retargeting. No remarketing. No frequency capping by user ID (the publisher handles that locally). No lookalike audiences. No user profile sync.
+No user targeting endpoint. No retargeting. No remarketing. No frequency capping by user ID (the SDK caps in the browser; nothing leaves the page). No lookalike audiences. No user profile sync.
 
 Relevance comes from [embedding proximity](/power-diagrams-ad-auctions). Frequency is the publisher's decision. Lookalikes are meaningless when targeting is geometric. The [go-to-market](/the-playbook) doesn't need them either.
 

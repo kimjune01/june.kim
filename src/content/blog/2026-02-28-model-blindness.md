@@ -24,7 +24,7 @@ This is the strongest argument for architectural enforcement. If users can't tel
 
 ## The Architecture
 
-The chatbot cannot see the ad system. This is construction, enforced by enclave boundaries.
+The chatbot cannot see the ad system. This is by construction, enforced by enclave boundaries.
 
 The chatbot runs in its own enclave. The ad system runs in a separate one. There is no communication channel from the ad system to the chatbot. It cannot know whether a suggestion appeared, whether the user opted in, or who the advertiser was.
 
@@ -32,7 +32,7 @@ The only data flow: conversation → embedding → ad system → UI. One-directi
 
 Perplexity killed ads because first-party selection destroyed trust. OpenAI kept ads and ate the trust damage. Model blindness is the alternative: run ads and preserve trust, because the model generating your answer provably doesn't know the ads exist.
 
-This requires the ad system to be operated by a third party, not Perplexity, not the chatbot provider. If the same company runs the conversation and the auction, the separation is a policy again, not a constraint. A third-party exchange inside a TEE enclave is the only arrangement where no single entity controls both the answers and the ads.
+This requires the ad system to be operated by a third party, not Perplexity, not the chatbot provider. If the same company runs the conversation and the auction, the separation is only a policy again. Nothing enforces it. A third-party exchange inside a TEE enclave is the only arrangement where no single entity controls both the answers and the ads.
 
 ## The Infrastructure Exists
 

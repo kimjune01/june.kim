@@ -7,7 +7,7 @@ image: "/assets/11_egalitarian_auction.png"
 
 ![The keyword tax: specialists crammed into one auction](/assets/11_egalitarian_auction.png)
 
-Keywords herd traffic into a narrow, dense auction. Five physical therapists — a climbing specialist, a pelvic floor specialist, a pediatric specialist, a sports rehab specialist, and a generalist — all bid on "physical therapy." The auction can't tell them apart. Each bin has 4–5 bidders fighting over every query, pushing clearing prices up and extracting maximum revenue. This is what the publisher wants.
+Keywords herd traffic into a narrow, dense auction. Five physical therapists all bid on "physical therapy": a climbing specialist, a pelvic floor specialist, a pediatric specialist, a sports rehab specialist, and a generalist. The auction can't tell them apart. Each bin has 4–5 bidders fighting over every query, pushing clearing prices up and extracting maximum revenue. This is what the publisher wants.
 
 [Levin & Milgrom (2010)](https://web.stanford.edu/~jdlevin/Papers/OnlineAds.pdf) call this **conflation**: pooling heterogeneous items into one auction. The auction mechanism is efficient (GSP works); the item definition is not. The climbing PT pays to compete on "pelvic floor exercises after C-section." The pelvic floor PT pays to compete on "finger pulley injury from rock climbing." Neither will convert on the other's queries, but the keyword bin forces them into the same auction anyway. That's the keyword tax.
 

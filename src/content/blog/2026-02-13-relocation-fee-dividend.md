@@ -119,7 +119,7 @@ What if the auctioneer doesn't know the optimal λ? Experiment 5 starts λ at ze
 <tr><td><b>Final λ learned</b></td><td>14,870</td></tr>
 </table>
 
-The auctioneer converges to λ≈14,870 across all 50 trials (std=219, remarkably tight). It discovers the fee from scratch by observing that higher λ improves market health metrics. The collapse ratio is low (0.16) because the market collapses during the initial rounds while λ is still low, and doesn't fully recover (same dynamic as Experiment 3). But win diversity reaches 0.80, and the market reaches a healthy state.
+The auctioneer converges to λ≈14,870 across all 50 trials, with a standard deviation of 219 (a spread under 2% of the mean). It discovers the fee from scratch by observing that higher λ improves market health metrics. The collapse ratio is low (0.16) because the market collapses during the initial rounds while λ is still low, and doesn't fully recover (same dynamic as Experiment 3). But win diversity reaches 0.80, and the market reaches a healthy state.
 
 The learned λ is higher than the manually-set 5,000, suggesting the auctioneer finds even more value in relocation fees than our initial parameterization assumed.
 
@@ -144,7 +144,7 @@ The low-fee exchange collapses. Win diversity drops to 0.32, with p5=0.00; some 
 
 But the ROI line is what matters for the competitive argument. Advertisers get **higher ROI on the exchange that charges them more**. 0.67x vs 0.56x. Same advertisers, same impressions, same budget. The only difference is the fee, and the higher fee produces better returns.
 
-This is the result that kills the "race to the bottom" argument. A competing exchange can't attract advertisers by cutting fees, because cutting fees destroys the market structure that makes the exchange worth using. It's like removing speed limits to attract drivers — you get more accidents, not more driving.
+This is the result that kills the "race to the bottom" argument. A competing exchange can't attract advertisers by cutting fees, because cutting fees destroys the market structure that makes the exchange worth using. It's like removing speed limits to attract drivers. You get more accidents.
 
 ## What This Means
 
@@ -162,7 +162,7 @@ This is why the fee is a *dividend*, not a *cost*. The advertiser pays λ·‖mo
 
 The standard competitive argument in adtech goes: exchanges compete on fees, fees trend to zero, and that's good for advertisers. The dual-market experiment shows this is exactly backwards:
 
-An exchange with near-zero relocation fees produces a collapsed market where one bidder dominates and everyone else gets nothing. An exchange with meaningful fees produces a competitive market where specialists thrive and ROI is higher for everyone.
+An exchange with near-zero relocation fees produces a collapsed market where one bidder dominates and everyone else gets nothing. An exchange with fees on the order of λ=5,000 produces a competitive market where specialists thrive and ROI is higher for everyone.
 
 The exchange that "competes on price" by cutting fees is actually offering an inferior product. It's selling a market with monopoly dynamics at a discount, while the high-fee exchange sells a competitive market at a premium. This is the same dynamic as building codes. Builders who compete by cutting corners on foundations aren't offering a better deal; they're offering a worse building. The inspection fee that prevents corner-cutting isn't a cost. It's what makes the building habitable.
 

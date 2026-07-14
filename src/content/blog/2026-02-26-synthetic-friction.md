@@ -9,7 +9,7 @@ image: "/assets/synthetic_friction.png"
 
 Embedding-space auctions give every advertiser a precise position in high-dimensional space. A climbing PT plants her flag at "rock climbing finger pulley rehabilitation." A pelvic floor PT plants his at "postpartum pelvic floor therapy." They stop competing for the same keyword. The auction scores by proximity, and each specialist wins the queries they're best at.
 
-That's the pitch. Here's the problem: it doesn't hold on its own.
+That's the pitch. It doesn't hold on its own.
 
 Without an external force, every advertiser drifts toward the center of demand. The embedding space that was supposed to preserve differentiation collapses back into keyword crowding: the same five PTs fighting over the same queries, this time at coordinates instead of keywords. The geometry changes. The economics don't.
 
@@ -31,11 +31,11 @@ There's a deeper problem. [Beyer et al. (1999)](https://link.springer.com/chapte
 
 When distances concentrate, the gradient that drives differentiation weakens. An advertiser can't gain much local monopoly power by moving to an empty region because no region is meaningfully farther from competitors than any other. The centripetal pull toward demand density dominates because it's the only gradient with a clear signal.
 
-The embeddings still encode meaningful differences. BGE-small distinguishes "climbing PT" from "sports PT" with hard negative mining, and the intrinsic manifold structure preserves fine-grained discrimination. But the *competitive dynamics* operating on those embeddings face a compressed distance space where the incentive to drift is always present.
+The embeddings still encode differences. BGE-small distinguishes "climbing PT" from "sports PT" with hard negative mining, and the intrinsic manifold structure preserves fine-grained discrimination. But the *competitive dynamics* operating on those embeddings face a compressed distance space where the incentive to drift is always present.
 
 ## The Simulation: Drift Is Universal
 
-We tested this with 25 advertisers across 5 clusters at controlled tightness levels, competing for 55 queries in 384-dimensional BGE-small-en-v1.5 embedding space. The simulation code is [open source](https://github.com/kimjune01/openauction/tree/v3.5.1/cmd/simulate).
+We tested this with 25 advertisers across 5 clusters at controlled tightness levels, competing for 55 queries in 384-dimensional [BGE-small-en-v1.5](https://huggingface.co/BAAI/bge-small-en-v1.5) embedding space. The simulation code is [open source](https://github.com/kimjune01/openauction/tree/v3.5.1/cmd/simulate).
 
 Five tightness levels, from nearly identical to completely unrelated:
 
@@ -65,7 +65,7 @@ Without fees (Cell C, λ=0), centripetal fraction is positive everywhere:
 
 Every cluster shows Hotelling drift. Advertisers move toward their competitors, not away. The direction is centripetal regardless of how tight or loose the cluster is. This is the strongest result across all versions of the simulation.
 
-The loose clusters show the highest centripetal fraction (0.80) despite having the lowest density. This makes sense: loose-cluster advertisers start far from the centroid, so the demand center exerts a stronger pull. In tight clusters, everyone is already near the center, and the directional signal is noisier. The drift magnitude is similar across clusters (0.48–0.58 in L2 distance). The direction is consistently centripetal.
+The loose clusters show the highest centripetal fraction (0.80) despite having the lowest density. Loose-cluster advertisers start far from the centroid, so the demand center exerts a stronger pull. In tight clusters, everyone is already near the center, and the directional signal is noisier. The drift magnitude is similar across clusters (0.48–0.58 in L2 distance). The direction is consistently centripetal.
 
 ### Choosing λ
 
@@ -112,7 +112,7 @@ It was wrong. At 5 clusters, the correlation collapses to r=0.13.
 
 The very tight cluster (yoga studios, cos 0.974) shows *negative* surplus from fees. The tight cluster benefits most (+0.777). There's no monotonic relationship. The r=0.87 at n=3 was overfitting noise.
 
-Fees improve surplus uniformly, not proportionally to density. The mechanism is blunter than the theory suggested. This means a flat fee works. Density-adaptive fees (Cell E) provide zero measurable benefit over uniform fees (all D↔E comparisons p > 0.82).
+Fees improve surplus in four of the five clusters, with no relationship to density: the tight cluster gains the most, not the tightest or the loosest. The mechanism is blunter than the theory suggested. This means a flat fee works about as well as a density-adaptive one: density-adaptive fees (Cell E) provide zero measurable benefit over uniform fees (all D↔E comparisons p > 0.82).
 
 ## Why This Matters: The Convergence Trap
 
@@ -127,7 +127,7 @@ This is the convergence trap. The embedding space has the *capacity* for differe
 
 The per-cluster data makes this concrete. Without fees, the medium-density cluster (fitness coaches, cos 0.830) earns surplus of just 0.156 per round. Keywords beat it at 0.758. The loose cluster is worse: 0.241 vs 1.930 for keywords. Embeddings without fees can actually *lose* to keywords in clusters where the demand gradient is strong enough to pull everyone toward the same queries. That's the [keyword tax](/keyword-tax) in reverse.
 
-With fees, every cluster improves. The tight cluster goes from 4.512 to 5.289. The medium from 0.156 to 0.335. The loose from 0.241 to 0.443. Fees make embedding auctions worth running in clusters where the no-fee version was worse than keywords.
+With fees, the tight, medium, and loose clusters all improve (the very tight cluster is the exception, per the table above). The tight cluster goes from 4.512 to 5.289. The medium from 0.156 to 0.335. The loose from 0.241 to 0.443. Fees make embedding auctions worth running in clusters where the no-fee version was worse than keywords.
 
 ## The Reinforcement Mechanism
 
@@ -169,7 +169,7 @@ The simulation tested distance-based fees (`λ · ‖move‖²`). A surplus-base
 
 ## The Fee Is Pure Profit
 
-Whatever fee structure the SSP chooses (distance-based, surplus-based, or a hybrid), the computation happens inside the same TEE that clears the auction. One extra line of arithmetic. No infrastructure cost. No human review. No marginal expense. The fee is collected as part of auction settlement, the same pipeline that already handles VCG payments. Revenue against zero cost of goods.
+Whatever fee structure the SSP chooses (distance-based, surplus-based, or a hybrid), the computation happens inside the same TEE that clears the auction. One extra line of arithmetic, no infrastructure cost, no human review, no marginal expense. The fee is collected as part of auction settlement, the same pipeline that already handles VCG payments. Revenue against zero cost of goods.
 
 Every industry example above works the same way. The FCC doesn't build new spectrum when it charges license fees. ICANN doesn't manufacture new domain names. The landlord doesn't construct a new building when collecting a lease termination fee. The fee is pure margin.
 
@@ -185,7 +185,7 @@ Across six simulation versions, two findings are robust:
 
 1. **Hotelling drift is universal.** Centripetal fraction is positive in every cluster tested, at every density level, in every version. Advertisers in embedding space drift toward competitors. The direction is always centripetal. The mechanism is the same one Hotelling described in 1929, operating in a space he couldn't have imagined.
 
-2. **A flat fee is sufficient.** Uniform relocation fees significantly improve surplus, reduce drift, and preserve the differentiation that embedding space makes possible. No density scaling needed. No adaptive scheduling. One fee, applied everywhere, enforced by attested code.
+2. **A flat fee is sufficient.** Uniform relocation fees improve surplus in most clusters, reduce drift, and preserve the differentiation that embedding space makes possible. No density scaling needed. No adaptive scheduling. One fee, applied everywhere, enforced by attested code.
 
 The embedding space can distinguish the climbing PT from the sports PT. The fee is what keeps them apart.
 
