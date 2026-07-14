@@ -251,21 +251,3 @@ span[data-note].open { background: #838383; }
 .highlight .vi { color: #008080 }
 .highlight .il { color: #099 }
 
-/* ── mdgm inline SVG diagrams ──
-   Blog posts render via BlogPost.astro, which never includes Base.astro,
-   so these classes must be styled here. Palette matches the embedded
-   <style> in public/assets/vcg-fig*.svg (designed for white background). */
-.mdgm text { font-family: ui-monospace, Menlo, monospace; fill: #334155; }
-.mdgm .dark { fill: #1c1917; }
-.mdgm .muted { fill: #64748b; }
-.mdgm .accent { fill: #3b82f6; }
-.mdgm .green { fill: #16a34a; }
-.mdgm .amber { fill: #d97706; }
-.mdgm .red { fill: #ef4444; }
-.mdgm .bold { font-weight: bold; }
-.mdgm .s-neutral { stroke: #64748b; }
-.mdgm .s-line { stroke: #94a3b8; }
-.mdgm .s-accent { stroke: #3b82f6; }
-.mdgm .s-green { stroke: #16a34a; }
-.mdgm .s-amber { stroke: #d97706; }
-.mdgm .s-red { stroke: #dc2626; }
