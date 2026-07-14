@@ -4,28 +4,24 @@ title: "PPC Science"
 tags: vector-space
 ---
 
-A PPC professional forms a hypothesis, assigns a treatment, observes a response, and moves the next dollar toward the treatment that worked. Change the audience, hold the creative fixed. Change the landing page, hold the bid fixed. Split traffic, wait, measure, update. The laboratory runs continuously, and every failed experiment costs real money.
+A PPC professional changes an audience, creative, landing page, bid, or budget. Then they observe a response and move the next dollar. The cadence resembles experimental science: intervene, measure, update. But most PPC work optimizes a system; only some identifies what the advertising caused.
 
-This is advertising science.
-
-It is conducted with some of the worst scientific data still tolerated in a trillion-dollar industry.
-
-The treatment record comes from the platform selling the treatment. The outcome begins as a pixel firing, may become a form fill, may eventually become a qualified lead in a CRM, and may become money months later in a different system. The join key is a query parameter somebody remembered to save. Treatment definitions change with the auction. Outcome definitions change with the campaign settings. The control group is whoever the platform did not happen to reach. The instrument reports its own success.
+The treatment record comes from the platform selling the treatment. The outcome begins as a pixel firing. It may become a form fill, a qualified lead in a CRM, and eventually money in a different system. A query parameter somebody remembered to save becomes the join key. Treatment definitions change with the auction. Campaign settings change outcome definitions. Whoever the platform did not happen to reach becomes the control group. The instrument reports its own success.
 
 Then the scientist is asked for ROAS by Friday.
 
 ## The field diagnosis
 
-PPC professionals already know what is broken. You can recover the diagnosis from the repairs they repeat.
+PPC professionals reveal the diagnosis through the repairs they repeat.
 
 Capture the gclid before it disappears. Carry it through the hidden form field. Store it on the CRM contact. Deduplicate the browser pixel against the server event. Score the lead. Upload the qualified stage. Upload closed-won. Pass the revenue value. Reverse the conversion when the customer refunds. Reconcile Google Ads against GA4, the CRM, Stripe, and the bank. Pick a source of truth. Explain why none of the totals match.
 
-This is not a collection of tracking tricks. It is a vernacular theory of measurement.
+These tracking tricks form a practical theory of the outcome label.
 
-| What the practitioner says | What the scientist means |
+| What the practitioner says | What the repair changes |
 |---|---|
-| Feed back qualified leads, not form fills | Improve the validity of the outcome label |
-| Preserve the click ID | Maintain unit-level linkage from treatment to outcome |
+| Feed back qualified leads, not form fills | Make the optimization target resemble business value |
+| Preserve the click ID | Keep the acquisition event joined to the later outcome |
 | Deduplicate pixel and CAPI | Prevent repeated observations |
 | Track refunds and chargebacks | Observe the outcome at its final horizon |
 | Standardize conversion actions | Hold the dependent variable's definition fixed |
@@ -35,39 +31,55 @@ This is not a collection of tracking tricks. It is a vernacular theory of measur
 | Wait for conversion lag | Account for right-censored outcomes |
 | Stop calling it after twelve conversions | Admit the test has no power |
 
-The vocabulary is different because the work grew out of operations, not a statistics department. The method is recognizable.
+The vocabulary grew out of operations. Though the method is recognizable, causal inference does not follow from plumbing.
 
-## They are asking for the rows
+In a purposive review of twenty r/PPC threads, the dominant question was how to choose the deepest outcome still frequent and fast enough for automated bidding. Form fills are abundant but weak; closed-won revenue is valid but sparse and late. Practitioners settled between them: qualified lead, answered call, booked appointment, MQL, SQL, or completed application. The trade-off appears in discussions of [qualified leads as the primary conversion](https://www.reddit.com/r/PPC/comments/14m2801), [low-quality conversions under Smart Bidding](https://www.reddit.com/r/PPC/comments/1uup4rz), and [offline imports for qualified leads](https://www.reddit.com/r/PPC/comments/1mb2gg7).
 
-The claim is visible in current job descriptions, where companies specify the data they wish the channels produced.
+Their requested repair is thin. Receive the inquiry, decide whether it is real and relevant, and preserve the click identity. Then return a label and perhaps a value to the bidding system.
+
+## The jobs ask for deeper joins
 
 Standard Bots wants a [Performance Marketing Lead](https://jobs.ashbyhq.com/standardbots/ae201278-1885-492d-b907-a9c810645e01) to connect advertising platforms to HubSpot so the algorithms learn from real business outcomes rather than form fills, and to measure the funnel from impression to closed-won. Viktor's [Founding Head of Search Acquisition](https://jobs.ashbyhq.com/viktor/5956d1bf-9159-4fc9-9a02-a710c334b84b) must upload offline conversions tied to closed-won, not lead volume, and read the raw data in SQL. Katana asks its [Senior Acquisition Manager](https://jobs.ashbyhq.com/katana/51b7810d-d7ab-4ee2-b25e-923271f75f1a) to connect low-level attribution events to SQL and closed-won records "so you know which programs are real."
 
-Those are not retail networks observing purchases inside their own stores. They are ordinary inbound businesses buying search and social traffic, losing the thread at the boundary between ad platform and sales system, and hiring a human to sew it back together.
+These are inbound businesses hiring people to repair the boundary between ad platform and sales system.
 
-The most explicit specification comes from Tradeify's [Marketing Data Engineering Lead](https://jobs.ashbyhq.com/tradeify/ad7d2d2d-de25-4a21-aa76-403e21576799). The role joins Google and Meta spend, web behavior, product use, and checkout transactions in a warehouse. It defines identity rules, event taxonomies, purchases, refunds, and chargebacks; handles deduplication and idempotency; monitors the pipelines; and turns ambiguous business questions into data contracts. That is not a dashboard job. It is the construction of an experimental dataset.
+Tradeify's [Marketing Data Engineering Lead](https://jobs.ashbyhq.com/tradeify/ad7d2d2d-de25-4a21-aa76-403e21576799) joins Google and Meta spend with web behavior, product use, and checkout transactions in a warehouse. The role defines identity rules and event taxonomies for purchases, refunds, and chargebacks. It handles deduplication and idempotency, then turns business questions into data contracts. The result is an experimental dataset.
 
-Upside's [Senior Marketing Analytics Manager](https://jobs.ashbyhq.com/upside/59da723c-f8b9-4463-8808-6f957154bb78) completes the specification: improve event tracking, identity stitching, attribution signals, and channel taxonomies, then run A/B tests, multivariate tests, and lift studies with statistical rigor. Keurig Dr Pepper compresses the observational half into one rule in its [Media Measurement Manager](https://careers.keurigdrpepper.com/es/trabajo/frisco/media-measurement-manager/42849/93272582624) posting: *verified exposure + verified sale = attributed sale*. Causal lift is a separate pillar.
+Upside's [Senior Marketing Analytics Manager](https://jobs.ashbyhq.com/upside/59da723c-f8b9-4463-8808-6f957154bb78) improves event tracking, identity stitching, attribution signals, and channel taxonomies, then runs A/B, multivariate, and lift tests. Keurig Dr Pepper's [Media Measurement Manager](https://careers.keurigdrpepper.com/es/trabajo/frisco/media-measurement-manager/42849/93272582624) follows one observational rule: *verified exposure + verified sale = attributed sale*. Causal lift remains separate.
 
-Across different companies and titles, the requested table has the same columns: treatment, unit, outcome, value, time, provenance. The requested controls have the same names: stable definitions, deduplication, traceability, reconciliation, experimental integrity.
-
-They are asking for scientific data.
+Across titles, the same columns recur: acquisition event, lead, downstream stage, value, and time. Measurement roles add provenance, stable definitions, deduplication, reconciliation, and experimental integrity. The first set supports optimization; the second can support inference.
 
 ## The optimization trap
 
-The industry has noticed half the problem. Google and Meta accept offline conversions, qualified leads, and value signals. Call-tracking products connect a keyword to a phone conversation. Attribution vendors join ad spend to CRM stages, Stripe payments, refunds, and lifetime value. Better labels make the bidding algorithm better.
+Existing products perform much of the repair. [WhatConverts](https://www.whatconverts.com/offline-conversion-tracking-for-agencies-clients/) captures calls, forms, chats, and click identity. It applies qualification rules and returns selected conversions to Google Ads. [CallRail](https://www.callrail.com/blog/callrail-debuts-conversion-signals-to-improve-ad-targeting) detects requested and booked appointments from calls. [Ruler Analytics](https://www.ruleranalytics.com/blog/ppc/google-ads-offline-conversions/) returns CRM stages and revenue. Google lets advertisers mark answers in [Google-hosted Search forms](https://support.google.com/google-ads/answer/17050941) as qualifying responses, and its [offline-conversion documentation](https://support.google.com/google-ads/answer/7012522) instructs advertisers to capture the gclid, store it with the prospect, and return later outcomes.
 
-That is useful. It is not yet science.
+This is the thin filter practitioners describe. A prospect, rule, conversation model, salesperson, CRM stage, or invoice supplies the label. The process spans the form, tracking software, sales operation, CRM, and platform.
 
-An optimizer needs a reward signal. A scientist needs a record of how the signal was produced. An optimizer can learn that customers resembling this customer produce more revenue. A scientist must still ask whether showing the ad changed the probability of revenue. An optimizer is rewarded for prediction under the platform's current policy. A scientist needs identification beyond that policy.
+It is useful. It still does not establish causation.
 
-The plumbing therefore runs in the wrong direction for inquiry. The advertiser improves a label in its own books, uploads the label into the platform, and receives a better bid decision. What comes back is a report. The row went in; the model's treatment assignment, joins, exclusions, and counterfactual did not come out.
+An optimizer needs a reward signal. A scientist needs its provenance and must still ask whether the ad changed the probability of revenue. Prediction under the platform's policy is not identification beyond it.
 
-This is why platform optimization can improve while advertiser knowledge does not. The machine gets a higher-quality dependent variable. The scientist still cannot reproduce the result.
+The plumbing runs inward. The advertiser improves and uploads a label, then receives a bid decision and report. The row goes in; treatment assignment, joins, exclusions, and counterfactual do not come out. Platform optimization can improve without improving advertiser knowledge.
+
+The advertiser pays for the click and absorbs bad leads. It discovers their value, maintains the join, and returns the result. That result supplies the reward signal to Smart Bidding, which [Google says sets bids for every auction using millions of signals](https://support.google.com/google-ads/faq/10286469). Google also [determines which ads show through that auction](https://support.google.com/google-ads/answer/6366577). The same company operates the bidder, auction, and market.
+
+Better labels can reduce waste and improve advertiser profit. They can also raise bids and transfer some gain to the auction operator. The workflow alone does not identify the incidence. It does reveal the conflict: private facts about customer value enter a bidder and auction controlled by the seller.
+
+The thin filter serves the advertiser, but sends better proprietary information to Google. After labeling the intervention, the advertiser receives decisions without a portable model or auditable account of how the label changed them.
+
+Google has repeatedly incorporated market information into a private model, degraded the surface through which participants inspected it, and returned an automated answer. That pattern supplies a reference class for this workflow.
+
+Publishers supplied pages and links; Google built the index, then moved answers onto its own surface. In a study of 68,879 searches, [Pew found](https://www.pewresearch.org/short-reads/2025/07/22/google-users-are-less-likely-to-click-on-links-when-an-ai-summary-appears-in-the-results/) that AI summaries reduced clicks to traditional results from 15% of visits to 8%, while only 1% clicked a source inside the summary. [The information remained useful after the reading surface disappeared](/impressions-and-clicks).
+
+Advertising followed the same pattern. Google moved targeting and bidding into private models while reducing inspectable records. Google says the [Performance Max placement report](https://support.google.com/google-ads/answer/11465047) is for brand safety, not comprehensive performance analysis; unlike newer channel-level reports, placement-level reporting does not attach clicks, cost, or conversions to each site. In 2022, Google [removed all App campaign placement data](https://ads-developers.googleblog.com/2022/02/important-changes-to-placement.html) from several API reports. [Smart Bidding still evaluates auction-time context](https://support.google.com/google-ads/answer/10964872), including signal combinations advertisers cannot reproduce. Participants contribute more information and receive fewer readable records.
+
+Offline conversions fit the pattern. The advertiser labels the outcome; Google returns a bid. Between them, the reading surface disappears. The advertiser cannot inspect what the model learned, how allocation changed, or whether the result could have been bought more cheaply.
+
+The direct evidence establishes information enclosure and conflicted delegation. Participant-produced information becomes private coordination, the reading surface withdraws, and dependence on the model increases. Google's repeated strategy makes rent extraction the leading explanation, but the evidence does not isolate this loop's additional rent. Measuring that incidence would require advertiser profit, price, and counterfactual-channel data that neither platform reporting nor the practitioner sample supplies.
 
 ## What good data would contain
 
-PPC science does not require perfect identity or a universal source of truth. Science routinely works across imperfect instruments. It requires that the imperfections be visible.
+PPC science does not require perfect identity or one truth. It requires visible imperfections.
 
 For a direct-response experiment, the minimum useful record is boring:
 
@@ -80,22 +92,22 @@ For a direct-response experiment, the minimum useful record is boring:
 7. The transformations, exclusions, and missingness between source and analysis.
 8. The assignment procedure, so selection can be distinguished from effect.
 
-Today's stack supplies fragments. The platform has eligibility, auction, and delivery. The advertiser has qualification, sale, margin, refund, and retention. The PPC practitioner has a spreadsheet, a click ID, and a weekly meeting where the fragments are made to sound like a result.
+The platform has eligibility, auction, and delivery. The advertiser has qualification, sale, margin, refund, and retention. The practitioner has a spreadsheet, click ID, and meeting where fragments become a result.
 
 No statistical technique repairs a treatment record it cannot inspect. No attribution model manufactures a control group. No beautiful dashboard makes a form fill into revenue.
 
 ## The compensating scientist
 
-This explains an odd feature of the profession. PPC work is described as campaign management, but much of the actual labor is instrument maintenance. Tag audits. Naming conventions. Negative keywords. CRM mappings. Conversion imports. Discrepancy explanations. Lead-quality meetings with Sales. Sheets that connect click IDs to opportunities. Small scripts that discover the webhook stopped firing eleven days ago.
+PPC is described as campaign management, but much of its labor maintains instruments. That labor includes tag audits, naming conventions, CRM mappings, conversion imports, discrepancy explanations, lead-quality meetings, join sheets, and scripts that discover a dead webhook.
 
 The practitioner is not merely operating the experiment. The practitioner is compensating for the missing laboratory.
 
-That labor has a testable shape. If the diagnosis is right, experienced PPC operators should independently converge on the same repairs: downstream outcome labels, persistent join keys, server-side events, deduplication, conversion governance, reconciliation, holdouts, and skepticism toward platform ROAS. The convergence should appear across agencies, in-house teams, lead generation, ecommerce, SaaS, calls, and bookings. It should become more pronounced as spend, conversion lag, and distance between lead and revenue increase.
+The diagnosis predicts convergence on downstream labels, persistent join keys, server-side events, deduplication, conversion governance, reconciliation, holdouts, and skepticism toward platform ROAS. Convergence should strengthen as spend, conversion lag, and distance from lead to revenue increase.
 
-The claim can be falsified. Sample the field's troubleshooting corpus. Code the failure location and proposed repair. If practitioners mostly complain about creative, bidding, and interface friction, the accounting diagnosis is overstated. If mature accounts accept platform conversions as adequate scientific evidence, it is wrong. If better downstream records do not change budget decisions or experimental conclusions, the missing rows are not the binding constraint.
+The first field sample supports an outcome-label and feedback-loop problem, not profession-wide demand for causal identification. If better downstream records do not change bidding or budgets, even that diagnosis is overstated.
 
-But if the same data repairs recur across the profession, the workarounds become evidence. The people closest to the experiments have been specifying the missing instrument all along.
+The workarounds specify the repair: an outcome deep enough to represent value, yet frequent and fast enough to train the optimizer. A smaller part of the profession tests incrementality.
 
-PPC professionals are advertising scientists. Their methods are not primitive. Their laboratory is.
+The practitioner repairs the label and preserves the join. Google uses that label inside a bidder it operates in an auction it monetizes. Better measurement may create value for both. The advertiser cannot inspect how much value it created, how the model used that value, or how the gain was divided.
 
 *Part of the [Vector Space](/vector-space) series.*
