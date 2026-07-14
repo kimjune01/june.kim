@@ -9,7 +9,7 @@ description: "v0.1.0"
 
 The publisher-exchange boundary is a contract. OpenAPI makes it auditable and enforceable by the same [coding agents](/skills-over-sdks) that integrate it. Every field that doesn't exist is a promise.
 
-*This post is the design-level view: the privacy-preserving core, three calls. The shipped server exposes a larger surface and the authoritative, machine-readable spec is [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/openapi.yaml) in the adserver repo. Where the two differ, the repo spec is the truth; the endpoint names below have been reconciled to it.*
+*This post is the design-level view: the privacy-preserving core, three calls. The shipped server exposes a larger surface and the authoritative, machine-readable spec is [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/apidocs/openapi.yaml) in the adserver repo. Where the two differ, the repo spec is the truth; the endpoint names below have been reconciled to it.*
 
 ## The Flow
 
@@ -218,7 +218,7 @@ Pre-filtering is the publisher's responsibility. If a health chatbot has 500 pos
 
 ## Events
 
-Three event types: `impression`, `click`, `viewable`. Each is a POST to `/event/{type}` (see [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/openapi.yaml) for the exact body).
+Three event types: `impression`, `click`, `viewable`. Each is a POST to `/event/{type}` (see [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/apidocs/openapi.yaml) for the exact body).
 
 `impression` fires when the creative renders (frequency-capped). `click` when the user taps it, which triggers the CPC charge on first click. `viewable` when the creative meets the viewability threshold. Downstream conversions are tracked off this path via [blind-signed coupons](/croupier) — see [attested attribution](/attested-attribution).
 
@@ -238,7 +238,7 @@ The spec is intentionally narrow. Everything not listed is the publisher's domai
 
 ## Agents Read This
 
-The authoritative [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/openapi.yaml) is what a coding agent reads to generate an integration client and to audit compliance against the wired routes. Packaged `install` / `verify` skills that wrap this flow are planned; today the spec itself is the interface.
+The authoritative [`openapi.yaml`](https://github.com/kimjune01/vectorspace-adserver/blob/master/apidocs/openapi.yaml) is what a coding agent reads to generate an integration client and to audit compliance against the wired routes. Packaged `install` / `verify` skills that wrap this flow are planned; today the spec itself is the interface.
 
 ---
 
