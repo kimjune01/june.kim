@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 // Shared Pyodide instance across all Repl components on the page
 let pyodidePromise: Promise<any> | null = null;
@@ -116,17 +116,12 @@ export default function Repl({ initialCode }: { initialCode?: string }) {
   const [code, setCode] = useState(initialCode || '');
   const [output, setOutput] = useState('');
   const [running, setRunning] = useState(false);
-  const [ready, setReady] = useState(false);
   const pyRef = useRef<any>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
 
-  useEffect(() => {
-    getPyodide().then(py => {
-      pyRef.current = py;
-      setReady(true);
-    });
-  }, []);
+  // Pyodide (~6 MB) loads lazily on the first Run, not on mount, so a reader
+  // scrolling past a Python cell downloads nothing until they ask to run it.
 
   function syncScroll() {
     if (textareaRef.current && preRef.current) {
@@ -136,17 +131,23 @@ export default function Repl({ initialCode }: { initialCode?: string }) {
   }
 
   async function run() {
-    const pyodide = pyRef.current;
-    if (!pyodide) return;
     setRunning(true);
     setOutput('');
     try {
+      let pyodide = pyRef.current;
+      if (!pyodide) {
+        setOutput('⏳ loading Python…');
+        pyodide = await getPyodide();
+        pyRef.current = pyodide;
+      }
       pyodide.runPython(`
 import sys, io, random, time
 sys.stdout = io.StringIO()
 sys.stderr = io.StringIO()
 random.seed(int(time.time() * 1000) % 2**32)
 `);
+      // Auto-load any imported packages (numpy, scipy, ...) from the Pyodide distribution
+      await pyodide.loadPackagesFromImports(code);
       await pyodide.runPythonAsync(code);
       const stdout = pyodide.runPython('sys.stdout.getvalue()');
       const stderr = pyodide.runPython('sys.stderr.getvalue()');
@@ -185,10 +186,10 @@ random.seed(int(time.time() * 1000) % 2**32)
         <span className="text-xs text-gray-500 font-mono">Python</span>
         <button
           onClick={run}
-          disabled={!ready || running}
+          disabled={running}
           className="px-2 py-0.5 border border-green-700 text-green-400 bg-transparent hover:bg-green-900/30 disabled:border-zinc-600 disabled:text-zinc-500 rounded text-xs font-mono transition-colors"
         >
-          {!ready ? '○' : running ? '···' : '▶'}
+          {running ? '···' : '▶'}
         </button>
       </div>
       <div className="relative">

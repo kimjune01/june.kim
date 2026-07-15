@@ -1,0 +1,78 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.5 — Optimization of Metabolic Fluxes" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>Optimization of metabolic fluxes</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 5 &middot; <a href="https://doi.org/10.5281/zenodo.8156596">10.5281/zenodo.8156596</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The flux cone holds every metabolic pattern the cell <em>could</em> run. Which one does it run? Flux balance analysis makes a bet: the cell picks the pattern that maximizes something it cares about (ATP, biomass, growth) subject to steady state and capacity limits. That is a <strong>linear program</strong>, and it runs right here in the browser.</p>
+    </div>
+
+    <h3>The optimization</h3>
+    <p>Everything is now in place. Steady state (Nv = 0) is a set of linear equalities. Reaction capacities and irreversibility (l&#8804;v&#8804;u) are linear bounds. Pick a linear objective (say, the rate of ATP production), and the best flux pattern is the solution of</p>
+    <p class="text-center text-gray-300 my-4" style="font-family:ui-monospace,monospace;font-size:0.9rem">maximize c&middot;v &nbsp; subject to &nbsp; Nv = 0, &nbsp; l &#8804; v &#8804; u</p>
+    <p>No kinetics, no rate constants, no concentrations: just stoichiometry and bounds. That is FBA's bargain: give up mechanistic detail and solve genome-scale networks with thousands of reactions in milliseconds. Here is a toy cell that must choose how to burn glucose.</p>
+
+    <Repl client:visible initialCode={`import numpy as np
+from scipy.optimize import linprog
+
+# Reactions:  v_uptake (-> glc), v_ferment (glc -> 2 ATP),
+#             v_respire (glc -> 18 ATP), v_atp (ATP -> biomass drain)
+# Metabolites (rows): glucose, ATP
+N = np.array([[ 1, -1, -1,  0],    # glucose balance
+              [ 0,  2, 18, -1]])   # ATP balance
+b = [0, 0]
+
+# glucose uptake capped at 10; everything irreversible (>= 0)
+bounds = [(0, 10), (0, None), (0, None), (0, None)]
+
+def solve(bounds, label):
+    # maximize ATP drain  ->  minimize -v_atp
+    r = linprog(c=[0, 0, 0, -1], A_eq=N, b_eq=b, bounds=bounds)
+    up, fer, res, atp = np.round(r.x, 1)
+    print(f"{label:12} ferment={fer:5}  respire={res:5}  ATP/time={-r.fun:6.1f}")
+
+solve(bounds, "aerobic")
+# now starve it of oxygen: respiration capped at 0
+solve([(0,10),(0,None),(0,0),(0,None)], "anaerobic")
+`} />
+
+    <p>Aerobic, the solver sends all ten glucose to respiration and makes 180 ATP: respiration yields nine times more ATP per glucose, so with unlimited oxygen it wins outright. Cap respiration (oxygen runs out) and the optimum flips to fermentation, salvaging just 20 ATP from the same feedstock. One bound changed the cell's entire metabolic strategy, and the LP found the new best route without being told how. That is the whole appeal: the model predicts behavior instead of prescribing it.</p>
+
+    <h3>What the objective smuggles in</h3>
+    <p>FBA's answer is only as good as its objective. Maximizing ATP, or biomass yield, or growth rate can give different flux patterns, and choosing the wrong one predicts the wrong biology. The source works through this: when yield-maximization is right, when it isn't, and why real cells often don't maximize yield at all. That last puzzle, cells that "waste" substrate on fast low-yield pathways, is the cliffhanger the enzyme-cost and microeconomics chapters resolve.</p>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cell-economics/eco-06/">🦠 Ch.6 Enzyme cost</a> &mdash; why yield-optimal isn't growth-optimal: pathways cost protein</li>
+      <li><a href="/reading/cell-economics/eco-08/">🦠 Ch.8 Microeconomics</a> &mdash; the fermentation-vs-respiration choice as consumer theory</li>
+      <li><a href="/reading/auction-theory/">💎 Auction Theory</a> &mdash; linear programming and duality, the same machinery</li>
+    </ul>
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Flux_balance_analysis"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Flux balance analysis</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Linear_programming"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Linear programming</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Adaptation notes</h3>
+    <p>The source covers objective choice, enzyme-constrained FBA, loopless and thermodynamic FBA, and flux variability. We build the plain LP on a four-reaction cell so the mechanism is visible end to end, and leave the constraint refinements as pointers: enzyme-constrained FBA is the bridge to Chapter 6. For real models, <a href="https://opencobra.github.io/cobrapy/">COBRApy</a> wraps exactly this LP around genome-scale networks.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 5</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cell-economics/eco-04/", label: "Metabolic flux distributions" }} next={{ href: "/reading/cell-economics/eco-06/", label: "The enzyme cost of a flux" }} />
+
+  </main>
+</Layout>

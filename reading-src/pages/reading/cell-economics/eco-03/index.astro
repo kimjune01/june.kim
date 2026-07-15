@@ -1,0 +1,89 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.3 — Cell Metabolism" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>Cell metabolism</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 3 &middot; <a href="https://doi.org/10.5281/zenodo.8156823">10.5281/zenodo.8156823</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Metabolism is a network of chemical reactions, each run by an enzyme. Two laws govern any single reaction: <strong>thermodynamics</strong> says which way it can go, and <strong>kinetics</strong> says how fast. Get these two right for one reaction and the whole network is just bookkeeping on top.</p>
+    </div>
+
+    <h3>How fast: enzyme kinetics</h3>
+    <p>An enzyme's rate depends on how much substrate is around. At low substrate the enzyme is starved and the rate climbs almost linearly; at high substrate every enzyme is busy and the rate saturates at a maximum. The Michaelis-Menten law captures both regimes with two constants: V<sub>max</sub>, the saturated rate, and K<sub>m</sub>, the substrate level at which the enzyme runs half-speed.</p>
+    <p class="text-center text-gray-300 my-4" style="font-family:ui-monospace,monospace;font-size:0.95rem">v = V<sub>max</sub> &middot; S / (K<sub>m</sub> + S)</p>
+
+    <SchemeRepl client:visible initialCode={`; Michaelis-Menten: rate as a function of substrate
+(define Vmax 10.0)   ; saturated rate
+(define Km    2.0)   ; half-saturation substrate level
+
+(define (rate S) (/ (* Vmax S) (+ Km S)))
+
+(for-each
+  (lambda (S)
+    (display "S = ") (display S)
+    (display "\\tv = ") (display (rate S)) (newline))
+  (list 0.5 2 8 50))
+
+; at S = Km the enzyme runs at exactly half Vmax
+(display "half-max at S=Km? ") (display (rate Km))
+`} />
+
+    <p>At S = K<sub>m</sub> the rate is exactly V<sub>max</sub>/2, confirming what the constant means. Doubling substrate from there buys less and less. It's the first hint of diminishing returns, a theme the economics chapters make precise.</p>
+
+    <h3>Which way: reaction thermodynamics</h3>
+    <p>A reaction's direction isn't fixed by its chemistry alone. It depends on how far the current mixture sits from equilibrium. The driving force is the Gibbs free energy change, &Delta;G = &Delta;G&deg; + RT&thinsp;ln&thinsp;Q, where Q is the reaction quotient, the ratio of product to substrate concentrations for this reaction. Net flux runs in whichever direction makes &Delta;G negative. Pile up product and you can stall a reaction, or push it backward, no matter how good the enzyme.</p>
+
+    <SchemeRepl client:visible initialCode={`; Reaction direction from thermodynamics: dG = dG0 + RT ln(Q)
+(define R 8.314)      ; J / (mol K)
+(define T 298.15)     ; K
+(define dG0 -7500.0)  ; standard free energy, J/mol (mildly favorable)
+
+(define (dG Q) (+ dG0 (* R T (log Q))))   ; Q = [product]/[substrate]
+
+(for-each
+  (lambda (Q)
+    (let ((g (dG Q)))
+      (display "Q = ") (display Q)
+      (display "\\tdG = ") (display (/ g 1000)) (display " kJ/mol -> ")
+      (display (if (< g 0) "forward" "reverse")) (newline)))
+  (list 0.01 1 100))
+
+; A favorable reaction still reverses once product accumulates enough.
+`} />
+
+    <p>The enzyme sets the speed; thermodynamics sets the sign. A cell that lets product pile up is like a firm whose warehouse is full. The line backs up regardless of how fast the workers are. Both facts return in Chapter 6, where the cost of a flux turns out to depend on how close to equilibrium the reaction is forced to run.</p>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cell-economics/eco-06/">🦠 Ch.6 Enzyme cost</a> &mdash; near-equilibrium reactions cost more enzyme, quantified</li>
+      <li><a href="/reading/cell-economics/eco-04/">🦠 Ch.4 Flux distributions</a> &mdash; from single reactions to whole steady-state networks</li>
+    </ul>
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Michaelis%E2%80%93Menten_kinetics"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Michaelis&ndash;Menten kinetics</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Gibbs_free_energy"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Gibbs free energy</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Adaptation notes</h3>
+    <p>The source frames metabolism as a dynamical system and develops rate laws and reaction thermodynamics in depth, including regulation and the dynamics of metabolite pools. We take saturating kinetics and free-energy-driven direction as the two load-bearing facts, the minimum needed to make later flux and cost models honest. Reversible rate laws, allosteric regulation, and the full dynamics are in the source.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 3</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cell-economics/eco-02/", label: "An inventory of the cell" }} next={{ href: "/reading/cell-economics/eco-04/", label: "Metabolic flux distributions" }} />
+
+  </main>
+</Layout>

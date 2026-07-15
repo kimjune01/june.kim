@@ -1,0 +1,95 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.2 — An Inventory of the Cell" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>An inventory of the cell</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 2 (Grigaitis &amp; Sz&eacute;liov&aacute;) &middot; <a href="https://doi.org/10.5281/zenodo.8156583">10.5281/zenodo.8156583</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Before you can talk about a budget, you have to count what's in the account. This chapter is the cell's balance sheet: what it's made of, in what proportions, and how many copies. What turns an inventory into an economy is that the account is <strong>finite</strong>. Protein has to fit.</p>
+    </div>
+
+    <h3>Biomass is mostly protein</h3>
+    <p>Across bacteria, yeast, and mammalian cells the bulk composition is strikingly alike: mostly water, and of the dry mass, protein is the largest fraction (roughly half), with RNA, lipids, DNA, and small molecules making up the rest. The exact split shifts with the environment and the growth rate (fast-growing cells carry more ribosomal RNA), and it varies cell to cell within one population. But the headline holds: a cell is, by mass, a bag of protein.</p>
+    <p>That matters because protein is what does the work. Every reaction in the next chapters is run by an enzyme, and every enzyme is drawn from the same fixed protein budget. Counting the proteome is counting the workforce.</p>
+
+    <h3>From cell mass to ribosome demand</h3>
+    <p>Take a bacterium's dry mass, the protein fraction, and the mass of an average protein, and you can read off how many protein molecules it holds. Then ask the question that foreshadows the whole book: to double, the cell must rebuild that entire proteome within one doubling time. Ribosomes do the building, at a roughly fixed speed. How many ribosomes does the schedule demand?</p>
+
+    <SchemeRepl client:visible initialCode={`; The cell as a balance sheet (E. coli, order-of-magnitude)
+(define dry-mass-g   0.3e-12)  ; dry mass per cell, grams
+(define protein-frac 0.55)     ; fraction of dry mass that is protein
+(define avg-aa       360)      ; amino acids in an average protein
+(define aa-mass-da   110)      ; average mass per amino acid, daltons
+(define avogadro     6.022e23)
+
+; protein molecules per cell = protein mass / mass of one protein
+(define protein-mass-g (* dry-mass-g protein-frac))
+(define one-protein-g  (/ (* avg-aa aa-mass-da) avogadro))
+(define n-protein (/ protein-mass-g one-protein-g))
+(display "proteins per cell   ~ ") (display n-protein) (newline)
+
+; total amino acids that must be re-polymerized to double
+(define total-aa (* n-protein avg-aa))
+
+; ribosomes needed = synthesis demand / speed, if every ribosome is translating
+(define elong-rate 20)   ; amino acids per second per ribosome
+(define (ribosomes-for doubling-s)
+  (/ (/ total-aa doubling-s) elong-rate))
+
+(display "ribosomes at 60 min ~ ") (display (ribosomes-for 3600)) (newline)
+(display "ribosomes at 20 min ~ ") (display (ribosomes-for 1200)) (newline)
+`} />
+
+    <p>Both figures land in the right range for real <em>E. coli</em>, and the second is three times the first. Cutting the doubling time to a third triples the ribosome demand. Ribosomes are themselves expensive protein, so a fast-growing cell must spend a large slice of its finite budget just on the machines that spend the budget. That tension, ribosomes competing with enzymes for the same proteome, is the engine of the growth laws in Chapter 7.</p>
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`# The cell as a balance sheet (E. coli, order-of-magnitude)
+avogadro = 6.022e23
+dry_mass_g, protein_frac = 0.3e-12, 0.55
+avg_aa, aa_mass_da, elong = 360, 110, 20
+
+n_protein = (dry_mass_g * protein_frac) / (avg_aa * aa_mass_da / avogadro)
+total_aa = n_protein * avg_aa
+print(f"proteins per cell ~ {n_protein:.2e}")
+for mins in (60, 20):
+    print(f"ribosomes at {mins} min ~ {total_aa / (mins*60) / elong:.2e}")
+`} />
+    </div>
+
+    <h3>Why round numbers</h3>
+    <p>The source leans on the <a href="https://bionumbers.hms.harvard.edu/">BioNumbers</a> database, where every figure traces to a measurement in the literature. That discipline matters: the models to come are only as trustworthy as the constants fed into them. We keep the same habit. The numbers above are round, sourced, and meant to be re-run with your own.</p>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cell-economics/eco-07/">🦠 Ch.7 Cell growth</a> &mdash; the ribosome-vs-enzyme tension counted here, turned into a growth law</li>
+      <li><a href="/reading/cell-economics/eco-01/">🦠 Ch.1 Economy of the cell</a> &mdash; the allocation decision this budget makes possible</li>
+    </ul>
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Ribosome"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Ribosome</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Proteome"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Proteome</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Adaptation notes</h3>
+    <p>The source chapter is a careful tour of cell components, sizes, densities, and biomass fractions with sourced numbers. We keep the one thread that the rest of the series needs (the finite, protein-dominated budget) and turn it into a single estimate that ties the inventory to growth. The full chapter has the complete tables and the physicochemical constraints (volume, density, surface area) we only gesture at.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 2</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cell-economics/eco-01/", label: "The economy of the cell" }} next={{ href: "/reading/cell-economics/eco-03/", label: "Cell metabolism" }} />
+
+  </main>
+</Layout>

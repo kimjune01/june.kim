@@ -1,0 +1,93 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.6 — The Enzyme Cost of a Flux" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>The enzyme cost of a flux</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 6 &middot; <a href="https://doi.org/10.5281/zenodo.8154381">10.5281/zenodo.8154381</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">FBA treated a flux as free once it balanced. It isn't. Every reaction needs enzyme to carry it, and enzyme is protein drawn from a finite budget. FBA asks what flux is possible. Ask the dual question instead: what does this flux <strong>cost</strong> in protein? The answer explains why cells reject the highest-yield pathway.</p>
+    </div>
+
+    <h3>Flux has a price in protein</h3>
+    <p>To carry flux v through a reaction, you need enzyme in proportion. The faster you push, the more copies you must build. The cost of a step is its flux divided by how fast one enzyme works, v / k<sub>cat</sub>. A pathway's total protein cost is the sum over its steps, and the slowest enzyme dominates the bill.</p>
+
+    <SchemeRepl client:visible initialCode={`; Enzyme cost of a pathway carrying flux J
+(define J 10.0)                    ; target flux through the pathway
+(define kcats (list 100.0 10.0 50.0))  ; turnover of each step's enzyme (1/s)
+
+; enzyme demand of one step = flux / turnover
+(define (demand kcat) (/ J kcat))
+
+(define demands (map demand kcats))
+(display "enzyme per step: ") (display demands) (newline)
+(display "total protein cost: ") (display (apply + demands)) (newline)
+(display "-> the slow middle step (kcat=10) is most of the bill")
+`} />
+
+    <h3>Thermodynamics raises the price</h3>
+    <p>Thermodynamics adds a second, subtler cost. A reaction run far from equilibrium goes almost entirely forward. Run it close to equilibrium and the backward reaction nearly cancels the forward one, so you must build extra enzyme just to net the same flux. The penalty is a factor 1 / (1 &minus; e<sup>&Delta;G/RT</sup>): negligible when &Delta;G is strongly negative, and exploding as &Delta;G approaches zero. Thermodynamic driving force and protein cost are two views of the same thing.</p>
+
+    <SchemeRepl client:visible initialCode={`; How much a near-equilibrium reaction inflates its enzyme cost
+(define R 8.314) (define T 298.15)
+
+; cost multiplier from the reversibility of the reaction
+(define (thermo-factor dG) (/ 1.0 (- 1.0 (exp (/ dG (* R T))))))
+
+(for-each
+  (lambda (dG)
+    (display "dG = ") (display (/ dG 1000)) (display " kJ/mol")
+    (display "\\tcost x") (display (thermo-factor dG)) (newline))
+  (list -20000.0 -4000.0 -1000.0))
+
+; A reaction pushed to the edge of equilibrium can cost several times
+; the enzyme a strongly-driven one would.
+`} />
+
+    <p>Now Chapter 5's puzzle dissolves. The highest-yield pathway may thread slow enzymes or near-equilibrium steps, making it ruinously expensive in protein. A lower-yield route that runs on cheap, fast, strongly-driven enzymes can leave more of the budget for growth. Yield-optimal and growth-optimal part ways precisely because flux costs protein. Enzyme cost minimization is the tool that picks the winner: choosing metabolite concentrations and pathways to carry a demanded flux for the least protein.</p>
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`import numpy as np
+J, kcats = 10.0, [100.0, 10.0, 50.0]
+demand = [J/k for k in kcats]
+print("enzyme per step:", np.round(demand, 3), "total:", round(sum(demand), 3))
+
+R, T = 8.314, 298.15
+for dG in (-20000, -4000, -1000):
+    print(f"dG={dG/1000:+.1f} kJ/mol -> cost x{1/(1-np.exp(dG/(R*T))):.2f}")
+`} />
+    </div>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cell-economics/eco-05/">🦠 Ch.5 Optimizing fluxes</a> &mdash; the yield-vs-growth puzzle this chapter answers</li>
+      <li><a href="/reading/cell-economics/eco-08/">🦠 Ch.8 Microeconomics</a> &mdash; cost and benefit made into a full economic choice</li>
+      <li><a href="/reading/cell-economics/eco-03/">🦠 Ch.3 Metabolism</a> &mdash; where the &Delta;G that sets this cost comes from</li>
+    </ul>
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations</p>
+    <ul>
+      <li><a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005167"><img src="/reading/wikipedia.svg" alt="src" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Noor et al., The protein cost of metabolic fluxes (PLOS Comp Biol, 2016)</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Adaptation notes</h3>
+    <p>The source chapter builds enzyme cost minimization carefully, including how metabolite concentrations are chosen to minimize protein demand and how alternative pathways compare. We take the two costs that drive the result, turnover and thermodynamic reversibility, and make each runnable on its own. The full optimization over metabolite levels, and the formal pathway comparison, are in the source and its companion paper.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 6</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cell-economics/eco-05/", label: "Optimization of metabolic fluxes" }} next={{ href: "/reading/cell-economics/eco-07/", label: "Principles of cell growth" }} />
+
+  </main>
+</Layout>

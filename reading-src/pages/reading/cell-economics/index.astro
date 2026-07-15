@@ -1,0 +1,69 @@
+---
+import ChapterTable from "../../../components/ChapterTable.astro";
+import Layout from '../../../layouts/Base.astro';
+import Neighbors from "../../../components/Neighbors.astro";
+---
+
+<Layout title="Economic Principles in Cell Biology" favicon="🦠">
+  <main>
+
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
+
+    <h1>🦠 Cell Economics</h1>
+    <p class="text-gray-400 mb-2">A runnable adaptation of <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology</a> by the Economic Cell Collective, licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> (<a href="https://doi.org/10.5281/zenodo.20819976">Zenodo</a>). This adaptation is <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p>
+    <p class="text-gray-400 mb-6">A cell spends a finite protein budget on catabolism, anabolism, and growth. Read it as an economy: allocation, cost, and trade-off, made runnable.</p>
+
+    <!-- SVG: coarse-grained cell as an economy -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 460 150" class="w-full max-w-lg" style="font-family: ui-monospace, monospace;">
+        <!-- nutrient -->
+        <text x="20" y="80" fill="currentColor" font-size="11" fill-opacity="0.6">nutrient</text>
+        <line x1="72" y1="76" x2="120" y2="76" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#ar)"/>
+        <!-- catabolism box -->
+        <rect x="120" y="55" width="90" height="42" rx="4" fill="#3b82f6" fill-opacity="0.12" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="165" y="72" text-anchor="middle" fill="#3b82f6" font-size="10" fill-opacity="0.9">catabolism</text>
+        <text x="165" y="88" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">enzymes &#966;c</text>
+        <!-- precursor -->
+        <line x1="210" y1="76" x2="250" y2="76" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"/>
+        <text x="230" y="68" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">precursor</text>
+        <!-- anabolism box -->
+        <rect x="250" y="55" width="90" height="42" rx="4" fill="#f59e0b" fill-opacity="0.12" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.5"/>
+        <text x="295" y="72" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.9">anabolism</text>
+        <text x="295" y="88" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.5">ribosomes &#966;a</text>
+        <!-- protein/biomass -->
+        <line x1="340" y1="76" x2="388" y2="76" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#ar)"/>
+        <text x="415" y="80" text-anchor="middle" fill="currentColor" font-size="11" fill-opacity="0.6">protein</text>
+        <!-- feedback loop: protein makes the enzymes -->
+        <path d="M 415,90 Q 415,130 230,130 Q 165,130 165,100" fill="none" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" stroke-dasharray="4,3" marker-end="url(#ar)"/>
+        <text x="230" y="145" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.4">protein builds the machines that make protein &#8594; exponential growth</text>
+        <defs>
+          <marker id="ar" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="currentColor" fill-opacity="0.5"/></marker>
+        </defs>
+      </svg>
+    </div>
+
+    <ChapterTable chapters={[
+  { href: "/reading/cell-economics/eco-01/", title: "The economy of the cell", desc: "The cell as a metabolic system that spends resources to rebuild itself. The allocation trade-off, made runnable." },
+  { href: "/reading/cell-economics/eco-02/", title: "An inventory of the cell", desc: "The proteome-dominated budget in numbers, and the ribosomes it takes to rebuild it each generation." },
+  { href: "/reading/cell-economics/eco-03/", title: "Cell metabolism", desc: "Two laws per reaction: thermodynamics sets the direction, Michaelis-Menten kinetics sets the speed." },
+  { href: "/reading/cell-economics/eco-04/", title: "Metabolic flux distributions", desc: "Steady state as Nv = 0, and the flux cone of everything the network could run." },
+  { href: "/reading/cell-economics/eco-05/", title: "Optimization of metabolic fluxes", desc: "Flux balance analysis as a linear program, solved in-browser. One bound flips the strategy." },
+  { href: "/reading/cell-economics/eco-06/", title: "The enzyme cost of a flux", desc: "Flux has a price in protein. Why the highest-yield pathway is often the wrong one." },
+  { href: "/reading/cell-economics/eco-07/", title: "Principles of cell growth", desc: "Ribosomes make ribosomes. The growth laws as what optimal allocation looks like plotted." },
+  { href: "/reading/cell-economics/eco-08/", title: "Microeconomics of cell metabolism", desc: "The cell as a consumer: overflow metabolism, Giffen goods, and diminishing returns." }
+]} icon="🦠" iconClass="text-yellow-300 hover:text-yellow-200" />
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-sm text-gray-400 mb-6">
+      The runnable models here are deliberately small: two or three reactions, solved in the browser. For genome-scale models use <a href="https://opencobra.github.io/cobrapy/">COBRApy</a>; for the full treatment, read the <a href="https://principlescellphysiology.org/book-economic-principles/">source book</a>.
+    </div>
+
+    <Neighbors>
+    <ul class="neighbors">
+      <li><a href="/reading/auction-theory/">💎 Auction Theory</a> &mdash; allocation of a scarce resource under constraints, the same optimization move</li>
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; strategies and trade-offs between competing agents</li>
+      <li><a href="/reading/control/">🎛 Control Theory</a> &mdash; feedback and steady states in dynamic systems</li>
+    </ul>
+    </Neighbors>
+
+  </main>
+</Layout>

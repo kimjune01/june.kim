@@ -1,0 +1,94 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.7 — Principles of Cell Growth" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>Principles of cell growth</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 7 (Golan, Hindley, de Jong, K&ouml;bis, Pascual Garcia, Wei&szlig;e) &middot; <a href="https://doi.org/10.5281/zenodo.8156979">10.5281/zenodo.8156979</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Chapter 1 split the proteome between two jobs and searched for the fastest growth. This chapter says <em>why</em> that search has an interior answer. Ribosomes are the one machine that builds machines, including more ribosomes. Growth is autocatalytic, and the split that maximizes it obeys a law you can read off a line.</p>
+    </div>
+
+    <h3>Ribosomes make ribosomes</h3>
+    <p>A cell grows by making protein, and protein is made by ribosomes, which are themselves protein. Devote a fraction &#966;<sub>R</sub> of the proteome to ribosomes and the rest to the metabolic enzymes that feed them precursors. Too few ribosomes and synthesis is slow; too many and they starve for precursor because ribosomes crowd out the enzymes that supply it. Growth is the throughput of these two coupled sectors, and it peaks somewhere in between.</p>
+    <p>The environment sets where. Rich medium makes precursors cheap, so the metabolic sector can be small and the cell should pack in ribosomes; poor medium demands more enzymes and fewer ribosomes. Search the split and watch the optimum move.</p>
+
+    <SchemeRepl client:visible initialCode={`; Balanced growth: proteome fraction phi-R to ribosomes, the rest to metabolism.
+; Ribosomes demand precursor; metabolism supplies it. Growth couples the two.
+(define gamma 3.0)   ; ribosome efficiency (precursor -> protein)
+
+(define (growth phi-R nutrient)
+  (let ((supply (* nutrient (- 1 phi-R)))   ; metabolic sector makes precursor
+        (demand (* gamma phi-R)))           ; ribosomal sector consumes it
+    (/ (* supply demand) (+ supply demand))))
+
+(define (best-phi nutrient)
+  (define (scan i bi bm)
+    (if (> i 99)
+        (list (/ bi 100.0) bm)
+        (let ((g (growth (/ i 100.0) nutrient)))
+          (if (> g bm) (scan (+ i 1) i g) (scan (+ i 1) bi bm)))))
+  (scan 1 1 0))
+
+(for-each
+  (lambda (n)
+    (let ((r (best-phi n)))
+      (display "nutrient=") (display n)
+      (display "  optimal ribosome fraction=") (display (car r))
+      (display "  growth=") (display (cadr r)) (newline)))
+  (list 1.0 4.0))
+`} />
+
+    <p>Richer nutrient pushes the optimal ribosome fraction up, and the growth rate with it. This is the content of the bacterial <em>growth laws</em>: measured across conditions, ribosome content rises almost linearly with growth rate. The linear relation is what optimal allocation looks like when you plot it. The cell isn't consulting a rule that says "make more ribosomes when you grow fast."</p>
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`import numpy as np
+gamma = 3.0
+def growth(phiR, nutrient):
+    s, d = nutrient*(1-phiR), gamma*phiR
+    return s*d/(s+d)
+
+grid = np.linspace(0.01, 0.99, 99)
+for n in (1.0, 4.0):
+    phi = grid[np.argmax([growth(p, n) for p in grid])]
+    print(f"nutrient={n}: phi_R*={phi:.2f}  growth={growth(phi, n):.3f}")
+`} />
+    </div>
+
+    <h3>Self-replication as autocatalysis</h3>
+    <p>The cell is an autocatalytic system: its product is itself. That's the deep reason growth is exponential, and why an optimum exists at all. Double the machinery and you double the rate of making machinery. The source develops this from first principles: it builds up the minimal self-fabricating system and the assumptions any growth model must make, then shows the growth laws fall out as consequences rather than assumptions built in. The allocation instinct from Chapter 1 turns out to be forced by the arithmetic of self-reproduction.</p>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cell-economics/eco-01/">🦠 Ch.1 Economy of the cell</a> &mdash; the same allocation, now with a mechanism under it</li>
+      <li><a href="/reading/cell-economics/eco-02/">🦠 Ch.2 Inventory</a> &mdash; where the ribosome count came from</li>
+      <li><a href="/reading/cell-economics/eco-08/">🦠 Ch.8 Microeconomics</a> &mdash; trade-offs between whole metabolic strategies</li>
+    </ul>
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Bacterial_growth"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Bacterial growth</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Autocatalysis"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Autocatalysis</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Adaptation notes</h3>
+    <p>The source chapter states the foundational assumptions of microbial growth and derives the growth laws, then builds toward mechanistic coarse-grained models linking gene expression to growth. We use the smallest coupled-sector model that reproduces the qualitative law (ribosome fraction rising with nutrient quality) as a runnable follow-through on Chapter 1. The formal derivations and the link to the experimental growth laws are in the source.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 7</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cell-economics/eco-06/", label: "The enzyme cost of a flux" }} next={{ href: "/reading/cell-economics/eco-08/", label: "Microeconomics of cell metabolism" }} />
+
+  </main>
+</Layout>

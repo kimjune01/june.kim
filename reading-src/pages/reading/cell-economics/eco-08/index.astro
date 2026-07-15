@@ -1,0 +1,87 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.8 — Microeconomics of Cell Metabolism" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>Microeconomics of cell metabolism</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 8 &middot; <a href="https://doi.org/10.5281/zenodo.19221188">10.5281/zenodo.19221188</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">The analogy has run one way. Economics lends metaphors to biology. This chapter closes the loop and borrows the actual apparatus: a cell allocating a protein budget across metabolic pathways <em>is</em> a consumer allocating income across goods. The same theorems apply, down to the paradoxes.</p>
+    </div>
+
+    <h3>The cell as a consumer</h3>
+    <p>A consumer spends a fixed income across goods to maximize utility. A cell spends a fixed proteome across pathways to maximize growth. Line them up and the correspondence is exact: income is the protein budget, price is the enzyme a pathway needs per unit product, and utility is growth rate. Consumer theory (budgets, marginal returns, substitution) is the right formalism here.</p>
+
+    <h3>Overflow metabolism: choosing the wasteful good</h3>
+    <p>The sharpest case is the one FBA couldn't explain. Respiration extracts far more ATP per glucose than fermentation, so a yield-maximizer would always respire. Yet <em>E. coli</em>, yeast, and tumor cells all ferment when sugar is plentiful, spilling most of their energy. Price it in protein and the paradox vanishes: respiration's machinery is bulky and slow per unit protein, fermentation's is cheap and fast. Under a tight protein budget, the cell buys ATP at the best rate per gram of enzyme, and that can be the low-yield good.</p>
+
+    <SchemeRepl client:visible initialCode={`; Two ways to buy ATP from glucose, under a fixed protein budget.
+;   respiration:  high yield per glucose, but expensive enzyme (slow, bulky)
+;   fermentation: low yield,  but cheap enzyme (fast, lean)
+(define budget 1.0)   ; proteome available to energy metabolism
+
+; each strategy: (ATP per glucose, protein cost per unit glucose flux)
+(define (atp-rate yield cost)
+  (let ((flux (/ budget cost)))   ; glucose flux the budget can sustain
+    (* flux yield)))              ; ATP produced per unit time
+
+(display "respiration  ATP/time: ")
+(display (atp-rate 18 6.0)) (newline)   ; 9x the yield, 12x the enzyme cost
+(display "fermentation ATP/time: ")
+(display (atp-rate 2 0.5)) (newline)
+
+(display "-> fermentation wins the RATE despite losing the YIELD 9:1")
+`} />
+
+    <p>The cell that ferments is not malfunctioning. Given its budget, it is buying energy at the higher rate, and rate is what growth rewards. Yield is the wrong objective; return per unit protein is the right one. This is why the FBA of Chapter 5 mispredicts real cells until enzyme cost is folded in.</p>
+
+    <h3>Giffen goods and diminishing returns</h3>
+    <p>Push the analogy and cell metabolism reproduces consumer theory's oddities. The source shows a metabolic <em>Giffen good</em>, a nutrient the cell consumes <em>more</em> of as it gets more expensive. That's the textbook violation of the law of demand, arising here from the same budget geometry that produces it in economics. And growth shows diminishing returns: each added increment of a resource buys less extra growth than the last, the marginal-utility curve bending over exactly as it does for a consumer. Biology was doing microeconomics all along.</p>
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`budget = 1.0
+def atp_rate(yield_, cost):
+    flux = budget / cost
+    return flux * yield_
+
+print("respiration  ATP/time:", atp_rate(18, 6.0))
+print("fermentation ATP/time:", atp_rate(2, 0.5))
+print("-> fermentation wins the rate despite losing the yield 9:1")
+`} />
+    </div>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cell-economics/eco-05/">🦠 Ch.5 Optimizing fluxes</a> &mdash; the overflow puzzle FBA raised</li>
+      <li><a href="/reading/cell-economics/eco-06/">🦠 Ch.6 Enzyme cost</a> &mdash; the protein price that makes this trade-off real</li>
+      <li><a href="/reading/economics/">💰 Economics</a> &mdash; the consumer theory this chapter borrows in earnest</li>
+      <li><a href="/reading/auction-theory/">💎 Auction Theory</a> &mdash; allocation and value, the recurring optimization</li>
+    </ul>
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Overflow_metabolism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Overflow metabolism</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Giffen_good"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Giffen good</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Adaptation notes</h3>
+    <p>The source chapter treats the cell as an economic consumer, works the overflow-metabolism example as Giffen behavior, and derives a linear response relation and a law of diminishing returns. We make the central trade-off (rate-per-protein beating yield) runnable, and point to the source for the Giffen construction and the response relations, which deserve their full treatment.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 8</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cell-economics/eco-07/", label: "Principles of cell growth" }} next={{ href: "/reading/cell-economics/", label: "Chapter map" }} />
+
+  </main>
+</Layout>

@@ -1,0 +1,89 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.4 — Metabolic Flux Distributions" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>Metabolic flux distributions</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 4 &middot; <a href="https://doi.org/10.5281/zenodo.8156504">10.5281/zenodo.8156504</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Zoom out from single reactions to the whole network and one assumption does most of the work: in steady growth, internal metabolites hold constant. Whatever is made is used. That single equation, <strong>Nv = 0</strong>, carves the space of all possible flux patterns down to a cone. This chapter is the geometry the next one optimizes over.</p>
+    </div>
+
+    <h3>Steady state as a balance sheet</h3>
+    <p>Collect the network's stoichiometry into a matrix <strong>N</strong>: one row per internal metabolite, one column per reaction, entries counting how many molecules each reaction makes or consumes. A flux vector <strong>v</strong> lists the rate of every reaction. The product Nv is the net rate of change of every metabolite pool. Steady state means none of them drift, so Nv = 0. Every metabolite's ledger balances: total in equals total out.</p>
+
+    <!-- SVG: 3-reaction linear pathway -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 420 70" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <text x="20" y="40" fill="currentColor" font-size="11" fill-opacity="0.5">ext</text>
+        <line x1="45" y1="36" x2="95" y2="36" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a4)"/>
+        <text x="70" y="28" text-anchor="middle" fill="#3b82f6" font-size="9" fill-opacity="0.8">v&#8321;</text>
+        <circle cx="110" cy="36" r="14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/><text x="110" y="40" text-anchor="middle" fill="currentColor" font-size="11">A</text>
+        <line x1="126" y1="36" x2="176" y2="36" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a4)"/>
+        <text x="151" y="28" text-anchor="middle" fill="#3b82f6" font-size="9" fill-opacity="0.8">v&#8322;</text>
+        <circle cx="191" cy="36" r="14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-opacity="0.5"/><text x="191" y="40" text-anchor="middle" fill="currentColor" font-size="11">B</text>
+        <line x1="207" y1="36" x2="257" y2="36" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a4)"/>
+        <text x="232" y="28" text-anchor="middle" fill="#3b82f6" font-size="9" fill-opacity="0.8">v&#8323;</text>
+        <text x="272" y="40" fill="currentColor" font-size="11" fill-opacity="0.5">ext</text>
+        <defs><marker id="a4" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="#3b82f6" fill-opacity="0.6"/></marker></defs>
+      </svg>
+    </div>
+
+    <p>The linear chain above makes A, converts A to B, and consumes B. Steady state forces v&#8321; = v&#8322; = v&#8323;. Nothing can accumulate in a pipe. Let's confirm it and find the whole solution space.</p>
+
+    <Repl client:visible initialCode={`import numpy as np
+from scipy.linalg import null_space
+
+# rows = internal metabolites A, B ; columns = reactions v1, v2, v3
+#   v1: -> A      (+1 to A)
+#   v2: A -> B    (-1 A, +1 B)
+#   v3: B ->      (-1 B)
+N = np.array([[ 1, -1,  0],
+              [ 0,  1, -1]])
+
+v = np.array([5, 5, 5])
+print("N @ v =", N @ v, "->", "steady state" if np.allclose(N@v, 0) else "drifting")
+
+# the space of ALL steady-state flux vectors is the null space of N
+ns = null_space(N)
+print("degrees of freedom:", ns.shape[1])
+print("basis flux mode:", np.round(ns[:,0] / ns[0,0], 3))  # scaled so v1 = 1
+`} />
+
+    <p>The null space has dimension one: every steady-state flux through this network is a multiple of the same pattern (1, 1, 1). Set the input rate and the rest follows. Real networks have branches and cycles, so the solution space grows into a whole cone of allowed flux patterns.</p>
+
+    <h3>The flux cone</h3>
+    <p>Add one more rule: some reactions run only forward, their flux can't go negative. The solution set was a subspace when reactions could run either direction. Restricted to non-negative flux, it becomes a <em>cone</em>, closed under adding allowed patterns and scaling them up, but with walls where irreversible reactions hit zero. The cone's edges are the <strong>elementary flux modes</strong>, the minimal self-contained routes through the network. Any steady flux the cell can run is a positive blend of these routes. The source develops this geometry in full. What we need next is only that the feasible region is a convex cone, because that's exactly the shape a linear program knows how to optimize.</p>
+
+    <Neighbors>
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/cell-economics/eco-05/">🦠 Ch.5 Optimizing fluxes</a> &mdash; pick the best point in this cone: flux balance analysis</li>
+      <li><a href="/reading/linear-algebra/">📐 Linear Algebra</a> &mdash; null spaces, the machinery under Nv = 0</li>
+    </ul>
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Flux_balance_analysis"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Stoichiometric network</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Elementary_modes"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Elementary flux modes</a></li>
+    </ul>
+    </Neighbors>
+
+    <h3>Adaptation notes</h3>
+    <p>The source chapter covers the flux cone, elementary flux modes, flux polyhedra, and several methods for exploring flux space. We keep the core, steady state as Nv = 0 and the feasible set as a convex cone, and make the null-space claim runnable on the smallest network that shows it. Elementary modes, cofactor balancing, and the full polyhedral picture are in the source.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 4</a>.
+    </div>
+
+    <PrevNext prev={{ href: "/reading/cell-economics/eco-03/", label: "Cell metabolism" }} next={{ href: "/reading/cell-economics/eco-05/", label: "Optimization of metabolic fluxes" }} />
+
+  </main>
+</Layout>

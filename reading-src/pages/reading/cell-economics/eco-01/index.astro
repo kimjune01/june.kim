@@ -1,0 +1,125 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Repl from '../../../../components/Repl';
+import SchemeRepl from '../../../../components/SchemeRepl';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Cell Economics Ch.1 — The Economy of the Cell" favicon="🦠">
+  <main>
+
+    <a href="/reading/cell-economics/" class="text-sm mb-4 inline-block">&larr; back to cell economics</a>
+
+    <h1>The economy of the cell</h1>
+    <p class="text-gray-400 text-sm mb-6">Economic Principles in Cell Biology &middot; Ch. 1 (Golan) &middot; <a href="https://doi.org/10.5281/zenodo.12592513">10.5281/zenodo.12592513</a></p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">A cell takes in nutrients and spends them to rebuild itself. Give it a fixed protein budget and one decision: how much to spend breaking food down versus building new machinery. The fastest-growing split falls out of arithmetic. That is the whole move of this book: read biology as an <strong>economy</strong>.</p>
+    </div>
+
+    <!-- 1. What a metabolic system is -->
+    <h3>A metabolic system</h3>
+    <p>The book starts from a definition broad enough to cover things that aren't alive: a metabolic system is <em>a well-defined system that takes up nutrients and uses them to sustain itself</em>. As a bare chemical equation, nutrients go in and the system (plus some waste) comes out:</p>
+
+    <div class="flex justify-center my-5">
+      <svg viewBox="0 0 420 60" class="w-full max-w-md" style="font-family: ui-monospace, monospace;">
+        <text x="10" y="35" fill="currentColor" font-size="12" fill-opacity="0.7">sugar + O&#8322; + ammonia</text>
+        <line x1="175" y1="30" x2="235" y2="30" stroke="currentColor" stroke-width="1.5" marker-end="url(#a2)"/>
+        <text x="250" y="35" fill="currentColor" font-size="12" fill-opacity="0.7">biomass + waste</text>
+        <defs><marker id="a2" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="currentColor" fill-opacity="0.5"/></marker></defs>
+      </svg>
+    </div>
+
+    <p>What makes it an <em>economy</em> and not just chemistry: the machines that run the reactions are made <em>by</em> the reactions. Enzymes catalyze the conversions, and the conversions build more enzymes. A system that spends its output on more of itself grows exponentially when fed. The book's running analogy is a construction firm: it buys land and materials (nutrients), pays workers (enzymes) to turn them into houses (biomass), and sells houses to hire more workers. Grow the payroll and you build faster.</p>
+
+    <!-- 2. The allocation decision -->
+    <h3>The one decision</h3>
+    <p>Coarse-grain the cell to two jobs. <strong>Catabolism</strong> breaks nutrients into a generic precursor. <strong>Anabolism</strong> (with the ribosomes) turns precursor into protein. Every protein made is one more worker, assigned to one job or the other. Call the fraction sent to catabolism &#966;<sub>c</sub>; the rest, 1&minus;&#966;<sub>c</sub>, goes to anabolism.</p>
+    <p>The two jobs run in series: precursor made by catabolism is the feedstock anabolism consumes. Overspend on either and the other starves. Growth is set by their combined throughput, which for two coupled steps behaves like</p>
+    <p class="text-center text-gray-300 my-4" style="font-family:ui-monospace,monospace;font-size:0.95rem">&#956; = (k<sub>c</sub>&#966;<sub>c</sub> &middot; k<sub>a</sub>(1&minus;&#966;<sub>c</sub>)) / (k<sub>c</sub>&#966;<sub>c</sub> + k<sub>a</sub>(1&minus;&#966;<sub>c</sub>))</p>
+    <p>where k<sub>c</sub> and k<sub>a</sub> are how fast a unit of each machine works. k<sub>c</sub> is set by the environment: rich food is easy to break down (high k<sub>c</sub>), poor food is not. There is no fixed best split. Search for it.</p>
+
+    <SchemeRepl client:visible initialCode={`; Coarse-grained cell: nutrient -> [catabolism] -> precursor -> [anabolism] -> protein
+; phi-c = proteome fraction spent on catabolism; the rest goes to anabolism.
+; The two steps run in series, so growth is their combined throughput.
+
+(define k-c 4.0)   ; catabolic rate (set by nutrient quality)
+(define k-a 2.0)   ; anabolic rate
+
+(define (mu phi)
+  (let ((cat (* k-c phi))
+        (ana (* k-a (- 1 phi))))
+    (/ (* cat ana) (+ cat ana))))   ; two steps in series
+
+; grid-search phi-c from 0.01 to 0.99 for the fastest-growing split
+(define (scan i best-i best-mu)
+  (if (> i 99)
+      (list (/ best-i 100.0) best-mu)
+      (let ((m (mu (/ i 100.0))))
+        (if (> m best-mu)
+            (scan (+ i 1) i m)
+            (scan (+ i 1) best-i best-mu)))))
+
+(define (report name)
+  (let ((r (scan 1 1 0)))
+    (display name) (display ": spend ")
+    (display (* 100 (car r))) (display "% on catabolism  (growth ")
+    (display (cadr r)) (display ")") (newline)))
+
+(set! k-c 4.0) (report "rich nutrient")   ; food is easy: catabolism is cheap
+(set! k-c 1.0) (report "poor nutrient")   ; food is hard: catabolism is the bottleneck
+`} />
+
+    <p>Poor food pushes the optimal split toward catabolism. When breaking nutrients down is the bottleneck, the cell rationally hires more workers for that job. This is the same reflex a bacterium shows: on weak carbon sources it raises the proteome fraction devoted to uptake and catabolism. The allocation tracks the environment.</p>
+
+    <div class="python-block my-2" style="display:none">
+      <Repl client:visible initialCode={`# Same model, Python
+def mu(phi, k_c, k_a=2.0):
+    cat, ana = k_c * phi, k_a * (1 - phi)
+    return cat * ana / (cat + ana)   # two steps in series
+
+def best_split(k_c):
+    grid = [i / 100 for i in range(1, 100)]
+    phi = max(grid, key=lambda p: mu(p, k_c))
+    return phi, mu(phi, k_c)
+
+for label, k_c in [("rich nutrient", 4.0), ("poor nutrient", 1.0)]:
+    phi, m = best_split(k_c)
+    print(f"{label}: spend {phi*100:.0f}% on catabolism (growth {m:.4f})")
+`} />
+    </div>
+
+    <!-- 3. Why optimality is fair game -->
+    <h3>Why ask what's optimal?</h3>
+    <p>Cells were not designed to maximize anything. Evolution has no optimality criterion built in, and fitness in a changing world has no clean formula. The book's argument is a conditional one: <em>if</em> a trait evolved in a roughly constant environment, then treating the end result as if it were optimized is a useful description of where selection landed. That licence is why cell models end up looking like economic models (allocation under constraints, cost against benefit) and why the rest of this series can compute with them.</p>
+
+    <!-- Neighbors -->
+    <Neighbors>
+
+    <p class="text-sm text-gray-500 mb-2">Related chapters</p>
+    <ul class="neighbors">
+      <li><a href="/reading/auction-theory/">💎 Auction Theory</a> &mdash; allocating a scarce resource to maximize value, the same optimization under constraints</li>
+      <li><a href="/reading/game-theory/">🎲 Game Theory</a> &mdash; when the competing agents are whole cells in a shared broth</li>
+    </ul>
+
+    <p class="text-sm text-gray-500 mb-2 mt-4">Foundations (Wikipedia)</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Metabolism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Metabolism</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Anabolism"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Anabolism &amp; catabolism</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Bacterial_growth"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>&#x2460; Exponential growth</a></li>
+    </ul>
+    </Neighbors>
+
+    <!-- Translation notes -->
+    <h3>Adaptation notes</h3>
+    <p>The source chapter (Ohad Golan, with Wolfram Liebermeister and Elad Noor) develops the metabolic-system definition and the construction-firm analogy in full, without equations. We keep both and add the smallest model that shows allocation responding to the environment. The two-steps-in-series growth law is a stand-in for the coarse-grained self-replicator developed later in the book (chapters on cell growth and resource allocation); the real thing links precursor supply to ribosome demand explicitly. The nutrient-quality result (poorer food, more catabolic protein) is the qualitative content of the bacterial growth laws.</p>
+
+    <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
+      Want the full treatment? Read <a href="https://principlescellphysiology.org/book-economic-principles/">Economic Principles in Cell Biology, Ch. 1</a>.
+    </div>
+
+    <PrevNext next={{ href: "/reading/cell-economics/", label: "Chapter map" }} />
+
+  </main>
+</Layout>
