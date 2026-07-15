@@ -233,7 +233,7 @@ lake build
 Zero `sorry`, and no trusted axiom of our own. `#print axioms` on every theorem below returns only Lean's three standard background axioms (`propext`, `Classical.choice`, `Quot.sound`), because the single modeling assumption is a `QueryMeasure` typeclass that concrete instances discharge by proof. The claims-to-theorems map:
 
 | Claim | Lean theorem | File |
-|---|---|---|
+|--------------------------|------------------------------------------|-----------------|
 | score = log(reported value) | `score_eq_log_reportedVal` | Efficiency.lean |
 | winner maximizes true welfare | `winner_maximizes_welfare` | Efficiency.lean |
 | truthful reporting is dominant | `vcg_dsic` | Strategyproof.lean |
