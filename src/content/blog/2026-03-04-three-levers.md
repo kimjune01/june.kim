@@ -74,7 +74,7 @@ Which raises a question about log(b). Whatever compression the platform applies,
 
 The lever's value is in the turning. An exchange that controls the compression function shifts allocation only transiently, during the lag while σ adapts. The durable rents are the real-estate kind: the government takes its cut through property taxes, agents take theirs on the switch. Here both collectors are the platform. Auction payments tax the sitting; [relocation fees](/relocation-fees) price the move. The scoring function has two levers and a market.
 
-*Editor's note: I originally read log(b) as the platform's lever, the third of the three in the title. The σ-compensation identity above is what changed my mind. The [formalization](/formally-verified-vcg-mechanisms) tracks the equilibrium version, that advertisers do rescale, as an open claim pending σ best-response theory; the identity itself is arithmetic.*
+*Editor's note: I originally read log(b) as the platform's lever, the third of the three in the title. The σ-compensation identity above is what changed my mind. The [formalization](/power-diagram-auction) tracks the equilibrium version, that advertisers do rescale, as an open claim pending σ best-response theory; the identity itself is arithmetic.*
 
 ---
 
