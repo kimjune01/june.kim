@@ -5,7 +5,7 @@ subtitle: "A carefully built benchmark that measures scoped reimplementation and
 tags: methodology, epistemology
 ---
 
-[MirrorCode](https://arxiv.org/abs/2606.30182) ([Epoch AI](https://epoch.ai/) and [METR](https://metr.org/)) hands an AI an execute-only binary plus its docs and asks it to rebuild the whole program, graded byte-exact against the reference. The headline: *"the largest software project AI can complete on its own."* I ran it through the [how-to-audit checklist](/how-to-audit-a-benchmark).
+[MirrorCode](https://arxiv.org/abs/2606.30182) ([Epoch AI](https://epoch.ai/) and [METR](https://metr.org/)) hands an AI an execute-only binary plus its docs and asks it to rebuild the whole program, graded byte-exact against the reference. Their headline asks: *"What's the largest software project AI can complete on its own?"* I ran it through the [how-to-audit checklist](/how-to-audit-a-benchmark).
 
 Full audit, re-runnable, with a receipt for every claim: https://github.com/kimjune01/mirrorcode-audit
 
@@ -16,7 +16,7 @@ MirrorCode is a well-built instrument that measures scoped *reimplementation fro
 MirrorCode is better-built than most, on several axes better than the [six benchmarks](/how-to-audit-a-benchmark) I audited before it. [Full credit, sourced.](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/04_what_it_gets_right.md)
 
 - *Cheat-proofing is real.* Four isolated containers, scoring where the agent can't reach it, and an execute-only reference [enforced with seccomp-BPF, Landlock, and `RLIMIT_CORE=0`](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/04_what_it_gets_right.md) that blocks every byte-read path to the binary, and the scoring isolation defeated a live Gemini binary-wrap cheat.
-- *I/O-only grading sidesteps the frame sin.* The oracle is `(stdout, stderr, exit)`, not final environment state, so the destructive-completion trap that [sank Terminal-Bench](/terminal-bench-frame) can't arise.
+- *I/O-only grading sidesteps the frame sin.* The oracle is `(stdout, stderr, exit)`, not final environment state, so the destructive-completion trap that [broke Terminal-Bench](/terminal-bench-frame) can't arise.
 - *It did the two things most benchmarks skip:* [a human baseline and a memorization screen](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/04_what_it_gets_right.md). Both incomplete, both worth attempting.
 - *Selection drained the recall surface.* A [complete per-target read](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/06_per_target.md) finds 2 recall targets out of 25, and none is a hash, image, or media target.
 - *Not saturated.* 8 of 25 targets were never solved to 100%, and the large ones sit near zero, so the instrument still discriminates at the frontier.
@@ -24,7 +24,7 @@ MirrorCode is better-built than most, on several axes better than the [six bench
 
 ## Some claims outrun the metric
 
-- *Construct validity.* MirrorCode sells autonomous whole-program builds. The metric scores *reimplementation from a live reference oracle*, something narrower than the title names. [The gap, laid out.](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/00_construct_validity.md)
+- *Construct validity.* MirrorCode's title claims autonomous whole-program builds. The metric scores *reimplementation from a live reference oracle*, something narrower than the title names. [The gap, laid out.](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/00_construct_validity.md)
 - *The human-labor claim is unmeasured belief.* Every "a human would take weeks/months" is *"we believe,"* from four contributors with a sevenfold spread and no completed baseline. The targets are open-source, so their [git histories anchor the real labor](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/01_human_labor.md). Creation runs to tens of developer-weeks, while MirrorCode's own baseline puts reimplementation at days. The marketing evokes the first and measures the second.
 - *Two targets are recall by construction* (below), so a pass means recalling a spec rather than reconstructing it. [Witnesses.](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/02_recall_and_verifiability.md)
 - *Contamination, unquantifiable.* MirrorCode's own screen flags [17 of 25 targets as screen-positive](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/03_how_much_is_recall.md) for memorization. Whether recall inflates the 56% headline cannot be computed from released data, because the join that would show it was never published.
@@ -124,6 +124,6 @@ The [complete read](https://github.com/kimjune01/mirrorcode-audit/blob/main/find
 
 ## One-sided by design
 
-The [audit](https://github.com/kimjune01/mirrorcode-audit) is one-sided by design: a witness proves a defect, and "no witness found" is not a clearance. Every quantitative claim traces to a cited paper section, a public repo file, or a re-runnable script, with per-cell figure reads labeled as such. The recall column is verified from the graded I/O, while the memorization and solve columns are figure reads, exact only in aggregate. Corrections are welcome, and re-derivable against the receipts. MirrorCode is a good instrument for a real capability. It measures a narrower thing than its title, and the narrowing favors the headline.
+The [audit](https://github.com/kimjune01/mirrorcode-audit) is one-sided by design. It can show a defect, never the absence of one. Every quantitative claim traces to a cited paper section, a public repo file, or a re-runnable script, with per-cell figure reads labeled as such. The recall column is verified from the graded I/O, while the memorization and solve columns are figure reads, exact only in aggregate. Corrections are welcome, and re-derivable against the receipts. MirrorCode is a good instrument for a real capability. It measures a narrower thing than its title, and the narrowing favors the headline.
 
 *Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode, and didn't get it. This audit uses only public artifacts and is re-runnable, so every claim traces to a cited receipt and stands or falls independent of me. My own [check 4](/how-to-audit-a-benchmark) says a producer's relationships are a conflict when the artifact is asked to be science, and that rule applies to the auditor too.*
