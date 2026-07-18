@@ -1,4 +1,5 @@
 ---
+import fs from 'node:fs';
 import '../styles/blog.css';
 import JuneBot from '../components/JuneBot.astro';
 
@@ -27,6 +28,14 @@ const VARIANTS: Record<string, { className: string; poetry?: boolean; mermaid?: 
 const v = VARIANTS[variant] ?? { className: '' };
 
 const dateStr = date.toISOString();
+
+// Google Scholar (Highwire) tags for paper-variant posts only — tagging casual
+// posts as scholarship makes Scholar distrust the whole site.
+const isPaper = variant === 'post-paper';
+const scholarDate = dateStr.slice(0, 10).replaceAll('-', '/');
+const pdfUrl = isPaper && fs.existsSync(`public/assets/${slug}.pdf`)
+  ? `https://june.kim/assets/${slug}.pdf`
+  : null;
 const tagsArray = typeof tags === 'string' ? tags.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : (tags || []);
 const excerpt = ''; // TODO: extract from content
 const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/default-icon.png';
@@ -41,6 +50,15 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
   <title>{title} | june.kim</title>
   {keywordsStr && <meta name="keywords" content={keywordsStr} />}
   <link rel="canonical" href={`https://june.kim/${slug}`}>
+
+  {isPaper && (
+    <Fragment>
+      <meta name="citation_title" content={title} />
+      <meta name="citation_author" content="June Kim" />
+      <meta name="citation_publication_date" content={scholarDate} />
+      {pdfUrl && <meta name="citation_pdf_url" content={pdfUrl} />}
+    </Fragment>
+  )}
 
   <meta property="og:type" content="article">
   <meta property="article:published_time" content={dateStr}>
