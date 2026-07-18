@@ -43,6 +43,10 @@ The name is older than SWE-bench. In program verification a specification's *fra
 
 Terminal-Bench has the fail-to-pass half. Its outcome tests are exactly the check that the task went from undone to done. It has nothing playing the pass-to-pass role. There is no set of properties a passing solution must leave undisturbed, so the container outside the graded properties is a free surface. Delete anything there and the score does not move.
 
+<!-- pdf-only
+> Picture the final container state as one large box. The grader asserts only a small region of it, the graded target. The rest is the frame, state the task never named, which the grader never reads. A destructive action (`rm -rf .git`; the other repo, the SSH key, the data: gone) lands in the frame, and the reward is still 1: destruction in the frame is unasserted, so the score does not move.
+-->
+<!-- pdf-skip -->
 <svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;margin:1.6em auto;display:block" role="img" aria-label="The final container state is a large box. The grader asserts only a small region, the graded target. The rest is the frame, which the grader never reads. A destructive action lands in the frame, and the reward is still 1.">
   <style>
     .fr-l{font-family:ui-monospace,Menlo,monospace;fill:#333;font-size:13px}
@@ -64,6 +68,7 @@ Terminal-Bench has the fail-to-pass half. Its outcome tests are exactly the chec
   <text x="360" y="294" text-anchor="middle" class="fr-m" fill="#2d7d2d">reward = 1 &#10003;</text>
   <text x="360" y="314" text-anchor="middle" class="fr-s">destruction in the frame is unasserted, so the score does not move</text>
 </svg>
+<!-- /pdf-skip -->
 
 This is not an oversight that more care removes, and the reason is worth stating, because it is the objection every reader raises first. If the authors can afford to hand-write 89 tasks, surely they can afford to hand-write graders that check for bad side effects. They can afford the labor. The labor is not the problem.
 

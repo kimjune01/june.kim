@@ -34,6 +34,13 @@ The thesis is that on the elementwise and transcendental fragment, soundness is 
 
 Two lines of prior work bracket the problem. **Differential compiler testing** (CSmith; Equivalence Modulo Inputs) checks that an optimization preserves *value*. **Autodiff fuzzing** (NablaFuzz) differentially tests AD behavior at the API and function level across libraries. Neither compares the gradient *before and after* a value-preserving optimization, which is the precise contract of differentiate-after-optimize.
 
+<!-- pdf-only
+| | unit = primitive | unit = optimization / composition |
+|---|---|---|
+| **checks value** | type checkers | DL-compiler fuzzers (NNSmith, Tzer, MT-DLComp) |
+| **checks gradient** | AD fuzzers (NablaFuzz) | **this work** (the isolated cell) |
+-->
+<!-- pdf-skip -->
 <table style="max-width:640px;margin:1.4em auto;font-size:14px;border-collapse:collapse;text-align:center">
 <thead><tr>
 <th style="padding:.5em;border:1px solid currentColor"></th>
@@ -48,6 +55,7 @@ Two lines of prior work bracket the problem. **Differential compiler testing** (
 <td style="padding:.5em;border:1px solid currentColor">AD fuzzers<br><small>NablaFuzz</small></td>
 <td style="padding:.5em;border:1px solid currentColor;font-weight:bold;background:currentColor;color:var(--bg,#fff)">this work<br><small>the isolated cell</small></td></tr>
 </tbody></table>
+<!-- /pdf-skip -->
 
 The cell this work isolates is **gradient preservation of the composition *optimize-then-AD***. Our flagship finding, a derivative rule whose primal is correct on negatives but whose gradient is NaN there, lives in it, invisible to a value-only oracle or to an API-level AD test that never sees the optimization.
 
@@ -55,9 +63,9 @@ The cell this work isolates is **gradient preservation of the composition *optim
 
 The maintainer's stated contract turns triage from a matter of taste into a matter of conformance. Every divergence between an optimized program and its reference falls into one of:
 
-- **value divergence on an ordinary input** &rarr; a bug, full stop;
-- **gradient divergence at a smooth point** (the gradient is unique there) &rarr; a bug, full stop;
-- **divergence only at a non-smooth tie** (both subgradients valid), or **only under inf / nan / fast-math** (tacit precision relaxations the contract permits) &rarr; *sanctioned residue*.
+- **value divergence on an ordinary input** → a bug, full stop;
+- **gradient divergence at a smooth point** (the gradient is unique there) → a bug, full stop;
+- **divergence only at a non-smooth tie** (both subgradients valid), or **only under inf / nan / fast-math** (tacit precision relaxations the contract permits) → *sanctioned residue*.
 
 We hunt the first two and filter the third. A finding either violates the stated contract or it does not; nothing rests on our judgment of whether it *should* be a bug.
 
@@ -78,6 +86,17 @@ Two honest limits on "refine": the guard states the constraint a rule must satis
 
 Many of these rewrites are **real-algebra identities**: `log(a*a) = 2 log(a)`, `(a+b)+c = a+(b+c)`, `(a/b)/c = a/(b*c)` are theorems in the real field, applied as if floats obeyed those laws. Floats **are not a ring**: no associativity, no exact inverses, a finite range, NaN and inf, rounding. The bugs in this class split along whether the identity is *even true in the reals*.
 
+<!-- pdf-only
+A rewrite `L = R` on this fragment is a ring identity applied to floats, and it can fail in exactly two ways:
+
+| | FALSE even in ℝ | TRUE in ℝ, false on floats |
+|---|---|---|
+| why | domain(L) wider than domain(R); e.g. `log(a*a) = 2*log(a)` at `a<0` | floats are not a ring; e.g. `(a+b)+c` vs `a+(b+c)` |
+| verdict | **self-adjudicating bug**; the analyzer decides this | **sanctioned residue**; fast-math forgives, analyzer blind by design |
+
+The relevant fast-math flag licenses the very law being applied, so this blind spot is the sanctioned class by design.
+-->
+<!-- pdf-skip -->
 <svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin:1.6em 0;display:block">
   <style>
     text { font-family: monospace; font-size: 13px; fill: currentColor; }
@@ -111,6 +130,7 @@ Many of these rewrites are **real-algebra identities**: `log(a*a) = 2 log(a)`, `
   <text x="310" y="280" text-anchor="middle" class="s">the relevant fast-math flag licenses the very law being applied;</text>
   <text x="310" y="294" text-anchor="middle" class="s">so this blind spot is the sanctioned class by design</text>
 </svg>
+<!-- /pdf-skip -->
 
 A self-adjudicating bug is **false even in the reals**. `log(a*a) = 2 log(a)` fails in the *partial* real field: the left side is defined for `a != 0` (since `a*a > 0`), the right only for `a > 0`. As partial functions they have different domains, so the identity is false before floats enter, and a real-valued model with domain tracking decides it. Fast-math does *not* excuse it; the fast-math flags license applying real-algebra laws to floats, and this identity fails *as a real-algebra law*.
 
@@ -124,6 +144,10 @@ Sanctioned residue is **true in the reals, false because floats are not a ring**
 
 A **proto-test** is a pair *(witnessing input class, predicted verdict)* derived from a rule's structure, not yet a real test because its oracle is model-predicted rather than ground-truth-pinned. It is *promoted* to a regression test by confirming the witness against the real implementation and pinning the expected value.
 
+<!-- pdf-only
+The flow: rule structure feeds the static analyzer, which emits the proto-test (witness and predicted verdict); confirming the witness against the real oracle promotes it to a minimal regression test. The static side is cheap, about thirty ops modeled once; the confirming run is expensive and spent only on the flagged.
+-->
+<!-- pdf-skip -->
 <svg viewBox="0 0 640 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin:1.6em 0;display:block">
   <style>
     text { font-family: monospace; font-size: 12px; fill: currentColor; }
@@ -154,10 +178,11 @@ A **proto-test** is a pair *(witnessing input class, predicted verdict)* derived
   <text x="480" y="112" text-anchor="middle" class="s">expensive run,</text>
   <text x="480" y="124" text-anchor="middle" class="s">only the flagged</text>
 </svg>
+<!-- /pdf-skip -->
 
-The **static generator** is a finite-class-cover analyzer ([`domain_analysis.py`](https://github.com/kimjune01/enzyme-soundness-gate/blob/main/domain_analysis.py)). A rewrite `L &rarr; R` is domain-unsound when `R` is undefined (non-finite) somewhere `L` is defined; the witness is any input in `domain(L) \ domain(R)`. The choice of which inputs to test is *not* hand-authored per rule: a fixed cover for the tier-1 operator family applies to every rule, and only the rule's structure varies, so authoring cost is amortized over the operator semantics (about thirty ops, modeled once) rather than paid per rule.
+The **static generator** is a finite-class-cover analyzer ([`domain_analysis.py`](https://github.com/kimjune01/enzyme-soundness-gate/blob/main/domain_analysis.py)). A rewrite `L → R` is domain-unsound when `R` is undefined (non-finite) somewhere `L` is defined; the witness is any input in `domain(L) \ domain(R)`. The choice of which inputs to test is *not* hand-authored per rule: a fixed cover for the tier-1 operator family applies to every rule, and only the rule's structure varies, so authoring cost is amortized over the operator semantics (about thirty ops, modeled once) rather than paid per rule.
 
-**The cover must be refined by the rule's own definedness break-points.** A single sign representative per variable is sound only when the rule's break-points coincide with the class boundaries, that is, when the sole break-point is zero, as in both findings (`log(a*a)`, `cbrt'`): every negative behaves alike, so `a=-2` witnesses the whole class. A rule with an *interior* break-point breaks this: `log((a-3)(a+3)) &rarr; log(a-3)+log(a+3)` is real-valued and unsound for `a<-3` (both factors negative, product positive, but `log` of each factor is NaN), yet a point-sampled `a=-2` agrees on both sides and the rule is wrongly certified sound. Sign is not a uniform partition for it. The sound form, then, is not point-sampling a fixed cover but tracking each subterm's sign/definedness *set* and refining the partition at the constants the rule introduces, a sound over-approximation (this is what the sweep, §(sweep), builds; the shipped point-sampler is its exact instance only on break-point-zero rules). Tier-1 decidability also assumes the exponent in any `pow` is a literal constant: a non-integer exponent narrows the domain on negatives where an integer one does not, and a variable exponent leaves the fragment.
+**The cover must be refined by the rule's own definedness break-points.** A single sign representative per variable is sound only when the rule's break-points coincide with the class boundaries, that is, when the sole break-point is zero, as in both findings (`log(a*a)`, `cbrt'`): every negative behaves alike, so `a=-2` witnesses the whole class. A rule with an *interior* break-point breaks this: `log((a-3)(a+3)) → log(a-3)+log(a+3)` is real-valued and unsound for `a<-3` (both factors negative, product positive, but `log` of each factor is NaN), yet a point-sampled `a=-2` agrees on both sides and the rule is wrongly certified sound. Sign is not a uniform partition for it. The sound form, then, is not point-sampling a fixed cover but tracking each subterm's sign/definedness *set* and refining the partition at the constants the rule introduces, a sound over-approximation (this is what the sweep, §(sweep), builds; the shipped point-sampler is its exact instance only on break-point-zero rules). Tier-1 decidability also assumes the exponent in any `pow` is a literal constant: a non-integer exponent narrows the domain on negatives where an integer one does not, and a variable exponent leaves the fragment.
 
 The **dynamic gate** confirms by reimplementing the rule's two forms, enumerating an edge lattice, and comparing value and gradient against the reference, auto-filtering the residue.
 
@@ -180,6 +205,14 @@ The complement is the region where the question is well-posed, and on it the cas
 
 The partition exists in three tiers:
 
+<!-- pdf-only
+| tier | operators | status |
+|---|---|---|
+| tier 1: finite | log sqrt cbrt pow div exp | decidable by enumeration; in scope, exhaustive |
+| tier 2: parametric | tan, gamma (poles) | needs symbolic reasoning |
+| tier 3: fractal | sin(1/x) near 0 | no partition, float-aliased; out of scope, ill-posed |
+-->
+<!-- pdf-skip -->
 <svg viewBox="0 0 620 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin:1.5em 0;display:block">
   <style>
     text { font-family: monospace; font-size: 12px; fill: currentColor; }
@@ -202,6 +235,7 @@ The partition exists in three tiers:
   <text x="10" y="112" class="s">in scope, exhaustive</text>
   <text x="609" y="112" text-anchor="end" class="s">out of scope, ill-posed</text>
 </svg>
+<!-- /pdf-skip -->
 
 On the fragment, the blind spots are exactly the sanctioned and ill-posed zones; the fragment's edge is where we stop, and §(limitations) names what lies past it. A tensor compiler's elementwise core is tier 1 but for a few transcendentals like tan and gamma, which is what makes it a clean target.
 
@@ -209,6 +243,13 @@ On the fragment, the blind spots are exactly the sanctioned and ill-posed zones;
 
 The two findings below were reported to Enzyme-JAX, and the static analyzer recovers both from rule structure alone.
 
+<!-- pdf-only
+| issue | rule | the bug |
+|---|---|---|
+| [#2570](https://github.com/EnzymeAD/Enzyme-JAX/issues/2570) | `LogSimplify` | `log(a*a) → 2*log(a)`, `log(pow(x,y)) → y*log(x)`, and the constant `log(a*b)`/`log(a/b)` cases narrow the domain (real for `a≠0`, real only for `a>0`) and return NaN on finite negatives. The analyzer recovers all four from structure, **including the constant-sign dependence**: a negative constant breaks the identity, a positive one is sound. |
+| [#2571](https://github.com/EnzymeAD/Enzyme-JAX/issues/2571) | `CbrtOp` derivative | the rule routes the gradient through `pow(x,-2/3)`, NaN for negative `x`, while `cbrt` is real and smooth there. Primal correct, gradient poisoned. The repro is a one-line mutation of the maintainer's own test: flip the inputs from positive to negative, expected gradients unchanged, the rule yields NaN. |
+-->
+<!-- pdf-skip -->
 <table style="max-width:720px;margin:1.4em auto;font-size:13px;border-collapse:collapse">
 <thead><tr>
 <th style="padding:.5em;border:1px solid currentColor;text-align:left">issue</th>
@@ -219,7 +260,7 @@ The two findings below were reported to Enzyme-JAX, and the static analyzer reco
 <tr>
 <td style="padding:.5em;border:1px solid currentColor"><a href="https://github.com/EnzymeAD/Enzyme-JAX/issues/2570">#2570</a></td>
 <td style="padding:.5em;border:1px solid currentColor"><a href="https://github.com/EnzymeAD/Enzyme-JAX/blob/c3406f67b1a1530fd4e99c34d70a5b1327f7be37/src/enzyme_ad/jax/Passes/EnzymeHLOOpt.cpp#L27376"><code>LogSimplify</code></a></td>
-<td style="padding:.5em;border:1px solid currentColor"><code>log(a*a) &rarr; 2*log(a)</code>, <code>log(pow(x,y)) &rarr; y*log(x)</code>, and the constant <code>log(a*b)</code>/<code>log(a/b)</code> cases narrow the domain (real for <code>a&ne;0</code>, real only for <code>a&gt;0</code>) and return NaN on finite negatives. The analyzer recovers all four from structure, <strong>including the constant-sign dependence</strong>: a negative constant breaks the identity, a positive one is sound.</td>
+<td style="padding:.5em;border:1px solid currentColor"><code>log(a*a) → 2*log(a)</code>, <code>log(pow(x,y)) → y*log(x)</code>, and the constant <code>log(a*b)</code>/<code>log(a/b)</code> cases narrow the domain (real for <code>a&ne;0</code>, real only for <code>a&gt;0</code>) and return NaN on finite negatives. The analyzer recovers all four from structure, <strong>including the constant-sign dependence</strong>: a negative constant breaks the identity, a positive one is sound.</td>
 </tr>
 <tr>
 <td style="padding:.5em;border:1px solid currentColor"><a href="https://github.com/EnzymeAD/Enzyme-JAX/issues/2571">#2571</a></td>
@@ -227,6 +268,7 @@ The two findings below were reported to Enzyme-JAX, and the static analyzer reco
 <td style="padding:.5em;border:1px solid currentColor">the rule routes the gradient through <code>pow(x,-2/3)</code>, NaN for negative <code>x</code>, while <code>cbrt</code> is real and smooth there. Primal correct, gradient poisoned. The repro is a <strong><a href="https://github.com/kimjune01/enzyme-soundness-gate/blob/main/cbrt_repro.mlir">one-line mutation of the maintainer's own test</a></strong>: flip the inputs from positive to negative, expected gradients unchanged, the rule yields NaN.</td>
 </tr>
 </tbody></table>
+<!-- /pdf-skip -->
 
 Both are self-adjudicating divergences on ordinary finite inputs, and both fall out of `domain(L) \ domain(R)` over the sign cover.
 
