@@ -40,7 +40,45 @@ Each carries a re-fetchable receipt. [Per-target audit.](https://github.com/kimj
 
 ## What I'd report instead
 
-MirrorCode asks three questions: how large a program, how much faster than a human, and how reliably. Collapsing them into "56%" is the problem. The [constructive fix](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/05_recommendation.md) is a preregistered size-by-time-by-success profile. Plot whole-task success and time-to-success against program size, censor failures rather than dropping them, split out contamination, and show uncertainty so the curve can't imply precision it lacks. Wall-clock is the capability axis, not dollars, since a model's compute is negligible against a human SWE's time. The audit can't build this profile, because the run records aren't public. So the ask is the smaller one: publish the per-task, per-model results that already sit in the paper as a figure, and validate or dispute the findings against the repo.
+MirrorCode asks three questions: how large a program, how much faster than a human, and how reliably. Collapsing them into "56%" is the problem. The [constructive fix](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/05_recommendation.md) is a preregistered size-by-time-by-success profile. Plot whole-task success and time-to-success against program size, censor failures rather than dropping them, split out contamination, and show uncertainty so the curve can't imply precision it lacks.
+
+<svg viewBox="0 0 680 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;margin:1.6em auto;display:block" role="img" aria-label="An illustrative profile: whole-task success against wall-clock to a full solve, one cluster per program-size bucket (small, medium, large). Success falls and uncertainty grows with size. The frontier is drawn as a bootstrap band rather than a line, and each point carries a Wilson interval on success and a bootstrap interval on time.">
+  <style>
+    .ax{stroke:#999;stroke-width:1}
+    .gr{stroke:#e8e8e8;stroke-width:1}
+    .lbl{font-family:ui-monospace,Menlo,monospace;fill:#555;font-size:12px}
+    .tk{font-family:ui-monospace,Menlo,monospace;fill:#888;font-size:11px}
+    .cap{font-family:ui-monospace,Menlo,monospace;fill:#666;font-size:11px}
+    .s{stroke:#2d7d2d;fill:#2d7d2d}
+    .m{stroke:#c0803a;fill:#c0803a}
+    .l{stroke:#2b6cb0;fill:#2b6cb0}
+  </style>
+  <line class="gr" x1="90" y1="177.5" x2="620" y2="177.5"/>
+  <line class="ax" x1="90" y1="45" x2="90" y2="310"/>
+  <line class="ax" x1="90" y1="310" x2="620" y2="310"/>
+  <text class="tk" x="84" y="49" text-anchor="end">100%</text>
+  <text class="tk" x="84" y="181" text-anchor="end">50%</text>
+  <text class="tk" x="84" y="313" text-anchor="end">0</text>
+  <text class="lbl" x="28" y="178" text-anchor="middle" transform="rotate(-90 28 178)">whole-task success</text>
+  <text class="lbl" x="355" y="336" text-anchor="middle">wall-clock to a full solve (log)</text>
+  <path d="M95,62 C250,72 420,150 615,248 L615,300 C420,244 250,120 95,96 Z" fill="#999" fill-opacity="0.12"/>
+  <line class="s" x1="175" y1="58" x2="225" y2="58" stroke-width="1.4"/>
+  <line class="s" x1="200" y1="48" x2="200" y2="68" stroke-width="1.4"/>
+  <circle class="s" cx="200" cy="58" r="4"/>
+  <line class="m" x1="335" y1="164" x2="425" y2="164" stroke-width="1.4"/>
+  <line class="m" x1="380" y1="136" x2="380" y2="192" stroke-width="1.4"/>
+  <circle class="m" cx="380" cy="164" r="4"/>
+  <line class="l" x1="490" y1="289" x2="600" y2="289" stroke-width="1.4"/>
+  <line class="l" x1="545" y1="262" x2="545" y2="305" stroke-width="1.4"/>
+  <circle class="l" cx="545" cy="289" r="4"/>
+  <circle class="s" cx="470" cy="60" r="4"/><text class="tk" x="481" y="64">small programs</text>
+  <circle class="m" cx="470" cy="80" r="4"/><text class="tk" x="481" y="84">medium</text>
+  <circle class="l" cx="470" cy="100" r="4"/><text class="tk" x="481" y="104">large</text>
+  <text class="cap" x="355" y="362" text-anchor="middle">Illustrative. Success and time by program size, the shape to report in place of one number.</text>
+  <text class="cap" x="355" y="378" text-anchor="middle">The frontier is a bootstrap band, not a line; bars are Wilson (success) and bootstrap (time) intervals.</text>
+</svg>
+
+Wall-clock is the capability axis, not dollars, since a model's compute is negligible against a human SWE's time. The audit can't build this profile, because the run records aren't public. So the ask is the smaller one: publish the per-task, per-model results that already sit in the paper as a figure, and validate or dispute the findings against the repo.
 
 ## Per-target, all 25
 
