@@ -15,10 +15,10 @@ MirrorCode is a well-built instrument that measures scoped *reimplementation fro
 
 MirrorCode is better-built than most, on several axes better than the [six benchmarks](/how-to-audit-a-benchmark) I audited before it. [Full credit, sourced.](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/04_what_it_gets_right.md)
 
-- *Cheat-proofing is real.* Four isolated containers, scoring where the agent can't reach it, and an execute-only reference [enforced with seccomp-BPF, Landlock, and `RLIMIT_CORE=0`](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/04_what_it_gets_right.md) that blocks every byte-read path to the binary. ProgramBench only assumed execute-only. MirrorCode closes the holes, and its scoring isolation defeated a live Gemini binary-wrap cheat.
+- *Cheat-proofing is real.* Four isolated containers, scoring where the agent can't reach it, and an execute-only reference [enforced with seccomp-BPF, Landlock, and `RLIMIT_CORE=0`](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/04_what_it_gets_right.md) that blocks every byte-read path to the binary, and the scoring isolation defeated a live Gemini binary-wrap cheat.
 - *I/O-only grading sidesteps the frame sin.* The oracle is `(stdout, stderr, exit)`, not final environment state, so the destructive-completion trap that [sank Terminal-Bench](/terminal-bench-frame) can't arise.
 - *It did the two things most benchmarks skip:* [a human baseline and a memorization screen](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/04_what_it_gets_right.md). Both incomplete, both worth attempting.
-- *Selection drained the recall surface.* A [complete per-target read](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/06_per_target.md) finds 2 recall targets out of 25, against ProgramBench's [21 of 201](/programbench-measures-recall). None is a hash, image, or media target.
+- *Selection drained the recall surface.* A [complete per-target read](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/06_per_target.md) finds 2 recall targets out of 25, and none is a hash, image, or media target.
 - *Not saturated.* 8 of 25 targets were never solved to 100%, and the large ones sit near zero, so the instrument still discriminates at the frontier.
 - *The paper body is candid.* It concedes the code is piecemeal, "would not be merged," and that the results don't show AI can do arbitrary implementation work. The overreach is in the title, not the methods section.
 
@@ -82,7 +82,45 @@ Wall-clock is the capability axis, not dollars, since a model's compute is negli
 
 ## Per-target, all 25
 
-The [complete read](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/06_per_target.md) gives every target a verdict and sweeps the full rejection taxonomy from the prior audits: recall, implementation-pinned render, undiscoverable entry point, self-capturing golden, scale, and the non-determinism family. The tally across all 25: 2 recall, 7 scale, 13 clean, 3 private unread. Everything else is absent in the public set or neutralized by the non-determinism screen and the selection away from reverse-engineering targets. One whole-benchmark caveat remains. Every gold output is the reference's own I/O, a self-capturing oracle with no independent contract check.
+The [complete read](https://github.com/kimjune01/mirrorcode-audit/blob/main/findings/06_per_target.md) gives every target a verdict and sweeps the full rejection taxonomy from the prior audits: recall, implementation-pinned render, undiscoverable entry point, self-capturing golden, scale, and the non-determinism family. The tally across all 25: 2 recall, 7 scale, 13 clean, 3 private unread.
+
+<svg viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;margin:1.6em auto;display:block" role="img" aria-label="A grid of 25 cells, one per MirrorCode target, colored by verdict: 13 clean, 7 scale, 2 recall (brotlid and mailauth), and 3 private targets left unread.">
+  <style>
+    .c{fill:#2d7d2d} .s{fill:#c0803a} .r{fill:#c0392b} .u{fill:#b3b3b3}
+    .lg{font-family:ui-monospace,Menlo,monospace;fill:#444;font-size:13px}
+    .cap{font-family:ui-monospace,Menlo,monospace;fill:#666;font-size:11px}
+  </style>
+  <rect class="c" x="44" y="36" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="92" y="36" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="140" y="36" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="188" y="36" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="236" y="36" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="44" y="84" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="92" y="84" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="140" y="84" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="188" y="84" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="236" y="84" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="44" y="132" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="92" y="132" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="140" y="132" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="s" x="188" y="132" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="s" x="236" y="132" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="s" x="44" y="180" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="s" x="92" y="180" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="s" x="140" y="180" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="s" x="188" y="180" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="s" x="236" y="180" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="r" x="44" y="228" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="r" x="92" y="228" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="u" x="140" y="228" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="u" x="188" y="228" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="u" x="236" y="228" width="40" height="40" rx="6" fill-opacity="0.9"/>
+  <rect class="c" x="320" y="44" width="14" height="14" rx="3"/><text class="lg" x="342" y="56">clean · 13</text>
+  <rect class="s" x="320" y="74" width="14" height="14" rx="3"/><text class="lg" x="342" y="86">scale · 7</text>
+  <rect class="r" x="320" y="104" width="14" height="14" rx="3"/><text class="lg" x="342" y="116">recall · 2 · brotlid, mailauth</text>
+  <rect class="u" x="320" y="134" width="14" height="14" rx="3"/><text class="lg" x="342" y="146">private, unread · 3</text>
+  <text class="cap" x="160" y="300" text-anchor="middle">Every MirrorCode target as one cell, colored by verdict.</text>
+</svg> Everything else is absent in the public set or neutralized by the non-determinism screen and the selection away from reverse-engineering targets. One whole-benchmark caveat remains. Every gold output is the reference's own I/O, a self-capturing oracle with no independent contract check.
 
 ## One-sided by design
 
