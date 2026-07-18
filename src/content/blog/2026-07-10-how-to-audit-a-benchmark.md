@@ -7,6 +7,8 @@ tags: methodology, epistemology
 
 Over the past few months I audited seven benchmarks: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), and [MirrorCode](https://github.com/kimjune01/mirrorcode-audit). Each one broke in a different place, and one, re-audited after its revision, mostly held. This post compresses the lenses into a checklist a stranger can run.
 
+*Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode, one of the audits drawn on here. An interest disclosure, not a funding one; it changes none of the receipts, which is the point of check 4 below.*
+
 <table style="max-width:700px; margin:1em auto; font-size:14px;">
 <colgroup><col style="width:11em"><col style="width:7em"><col></colgroup>
 <thead><tr><th style="background:#f0f0f0">audit</th><th style="background:#f0f0f0">broke at</th><th style="background:#f0f0f0">finding</th></tr></thead>

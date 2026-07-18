@@ -9,6 +9,8 @@ tags: methodology, epistemology
 
 **Verdict in one line:** a well-built instrument that measures scoped *reimplementation from a working oracle*, partly via *recall* of these specific public programs, and is marketed as autonomous *creation*. The engineering is good. The claim on the number is not.
 
+*Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode. This audit uses only public artifacts and is re-runnable; every claim below traces to a cited receipt, so it stands or falls independent of me. My own [check 4](/how-to-audit-a-benchmark) says a producer's relationships are a conflict when the artifact is asked to be science, and that rule applies to the auditor too.*
+
 ## At a glance
 
 | Pro | Con |
