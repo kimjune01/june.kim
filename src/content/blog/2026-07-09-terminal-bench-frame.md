@@ -10,7 +10,7 @@ keywords: Terminal-Bench, terminal agents, benchmark, construct validity, frame 
 <!-- pdf-skip -->
 *A construct-validity audit of Terminal-Bench 2.1, the current version of the terminal-agent benchmark. The paper is a live, re-runnable artifact; this is its readable preprint. Every number links to a receipt a skeptic re-runs.*
 
-*Live artifact, every receipt included: [github.com/kimjune01/terminal-bench-audit](https://github.com/kimjune01/terminal-bench-audit). Reproduce any verdict with `harness/regrade.sh <task> <mutation>`: it pulls the pinned image, runs the reference solution, appends the mutation, runs the official grader, and reads the reward. `REPRODUCE.md` is the setup; `CLAIMS.md` maps every number to its receipt. CC BY-SA.*
+*Live artifact, every receipt included: [github.com/kimjune01/terminal-bench-audit](https://github.com/kimjune01/terminal-bench-audit). Reproduce any verdict with `harness/regrade.sh <task> <mutation>`: it pulls the pinned image, runs the reference solution, appends the mutation, runs the official grader, and reads the reward. `REPRODUCE.md` is the setup; `CLAIMS.md` maps every number to its receipt. CC BY-SA. Archived at [doi.org/10.5281/zenodo.21463236](https://doi.org/10.5281/zenodo.21463236).*
 <!-- /pdf-skip -->
 
 ## Abstract {-}
