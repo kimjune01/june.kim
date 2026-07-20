@@ -13,11 +13,17 @@ autonumber: true
 
 ## Problems posed by Frontier AI Auditing
 
+### The four assurance levels
+
 Brundage and coauthors propose four AI Assurance Levels for third-party audits of frontier AI companies (see glossary). The levels are ordered by confidence, and access is the input they name first: higher levels "tend to require greater access to non-public information relative to lower levels, larger allocations of time and talent, and more sophisticated infrastructure and analysis." AAL-2 adds "greater access to non-public information, less reliance on companies' statements, and a more holistic assessment of company-level risks." At the top, auditors "can rule out the possibility of materially significant deception by the auditee."
 
 The paper is candid about feasibility: "The two highest assurance levels (AAL-3 and AAL-4) are not yet technically and organizationally feasible, but we outline research directions to change this." Its own estimates, offered with stated high uncertainty, put AAL-1 engagements at $300,000 to $600,000, AAL-2 at $1,000,000 or more, and AAL-3/4 at several million dollars annually.
 
+### What the framework leaves on the shelf
+
 The framework gets four things right, and this response keeps all of them: the independence requirements, the cooling-off periods, the revenue diversification, the warning against companies shopping for favorable auditors. The paper also poses its hard problems, naming completeness, gaining confidence that "there aren't material omissions that would change the audit conclusions," along with accountability, coordination, and cost.
+
+### Each problem has a deployed precedent
 
 Each of these problems has a precedent with decades of operating history, and the paper knows the fields that hold them. It works the financial-auditing analogy through an appendix surveying six assurance domains, proposes a [PCAOB](https://pcaobus.org/) analogue, and builds AAL-4 on the arms-control verification literature. What it takes from them is the internal controls, the inspection rights, the accreditation body with revocation power. What it leaves on the shelf is the discipline that made them work before any of that machinery existed: assurance attached to the artifact at the boundary, against a declared standard, under a named signature. Assembled, those three are the level below their first.
 
@@ -46,9 +52,13 @@ Two problems survive the matching. Omissions from the declared boundary map get 
 
 ## The boundary as audit object
 
+### What financial auditing settled
+
 Financial auditing settled its audit-object question long ago. The audit attaches to the financial statements, the numbers that cross the boundary from firm to investors, verified against a declared public standard. Managerial accounting is out of scope. How the firm formulates its internal spreadsheets, allocates costs between divisions, or builds its dashboards is its own business. The auditor does enter the interior, sampling ledgers and confirming receivables, but that access is instrumental to verifying the boundary statements, and the opinion letter certifies the statements, never the interior. *Assurance attaches to the boundary artifact.*
 
 Segregation of duties is why a firm's self-reported numbers cannot stand alone, however honest the firm. A lab holds execution, custody, recording, and authorization at once when it trains a system, evaluates it, reports the score, and decides the release.
+
+### Separation into three parties
 
 The cure is accounting's cure, separation into parties: developers build, evaluation organizations measure, auditors verify. The monitoring logic is agency theory's oldest ([Alchian and Demsetz 1972](https://www.aeaweb.org/aer/top20/62.5.777-795.pdf); [Jensen and Meckling 1976](https://doi.org/10.1016/0304-405X%2876%2990026-X)); the party assignment is this response's. The separation fixes the boundary map. A crossing exists wherever work changes hands, so the map is induced by the division of labor rather than drawn by the audited.
 
@@ -60,6 +70,8 @@ Today's frontier evaluation engagements run in the shape that statute was writte
 
 Frontier AI Auditing's glossary takes "reasonable assurance" and maps it to AAL-2. But AAL-2's stated object is "company-level risks." The framework takes the term of art from a regime whose audit object is the boundary statement and aims it at the interior at large. Where mature practice does certify the interior, it does so only against specified criteria and declared assertions, criteria the AAL framework does not yet name.
 
+### Claims, crossings, and pinned artifacts
+
 Claim carries the [Verifiable Knowledge](https://june.kim/verifiable-knowledge) sense throughout, defined with its companions in the glossary: a statement shipped with the check that would refute it, entitlement conferred by replay. A score without its tasks, a safety statement without its test, a headline rate without its labels is an assertion, and its verdict is untrue rather than false.
 
 The same boundary shape recurs at every layer of the AI stack, because the same failure recurs. A claim becomes uncheckable at the moment its provenance is dropped, and crossings drop it. A benchmark's contract crosses when the benchmark publishes. An eval's claim crosses when the evaluator reports the number. A deployment's claim crosses when the system reaches a user. An audit's claim crosses when the auditor publishes the finding. At each crossing, the fix financial auditing found is available. Record what crosses, against a declared standard, under a name.
@@ -69,6 +81,8 @@ And the record must pin the artifact it describes. [Ristea and Mavroudis (2026)]
 Accounting has the precedent. A ledger's balances change too fast to audit as states, so the record attaches upstream, to the journal entries that change them, and the statements are derived. Tamper-evident change logs, the instrument their own highest level asks for, are journal entries under another name. The receipt follows the same path when the artifact is a stream, so each decision that feeds the artifact becomes a recorded, signed crossing. For now the legible surface for those decisions is the evaluation, since a release gate cites its evals and an eval can carry a full record. How much farther upstream the record can reach is an open question, and the standard should declare where its records stop.
 
 ## Evidence from zero-access audits
+
+### Eight audits from the public side
 
 Audits have budgets, so the governing discipline is Peirce's [economy of research](https://doi.org/10.1287/opre.15.4.643) (1879). Order the instruments by expected yield per dollar and spend on the highest-yield first. The economics of auditing reached the same prescription a century later. Verification is costly, so auditors buy it where the expected information per dollar is highest ([Townsend 1979](https://doi.org/10.1016/0022-0531%2879%2990031-0); [Border and Sobel 1987](https://econweb.ucsd.edu/~jsobel/Papers/auditing.pdf); [Mookherjee and Png 1989](https://doi.org/10.2307/2937855)). Applied to AI audits, the ordering is stark, because the cheapest instrument is the only one with demonstrated yield on the public record.
 
@@ -93,6 +107,8 @@ The checklist is [ordered by cost](https://june.kim/how-to-audit-a-benchmark), a
 
 A check specified this tightly also automates. [Determinacy](https://github.com/kimjune01/determinacy) certifies by grep which tasks a hidden test grades against a spec that never stated the requirement, and it audited [SWE-rebench](https://github.com/kimjune01/swe-rebench-audit), a benchmark it was not written for, down to a 14.5% pointer-checkable spine. An auditor's time is the cost of the first run, not of the hundredth.
 
+### No demonstrated yield from access
+
 Against those eight receipts, *internal access has no published demonstration of marginal yield*. No audit on the public record shows added interior access producing a finding, with receipts, that boundary verification could not reach. This response does not claim access adds nothing. It observes that one mechanism is demonstrated and the other is a promissory note. The claim that access adds assurance is theirs to substantiate, and the challenge is executable. Publish one such finding.
 
 Their own paper names the strongest candidates against this claim. It calls METR's [review of Anthropic's sabotage risk report](https://metr.org/assets/sabotage-risk-report-opus-4-6-review-mar-2026.pdf) "among the first AAL-1 audits," and cites UK AISI and CAISI pre-deployment testing that "identified safety issues that developers then addressed before release." Each engagement is real, each had access no stranger has, and each found something. None shipped a receipt.
@@ -116,6 +132,8 @@ Confidentiality is no shelter here, because their own framework concedes the mac
 
 Buying access is a compensating control, the second-best substitute auditing accepts when the preferred control is missing. The primary control it stands in for is the boundary record.
 
+### The closest head-to-head
+
 The closest thing to a head-to-head comparison ran in the wrong direction for internal access. On 8 July 2026, OpenAI [audited SWE-bench Pro](https://openai.com/index/separating-signal-from-noise-coding-evaluations/), estimated ~30% of tasks broken, and retracted its February recommendation of the benchmark. An unreleased pipeline flagged 27.4% of tasks; five unnamed engineers flagged 34.1%; the headline sits between. No per-task labels, no false-positive inspection, no released pipeline, so [nothing they published re-derives the number](https://june.kim/an-epistemic-ablation). A number that cannot be re-derived is not a wrong measurement; it is not a measurement.
 
 Same instrument, two audits, and the two numbers are compatible: a proven floor beneath a broader estimate. Accepting the ~30% requires trusting OpenAI; accepting the 15.0% requires only re-running the published checks. The warrant travels with the claim, or the claim travels on faith. *OpenAI had every resource needed to ship receipts and shipped none*; the zero-access audit is the one that survives deletion of its author.
@@ -138,7 +156,9 @@ The lesson is narrower than "access failed." Receipts remove dependence on the a
 
 </div>
 
-*Records raise catchability.* [DeAngelo (1981)](https://doi.org/10.1016/0165-4101%2881%2990002-1) decomposes audit quality into the probability that a breach is discovered and the probability that a discovered breach is reported. A replayable boundary record drives the discovery term toward one for whatever the record covers; the reporting term is what signatures and independence are for.
+### Records raise catchability
+
+[DeAngelo (1981)](https://doi.org/10.1016/0165-4101%2881%2990002-1) decomposes audit quality into the probability that a breach is discovered and the probability that a discovered breach is reported. A replayable boundary record drives the discovery term toward one for whatever the record covers; the reporting term is what signatures and independence are for.
 
 Receipt cost and access cost also scale differently, which is what the AAL cost curve shows.
 
@@ -153,7 +173,9 @@ Receipt cost and access cost also scale differently, which is what the AAL cost 
 
 What qualifies as a record? A record that always vindicates its keeper is a press release. Only a record that could convict is informative when it acquits.
 
-*Readers supply the probability of review.* A record nobody reads deters nothing, and this is the current failure. SWE-bench Verified's contamination was common knowledge while it stayed [the field's reported number for two years](https://june.kim/hiring-is-evals), records public, reading absent, consequence none. The market cannot correct what it cannot attribute.
+### Readers supply the probability of review
+
+A record nobody reads deters nothing, and this is the current failure. SWE-bench Verified's contamination was common knowledge while it stayed [the field's reported number for two years](https://june.kim/hiring-is-evals), records public, reading absent, consequence none. The market cannot correct what it cannot attribute.
 
 Review probability is an institutional variable. Standard-setters and professional associations in accounting and engineering supply it: a body that reads records, remembers signatures, and makes findings legible across firms. That reader function is a better fit for [AVERI](https://www.averi.org/) than pursuing access levels its own paper marks infeasible. Reading is feasible today; the records already exist wherever a boundary is public.
 
@@ -165,7 +187,9 @@ Both bounds point to the same starting design, and [land registration](https://e
 
 The practice even comes in two grades, cheapest first: a deeds registry records instruments without vouching for their validity, and a title registry guarantees what it registers. A title is itself a chain of instruments back to a root grant, which is the claim record under a different sovereign. The body should open as a deeds registry for provenance claims and grow toward reading, and eventually title-grade vouching, as demand concentrates.
 
-*Signatures attach the consequence.* A named signature gives the penalty an address, the way an engagement partner's name goes on an audit opinion and an engineer's stamp goes on a drawing. The verdict travels with the record and survives deletion of the signer; the name confers accountability, never authority.
+### Signatures attach the consequence
+
+A named signature gives the penalty an address, the way an engagement partner's name goes on an audit opinion and an engineer's stamp goes on a drawing. The verdict travels with the record and survives deletion of the signer; the name confers accountability, never authority.
 
 When vouching was local, every voucher held a stake in the outcome, and that stake disciplined the vouch. Across the compartment walls of a modern supply chain the voucher is now a stranger who can profit from a false vouch and lose nothing. A named signature puts that party back at the boundary. [Klein and Leffler (1981)](https://doi.org/10.1086/260996) state the condition exactly. Performance is self-enforcing when the rents lost by cheating exceed the one-time gain. [Shapiro (1983)](https://doi.org/10.2307/1881782) prices the premium such a reputation earns.
 
@@ -250,6 +274,12 @@ Auditing terms follow their established use in financial auditing and in [Brunda
 **Attestation.** The signed check log: *I ran this, here is the receipt.* Attestation identifies who stands behind a record; it confers no entitlement. An attestation without a replayable check beneath it is authority, not evidence.
 
 **Underdetermined.** Of a benchmark task: the public statement does not pin the behavior the hidden grader scores, so passing measures recovery of an unstated choice rather than solution of the stated problem.
+
+## Disclosures {-}
+
+*Funding.* This work received no funding. The author has no financial relationship with any organization whose benchmarks, products, or frameworks are assessed here, and no organization reviewed this response before publication.
+
+*Model use.* This response was drafted with LLM assistance, under the author's authorship, with the author answerable for every claim in it. LLMs also served as instruments inside the audits cited above: as coding agents executing published protocols, and as blind independent coders in the closure measurement behind the FrontierCode audit. Each such use resolves to a committed transcript or receipt in the linked repositories, on the same replay standard this response asks of others.
 
 ## References {-}
 
