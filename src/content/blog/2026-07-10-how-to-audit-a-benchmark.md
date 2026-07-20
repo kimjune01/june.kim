@@ -130,6 +130,28 @@ And build the instrument so it can come back empty. An audit that always finds s
 
 Name the cure, not only the disease. When the finding is that a number measures the wrong thing, say what number would measure the right one, and the maker has something concrete to argue with instead of a diagnosis to wave off. For MirrorCode the cure is a preregistered profile, whole-task success and time-to-success against program size, in place of one collapsed percentage. Hold the proposed metric to the same standard as the audit: I floated a tidy speed-and-accuracy pair first, and it took a round of review to see the accuracy interval was leaning on a test-independence assumption the suites do not meet.
 
+## File the sin upstream
+
+Two published metaevaluations already catalogue benchmark failure, and an audit should end by reconciling with them. [McGregor and coauthors](https://arxiv.org/abs/2510.21460) maintain [BenchRisk](https://benchrisk.ai/), 57 failure modes with 196 mitigations scored across 26 benchmarks, plus a [public registry](https://github.com/BenchRisk/BenchRisk) that accepts new modes through issue templates. [Reuel and coauthors](https://arxiv.org/abs/2411.12990) maintain [BetterBench](https://betterbench.stanford.edu/), 46 best practices assessed across a benchmark's lifecycle. Both catalogues grew on chatbot benchmarks, where the pipeline runs prompt to inference to judged output. That pipeline has no answer key, no executable grader, and no environment, so most of the contract's clauses fall outside it; the BenchRisk paper defers agentic benchmarks to future work for this reason.
+
+The reconciliation is one row per clause:
+
+<div class="table-wrap">
+<table style="max-width:100%; margin:1em auto; font-size:14px;">
+<colgroup><col style="width:5em"><col style="width:20em"><col></colgroup>
+<thead><tr><th style="background:#f0f0f0">clause</th><th style="background:#f0f0f0">nearest BenchRisk mode</th><th style="background:#f0f0f0">status</th></tr></thead>
+<tr><td>claim</td><td>47: benchmark does not measure a property linked to the user task</td><td>adjacent; the mode faults the reader's inference, while the quotable equivocation in the title is unregistered</td></tr>
+<tr><td>spec</td><td>none</td><td>hidden tests grading unstated choices are unregistered</td></tr>
+<tr><td>oracle</td><td>25: ground truth placed within the system chain</td><td>adjacent; the mode covers SUT developers cheating, while recall-only witnesses and self-capturing goldens are unregistered</td></tr>
+<tr><td>frame</td><td>none</td><td>filed from this checklist as <a href="https://github.com/BenchRisk/BenchRisk/issues/8">BenchRisk#8</a></td></tr>
+<tr><td>gold</td><td>none</td><td>answer keys failing their own graders are unregistered</td></tr>
+<tr><td>score</td><td>34&ndash;36, 57: sample size, uncertainty propagation and presentation</td><td>partial; miscomputed denominators and undisclosed exclusions are unregistered</td></tr>
+<tr><td>decay</td><td>4, 21, 23, 42, 44, 46, 49, 50</td><td>covered; cite the mode numbers</td></tr>
+</table>
+</div>
+
+So the checklist ends with a routing rule. When an audit surfaces a sin the registry already carries, cite the mode number, because the shared name is what lets maintainers and other auditors connect the finding to its siblings on other benchmarks. When it surfaces a sin the registry lacks, file it through the new-failure-mode template with the receipt and the cure attached, one filing at a time. The registry is where a finding outlives its benchmark: the verdict covered one artifact, the check covers every later one, and the filed mode is how the next auditor inherits both.
+
 ## The bill
 
 Every sin above was found with the benchmark's own shipped artifacts: its golds, its graders, its JSON, its tests. Nothing required privileged access, a big model, or a budget beyond a few dollars and the patience to read. That is the uncomfortable part for makers and the encouraging part for everyone else. The contract clauses are checkable at publication time, by the authors, for less than the cost of one leaderboard submission, and the cheapest one, run the answer key, would have caught a shipped defect in three of the benchmarks named here before anyone reported a score.
