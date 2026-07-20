@@ -55,6 +55,7 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     <Fragment>
       <meta name="citation_title" content={title} />
       <meta name="citation_author" content="June Kim" />
+      <meta name="citation_author_orcid" content="https://orcid.org/0009-0005-3153-9396" />
       <meta name="citation_publication_date" content={scholarDate} />
       {pdfUrl && <meta name="citation_pdf_url" content={pdfUrl} />}
     </Fragment>
@@ -80,7 +81,7 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     url: `https://june.kim/${slug}`,
     datePublished: dateStr,
     dateModified: dateStr,
-    author: { "@type": "Person", name: "June Kim", url: "https://june.kim" },
+    author: { "@type": "Person", name: "June Kim", url: "https://june.kim", sameAs: ["https://orcid.org/0009-0005-3153-9396"] },
     publisher: { "@type": "Person", name: "June Kim", url: "https://june.kim" },
     license: "https://creativecommons.org/licenses/by-sa/4.0/",
     mainEntityOfPage: { "@type": "WebPage", "@id": `https://june.kim/${slug}` },
