@@ -5,7 +5,7 @@ tags: epistemology, methodology
 autonumber: true
 ---
 
-*[Download PDF](/assets/assurance-at-the-boundary.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.21448999](https://doi.org/10.5281/zenodo.21448999) (CC BY-SA 4.0).*
+*[Download PDF](/assets/assurance-at-the-boundary.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.21461148](https://doi.org/10.5281/zenodo.21461148) (CC BY-SA 4.0).*
 
 ## Abstract {-}
 
