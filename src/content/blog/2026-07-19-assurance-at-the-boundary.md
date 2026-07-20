@@ -5,6 +5,8 @@ tags: epistemology, methodology
 autonumber: true
 ---
 
+*[Download PDF](/assets/assurance-at-the-boundary.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.21448999](https://doi.org/10.5281/zenodo.21448999) (CC BY-SA 4.0).*
+
 ## Abstract {-}
 
 [Frontier AI Auditing](https://arxiv.org/abs/2601.11699) proposes four AI Assurance Levels in which assurance deepens as auditors gain access to non-public information, at $300,000 to several million dollars annually by its authors' own estimates. That framework takes from financial auditing, engineering, and arms control their inspection rights and accreditation powers. Here we present the level below their first, adoptable immediately at the cost of an auditor's time: assurance attached to the artifact at the boundary, against a declared standard, under a named signature. The design is not novel. All but two of the problems their paper poses have solutions already running in one of those fields, yet none has been tried on AI. The stance we take is that entitlement to a claim comes from replay, so assurance can only attach where replay is possible, which is the boundary. The practice has already run from the public side. Audits of eight publicly accessible benchmarks surfaced severe defects, each with a re-runnable receipt, and no published audit shows internal access reaching anything boundary verification could not. What the receipts need now is a reader. [AVERI](https://www.averi.org/) could hold them today, without buying any access at all.
