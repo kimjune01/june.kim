@@ -8,7 +8,7 @@ import '../../styles/blog.css';
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hire June Kim | june.kim</title>
-  <meta name="description" content="June Kim — AI systems / research engineer. Independent benchmark auditing, agentic workflows, LLM evaluation, provenance, memory, developer tools. Anti-credence, pro-merit.">
+  <meta name="description" content="June Kim — AI systems / research engineer. Independent benchmark auditing, agentic workflows, LLM evaluation, provenance, memory, developer tools. Work you can run instead of claims you have to believe.">
   <link rel="canonical" href="https://june.kim/about">
   <link rel="icon" href="/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@ import '../../styles/blog.css';
 
       <p>I am an AI systems / research engineer. The depth is independent evaluation: I audit frontier coding benchmarks for construct validity and find where the headline metric measures the wrong thing, every verdict a re-runnable receipt. The breadth is shipping: 10+ years across Google, Loom, and startups, and fixes landed in dozens of open-source projects across Rust, Go, C++, and Python, which is what lets me read any benchmark's test suite in any stack.</p>
 
-      <p>The common thread is anti-credence, pro-merit: replace trust in credentials, affiliation, and polished claims with artifacts that earn trust through evidence, provenance, review, execution, and use.</p>
+      <p>The common thread is checkable work. I'd rather hand you something you can verify than something you have to believe.</p>
 
       <p>The best fit is a team that needs someone between research and product: build the system, run it against real workflows, measure what breaks, and turn the result into a better product or protocol.</p>
 
@@ -53,18 +53,26 @@ import '../../styles/blog.css';
         <li>Founding or early engineering roles around research-adjacent products.</li>
       </ul>
 
+      <h2>What other people staked on the work</h2>
+      <p>Judge these first. Every item is someone else's action on a public timestamp, not my description of my own work.</p>
+      <ul>
+        <li><strong>98 pull requests merged across 77 organizations in 2026</strong>, including <a href="https://github.com/hyperium/hyper/pulls?q=author%3Akimjune01">hyper</a>, <a href="https://github.com/pingcap/tidb/pulls?q=author%3Akimjune01">TiDB</a>, <a href="https://github.com/servo/servo/pulls?q=author%3Akimjune01">Servo</a>, <a href="https://github.com/EnzymeAD/Enzyme/pulls?q=author%3Akimjune01">Enzyme</a>, <a href="https://github.com/wild-linker/wild/pulls?q=author%3Akimjune01">wild</a>, <a href="https://github.com/flux-rs/flux/pulls?q=author%3Akimjune01">flux</a>, burn, luminal, ag2, and pertpy. A maintainer pressing merge is a cost paid by someone with no reason to flatter me. <a href="https://github.com/pulls?q=is%3Apr+author%3Akimjune01+is%3Amerged">Full list</a>.</li>
+        <li><strong>Archived and regradeable, with DOIs.</strong> Every audit ships its receipts to Zenodo, versioned, with a regrade script: <a href="https://doi.org/10.5281/zenodo.21463236">Terminal-Bench audit</a>, <a href="https://doi.org/10.5281/zenodo.20691978">SWE-bench Pro run</a>, <a href="https://doi.org/10.5281/zenodo.21461148">Assurance at the Boundary</a>. Anyone can re-run the grading and disagree with me on the record.</li>
+        <li><strong>Fixes filed upstream, not just findings published.</strong> <a href="https://github.com/harbor-framework/harbor/pull/2266">harbor#2266</a> implements the Terminal-Bench frame gate as an opt-in observational check, CI green, currently open. <a href="https://github.com/UKGovernmentBEIS/inspect_ai/pull/4462">inspect_ai#4462</a> does the same for Inspect. When I say a benchmark is broken, I send the patch.</li>
+      </ul>
+
+      <h2>Provenance</h2>
+      <p>Twice I have audited a coding benchmark, received no reply, and watched something happen anyway: <a href="/auditing-deepswe">DeepSWE</a> shipped a re-graded v1.1 eighteen days later in which <a href="/auditing-deepswe-v1-1">exactly the four tasks I flagged</a> climbed while the pooled rate held flat, and OpenAI <a href="https://openai.com/index/separating-signal-from-noise-coding-evaluations/">retracted its SWE-bench Pro recommendation</a> twenty-nine days after <a href="/a-determinacy-audit-of-swebench-pro">my determinacy audit</a> went up on <a href="https://github.com/scaleapi/SWE-bench_Pro-os/issues/108">Scale's tracker</a>. I claim no causation, only the dates, which sit on other people's servers. <a href="/an-epistemic-ablation">What the comparison is actually about.</a></p>
+
       <h2>Proof</h2>
       <ul>
-        <li>Benchmark and eval auditing: five public construct-validity audits of frontier coding benchmarks (<a href="/programbench-measures-recall">ProgramBench</a>, <a href="/a-determinacy-audit-of-swebench-pro">SWE-bench Pro</a>, <a href="/auditing-deepswe">DeepSWE</a>, SWE-rebench, SWE-bench Verified), plus <a href="https://github.com/kimjune01/determinacy">determinacy</a>, a reusable auditing tool. Each verdict is a grep-checkable receipt anyone can re-run.</li>
+        <li>Benchmark and eval auditing: public construct-validity audits of frontier coding benchmarks (<a href="/programbench-measures-recall">ProgramBench</a>, <a href="/a-determinacy-audit-of-swebench-pro">SWE-bench Pro</a>, <a href="/auditing-deepswe">DeepSWE</a>, <a href="/terminal-bench-frame">Terminal-Bench</a>, SWE-rebench, SWE-bench Verified), plus <a href="https://github.com/kimjune01/determinacy">determinacy</a>, a reusable auditing tool. Each verdict is a grep-checkable receipt anyone can re-run.</li>
         <li><a href="/the-hypothesis-graph-semantic-memory-methodeutics">The Hypothesis Graph</a>: a harness-layer data structure for coding agents — testable-claim nodes, refutation-condition edges — that makes an agent's reasoning inspectable and reusable. arXiv-shape preprint with reproducible, DOI-archived artifacts.</li>
         <li><a href="/verifiable-knowledge">Verifiable Knowledge</a>: a protocol where each agent presents each claim with a falsifiable condition another agent can re-run instead of attesting its own work. Accountable failure outranks unaccountable assertion.</li>
         <li><a href="/does-iteration-mitigate-slop-slope">Slop Slope</a>: tested whether adversarial review loops turn test-passing LLM code from coin-flip drafts into merge-ready artifacts.</li>
         <li><a href="/speedrunning-open-source">Agentic open-source contribution</a>: pipeline for finding issues, generating patches, submitting PRs, and tracking maintainer outcomes.</li>
         <li><a href="/the-natural-framework">Cognition and epistemology research</a>: abduction, memory, provenance, review loops, and agentic systems as a theory layer for visible tools.</li>
-        <li><a href="/sweep-and-triage">Sweep &amp; Triage</a></li>
-        <li><a href="/pr-to-merged">(PR) → merged</a></li>
-        <li><a href="/pageleft-manifesto">PageLeft</a></li>
-        <li><a href="/reading">Runnable Textbooks</a></li>
+        <li>Also: <a href="/sweep-and-triage">Sweep &amp; Triage</a>, <a href="/pr-to-merged">(PR) → merged</a>, <a href="/pageleft-manifesto">PageLeft</a>, and <a href="/reading">Runnable Textbooks</a>.</li>
       </ul>
 
       <h2>Resume &amp; Contact</h2>
