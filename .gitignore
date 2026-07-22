@@ -36,3 +36,4 @@ build/
 # from the local Houghton export, pushed straight to s3://www.june.kim/peirce/display/)
 public/peirce/display/
 .claude/settings.local.json
+__pycache__/
