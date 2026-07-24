@@ -13,6 +13,8 @@ The comment carries no link to June's own writing. What the receipt buys is the 
 
 **A. Topic hits.** Live threads on June's topics, whether or not an asset collides with them. This is the default deliverable and it should rarely be empty: five to fifteen on a normal day. One line each, no drafting, no gates beyond being on topic and alive. He reads the list and decides. Never suppress a topic hit because no receipt matches it, because that is his call and not the skill's.
 
+Alive here means the thread is still worth reading, not that it clears gate 4. Do not apply the 6-hour cap to this list. A is for reading and B is for posting, and a thread that stopped taking comments an hour ago is still worth his eyes while being a bad place to speak. Report the age so he can judge; do not filter on it.
+
 **B. Opportunities.** The subset of A where a published receipt settles a specific quoted claim and the four gates below all hold. Default zero. Two is a good day. If a run produces five, the bar slipped and the run is wrong.
 
 The gates in "What counts" govern **B only**. Applying them to A is the failure mode that produced a zero-item run across roughly 400 threads on 2026-07-21, several of which were squarely on topic. A is a filter; B is a recommendation to act.
@@ -35,7 +37,13 @@ The receipt has not stopped mattering, it has changed jobs. It is what makes the
 
 The point of a number is to be defensible, not to be impressive. First person is honest and needs no citation: "in an ablation I ran, six self-attested arms plateaued while the externally verified arm broke past" is a claim June can stand behind and defend if pressed.
 
-**4. The thread is live.** Last comment within about 12 hours, thread under 48 hours old, not locked. A perfect comment on a dead thread is a diary entry.
+**4. The thread is live.** Last comment within 6 hours, not locked. A perfect comment on a dead thread is a diary entry.
+
+Six is measured rather than chosen. Across 25 threads carrying 30+ comments on 2026-07-21, the median comment landed 3.2 hours after submission, 80% of a thread's comments had arrived by 7.0 hours and 90% by 9.0. The old gate passed anything touched in the last 12 hours, and by 12 hours a typical thread is past 90% of every comment it will ever get, so the gate was admitting rooms that had already emptied. The LoRA Speedrun candidate cleared it that day at about 12 hours and was dead. Those percentiles are also biased low, since several threads were snapshotted while still accreting and lost their tails, so treat them as floors.
+
+Drop the old 48-hour age cap. Age is the wrong variable: what matters is whether comments are still arriving, and the newest-comment check already measures that directly. A 30-hour thread still taking comments is worth more than a 5-hour thread that stopped at hour two.
+
+Do not turn 6 into a rule about thread *age*, because decay tracks thread type and the spread is wide. News and outrage burn out fast (Advertise in ChatGPT reached 80% of its comments in 1.8 hours, an NPM security post in 1.4). Technical and argumentative threads run long (a Lean proof thread at 19.2 hours, a Hyprland config fight at 12.3). June's candidates are almost entirely the slow kind, since a thread where someone makes a defensible claim and others argue it is the same thread that stays alive. The gate is on the last comment for exactly this reason: it tracks the room rather than the clock.
 
 Two disqualifiers that override everything: do not surface threads where June's piece merely agrees with the prevailing view, since a comment there adds nothing and reads as flag-planting; and do not surface a thread where the correct response is disagreement with a named individual's own work unless the receipt is decisive, because a half-decisive public disagreement costs more than the attention is worth.
 

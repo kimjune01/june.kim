@@ -13,7 +13,7 @@ HN has no notifications by design. dang's position is that the missing activatio
 
 Everything lives in `~/Documents/sweep/`, next to the seen store `/hn` already keeps. Create the directory if missing.
 
-- `feed-seen.json` — entry IDs already reported, so a repeat run is quiet. One object keyed by ID, value `{"date": ..., "feed": ...}`.
+- `feed-seen.json` — entry IDs already handled, so a repeat run is quiet. One object keyed by ID, value `{"date": ..., "feed": ..., "parent": ..., "reported": true|false}`.
 - `hn-feed.heartbeat` — touched by the running monitor each cycle. This is how the setup stays idempotent.
 
 Do **not** write feed entries into `hn-seen.json`. That file records threads judged against the four gates, and mixing "I have seen this" with "I have ruled on this" destroys both meanings.
@@ -52,6 +52,19 @@ PY
 
 Load `feed-seen.json`, drop entries already present, report the rest, then write the file back. Report per new entry: who, which of June's comments it answers, the full text, and the permalink. A reply is short; paste it rather than summarizing it.
 
+**Report anything unreported, not merely anything unseen.** Presence in the store means a poller *noticed* a reply, which is not the same as June having *read* it, and conflating the two loses replies permanently. That is what happened on 2026-07-21: two replies (`48995894`, `48995578`) were detected by pollers whose stdout went into a dead session, written to the store as handled, and never shown to anyone. They surfaced a day later only because someone went looking.
+
+So every run must sweep for `reported` falsy or missing, and re-surface those alongside the genuinely new:
+
+```python
+pending = {k: v for k, v in seen.items()
+           if v.get("feed") in ("monitor", "replies") and not v.get("reported")}
+```
+
+Set `reported: true` on an entry only in the same breath as putting it in front of June, then write the file back. The monitor sets it itself, because under the `Monitor` tool its stdout genuinely reaches him. Any other path that writes to this store must set it `false` and let a run do the surfacing.
+
+The `feed` filter matters. The store also holds June's own comment IDs and keyword-hit IDs, and those are not replies waiting to be read, so an unfiltered sweep would re-report them forever.
+
 ### 2. Arm the watch, idempotently
 
 The poller already exists at `~/Documents/sweep/bin/hn-feed-monitor.sh`. It reads June's recent comments from Algolia, checks each one's `kids` on Firebase, writes new reply IDs into `feed-seen.json`, prints one line per reply, and touches the heartbeat every cycle. Do not rewrite it, and do not inline a copy into a heredoc. Read it, and change the file if it needs changing.
@@ -86,6 +99,10 @@ Fresh heartbeat means a monitor is live: say so and start nothing. Stale or miss
 Most runs skip this. The named-instrument queries exist to catch a thread while it is still alive, so occasionally one returns a comment that a published audit answers, and then the draft is the deliverable rather than the link.
 
 **Gates first, and they are `/hn`'s, not looser ones.** Read the four gates and the asset list in `/hn`'s `SKILL.md` and `assets.md` before drafting anything. A keyword match is not a gate pass. The one that kills most feed hits is gate 3: benchmark threads are full of people who already distrust benchmarks, so an audit that merely joins the skepticism adds nothing. The hit is worth drafting when someone recommends or defends a specific instrument, because then the audit qualifies a live claim instead of seconding the room.
+
+**Gate 4 needs a second clause here, because keyword search breaks its assumption.** `/hn`'s liveness gate asks whether the thread's newest comment is under 6 hours old, which works for a sweep because sweep candidates surface from active subthreads. Keyword search does the opposite by construction: it finds *old comments inside live threads*, since a matching comment stays matchable long after anyone is reading it. On 2026-07-22 the WASDx hit passed gate 4 on a thread active 0.9 hours earlier while the comment itself was 15.2 hours cold and buried under 451 others.
+
+So require both: the thread's newest comment under 6 hours, **and** the comment being answered under 6 hours old. A reply to a cold comment in a warm thread is written for the archive, and if that is the intent then say so when reporting it rather than presenting it as a live opportunity.
 
 **Then write it short.** The failure mode here is the wall of text, and it comes from the draft trying to do three jobs at once: state the finding, pre-empt every objection, and summarize itself at the end. Do the first one.
 

@@ -48,8 +48,8 @@ that number hides.* The honesty about the number is itself the credibility.
 
 | Funder | Why | Speed | Ask size | Status |
 |---|---|---|---|---|
-| **LTFF (EA Funds)** | funds independent AI-safety researchers; light app; rolling | weeks | $60–90k / 9–12mo | fire first |
-| **Manifund** | public, regrantor-driven, fast; doubles as visibility | weeks | $20–60k bridge | parallel, same text |
+| **LTFF (EA Funds)** | funds independent AI-safety researchers; light app; rolling | weeks | $75k / 12mo | SUBMITTED 2026-07-20 (auditor-shaped, Applied GCR program; as-submitted text in [ltff-submitted-2026-07-20.md](ltff-submitted-2026-07-20.md)) |
+| **Manifund** | public, regrantor-driven, fast; doubles as visibility | weeks | $75k, tranches from $10k | next: reshaped draft ready in [manifund-proposal.md](manifund-proposal.md) |
 | **Cooperative AI Foundation** | narrow fit: the new $10M agent-infrastructure fund (reputation/commitment protocols), not the core cooperation agenda; verification ≠ cooperation until an incentive argument is added | slower | larger | queue 2nd, reframe |
 | **Open Philanthropy** | funds scalable oversight / agent verification directly | slow | larger | after LTFF lands (social proof) |
 | **SFF / Foresight / ARIA** | safety-adjacent, varied cycles | varied | varied | optional backup |

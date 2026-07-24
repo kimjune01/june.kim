@@ -58,15 +58,15 @@ Inherent competition against `π_ref` sounds fair. Every advertiser competes aga
 
 The context-aware variant (`π_con`) partially addresses this by injecting advertiser descriptions into the generation prompt. But `π_con` still generates from `π_ref`'s weights. The startup gets one shot at overcoming a prior built on billions of tokens of incumbent mentions.
 
-### 6. Advertisers are adversarial
+### 6. Advertiser switching costs favor incumbents
 
-MOSAIC aggregates advertiser rewards additively: `r(x,y) = Σ r_i(x,y)`. The softmax over this sum produces one reply that tries to satisfy everyone. The paper doesn't address what happens when advertisers are direct competitors.
+MOSAIC does address conflicts between advertisers. Appendix B.2 explains how an advertiser's reward can be low for replies favoring a competing brand, and Appendix C.7 tests whether convergence suppresses incoherent replies that mention too many advertisers. The problem is not that competition is absent from the model. It is who can afford to participate in the market the model creates.
 
-Coca-Cola and Pepsi both bid on "best soda." Their reward functions pull in opposite directions. The mechanism faithfully sums them, and the output either mentions both (satisfying neither) or picks one stochastically (back to assumption 3).
+An advertiser must supply an LLM or reward function, integrate it with the platform, verify how it behaves across prompts, and learn how its reports interact with the reference model and other advertisers. Those are fixed costs. A repeat advertiser can amortize them across many auctions and improve its configuration over time. A newcomer pays them before knowing whether the channel works. A large advertiser can fund that experimentation; a small one cannot.
 
-Worse, a truthful reward function can encode negative preferences: "my reward is high when my competitor's brand doesn't appear." Strategyproofness guarantees this is reported honestly. It doesn't prevent it.
+The reference model compounds the advantage. It already assigns familiar brands higher probability because they appear more often in its training data. A new entrant therefore has to overcome both an encoded incumbent prior and the fixed cost of learning the mechanism. MOSAIC's allocation rule does not explicitly contain a "repeat customer" variable, but a deployed MOSAIC market would still select for incumbents and advertisers with enough budget to absorb switching and experimentation costs.
 
-Traditional ad auctions handle this with category exclusivity and competitive separation rules. MOSAIC's allocation has no such structure. The paper's implicit answer is that the softmax will sort it out. In practice, adversarial rewards in a sum degrade output quality for the user, which triggers assumption 7.
+Traditional ad auctions at least expose a discrete placement, price, and outcome that advertisers can compare across channels. MOSAIC asks advertisers to invest in influencing a stochastic generated reply whose contribution is hard to attribute. That makes exit and comparison expensive precisely for the advertisers least able to bear the cost.
 
 ### 7. The user can leave
 
@@ -78,7 +78,7 @@ Perplexity learned this empirically. It tried first-party ads, earned [$20K tota
 
 ## The chain
 
-These seven aren't independent. The user can leave (7), which constrains `τ` (2), which limits revenue, which can't cover the inference overhead (1). Erratic output (3) and missing attribution (4) make the product unsellable to advertisers even within the feasible `τ` range. Adversarial rewards (6) degrade output quality, which accelerates user exit. Incumbent advantage (5) thins the advertiser pool to players who don't need the mechanism.
+These seven aren't independent. The user can leave (7), which constrains `τ` (2), which limits revenue, which can't cover the inference overhead (1). Erratic output (3) and missing attribution (4) make the product difficult to compare with other channels. The incumbent prior (5) and advertiser switching costs (6) then thin the pool toward repeat advertisers with enough budget to absorb experimentation. That weakens the mechanism as a market for discovering relevant new entrants.
 
 ## The alternative
 
