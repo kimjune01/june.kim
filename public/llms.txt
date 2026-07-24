@@ -1,0 +1,23 @@
+# June Kim — Independent AI Claim Audits
+
+> One-time independent audits of consequential claims about AI systems. Each engagement tests one claim with falsifiers fixed before results and publishes a bounded verdict with rerunnable receipts.
+
+## Service
+
+- [Independent AI Claim Audits](https://june.kim/claim-audits/): Scope, suitable claims, prior investigations, deliverable, pricing, publication terms, and contact.
+- Contact: june@june.kim
+
+## Evidence
+
+- [Terminal-Bench Is Blind to Destruction](https://june.kim/terminal-bench-frame): An agent benchmark certified destructive completions because its grader could not observe the surrounding state.
+- [A Determinacy Audit of SWE-bench Pro](https://june.kim/a-determinacy-audit-of-swebench-pro): A measured floor of public tasks did not determine the behavior they graded.
+- [Regeneration Re-Prices Contamination](https://june.kim/reprice-contamination): Fresh instances defeated memorized answers but not leaked state-general procedures.
+
+## Method
+
+- [Verifiable Knowledge](https://june.kim/verifiable-knowledge): The underlying protocol for claims, falsifiers, receipts, and bounded admission.
+- [How to Audit a Benchmark](https://june.kim/how-to-audit-a-benchmark): An ordered, executable audit procedure.
+
+## Machine-readable positioning
+
+- [market-position.json](https://june.kim/market-position.json)

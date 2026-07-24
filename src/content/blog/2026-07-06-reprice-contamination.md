@@ -102,6 +102,10 @@ The claims here are deliberately narrow, and the narrowness does the work.
 
 What survives all three caveats is the part worth keeping: a free, sound, replay-derived oracle for a corner of evaluation where freshness had been expensive; a criterion, scored-target equivariance, that tells a benchmark builder when regenerating state resists contamination and when it is cosmetic; and an adversary-indexed ledger of what regeneration does. Score the state, derive the golden by replay, and say which adversary you mean. The rest is authoring budget.
 
+<!-- pdf-skip -->
+*This investigation is an example of my [independent AI claim-audit practice](/claim-audits/): one consequential claim, fixed falsifiers, a bounded verdict, and public rerunnable receipts.*
+<!-- /pdf-skip -->
+
 ## LLM collaboration disclosure {-}
 
 LLMs enter this work in three roles. *Subject of study*: the benchmark drives shipped LLMs as the agents under test (Claude Opus 4.8 at low and high reasoning effort, Cursor's Composer 2.5, and an in-context learner), and the recall probes query Claude Opus 4.8 and OpenAI's GPT-5.5; the model versions and exact commands are recorded in the archived receipts. *Instrument*: an independent model family adversarially reviewed the design and the results (Anthropic's Fable), a separate model verified every citation against source (Claude Sonnet), and the verdicts that matter rest on a mechanical layer, the replay oracle and the audit harness and McNemar's test, that no model overrides. *Writing aid*: the prose was drafted and revised with Anthropic's Claude (Opus 4.8) from the author's repository documents, experiment receipts, and direction; the method, the experiments, the numbers, and the argument are the author's. No LLM decided what to publish.

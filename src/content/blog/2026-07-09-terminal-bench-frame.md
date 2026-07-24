@@ -236,6 +236,10 @@ Zhang et al., 2024. Agent-SafetyBench: Evaluating the Safety of LLM Agents. [arX
 
 Kim, 2026. [A Determinacy Audit of SWE-bench Pro](/a-determinacy-audit-of-swebench-pro); [Auditing DeepSWE](/auditing-deepswe). The spec-side companion audits in this program.
 
+<!-- pdf-skip -->
+*This investigation is an example of my [independent AI claim-audit practice](/claim-audits/): one consequential claim, fixed falsifiers, a bounded verdict, and public rerunnable receipts.*
+<!-- /pdf-skip -->
+
 ## LLM use {-}
 
 This work used a large language model (Claude, Anthropic) to build and run the audit harness, extract the receipts, and draft this preprint under the author's direction. Every claim rests on a re-runnable receipt: the pinned image, the reference solution, the mutation, and the grader's own reward. None rests on the model's say-so.

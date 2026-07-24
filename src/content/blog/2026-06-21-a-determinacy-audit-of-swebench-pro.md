@@ -110,3 +110,7 @@ Second, the position is already in the literature; the measurement is not. [Gori
 SWE-bench Pro is not debunked, and this audit needs no contamination claim. The finding is narrower and more useful: on the benchmark OpenAI now recommends, a measurable floor of the public set does not pin the behavior it grades. At least 11.4% is provably underdetermined from committed receipts, and 15.0% with a two-expert reading-judgment tier verified by two independent model families, with three broken golds and at least one feature mismatch alongside. A raw Pro score therefore conflates solving the stated problem with recovering the author's unstated choice. Reporting against a determinacy-aware denominator, and publishing which instances are underdetermined, separates the part of the benchmark that measures capability from the part that scores whether you matched an unstated choice.
 
 The whole audit, every per-case receipt, and the code that regenerates these tables are the artifact, not this preprint: [github.com/kimjune01/swebench-pro-audit](https://github.com/kimjune01/swebench-pro-audit), archived at [doi.org/10.5281/zenodo.20738219](https://doi.org/10.5281/zenodo.20738219).
+
+<!-- pdf-skip -->
+*This investigation is an example of my [independent AI claim-audit practice](/claim-audits/): one consequential claim, fixed falsifiers, a bounded verdict, and public rerunnable receipts.*
+<!-- /pdf-skip -->
