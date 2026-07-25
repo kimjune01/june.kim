@@ -1,11 +1,11 @@
 ---
 variant: post-medium
 title: "How to Audit a Benchmark"
-subtitle: "Seven audits' worth of sins, ordered by how cheaply they're caught."
+subtitle: "Nine audits' worth of sins, ordered by how cheaply they're caught."
 tags: methodology, epistemology
 ---
 
-Over the past few months I audited seven benchmarks: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), and [MirrorCode](https://github.com/kimjune01/mirrorcode-audit). Each one broke in a different place, and one, re-audited after its revision, mostly held. This post compresses the lenses into a checklist a stranger can run.
+Over the past few months I audited nine benchmarks: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), [MirrorCode](https://github.com/kimjune01/mirrorcode-audit), [FrontierCode](/auditing-frontiercode), and [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit). Each one broke in a different place, and one, re-audited after its revision, mostly held. This post compresses the lenses into a checklist a stranger can run.
 
 *Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode, one of the audits drawn on here. An interest disclosure, not a funding one; it changes none of the receipts, which is the point of check 4 below.*
 
@@ -20,11 +20,15 @@ Over the past few months I audited seven benchmarks: [SWE-bench Verified](/swebe
 <tr><td><a href="/reprice-contamination">τ-bench</a></td><td>decay</td><td>memorized answer passes 0% regenerated, leaked query 100%</td></tr>
 <tr><td><a href="/terminal-bench-frame">Terminal-Bench</a></td><td>frame</td><td>83 of 83 pass after off-task destruction</td></tr>
 <tr><td><a href="https://github.com/kimjune01/mirrorcode-audit">MirrorCode</a></td><td>claim</td><td>title sells autonomous whole-program builds; metric scores scoped reimplementation from a live oracle, 17/25 targets contaminated</td></tr>
+<tr><td><a href="/auditing-frontiercode">FrontierCode</a></td><td>claim</td><td>sold as mergeability; of 59 coded closures, the patch decided 3</td></tr>
+<tr><td><a href="https://github.com/kimjune01/frontier-bench-audit">Frontier-Bench</a></td><td>frame</td><td>agent container torn down before grading; 9 of 9 pass after off-task destruction</td></tr>
 </table>
 
 A benchmark is a measurement instrument, and an instrument makes a contract. Above every clause sits the claim: the capability the headline advertises has to be the one the metric measures (the *claim* clause), or the number is precise about the wrong thing. The instruction pins the target (the *spec* clause). The grader checks the target (the *oracle* clause). The grader guards everything the task never named (the *frame* clause: a run that completes the task by wrecking unrelated state must not pass). The answer key passes its own test (the *gold* clause). The headline number means what the leaderboard says it means (the *score* clause). And the number survives its own publication (the *decay* clause).
 
-Each clause can be broken, each break is a distinct sin, and each sin has a check. The checks below are ordered by cost, and the order carries the lesson: every severe defect in these seven audits surfaced before any model ran. Cost here means compute and cash; several of the free checks still cost an afternoon of reading.
+Each clause can be broken, each break is a distinct sin, and each sin has a check. The checks below are ordered by cost, and the order carries the lesson: every severe defect in these audits surfaced before any model ran. Cost here means compute and cash; several of the free checks still cost an afternoon of reading.
+
+The clauses are not independent, and that is the one thing this list got wrong for a while. A mitigation for one clause can be a regression in another. [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit) runs every task with the verifier in its own container, which kills a real attack where agent-produced code double-forks a daemon and overwrites the reward file after the tests write it. It buys that by tearing down the agent's container before the verifier starts, so the state a frame check would read no longer exists. Sound oracle-integrity fix, straight subtraction from the frame. Neither the rubric nor the review pipeline registers the trade, because nothing scores a clause against its neighbours. When a maker hardens one clause, ask which other clause paid for it.
 
 <div class="table-wrap">
 <table style="max-width:100%; margin:1em auto; font-size:14px;">
@@ -78,13 +82,17 @@ Costs about a dollar, and it has caught a defect in every benchmark I've pointed
 
 An answer key asserted correct but never run against its own test is a confabulation, a plausible artifact nobody checked, and a task whose gold cannot pass cannot anchor any verdict built on it. A panel of annotators signing off on the reference solutions does not substitute, because attestation is reading and the defect only shows under execution; every failing gold above shipped from a benchmark whose authors believed it correct. This is the highest-yield dollar in benchmark auditing, it requires no model, and it doubles as the pre-ship check the makers should have run.
 
-When golds fail, quarantine rather than adjudicate. Some failures are your harness's fault (my first DeepSWE run failed all 113 tasks at once, which is never 113 independent defects; it was one missing Docker plugin on my side). Exclude the failures from your denominator, report them as unresolved, and let the maintainers sort artifact from defect.
+When golds fail, quarantine rather than adjudicate. Some failures are your harness's fault (my first DeepSWE run failed all 113 tasks at once, which is never 113 independent defects; it was one missing Docker plugin on my side). Exclude the failures from your denominator, report them as unresolved, and let the maintainers sort artifact from defect. Quarantine what you never attempted too, and label it as such: a task you skipped because your host lacked the disk or the architecture is not a task whose gold failed, and collapsing the two moves your own limits onto the maker's ledger.
+
+Before running it, check whether they already do. Frontier-Bench instructs every runner to execute the oracle five times before trusting a result and validates it in CI on every task PR, which is the first time this check has come back empty by policy rather than by luck. That is the outcome the check exists to produce, and a maker who has internalized it deserves the credit in writing.
 
 ## 7. Read what the assertions pin
 
 Cheap, and it catches oracle sins, where the grader checks the wrong thing. Open the tests and classify every exact-value assertion by one question: how would a solver without the reference obtain this value? [ProgramBench](/programbench-measures-recall) sorted into three bins. Discoverable values come from the materials at hand. Brute-searchable values live in a finite space too large for the budget. Recall-only values are the output of a hash, a cipher, a codec, something no observation reproduces, and one such value behind a conjunctive metric puts the whole task beyond the stated construct. Twenty-one ProgramBench programs carried a verified recall witness, which is why a zero-percent resolve rate across nine models measured recall rather than the reconstruction the paper claimed.
 
 The same read catches goldens that encode one implementation's incidentals where the contract left the output free, and the eeriest specimen in the family, the self-capturing golden, a graded test that writes its own answer key when the reference file is missing. ProgramBench had at least 29. A test must not author its own oracle.
+
+Then ask a question one step earlier: where do the verifier's inputs come from? On a benchmark that grades in a separate container, some of them arrive from the run and some are baked into the verifier's own image, and the tests look identical either way. In Frontier-Bench's `cargo-flight-dispatch` the verifier image copies its own pristine `/app/data/`, then executes the agent's code against that copy. The verdict is a function of the artifact and a *restored* world rather than the world the run actually left. Damage to those inputs is not merely unnoticed; it is undone before grading. Call it environment reconstitution, and treat it as the self-capturing golden's structural cousin: in both, the grader supplies the conditions of its own success. Its census is cheap, since the reconstituted paths are visible in the verifier's Dockerfile.
 
 ## 8. Probe what pins the graded value
 
@@ -98,7 +106,13 @@ The classes are worth memorizing because they recur everywhere. *Airtight*: the 
 
 Cheap, model-free, and it catches the frame sin, the one clause almost no benchmark writes down: the grader must guard what the task never named. Take the reference solution, append one careless accident, `rm -rf .git` or a deleted file the solution never touched, and re-run the official grader. [On Terminal-Bench 2.1](/terminal-bench-frame), 40 of 83 gold-passing tasks still scored 1 after a careless deletion inside their own workspace, and all 83 passed after off-task user assets were wiped, an outcome final-state grading entails. The reward ordering that falls out is the sin in one row: a destructive completion scores 1, a safe failure scores 0, and the outcome users fear most outranks the harmless one.
 
-The frame check generalizes to any benchmark that grades environment state, and the fix generalizes too: manifest the world at agent handoff, diff the final state against it, and gate the delta on the reference solution's own footprint. The oracle the benchmark already ships is the frame it never wrote.
+Instrument the accident, not just the verdict. An accident that leaves no evidence it occurred is indistinguishable from one that silently no-opped, and both look like a pass. Have the mutation write a witness recording the state before and after, carry it out through the harness's own artifact path, and void any verdict whose witness is incomplete. Two of my mutations ran against tasks whose shipped `solve.sh` had no trailing newline, so the appended accident concatenated onto the last command and aborted the solution; without a witness those read as the grader catching damage that never happened.
+
+There are two grades of this sin, and the newer one is worse. On Terminal-Bench the frame was *unasserted*: the state sat in the container and no test looked at it, which is why 83 runs were needed to establish it. On a benchmark that tears down the agent's container before grading, the frame is *unavailable*: no test can reach it however well written, so the property follows from the interface and a handful of runs demonstrate rather than sample it. When the frame is unavailable, the check itself has to move. The mutation still goes in the same place, but the observation has to happen before teardown, through whatever pre-teardown hook the harness offers.
+
+Then look for the exception and invert it. Terminal-Bench had exactly one task with a hand-written frame check, and it was the one task where the frame collapsed to a single `git diff`. Frontier-Bench has exactly four tasks that carry the frame across the boundary, all git-backed with a pinned base, all adopted to cut artifact bloat rather than for validity. Checks appear where they are cheap, not where they are needed, and the motivation need not be correctness at all. So find the task that does it right, work out what made it affordable there, and the complement is your coverage gap. In Frontier-Bench that complement is the 36 of 74 tasks declaring a single artifact path, which have no bloat to motivate the fix and no less capacity to wreck their environment.
+
+The frame check generalizes to any benchmark that grades environment state, and the fix generalizes too: manifest the world at agent handoff, diff the final state against it, and gate the delta on the reference solution's own footprint. The oracle the benchmark already ships is the frame it never wrote. Since separate-verifier isolation is where harnesses are heading for good security reasons, this is a harness-architecture finding more than a benchmark one, and the capture belongs in the runner where every dataset on it inherits the fix.
 
 ## 10. Ask what survives publication
 
@@ -117,6 +131,8 @@ The gate mistaken for the verdict: an agent's internal green light is a stop sig
 The checks above are worthless without discipline on the reporting side, and the discipline compresses to a few rules that recur across all seven audits.
 
 Audit yourself first. Every campaign in this series began with a false positive of my own: a missing Docker plugin masquerading as 113 defects, my determinacy tool certifying test-fixture strings as authorial constants, a sentinel bug that silently voided 35 runs. The instrument you trust least should be yours.
+
+Make the validity gate symmetric. When I added the witness check above, I first used it only to void suspicious *findings*, leaving suspicious exonerations to stand. That is backwards in the direction that flatters the auditor, and it hid a bug for two more tasks: a broken splice was scoring as the grader catching damage. A gate that fires on one verdict and not its opposite is not a gate, it is a thumb. Void both directions or neither, and publish the failing runs so a reader can tell which.
 
 Report floors, never rates. A defect you can exhibit is a lower bound; the tier you couldn't adjudicate stays out of the count, and the number only grows with more search.
 
