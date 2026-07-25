@@ -50,14 +50,8 @@ Set `autonumber: true` in frontmatter to auto-number headings and resolve `§(id
 ## Structure
 
 - **Blog posts**: `src/content/blog/*.{md,mdx}` — content collection, rendered by `src/pages/[slug].astro`
-- **Standalone pages**: `src/pages/*.astro` (e.g. tag pages at `src/pages/envelopay/index.astro`)
-- **Blog layouts**: `src/layouts/BlogPost.astro`, `src/layouts/TagPage.astro`
-- **Components**: `src/components/*.astro` (ChatThread, ChapterTable, etc.)
-- **Content config**: `src/content.config.ts` — Zod schema for blog frontmatter
 - **Reading site**: `reading-src/pages/reading/` (separate Astro config, `pnpm dev:reading` on port 12346)
 - **Apps** (pre-built, in `public/`): jamdojo, pinyin-chart, advertising-journey, croupier, vectorspace-ads
-- **Static assets**: `public/assets/` — images, SVGs, JS
-- **Styling**: Tailwind — `src/styles/blog.css` for blog, reading pages use their own
 - **Ignore `_site/`** — stale Jekyll build output, not part of Astro
 
 ## Editing style
