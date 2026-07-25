@@ -39,7 +39,7 @@ The *frame* is everything the task did not ask the agent to change. In the [Term
 
 I planted a second git repository with unpushed work, an SSH private key, and a customer CSV under an unreferenced directory. The certified solution ran unchanged, then deleted that directory before official grading.
 
-**Result: reward 1 on all nine gold-passing tasks probed; every deletion was witnessed.**
+*Result: reward 1 on all nine gold-passing tasks probed; every deletion was witnessed.*
 
 No model or adversary participated: official oracle, unmodified grader, one documented accident.
 
@@ -107,17 +107,17 @@ The rest of the bounds:
 
 These follow from the interface boundary, not the nine-task sample.
 
-1. **Capture before teardown in Harbor.** Snapshot writable state through the same path for oracle and agent runs. Missing or partial capture invalidates the trial. Runner-level capture covers every separate-verifier dataset.
+1. *Capture before teardown in Harbor.* Snapshot writable state through the same path for oracle and agent runs. Missing or partial capture invalidates the trial. Runner-level capture covers every separate-verifier dataset.
 
-2. **Report frame deltas beside reward.** Compare agent and oracle final-state deltas, excluding declared volatile paths. Publish unexplained additions, modifications, and deletions; do not initially fold them into binary reward because valid alternative solutions differ.
+2. *Report frame deltas beside reward.* Compare agent and oracle final-state deltas, excluding declared volatile paths. Publish unexplained additions, modifications, and deletions; do not initially fold them into binary reward because valid alternative solutions differ.
 
-3. **Test capture in CI.** Run the oracle plus a witnessed mutation outside the target; require it to reach the diagnostic. This proves observation without enumerating the frame and leaves `/cheat` and `/fortify` focused on reward hacking.
+3. *Test capture in CI.* Run the oracle plus a witnessed mutation outside the target; require it to reach the diagnostic. This proves observation without enumerating the frame and leaves `/cheat` and `/fortify` focused on reward hacking.
 
-4. **Measure behavior.** Seed realistic synthetic state across writable scopes and run agents repeatedly. Estimate destructive-action probability and test whether model, prompt, or harness changes lower it.
+4. *Measure behavior.* Seed realistic synthetic state across writable scopes and run agents repeatedly. Estimate destructive-action probability and test whether model, prompt, or harness changes lower it.
 
-5. **Speculation: build a destructive-behavior safety benchmark.** Surround ordinary tasks with valuable synthetic state, and vary ambiguity and permissions. Measure scope inspection, preservation, warranted escalation, recovery, probability, and severity. Use hidden canaries, effect logs, realistic recovery, and defenses against agents treating every file as a trap. Measure improvement, not “safe” certification.
+5. *Speculation: build a destructive-behavior safety benchmark.* Surround ordinary tasks with valuable synthetic state, and vary ambiguity and permissions. Measure scope inspection, preservation, warranted escalation, recovery, probability, and severity. Use hidden canaries, effect logs, realistic recovery, and defenses against agents treating every file as a trap. Measure improvement, not “safe” certification.
 
-6. **Declare coverage.** Filesystem capture misses exfiltration, remote APIs, uncaptured sidecars, and harm reversed before snapshot. Use event logs, scoped credentials, egress controls, and separate adversarial trials; report observed channels.
+6. *Declare coverage.* Filesystem capture misses exfiltration, remote APIs, uncaptured sidecars, and harm reversed before snapshot. Use event logs, scoped credentials, egress controls, and separate adversarial trials; report observed channels.
 
 ## What this is really about
 
