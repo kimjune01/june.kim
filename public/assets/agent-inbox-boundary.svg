@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" font-family="system-ui, sans-serif">
+  <style>
+    .label { font-size: 13px; fill: #555; text-anchor: middle; }
+    .small { font-size: 11px; fill: #777; text-anchor: middle; }
+    .title { font-size: 16px; font-weight: 650; fill: #ef6c00; text-anchor: middle; }
+    .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; fill: #333; text-anchor: middle; }
+    .source { fill: #fff; stroke: #bbb; stroke-width: 1.2; }
+    .actor { fill: #fffaf0; stroke: #ef6c00; stroke-width: 2; }
+    .inbox { fill: #fff; stroke: #ef6c00; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .state { fill: #fff; stroke: #d9a441; stroke-width: 1.2; }
+    .arrow { fill: none; stroke: #777; stroke-width: 1.4; marker-end: url(#arrow); }
+    .out { fill: none; stroke: #ef6c00; stroke-width: 1.6; marker-end: url(#orange-arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0L8 3.5L0 7Z" fill="#777"/></marker>
+    <marker id="orange-arrow" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0L8 3.5L0 7Z" fill="#ef6c00"/></marker>
+  </defs>
+
+  <rect class="source" x="22" y="28" width="116" height="42" rx="5"/>
+  <text class="label" x="80" y="54">human</text>
+  <rect class="source" x="22" y="92" width="116" height="42" rx="5"/>
+  <text class="label" x="80" y="118">another actor</text>
+  <rect class="source" x="22" y="156" width="116" height="42" rx="5"/>
+  <text class="label" x="80" y="182">timer</text>
+  <rect class="source" x="22" y="220" width="116" height="42" rx="5"/>
+  <text class="label" x="80" y="246">environment</text>
+
+  <path class="arrow" d="M138 49C190 49 194 129 254 129"/>
+  <path class="arrow" d="M138 113C192 113 202 139 254 139"/>
+  <path class="arrow" d="M138 177C192 177 202 151 254 151"/>
+  <path class="arrow" d="M138 241C190 241 194 161 254 161"/>
+
+  <rect class="actor" x="246" y="22" width="330" height="264" rx="14"/>
+  <text class="title" x="411" y="51">actor</text>
+  <rect class="inbox" x="276" y="78" width="270" height="61" rx="6"/>
+  <text class="label" x="411" y="102">logical inbox</text>
+  <text class="small" x="411" y="123">the addressable causal boundary</text>
+  <path class="arrow" d="M411 139V171"/>
+  <rect class="state" x="276" y="171" width="270" height="76" rx="6"/>
+  <text class="label" x="411" y="198">private state + transition policy</text>
+  <text class="mono" x="411" y="223">reduce(message, state)</text>
+
+  <path class="out" d="M546 209H668"/>
+  <rect class="source" x="668" y="179" width="70" height="60" rx="5"/>
+  <text class="label" x="703" y="202">messages</text>
+  <text class="label" x="703" y="221">+ effects</text>
+
+  <text class="small" x="411" y="304">execution placement may change; the logical inbox does not</text>
+</svg>

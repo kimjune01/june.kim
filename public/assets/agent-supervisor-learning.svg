@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 350" font-family="system-ui, sans-serif">
+  <style>
+    .supervisor { fill: #fff8e1; stroke: #ef6c00; stroke-width: 1.8; }
+    .det { fill: #eef7ee; stroke: #4b8b4b; stroke-width: 1.4; }
+    .llm { fill: #eef3fb; stroke: #4e71a8; stroke-width: 1.4; }
+    .human { fill: #fff0f0; stroke: #a85a5a; stroke-width: 1.4; }
+    .learn { fill: #f5f5f5; stroke: #777; stroke-width: 1.3; stroke-dasharray: 5 3; }
+    .title { font-size: 15px; font-weight: 650; fill: #333; text-anchor: middle; }
+    .text { font-size: 12px; fill: #333; text-anchor: middle; }
+    .small { font-size: 10.5px; fill: #666; text-anchor: middle; }
+    .arrow { fill: none; stroke: #777; stroke-width: 1.4; marker-end: url(#arrow); }
+    .back { fill: none; stroke: #ef6c00; stroke-width: 1.5; stroke-dasharray: 5 3; marker-end: url(#orange-arrow); }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0L8 3.5L0 7Z" fill="#777"/></marker>
+    <marker id="orange-arrow" markerWidth="8" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0 0L8 3.5L0 7Z" fill="#ef6c00"/></marker>
+  </defs>
+
+  <rect class="supervisor" x="220" y="22" width="320" height="78" rx="9"/>
+  <text class="title" x="380" y="50">supervisor matches the situation</text>
+  <text class="text" x="380" y="72">class + confidence + novelty + criticality</text>
+
+  <path class="arrow" d="M292 100L155 151"/>
+  <path class="arrow" d="M380 100V151"/>
+  <path class="arrow" d="M468 100L605 151"/>
+
+  <rect class="det" x="48" y="151" width="214" height="76" rx="8"/>
+  <text class="title" x="155" y="179">deterministic</text>
+  <text class="text" x="155" y="200">known class, stable procedure</text>
+  <text class="small" x="155" y="217">cheap · repeatable · inspectable</text>
+
+  <rect class="llm" x="273" y="151" width="214" height="76" rx="8"/>
+  <text class="title" x="380" y="179">LLM</text>
+  <text class="text" x="380" y="200">recognized class, judgment needed</text>
+  <text class="small" x="380" y="217">typed proposal · bounded authority</text>
+
+  <rect class="human" x="498" y="151" width="214" height="76" rx="8"/>
+  <text class="title" x="605" y="179">human judgment</text>
+  <text class="text" x="605" y="200">novel, conflicting, or critical</text>
+  <text class="small" x="605" y="217">performs work or gates a proposal</text>
+
+  <path class="arrow" d="M155 227V274"/>
+  <path class="arrow" d="M380 227V274"/>
+  <path class="arrow" d="M605 227V274"/>
+  <rect class="learn" x="125" y="274" width="510" height="55" rx="8"/>
+  <text class="title" x="380" y="298">operating evidence</text>
+  <text class="small" x="380" y="317">episodes · corrections · outcomes · discrepancies</text>
+
+  <path class="back" d="M635 301H702V61H540"/>
+  <text class="small" x="694" y="182" transform="rotate(-90 694 182)">backward pass changes matching and procedure</text>
+</svg>
