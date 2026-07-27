@@ -4,20 +4,18 @@ Vancouver, Canada · june@june.kim · www.june.kim · 604 356 1191 · github.com
 
 ## Summary
 
-Evaluation engineer. I audit frontier coding benchmarks for construct validity, finding where the headline metric measures something other than what it claims, and I ship the receipts as preregistered, re-runnable artifacts with public repos and DOIs. 10+ years of software engineering at Google, Loom, and startups. 111 merged PRs across 89 external open-source repositories in Rust, Go, C++, and Python is how I read a benchmark's test suite in whatever stack it ships.
+Research engineer for agent evaluation and environments. I turn ambiguous questions about coding-agent behavior into reproducible experiments, graders, datasets, and production systems. My benchmark audits ship as preregistered, re-runnable artifacts with public repositories and DOIs. I bring 10+ years of software engineering at Google, Loom, and startups, plus 100 merged pull requests across 81 external repositories in 2026 (GitHub search, July 26).
 
 ## Selected Research & Systems Work
 
-### Independent Evaluation Engineer — Frontier Coding Benchmarks
+### Independent Research Engineer — Agent Evaluation & Coding Benchmarks
 
 2026 — present
 
-- SWE-bench Pro, determinacy audit (flagship): audited all 728 tasks; proven 15% underdetermined floor, 3 gold patches fail the benchmark's own verifier. Pro is what OpenAI now recommends over Verified. Preregistered and DOI-archived; findings filed with the maintainers.
-- SWE-bench Pro, harness run: 95.3% (694/728) under the official grader, preregistered and frozen, every verdict re-gradable from a committed diff. Solo, on a $200/month plan.
-- ProgramBench: showed the "% Resolved" metric scores recall of published algorithms, not source-blind reconstruction; 21+ programs gated on recalling a hash, cipher, or codec. Filed with the authors as a right of reply.
-- DeepSWE: applied each reference solution to its own verifier; 4 of 113 fail. Under $1, under an hour, preregistered two-pass protocol.
-- SWE-bench Verified: 426/500 (85.2%), denominator reconciled instance by instance; flags the set as contamination-compromised.
-- SWE-rebench: determinacy audit, 14.5% pointer-checkable claimable spine. Built determinacy, the reusable auditor behind it and the Pro audit.
+- SWE-bench Pro determinacy audit: audited all 728 tasks and established a pointer-checkable 15% underdetermination floor; three gold patches fail the benchmark's own verifier. Preregistered, DOI-archived, and filed with the maintainers.
+- Reproducible evaluation harness: ran all 728 SWE-bench Pro tasks under the official grader; froze every prediction and verdict in committed artifacts so any result can be independently regraded.
+- ProgramBench construct-validity audit: showed that “% Resolved” partly measures recall of published algorithms rather than source-blind reconstruction; filed the evidence with the authors for right of reply.
+- Built `determinacy`, a reusable auditor for tracing benchmark claims to the evidence available to an agent; applied it to SWE-rebench and SWE-bench Pro.
 
 ## Work Experience
 
@@ -67,7 +65,7 @@ Software Engineer
 2026
 
 - The Hypothesis Graph, Verifiable Knowledge, and What Cannot Be False Cannot Be True: DOI-archived preprints with reproducible artifacts; full record and code at june.kim.
-- Adversarial review loops push test-passing LLM code from 43% to 91% merge-readiness; deployed as 101 real-maintainer PRs.
+- Tested whether adversarial review loops improve test-passing LLM code from 43% to 91% merge-readiness; evaluated the workflow against real maintainer decisions.
 - Methodology in public: a 22-question preregistration checklist, a published null result, and a post-mortem of a $1,000 mistake caused by held-out-test leakage.
 
 ### Open Source Software

@@ -1,0 +1,70 @@
+@page {
+  size: A4;
+  margin: 13mm 15mm;
+}
+
+:root {
+  color: #171717;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9.2pt;
+  line-height: 1.25;
+}
+
+body {
+  margin: 0 auto;
+  max-width: 180mm;
+}
+
+h1 {
+  font-size: 19pt;
+  margin: 0 0 2mm;
+  text-align: center;
+}
+
+h2 {
+  border-bottom: 0.5pt solid #777;
+  font-size: 11.5pt;
+  margin: 3.5mm 0 1.5mm;
+  padding-bottom: 0.6mm;
+}
+
+h3 {
+  font-size: 10pt;
+  margin: 2.2mm 0 0.7mm;
+}
+
+p {
+  margin: 0 0 1.5mm;
+}
+
+body > p:first-of-type {
+  text-align: center;
+}
+
+ul {
+  margin: 0.8mm 0 1.7mm;
+  padding-left: 5mm;
+}
+
+li {
+  margin-bottom: 0.7mm;
+}
+
+code {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: inherit;
+}
+
+a {
+  color: #174ea6;
+  text-decoration: none;
+}
+
+h2, h3 {
+  break-after: avoid;
+}
+
+li, p {
+  orphans: 2;
+  widows: 2;
+}
