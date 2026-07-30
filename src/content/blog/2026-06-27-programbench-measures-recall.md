@@ -3,7 +3,7 @@ variant: post-paper
 autonumber: true
 title: "ProgramBench Measures Recall"
 subtitle: "Execute-only binaries and hidden tests reward prior knowledge of algorithms, formats, and reference traces."
-tags: coding, epistemology, methodology
+tags: coding, epistemology
 keywords: ProgramBench, behavioral equivalence, query complexity, lower bound, algorithm existence, execute-only, oracle, contamination, construct validity, program synthesis, benchmark
 ---
 

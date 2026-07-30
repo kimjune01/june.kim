@@ -3,7 +3,7 @@ variant: post-paper
 autonumber: true
 title: "A Determinacy Audit of SWE-bench Pro"
 subtitle: "How much of the public set pins the behavior it grades."
-tags: coding, methodology, epistemology
+tags: coding, epistemology
 keywords: SWE-bench Pro, construct validity, determinacy, underdetermined specification, gold patch, test oracle, agentic coding benchmark, benchmark audit, oracle problem, software engineering evaluation
 ---
 

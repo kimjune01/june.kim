@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "85% on SWE-bench Verified, 97% of eligible"
-tags: coding, methodology
+tags: coding
 ---
 
 Against the full 500-instance Verified set: **426 / 500, 85.2%**. Against the eligible pool I could actually run: **426 / 438, 97.3%**. Both numbers are real; the gap between them is the honest part of this post. Artifacts public:

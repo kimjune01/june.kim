@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Auditing DeepSWE"
-tags: coding, methodology, epistemology, reflecting
+tags: coding, epistemology, reflecting
 ---
 
 *Last updated 2026-07-07.*

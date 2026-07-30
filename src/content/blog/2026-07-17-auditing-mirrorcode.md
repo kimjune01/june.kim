@@ -2,7 +2,7 @@
 variant: post-medium
 title: "Auditing MirrorCode"
 subtitle: "A carefully built benchmark that measures scoped reimplementation and partial recall, sold as autonomous whole-program creation. A receipt for every claim."
-tags: methodology, epistemology
+tags: epistemology
 ---
 
 [MirrorCode](https://arxiv.org/abs/2606.30182) ([Epoch AI](https://epoch.ai/) and [METR](https://metr.org/)) hands an AI an execute-only binary plus its docs and asks it to rebuild the whole program, graded byte-exact against the reference. Their headline asks: *"What's the largest software project AI can complete on its own?"* I ran it through the [how-to-audit checklist](/how-to-audit-a-benchmark).

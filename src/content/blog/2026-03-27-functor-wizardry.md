@@ -1,7 +1,7 @@
 ---
 variant: post-wide
 title: "Functor Wizardry"
-tags: cognition, methodology
+tags: cognition
 ---
 
 *Part of the [cognition](/cognition) and [methodology](/methodology) series. Builds on [The Parts Bin](/the-parts-bin) and [Volley](/volley).*

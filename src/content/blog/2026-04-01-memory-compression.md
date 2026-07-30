@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "Memory Compression"
-tags: cognition, methodology
+tags: cognition
 ---
 
 *Sequel to [Functor Wizardry](/functor-wizardry). Builds on [The Parts Bin](/the-parts-bin), [Volley](/volley), and [The Double Loop](/double-loop).*

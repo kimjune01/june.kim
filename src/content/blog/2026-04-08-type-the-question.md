@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Type the question"
-tags: methodology, epistemology, coding, reflecting
+tags: epistemology, coding, reflecting
 ---
 
 March 2020. Public health agencies around the world had the same question: what happens if we shut down? Much of the early modeling reached for statistical extrapolation of case counts and deaths. The forecasts came back fast and confident. Many were structurally wrong, not because the statistics were sloppy, but because the question was not the kind a curve-fitting model can answer.

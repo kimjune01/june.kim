@@ -2,7 +2,7 @@
 variant: post-medium
 title: "Auditing FrontierCode"
 subtitle: "A carefully QC'd patch grader, reported as mergeability. Measured against 98 real closures, the patch decided 3."
-tags: methodology, epistemology
+tags: epistemology
 ---
 
 [FrontierCode](https://cognition.com/blog/frontier-code) (Cognition) grades an agent's patch on maintainer-authored rubrics and asks the question its leaderboard leads with: *"would the maintainer actually merge this PR?"* The conclusion offers it as the instrument enterprises and researchers "can trust... to evaluate the production readiness of their strongest models." I ran it through the [how-to-audit checklist](/how-to-audit-a-benchmark), then measured its construct against a population where the answer key exists.

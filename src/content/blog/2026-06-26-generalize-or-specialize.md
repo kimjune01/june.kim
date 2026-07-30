@@ -1,7 +1,7 @@
 ---
 variant: post-paper
 title: "Generalize or Specialize? Retaining Reusable Skills for World-Model Agents"
-tags: methodology, cognition
+tags: cognition
 autonumber: true
 ---
 

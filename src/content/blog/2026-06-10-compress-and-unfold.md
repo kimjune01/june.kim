@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "Compress and Unfold"
-tags: cognition, methodology
+tags: cognition
 image: "/assets/coral-tubastraea.jpg"
 ---
 

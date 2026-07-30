@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "Wrong Again"
-tags: epistemology, methodology, reflecting
+tags: epistemology, reflecting
 ---
 
 [Last month](/type-iii-error) I wrote about spending a week measuring the wrong thing carefully, and the reflex I built afterward to catch it: when a result is too clean, stop and read the cold source before you scale. I thought that was the lesson. Then I built the real paper on top of the corrected harness and got the wrong question again, twice, in ways that reflex could not catch.

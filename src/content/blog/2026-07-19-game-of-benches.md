@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Game of Benches"
-tags: methodology, epistemology, reflecting
+tags: epistemology, reflecting
 ---
 
 Between late May and the middle of July I audited five coding benchmarks. [DeepSWE](/auditing-deepswe) landed on 26 May. [ProgramBench](/programbench-measures-recall) in June. [Terminal-Bench](/terminal-bench-frame), [MirrorCode](/auditing-mirrorcode), and [FrontierCode](/auditing-frontiercode) in July, the last two within a day of each other. [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) was already in the field on OpenAI's February recommendation.

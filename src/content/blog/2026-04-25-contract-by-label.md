@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Contract by label"
-tags: coding, methodology
+tags: coding
 ---
 
 Nobody picks MIT vs GPL by reading the legal mechanism. They pick by what they're licensed to do — use commercially, fork freely, keep derivatives proprietary. The mechanism (copyleft enforcement, patent grants, redistribution conditions) is the receipt; the license name is the product.

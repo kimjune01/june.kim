@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 370" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .title { font-size: 16px; font-weight: 650; fill: #333; }
+    .label { font-size: 13px; fill: #555; }
+    .small { font-size: 12px; fill: #777; font-style: italic; }
+    .axis { stroke: #bbb; stroke-width: 1; fill: none; }
+    .curve { stroke: #333; stroke-width: 2; fill: none; }
+    .tailfill { fill: #4477cc; opacity: 0.25; }
+    .taillabel { font-size: 13px; fill: #35619e; }
+    .tailsmall { font-size: 12px; fill: #35619e; font-style: italic; }
+    .bar { fill: #333; }
+    .ghost { stroke: #999; stroke-width: 1.6; stroke-dasharray: 5 5; fill: none; }
+    .leader { stroke: #999; stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+  </style>
+
+  <!-- ===== Left panel: the web ===== -->
+  <text x="60" y="38" class="title">the web, 2010</text>
+
+  <path class="axis" d="M60,56 L60,314 L430,314"/>
+  <text x="245" y="340" class="label" text-anchor="middle">sites by rank</text>
+  <text x="44" y="185" class="label" text-anchor="middle" transform="rotate(-90 44 185)">traffic</text>
+
+  <path class="tailfill" d="M170,258 C210,281 290,301 428,308 L428,313 L170,313 Z"/>
+  <path class="curve" d="M62,74 C85,136 115,211 170,258 C210,281 290,301 428,308"/>
+
+  <text x="255" y="284" class="taillabel">the aggregatable tail</text>
+  <text x="255" y="301" class="tailsmall">(AdSense, Mediavine)</text>
+
+  <text x="88" y="91" class="small">portals</text>
+  <text x="150" y="176" class="small">search scatters demand&#8594;</text>
+
+  <!-- ===== Right panel: chat ===== -->
+  <text x="530" y="38" class="title">chat, 2026</text>
+
+  <path class="axis" d="M530,56 L530,314 L900,314"/>
+  <text x="715" y="340" class="label" text-anchor="middle">surfaces by rank</text>
+
+  <rect class="bar" x="540" y="76"  width="26" height="238" rx="4"/>
+  <rect class="bar" x="574" y="156" width="26" height="158" rx="4"/>
+  <rect class="bar" x="608" y="224" width="26" height="90"  rx="4"/>
+  <rect class="bar" x="642" y="264" width="26" height="50"  rx="4"/>
+
+  <rect class="bar" x="690" y="307" width="7" height="7" rx="2"/>
+  <rect class="bar" x="712" y="309" width="7" height="5" rx="2"/>
+  <rect class="bar" x="734" y="308" width="7" height="6" rx="2"/>
+  <rect class="bar" x="756" y="310" width="7" height="4" rx="2"/>
+  <rect class="bar" x="778" y="309" width="7" height="5" rx="2"/>
+  <rect class="bar" x="800" y="310" width="7" height="4" rx="2"/>
+  <rect class="bar" x="822" y="309" width="7" height="5" rx="2"/>
+  <rect class="bar" x="844" y="310" width="7" height="4" rx="2"/>
+
+  <path class="ghost" d="M648,246 C690,266 760,288 896,296"/>
+  <text x="688" y="230" class="small">the tail that never formed</text>
+  <text x="688" y="247" class="small">(no distributor to scatter demand)</text>
+
+  <path class="leader" d="M766,286 L742,305"/>
+  <text x="770" y="282" class="small">ritual products</text>
+
+  <text x="553" y="68" class="small" text-anchor="middle">generalists</text>
+</svg>

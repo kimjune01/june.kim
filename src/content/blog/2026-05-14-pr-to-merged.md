@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "(PR) → merged"
-tags: coding, methodology, projects, pageleft
+tags: coding, projects, pageleft
 ---
 
 *Sequel to [(Issue) → PR](/issue-to-pr). The contributor side ships PRs with receipts; this is what runs on the maintainer side to read them.*

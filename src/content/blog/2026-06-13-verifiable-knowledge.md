@@ -3,7 +3,7 @@ variant: post-paper
 autonumber: true
 title: "Verifiable Knowledge"
 subtitle: "A protocol for trustless agents."
-tags: epistemology, cognition, methodology
+tags: epistemology, cognition
 keywords: agent-native epistemics, knowledge interop, entitlement, provenance, independent verification, verifiable knowledge, canon, falsifiability, reproducibility, protocol
 ---
 

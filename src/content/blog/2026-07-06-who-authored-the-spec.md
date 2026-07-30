@@ -1,7 +1,7 @@
 ---
 variant: post-paper
 title: "Who Authored the Spec? Evidence for the Line-Drawing Question Thaler Left Open"
-tags: methodology, coding
+tags: coding
 autonumber: true
 ---
 

@@ -3,7 +3,7 @@ variant: post-paper
 autonumber: true
 title: "What Cannot Be False Cannot Be True"
 subtitle: "Truth is verifiable. The unverifiable is untrue."
-tags: epistemology, cognition, methodology
+tags: epistemology, cognition
 keywords: epistemology, machine knowledge, agent epistemics, falsifiability, pragmatism, intuitionism, entitlement, bivalence, verifiable truth, phenomenon and noumenon
 ---
 

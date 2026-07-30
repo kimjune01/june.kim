@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Speedrunning Open Source"
-tags: coding, methodology
+tags: coding
 ---
 
 > Hello and thanks for lending a paw to Uptime Kuma! 🐻👋

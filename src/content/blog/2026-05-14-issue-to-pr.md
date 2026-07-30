@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "(Issue) → PR"
-tags: pageleft, coding, methodology
+tags: pageleft, coding
 ---
 
 Sweep and triage work. The pipeline scans open issues across 200 OSS repos, picks ones worth fixing, opens a fork, runs a hypothesis graph against the bug, implements with TDD, sends the diff to two adversarial reviewers, ships the PR, handles pushback, and either merges or learns from the closure. End to end, no human in the orchestration loop.

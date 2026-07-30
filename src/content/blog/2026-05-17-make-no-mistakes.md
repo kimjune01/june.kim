@@ -1,7 +1,7 @@
 ---
 variant: post-wide
 title: "Make No Mistakes"
-tags: coding, methodology
+tags: coding
 ---
 
 *Sequel to [Skills Lack Determinism](https://june.kim/skills-lack-determinism) and [Don't LLM What You Can Code](https://june.kim/dont-lang-what-you-can-math).*

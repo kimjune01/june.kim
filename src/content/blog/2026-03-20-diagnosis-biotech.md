@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "Diagnosis Biotech"
-tags: cognition, methodology
+tags: cognition
 ---
 
 *Part of the [cognition](/cognition) series. Pre-registration, data, and code: [github.com/kimjune01/universal-diagnosis](https://github.com/kimjune01/universal-diagnosis)*

@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Sour Red Tapes"
-tags: methodology, epistemology
+tags: epistemology
 ---
 
 > *Nullius in verba.*

@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Wrong Questions"
-tags: epistemology, methodology, reflecting
+tags: epistemology, reflecting
 ---
 
 A [Type III error](/type-iii-error) is an exact answer to the wrong question. From the inside it feels identical to knowing: the work is done correctly, the evidence is vivid and real, and all of it answers a question nobody should have asked. You cannot catch it by doubting harder, because doubt loses to vivid evidence every time. You catch it with a checklist, run before you scale.

@@ -3,7 +3,7 @@ variant: post-paper
 autonumber: true
 title: "Terminal-Bench Is Blind to Destruction"
 subtitle: "It grades what the task asked for, and nothing else the run touched."
-tags: coding, methodology, epistemology
+tags: coding, epistemology
 keywords: Terminal-Bench, terminal agents, benchmark, construct validity, frame condition, pass-to-pass, unwarranted destruction, agent safety, reward hacking, final-state grading, oracle problem
 ---
 

@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "Precisely Wrong"
-tags: epistemology, methodology, reflecting
+tags: epistemology, reflecting
 ---
 
 I spent a week and almost a thousand dollars measuring the wrong thing, carefully.

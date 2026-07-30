@@ -2,7 +2,7 @@
 variant: post-medium
 title: "Auditing Frontier-Bench"
 subtitle: "It destroys the agent's container before grading. On nine tasks, deleting unrelated state stayed invisible and the reward stayed 1."
-tags: methodology, epistemology, coding
+tags: epistemology, coding
 ---
 
 [Frontier-Bench](https://www.frontierbench.ai/), the same team's successor to Terminal-Bench, [released v0.1 on July 23](https://github.com/harbor-framework/frontier-bench/releases/tag/v0.1.0) with 74 tasks in seven domains. Its [review pipeline](https://github.com/harbor-framework/frontier-bench/blob/2d260bc7fb344dd13b1b920265e372b6dbc6a38d/docs/TASK_REVIEW_AUTOMATION.md) includes static checks, oracle validation, automatic `/cheat` trials for new tasks, maintainer-triggered `/fortify`, and a [35-criterion rubric](https://github.com/harbor-framework/frontier-bench/blob/2d260bc7fb344dd13b1b920265e372b6dbc6a38d/rubrics/task-implementation.toml) with an explicit preservation criterion.

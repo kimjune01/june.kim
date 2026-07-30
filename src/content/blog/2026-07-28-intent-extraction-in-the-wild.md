@@ -1,7 +1,7 @@
 ---
 variant: post
 title: "Intent Extraction in the Wild"
-tags: vector-space, methodology
+tags: vector-space
 ---
 
 [OpenAI's ad platform](https://help.openai.com/en/articles/20001047-ads-in-chatgpt) targets ads using conversational context, past chat history, and previous ad interactions. Call the targeting signal derived from past chats the dossier: what you've told the assistant before, brought to bear on which ad you see now. The assumption underneath is old and rarely stated: more data about the user means better targeting, so a profile must be worth building.

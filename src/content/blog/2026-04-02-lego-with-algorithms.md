@@ -1,7 +1,7 @@
 ---
 variant: post-wide
 title: "Lego with Algorithms"
-tags: cognition, methodology
+tags: cognition
 ---
 
 *Part of the [cognition](/cognition) series. Builds on [The Parts Bin](/the-parts-bin).*

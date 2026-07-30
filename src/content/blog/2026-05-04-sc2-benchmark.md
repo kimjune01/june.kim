@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "StarCraft 2 Is the Ideal Benchmark"
-tags: cognition, methodology
+tags: cognition
 image: "/assets/sc2-benchmark.jpg"
 ---
 

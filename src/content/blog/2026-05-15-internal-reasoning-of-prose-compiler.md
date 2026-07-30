@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Internal Reasoning of Prose Compiler"
-tags: coding, methodology, projects, pageleft
+tags: coding, projects, pageleft
 ---
 
 Two pipelines, one compiler. Sweep takes a natural-language issue and emits a pull request with embedded receipts. Immune takes that pull request and emits a verdict that the maintainer reads in thirty seconds. Together they compile intent to commit. The hypothesis graph is the IR. The only human gate is the maintainer's merge.

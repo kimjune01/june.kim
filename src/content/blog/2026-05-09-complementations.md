@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Complementations"
-tags: cognition, methodology
+tags: cognition
 ---
 
 People point their AI at open source repos and contribute. PRs with passing CI, repos they don't own, multiple projects, no compensation. Some get merged. Some get "DO NOT SUBMIT AI SLOP." They keep going.

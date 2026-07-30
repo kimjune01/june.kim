@@ -1,7 +1,7 @@
 ---
 variant: post-wide
 title: "Abduction Tuner"
-tags: coding, methodology
+tags: coding
 ---
 
 <!-- TODO: Add section on the transition graph — which parameters interact and why (BLOCK_M → {BLOCK_K, num_warps, ...}) -->
