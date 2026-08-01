@@ -1,7 +1,7 @@
 ---
 variant: post
 title: The Virtues of Typed Reasoning
-tags: reflecting, epistemology
+tags: reflecting, epistemology, methodology
 ---
 
 I like prose. I've written a lot of it. The nice thing about prose is that you can say anything.
@@ -36,6 +36,26 @@ These are not different names for the same blob of text. Each type does a differ
 Most bad reasoning is a [type error](/type-iii-error).
 
 Correlation cast to causation. Confidence cast to evidence. A benchmark score cast to general intelligence. A missing test cast to a passing one. An idea repeated until it gets cast to a fact.
+
+Good prose hides these casts better than bad prose. Confidence, detail, citations, and technical vocabulary can make a claim easier to accept, but none of them change what the claim is entitled to do.
+
+> Eloquent prose cannot substitute for epistemic entitlement.
+
+You don't need to draw a graph in every meeting. Start by translating the phrases people already use:
+
+| When someone says | Translate it to | What it still owes |
+|:--|:--|:--|
+| "We saw..." | Observation | Source, scope, and repeatability |
+| "The data shows..." | Observation plus an inference | Name the inference and its alternatives |
+| "I think..." | Hypothesis | A prediction that could be wrong |
+| "This means..." | Interpretation | A test that separates it from other meanings |
+| "We proved..." | Claim of verification | The check, boundary, and result |
+| "There's no evidence..." | Nothing found by the stated search | A test designed to establish absence or equivalence |
+| "Everyone agrees..." | Reported consensus | Independent evidence, if truth matters |
+| "I'm confident..." | Confidence report | Nothing; confidence is not evidence |
+| "We should..." | Recommendation | Evidence plus values, costs, and risk tolerance |
+
+The left column is how reasoning arrives. The middle column is what it is. The right column is what it still owes.
 
 ### Give disagreements an address
 
