@@ -1,34 +1,34 @@
 ---
 variant: post-paper
-title: "Union-Find Compaction: Provenance-Preserving Context Compression for LLM Agents at No Cost to Recall"
+title: "Union-Find Compaction: Provenance-Preserving Context Compression for LLM Agents"
 tags: methodology, cognition
 autonumber: true
 ---
 
-*Draft. When a conversational agent's context window fills, the standard fix is flat summarization: run a cheap model over the old messages, replace them with a paragraph, discard the sources. That paragraph cannot trace a claim to its origin, cannot be re-expanded, cannot be retrieved selectively, and every compaction stalls the session while it reprocesses the whole history. We compact instead through a union-find forest: each old message is a node, similar messages merge into equivalence classes, and each merge is one cheap summarizer call. This buys four properties by construction: provenance (`find` traces any summary to its sources), recoverability (`expand` reinflates a cluster), incremental graduation, and cross-session persistence. It buys them at no cost to recall, and in fact cheaper and faster. In a feature-flagged gemini-cli integration over twelve real GitHub-issue conversations, union-find recalls at least as well as flat summarization (+8.3pp, 30.2% vs 21.9%, no significant difference favoring flat) at 0.79x the cost and sub-millisecond latency; a seven-trial controlled study is tied-or-higher in every trial. Recall is directionally better but not yet significant, so we preregister a higher-powered replication that would upgrade non-regression to improvement.*
+*Draft. Conversational agents usually handle a full context window by replacing old messages with one summary. The summary is compact, but it severs each claim from its source and cannot restore details it omitted. We instead organize old messages in a union-find forest: related messages form clusters, each cluster has a summary, and the original messages remain attached as evidence. Structural merges happen synchronously; summary updates are coalesced and run while the main model is already working. This makes compaction incremental, auditable, reversible, and persistent across sessions. In a feature-flagged Gemini CLI integration over twelve GitHub-issue conversations, the method cost 0.79x as much as flat summarization without putting summary generation on the interactive path. Recall was 30.2% versus 21.9% for the baseline, a promising but non-significant difference (p = 0.136). Across seven controlled trials, it tied or exceeded the baseline each time. These studies do not yet prove non-inferiority or improvement; they motivate the higher-powered, formally specified replication preregistered below.*
 
 *[Download PDF](/assets/provenance-preserving-compaction.pdf) · arxiv-shape preprint, rebuilt from this source by [md2arxiv](https://github.com/kimjune01/md2arxiv). · Data: [controlled study](https://doi.org/10.5281/zenodo.21215158) · [field study](https://doi.org/10.5281/zenodo.21215160), each reproducible from its committed artifacts (CC BY-SA 4.0).*
 
 ## Introduction
 
-Every conversational agent has the same bounded-context problem. Conversations grow, the window does not. When it fills, the dominant fix is flat summarization: run a cheap model over everything outside a hot window, compress it to a budget, and let the summary replace the sources. [Gemini CLI](https://github.com/google-gemini/gemini-cli) compresses the oldest 70% of a session into one snapshot; comparable agents do the same.
+Every conversational agent has the same bounded-context problem: conversations grow, but the window does not. A common response is flat summarization. The agent runs a cheap model over everything outside a recent “hot” window, compresses that material to a fixed budget, and replaces the source messages with the result. [Gemini CLI](https://github.com/google-gemini/gemini-cli) compresses the oldest 70% of a session into one snapshot.
 
-Flat summarization works, and it destroys three things at once. The summary replaces every source, so no claim in it can be traced back to the message that produced it. The sources are discarded, so nothing can be re-expanded once compressed. And because compression runs over the whole history in a single pass, every compaction is a batch stall: twenty to thirty seconds of spinner while the session waits. Whatever the summarizer prompt did not prioritize is gone, invisibly, at compression time.
+Flat summarization is useful, but the replacement loses three capabilities. A claim in the summary no longer points to the message that supports it. An omitted detail cannot be restored from the summary. And the agent cannot retrieve one relevant topic independently because the entire cold history has become a single block. In the Gemini CLI implementation studied here, batch compression also put a twenty-to-thirty-second model call on the session's critical path.
 
-The three losses are not statistical. They are structural properties of replacing a set of sources with a paragraph, and no summarizer quality improvement recovers them. A better model writes a better paragraph; it still cannot cite, cannot expand, and cannot compact one message without reconsidering the rest.
+These losses come from the representation, not the quality of the summarizer. A better model may write a better paragraph, but a paragraph without source links still cannot identify its evidence or restore text that was discarded.
 
-We keep the sources. Represent the cold context as a [union-find](https://en.wikipedia.org/wiki/Disjoint-set_data_structure) forest: each graduated message is a node, topically similar messages merge into equivalence classes, and each `union` is a single cheap summarizer call that folds two small summaries into one. The summarizer calls were going to happen regardless; routing them through a disjoint-set structure turns them into a provenance spine, because `find` recovers the source messages of any cluster and `union` merges one message at a time. The operations are also near-O(1) amortized ([Tarjan 1975](https://doi.org/10.1145/321879.321884), with path compression and union by rank), which keeps the bookkeeping free, though at the scale we test the merge and lookup semantics matter more than the bound. The structure never forgets which messages belong together.
+Our alternative keeps the sources and adds an index over them. The cold context becomes a [union-find](https://en.wikipedia.org/wiki/Disjoint-set_data_structure) forest: each graduated message is a node, and topically similar nodes join the same cluster. The cluster root stores a summary, while membership metadata maps that summary back to its source messages. `find` locates the cluster for any message; enumerating that cluster's members recovers its evidence. With path compression and union by rank, the parent-pointer operations take amortized O(α(*n*)) time, where α is the inverse Ackermann function ([Tarjan 1975](https://doi.org/10.1145/321879.321884)). This bound does not include cluster search, member enumeration, centroid updates, or model summarization.
 
 From that one substitution, four properties follow by construction rather than by measurement:
 
-- **Provenance.** `find(m)` walks parent pointers to the cluster root, so every summary traces to its source messages. The summary is auditable against its sources.
+- **Provenance.** `find(m)` locates the cluster root, and the cluster's membership index identifies the source messages behind its summary.
 - **Recoverability.** `expand(root)` reinflates a cluster to its sources. Raw messages stay addressable; flat summarization discards them.
-- **Incremental.** Messages graduate one at a time, each in near-O(1). No batch stall, no latency spike; flat summarization reprocesses the entire history per compaction.
+- **Incremental operation.** Messages graduate one at a time; local indexing does not require reprocessing the entire cold history.
 - **Persistent.** The forest serializes as integer parent pointers. Save it, reload it next session, clusters intact.
 
-These four hold by construction: a structure either preserves provenance or it does not, and no significance test establishes them. What remains empirical is the precondition that makes them free. Provenance would be a trade, not a gift, if it cost recall; so the decisive claim is that routing compaction through the forest costs no recall against flat summarization, at less money and lower latency. That precondition has to be earned, and earning it is non-regression, not improvement.
+These four properties follow from retaining the sources and membership structure. The empirical question is whether the new representation preserves recall at an acceptable cost. The current results favor the forest, but the studies are too small to establish formal non-inferiority or a recall improvement.
 
-**Contributions.** (1) Union-find as the provenance spine for context compaction, with the four structural properties above. (2) A lazy-summarization design that keeps the per-session summarizer cost linear rather than quadratic in cluster growth. (3) Evidence from two studies, a controlled synthetic one and a feature-flagged gemini-cli field integration, that at matched token budget union-find recalls at least as well as flat summarization while costing less: the non-regression that makes the structural properties free. (4) A preregistered higher-powered replication that would upgrade non-regression to a positive recall improvement, stated as the confirmation this draft does not yet claim.
+**Contributions.** This work introduces union-find as a provenance index for context compaction. It then separates cheap structural merges from expensive model calls through deferred, coalesced summarization. A controlled Python prototype tests the clustering idea; a feature-flagged Gemini CLI integration tests the optimized design. Both provide encouraging recall results, while the field integration also reduces measured summarizer cost. A preregistered replication is designed to test formal non-inferiority and possible improvement at higher power.
 
 ## What Flat Compaction Destroys
 
@@ -46,16 +46,16 @@ The union-find forest restores all three because it never overwrites the sources
 
 | | Flat summarization | Union-find compaction |
 |---|---|---|
-| Provenance | none (paragraph has no inverse) | `find` &rarr; source messages |
+| Provenance | none (paragraph has no source index) | cluster membership &rarr; source messages |
 | Recoverability | sources discarded | `expand` &rarr; reinflate cluster |
 | Selective retrieval | whole summary or nothing | nearest cluster injected |
 | Compaction unit | whole history, single pass | one message, incremental |
-| Latency | batch stall (20&ndash;30s) | sub-millisecond append |
+| Update path | batch model call on critical path | sub-millisecond local append; summaries deferred |
 | Persistence | re-summarize each session | forest serialized as integers |
 
 </div>
 
-*Table 1. What each method preserves. The right column holds by construction; the evaluation asks whether it also costs any recall (it does not) and what it costs to run (less).*
+*Table 1. What each representation preserves. The evaluation asks how the structural benefits affect recall and operating cost.*
 
 ## Method
 
@@ -65,29 +65,37 @@ Context splits into two zones. The **hot** zone is the last *k* messages (defaul
 
 ![](/assets/uf-forest.svg)
 
-*Figure 1. Messages graduate oldest-first from the hot window into the cold forest. Each cluster holds one summary over its sources; `find` recovers a summary's sources, `expand` reinflates a cluster, and a new message joins by `union` when it is close enough to a centroid.*
+*Figure 1. Messages graduate oldest-first from the hot window into the cold forest. Each cluster holds one summary and retains its source membership. `find` locates a message's cluster, `expand` returns the cluster's sources, and `union` joins a new message when it is close enough to a centroid.*
 
-The write path, per graduated message:
+The field implementation's write path, per graduated message:
 
 1. Keep its timestamp; compute a [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) vector (local, no model call).
-2. Cosine-compare against cluster centroids. Above the merge threshold (default 0.15), `union` into the nearest cluster and refold its summary; below, start a singleton.
+2. Cosine-compare against cluster centroids. Above the merge threshold (default 0.15), `union` into the nearest cluster and mark its summary dirty; below, start a singleton.
 3. If clusters exceed the cap (default 10), force the closest pair to merge. Centroids update as weighted averages, so the geometry stays current without re-vectorizing history.
 
-The read path injects the nearest cluster's summary beside the hot window. Unlike in retrieval-augmented generation, summaries are pre-merged at write time, so injected context stays bounded and no per-turn retrieval call is needed. Each of the four properties is one operation here (`find`, `expand`, the single-message write path, serializing the pointer array), and none depends on the recall results below; they hold for any forest this path produces.
+The read path injects the nearest cluster's summary beside the hot window. Unlike retrieval systems that generate or rerank passages with a model at query time, this prototype chooses among summaries prepared in advance. Injected context therefore stays bounded and retrieval needs no model call. The forest provides cluster lookup and incremental updates; retained source storage and a membership index provide expansion and auditability.
 
-### Lazy summarization
+### Deferred, coalesced summarization
 
-The naive forest re-summarizes a cluster from its full membership on every merge. Message 90 re-reads 1 through 89; message 91 re-reads 1 through 90. That is quadratic in cluster growth. In an early build it produced roughly 80 summarizer calls per conversation against flat summarization's 2, a 5.2x cost premium.
+Union-find makes parent-pointer updates cheap; it does not make summarization cheap. The naive prototype re-summarizes a cluster from its full membership after every merge. If one cluster grows one message at a time, successive calls read 2, 3, ... *n* messages: quadratic source-text volume overall. In an early build, this produced roughly 80 summarizer calls per conversation against flat summarization's 2 and a 5.2x cost premium.
 
-The fix is to summarize lazily. `union` is synchronous and only records that a cluster's inputs are dirty; the actual re-summarization is deferred and coalesced, so a cluster that absorbs ten messages in quick succession pays one summarizer call, not ten. This keeps per-session summarizer cost linear in the number of clusters rather than quadratic in cluster size, and moves the method from a cost regression to a cost improvement (see §(field)). Folding two small summaries is cheaper than compressing the whole history, so a cluster of 5 to 20 messages summarizes with a small prompt and a small model.
+The field implementation decouples the two operations. `union` updates parent pointers, membership, and centroids synchronously, then marks the root dirty. For each dirty root, the system retains its last clean summary plus the raw messages added since that summary. A background resolver coalesces all intervening merges into one call:
+
+`summarize([last_clean_summary, ...new_messages])`
+
+Thus each newly graduated message enters one summarization batch rather than every later re-summarization of its cluster. The bounded previous summary carries older information forward. Multiple dirty clusters can resolve concurrently, and generation guards prevent an in-flight result from overwriting a root that changed during the call.
+
+Resolution runs while the main agent model is already working. An overlap window keeps newly graduated messages available verbatim until their cluster summary is ready; `render` uses cached clean summaries and does not await a summarizer. This moves model latency off the interactive path rather than pretending the model call is sub-millisecond. In the field study, coalescing and smaller prompts turned the early cost regression into a cost improvement (see §(field)).
+
+This optimization changes summarizer input growth, not the asymptotic cost of every operation. `find` and the parent-pointer portion of `union` are amortized O(α(*n*)); expanding a *k*-message cluster is O(*k*), centroid comparison over *c* clusters of dimension *d* is O(*cd*), and an exhaustive closest-pair fallback is O(*c*²*d*). With the tested cap of ten clusters, model inference remains the dominant cost.
 
 ## Evaluation
 
-The structure leaves one empirical question unsettled: at a matched token budget, does routing compaction through the forest cost any recall the agent would otherwise keep? The structural properties are free only if the answer is no, so the two studies below, one controlled and one in production, test non-regression. A significant improvement, if it holds, is upside; non-regression is the result the free lunch rests on.
+The structure leaves one empirical question: at a matched token budget, how does routing compaction through the forest affect recall? The two studies below provide an initial estimate. They were not large enough to establish formal non-inferiority; that is the purpose of the planned replication.
 
 ### Controlled study {#controlled}
 
-A synthetic 200-message DevOps conversation seeded with 40 verifiable facts. Both methods use the same cheap summarizer (Haiku), the same token budget, and the same retrieval machinery. An LLM judge scores binary recall: "PostgreSQL 16.2" counts, "PostgreSQL" does not. [McNemar's test](https://en.wikipedia.org/wiki/McNemar's_test) on the discordant pairs. Seven trials vary the summarizer, the compression ratio, retrieval, tuning, and timestamping.
+The controlled study uses the original, eager Python prototype: a synthetic 200-message DevOps conversation seeded with 40 verifiable facts. It tests whether topical clustering preserves recall, not whether deferred summarization reduces cost. Both methods use the same cheap summarizer (Haiku), the same token budget, and the same retrieval machinery. An LLM judge scores binary recall: "PostgreSQL 16.2" counts, "PostgreSQL" does not. [McNemar's test](https://en.wikipedia.org/wiki/McNemar's_test) is applied to the discordant pairs. Seven trials vary the summarizer, compression ratio, retrieval, tuning, and timestamping.
 
 <div class="results-table" markdown="1">
 
@@ -108,11 +116,11 @@ A synthetic 200-message DevOps conversation seeded with 40 verifiable facts. Bot
 .results-table th { background: #f0f0f0 !important; }
 </style>
 
-At low compression (50 messages) the methods tie: with little to discard, provenance structure buys nothing, and neither loses. At 200 messages union-find is higher in every trial, by 8 to 18 points, and lower in none. Trial 2 clears significance (p = 0.039); the rest are directional at n = 40 facts. The seven trials vary different axes (summarizer, compression ratio, retrieval, tuning, timestamps) rather than repeat one test, so they read as a consistent direction across conditions, not seven shots at a single hypothesis to correct for. Every trial shares the floor: union-find never recalls less than flat. Trial 7 mirrors production, a cheap model summarizing and an expensive model answering. It shows why the floor matters: the expensive answerer cannot recover facts the cheap summary already dropped, so any recall difference has to be won at compaction time, not answer time.
+At low compression (50 messages), the methods tie. At 200 messages, union-find is higher in every trial by 8 to 18 points. Trial 2 reaches p = 0.039; the remaining trials are individually inconclusive at n = 40 facts. Because the trials change several conditions rather than repeat one fixed experiment, their consistent direction is suggestive but does not constitute a pooled significance test. Trial 7 most closely mirrors production: a cheap model summarizes and an expensive model answers. The expensive answerer cannot recover a fact already omitted during compaction, so recall must be preserved at the summarization stage.
 
 ### Field study {#field}
 
-We implemented the method as a feature-flagged fork of Gemini CLI and evaluated on 12 real GitHub-issue conversations of about 120 messages each; 8 factual questions per conversation (96 total) were generated from the uncompressed content and scored by a blinded LLM judge. Flat compression runs on the same data. We preregistered three hypotheses before any run.
+We implemented the method in a feature-flagged fork of Gemini CLI and evaluated it on 12 GitHub-issue conversations of about 120 messages each. Eight factual questions per conversation (96 total) were generated from the uncompressed content and scored by a blinded LLM judge. Flat compression ran on the same data. We preregistered three hypotheses before any run.
 
 <div class="results-table" markdown="1">
 
@@ -120,7 +128,7 @@ We implemented the method as a feature-flagged fork of Gemini CLI and evaluated 
 |---|---|---|
 | Latency | **PASS** | append p95 = 0.33ms, render p50 = 0.006ms |
 | Cost | **PASS** | 0.79x flat, 21% cheaper |
-| Recall | Trending | +8.3pp (30.2% vs 21.9%), p = 0.136 |
+| Recall | Inconclusive | +8.3pp (30.2% vs 21.9%), p = 0.136 |
 
 </div>
 
@@ -129,9 +137,9 @@ We implemented the method as a feature-flagged fork of Gemini CLI and evaluated 
 .results-table th { background: #f0f0f0 !important; }
 </style>
 
-Latency and cost pass with no close calls. Lazy summarization makes 35 summarizer calls across 12 conversations where flat makes 24 and the naive quadratic forest would have made 960; the extra 11 calls over flat feed small clusters with small prompts, so total cost still lands below flat. The 0.79x figure is summarizer (API) cost, the dominant term; the forest's local operations (TF-IDF vectorization, cosine similarity, centroid updates, serialization) make no model call and are excluded as negligible against a summarizer round-trip. Append and render are sub-millisecond, so compaction no longer stalls the session.
+Latency and cost pass their preregistered thresholds. Deferred summarization makes 35 summarizer calls across 12 conversations, compared with 24 for flat compression and 960 projected for the eager forest under the same workload. Its 11 additional calls use smaller prompts, bringing total summarizer API cost to 0.79x the baseline. That figure excludes local TF-IDF vectorization, cosine similarity, centroid updates, and serialization. Append and render bookkeeping are sub-millisecond; background resolution is not, but overlaps the main model call instead of blocking the next turn.
 
-Recall does not regress. Union-find is +8.3 points across 96 questions (30.2% vs 21.9%), winning 8 conversations, tying 2, and losing 2, with no significant difference favoring flat (p = 0.136). The point estimate favors union-find; the evidence is consistent with a moderate gain and with no difference, but not with a loss. That is the claim the free lunch needs, and no more than it: recall is not traded away for provenance. This is a non-inferiority reading of a two-sided test read for direction; the formal version, with a stated margin, is preregistered in [§(limits)](#limits), not yet run. Two of the twelve conversations did lose head-to-head. We do not yet claim a positive recall improvement from this study.
+The recall result is encouraging but inconclusive. Union-find leads by 8.3 points across 96 questions (30.2% versus 21.9%), winning 8 conversations, tying 2, and losing 2. The difference is not statistically significant (p = 0.136). A non-significant two-sided test cannot establish either equality or non-inferiority, so this study supports neither a “no regression” claim nor a positive improvement claim on its own. The point estimate supplies an effect size for the formally specified replication in [§(limits)](#limits).
 
 The integration is public and inspectable to any depth: the implementation submitted as [PR #24736](https://github.com/google-gemini/gemini-cli/pull/24736) (not merged), the [issue](https://github.com/google-gemini/gemini-cli/issues/22877), the [design discussion](https://github.com/google-gemini/gemini-cli/discussions/26488), and the preregistration, raw data, and latency CSVs in the spec repository.
 
@@ -159,13 +167,13 @@ Where union-find leads, it leads on footnote facts. Flat summarization preserves
 
 ## Limitations and Planned Confirmation {#limits}
 
-### What is established
+### What the current evidence shows
 
-What this draft claims empirically is non-regression, not improvement. Union-find is tied-or-higher in all seven controlled trials and +8.3pp in the field with no significant difference favoring flat, which supports the precondition the free lunch needs; a positive recall improvement is not yet established (one of seven controlled trials at p < 0.05, the field study at p = 0.136). The right frame is formal non-inferiority testing, with a stated margin rather than a two-sided test read for direction, and it is not yet run.
+Union-find is tied or higher in all seven controlled trials and leads by 8.3 points in the field study. One controlled trial reaches p < 0.05; the field study does not (p = 0.136). These results justify further testing, but they establish neither improvement nor non-inferiority. The latter requires a prespecified margin and confidence interval, not a non-significant two-sided test.
 
 ### The preregistered confirmation
 
-We preregister it. A higher-powered replication holds the design fixed and scales to 200 or more paired questions across a larger conversation corpus, powered to detect an 8-point difference at the observed base rate. It adds two conditions that stress provenance directly: contradictory facts and stale facts, where a later message overrides an earlier one and the compaction must keep the correction traceable rather than blend the two. The hypothesis, the design, and the analysis are fixed here in advance; only the token budget to run it is pending. The gap is not ours alone: maintainers of the integration target independently flagged that a compression eval harness is badly needed, and this study is that harness. Should it fail to confirm, the structural contribution and the non-regression result stand, and only the improvement claim is withheld.
+The preregistered replication holds the design fixed and scales to 200 or more paired questions across a larger conversation corpus, powered to detect an 8-point difference at the observed base rate. It also adds contradictory and stale facts, where a later message overrides an earlier one and compaction must keep the correction traceable rather than blend the two. The hypothesis, design, and analysis are fixed in advance; only the token budget to run it is pending. If the recall result does not replicate, the representation will still preserve source membership, but its empirical tradeoff against flat summarization will remain unresolved.
 
 ### Further limits
 
@@ -179,14 +187,14 @@ The forest serializes into a single small store (integer parent pointers, cluste
 
 - **Persistence across sessions.** Prior conversations reload as pre-merged clusters, not a blank window, with no pinned notes and no "as we discussed last time." A new session inherits what earlier ones understood.
 - **Multiplayer read-access.** Persist the forest across people, not just sessions, and two agents on one repository feed one forest. Agent A files a race condition it hit in the payment flow; agent B, on an unrelated feature, queries the forest and routes around it, the two never communicating. A new contributor's agent inherits the forest on clone. The result is a record the others miss: code is what the software *is*, git history is what *changed*, the forest is what is *understood*.
-- **Concurrent write.** Union-find merges are associative, commutative, and order-independent, so two sessions writing in parallel converge without a referee, the way a [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) does; when two claims contradict, both are filed with provenance and the reader judges. The session is where you work, the forest where you meet.
+- **Shared write, with coordination.** Multiple sessions can contribute messages to one store, and retained provenance lets a reader inspect conflicting claims. The prototype would still need transaction semantics and a deterministic merge policy before concurrent replicas could converge safely; union-find alone does not make generated summaries a [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type).
 - **Branching.** Forking the forest for a what-if conversation inherits all context, giving version-control semantics for conversations.
 
-Each follows from keeping the sources and their structure instead of a paragraph. Governance is a thin layer over the same store: access modes (private, read-only, shared) and a retention policy on unqueried clusters, with the clustering parameters left as convention. The fuller vision of a shared understanding-layer for a team is developed separately ([Union Found](/union-found)); the narrower point is that the data structure measured here already carries the persistence, provenance, and conflict-free merge those capabilities need.
+The first capability follows directly from serialization; the others are design opportunities enabled by retained sources, not properties established by this evaluation. They would require access control, retention rules, concurrency control, and policies for contradictory or sensitive material. The fuller vision of a shared understanding layer is developed separately ([Union Found](/union-found)).
 
 ## Conclusion
 
-Flat context compaction trades provenance, recoverability, and selective retrieval for a paragraph, and stalls the session to do it. Routing the summarizer calls that were happening anyway through a union-find forest recovers all three by construction, at 0.79x the cost and sub-millisecond latency. It does so without costing recall: union-find is tied-or-higher in every controlled trial and does not significantly regress in the field, pending the formal non-inferiority test we preregister. The standing result is that the structural and cost wins are free, at no measured cost to what the agent remembers. The open one, which we have preregistered, is whether recall also improves outright.
+Flat compaction turns the cold history into one irreversible paragraph. A union-find forest instead keeps source messages in topic clusters, allowing summaries to be audited, expanded, updated incrementally, and persisted. In the Gemini CLI field study, the implementation used 0.79x the baseline's summarizer cost and overlapped summary generation with the main model call. Recall favored the forest in both studies, but the samples do not establish improvement or non-inferiority. The preregistered replication is intended to decide that empirical question; the current result is a workable provenance-preserving design with promising early measurements.
 
 ## Availability
 
