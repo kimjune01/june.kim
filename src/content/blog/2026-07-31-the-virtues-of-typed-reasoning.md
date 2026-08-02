@@ -57,6 +57,12 @@ You don't need to draw a graph in every meeting. Start by translating the phrase
 
 The left column is how reasoning arrives. The middle column is what it is. The right column is what it still owes.
 
+### Meetings already have type systems
+
+This is not the first attempt to inject epistemology into a meeting. In 1970, Kunz and Rittel proposed [IBIS](https://escholarship.org/uc/item/5cj786v8), a grammar of issues, positions, and arguments for group decisions. [Dialogue Mapping](https://cognexus.org/id41.htm) applies it by translating everyday meeting-speak into questions, ideas, pros, and cons on a shared screen. Toulmin separated arguments into claims, grounds, warrants, qualifiers, backing, and rebuttals. [Six Thinking Hats](https://www.debono.com/) separates facts, feelings, risks, benefits, ideas, and process so a group doesn't confuse one mode for another. Intelligence analysts use [Analysis of Competing Hypotheses](https://www.cia.gov/resources/csi/static/955180a45afe3f5013772c313b16face/Tradecraft-Primer-apr09.pdf) to array evidence against alternatives instead of collecting support for a favorite.
+
+Each one types conversation to prevent a familiar failure. The addition here is a promotion rule: no move inherits a stronger epistemic entitlement just because it was spoken well. An observation can become evidence only through a declared inference and test. A hypothesis can become a conclusion only by surviving the checks that its type owes. The meeting can stay conversational as long as its claims can't skip the line.
+
 ### Give disagreements an address
 
 When two people disagree through prose, they write more prose. One publishes a paper, another a rebuttal, then the first a response. Now you have three documents, and the disagreement is somewhere inside all of them.
