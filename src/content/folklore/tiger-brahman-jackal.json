@@ -1,0 +1,59 @@
+{
+  "id": "tiger-brahman-jackal",
+  "order": 7,
+  "featured": true,
+  "title": "The Tiger, the Brahman, and the Jackal",
+  "originalTitle": "बाघ, ब्राह्मण और सियार · Bāgh, Brāhmaṇ aur Siyār",
+  "tradition": "Indian tale",
+  "region": "Asia",
+  "culture": "India",
+  "place": "A road beside a tiger’s cage",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 4,
+  "themes": [
+    "cleverness",
+    "promises",
+    "tigers"
+  ],
+  "color": "#b8652f",
+  "colorSoft": "#edcf9e",
+  "sourceTitle": "Indian Fairy Tales",
+  "sourceAuthor": "Joseph Jacobs",
+  "sourceYear": "1892",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/7128",
+  "note": "A new concise adaptation of “The Tiger, the Brahman, and the Jackal,” from Joseph Jacobs’s compilation.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published in 1892 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A jackal puzzles over a tiger waiting beside an open cage.",
+  "art": "jackal",
+  "scenes": [
+    [
+      "A tiger begged a passing Brahman to open his cage. “I will be grateful forever,” he promised.",
+      "But once free, the tiger stretched and announced that he would eat his rescuer."
+    ],
+    [
+      "The Brahman asked three judges whether this was fair. A tree, a buffalo, and the road each remembered how people had used them badly. All sided with the tiger."
+    ],
+    [
+      "Then a jackal arrived. He listened, frowned, and walked around the cage. “I cannot understand. Was the cage inside the tiger, or the Brahman inside the cage?”"
+    ],
+    [
+      "“The tiger was inside!” they cried. The jackal shook his head. “Such a large tiger in this little cage? Show me.”",
+      "Impatiently, the tiger stepped back inside and curled himself up."
+    ],
+    [
+      "The jackal slammed the door. “Now I understand perfectly,” he said.",
+      "The Brahman thanked him and continued down the road, while the tiger had time to consider the worth of a promise."
+    ]
+  ],
+  "image": "/folklore/art/covers/tiger-brahman-jackal.webp"
+}

@@ -1,0 +1,85 @@
+---
+interface Props {
+  title: string;
+  path: string;
+  description: string;
+  count: number;
+  compact?: boolean;
+}
+
+const { title, path, description, count, compact = false } = Astro.props;
+const headingId = `shelf-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+---
+
+<section class="story-shelf" aria-labelledby={headingId} data-story-shelf>
+  <header class="shelf-head">
+    <div>
+      <p class="shelf-path">{path}</p>
+      <h2 id={headingId}>{title}</h2>
+      <p class="shelf-description">{description}</p>
+    </div>
+    <div class="shelf-actions">
+      <span class="shelf-count">{count} {count === 1 ? 'story' : 'stories'}</span>
+      <div class="shelf-controls" hidden>
+        <button type="button" data-shelf-prev aria-label={`Previous items in ${title}`}><span aria-hidden="true">←</span></button>
+        <button type="button" data-shelf-next aria-label={`More items in ${title}`}><span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </header>
+  <div class:list={["shelf-rail", { compact }]}><slot /></div>
+</section>
+
+<style>
+  .story-shelf { position: relative; width: 100%; min-width: 0; overflow: hidden; }
+  .shelf-head { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1rem; padding-right: 9.5rem; }
+  .shelf-head h2 { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: clamp(1.35rem, 2.3vw, 1.8rem); font-weight: 680; line-height: 1.1; letter-spacing: -.025em; }
+  .shelf-path { margin: 0 0 .32rem; color: var(--muted); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .66rem; font-weight: 720; letter-spacing: .07em; text-transform: uppercase; }
+  .shelf-description { margin: .38rem 0 0; color: var(--muted); font-size: .85rem; }
+  .shelf-count { flex: none; padding-bottom: .18rem; color: var(--muted); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .72rem; }
+  .shelf-actions { position: absolute; top: .05rem; right: .15rem; display: flex; flex: none; align-items: center; gap: .8rem; }
+  .shelf-controls { display: flex; gap: .35rem; }
+  .shelf-controls button { display: inline-grid; width: 2.35rem; height: 2.35rem; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, #fffaf0 88%, transparent); color: var(--ink); font: 750 .9rem/1 system-ui, sans-serif; cursor: pointer; box-shadow: 0 .2rem .7rem rgba(60,45,25,.07); }
+  .shelf-controls button:hover:not(:disabled) { border-color: var(--ink); transform: translateY(-1px); }
+  .shelf-controls button:disabled { opacity: .3; cursor: default; }
+  .shelf-rail { display: grid; width: 100%; max-width: 100%; grid-auto-flow: column; grid-auto-columns: calc((100% - 3rem) / 3); gap: clamp(.9rem, 2vw, 1.5rem); min-width: 0; overflow-x: auto; overscroll-behavior-inline: contain; padding: .2rem .15rem 1.2rem; scroll-padding-inline: .15rem; scroll-snap-type: x proximity; scrollbar-color: var(--line) transparent; scrollbar-width: thin; }
+  .shelf-rail > :global(*) { scroll-snap-align: start; }
+  .shelf-rail.compact { grid-auto-columns: calc((100% - 3rem) / 3); }
+  @media (max-width: 760px) {
+    .shelf-head { margin-inline: 1.1rem; padding-right: 4rem; }
+    .shelf-actions { right: 1.1rem; }
+    .shelf-rail { grid-auto-columns: min(82vw, 22rem); gap: .9rem; padding: .2rem 1.1rem 1.2rem; scroll-padding-inline: 1.1rem; scrollbar-width: none; }
+    .shelf-rail::-webkit-scrollbar { display: none; }
+    .shelf-rail.compact { grid-auto-columns: min(78vw, 19rem); }
+    .shelf-controls { display: none !important; }
+  }
+  @media (max-width: 470px) {
+    .shelf-count { display: none; }
+  }
+</style>
+
+<script>
+  const setupShelf = (section) => {
+    if (section.dataset.shelfReady) return;
+    section.dataset.shelfReady = 'true';
+    const rail = section.querySelector('.shelf-rail');
+    const controls = section.querySelector('.shelf-controls');
+    const previous = section.querySelector('[data-shelf-prev]');
+    const next = section.querySelector('[data-shelf-next]');
+    if (!rail || !controls || !previous || !next) return;
+
+    const update = () => {
+      const overflow = rail.scrollWidth > rail.clientWidth + 2;
+      controls.hidden = !overflow;
+      previous.disabled = rail.scrollLeft <= 2;
+      next.disabled = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 2;
+    };
+    const move = direction => rail.scrollBy({ left: direction * rail.clientWidth * .82, behavior: 'smooth' });
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    rail.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(rail);
+    update();
+  };
+
+  document.querySelectorAll('[data-story-shelf]').forEach(setupShelf);
+</script>

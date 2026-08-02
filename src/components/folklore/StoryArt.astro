@@ -1,0 +1,54 @@
+---
+interface Props {
+  kind: string;
+  label: string;
+  image?: string;
+  class?: string;
+}
+
+const { kind, label, image, class: className } = Astro.props;
+---
+
+{image && <img class={className} src={image} alt={label} loading="lazy" decoding="async" />}
+
+{!image && kind === 'tiger' && (
+  <svg class={className} viewBox="0 0 600 430" role="img" aria-label={label}>
+    <rect width="600" height="430" rx="35" fill="#f4c9a8"/><circle cx="485" cy="80" r="48" fill="#fff0c9"/>
+    <path d="M0 305Q110 210 220 303T440 292T650 290V430H0Z" fill="#cf7858"/><path d="M0 340Q125 270 245 340T500 330T700 345V430H0Z" fill="#9e4538"/>
+    <ellipse cx="332" cy="236" rx="108" ry="86" fill="#d97639"/><path d="M249 185 220 120 286 155m136 27 36-62-77 35" fill="#d97639" stroke="#29251f" stroke-width="9"/>
+    <ellipse cx="332" cy="249" rx="64" ry="54" fill="#f6d59f"/><circle cx="296" cy="218" r="9"/><circle cx="367" cy="218" r="9"/><path d="M321 247h22l-11 13zm11 13q-15 18-35 4m35-4q15 18 35 4" fill="none" stroke="#29251f" stroke-width="8"/>
+    <path d="M95 344 82 165h137l-13 179M82 165l68-48 69 48" fill="none" stroke="#5d3a2e" stroke-width="10"/><rect x="106" y="165" width="89" height="116" rx="44" fill="#b6d0d1" stroke="#5d3a2e" stroke-width="8"/><path d="M120 195q32-35 61 0" fill="none" stroke="#fff" stroke-width="7" opacity=".7"/>
+  </svg>
+)}
+
+{!image && kind === 'bannock' && (
+  <svg class={className} viewBox="0 0 600 430" role="img" aria-label={label}>
+    <rect width="600" height="430" rx="35" fill="#c8dfc8"/><circle cx="488" cy="83" r="52" fill="#fff4c8"/>
+    <path d="M0 280Q105 180 210 280T430 270T650 275V430H0Z" fill="#73a087"/><path d="M0 340Q120 255 250 340T520 330T700 340V430H0Z" fill="#36695d"/><path d="M110 430q55-153 164-147t207 147" fill="#e5c995"/>
+    <circle cx="302" cy="268" r="81" fill="#f4e2b6" stroke="#6a4d32" stroke-width="9"/><circle cx="276" cy="252" r="7" fill="#6a4d32"/><circle cx="330" cy="252" r="7" fill="#6a4d32"/><path d="M274 291q28 20 57 0" fill="none" stroke="#6a4d32" stroke-width="8" stroke-linecap="round"/><path d="M250 205q52-27 103 3M249 331l-25 31m131-31 25 31" fill="none" stroke="#6a4d32" stroke-width="9" stroke-linecap="round"/>
+    <g fill="#fbf3dc"><circle cx="75" cy="95" r="14"/><circle cx="104" cy="78" r="19"/><circle cx="134" cy="97" r="13"/></g>
+  </svg>
+)}
+
+{!image && kind === 'anansi' && (
+  <svg class={className} viewBox="0 0 600 430" role="img" aria-label={label}>
+    <rect width="600" height="430" rx="35" fill="#d8c9e8"/><circle cx="92" cy="80" r="49" fill="#fff0bd"/><path d="M0 337Q139 277 265 338T650 325V430H0Z" fill="#7c679e"/>
+    <path d="M423 430V103m0 99-83-72m83 15 73-78m-73 191-101-44m101-6 88-44" stroke="#473856" stroke-width="20" stroke-linecap="round"/><ellipse cx="250" cy="278" rx="57" ry="67" fill="#a65d3c" stroke="#473856" stroke-width="9"/><path d="M216 246q34-28 69 0" fill="none" stroke="#e8b36f" stroke-width="10"/>
+    <g fill="#342a3c"><circle cx="126" cy="284" r="42"/><circle cx="126" cy="230" r="27"/></g><g stroke="#342a3c" stroke-width="10" stroke-linecap="round"><path d="m101 263-54-35m55 56-67 3m70 16-49 43m94-83 52-39m-47 60 65-5m-70 26 47 45"/></g>
+  </svg>
+)}
+
+{!image && !['tiger', 'bannock', 'anansi'].includes(kind) && (
+  <svg class={className} viewBox="0 0 600 430" role="img" aria-label={label}>
+    <rect width="600" height="430" rx="35" fill="#d9d3bd"/>
+    <circle cx="475" cy="88" r="51" fill="#fff1bd"/>
+    <path d="M0 315Q105 220 210 315T430 304T650 309V430H0Z" fill="#859b7b"/>
+    <path d="M0 365Q125 295 250 365T520 355T700 365V430H0Z" fill="#536b59"/>
+    <path d="M213 126q87-34 174 0v201q-87-34-174 0Z" fill="#fff8e8" stroke="#574b3e" stroke-width="10"/>
+    <path d="M300 113v201M240 169h37m-37 37h37m46-37h37m-37 37h37" stroke="#a36a50" stroke-width="9" stroke-linecap="round"/>
+  </svg>
+)}
+
+<style>
+  img { display: block; width: 100%; height: 100%; object-fit: cover; }
+</style>

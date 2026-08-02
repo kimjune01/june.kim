@@ -1,0 +1,57 @@
+{
+  "id": "bremen-town-musicians",
+  "order": 9,
+  "featured": false,
+  "title": "The Bremen Town Musicians",
+  "originalTitle": "Die Bremer Stadtmusikanten",
+  "tradition": "German tale",
+  "region": "Europe",
+  "culture": "Germany",
+  "place": "The road to Bremen",
+  "language": "English",
+  "ages": "6–10",
+  "minutes": 5,
+  "themes": [
+    "friendship",
+    "music",
+    "animals"
+  ],
+  "color": "#526b86",
+  "colorSoft": "#c9d5e2",
+  "sourceTitle": "The Fairy Book",
+  "sourceAuthor": "Dinah Maria Mulock Craik",
+  "sourceYear": "1863",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/19734",
+  "note": "A new shortened adaptation of the Brothers Grimm tale as printed in Dinah Maria Mulock Craik’s public-domain collection.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published in the nineteenth century and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A donkey, dog, cat, and rooster make music beneath a cottage window.",
+  "art": "musicians",
+  "scenes": [
+    [
+      "An old donkey left home and set out for Bremen. “Perhaps I can become a town musician,” he thought."
+    ],
+    [
+      "On the road he met an old dog, an old cat, and a rooster in trouble. “Come with me,” said the donkey. “Together we can make music.”"
+    ],
+    [
+      "At night they saw a cottage where robbers feasted. The animals stacked themselves—donkey, dog, cat, then rooster—and performed their loudest song through the window."
+    ],
+    [
+      "The terrified robbers fled. When one crept back, the cat scratched, the dog barked, the donkey kicked, and the rooster crowed from the roof. He raced away with a wild tale of monsters."
+    ],
+    [
+      "The four friends found the cottage so comfortable that they never reached Bremen.",
+      "They had set out to become musicians, and in their own noisy fashion, music had found them a home."
+    ]
+  ],
+  "image": "/folklore/art/covers/bremen-town-musicians.webp"
+}

@@ -1,0 +1,58 @@
+{
+  "id": "bridegroom-for-miss-mole",
+  "order": 5,
+  "featured": false,
+  "title": "A Bridegroom for Miss Mole",
+  "originalTitle": "두더지 사위 삼기 · Dudeoji sawi samgi",
+  "tradition": "Korean tale",
+  "region": "Asia",
+  "culture": "Korea",
+  "place": "Near the stone Miryek by the Kingin River",
+  "language": "English",
+  "ages": "6–10",
+  "minutes": 4,
+  "themes": [
+    "belonging",
+    "family",
+    "nature"
+  ],
+  "color": "#8a633b",
+  "colorSoft": "#dfceb0",
+  "sourceTitle": "Korean Fairy Tales",
+  "sourceAuthor": "William Elliot Griffis",
+  "sourceYear": "1922",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/67180",
+  "note": "A new adaptation of “A Bridegroom for Miss Mole,” retaining its chain of Sky, Sun, Cloud, Wind, Stone, and Mole while shortening the courtship frame.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published in 1922 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A small mole looks up at the sun, cloud, wind, and a great stone figure.",
+  "art": "mole",
+  "scenes": [
+    [
+      "Father Mole adored his daughter and vowed that she would marry the mightiest being in the universe.",
+      "The wise moles named the great blue Sky, so Father Mole climbed up to make his request."
+    ],
+    [
+      "But Sky said, “Sun is mightier, for only when Sun rises can my colors be seen.” Sun replied, “Cloud can cover me completely.”"
+    ],
+    [
+      "Cloud rumbled, then admitted, “Wind drives me wherever it pleases.” Wind sighed, “The great stone Miryek does not move, however hard I blow.”"
+    ],
+    [
+      "Miryek listened patiently. “I withstand sky, sun, cloud, and wind,” said the stone. “Yet Mole tunnels beneath my feet. One day his burrows could topple me.”"
+    ],
+    [
+      "After traveling around the world, Father Mole found the answer close to home. His daughter married a kind young mole.",
+      "Their underground wedding was joyful—and Miss Mole was pleased that someone had finally asked what suited her."
+    ]
+  ],
+  "image": "/folklore/art/covers/bridegroom-for-miss-mole.webp"
+}

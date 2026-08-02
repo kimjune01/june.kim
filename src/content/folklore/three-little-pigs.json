@@ -1,0 +1,56 @@
+{
+  "id": "three-little-pigs",
+  "order": 10,
+  "featured": false,
+  "title": "The Three Little Pigs",
+  "originalTitle": "The Story of the Three Little Pigs",
+  "tradition": "English tale",
+  "region": "Europe",
+  "culture": "England",
+  "place": "The English countryside",
+  "language": "English",
+  "ages": "5–9",
+  "minutes": 4,
+  "themes": [
+    "planning",
+    "perseverance",
+    "wolves"
+  ],
+  "color": "#a45555",
+  "colorSoft": "#ecc7be",
+  "sourceTitle": "The Story of the Three Little Pigs",
+  "sourceAuthor": "L. Leslie Brooke",
+  "sourceYear": "1904",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/18155",
+  "note": "A new child-friendly adaptation. Unlike the historical source, the first two pigs escape to their sibling’s house and the wolf flees rather than being killed.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published before 1929 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "Three pigs stand beside houses of straw, sticks, and brick.",
+  "art": "pigs",
+  "scenes": [
+    [
+      "Three little pigs went out to build homes. The first chose straw because it was quick. The second chose sticks. The third carried bricks, one heavy armful at a time."
+    ],
+    [
+      "A wolf huffed and puffed the straw house down. The first pig ran to the stick house—but the wolf blew that one down too. Both pigs hurried to the brick house."
+    ],
+    [
+      "The wolf huffed. He puffed. He blew until he was dizzy, but the brick walls did not move."
+    ],
+    [
+      "The wolf tried the roof and slid toward the chimney. The pigs heard his claws and placed a great empty washtub below, then banged pots and pans as loudly as they could."
+    ],
+    [
+      "The startled wolf shot back up the chimney and ran away. The three pigs repaired the first two houses together—this time with strong walls and patient work."
+    ]
+  ],
+  "image": "/folklore/art/covers/three-little-pigs.webp"
+}

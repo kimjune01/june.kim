@@ -1,0 +1,42 @@
+---
+import StoryArt from './StoryArt.astro';
+import type { FolkloreStory } from '../../lib/folklore';
+
+interface Props {
+  story: FolkloreStory;
+}
+
+const { story } = Astro.props;
+---
+
+<button class="book" style={`--accent:${story.color};--soft:${story.colorSoft}`} data-story={story.id} aria-label={`Read ${story.title}, ${story.tradition}`}>
+  <span class="book-art"><StoryArt kind={story.art} label={story.artLabel} image={story.image} /></span>
+  <span class="book-copy">
+    <span class="book-place">{story.tradition}</span>
+    <span class="book-title">{story.title}</span>
+    <span class="book-original-title">({story.originalTitle})</span>
+    <span class="book-meta">{story.minutes} min · ages {story.ages}</span>
+    <span class="book-status" data-book-status={story.id} aria-live="polite"></span>
+  </span>
+</button>
+
+<style>
+  .book {
+    position: relative; overflow: hidden; padding: 0; border: 1px solid var(--line); border-radius: 1.4rem; background: #fffaf0; text-align: left; box-shadow: 0 1rem 2.8rem rgba(82, 62, 35, .11); cursor: pointer; transform: translateY(0); transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .book:hover { transform: translateY(-.35rem); box-shadow: 0 1.3rem 3rem rgba(82, 62, 35, .17); }
+  .book-art { display: block; width: 100%; height: 15rem; background: var(--soft); }
+  .book-art :global(svg) { display: block; width: 100%; height: 100%; }
+  .book-copy { display: flex; flex-direction: column; min-height: 10.25rem; padding: 1.55rem 1.25rem 1.35rem; }
+  .book-place { display: block; margin-bottom: .55rem; color: var(--accent); font-size: .72rem; font-weight: 850; letter-spacing: .09em; text-transform: uppercase; }
+  .book-title { display: block; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1.42rem; font-weight: 650; line-height: 1.12; letter-spacing: -.018em; }
+  .book-original-title { display: block; margin-top: .28rem; color: var(--muted); font-size: .78rem; line-height: 1.25; }
+  .book-meta { display: block; margin-top: .8rem; color: var(--muted); font-size: .82rem; }
+  .book-status { display: inline-flex; align-items: center; min-height: 1.5rem; margin-top: auto; padding-top: .65rem; color: var(--accent); font-size: .75rem; font-weight: 800; }
+  @media (max-width: 760px) {
+    .book { min-height: 0; }
+  }
+  @media (max-width: 470px) {
+    .book-art { height: 12rem; min-height: 0; }
+  }
+</style>

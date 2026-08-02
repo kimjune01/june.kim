@@ -1,0 +1,72 @@
+{
+  "id": "rabbits-eyes",
+  "order": 4,
+  "featured": true,
+  "title": "The Rabbit’s Eyes",
+  "originalTitle": "별주부전 · Byeoljubujeon",
+  "tradition": "Korean tale",
+  "region": "Asia",
+  "culture": "Korea",
+  "place": "Korea’s seashore and the kingdom beneath the sea",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 4,
+  "themes": [
+    "cleverness",
+    "rabbits",
+    "the sea"
+  ],
+  "color": "#397388",
+  "colorSoft": "#b9dce2",
+  "sourceTitle": "Korean Fairy Tales",
+  "sourceAuthor": "William Elliot Griffis",
+  "sourceYear": "1922",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/67180",
+  "note": "A new, shortened adaptation of “The Rabbit’s Eyes.” The historical English-language source uses fanciful court titles and tells the story as an animal trickster tale.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published in 1922 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A rabbit rides on a turtle’s shell beneath blue waves.",
+  "art": "rabbit-sea",
+  "image": "/folklore/art/covers/rabbits-eyes.webp",
+  "pageArt": [
+    {
+      "page": 2,
+      "image": "/folklore/art/rabbits-eyes/03-overheard.webp",
+      "alt": "Rabbit listens from behind a painted palace pillar while Turtle and the fish physicians confer."
+    },
+    {
+      "page": 4,
+      "image": "/folklore/art/rabbits-eyes/05-escape.webp",
+      "alt": "Rabbit leaps onto the rocky shore while Turtle watches from the clear water."
+    }
+  ],
+  "scenes": [
+    [
+      "The king beneath the sea had swallowed a fisherman’s hook. It stuck painfully in his mouth, and every doctor in the watery kingdom was summoned.",
+      "At last they declared that only a poultice made from a rabbit’s eyes could loosen it. Turtle was sent ashore to find a rabbit."
+    ],
+    [
+      "Turtle found Rabbit admiring the mountains. He described a palace beneath the waves, with jeweled gardens, music, dancing, and splendid food.",
+      "Curious Rabbit climbed onto Turtle’s back. Down they sank through the blue water to the shining court."
+    ],
+    [
+      "While touring the palace, Rabbit overheard the doctors. Their honored guest was to lose his eyes! He hid his fear and thought quickly."
+    ],
+    [
+      "“I would gladly help,” Rabbit said, “but these are only crystal eyes. I left my real ones buried safely on the beach so the salt water would not harm them.”",
+      "The officers believed him. Turtle carried Rabbit back to shore to fetch the missing eyes."
+    ],
+    [
+      "The instant they reached land, Rabbit sprang from Turtle’s shell and raced into the woods, his white tail flashing.",
+      "Turtle returned alone. The sea court had learned too late that a quick mind can escape a deep trap."
+    ]
+  ]
+}

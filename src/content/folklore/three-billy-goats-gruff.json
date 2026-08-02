@@ -1,0 +1,56 @@
+{
+  "id": "three-billy-goats-gruff",
+  "order": 8,
+  "featured": true,
+  "title": "The Three Billy Goats Gruff",
+  "originalTitle": "De tre bukkene Bruse",
+  "tradition": "Norwegian tale",
+  "region": "Europe",
+  "culture": "Norway",
+  "place": "A bridge below a green mountain meadow",
+  "language": "English",
+  "ages": "5–9",
+  "minutes": 3,
+  "themes": [
+    "courage",
+    "siblings",
+    "trolls"
+  ],
+  "color": "#4f7354",
+  "colorSoft": "#c9ddbd",
+  "sourceTitle": "Popular Tales from the Norse",
+  "sourceAuthor": "Peter Christen Asbjørnsen and Jørgen Moe; translated by George Webbe Dasent",
+  "sourceYear": "1859",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/8933",
+  "note": "A new adaptation of “The Three Billy-Goats Gruff,” preserving the familiar trip-trap pattern and softening the source’s violent ending.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published in the nineteenth century and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "Three goats cross a wooden bridge while a troll watches below.",
+  "art": "goats",
+  "scenes": [
+    [
+      "Three goats named Gruff longed for the sweet grass on the mountain. To reach it, they had to cross a bridge where a hungry troll lived."
+    ],
+    [
+      "Trip-trap went the littlest goat. The troll roared, but the goat said, “Wait for my brother—he is much bigger.” The troll let him pass."
+    ],
+    [
+      "Trip-trap, trip-trap went the middle goat. He gave the same warning, and the greedy troll waited again."
+    ],
+    [
+      "TRAMP-TRAMP came the biggest Gruff. The troll leaped onto the bridge. Big Gruff lowered his strong horns and charged."
+    ],
+    [
+      "The troll tumbled into the rushing river and floated far downstream. All three goats climbed safely to the meadow, where there was enough green grass for everyone."
+    ]
+  ],
+  "image": "/folklore/art/covers/three-billy-goats-gruff.webp"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "king-of-the-ants",
+  "order": 11,
+  "featured": false,
+  "title": "The King of the Ants",
+  "originalTitle": "蟻王 · Yǐ Wáng",
+  "tradition": "Chinese miniature tale",
+  "region": "Asia",
+  "culture": "China",
+  "place": "Emmet Village",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 4,
+  "themes": [
+    "wonder",
+    "pride",
+    "miniature worlds"
+  ],
+  "color": "#8a4938",
+  "colorSoft": "#e4c4a6",
+  "sourceTitle": "The Chinese Fairy Book",
+  "sourceAuthor": "Richard Wilhelm, editor; Frederick H. Martens, translator",
+  "sourceYear": "1921",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/29939",
+  "note": "A new adaptation of “The King of the Ants.” The source identifies it as a tale from the Tang Dai Tsung Schu; this version omits the source’s destructive ending.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published in 1921 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "Tiny riders and banners parade around an ink saucer on a scholar’s desk.",
+  "art": "ants",
+  "scenes": [
+    [
+      "A traveling scholar rented a quiet house in Emmet Village. One evening, hundreds of knights no taller than rice grains galloped across his room."
+    ],
+    [
+      "Tiny servants raised tents and tables beside his ink saucer, which they called the Purple Lake. Musicians played; dancers turned; nets caught little red fish."
+    ],
+    [
+      "At last their king arrived in scarlet and purple. Proud of his grand court, he laughed at the poor scholar and offered him a lowly place among the servants."
+    ],
+    [
+      "The scholar shut his book with a clap. Riders, cooks, banners, and king scattered through a crack in the wall."
+    ],
+    [
+      "Outside, he found an enormous green ants’ nest. He left it undisturbed and returned to his studies.",
+      "After seeing a kingdom fit inside one room, his own troubles no longer seemed quite so large."
+    ]
+  ],
+  "image": "/folklore/art/covers/king-of-the-ants.webp"
+}

@@ -1,0 +1,304 @@
+---
+import StoryArt from '../../components/folklore/StoryArt.astro';
+import StoryCard from '../../components/folklore/StoryCard.astro';
+import StoryShelf from '../../components/folklore/StoryShelf.astro';
+import CollectionCard from '../../components/folklore/CollectionCard.astro';
+import { loadFolkloreStories } from '../../lib/folklore';
+
+const stories = await loadFolkloreStories();
+const featuredStories = stories.filter(story => story.featured);
+const regionGroups = Object.entries(Object.groupBy(stories, story => story.region))
+  .map(([region, items]) => ({ region, stories: items ?? [] }))
+  .filter(group => group.stories.length);
+const regionId = (region: string) => `region-${region.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const countWords = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
+const storyCount = countWords[stories.length] ?? String(stories.length);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f6f0df" />
+    <meta name="description" content="A small library of folktales from around the world, adapted from public-domain sources." />
+    <link rel="manifest" href="/folklore/manifest.webmanifest" />
+    <link rel="icon" href="/folklore/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/folklore/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Small Stories, Wide World</title>
+    <style is:global>
+      :root {
+        --paper: #f6f0df;
+        --paper-deep: #eadfca;
+        --ink: #29251f;
+        --muted: #70685d;
+        --line: rgba(41, 37, 31, .18);
+        --action: #8c3c2b;
+        --action-ink: #fffaf0;
+        --sp-1: .25rem;
+        --sp-2: .5rem;
+        --sp-3: .75rem;
+        --sp-4: 1rem;
+        --sp-5: 1.5rem;
+        --sp-6: 2rem;
+        --font-scale: 1;
+        color-scheme: light;
+        font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+        font-size: 19px;
+        line-height: 1.4;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+        background: var(--paper);
+        color: var(--ink);
+        font-synthesis: none;
+      }
+
+      * { box-sizing: border-box; }
+      html { min-height: 100%; background: var(--paper); }
+      body { min-height: 100%; margin: 0; background: var(--paper); }
+      button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+      button { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: inherit; }
+      button:focus-visible, a:focus-visible { outline: 4px solid #126d83; outline-offset: 3px; }
+      [hidden] { display: none !important; }
+
+      .library {
+        min-height: 100svh;
+        padding: max(1.25rem, env(safe-area-inset-top)) max(1.1rem, env(safe-area-inset-right)) max(2rem, env(safe-area-inset-bottom)) max(1.1rem, env(safe-area-inset-left));
+        background:
+          radial-gradient(circle at 10% 10%, rgba(255,255,255,.8), transparent 25rem),
+          linear-gradient(160deg, #fbf7ec 0%, var(--paper) 55%, #ecdfc6 100%);
+      }
+      .library-inner { width: min(72rem, 100%); margin: auto; }
+      .library-head { margin-bottom: var(--sp-6); }
+      .eyebrow { margin: 0 0 .6rem; color: #8c3c2b; font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+      h1 { max-width: 15ch; margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: clamp(2.2rem, 4.5vw, 4rem); font-weight: 650; line-height: 1.02; letter-spacing: -.035em; }
+      .intro { max-width: 35rem; margin: var(--sp-4) 0 0; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.3rem); line-height: 1.45; }
+      .library-tree { display: grid; gap: clamp(2.8rem, 5.5vw, 4.5rem); }
+      .library-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: var(--sp-6); padding-top: var(--sp-4); border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
+      .library-foot button { min-height: 44px; border: 0; border-bottom: 1px solid currentColor; background: none; cursor: pointer; }
+      .site-link { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .2em; }
+
+      .reader { --accent: #8c3c2b; min-height: 100svh; background: var(--paper); }
+      .reader-bar {
+        position: fixed; z-index: 20; inset: 0 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 4.2rem; padding: max(.5rem, env(safe-area-inset-top)) max(.7rem, env(safe-area-inset-right)) .5rem max(.7rem, env(safe-area-inset-left)); background: color-mix(in srgb, var(--paper) 91%, transparent); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      }
+      .icon-button { display: inline-flex; align-items: center; justify-content: center; min-width: 48px; min-height: 48px; padding: .55rem .8rem; border: 0; border-radius: 999px; background: transparent; cursor: pointer; }
+      .icon-button:hover { background: rgba(0,0,0,.06); }
+      .back { justify-self: start; gap: .3rem; }
+      .back-label { font-size: .82rem; font-weight: 750; }
+      .reader-title { max-width: 36vw; overflow: hidden; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .82rem; font-weight: 650; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+      .tools { position: relative; justify-self: end; }
+      .settings { position: absolute; top: 3.4rem; right: 0; width: 15rem; padding: .8rem; border: 1px solid var(--line); border-radius: 1rem; background: #fffaf0; box-shadow: 0 .8rem 2rem rgba(60,45,25,.18); }
+      .settings-label { display: block; margin: 0 0 .5rem; color: var(--muted); font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+      .setting-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; }
+      .setting-row.sizes { grid-template-columns: repeat(4, 1fr); }
+      .setting-row button { min-width: 48px; min-height: 48px; border: 1px solid var(--line); border-radius: .7rem; background: white; cursor: pointer; }
+      .setting-row button[aria-pressed="true"] { border: 2px solid var(--action); background: var(--paper-deep); color: var(--action); font-weight: 850; }
+
+      .story-shell { min-height: 100svh; padding-top: 4.2rem; }
+      .progress { position: fixed; z-index: 22; top: calc(4.2rem - 3px); left: 0; width: 0; height: 3px; background: var(--accent); transition: width .2s ease; }
+      .scenes { min-height: calc(100svh - 4.2rem); }
+      .scene { display: none; min-height: calc(100svh - 4.2rem); padding: clamp(1.5rem, 3vw, 2.25rem) max(1.25rem, env(safe-area-inset-right)) max(6.7rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left)); }
+      .scene.active { display: grid; animation: arrive-forward .28s ease both; }
+      .scenes[data-direction="back"] .scene.active { animation-name: arrive-back; }
+      .scene-inner { display: flex; flex-direction: column; width: min(48rem, 100%); min-height: calc(100svh - 11.2rem); margin: 0 auto; }
+      .story-kicker { margin: 0 0 .7rem; color: var(--accent); font-size: .76rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+      .story-heading { max-width: 18ch; margin: 0 0 var(--sp-4); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: clamp(2rem, 4.5vw, 3.45rem); font-weight: 650; line-height: 1.05; letter-spacing: -.03em; }
+      .story-original-title { display: block; margin-top: .35rem; color: var(--muted); font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif; font-size: .42em; font-weight: 400; line-height: 1.25; letter-spacing: 0; }
+      .hero-art { display: block; width: min(100%, 34rem); max-height: 36vh; margin: var(--sp-3) auto 0; }
+      .cover-text { margin-top: var(--sp-5); }
+      .story-text { width: min(65ch, 100%); margin-inline: auto; padding-top: clamp(2rem, 10vh, 7rem); font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif; font-size: calc(clamp(1.15rem, 2.1vw, 1.4rem) * var(--font-scale)); line-height: 1.4; letter-spacing: 0; }
+      .story-text.cover-text { padding-top: 0; }
+      .story-text p { margin: 0 0 .72em; }
+      .scene-art { width: min(100%, 38rem); margin: 0 auto clamp(1.2rem, 3vw, 2rem); }
+      .scene-art img { display: block; width: 100%; max-height: 45vh; border-radius: 1.2rem; object-fit: cover; box-shadow: 0 .8rem 2.2rem rgba(60,45,25,.12); }
+      .scene:has(.scene-art) .story-text { padding-top: 0; }
+      .page-number { display: block; margin: auto auto 0; padding-top: var(--sp-5); color: var(--muted); font-size: .72rem; font-weight: 750; letter-spacing: .1em; text-align: center; }
+
+      .reader-nav { position: fixed; z-index: 18; inset: auto 0 0; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: .6rem max(.7rem, env(safe-area-inset-right)) max(.6rem, env(safe-area-inset-bottom)) max(.7rem, env(safe-area-inset-left)); background: linear-gradient(transparent, var(--paper) 36%); pointer-events: none; }
+      .reader-nav button { min-width: 56px; min-height: 52px; border: 1px solid var(--line); border-radius: 999px; background: #fffaf0; box-shadow: 0 .3rem 1rem rgba(60,45,25,.09); cursor: pointer; pointer-events: auto; }
+      .reader-nav button:disabled { opacity: .3; cursor: default; }
+      .reader-nav .prev { justify-self: start; }
+      .reader-nav .next { justify-self: end; min-width: 64px; padding-inline: 1rem; background: var(--accent); color: white; font-weight: 800; }
+      .dots { display: flex; gap: .35rem; pointer-events: none; }
+      .dot { width: .42rem; height: .42rem; border-radius: 50%; background: var(--ink); opacity: .2; }
+      .dot.active { opacity: .8; }
+
+      .colophon-dialog { width: min(42rem, calc(100% - 2rem)); max-height: 80svh; padding: 0; border: 1px solid var(--line); border-radius: 1.2rem; background: #fffaf0; color: var(--ink); box-shadow: 0 1.5rem 5rem rgba(30,24,15,.3); }
+      .colophon-dialog::backdrop { background: rgba(39,32,23,.45); backdrop-filter: blur(3px); }
+      .colophon-inner { padding: 1.2rem 1.3rem 1.5rem; }
+      .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+      .dialog-head h2 { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1.45rem; font-weight: 650; }
+      .colophon-copy { color: var(--muted); font-family: Georgia, "Times New Roman", serif; line-height: 1.55; }
+      .source-list { padding: 0; list-style: none; }
+      .source-list li { padding: .9rem 0; border-top: 1px solid var(--line); }
+      .source-list a { color: var(--ink); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1rem; font-weight: 650; text-underline-offset: .2em; }
+      .source-list p { margin: .35rem 0 0; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+      .review-state { display: inline-block; margin: .55rem .35rem 0 0; padding: .18rem .45rem; border: 1px solid var(--line); border-radius: 999px; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .63rem; font-weight: 720; }
+
+      :root[data-theme="night"] { --paper: #1f2828; --paper-deep: #172020; --ink: #f3ead9; --muted: #b9b2a6; --line: rgba(243,234,217,.18); color-scheme: dark; }
+      :root[data-theme="night"] .library { background: radial-gradient(circle at 10% 10%, #35403d, transparent 28rem), var(--paper); }
+      :root[data-theme="night"] .book, :root[data-theme="night"] .collection-card, :root[data-theme="night"] .settings, :root[data-theme="night"] .setting-row button, :root[data-theme="night"] .reader-nav button, :root[data-theme="night"] .colophon-dialog { background: #293331; }
+      :root[data-theme="night"] .reader-nav .next { background: var(--accent); }
+
+      @keyframes arrive-forward { from { opacity: 0; transform: translateX(1rem); } to { opacity: 1; transform: none; } }
+      @keyframes arrive-back { from { opacity: 0; transform: translateX(-1rem); } to { opacity: 1; transform: none; } }
+      @media (min-width: 900px) { .library-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, .72fr); column-gap: clamp(3rem, 7vw, 7rem); align-items: end; } .library-head .eyebrow { grid-column: 1; } .library-head h1 { grid-column: 1; } .library-head .intro { grid-column: 2; grid-row: 1 / span 2; margin: 0 0 .2rem; } }
+      @media (min-width: 900px) and (orientation: landscape) { .scene-inner.illustrated { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .65fr); grid-template-rows: 1fr auto; align-items: center; gap: 1.5rem clamp(1.5rem, 4vw, 3.5rem); } .scene-inner.illustrated .scene-art { width: 100%; margin: 0; } .scene-inner.illustrated .scene-art img { max-height: min(58vh, 32rem); } .scene-inner.illustrated .story-text { width: 100%; margin: 0; } .scene-inner.illustrated .page-number { grid-column: 1 / -1; } }
+      @media (max-width: 760px) { .library { padding-inline: 0; } .library-head, .library-foot { margin-inline: 1.1rem; } .library-foot { align-items: flex-start; flex-direction: column; } }
+      @media (max-width: 470px) { .back-label { display: none; } .reader-title { max-width: 50vw; } }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+    </style>
+  </head>
+  <body>
+    <main id="library" class="library">
+      <div class="library-inner">
+        <header class="library-head">
+          <p class="eyebrow">A little reading room</p>
+          <h1>Small stories, wide world.</h1>
+          <p class="intro">{storyCount} old tales, newly told. Pick a story and settle in—there are clever creatures just beyond the page.</p>
+        </header>
+        <div class="library-tree" aria-label="Story library">
+          <StoryShelf title="Featured stories" path="World library" description="A small beginning, chosen from storytelling traditions around the world." count={featuredStories.length}>
+            {featuredStories.map((story) => <StoryCard story={story} />)}
+          </StoryShelf>
+          <StoryShelf title="Explore by region" path="World library › Regions" description="Follow a branch of the library to its people and places." count={regionGroups.length} compact>
+            {regionGroups.map(group => {
+              const lead = group.stories[0];
+              const cultures = [...new Set(group.stories.map(story => story.culture))].join(' · ');
+              return <CollectionCard title={group.region} path={`World › ${group.region}`} detail={cultures} href={`#${regionId(group.region)}`} count={group.stories.length} color={lead.color} colorSoft={lead.colorSoft} art={lead.art} artLabel={lead.artLabel} image={lead.image} />;
+            })}
+          </StoryShelf>
+          {regionGroups.map(group => <div id={regionId(group.region)}>
+            <StoryShelf title={group.region} path={`World library › Regions › ${group.region}`} description={[...new Set(group.stories.map(story => story.culture))].join(' · ')} count={group.stories.length}>
+              {group.stories.map(story => <StoryCard story={story} />)}
+            </StoryShelf>
+          </div>)}
+        </div>
+        <footer class="library-foot"><span>New adaptations from public-domain editions. No ads, accounts, or tracking. <span id="availability" role="status">Available online.</span></span><span><button id="about-open">For grown-ups &amp; sources</button> · <a class="site-link" href="/">june.kim</a></span></footer>
+      </div>
+    </main>
+
+    <section id="reader" class="reader" hidden aria-label="Story reader">
+      <header class="reader-bar">
+        <button id="back" class="icon-button back" aria-label="Back to the library"><span aria-hidden="true">←</span><span class="back-label">Library</span></button>
+        <div id="reader-title" class="reader-title"></div>
+        <div class="tools"><button id="settings-open" class="icon-button" aria-label="Reading settings" aria-expanded="false">Aa</button><div id="settings" class="settings" hidden><span class="settings-label">Text size</span><div class="setting-row sizes"><button data-size=".88" aria-label="Smaller text">A−</button><button data-size="1" aria-label="Default text">A</button><button data-size="1.16" aria-label="Larger text">A+</button><button data-size="1.4" aria-label="Largest text, for reading aloud">A++</button></div><span class="settings-label" style="margin-top:.8rem">Page colour</span><div class="setting-row"><button data-theme="day" aria-label="Light page">☀</button><button data-theme="night" aria-label="Dark page">☾</button><button data-theme="system" aria-label="Use device setting">◐</button></div></div></div>
+      </header>
+      <div id="progress" class="progress"></div>
+      <div id="story-shell" class="story-shell"></div>
+      <nav class="reader-nav" aria-label="Story pages"><button id="prev" class="prev" aria-label="Previous page">←</button><div id="dots" class="dots" aria-hidden="true"></div><button id="next" class="next" aria-label="Next page">→</button></nav>
+    </section>
+
+    <dialog id="colophon" class="colophon-dialog"><div class="colophon-inner"><div class="dialog-head"><h2>About this little library</h2><button id="about-close" class="icon-button" aria-label="Close">×</button></div><p class="colophon-copy">These are new, concise adaptations made for this prototype—not transcriptions or authoritative translations. Every record carries separate rights, adaptation, and cultural-review states. “Pending” material is suitable for prototyping, not publication. The simple vector illustrations were made for this site.</p><ul class="source-list">{stories.map(story => <li><a href={story.sourceUrl} rel="external">{story.sourceTitle}</a> — {story.sourceAuthor}, {story.sourceYear}<p>{story.note}</p><span class="review-state">Rights: {story.rights.status}</span><span class="review-state">Adaptation: {story.review.adaptation}</span><span class="review-state">Cultural review: {story.review.cultural}</span><p>Rights basis: {story.rights.basis} · {story.rights.jurisdiction} · checked {story.rights.checked}</p></li>)}</ul></div></dialog>
+
+    <div id="art-templates" hidden aria-hidden="true">
+      {stories.map(story => <template id={`art-${story.id}`}><StoryArt kind={story.art} label={story.artLabel} image={story.image} class="hero-art" /></template>)}
+    </div>
+
+    <script define:vars={{ stories }}>
+      const library = document.querySelector('#library');
+      const reader = document.querySelector('#reader');
+      const shell = document.querySelector('#story-shell');
+      const title = document.querySelector('#reader-title');
+      const progress = document.querySelector('#progress');
+      const dots = document.querySelector('#dots');
+      const prev = document.querySelector('#prev');
+      const next = document.querySelector('#next');
+      const settings = document.querySelector('#settings');
+      let activeStory = null;
+      let page = 0;
+      let direction = 'forward';
+
+      const escapeHtml = (value) => value.replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+      const art = (id) => document.querySelector(`#art-${id}`)?.innerHTML || '';
+      const pageArt = (story, index) => {
+        const illustration = story.pageArt?.find(item => item.page === index);
+        return illustration ? `<figure class="scene-art"><img src="${escapeHtml(illustration.image)}" alt="${escapeHtml(illustration.alt)}" loading="eager" decoding="async"></figure>` : '';
+      };
+
+      function openStory(id, requestedPage = null) {
+        activeStory = stories.find(story => story.id === id);
+        if (!activeStory) return;
+        page = requestedPage === null ? Number(localStorage.getItem(`folklore:${id}`) || 0) : requestedPage;
+        page = Math.min(page, activeStory.scenes.length - 1);
+        document.documentElement.style.setProperty('--accent', activeStory.color);
+        title.textContent = activeStory.title;
+        shell.innerHTML = `<div class="scenes">${activeStory.scenes.map((paragraphs, index) => { const illustrated = activeStory.pageArt?.some(item => item.page === index); return `<article class="scene" data-page="${index}" aria-label="Page ${index + 1} of ${activeStory.scenes.length}"><div class="scene-inner${illustrated ? ' illustrated' : ''}">${index === 0 ? `<p class="story-kicker">${escapeHtml(activeStory.tradition)} · ${escapeHtml(activeStory.place)}</p><h1 class="story-heading">${escapeHtml(activeStory.title)}<span class="story-original-title">(${escapeHtml(activeStory.originalTitle)})</span></h1>${art(activeStory.id)}` : pageArt(activeStory, index)}<div class="story-text${index === 0 ? ' cover-text' : ''}">${paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('')}</div><span class="page-number">${index + 1} / ${activeStory.scenes.length}</span></div></article>`; }).join('')}</div>`;
+        dots.innerHTML = activeStory.scenes.map((_, index) => `<span class="dot${index === page ? ' active' : ''}"></span>`).join('');
+        library.hidden = true;
+        reader.hidden = false;
+        renderPage();
+      }
+
+      function renderPage() {
+        shell.querySelector('.scenes')?.setAttribute('data-direction', direction);
+        shell.querySelectorAll('.scene').forEach((scene, index) => scene.classList.toggle('active', index === page));
+        dots.querySelectorAll('.dot').forEach((dot, index) => dot.classList.toggle('active', index === page));
+        prev.disabled = page === 0;
+        next.disabled = page === activeStory.scenes.length - 1;
+        next.textContent = page === activeStory.scenes.length - 1 ? 'Done' : '→';
+        next.setAttribute('aria-label', page === activeStory.scenes.length - 1 ? 'Finish story' : 'Next page');
+        progress.style.width = `${((page + 1) / activeStory.scenes.length) * 100}%`;
+        localStorage.setItem(`folklore:${activeStory.id}`, String(page));
+        window.scrollTo(0, 0);
+      }
+
+      function updateLibraryStates() {
+        stories.forEach(story => {
+          const statuses = document.querySelectorAll(`[data-book-status="${story.id}"]`);
+          const saved = Number(localStorage.getItem(`folklore:${story.id}`) || 0);
+          const done = localStorage.getItem(`folklore:done:${story.id}`) === 'true';
+          statuses.forEach(status => {
+            if (done) status.textContent = '✓ Read';
+            else if (saved > 0) status.textContent = `Continue · page ${saved + 1}`;
+            else status.textContent = 'Begin →';
+          });
+        });
+      }
+      function showLibrary() { reader.hidden = true; library.hidden = false; activeStory = null; updateLibraryStates(); }
+      function closeStory() {
+        if (history.state && history.state.folklore) history.back();
+        else { showLibrary(); history.replaceState(null, '', location.pathname); }
+      }
+      const hashRoute = () => { const [id, pageNumber] = location.hash.slice(1).split('/'); return { id, page: pageNumber ? Math.max(0, Number(pageNumber) - 1) : null }; };
+      window.addEventListener('popstate', () => {
+        const route = hashRoute();
+        if (stories.some(story => story.id === route.id)) { if (!activeStory || activeStory.id !== route.id || route.page !== null) openStory(route.id, route.page); }
+        else if (activeStory) showLibrary();
+      });
+      document.querySelectorAll('[data-story]').forEach(button => button.addEventListener('click', () => { history.pushState({ folklore: true }, '', `#${button.dataset.story}`); openStory(button.dataset.story); }));
+      document.querySelector('#back').addEventListener('click', closeStory);
+      prev.addEventListener('click', () => { if (page > 0) { direction = 'back'; page -= 1; renderPage(); } });
+      next.addEventListener('click', () => { if (page < activeStory.scenes.length - 1) { direction = 'forward'; page += 1; renderPage(); } else { localStorage.setItem(`folklore:done:${activeStory.id}`, 'true'); closeStory(); } });
+      document.querySelector('#settings-open').addEventListener('click', event => { settings.hidden = !settings.hidden; event.currentTarget.setAttribute('aria-expanded', String(!settings.hidden)); });
+      function selectSetting(attribute, value) { document.querySelectorAll(`[${attribute}]`).forEach(button => button.setAttribute('aria-pressed', String(button.getAttribute(attribute) === value))); }
+      document.querySelectorAll('[data-size]').forEach(button => button.addEventListener('click', () => { document.documentElement.style.setProperty('--font-scale', button.dataset.size); localStorage.setItem('folklore:size', button.dataset.size); selectSetting('data-size', button.dataset.size); }));
+      document.querySelectorAll('[data-theme]').forEach(button => button.addEventListener('click', () => { const chosen = button.dataset.theme; const night = chosen === 'night' || (chosen === 'system' && matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.dataset.theme = night ? 'night' : 'day'; localStorage.setItem('folklore:theme', chosen); selectSetting('data-theme', chosen); }));
+      const colophon = document.querySelector('#colophon');
+      document.querySelector('#about-open').addEventListener('click', () => colophon.showModal());
+      document.querySelector('#about-close').addEventListener('click', () => colophon.close());
+      document.addEventListener('keydown', event => { if (!activeStory) return; if (event.key === 'ArrowLeft' && page > 0) { direction = 'back'; page -= 1; renderPage(); } if (event.key === 'ArrowRight' && page < activeStory.scenes.length - 1) { direction = 'forward'; page += 1; renderPage(); } if (event.key === 'Escape') { if (!settings.hidden) settings.hidden = true; else closeStory(); } });
+      let touchX = null;
+      shell.addEventListener('touchstart', event => { touchX = event.changedTouches[0].clientX; }, { passive: true });
+      shell.addEventListener('touchend', event => { if (touchX === null) return; const delta = event.changedTouches[0].clientX - touchX; if (Math.abs(delta) > 65) { if (delta < 0 && page < activeStory.scenes.length - 1) { direction = 'forward'; page += 1; renderPage(); } else if (delta > 0 && page > 0) { direction = 'back'; page -= 1; renderPage(); } else if (delta > 0 && page === 0) closeStory(); } touchX = null; }, { passive: true });
+      const savedSize = localStorage.getItem('folklore:size') || '1';
+      document.documentElement.style.setProperty('--font-scale', savedSize);
+      const savedTheme = localStorage.getItem('folklore:theme') || 'day';
+      document.documentElement.dataset.theme = savedTheme === 'night' || (savedTheme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'night' : 'day';
+      selectSetting('data-size', savedSize);
+      selectSetting('data-theme', savedTheme);
+      updateLibraryStates();
+      const initial = hashRoute(); if (stories.some(story => story.id === initial.id)) openStory(initial.id, initial.page);
+      const availability = document.querySelector('#availability');
+      function updateAvailability() { availability.textContent = navigator.onLine ? 'Saved for offline reading.' : 'Reading offline.'; }
+      if ('serviceWorker' in navigator) navigator.serviceWorker.register('/folklore/service-worker.js').then(() => navigator.serviceWorker.ready).then(updateAvailability).catch(() => { availability.textContent = 'Offline saving unavailable.'; });
+      window.addEventListener('online', updateAvailability);
+      window.addEventListener('offline', updateAvailability);
+    </script>
+  </body>
+</html>

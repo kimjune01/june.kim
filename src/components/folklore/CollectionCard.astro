@@ -1,0 +1,44 @@
+---
+import StoryArt from './StoryArt.astro';
+
+interface Props {
+  title: string;
+  path: string;
+  detail: string;
+  href: string;
+  count: number;
+  color: string;
+  colorSoft: string;
+  art: string;
+  artLabel: string;
+  image?: string;
+}
+
+const { title, path, detail, href, count, color, colorSoft, art, artLabel, image } = Astro.props;
+---
+
+<a class="collection-card" style={`--accent:${color};--soft:${colorSoft}`} href={href} aria-label={`Explore ${title}, ${count} ${count === 1 ? 'story' : 'stories'}`}>
+  <span class="collection-art"><StoryArt kind={art} label={artLabel} image={image} /></span>
+  <span class="collection-copy">
+    <span class="collection-path">{path}</span>
+    <span class="collection-title">{title}</span>
+    <span class="collection-detail">{detail}</span>
+    <span class="collection-action">{count} {count === 1 ? 'story' : 'stories'} <span aria-hidden="true">→</span></span>
+  </span>
+</a>
+
+<style>
+  .collection-card { display: grid; grid-template-columns: 42% 1fr; min-width: 0; overflow: hidden; padding: 0; border: 1px solid var(--line); border-radius: 1.15rem; background: #fffaf0; color: inherit; text-align: left; text-decoration: none; box-shadow: 0 .65rem 1.8rem rgba(82, 62, 35, .09); cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; }
+  .collection-card:hover { transform: translateY(-.25rem); box-shadow: 0 .9rem 2.2rem rgba(82, 62, 35, .15); }
+  .collection-art { display: block; min-height: 10.5rem; background: var(--soft); }
+  .collection-art :global(svg) { display: block; width: 100%; height: 100%; }
+  .collection-copy { display: flex; min-width: 0; flex-direction: column; padding: 1.1rem 1rem 1rem; }
+  .collection-path { overflow: hidden; margin-bottom: .35rem; color: var(--accent); font-size: .62rem; font-weight: 820; letter-spacing: .075em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+  .collection-title { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 1.22rem; font-weight: 680; line-height: 1.08; letter-spacing: -.02em; }
+  .collection-detail { margin-top: .35rem; color: var(--muted); font-size: .75rem; }
+  .collection-action { margin-top: auto; padding-top: .8rem; color: var(--accent); font-size: .7rem; font-weight: 800; }
+  @media (max-width: 470px) {
+    .collection-card { grid-template-columns: 41% 1fr; }
+    .collection-art { min-height: 9.5rem; }
+  }
+</style>

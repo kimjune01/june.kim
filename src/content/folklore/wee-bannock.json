@@ -1,0 +1,62 @@
+{
+  "id": "wee-bannock",
+  "order": 2,
+  "featured": true,
+  "title": "The Wee Bannock",
+  "originalTitle": "The Wee Bannock · Scots",
+  "tradition": "Scottish tale",
+  "region": "Europe",
+  "culture": "Scotland",
+  "place": "Scotland",
+  "language": "English",
+  "ages": "5–9",
+  "minutes": 4,
+  "themes": [
+    "journeys",
+    "humour",
+    "food"
+  ],
+  "color": "#36695d",
+  "colorSoft": "#c8dfc8",
+  "sourceTitle": "The Scottish Fairy Book",
+  "sourceAuthor": "Elizabeth W. Grierson",
+  "sourceYear": "1910",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/37532",
+  "note": "A new, shortened adaptation of the cumulative Scottish tale. A bannock is a round, flat bread; in this version it is made with oatmeal.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published before 1929 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A round oatmeal bannock rolls over green Scottish hills.",
+  "art": "bannock",
+  "scenes": [
+    [
+      "An old woman baked two fine oatmeal bannocks and set them by the fire. When her husband broke one in half for a taste, the other bannock took fright.",
+      "Down it dropped, across the floor it rolled, and out through the cottage door it flew."
+    ],
+    [
+      "The wee bannock rolled into a tailor’s house. The tailor came with his shears, his apprentices came with pins, and the tailor’s wife came with her cards for combing flax.",
+      "Round and round the fire they chased it. Zip! The bannock dodged them all and rolled back onto the road."
+    ],
+    [
+      "It escaped a weaver and his shuttle, a woman making butter, a miller dusty with flour, and a blacksmith who flung his heavy hammer.",
+      "“Too slow!” cried the wee bannock, rolling over the brae."
+    ],
+    [
+      "At every cottage someone fancied a bite. A farmer swung a stick. A shepherd threw his bonnet. A hungry family ran after it with their spoons.",
+      "The wee bannock rolled into the evening, proud of being quicker than everyone it met."
+    ],
+    [
+      "In the dark it slipped beneath a whin bush to rest—but tumbled straight into a fox’s den.",
+      "“Welcome,” said the fox, who had eaten nothing for two days.",
+      "Snap! That was the end of the wee bannock’s running."
+    ]
+  ],
+  "image": "/folklore/art/covers/wee-bannock.webp"
+}

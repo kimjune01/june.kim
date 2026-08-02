@@ -1,0 +1,57 @@
+{
+  "id": "tongue-cut-sparrow",
+  "order": 6,
+  "featured": true,
+  "title": "The Sparrow’s Gifts",
+  "originalTitle": "舌切り雀 · Shita-kiri Suzume",
+  "tradition": "Japanese tale",
+  "region": "Asia",
+  "culture": "Japan",
+  "place": "A village beside a bamboo grove",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 5,
+  "themes": [
+    "kindness",
+    "greed",
+    "birds"
+  ],
+  "color": "#a34e5d",
+  "colorSoft": "#ebc4c8",
+  "sourceTitle": "Japanese Fairy Tales",
+  "sourceAuthor": "Yei Theodora Ozaki",
+  "sourceYear": "1903",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/4018",
+  "note": "A gentler, shortened adaptation of “The Tongue-Cut Sparrow.” The source includes cruelty to the sparrow; this version states the harm without dwelling on it.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published before 1929 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A sparrow waits in a bamboo grove beside two woven baskets.",
+  "art": "sparrow",
+  "image": "/folklore/art/covers/tongue-cut-sparrow.webp",
+  "scenes": [
+    [
+      "An old woodcutter cared for a little sparrow. While he worked, a bad-tempered neighbor punished the bird for eating her rice paste and drove it away."
+    ],
+    [
+      "The woodcutter searched through fields and bamboo, calling until the sparrow answered. Its family welcomed him to a beautiful house hidden in the grove."
+    ],
+    [
+      "After food, music, and many thanks, the sparrows offered two baskets: one large and one small. The tired woodcutter chose the small basket and carried it home."
+    ],
+    [
+      "Inside were coins and treasures. Hearing this, the greedy neighbor hurried to the grove, demanded the largest basket, and ignored the warning not to open it before reaching home."
+    ],
+    [
+      "On the road she lifted the lid. Startling creatures and shadows flew out, and she fled, leaving the basket behind.",
+      "The woodcutter shared his good fortune. The sparrows’ gifts had revealed what each visitor already carried inside."
+    ]
+  ]
+}

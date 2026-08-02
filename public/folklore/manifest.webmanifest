@@ -1,0 +1,13 @@
+{
+  "name": "Small Stories, Wide World",
+  "short_name": "Folklore",
+  "description": "A little library of folktales from around the world.",
+  "start_url": "/folklore/",
+  "scope": "/folklore/",
+  "display": "standalone",
+  "background_color": "#f6f0df",
+  "theme_color": "#f6f0df",
+  "icons": [
+    { "src": "/folklore/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "unmannerly-tiger",
+  "order": 1,
+  "featured": true,
+  "title": "The Unmannerly Tiger",
+  "originalTitle": "은혜를 모르는 호랑이 · Eunhyereul moreuneun horangi",
+  "tradition": "Korean tale",
+  "region": "Asia",
+  "culture": "Korea",
+  "place": "Gangwon, Korea",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 4,
+  "themes": [
+    "cleverness",
+    "gratitude",
+    "tigers"
+  ],
+  "color": "#b84b36",
+  "colorSoft": "#f4c9a8",
+  "sourceTitle": "Korean Fairy Tales",
+  "sourceAuthor": "William Elliot Griffis",
+  "sourceYear": "1922",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/67180",
+  "note": "A new, shortened adaptation of a tale printed in a 1922 collection. The source calls the tiger “Mountain Uncle” and places him in Kang Wen, an older spelling of Gangwon.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published before 1929 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A striped tiger peers into a mirrored forest trap.",
+  "art": "tiger",
+  "scenes": [
+    [
+      "High in the mountains of Gangwon lived a great striped tiger. The villagers called him Mountain Uncle.",
+      "He boasted that no hunter could fool him. He knew every rope, every cage, every trail of leaves laid over a pit—or so he believed."
+    ],
+    [
+      "One autumn morning, Mountain Uncle rounded a rock and stopped. Another tiger stood directly in his path.",
+      "He twitched his tail. The stranger twitched too. He bared his teeth. The stranger did the same.",
+      "Mountain Uncle sprang—and crashed through a roof of branches into a deep trap. The fierce stranger had been his own face in a mirror."
+    ],
+    [
+      "A Buddhist monk heard him groaning. Because the monk tried to be kind to every living creature, he lowered a log into the pit.",
+      "The tiger climbed out, shook the dust from his coat, and bowed. “Thank you,” he said. “But I am terribly hungry, so now I must eat you.”"
+    ],
+    [
+      "The monk protested. A tree rustled that such ingratitude was shameful. A rock agreed. Still the tiger crept closer.",
+      "At last a little toad offered to judge—but first, he said, he must inspect the trap. While the tiger hurried ahead, the monk ran safely home."
+    ],
+    [
+      "The toad slipped into a narrow crack and called out his decision: “A creature who answers kindness with cruelty has very bad manners indeed.”",
+      "Mountain Uncle clawed uselessly at the stone. The little toad remained safe inside, and told the story for many years: strength may be loud, but good sense knows when to hop aside."
+    ]
+  ],
+  "image": "/folklore/art/covers/unmannerly-tiger.webp"
+}

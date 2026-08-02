@@ -1,0 +1,57 @@
+{
+  "id": "gigantic-turnip",
+  "order": 12,
+  "featured": true,
+  "title": "The Gigantic Turnip",
+  "originalTitle": "Репка · Repka",
+  "tradition": "Russian tale",
+  "region": "Europe",
+  "culture": "Russia",
+  "place": "A family garden",
+  "language": "English",
+  "ages": "4–8",
+  "minutes": 3,
+  "themes": [
+    "cooperation",
+    "family",
+    "gardens"
+  ],
+  "color": "#745a8a",
+  "colorSoft": "#d9cce3",
+  "sourceTitle": "More Russian Picture Tales",
+  "sourceAuthor": "Valerian V. Carrick",
+  "sourceYear": "1915",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/34705",
+  "note": "A new adaptation of the cumulative Russian turnip tale, retaining its chain of helpers and repeated pulling pattern.",
+  "rights": {
+    "status": "verified",
+    "basis": "Source edition published in 1915 and identified as public domain by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A family and their animals pull together on the leaves of an enormous turnip.",
+  "art": "turnip",
+  "scenes": [
+    [
+      "Grandfather planted a turnip seed. Rain fell, sun shone, and the turnip grew broad leaves, a round purple crown, and a root as big as a barrel."
+    ],
+    [
+      "Grandfather pulled. The turnip stayed. Grandmother held Grandfather, and they pulled together. Still it would not move."
+    ],
+    [
+      "Their granddaughter joined, then the dog, then the cat. They leaned back in one long line. The turnip only wiggled."
+    ],
+    [
+      "At last a tiny mouse took hold of the cat’s tail. “Ready?” called Grandfather. Everyone pulled: mouse, cat, dog, granddaughter, grandmother, grandfather."
+    ],
+    [
+      "Out popped the turnip, and down tumbled the whole line—laughing.",
+      "There was turnip soup enough for everyone, including one very small but very important mouse."
+    ]
+  ],
+  "image": "/folklore/art/covers/gigantic-turnip.webp"
+}
