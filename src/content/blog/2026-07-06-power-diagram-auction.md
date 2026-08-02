@@ -5,7 +5,7 @@ tags: vector-space
 autonumber: true
 ---
 
-*[Download PDF](/assets/power-diagram-auction.pdf)*
+*[Download PDF](/assets/power-diagram-auction.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.21723924](https://doi.org/10.5281/zenodo.21723924) (CC BY-SA 4.0).*
 
 ## Abstract {-}
 
