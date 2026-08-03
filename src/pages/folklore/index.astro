@@ -7,10 +7,21 @@ import { loadFolkloreStories } from '../../lib/folklore';
 
 const stories = await loadFolkloreStories();
 const featuredStories = stories.filter(story => story.featured);
-const regionGroups = Object.entries(Object.groupBy(stories, story => story.region))
-  .map(([region, items]) => ({ region, stories: items ?? [] }))
+const shelfFor = (story: (typeof stories)[number]) => {
+  if (story.tradition.includes('Aesop') || story.tradition.includes('Aesopic')) return 'Aesop’s fables';
+  if (story.tradition.includes('Arabian Nights')) return 'Arabian Nights';
+  if (['Ancient Greek', 'Ancient Greece'].includes(story.culture)) return 'Greek myths';
+  if (['Danish', 'Denmark'].includes(story.culture)) return 'Danish tales';
+  if (['England', 'English', 'English and American', 'Scotland'].includes(story.culture)) return 'British tales';
+  if (['German', 'Germany'].includes(story.culture)) return 'German tales';
+  if (story.culture === 'French') return 'French tales';
+  if (story.culture === 'U.S. logging-camp folklore and print folklore' || story.culture === 'African American railroad-worker tradition') return 'North American legends';
+  return `${story.culture} tales`;
+};
+const shelfGroups = Object.entries(Object.groupBy(stories, shelfFor))
+  .map(([shelf, items]) => ({ shelf, stories: items ?? [] }))
   .filter(group => group.stories.length);
-const regionId = (region: string) => `region-${region.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+const shelfId = (shelf: string) => `shelf-group-${shelf.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 const countWords = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
 const storyCount = countWords[stories.length] ?? String(stories.length);
 ---
@@ -176,15 +187,15 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
           <StoryShelf title="Featured stories" path="World library" description="A small beginning, chosen from storytelling traditions around the world." count={featuredStories.length}>
             {featuredStories.map((story) => <StoryCard story={story} />)}
           </StoryShelf>
-          <StoryShelf title="Explore by region" path="World library › Regions" description="Follow a branch of the library to its people and places." count={regionGroups.length} compact>
-            {regionGroups.map(group => {
+          <StoryShelf title="Explore the shelves" path="Story traditions" description="Browse tales together by culture and storytelling tradition." count={shelfGroups.length} compact>
+            {shelfGroups.map(group => {
               const lead = group.stories[0];
-              const cultures = [...new Set(group.stories.map(story => story.culture))].join(' · ');
-              return <CollectionCard title={group.region} path={`World › ${group.region}`} detail={cultures} href={`#${regionId(group.region)}`} count={group.stories.length} color={lead.color} colorSoft={lead.colorSoft} art={lead.art} artLabel={lead.artLabel} image={lead.image} />;
+              const traditions = [...new Set(group.stories.map(story => story.tradition))].slice(0, 3).join(' · ');
+              return <CollectionCard title={group.shelf} path="Story traditions" detail={traditions} href={`#${shelfId(group.shelf)}`} count={group.stories.length} color={lead.color} colorSoft={lead.colorSoft} art={lead.art} artLabel={lead.artLabel} image={lead.image} />;
             })}
           </StoryShelf>
-          {regionGroups.map(group => <div id={regionId(group.region)}>
-            <StoryShelf title={group.region} path={`World library › Regions › ${group.region}`} description={[...new Set(group.stories.map(story => story.culture))].join(' · ')} count={group.stories.length}>
+          {shelfGroups.map(group => <div id={shelfId(group.shelf)}>
+            <StoryShelf title={group.shelf} path="Story traditions" description={[...new Set(group.stories.map(story => story.tradition))].join(' · ')} count={group.stories.length}>
               {group.stories.map(story => <StoryCard story={story} />)}
             </StoryShelf>
           </div>)}
