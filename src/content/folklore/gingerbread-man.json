@@ -1,10 +1,10 @@
 {
-  "id": "gingerbread-man", "order": 56, "published": false, "featured": false,
+  "id": "gingerbread-man", "order": 56, "published": true, "featured": false,
   "title": "The Gingerbread Man", "originalTitle": "The Little Gingerbread Man",
   "tradition": "English-language nursery tale", "region": "Europe", "culture": "English and American", "place": "A kitchen, garden, and field", "language": "English", "ages": "5–9", "minutes": 7,
   "themes": ["mischief", "chase", "consequences"], "color": "#a75d32", "colorSoft": "#e7c4a7",
   "sourceTitle": "The Little Gingerbread Man", "sourceAuthor": "George Haven Putnam", "sourceYear": "1910", "sourceUrl": "https://www.gutenberg.org/ebooks/25877",
-  "note": "This reading copy follows Putnam’s public-domain text, lightly shortening the middle of the chase. Illustration captions were omitted, the display title was shortened to its familiar form, and page divisions are editorial.",
+  "note": "This reading copy follows Putnam’s public-domain text, lightly shortening the middle of the chase. Illustration captions were omitted, the display title was shortened to its familiar form, and page divisions are editorial. The three original illustrations are “Cook makes the Gingerbread Man” (images/i005tn.jpg), “The Gingerbread Man Escapes” (images/i012.jpg), and “The end of the story” (images/i025.jpg) from Project Gutenberg ebook 25877.",
   "rights": {"status": "verified", "basis": "The 1910 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"}, "artLabel": "A little gingerbread man springs from an oven and races through a sunny garden.", "art": "gingerbread-chase",
   "scenes": [

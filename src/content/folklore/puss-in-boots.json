@@ -19,7 +19,7 @@
   "sourceAuthor": "Charles Perrault; translated by J. E. Mansion and Robert Samber",
   "sourceYear": "1922",
   "sourceUrl": "https://www.gutenberg.org/ebooks/29021",
-  "note": "A concise reading retelling faithful to Perrault’s plot, published in this 1922 English collection as “The Master Cat; or, Puss in Boots.” The linked Project Gutenberg edition supplies the public-domain source text; compression and page divisions are editorial.",
+  "note": "A concise reading retelling faithful to Perrault’s plot, published in this 1922 English collection as “The Master Cat; or, Puss in Boots.” The linked Project Gutenberg edition supplies the public-domain source text; compression and page divisions are editorial. The available ending art reproduces Harry Clarke’s plate captioned “The Marquis gave his hand to the Princess, and followed the King, who went up first” from the same edition; that edition has no suitable cover or Ogre-scene plate.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 29021 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A booted cat bows confidently beside his young master on a French country road.",
@@ -27,7 +27,7 @@
   "image": "/folklore/art/covers/puss-in-boots.webp",
   "pageArt": [
     {"page": 3, "image": "/folklore/art/puss-in-boots/03-turning.webp", "alt": "Puss bows before the king and presents game in the name of the Marquis of Carabas."},
-    {"page": 7, "image": "/folklore/art/puss-in-boots/05-ending.webp", "alt": "Puss stands proudly beside the newly married Marquis and princess at the castle."}
+    {"page": 6, "image": "/folklore/art/puss-in-boots/05-ending.webp", "alt": "The Marquis gives his hand to the princess and follows the king into the castle, with Puss beside them."}
   ],
   "scenes": [
     ["A miller left his mill to his eldest son, his donkey to the second, and only his cat to the youngest. The youngest son was discouraged by so small an inheritance, but the Cat told him not to worry. “Give me a bag and have a pair of boots made for me,” he said, “and you shall see that you are not so badly provided for as you think.”"],

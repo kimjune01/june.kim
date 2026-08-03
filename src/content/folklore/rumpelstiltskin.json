@@ -4,7 +4,7 @@
   "tradition": "German fairy tale", "region": "Europe", "culture": "Germany", "place": "A king’s castle and a forest", "language": "English", "ages": "8–12", "minutes": 8,
   "themes": ["promises", "names", "cleverness"], "color": "#704b68", "colorSoft": "#dac3d5",
   "sourceTitle": "Grimm’s Fairy Stories", "sourceAuthor": "Jacob and Wilhelm Grimm; translated by Marion Edwardes", "sourceYear": "1912", "sourceUrl": "https://www.gutenberg.org/ebooks/11027",
-  "note": "This reading copy follows Marion Edwardes’s public-domain text, lightly condensing repeated episodes. Page divisions are editorial.",
+  "note": "This reading copy follows Marion Edwardes’s public-domain text, lightly condensing repeated episodes. Page divisions are editorial. The source edition supplies two story-specific drawings: the maiden with the little man (images/175.png), used as the cover, and the little man stamping in rage (images/177.png), used for the ending; no third story-specific illustration was found in Project Gutenberg ebook 11027.",
   "rights": {"status": "verified", "basis": "The 1912 English source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"}, "artLabel": "A mysterious little man spins straw into shining gold in a locked castle room.", "art": "straw-gold",
   "scenes": [

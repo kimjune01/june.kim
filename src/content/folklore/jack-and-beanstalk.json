@@ -1,10 +1,10 @@
 {
-  "id": "jack-and-beanstalk", "order": 60, "published": false, "featured": false,
+  "id": "jack-and-beanstalk", "order": 60, "published": true, "featured": false,
   "title": "Jack and the Beanstalk", "originalTitle": "Jack and the Beanstalk",
   "tradition": "English fairy tale", "region": "Europe", "culture": "England", "place": "A widow’s cottage and a castle above the clouds", "language": "English", "ages": "7–11", "minutes": 8,
   "themes": ["adventure", "courage", "consequences"], "color": "#477552", "colorSoft": "#c9dfc3",
   "sourceTitle": "Favorite Fairy Tales", "sourceAuthor": "Traditional tale; arranged by Logan Marshall", "sourceYear": "1917", "sourceUrl": "https://www.gutenberg.org/ebooks/20748",
-  "note": "This is a lightly shortened reading copy of the public-domain version arranged by Logan Marshall. Repeated passages and book illustration captions were omitted; page divisions are editorial.",
+  "note": "This is a lightly shortened reading copy of the public-domain version arranged by Logan Marshall. Repeated passages and book illustration captions were omitted; page divisions are editorial. Original illustrations “Jack and the Beanstalk” (images/page_158.png), “The ogre’s wife hid Jack in the oven” (images/page_161.png), and “Down Came the Beanstalk, Down Came the Ogre” (images/page_164.jpg) come from Project Gutenberg ebook 20748.",
   "rights": {"status": "verified", "basis": "The 1917 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"}, "artLabel": "Jack climbs a vast green beanstalk from his cottage into the clouds.", "art": "jack-beanstalk",
   "scenes": [

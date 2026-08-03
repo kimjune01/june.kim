@@ -1,10 +1,10 @@
 {
-  "id": "ugly-duckling", "order": 59, "published": false, "featured": false,
+  "id": "ugly-duckling", "order": 59, "published": true, "featured": false,
   "title": "The Ugly Duckling", "originalTitle": "Den grimme Ælling",
   "tradition": "Danish literary fairy tale", "region": "Europe", "culture": "Denmark", "place": "A farmyard, marsh, and lake", "language": "English", "ages": "6–10", "minutes": 6,
   "themes": ["belonging", "growth", "self-worth"], "color": "#657c86", "colorSoft": "#cfdee2",
   "sourceTitle": "Aunt Friendly’s Picture Book", "sourceAuthor": "Hans Christian Andersen; anonymous English adaptation", "sourceYear": "1867", "sourceUrl": "https://www.gutenberg.org/ebooks/25442",
-  "note": "This reading copy follows the concise public-domain adaptation printed in “Aunt Friendly’s Picture Book,” with connecting passages lightly condensed; it is not presented as a full translation of Andersen’s Danish text. Page divisions are editorial.",
+  "note": "This reading copy follows the concise public-domain adaptation printed in “Aunt Friendly’s Picture Book,” with connecting passages lightly condensed; it is not presented as a full translation of Andersen’s Danish text. Page divisions are editorial. Original plates “The Ugly Duckling” (images/illus_062.jpg), “Chasing the swan” (images/illus_064.jpg), and “The swan” (images/illus_069.jpg) come from Project Gutenberg ebook 25442.",
   "rights": {"status": "verified", "basis": "The nineteenth-century source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"}, "artLabel": "A lonely gray duckling sees graceful white swans reflected in a spring lake.", "art": "duckling-swan",
   "scenes": [
@@ -17,5 +17,5 @@
     ["When the sun began to shine warmly again, he found himself in a beautiful garden where three splendid white swans came sailing toward him. “I will fly to those royal birds,” he thought; “they will kill me because I am so ugly, but it is better to be killed by them than bitten by ducks and pecked by hens.”"],
     ["He bowed his head over the water and awaited death. But what did he see in the clear stream? His own image—not a dark, gray bird, ugly and disagreeable to look at, but a graceful and beautiful swan.", "The other swans swam round the newcomer and stroked his neck with their beaks. He felt quite glad that he had passed through so much trouble, for now he could better enjoy his happiness."]
   ],
-  "image": "/folklore/art/covers/ugly-duckling.webp", "pageArt": [{"page": 5, "image": "/folklore/art/ugly-duckling/03-turning.webp", "alt": "The gray duckling watches a flock of dazzling white swans rise into the evening sky."}, {"page": 7, "image": "/folklore/art/ugly-duckling/05-ending.webp", "alt": "The grown swan sees his reflection as the other swans welcome him on the spring lake."}]
+  "image": "/folklore/art/covers/ugly-duckling.webp", "pageArt": [{"page": 3, "image": "/folklore/art/ugly-duckling/03-turning.webp", "alt": "A farm girl chases the frightened young bird from the poultry yard."}, {"page": 7, "image": "/folklore/art/ugly-duckling/05-ending.webp", "alt": "The grown white swan rests gracefully on the water as other swans fly overhead."}]
 }
