@@ -6,7 +6,7 @@ import CollectionCard from '../../components/folklore/CollectionCard.astro';
 import { loadFolkloreStories } from '../../lib/folklore';
 
 const stories = await loadFolkloreStories();
-const featuredStories = stories.filter(story => story.featured);
+const recentStories = stories.toSorted((a, b) => b.order - a.order || a.title.localeCompare(b.title)).slice(0, 12);
 const cultureShelfNames: Record<string, string> = {
   China: 'Chinese tales',
   Fante: 'Anansi tales',
@@ -193,8 +193,8 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
           <p class="intro">{storyCount} old tales, gathered from many traditions. Pick a story and settle in—there are clever creatures just beyond the page.</p>
         </header>
         <div class="library-tree" aria-label="Story library">
-          <StoryShelf title="Featured stories" path="World library" description="A small beginning, chosen from storytelling traditions around the world." count={featuredStories.length}>
-            {featuredStories.map((story) => <StoryCard story={story} />)}
+          <StoryShelf title="Recent stories" path="World library" description="The newest tales added to the reading room." count={recentStories.length}>
+            {recentStories.map((story) => <StoryCard story={story} />)}
           </StoryShelf>
           <StoryShelf title="Explore the shelves" path="Story traditions" description="Browse tales together by culture and storytelling tradition." count={shelfGroups.length} compact>
             {shelfGroups.map(group => {
