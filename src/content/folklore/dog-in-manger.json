@@ -1,10 +1,10 @@
 {
   "id": "dog-in-manger",
   "order": 31,
-  "published": false,
+  "published": true,
   "featured": false,
   "title": "The Dog in the Manger",
-  "originalTitle": "No source-language title supplied in this edition",
+  "originalTitle": "The Dog in the Manger · English",
   "tradition": "Aesopic fable",
   "region": "Europe",
   "culture": "Ancient Greece",
@@ -23,7 +23,7 @@
   "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs",
   "sourceYear": "1894",
   "sourceUrl": "https://www.gutenberg.org/ebooks/28",
-  "note": "The public-domain text of “The Dog in the Manger” is reproduced directly from this edition. Page divisions are editorial.",
+  "note": "The public-domain text of “The Dog in the Manger” is reproduced directly from this edition; page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image87.png), 53103 (images/image14.jpg), and 11339 (images/089.jpg).",
   "rights": {
     "status": "verified",
     "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.",

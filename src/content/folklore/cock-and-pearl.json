@@ -1,9 +1,9 @@
 {
-  "id": "cock-and-pearl", "order": 40, "featured": false, "published": false,
-  "title": "The Cock and the Pearl", "originalTitle": "Greek title not preserved in this edition",
+  "id": "cock-and-pearl", "order": 40, "featured": false, "published": true,
+  "title": "The Cock and the Pearl", "originalTitle": "The Cock and the Pearl · English",
   "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A farmyard", "language": "English", "ages": "5–9", "minutes": 2,
   "themes": ["value", "wisdom", "contentment"], "color": "#a73e31", "colorSoft": "#efc6a6",
-  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image21.png), 11339 (images/150.jpg), and 39187 (images/i_014.jpg).",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A bright cock discovers a luminous pearl among the farmyard straw.", "art": "cock-pearl", "image": "/folklore/art/covers/cock-and-pearl.webp",
   "pageArt": [{"page": 1, "image": "/folklore/art/cock-and-pearl/03-turning.webp", "alt": "The Cock roots beneath the straw and uncovers a shining Pearl."}, {"page": 2, "image": "/folklore/art/cock-and-pearl/05-ending.webp", "alt": "The Cock leaves the Pearl in the straw and searches for a barley-corn."}],
