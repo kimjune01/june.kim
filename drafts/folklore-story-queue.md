@@ -43,7 +43,7 @@ These are not compact tales as a whole, but one well-recognized episode could fi
 
 Status after the 2026-08-03 production pass:
 
-- **Jason and the Golden Fleece — deferred.** No episode has yet been selected, and choosing among the dragon, the ploughing trial, and the flight with the fleece would materially define the adaptation. It remains blocked on an editorial episode choice and source-edition review.
+- **Jason and the Golden Fleece — published.** The shelf now carries “Jason Wins the Golden Fleece,” a disclosed condensation of Hawthorne’s public-domain “The Golden Fleece” centered on the Colchian trials, Medea’s aid, and the winning of the fleece.
 - **David and Goliath — deferred.** This is viable as a short reading, but publication is blocked until the collection has an explicit policy for presenting narratives sacred to living communities on a folklore shelf.
 - **Noah's Ark — deferred.** Publication is likewise blocked on the living-religion collection policy, as well as a decision about which scriptural tradition and public-domain translation the reading would represent.
 
