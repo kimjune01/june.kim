@@ -1,0 +1,23 @@
+{
+  "id": "herd-boy-weaving-maiden", "order": 19, "featured": true,
+  "title": "The Cowherd and the Weaver Girl", "originalTitle": "牛郎织女 · Niúláng Zhīnǚ",
+  "tradition": "Chinese celestial legend", "region": "Asia", "culture": "China",
+  "place": "Earth, the heavens, and the Silver River", "language": "English", "ages": "7–11", "minutes": 5,
+  "themes": ["love", "stars", "separation"], "color": "#43568a", "colorSoft": "#c5cbea",
+  "sourceTitle": "The Chinese Fairy Book", "sourceAuthor": "Richard Wilhelm; translated by Frederick H. Martens", "sourceYear": "1921", "sourceUrl": "https://www.gutenberg.org/ebooks/29939",
+  "note": "A new, child-oriented adaptation of “The Herd Boy and the Weaving Maiden.” The coercive clothing episode in the historical source is omitted; the lovers meet by mutual choice.",
+  "rights": {"status": "verified", "basis": "The 1921 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A cowherd and celestial weaver meet on a bridge of magpies across the starry Milky Way.", "art": "magpie-bridge", "image": "/folklore/art/covers/herd-boy-weaving-maiden.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/herd-boy-weaving-maiden/03-turning.webp", "alt": "The Queen Mother draws the shining Silver River between Niulang and Zhinü."},
+    {"page": 4, "image": "/folklore/art/herd-boy-weaving-maiden/05-ending.webp", "alt": "Niulang and Zhinü approach each other across a bridge formed by magpies over the Milky Way."}
+  ],
+  "scenes": [
+    ["Niulang was a lonely cowherd whose old ox was his truest companion. High above, Zhinü wove glowing clouds beside the heavenly loom."],
+    ["One summer evening, Zhinü came down to the earthly fields. She and Niulang met beneath the stars, and in time chose to make a home together."],
+    ["But the ruler of heaven commanded Zhinü back to her loom. With one sweep of a hairpin, the Queen Mother drew a shining river across the sky between them."],
+    ["Niulang stood on one bank of the Milky Way and Zhinü on the other. Their sorrow moved every magpie in the world."],
+    ["On the seventh night of the seventh month, the birds formed a bridge with their wings. The two crossed the Silver River and met again.", "Look up on a clear summer night: the stars Altair and Vega still wait on opposite shores."]
+  ]
+}

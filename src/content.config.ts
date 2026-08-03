@@ -42,12 +42,12 @@ const folklore = defineCollection({
     note: z.string(),
     artLabel: z.string(),
     art: z.string(),
-    image: z.string().optional(),
+    image: z.string(),
     pageArt: z.array(z.object({
       page: z.number().int().nonnegative(),
       image: z.string(),
       alt: z.string(),
-    })).optional(),
+    })).length(2),
     scenes: z.array(z.array(z.string()).nonempty()).nonempty(),
     rights: z.object({
       status: z.enum(['verified', 'review']),
@@ -60,6 +60,16 @@ const folklore = defineCollection({
       cultural: z.enum(['pending', 'reviewed']),
       reviewer: z.string().optional(),
     }),
+  }).superRefine((story, ctx) => {
+    const pages = story.pageArt.map(item => item.page);
+    if (new Set(pages).size !== pages.length) {
+      ctx.addIssue({ code: 'custom', path: ['pageArt'], message: 'Interior illustrations must use distinct pages.' });
+    }
+    story.pageArt.forEach((item, index) => {
+      if (item.page === 0 || item.page >= story.scenes.length) {
+        ctx.addIssue({ code: 'custom', path: ['pageArt', index, 'page'], message: 'Interior art must reference a non-cover story page.' });
+      }
+    });
   }),
 });
 

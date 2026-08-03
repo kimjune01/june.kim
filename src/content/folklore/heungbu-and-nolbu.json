@@ -1,0 +1,23 @@
+{
+  "id": "heungbu-and-nolbu", "order": 17, "featured": true,
+  "title": "Heungbu and Nolbu", "originalTitle": "흥부와 놀부 · Heungbu-wa Nolbu",
+  "tradition": "Korean pansori tale", "region": "Asia", "culture": "Korea",
+  "place": "Jeolla Province in old Korea", "language": "English", "ages": "7–11", "minutes": 5,
+  "themes": ["kindness", "greed", "swallows"], "color": "#3f7259", "colorSoft": "#bed8bd",
+  "sourceTitle": "Korean Tales", "sourceAuthor": "Horace Newton Allen", "sourceYear": "1889", "sourceUrl": "https://www.gutenberg.org/ebooks/55539",
+  "note": "A new adaptation of “Hyung Bo and Nahl Bo; or, The Swallow-King’s Rewards.” Modern romanization is used, and the long historical telling is condensed around the swallow and gourds.",
+  "rights": {"status": "verified", "basis": "The 1889 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "Heungbu tends a swallow beneath the curved tiled eaves of a Korean house as gourds grow nearby.", "art": "heungbu", "image": "/folklore/art/covers/heungbu-and-nolbu.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/heungbu-and-nolbu/03-turning.webp", "alt": "Gourds open beneath Heungbu’s thatched eaves to reveal food, cloth, and useful tools."},
+    {"page": 4, "image": "/folklore/art/heungbu-and-nolbu/05-ending.webp", "alt": "Heungbu welcomes his ashamed brother Nolbu at the courtyard gate."}
+  ],
+  "scenes": [
+    ["Two brothers lived very differently. Nolbu kept the family wealth and wanted still more. Heungbu had little, yet shared whatever he could with his family and neighbors."],
+    ["Swallows nested beneath Heungbu’s eaves. When a young bird hurt its leg, he gently set it straight and cared for it until it could fly south."],
+    ["The next spring, the swallow returned with a gourd seed. Heungbu planted it, and vines curled over his small roof.", "When the gourds ripened, each opened to reveal food, cloth, tools, and enough treasure for a comfortable life."],
+    ["Nolbu heard the story and wanted the same reward. Instead of helping a bird, he hurt one and then bound its leg, pretending to be kind."],
+    ["The gourds grown from Nolbu’s seed released troublesome visitors and bills until his hoarded wealth was gone.", "Ashamed, Nolbu went to Heungbu, who welcomed him. The brothers began again with generosity between them."]
+  ]
+}

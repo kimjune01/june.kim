@@ -36,6 +36,10 @@
   "artLabel": "A sparrow waits in a bamboo grove beside two woven baskets.",
   "art": "sparrow",
   "image": "/folklore/art/covers/tongue-cut-sparrow.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/tongue-cut-sparrow/03-turning.webp", "alt": "Sparrows offer the kind woodcutter a large basket and a small basket inside their bamboo-grove home."},
+    {"page": 4, "image": "/folklore/art/tongue-cut-sparrow/05-ending.webp", "alt": "Startling shadows fly from the opened large basket on a bamboo forest road."}
+  ],
   "scenes": [
     [
       "An old woodcutter cared for a little sparrow. While he worked, a bad-tempered neighbor punished the bird for eating her rice paste and drove it away."

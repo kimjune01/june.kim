@@ -53,5 +53,9 @@
       "After seeing a kingdom fit inside one room, his own troubles no longer seemed quite so large."
     ]
   ],
-  "image": "/folklore/art/covers/king-of-the-ants.webp"
+  "image": "/folklore/art/covers/king-of-the-ants.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/king-of-the-ants/03-turning.webp", "alt": "A tiny ant king arrives with miniature riders and banners around the scholar’s ink saucer."},
+    {"page": 4, "image": "/folklore/art/king-of-the-ants/05-ending.webp", "alt": "The scholar kneels beside a great green ants’ nest and chooses to leave it undisturbed."}
+  ]
 }

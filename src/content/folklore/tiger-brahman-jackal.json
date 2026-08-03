@@ -55,5 +55,9 @@
       "The Brahman thanked him and continued down the road, while the tiger had time to consider the worth of a promise."
     ]
   ],
-  "image": "/folklore/art/covers/tiger-brahman-jackal.webp"
+  "image": "/folklore/art/covers/tiger-brahman-jackal.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/tiger-brahman-jackal/03-turning.webp", "alt": "Jackal pretends not to understand how Tiger and the Brahman stood beside the open cage."},
+    {"page": 4, "image": "/folklore/art/tiger-brahman-jackal/05-ending.webp", "alt": "Jackal closes the cage door as the grateful Brahman continues safely down the road."}
+  ]
 }

@@ -54,5 +54,9 @@
       "Their underground wedding was joyful—and Miss Mole was pleased that someone had finally asked what suited her."
     ]
   ],
-  "image": "/folklore/art/covers/bridegroom-for-miss-mole.webp"
+  "image": "/folklore/art/covers/bridegroom-for-miss-mole.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/bridegroom-for-miss-mole/03-turning.webp", "alt": "Father Mole watches wind push a cloud around the unmoving stone Miryek beside a Korean river."},
+    {"page": 4, "image": "/folklore/art/bridegroom-for-miss-mole/05-ending.webp", "alt": "Miss Mole and a kind young mole celebrate their joyful underground wedding."}
+  ]
 }

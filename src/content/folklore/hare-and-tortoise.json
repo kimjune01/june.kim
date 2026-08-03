@@ -1,0 +1,22 @@
+{
+  "id": "hare-and-tortoise", "order": 13, "featured": true,
+  "title": "The Hare and the Tortoise", "originalTitle": "Λαγωὸς καὶ χελώνη · Lagōos kai chelōnē",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece",
+  "place": "A country road in ancient Greece", "language": "English", "ages": "5–9", "minutes": 3,
+  "themes": ["patience", "perseverance", "pride"], "color": "#9a542f", "colorSoft": "#efd1a8",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "Joseph Jacobs’s public-domain text is reproduced directly; only page divisions are editorial. The fable is commonly catalogued as Perry 226.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A tortoise approaches an olive-wreathed finish while a hare wakes beneath a tree.", "art": "hare-tortoise", "image": "/folklore/art/covers/hare-and-tortoise.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/hare-and-tortoise/03-turning.webp", "alt": "Tortoise walks steadily past Hare, who sleeps beneath an olive tree beside the ancient Greek road."},
+    {"page": 2, "image": "/folklore/art/hare-and-tortoise/05-ending.webp", "alt": "Tortoise crosses the olive-wreathed finish just before the astonished Hare arrives."}
+  ],
+  "scenes": [
+    ["The Hare was once boasting of his speed before the other animals. “I have never yet been beaten,” said he, “when I put forth my full speed. I challenge any one here to race with me.”", "The Tortoise said quietly, “I accept your challenge.”", "“That is a good joke,” said the Hare; “I could dance round you all the way.”", "“Keep your boasting till you’ve beaten,” answered the Tortoise. “Shall we race?”"],
+    ["So a course was fixed and a start was made. The Hare darted almost out of sight at once, but soon stopped and, to show his contempt for the Tortoise, lay down to have a nap."],
+    ["The Tortoise plodded on and plodded on, and when the Hare awoke from his nap, he saw the Tortoise just near the winning-post and could not run up in time to save the race. Then said the Tortoise:", "“Plodding wins the race.”"]
+  ]
+}

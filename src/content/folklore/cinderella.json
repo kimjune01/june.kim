@@ -1,0 +1,23 @@
+{
+  "id": "cinderella", "order": 20, "featured": true,
+  "title": "Cinderella", "originalTitle": "Aschenputtel",
+  "tradition": "German fairy tale", "region": "Europe", "culture": "Germany",
+  "place": "A household and royal festival in old Germany", "language": "English", "ages": "7–11", "minutes": 5,
+  "themes": ["resilience", "kindness", "recognition"], "color": "#76568c", "colorSoft": "#d8c8e6",
+  "sourceTitle": "Grimm’s Fairy Stories", "sourceAuthor": "Jacob and Wilhelm Grimm; translated by Marion Edwardes", "sourceYear": "1912", "sourceUrl": "https://www.gutenberg.org/ebooks/11027",
+  "note": "A new adaptation of the Grimms’ “Cinderella,” retaining the hazel tree and birds rather than details from later screen adaptations. Violent punishments are omitted.",
+  "rights": {"status": "verified", "basis": "The 1912 English source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "Cinderella stands beneath a hazel tree as white birds bring a silver dress and golden slipper.", "art": "cinderella-hazel", "image": "/folklore/art/covers/cinderella.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/cinderella/03-turning.webp", "alt": "White birds bring Cinderella a shining dress and golden slippers beneath the hazel tree."},
+    {"page": 4, "image": "/folklore/art/cinderella/05-ending.webp", "alt": "A royal messenger discovers that the golden slipper fits Cinderella."}
+  ],
+  "scenes": [
+    ["After her mother died, a girl was made to work among the ashes by her stepsisters, who mockingly called her Cinderella.", "She planted a hazel twig at her mother’s grave and watered it with her tears until it grew into a tree."],
+    ["When the king announced a three-day festival, the stepsisters scattered lentils into the ashes to keep Cinderella home.", "White birds came to help her sort every grain."],
+    ["At the hazel tree, Cinderella asked for something fine to wear. The birds brought a shining dress and slippers, and she went to the festival, where no one recognized her."],
+    ["Each night she slipped away before her family returned. On the third night, one golden slipper remained behind on the palace stair."],
+    ["The royal messenger searched until the slipper fit Cinderella. Her fine clothes had not made her worthy; they had only allowed others to see the person the ashes had hidden.", "She left the old household and began a life in which kindness was no longer treated as weakness."]
+  ]
+}

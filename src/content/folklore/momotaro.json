@@ -1,0 +1,23 @@
+{
+  "id": "momotaro", "order": 16, "featured": true,
+  "title": "Momotarō, the Peach Boy", "originalTitle": "桃太郎 · Momotarō",
+  "tradition": "Japanese tale", "region": "Asia", "culture": "Japan",
+  "place": "Rural Japan and an island beyond the sea", "language": "English", "ages": "6–10", "minutes": 5,
+  "themes": ["courage", "cooperation", "homecoming"], "color": "#b8473e", "colorSoft": "#f2c4b5",
+  "sourceTitle": "Japanese Fairy Tales", "sourceAuthor": "Yei Theodora Ozaki", "sourceYear": "1908", "sourceUrl": "https://www.gutenberg.org/ebooks/4018",
+  "note": "A shortened new adaptation of Ozaki’s “Momotaro, or the Story of the Son of a Peach.” Violent details and imperial language in the historical edition are softened; oni are presented as folktale beings rather than people.",
+  "rights": {"status": "verified", "basis": "The 1908 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "Momotarō carries a banner beside a dog, monkey, and pheasant under a peach tree.", "art": "momotaro", "image": "/folklore/art/covers/momotaro.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/momotaro/03-turning.webp", "alt": "Momotarō shares millet dumplings with Dog, Monkey, and Pheasant on a rural Japanese road."},
+    {"page": 4, "image": "/folklore/art/momotaro/05-ending.webp", "alt": "Momotarō and his animal companions sail home to a welcome beneath flowering peach branches."}
+  ],
+  "scenes": [
+    ["An old woman washing clothes saw an enormous peach floating down the river. She carried it home to share with her husband.", "When they cut it open, a healthy baby boy appeared. They named him Momotarō—Peach Boy."],
+    ["Momotarō grew strong and kind. Hearing that oni on a distant island had stolen from nearby villages, he resolved to recover what they had taken.", "His parents packed millet dumplings for the journey."],
+    ["Along the road, Momotarō shared dumplings with a dog, a monkey, and a pheasant. Each promised to help, though first the three had to learn to work together."],
+    ["At the island, Pheasant flew over the gate, Monkey climbed the wall, and Dog found the safest path. Their different gifts made one brave team."],
+    ["The oni returned the stolen treasure and promised peace. Momotarō and his companions sailed home, where the old couple welcomed all four beneath the peach blossoms."]
+  ]
+}

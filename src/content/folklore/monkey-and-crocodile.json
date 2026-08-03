@@ -1,0 +1,23 @@
+{
+  "id": "monkey-and-crocodile", "order": 18, "featured": true,
+  "title": "The Monkey and the Crocodile", "originalTitle": "वानरेन्द्रजातक · Vānarindajātaka",
+  "tradition": "Jātaka tale", "region": "Asia", "culture": "India",
+  "place": "A fruit tree beside the River Ganges", "language": "English", "ages": "6–10", "minutes": 4,
+  "themes": ["cleverness", "betrayal", "self-possession"], "color": "#477a61", "colorSoft": "#bdd9b3",
+  "sourceTitle": "Jataka Tales", "sourceAuthor": "Ellen C. Babbitt", "sourceYear": "1912", "sourceUrl": "https://www.gutenberg.org/ebooks/62514",
+  "note": "A new adaptation of Babbitt’s two-part “The Monkey and the Crocodile,” a Jātaka story associated with the Vānarinda Jātaka.",
+  "rights": {"status": "verified", "basis": "The 1912 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A monkey rides a crocodile across a broad river toward a fruit-covered island.", "art": "monkey-crocodile", "image": "/folklore/art/covers/monkey-and-crocodile.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/monkey-and-crocodile/03-turning.webp", "alt": "Midstream, Monkey calmly tells Crocodile that his heart was left hanging in the fruit tree."},
+    {"page": 4, "image": "/folklore/art/monkey-and-crocodile/05-ending.webp", "alt": "Safe in the riverside fruit tree, Monkey speaks to Crocodile below about the trust he has lost."}
+  ],
+  "scenes": [
+    ["Monkey lived in a fruit tree beside a wide river. Across the water grew an island laden with ripe mangoes.", "Crocodile offered Monkey a ride to the island, but secretly planned to bring Monkey’s heart home for another crocodile to eat."],
+    ["Halfway across, Crocodile revealed the plan. Monkey’s fear rose like the river, but he kept his voice calm."],
+    ["“My heart?” Monkey said. “I never carry it when gathering fruit. I left it hanging in my tree. Turn back, and I will fetch it.”"],
+    ["Crocodile believed him and swam back. The instant they reached the bank, Monkey leapt into the highest branches."],
+    ["“No creature leaves its heart behind,” Monkey called. “You tried to trick me, and now you have lost my trust.”", "A calm mind had found a branch where strength could not reach."]
+  ]
+}

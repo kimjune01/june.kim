@@ -52,5 +52,9 @@
       "The troll tumbled into the rushing river and floated far downstream. All three goats climbed safely to the meadow, where there was enough green grass for everyone."
     ]
   ],
-  "image": "/folklore/art/covers/three-billy-goats-gruff.webp"
+  "image": "/folklore/art/covers/three-billy-goats-gruff.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/three-billy-goats-gruff/03-turning.webp", "alt": "The middle billy goat trip-traps across the wooden bridge while the troll peers up from below."},
+    {"page": 4, "image": "/folklore/art/three-billy-goats-gruff/05-ending.webp", "alt": "All three billy goats graze together in the green mountain meadow above the river."}
+  ]
 }

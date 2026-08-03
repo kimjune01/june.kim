@@ -58,5 +58,9 @@
       "Snap! That was the end of the wee bannock’s running."
     ]
   ],
-  "image": "/folklore/art/covers/wee-bannock.webp"
+  "image": "/folklore/art/covers/wee-bannock.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/wee-bannock/03-turning.webp", "alt": "The wee bannock rolls over a Scottish brae ahead of a weaver, butter-maker, miller, and blacksmith."},
+    {"page": 4, "image": "/folklore/art/wee-bannock/05-ending.webp", "alt": "At twilight, the wee bannock rolls beneath a whin bush toward a surprised fox’s den."}
+  ]
 }

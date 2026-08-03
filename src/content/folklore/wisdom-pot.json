@@ -56,5 +56,9 @@
       "Wisdom scattered everywhere: through the forest, across the villages, and out into the wide world. That is why no one person possesses it all—and why a good idea may come from anyone."
     ]
   ],
-  "image": "/folklore/art/covers/wisdom-pot.webp"
+  "image": "/folklore/art/covers/wisdom-pot.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/wisdom-pot/03-turning.webp", "alt": "Anansi tries to climb the tallest tree with the clay pot tied in front while his son watches below."},
+    {"page": 4, "image": "/folklore/art/wisdom-pot/05-ending.webp", "alt": "Wisdom scatters from the broken clay pot through the forest, village, and wide sky."}
+  ]
 }

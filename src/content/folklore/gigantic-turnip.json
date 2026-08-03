@@ -22,10 +22,10 @@
   "sourceAuthor": "Valerian V. Carrick",
   "sourceYear": "1915",
   "sourceUrl": "https://www.gutenberg.org/ebooks/34705",
-  "note": "A new adaptation of the cumulative Russian turnip tale, retaining its chain of helpers and repeated pulling pattern.",
+  "note": "Prototype adaptation of the cumulative Russian turnip tale. The previously recorded Gutenberg link does not contain this story; this record must not be published until a matching public-domain edition is selected.",
   "rights": {
-    "status": "verified",
-    "basis": "Source edition published in 1915 and identified as public domain by Project Gutenberg.",
+    "status": "review",
+    "basis": "Provenance mismatch found during audit: the recorded Project Gutenberg ebook does not contain this story. A matching public-domain edition is still required.",
     "jurisdiction": "United States",
     "checked": "2026-08-02"
   },
@@ -53,5 +53,9 @@
       "There was turnip soup enough for everyone, including one very small but very important mouse."
     ]
   ],
-  "image": "/folklore/art/covers/gigantic-turnip.webp"
+  "image": "/folklore/art/covers/gigantic-turnip.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/gigantic-turnip/03-turning.webp", "alt": "A Russian family, their dog, and their cat tug in a long line while the giant turnip only wiggles."},
+    {"page": 4, "image": "/folklore/art/gigantic-turnip/05-ending.webp", "alt": "The turnip lies free as the whole family and their animals laugh together after their tumble."}
+  ]
 }

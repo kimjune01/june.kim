@@ -58,5 +58,9 @@
       "Mountain Uncle clawed uselessly at the stone. The little toad remained safe inside, and told the story for many years: strength may be loud, but good sense knows when to hop aside."
     ]
   ],
-  "image": "/folklore/art/covers/unmannerly-tiger.webp"
+  "image": "/folklore/art/covers/unmannerly-tiger.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/unmannerly-tiger/03-turning.webp", "alt": "A Buddhist monk lowers a log into the stone pit so Mountain Uncle Tiger can climb out."},
+    {"page": 4, "image": "/folklore/art/unmannerly-tiger/05-ending.webp", "alt": "A tiny toad speaks safely from a narrow stone crack while the large tiger waits outside."}
+  ]
 }

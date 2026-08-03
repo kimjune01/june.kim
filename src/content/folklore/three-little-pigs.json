@@ -52,5 +52,9 @@
       "The startled wolf shot back up the chimney and ran away. The three pigs repaired the first two houses together—this time with strong walls and patient work."
     ]
   ],
-  "image": "/folklore/art/covers/three-little-pigs.webp"
+  "image": "/folklore/art/covers/three-little-pigs.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/three-little-pigs/03-turning.webp", "alt": "Wolf huffs outside the brick house while the three pigs watch safely through a window."},
+    {"page": 4, "image": "/folklore/art/three-little-pigs/05-ending.webp", "alt": "The three pigs work together on strong brick homes in the English countryside."}
+  ]
 }

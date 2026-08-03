@@ -14,8 +14,14 @@ the Astro build.
 - `art` selects a built-in illustration. Unknown keys receive a neutral book cover,
   so artwork can be added after editorial entry rather than blocking it.
 - `scenes` is an array of pages, each containing an array of paragraphs.
-- `pageArt` optionally attaches an image and alt text to a zero-based page number.
-  Interior art is deliberately sparse; cover, turning point, and ending are the default rhythm.
+- Story length is editorial, not templated. Use as many pages as the tale's natural
+  rhythm needs; five pages is not a target or requirement.
+- Each finished story targets exactly three illustrations: its cover, one turning-point
+  image, and one ending image. `pageArt` attaches the two interior images to zero-based
+  page numbers. Records without both entries are still editorial drafts, even when their
+  text and cover are present.
+- The reader builds a citation from `sourceTitle`, `sourceAuthor`, `sourceYear`, and
+  `sourceUrl` and displays it after the text on the final story page.
 - `rights` records the edition-level determination, jurisdiction, basis, and date.
 - `review` tracks adaptation and cultural review independently. New work should begin
   as `draft` / `pending`; those states are visible in “For grown-ups & sources.”

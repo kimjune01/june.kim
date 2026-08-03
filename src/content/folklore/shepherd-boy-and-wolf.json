@@ -1,0 +1,21 @@
+{
+  "id": "shepherd-boy-and-wolf", "order": 15, "featured": false,
+  "title": "The Shepherd Boy and the Wolf", "originalTitle": "Ποιμὴν παίζων · Poimēn paizōn",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece",
+  "place": "A hillside above a farming village", "language": "English", "ages": "6–10", "minutes": 3,
+  "themes": ["honesty", "trust", "consequences"], "color": "#596b42", "colorSoft": "#cad5a3",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "Joseph Jacobs’s public-domain text is reproduced directly; only page divisions are editorial. The fable is commonly known as “The Boy Who Cried Wolf” and catalogued as Perry 210.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A shepherd boy calls toward a stone village while a wolf watches the flock from tall grass.", "art": "boy-wolf", "image": "/folklore/art/covers/shepherd-boy-and-wolf.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/shepherd-boy-and-wolf/03-turning.webp", "alt": "A real wolf emerges near the flock while the shepherd boy calls toward the Greek village."},
+    {"page": 2, "image": "/folklore/art/shepherd-boy-and-wolf/05-ending.webp", "alt": "The shepherd boy stands with his flock after the villagers no longer believe his call."}
+  ],
+  "scenes": [
+    ["There was once a young Shepherd Boy who tended his sheep at the foot of a mountain near a dark forest. It was rather lonely for him all day, so he thought upon a plan by which he could get a little company and some excitement."],
+    ["He rushed down towards the village calling out “Wolf, Wolf,” and the villagers came out to meet him, and some of them stopped with him for a considerable time. This pleased the boy so much that a few days afterwards he tried the same trick, and again the villagers came to his help."],
+    ["But shortly after this a Wolf actually did come out from the forest, and began to worry the sheep, and the boy of course cried out “Wolf, Wolf,” still louder than before. But this time the villagers, who had been fooled twice before, thought the boy was again deceiving them, and nobody stirred to come to his help. So the Wolf made a good meal off the boy’s flock, and when the boy complained, the wise man of the village said:", "“A liar will not be believed, even when he speaks the truth.”"]
+  ]
+}
