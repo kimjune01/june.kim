@@ -1,0 +1,21 @@
+{
+  "id": "ali-baba", "order": 73, "featured": false, "published": true,
+  "title": "Ali Baba and the Forty Thieves", "originalTitle": "علي بابا والأربعون لصًا",
+  "tradition": "Arabian Nights tale", "region": "Middle East", "culture": "Franco-Arabian literary tradition", "place": "A storybook Persian town and its surrounding forest", "language": "English", "ages": "10–14", "minutes": 11,
+  "themes": ["resourcefulness", "greed", "loyalty"], "color": "#75502d", "colorSoft": "#e6c99b",
+  "sourceTitle": "Ali Baba, or the Forty Thieves", "sourceAuthor": "Anonymous; an English toy-book adaptation of the tale introduced to Europe by Antoine Galland", "sourceYear": "c. 1860s", "sourceUrl": "https://www.gutenberg.org/ebooks/37679",
+  "note": "A moderately condensed reading of the public-domain J. Wrigley toy-book text. Its main sequence is retained, while repeated attacks are compressed and violence is stated without graphic detail. The three illustrations are the cover and plates images/p006-illus.jpg and images/p008-illus.jpg from the cited edition. “Ali Baba” is absent from known medieval Arabic manuscripts of the Nights and first survives in Galland’s French publication, reportedly from Hanna Diyab; the Arabic title given here is the conventional modern title, not a claim of a medieval Arabic original. Page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 37679 and its nineteenth-century illustrated toy-book edition as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Ali Baba watches horsemen gather before a hidden cave.", "art": "ali-baba", "image": "/folklore/art/covers/ali-baba.webp",
+  "pageArt": [{"page": 4, "image": "/folklore/art/ali-baba/03-turning.webp", "alt": "Morgiana discovers a thief hidden inside an oil jar."}, {"page": 6, "image": "/folklore/art/ali-baba/05-ending.webp", "alt": "Ali Baba welcomes Morgiana into his family."}],
+  "scenes": [
+    ["In a Persian town lived two brothers. Cassim had married into wealth, but Ali Baba earned a poor living by cutting wood. One day in the forest Ali Baba saw forty horsemen. He hid in a tree while their captain called, “Open, Sesame!” A door opened in the rock, and the men carried their laden bags inside."],
+    ["After they left, Ali Baba spoke the same words. Inside lay heaps of goods and gold. He took only what his asses could carry and concealed it at home. A coin stuck to scales borrowed from Cassim’s wife, and Cassim forced his brother to reveal the secret."],
+    ["Cassim entered the cave and loaded himself with treasure, but excitement drove the words from his mind. The thieves found him there and killed him. Ali Baba recovered his brother’s body, and Morgiana, a clever servant in Cassim’s household, arranged matters so that no one guessed the cause of his death."],
+    ["The thieves discovered that another person knew their cave. Their scout marked Ali Baba’s door with chalk, but Morgiana noticed and marked every neighboring door in the same way. A second mark was defeated by the same quick thought."],
+    ["At last the captain came disguised as an oil merchant, with thirty-eight men hidden in great jars. Morgiana heard a voice answer when she approached a jar for oil. She understood the plot and quietly stopped the hidden thieves before they could attack the household."],
+    ["The captain escaped and later returned as a merchant who befriended Ali Baba’s son. During supper, Morgiana recognized him. With a sudden dance she exposed and defeated the last enemy. Ali Baba, astonished, heard the whole story and thanked her for saving his family."],
+    ["Ali Baba gave Morgiana her freedom and welcomed her into the family through marriage to his son. He waited a full year before returning to the cave. Finding no one there, he knew the band was gone, and in time he entrusted the secret to his son. They used their fortune with care, remembering what greed had cost Cassim."]
+  ]
+}

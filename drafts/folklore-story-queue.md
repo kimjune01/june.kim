@@ -41,6 +41,12 @@ These are not compact tales as a whole, but one well-recognized episode could fi
 - David and Goliath — a compact scriptural episode, but decide whether sacred narratives belong on the folklore shelf.
 - Noah's Ark — likewise compact and widely retold, but requires an explicit collection policy for living religious traditions.
 
+Status after the 2026-08-03 production pass:
+
+- **Jason and the Golden Fleece — deferred.** No episode has yet been selected, and choosing among the dragon, the ploughing trial, and the flight with the fleece would materially define the adaptation. It remains blocked on an editorial episode choice and source-edition review.
+- **David and Goliath — deferred.** This is viable as a short reading, but publication is blocked until the collection has an explicit policy for presenting narratives sacred to living communities on a folklore shelf.
+- **Noah's Ark — deferred.** Publication is likewise blocked on the living-religion collection policy, as well as a decision about which scriptural tradition and public-domain translation the reading would represent.
+
 ## Deliberately excluded
 
 These are authored books, novellas, or long narratives whose picture-book versions would be abridgments rather than folk-sized source copies:
@@ -67,4 +73,3 @@ Santa-themed catalogue stories are also excluded because the catalogue explicitl
 ## Already represented
 
 Do not create duplicates for *The Boy Who Cried Wolf*, *The Three Little Pigs*, *The Ant and the Grasshopper*, *The Tortoise and the Hare*, *The Fox and the Crow*, *The Frog and the Ox*, *The Town Mouse and the Country Mouse*, or *The Three Billy Goats Gruff*.
-

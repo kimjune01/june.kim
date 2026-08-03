@@ -1,0 +1,19 @@
+{
+  "id": "paul-bunyan", "order": 75, "featured": false, "published": true,
+  "title": "Paul Bunyan and the Big Blue Ox", "originalTitle": "Paul Bunyan and His Big Blue Ox",
+  "tradition": "North American tall tale", "region": "North America", "culture": "U.S. logging-camp folklore and print folklore", "place": "The northern lumber camps of tall-tale America", "language": "English", "ages": "8–12", "minutes": 7,
+  "themes": ["exaggeration", "work", "companionship"], "color": "#3d5c49", "colorSoft": "#c5d5bd",
+  "sourceTitle": "The Marvelous Exploits of Paul Bunyan", "sourceAuthor": "William B. Laughead", "sourceYear": "1922; revised edition 1934", "sourceUrl": "https://www.gutenberg.org/ebooks/5800",
+  "note": "A selective, condensed reading assembled from episodes in Laughead’s public-domain promotional booklet: Paul’s great size, Babe’s discovery in the blue winter, the oversized camp, the crooked-road haul, and the round-river drive. Transitions and page divisions are editorial. Laughead collected and embellished earlier logger tales while promoting a lumber company; this is not treated as the single origin of the tradition. The ebook did not provide a suitable three-scene source-art set, so the illustrations are new collection artwork in a circa-1900 North Woods setting.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 5800, including Laughead’s text and illustrations, as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Paul Bunyan and Babe tower above a North Woods logging camp.", "art": "paul-bunyan", "image": "/folklore/art/covers/paul-bunyan.webp",
+  "pageArt": [{"page": 2, "image": "/folklore/art/paul-bunyan/03-turning.webp", "alt": "Babe the Blue Ox hauls an enormous winding string of logs."}, {"page": 4, "image": "/folklore/art/paul-bunyan/05-ending.webp", "alt": "Paul’s loggers watch their logs circle an impossibly round river."}],
+  "scenes": [
+    ["The old lumber-camp stories say Paul Bunyan was so large that when he was a baby, five giant storks were needed to deliver him. When he grew up, he became the mightiest logger in the North Woods, and ordinary geography had to make room for his work."],
+    ["During the Winter of the Blue Snow, Paul found a strange calf nearly frozen in a drift. He carried it to camp, warmed it, and named it Babe. The cold had dyed the animal a deep blue. Babe grew to a tremendous size and became Paul’s faithful working companion."],
+    ["Paul’s camp needed a cookhouse so long that the cook crossed it on skates. The pea-soup lake was kept hot by teams hauling firewood beneath it. When a road wound around hills and lakes, Babe pulled so hard that he straightened the road—and every curve snapped out of the logs behind him."],
+    ["Once Paul needed to drive logs down a river that curled in a perfect circle. The logs went round and round without finding the mill. Paul told the crew not to worry. He set Babe to pull the river straight enough for the timber to pass."],
+    ["That is how a Bunyan story works: every snowfall is deeper, every tool larger, and every job harder until Paul and Babe make it possible. Around the bunkhouse stove, one logger could always remember a feat bigger than the last—and another could improve it before the tale was done."]
+  ]
+}

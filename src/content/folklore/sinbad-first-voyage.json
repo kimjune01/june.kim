@@ -1,0 +1,20 @@
+{
+  "id": "sinbad-first-voyage", "order": 74, "featured": false, "published": true,
+  "title": "Sinbad’s First Voyage", "originalTitle": "السندباد البحري: الرحلة الأولى",
+  "tradition": "Arabian Nights tale cycle", "region": "Middle East", "culture": "Arabic and Persianate literary tradition", "place": "Baghdad, Basra, and the Indian Ocean of story", "language": "English", "ages": "9–13", "minutes": 8,
+  "themes": ["adventure", "resourcefulness", "fortune"], "color": "#315f68", "colorSoft": "#b9d8d4",
+  "sourceTitle": "Fairy Tales from the Arabian Nights", "sourceAuthor": "E. Dixon, editor; based on the English Arabian Nights tradition", "sourceYear": "1893", "sourceUrl": "https://www.gutenberg.org/ebooks/8599",
+  "note": "A condensed reading of “The First Voyage of Sinbad the Sailor” in Dixon’s public-domain collection. The frame with Sinbad the Porter is summarized, and some trading detail is compressed; the island-whale, castaway, mare, king, recovered cargo, and return remain. No suitable three-scene set of source plates was available, so the illustrations are new collection artwork with historically informed Indian Ocean and Abbasid-era details. The Arabic title is the conventional modern title of the episode. Page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 8599 and its nineteenth-century English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Sinbad’s merchant ship crosses a bright, uncertain sea.", "art": "sinbad", "image": "/folklore/art/covers/sinbad-first-voyage.webp",
+  "pageArt": [{"page": 2, "image": "/folklore/art/sinbad-first-voyage/03-turning.webp", "alt": "Sailors flee as the island beneath their fire proves to be a giant sea creature."}, {"page": 5, "image": "/folklore/art/sinbad-first-voyage/05-ending.webp", "alt": "Sinbad returns to Baghdad with goods and gifts after his first voyage."}],
+  "scenes": [
+    ["In Baghdad, the wealthy Sinbad the Sailor welcomed a poor porter who shared his name. To explain how fortune had come to him, Sinbad began the story of his first voyage."],
+    ["As a young man, Sinbad spent much of the estate his father left him. Regretting his carelessness, he sold what remained, bought merchandise, and sailed from Basra with other traders. They visited island after island, buying and selling."],
+    ["One green island seemed a pleasant place to rest, and the travelers lit fires upon it. Suddenly it heaved beneath them: it was an enormous sea creature that had slept so long sand and trees had gathered on its back. The heat woke it, and it plunged. Sinbad clung to a wooden tub while the ship sailed away."],
+    ["Waves carried him to a real island. There he found a groom guarding the king’s mares from sea-horses. The groom took Sinbad to the capital, where the king received him kindly and gave him work at the harbor."],
+    ["One day Sinbad recognized his old ship. Its captain believed him drowned and meant to sell his goods for his heirs. When Sinbad proved who he was, the honest captain restored every bale. Sinbad traded profitably and offered the king rare gifts; the king returned gifts of even greater value."],
+    ["At last Sinbad sailed home to Baghdad. He bought a house and shared his wealth with friends and those in need. After finishing the tale, he gave the porter a generous gift—but warned that this comfort had been won through danger, not granted without hardship."]
+  ]
+}

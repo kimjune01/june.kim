@@ -1,0 +1,19 @@
+{
+  "id": "king-midas", "order": 72, "featured": false, "published": true,
+  "title": "King Midas and the Golden Touch", "originalTitle": "Μίδας",
+  "tradition": "Greek myth", "region": "Europe", "culture": "Ancient Greek", "place": "Mythic Phrygia in Anatolia", "language": "English", "ages": "8–12", "minutes": 6,
+  "themes": ["greed", "wisdom", "consequences"], "color": "#8a671c", "colorSoft": "#ead89b",
+  "sourceTitle": "A Book of Myths", "sourceAuthor": "Jean Lang; illustrated by Helen Stratton", "sourceYear": "1914", "sourceUrl": "https://www.gutenberg.org/ebooks/22693",
+  "note": "A condensed reading of Jean Lang’s public-domain chapter “King Midas of the Golden Touch.” It follows that chapter’s Silenus, golden-touch, and Pactolus episodes; introductory commentary and some ornament are omitted. No three-scene set of source plates was available, so the illustrations are new collection artwork in a historically informed mythic Phrygian setting. Page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 22693 and its illustrated 1914 edition as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Midas reaches toward a rose as gold spreads beneath his fingers.", "art": "midas", "image": "/folklore/art/covers/king-midas.webp",
+  "pageArt": [{"page": 2, "image": "/folklore/art/king-midas/03-turning.webp", "alt": "King Midas stares at a feast transformed into hard gold."}, {"page": 4, "image": "/folklore/art/king-midas/05-ending.webp", "alt": "Midas washes the golden power from his hands in the river Pactolus."}],
+  "scenes": [
+    ["Midas, king of Phrygia, loved gold more than anything else. One day his servants found the old satyr Silenus sleeping among the roses. Midas knew him as a companion of Dionysus, treated him kindly, and led him safely back to the god."],
+    ["Dionysus offered Midas any reward he wished. The king asked that everything he touched should turn to gold. The god granted the wish, though he warned that it was not a wise one. Midas touched an oak twig, a stone, and an apple; each became solid gold."],
+    ["Delighted, he ordered a feast. But bread hardened between his fingers, meat became metal, and wine turned to molten gold before it reached his lips. Hungry and thirsty amid his treasure, Midas understood that his gift was a curse."],
+    ["He begged Dionysus to take the power away. The god told him to go to the river Pactolus, plunge his head beneath its waters, and wash his fault and its punishment from him."],
+    ["Midas obeyed. The river carried the golden power away, and its sands shone with gold thereafter. The king returned able to eat, drink, and touch living things again. From then on, the simple gifts of earth seemed more precious to him than metal."]
+  ]
+}

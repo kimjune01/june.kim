@@ -1,0 +1,19 @@
+{
+  "id": "john-henry", "order": 76, "featured": false, "published": true,
+  "title": "John Henry", "originalTitle": "John Henry",
+  "tradition": "African American work song and legend", "region": "North America", "culture": "African American railroad-worker tradition", "place": "A railroad tunnel in the Appalachian South", "language": "English", "ages": "10–14", "minutes": 6,
+  "themes": ["dignity", "labor", "human cost"], "color": "#55483e", "colorSoft": "#d7c6ae",
+  "sourceTitle": "Negro Workaday Songs", "sourceAuthor": "Howard W. Odum and Guy B. Johnson, collectors", "sourceYear": "1926", "sourceUrl": "https://www.gutenberg.org/ebooks/69378",
+  "note": "A restrained prose reading based on the early “John Henry” variants and commentary printed in this public-domain folklore study. Repeated and floating ballad verses are condensed into a single narrative; no one recorded singer’s wording is presented as definitive. The collectors’ period title and framing are cited as historical metadata and are not endorsed. No suitable source plates were available, so the illustrations are new collection artwork with a dignified Reconstruction-era railroad setting. Page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 69378 and the 1926 edition as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "John Henry stands with hammer raised at a railroad tunnel face.", "art": "john-henry", "image": "/folklore/art/covers/john-henry.webp",
+  "pageArt": [{"page": 2, "image": "/folklore/art/john-henry/03-turning.webp", "alt": "John Henry and a steam drill race side by side in a mountain tunnel."}, {"page": 4, "image": "/folklore/art/john-henry/05-ending.webp", "alt": "Railroad workers lower their hammers in remembrance beside the finished tunnel."}],
+  "scenes": [
+    ["Railroad crews told that John Henry could drive steel better than any man. A shaker held a drill against the rock; John Henry swung his hammer, turning the steel after every blow. Together they opened holes for the charges that cut a tunnel through the mountain."],
+    ["Then a captain brought a steam drill and said the machine would beat the workers. John Henry answered that a man was nothing but a man, yet he would not let the drill take his measure without a contest. He chose his hammers and entered the tunnel."],
+    ["The steam drill rattled while John Henry’s hammers rang. Dust filled the dark bore. He struck steadily and called for water, then for a larger hammer. By the finish, John Henry had driven farther into the rock than the machine."],
+    ["But the labor had taken all his strength. John Henry laid down his hammer and died. In some verses he falls with the tool still in his hand; in others he asks that his wife be told he could not be bought or driven from his work."],
+    ["The singers did not let the contest end in silence. They carried John Henry’s name from camp to camp and railroad to railroad. Their verses remember both his strength and its terrible cost: the machine was beaten, but the worker was not spared."]
+  ]
+}
