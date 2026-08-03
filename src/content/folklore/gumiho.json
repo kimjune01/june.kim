@@ -1,5 +1,5 @@
 {
-  "id": "gumiho", "order": 55, "published": false, "featured": false,
+  "id": "gumiho", "order": 55, "published": true, "featured": false,
   "title": "A Story of the Fox", "originalTitle": "구미호 · Gumiho",
   "tradition": "Korean supernatural tale", "region": "Asia", "culture": "Korea", "place": "A provincial governor’s residence in Pyongan",
   "language": "English", "ages": "10–14", "minutes": 3,
@@ -7,7 +7,7 @@
   "sourceTitle": "Korean Folk Tales: Imps, Ghosts and Fairies", "sourceAuthor": "Im Bang and Yi Ryuk; translated by James S. Gale", "sourceYear": "1913", "sourceUrl": "https://www.gutenberg.org/ebooks/51002",
   "note": "A reading copy of Im Bang’s public-domain “A Story of the Fox,” with page divisions and light line-wrap cleanup. Korean fox-spirit traditions have many variants; this telling involves a fox transformed into a woman but does not describe nine visible tails.",
   "rights": {"status": "verified", "basis": "The 1913 English translation is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
-  "review": {"adaptation": "draft", "cultural": "pending"},
+  "review": {"adaptation": "ready", "cultural": "best-effort"},
   "artLabel": "A mysterious fox-woman appears at midnight in a scholar’s garden pavilion.", "art": "gumiho",
   "image": "/folklore/art/covers/gumiho.webp",
   "pageArt": [
