@@ -1,12 +1,12 @@
 {
-  "id": "brave-little-tailor", "order": 68, "featured": false, "published": false,
+  "id": "brave-little-tailor", "order": 68, "featured": false, "published": true,
   "title": "The Brave Little Tailor", "originalTitle": "Das tapfere Schneiderlein",
   "tradition": "Grimms’ fairy tale", "region": "Europe", "culture": "German", "place": "Villages, forests, and a royal court in a German wonder-tale", "language": "English", "ages": "8–12", "minutes": 10,
   "themes": ["cleverness", "confidence", "misunderstanding"], "color": "#77583f", "colorSoft": "#e5d1af",
   "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob Grimm and Wilhelm Grimm; English text based on Edgar Taylor and Marian Edwardes", "sourceYear": "1812–1857", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
   "note": "A concise reading retelling faithful to the plot of the public-domain Project Gutenberg text, where the story is titled “The Valiant Little Tailor.” Compression and page divisions are editorial.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
-  "review": {"adaptation": "draft", "cultural": "pending"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "A little tailor wears his bold belt and sets out into the wide world.", "art": "brave-tailor", "image": "/folklore/art/covers/brave-little-tailor.webp",
   "pageArt": [
     {"page": 3, "image": "/folklore/art/brave-little-tailor/03-turning.webp", "alt": "The tailor tricks a giant by squeezing cheese while the giant crushes a stone."},

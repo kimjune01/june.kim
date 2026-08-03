@@ -1,12 +1,12 @@
 {
-  "id": "henny-penny", "order": 67, "featured": false, "published": false,
+  "id": "henny-penny", "order": 67, "featured": false, "published": true,
   "title": "Chicken Little, or Henny-Penny", "originalTitle": "Henny-Penny",
   "tradition": "English cumulative tale", "region": "Europe", "culture": "English", "place": "An English farmyard and woodland", "language": "English", "ages": "5–9", "minutes": 6,
   "themes": ["panic", "credulity", "caution"], "color": "#a7682f", "colorSoft": "#efd8a8",
   "sourceTitle": "English Fairy Tales", "sourceAuthor": "Joseph Jacobs, collector and editor", "sourceYear": "1890", "sourceUrl": "https://www.gutenberg.org/ebooks/7439",
   "note": "A concise reading adaptation faithful to Joseph Jacobs’s public-domain “Henny-Penny.” The opening and recurring dialogue retain Jacobs’s wording; cumulative passages are compressed, and page divisions are editorial. “Chicken Little” is included in the display title as the familiar American name for the tale.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 7439 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
-  "review": {"adaptation": "draft", "cultural": "pending"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "Henny-Penny hurries from the farmyard beneath a wide and harmless sky.", "art": "henny-penny", "image": "/folklore/art/covers/henny-penny.webp",
   "pageArt": [
     {"page": 3, "image": "/folklore/art/henny-penny/03-turning.webp", "alt": "Foxy-woxy offers to guide the five birds toward the king."},

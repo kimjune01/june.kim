@@ -1,11 +1,11 @@
 {
-  "id": "tom-thumb", "order": 65, "featured": false, "published": false,
+  "id": "tom-thumb", "order": 65, "featured": false, "published": true,
   "title": "Tom Thumb", "originalTitle": "Daumesdick",
   "tradition": "Grimm fairy tale", "region": "Europe", "culture": "German", "place": "A woodman’s cottage and countryside", "language": "English", "ages": "7–11", "minutes": 10,
   "themes": ["cleverness", "adventure", "home"], "color": "#89602d", "colorSoft": "#e4d0a2",
   "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob and Wilhelm Grimm; English translator not identified in the ebook metadata", "sourceYear": "Undated English edition", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
   "note": "This is a condensed reading adaptation of the public-domain Project Gutenberg story titled “Tom Thumb,” the Grimm tale Daumesdick; it preserves the main incidents but is not a direct transcription.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "Tiny Tom Thumb stands in his father’s palm beside a great workhorse and wooden cart.", "art": "tom-thumb", "image": "/folklore/art/covers/tom-thumb.webp",
   "pageArt": [{"page": 2, "image": "/folklore/art/tom-thumb/03-turning.webp", "alt": "Tom Thumb sits inside the horse’s ear and calls directions while two strangers stare in amazement."}, {"page": 6, "image": "/folklore/art/tom-thumb/05-ending.webp", "alt": "Tom Thumb returns safely to his delighted parents at their cottage fireside."}],
   "scenes": [
