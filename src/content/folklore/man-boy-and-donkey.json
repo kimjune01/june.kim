@@ -1,10 +1,10 @@
 {
-  "id": "man-boy-and-donkey", "order": 49, "featured": false, "published": false,
-  "title": "The Man, the Boy, and the Donkey", "originalTitle": "Greek title not preserved in this edition",
+  "id": "man-boy-and-donkey", "order": 49, "featured": false, "published": true,
+  "title": "The Man, the Boy, and the Donkey", "originalTitle": "The Man, the Boy, and the Donkey · English",
   "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "The road to a market town", "language": "English", "ages": "7–11", "minutes": 4,
   "themes": ["judgment", "approval", "indecision"], "color": "#7c6846", "colorSoft": "#e5d7b1",
   "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
-  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image141.png) and 11339 (images/165-2.jpg and images/165-3.jpg).",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A man and boy travel with their donkey toward a market town.", "art": "man-boy-donkey", "image": "/folklore/art/covers/man-boy-and-donkey.webp",
