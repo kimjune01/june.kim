@@ -1,6 +1,6 @@
 {
   "id": "fox-and-stork", "order": 27, "published": false, "featured": false,
-  "title": "The Fox and the Stork", "originalTitle": "Greek title not preserved in this edition",
+  "title": "The Fox and the Stork", "originalTitle": "No source-language title supplied in this edition",
   "tradition": "Aesopic fable", "region": "Europe", "culture": "Ancient Greece", "place": "The homes of the Fox and the Stork", "language": "English", "ages": "5–9", "minutes": 2,
   "themes": ["hospitality", "fairness", "consequences"], "color": "#9a603f", "colorSoft": "#e3c9b8",
   "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",

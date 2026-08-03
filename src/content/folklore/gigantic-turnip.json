@@ -20,13 +20,13 @@
   "color": "#745a8a",
   "colorSoft": "#d9cce3",
   "sourceTitle": "More Russian Picture Tales",
-  "sourceAuthor": "Valerian V. Carrick",
-  "sourceYear": "1915",
-  "sourceUrl": "https://www.gutenberg.org/ebooks/34705",
-  "note": "Prototype adaptation of the cumulative Russian turnip tale. The previously recorded Gutenberg link does not contain this story; this record must not be published until a matching public-domain edition is selected.",
+  "sourceAuthor": "Valery Carrick; translated by Nevill Forbes",
+  "sourceYear": "1914",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/23462",
+  "note": "Prototype adaptation of the cumulative Russian turnip tale. The cited public-domain collection provides relevant Russian picture-tale context but does not contain this story; this record must not be published until a matching public-domain edition is selected.",
   "rights": {
     "status": "review",
-    "basis": "Provenance mismatch found during audit: the recorded Project Gutenberg ebook does not contain this story. A matching public-domain edition is still required.",
+    "basis": "Project Gutenberg identifies the cited 1914 collection as public domain in the United States, but that collection does not contain this story. A matching public-domain source for the displayed text is still required.",
     "jurisdiction": "United States",
     "checked": "2026-08-02"
   },

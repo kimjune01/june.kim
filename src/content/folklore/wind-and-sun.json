@@ -1,1 +1,64 @@
-{"id":"wind-and-sun","order":30,"published":false,"featured":false,"title":"The Wind and the Sun","originalTitle":"Greek title not preserved in this edition","tradition":"Aesopic fable","region":"Europe","culture":"Ancient Greece","place":"A country road","language":"English","ages":"5–9","minutes":2,"themes":["kindness","persuasion","strength"],"color":"#bc7b34","colorSoft":"#f0d4a5","sourceTitle":"The Fables of Aesop","sourceAuthor":"Aesop; selected and told anew by Joseph Jacobs","sourceYear":"1894","sourceUrl":"https://www.gutenberg.org/ebooks/28","note":"The public-domain text of “The Wind and the Sun” is reproduced directly from this edition. Page divisions are editorial.","rights":{"status":"verified","basis":"The 1894 source edition is identified as public domain in the United States by Project Gutenberg.","jurisdiction":"United States","checked":"2026-08-02"},"review":{"adaptation":"draft","cultural":"pending"},"artLabel":"The Wind and Sun watch a cloaked traveller on a country road.","art":"wind-sun","scenes":[["The Wind and the Sun were disputing which was the stronger. Suddenly they saw a traveller coming down the road, and the Sun said: “I see a way to decide our dispute. Whichever of us can cause that traveller to take off his cloak shall be regarded as the stronger. You begin.”"],["So the Sun retired behind a cloud, and the Wind began to blow as hard as it could upon the traveller. But the harder he blew the more closely did the traveller wrap his cloak round him, till at last the Wind had to give up in despair."],["Then the Sun came out and shone in all his glory upon the traveller, who soon found it too hot to walk with his cloak on.","Kindness effects more than severity."]],"image":"/folklore/art/covers/wind-and-sun.webp","pageArt":[{"page": 1,"image":"/folklore/art/wind-and-sun/03-turning.webp","alt":"The Wind blows fiercely as the traveller wraps his cloak more tightly."},{"page": 2,"image":"/folklore/art/wind-and-sun/05-ending.webp","alt":"The warm Sun shines while the traveller removes his cloak."}]}
+{
+  "id": "wind-and-sun",
+  "order": 30,
+  "published": false,
+  "featured": false,
+  "title": "The Wind and the Sun",
+  "originalTitle": "No source-language title supplied in this edition",
+  "tradition": "Aesopic fable",
+  "region": "Europe",
+  "culture": "Ancient Greece",
+  "place": "A country road",
+  "language": "English",
+  "ages": "5–9",
+  "minutes": 2,
+  "themes": [
+    "kindness",
+    "persuasion",
+    "strength"
+  ],
+  "color": "#bc7b34",
+  "colorSoft": "#f0d4a5",
+  "sourceTitle": "The Fables of Aesop",
+  "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs",
+  "sourceYear": "1894",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "The public-domain text of “The Wind and the Sun” is reproduced directly from this edition. Page divisions are editorial.",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "The Wind and Sun watch a cloaked traveller on a country road.",
+  "art": "wind-sun",
+  "scenes": [
+    [
+      "The Wind and the Sun were disputing which was the stronger. Suddenly they saw a traveller coming down the road, and the Sun said: “I see a way to decide our dispute. Whichever of us can cause that traveller to take off his cloak shall be regarded as the stronger. You begin.”"
+    ],
+    [
+      "So the Sun retired behind a cloud, and the Wind began to blow as hard as it could upon the traveller. But the harder he blew the more closely did the traveller wrap his cloak round him, till at last the Wind had to give up in despair."
+    ],
+    [
+      "Then the Sun came out and shone in all his glory upon the traveller, who soon found it too hot to walk with his cloak on.",
+      "Kindness effects more than severity."
+    ]
+  ],
+  "image": "/folklore/art/covers/wind-and-sun.webp",
+  "pageArt": [
+    {
+      "page": 1,
+      "image": "/folklore/art/wind-and-sun/03-turning.webp",
+      "alt": "The Wind blows fiercely as the traveller wraps his cloak more tightly."
+    },
+    {
+      "page": 2,
+      "image": "/folklore/art/wind-and-sun/05-ending.webp",
+      "alt": "The warm Sun shines while the traveller removes his cloak."
+    }
+  ]
+}

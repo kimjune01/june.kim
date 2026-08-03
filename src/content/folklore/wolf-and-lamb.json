@@ -1,6 +1,6 @@
 {
   "id": "wolf-and-lamb", "order": 26, "published": false, "featured": false,
-  "title": "The Wolf and the Lamb", "originalTitle": "Greek title not preserved in this edition",
+  "title": "The Wolf and the Lamb", "originalTitle": "No source-language title supplied in this edition",
   "tradition": "Aesopic fable", "region": "Europe", "culture": "Ancient Greece", "place": "A hillside spring", "language": "English", "ages": "7–11", "minutes": 2,
   "themes": ["power", "injustice", "reason"], "color": "#667381", "colorSoft": "#cbd2d9",
   "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",

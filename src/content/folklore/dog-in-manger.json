@@ -1,1 +1,64 @@
-{"id":"dog-in-manger","order":31,"published":false,"featured":false,"title":"The Dog in the Manger","originalTitle":"Greek title not preserved in this edition","tradition":"Aesopic fable","region":"Europe","culture":"Ancient Greece","place":"An ox’s stable","language":"English","ages":"5–9","minutes":2,"themes":["selfishness","sharing","consideration"],"color":"#77654a","colorSoft":"#d8ccb8","sourceTitle":"The Fables of Aesop","sourceAuthor":"Aesop; selected and told anew by Joseph Jacobs","sourceYear":"1894","sourceUrl":"https://www.gutenberg.org/ebooks/28","note":"The public-domain text of “The Dog in the Manger” is reproduced directly from this edition. Page divisions are editorial.","rights":{"status":"verified","basis":"The 1894 source edition is identified as public domain in the United States by Project Gutenberg.","jurisdiction":"United States","checked":"2026-08-02"},"review":{"adaptation":"draft","cultural":"pending"},"artLabel":"A dog lies in an ox’s straw-filled manger.","art":"dog-manger","scenes":[["A Dog looking out for its afternoon nap jumped into the Manger of an Ox and lay there cosily upon the straw."],["But soon the Ox, returning from its afternoon work, came up to the Manger and wanted to eat some of the straw. The Dog in a rage, being awakened from its slumber, stood up and barked at the Ox, and whenever it came near attempted to bite it."],["At last the Ox had to give up the hope of getting at the straw, and went away muttering:","“Ah, people often grudge others what they cannot enjoy themselves.”"]],"image":"/folklore/art/covers/dog-in-manger.webp","pageArt":[{"page": 1,"image":"/folklore/art/dog-in-manger/03-turning.webp","alt":"The dog stands barking from the manger as the tired ox approaches its straw."},{"page": 2,"image":"/folklore/art/dog-in-manger/05-ending.webp","alt":"The ox walks away hungry while the dog remains upon the straw."}]}
+{
+  "id": "dog-in-manger",
+  "order": 31,
+  "published": false,
+  "featured": false,
+  "title": "The Dog in the Manger",
+  "originalTitle": "No source-language title supplied in this edition",
+  "tradition": "Aesopic fable",
+  "region": "Europe",
+  "culture": "Ancient Greece",
+  "place": "An ox’s stable",
+  "language": "English",
+  "ages": "5–9",
+  "minutes": 2,
+  "themes": [
+    "selfishness",
+    "sharing",
+    "consideration"
+  ],
+  "color": "#77654a",
+  "colorSoft": "#d8ccb8",
+  "sourceTitle": "The Fables of Aesop",
+  "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs",
+  "sourceYear": "1894",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "The public-domain text of “The Dog in the Manger” is reproduced directly from this edition. Page divisions are editorial.",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A dog lies in an ox’s straw-filled manger.",
+  "art": "dog-manger",
+  "scenes": [
+    [
+      "A Dog looking out for its afternoon nap jumped into the Manger of an Ox and lay there cosily upon the straw."
+    ],
+    [
+      "But soon the Ox, returning from its afternoon work, came up to the Manger and wanted to eat some of the straw. The Dog in a rage, being awakened from its slumber, stood up and barked at the Ox, and whenever it came near attempted to bite it."
+    ],
+    [
+      "At last the Ox had to give up the hope of getting at the straw, and went away muttering:",
+      "“Ah, people often grudge others what they cannot enjoy themselves.”"
+    ]
+  ],
+  "image": "/folklore/art/covers/dog-in-manger.webp",
+  "pageArt": [
+    {
+      "page": 1,
+      "image": "/folklore/art/dog-in-manger/03-turning.webp",
+      "alt": "The dog stands barking from the manger as the tired ox approaches its straw."
+    },
+    {
+      "page": 2,
+      "image": "/folklore/art/dog-in-manger/05-ending.webp",
+      "alt": "The ox walks away hungry while the dog remains upon the straw."
+    }
+  ]
+}

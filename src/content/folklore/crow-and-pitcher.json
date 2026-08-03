@@ -1,6 +1,6 @@
 {
   "id": "crow-and-pitcher", "order": 28, "published": false, "featured": false,
-  "title": "The Crow and the Pitcher", "originalTitle": "Greek title not preserved in this edition",
+  "title": "The Crow and the Pitcher", "originalTitle": "No source-language title supplied in this edition",
   "tradition": "Aesopic fable", "region": "Europe", "culture": "Ancient Greece", "place": "Beside a nearly empty pitcher", "language": "English", "ages": "5–9", "minutes": 2,
   "themes": ["ingenuity", "persistence", "patience"], "color": "#536b78", "colorSoft": "#c6d5dc",
   "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",

@@ -1,6 +1,6 @@
 {
   "id": "goose-with-golden-eggs", "order": 29, "published": false, "featured": false,
-  "title": "The Goose With the Golden Eggs", "originalTitle": "Greek title not preserved in this edition",
+  "title": "The Goose With the Golden Eggs", "originalTitle": "No source-language title supplied in this edition",
   "tradition": "Aesopic fable", "region": "Europe", "culture": "Ancient Greece", "place": "A countryman’s farm", "language": "English", "ages": "6–10", "minutes": 2,
   "themes": ["greed", "patience", "gratitude"], "color": "#a47b32", "colorSoft": "#ead9ab",
   "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
