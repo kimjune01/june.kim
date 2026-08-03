@@ -1,0 +1,47 @@
+{
+  "id": "firebird-horse-power",
+  "order": 81,
+  "featured": false,
+  "published": true,
+  "title": "The Firebird and the Horse of Power",
+  "originalTitle": "Жар-птица, конь богатырский и царевна Василиса · Zhar-ptitsa, kon bogatyrskiy i tsarevna Vasilisa",
+  "tradition": "Russian tale",
+  "region": "Europe",
+  "culture": "Russia",
+  "place": "The green forest and the land of Never",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 9,
+  "themes": ["wise counsel", "loyalty", "courage", "justice"],
+  "color": "#ad4f2f",
+  "colorSoft": "#ead0bd",
+  "sourceTitle": "Old Peter’s Russian Tales",
+  "sourceAuthor": "Arthur Ransome",
+  "sourceYear": "1916",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/16981",
+  "note": "A condensed reading copy of Arthur Ransome’s public-domain “The Fire-Bird, the Horse of Power, and the Princess Vasilissa.” The golden feather, capture of the Firebird, journey to the land of Never, recovery of Vasilissa’s wedding dress, cauldron test, and marriage are retained; Old Peter’s frame, repetitions, and travel detail are shortened. The illustrations are newly generated because the edition does not supply suitable art for all three required story moments.",
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies the 1916 edition as public domain in the United States; its text includes “The Fire-Bird, the Horse of Power, and the Princess Vasilissa.”",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "A young archer beholds the radiant Firebird in a moonlit orchard.",
+  "art": "firebird-horse-power",
+  "scenes": [
+    ["Once a powerful tsar had among his servants a young archer who rode a Horse of Power, broad-chested, iron-hoofed, and wise. One day they found a great golden feather shining in a silent forest. “Leave it,” warned the horse. “If you take it, you will learn the meaning of fear.” But the archer thought the tsar would reward such a gift, and carried it to the palace."],
+    ["The tsar admired the feather. “If you can bring me a feather, you can bring me the Firebird itself,” he said. “Bring it, or lose your head.” The archer wept, but his horse told him to ask for a hundred sacks of maize and have them scattered in a field at midnight."],
+    ["At dawn the Firebird flew down, huge, golden, and flaming, to eat the maize. The Horse of Power wandered nearer and nearer, then set an iron hoof upon one fiery wing. The archer bound the bird with three strong ropes and bore it to the palace. The delighted tsar at once gave him a harder command: bring Princess Vasilissa from the land of Never."],
+    ["Following the horse’s counsel, the archer took a silver tent, rich food, and wine to the edge of the world, where Vasilissa rowed a silver boat with golden oars. She came ashore to see the shining tent, shared his food, and fell asleep after drinking the heavy wine. The archer carried her away on the Horse of Power."],
+    ["Vasilissa refused to marry the tsar until her wedding dress was fetched from beneath a stone in the middle of the sea. At the distant shore, the Horse of Power caught the lobster tsar and won his help. Thousands of lobsters brought up the golden casket, and the archer returned it to Vasilissa."],
+    ["Dressed for the wedding, Vasilissa made one last condition: the man who had taken her must do penance in boiling water. The old tsar ordered a cauldron heated. The archer went to bid farewell to his horse, but the wise animal said, “Fear not. Run boldly and leap into the water.”"],
+    ["Vasilissa passed her hand over the cauldron. The archer leapt in, sank twice among the bubbles, and sprang out transformed into so beautiful a youth that everyone cried aloud in wonder. The old tsar, thinking the water would renew him too, climbed into the cauldron and was boiled to death."],
+    ["The people buried the old tsar and made the young archer tsar in his place. He married Princess Vasilissa, and they lived for many years in love and good fellowship. He built a golden stable for the Horse of Power and never forgot what he owed to his faithful friend."]
+  ],
+  "image": "/folklore/art/covers/firebird-horse-power.webp",
+  "pageArt": [
+    {"page": 3, "image": "/folklore/art/firebird-horse-power/04-turning.webp", "alt": "The Horse of Power helps the young archer safely capture the radiant Firebird in a moonlit field."},
+    {"page": 7, "image": "/folklore/art/firebird-horse-power/08-ending.webp", "alt": "The young archer and Princess Vasilissa ride together beneath the freed Firebird at sunrise."}
+  ]
+}
