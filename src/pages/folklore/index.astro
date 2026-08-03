@@ -110,7 +110,9 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       .back { justify-self: start; gap: .3rem; }
       .back-label { font-size: .82rem; font-weight: 750; }
       .reader-title { max-width: 36vw; overflow: hidden; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .82rem; font-weight: 650; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
-      .tools { position: relative; justify-self: end; }
+      .tools { position: relative; display: flex; align-items: center; justify-self: end; }
+      .listen-button { gap: .35rem; color: var(--accent); font-size: .78rem; font-weight: 800; }
+      .listen-button[aria-pressed="true"] { background: var(--paper-deep); }
       .settings { position: absolute; top: 3.4rem; right: 0; width: 15rem; padding: .8rem; border: 1px solid var(--line); border-radius: 1rem; background: #fffaf0; box-shadow: 0 .8rem 2rem rgba(60,45,25,.18); }
       .settings-label { display: block; margin: 0 0 .5rem; color: var(--muted); font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
       .setting-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .35rem; }
@@ -140,6 +142,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       .story-text { width: min(65ch, 100%); margin-inline: auto; padding-top: clamp(2rem, 10vh, 7rem); font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif; font-size: calc(clamp(1.15rem, 2.1vw, 1.4rem) * var(--font-scale)); line-height: 1.4; letter-spacing: 0; }
       .story-text.cover-text { padding-top: 0; }
       .story-text p { margin: 0 0 .72em; }
+      .story-text p.speaking { border-radius: .35rem; background: color-mix(in srgb, var(--accent) 13%, transparent); box-shadow: 0 0 0 .35rem color-mix(in srgb, var(--accent) 13%, transparent); }
       .story-source { width: min(65ch, 100%); margin: clamp(1.4rem, 4vh, 2.6rem) auto 0; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--muted); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .72rem; line-height: 1.5; }
       .story-source-label { display: block; margin-bottom: .2rem; color: var(--accent); font-size: .64rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
       .story-source cite { font-style: normal; }
@@ -180,6 +183,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       @media (min-width: 900px) { .library-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, .72fr); column-gap: clamp(3rem, 7vw, 7rem); align-items: end; } .library-head .eyebrow { grid-column: 1; } .library-head h1 { grid-column: 1; } .library-head .intro { grid-column: 2; grid-row: 1 / span 2; margin: 0 0 .2rem; } }
       @media (max-width: 760px) { .library { padding-inline: 0; } .library-head, .library-foot { margin-inline: 1.1rem; } .library-foot { align-items: flex-start; flex-direction: column; } }
       @media (max-width: 470px) { .back-label { display: none; } .reader-title { max-width: 50vw; } }
+      @media (max-width: 560px) { .listen-label { display: none; } }
       @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; transition-duration: .001ms !important; } }
     </style>
   </head>
@@ -218,7 +222,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       <header class="reader-bar">
         <button id="back" class="icon-button back" aria-label="Back to the library"><span aria-hidden="true">←</span><span class="back-label">Library</span></button>
         <div id="reader-title" class="reader-title"></div>
-        <div class="tools"><button id="settings-open" class="icon-button" aria-label="Reading settings" aria-expanded="false">Aa</button><div id="settings" class="settings" hidden><span class="settings-label">Text size</span><div class="setting-row sizes"><button data-size=".88" aria-label="Smaller text">A−</button><button data-size="1" aria-label="Default text">A</button><button data-size="1.16" aria-label="Larger text">A+</button><button data-size="1.4" aria-label="Largest text, for reading aloud">A++</button></div><span class="settings-label" style="margin-top:.8rem">Page colour</span><div class="setting-row"><button data-theme="day" aria-label="Light page">☀</button><button data-theme="night" aria-label="Dark page">☾</button><button data-theme="system" aria-label="Use device setting">◐</button></div></div></div>
+        <div class="tools"><button id="listen" class="icon-button listen-button" type="button" aria-label="Read this page aloud" aria-pressed="false" hidden><span aria-hidden="true">▶</span><span class="listen-label">Read page</span></button><button id="settings-open" class="icon-button" aria-label="Reading settings" aria-expanded="false">Aa</button><div id="settings" class="settings" hidden><span class="settings-label">Text size</span><div class="setting-row sizes"><button data-size=".88" aria-label="Smaller text">A−</button><button data-size="1" aria-label="Default text">A</button><button data-size="1.16" aria-label="Larger text">A+</button><button data-size="1.4" aria-label="Largest text, for reading aloud">A++</button></div><span class="settings-label" style="margin-top:.8rem">Page colour</span><div class="setting-row"><button data-theme="day" aria-label="Light page">☀</button><button data-theme="night" aria-label="Dark page">☾</button><button data-theme="system" aria-label="Use device setting">◐</button></div></div></div>
       </header>
       <div id="progress" class="progress"></div>
       <div id="story-shell" class="story-shell"></div>
@@ -240,6 +244,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       const dots = document.querySelector('#dots');
       const prev = document.querySelector('#prev');
       const next = document.querySelector('#next');
+      const listen = document.querySelector('#listen');
       const settings = document.querySelector('#settings');
       const recentShelf = document.querySelector('#recent-shelf');
       const recentRail = recentShelf?.querySelector('.shelf-rail');
@@ -247,6 +252,8 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       let activeStory = null;
       let page = 0;
       let direction = 'forward';
+      let speechActive = false;
+      let speechRun = 0;
 
       const escapeHtml = (value) => value.replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
       const art = (id) => document.querySelector(`#art-${id}`)?.innerHTML || '';
@@ -299,7 +306,41 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
         renderPage();
       }
 
+      function stopSpeech() {
+        speechRun += 1;
+        speechActive = false;
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        shell.querySelectorAll('.speaking').forEach(paragraph => paragraph.classList.remove('speaking'));
+        listen.setAttribute('aria-pressed', 'false');
+        listen.setAttribute('aria-label', 'Read this page aloud');
+        listen.querySelector('[aria-hidden="true"]').textContent = '▶';
+        listen.querySelector('.listen-label').textContent = 'Read page';
+      }
+
+      function speakPage() {
+        if (speechActive) { stopSpeech(); return; }
+        const paragraphs = [...shell.querySelectorAll('.scene.active .story-text p')];
+        if (!paragraphs.length) return;
+        stopSpeech();
+        speechActive = true;
+        const run = speechRun;
+        listen.setAttribute('aria-pressed', 'true');
+        listen.setAttribute('aria-label', 'Stop reading this page');
+        listen.querySelector('[aria-hidden="true"]').textContent = '■';
+        listen.querySelector('.listen-label').textContent = 'Stop';
+        const speakParagraph = index => {
+          if (!speechActive || run !== speechRun || index >= paragraphs.length) { if (run === speechRun) stopSpeech(); return; }
+          const utterance = new SpeechSynthesisUtterance(paragraphs[index].textContent);
+          utterance.onstart = () => paragraphs[index].classList.add('speaking');
+          utterance.onend = () => { paragraphs[index].classList.remove('speaking'); speakParagraph(index + 1); };
+          utterance.onerror = () => { if (run === speechRun) stopSpeech(); };
+          window.speechSynthesis.speak(utterance);
+        };
+        speakParagraph(0);
+      }
+
       function renderPage() {
+        stopSpeech();
         shell.querySelector('.scenes')?.setAttribute('data-direction', direction);
         shell.querySelectorAll('.scene').forEach((scene, index) => scene.classList.toggle('active', index === page));
         dots.querySelectorAll('.dot').forEach((dot, index) => dot.classList.toggle('active', index === page));
@@ -324,7 +365,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
           });
         });
       }
-      function showLibrary() { reader.hidden = true; library.hidden = false; activeStory = null; renderRecentStories(); updateLibraryStates(); }
+      function showLibrary() { stopSpeech(); reader.hidden = true; library.hidden = false; activeStory = null; renderRecentStories(); updateLibraryStates(); }
       function closeStory() {
         if (history.state && history.state.folklore) history.back();
         else { showLibrary(); history.replaceState(null, '', location.pathname); }
@@ -337,6 +378,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       });
       document.addEventListener('click', event => { const button = event.target.closest('[data-story]'); if (button) openFromButton(button); });
       document.querySelector('#back').addEventListener('click', closeStory);
+      listen.addEventListener('click', speakPage);
       prev.addEventListener('click', () => { if (page > 0) { direction = 'back'; page -= 1; renderPage(); } });
       next.addEventListener('click', () => { if (page < activeStory.scenes.length - 1) { direction = 'forward'; page += 1; renderPage(); } else { localStorage.setItem(`folklore:done:${activeStory.id}`, 'true'); closeStory(); } });
       document.querySelector('#settings-open').addEventListener('click', event => { settings.hidden = !settings.hidden; event.currentTarget.setAttribute('aria-expanded', String(!settings.hidden)); });
@@ -356,6 +398,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       document.documentElement.dataset.theme = savedTheme === 'night' || (savedTheme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'night' : 'day';
       selectSetting('data-size', savedSize);
       selectSetting('data-theme', savedTheme);
+      listen.hidden = !('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window);
       renderRecentStories();
       updateLibraryStates();
       const initial = hashRoute(); if (stories.some(story => story.id === initial.id)) openStory(initial.id, initial.page);
@@ -364,6 +407,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       if ('serviceWorker' in navigator) navigator.serviceWorker.register('/folklore/service-worker.js').then(() => navigator.serviceWorker.ready).then(updateAvailability).catch(() => { availability.textContent = 'Offline saving unavailable.'; });
       window.addEventListener('online', updateAvailability);
       window.addEventListener('offline', updateAvailability);
+      window.addEventListener('pagehide', stopSpeech);
     </script>
   </body>
 </html>
