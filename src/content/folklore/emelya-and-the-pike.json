@@ -1,0 +1,47 @@
+{
+  "id": "emelya-and-the-pike",
+  "order": 83,
+  "featured": false,
+  "published": true,
+  "title": "Emelya and the Pike",
+  "originalTitle": "По щучьему веленью · Po shchuchyemu velenyu",
+  "tradition": "Russian tale",
+  "region": "Europe",
+  "culture": "Russia",
+  "place": "A winter village and a royal court",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 12,
+  "themes": ["magic", "good fortune", "transformation"],
+  "color": "#426c78",
+  "colorSoft": "#cfe0df",
+  "sourceTitle": "A Russian Garland of Fairy Tales, chapter 13, “Emelyan, the Fool”",
+  "sourceAuthor": "Robert Steele, editor",
+  "sourceYear": "1911",
+  "sourceUrl": "https://en.wikisource.org/wiki/A_Russian_Garland_of_Fairy_Tales/Chapter_13",
+  "note": "A condensed reading copy of Steele’s public-domain English version. It retains Emelya’s bargain with the pike, the self-moving buckets and axe, the horseless sledge, the journey on the stove, the princess, exile in the cask, the island castle, reconciliation, and wedding. Repeated refusals, several scoldings, the crowd’s beating and magical cudgel episode, and some court logistics are shortened or omitted; spelling and punctuation are modernized.",
+  "rights": {
+    "status": "verified",
+    "basis": "The linked 1911 edition was published in the United States before 1931 and is public domain there. This reading copy is condensed directly from that edition.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Beside a hole in the frozen river, Emelya listens as the pike offers him a marvelous bargain.",
+  "art": "pike",
+  "scenes": [
+    ["In a certain village once lived a peasant with three sons. Two were clever, but the third was called Emelya the Fool. When their father died, he left each son a hundred roubles. The elder brothers soon went to trade in the city, taking Emelya’s money too. They promised to buy him a red coat, red boots, and a red cap if he obeyed their wives while they were away.", "Winter came. Emelya’s sisters-in-law asked him to fetch water, but he lay warm on the great stove and said, “I am lazy.” When they threatened to tell his brothers not to buy the red clothes, he dressed, took two buckets and an axe, and went to the frozen river."],
+    ["Emelya cut a hole in the ice and filled his buckets. Looking into the water, he saw a great pike and caught it in his hands.", "“Why have you caught me?” asked the pike. “To have you cooked,” said Emelya. “Put me back, and I shall do everything you do not wish to do yourself. Say only: ‘At the pike’s command, and at my desire,’ and then name your wish.”", "Emelya first made the pike prove its promise. “At the pike’s command, and at my desire, buckets, go home by yourselves without spilling the water!” Instantly the buckets ran up the hill. Emelya released the pike and followed them at his leisure, while all the neighbours stared."],
+    ["Soon his sisters-in-law told him to cut wood. Without leaving the stove, Emelya whispered the words. The axe sprang up, chopped the wood, and the logs laid themselves in the stove.", "When the wood was gone, the women sent him to the forest. Emelya dragged out a sledge but harnessed no horse. “At the pike’s command, and at my desire, away, sledge, to the wood!” The sledge raced through the gate. In the forest, his axe felled and split the wood, the logs loaded themselves, and the rope tied them fast. Then the sledge flew home."],
+    ["News of the horseless sledge reached the King, who sent an officer to bring Emelya to court. The officer tried force and came away no wiser. A more thoughtful messenger brought Emelya raisins, dried plums, and grapes, and promised that the King would give him a red coat, cap, and boots. At last Emelya agreed to follow.", "Still he disliked the journey. He whispered, “At the pike’s command, and at my desire, up, stove, and away to town!” The wall opened, and the stove carried Emelya out of the house and along the road to the palace. The King and all his court came out in amazement."],
+    ["At a palace window appeared the King’s daughter. Emelya saw how lovely she was and whispered that she should love him. Then he commanded the stove to carry him home.", "The princess begged her father to let her marry Emelya. Furious, the King had Emelya fetched by a trick. He ordered Emelya and the princess sealed in a strong, pitch-covered cask and cast into the sea. Emelya slept through it all. When he awoke in the darkness, the princess told him where they were and pleaded with him to save them."],
+    ["Moved by her tears, Emelya said, “At the pike’s command, and at my desire, O sea, cast us upon a shore near our own country, and cask, fall to pieces there.” At once the waves rolled them onto a fine island, and the cask broke open.", "The princess asked for shelter. Emelya wished for a castle finer than the King’s, with a crystal bridge leading to the royal palace and attendants of every kind. The castle appeared, splendid and fully furnished. Then Emelya wished to become a handsome and exceedingly wise young man, and so he did."],
+    ["Emelya sent a servant across the crystal bridge to invite the King and his court to dinner. Curious to meet the unknown lord, the King came. Emelya welcomed him into the castle, where the tables were spread with sweets and honey drinks.", "After the feast Emelya asked, “Does Your Majesty know me?” The King did not. “Do you remember the fool who rode to court on a stove, whom you sealed in a cask with your daughter and cast into the sea? I am that Emelya.” The terrified King did not know what to do."],
+    ["Emelya brought out the princess. The King rejoiced to see his daughter alive and said, “I was very unjust to you, and now I gladly give you my daughter in marriage.”", "Emelya thanked him. The wedding was celebrated with great magnificence, and the next day Emelya gave a feast for the ministers and all the people. The King offered him the crown, but Emelya did not want it. So the King returned to his own realm, while Emelya and the princess remained in their castle and lived happily."]
+  ],
+  "image": "/folklore/art/covers/emelya-and-the-pike.webp",
+  "pageArt": [
+    {"page": 3, "image": "/folklore/art/emelya-and-the-pike/04-turning.webp", "alt": "Emelya rides his great white stove along a snowy road while astonished villagers stand safely aside."},
+    {"page": 7, "image": "/folklore/art/emelya-and-the-pike/08-ending.webp", "alt": "Emelya and the princess welcome the reconciled King before their island castle and crystal bridge."}
+  ]
+}
