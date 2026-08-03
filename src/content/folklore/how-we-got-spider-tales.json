@@ -1,0 +1,43 @@
+{
+  "id": "how-we-got-spider-tales",
+  "order": 87,
+  "featured": false,
+  "published": true,
+  "title": "How We Got the Name ‘Spider Tales’",
+  "originalTitle": "Original Fante title not recorded in the 1917 source",
+  "tradition": "Fante Anansi tale",
+  "region": "Africa",
+  "culture": "Fante",
+  "place": "Fante-land, present-day Ghana",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 3,
+  "themes": ["cleverness", "storytelling", "Anansi"],
+  "color": "#8a5a2b",
+  "colorSoft": "#ead8b8",
+  "sourceTitle": "West African Folk-Tales",
+  "sourceAuthor": "William H. Barker and Cecilia Sinclair",
+  "sourceYear": "1917",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/66923",
+  "note": "The reading copy reproduces the public-domain text of “I. How We Got the Name ‘Spider Tales’” without condensation; only page divisions and typography are editorial. The source does not record a Fante-language title. Barker wrote from the position of a British colonial education official, and the edition’s English wording and labels reflect that setting; its attribution is therefore treated as one early printed witness, not a singularly authoritative form of the tale. The turning-point image is Cecilia Sinclair’s edition plate “The Bees Flying into the Jar”; the cover and ending are newly generated.",
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies the 1917 edition as public domain in the United States; it includes the tale and Cecilia Sinclair’s plate.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Anansi sets out with an earthen jar, a measuring stick, and a needle to win the old tales.",
+  "art": "how-we-got-spider-tales",
+  "scenes": [
+    ["In the olden days all the stories which men told were stories of Nyankupon, the chief of the gods. Spider, who was very conceited, wanted the stories to be told about him.", "Accordingly, one day he went to Nyankupon and asked that, in future, all tales told by men might be Anansi stories, instead of Nyankupon stories. Nyankupon agreed, on one condition. He told Spider (or Anansi) that he must bring him three things: the first was a jar full of live bees, the second was a boa-constrictor, and the third a tiger. Spider gave his promise."],
+    ["He took an earthen vessel and set out for a place where he knew were numbers of bees. When he came in sight of the bees he began saying to himself, “They will not be able to fill this jar”—“Yes, they will be able”—“No, they will not be able,” until the bees came up to him and said, “What are you talking about, Mr Anansi?” He thereupon explained to them that Nyankupon and he had had a great dispute. Nyankupon had said the bees could not fly into the jar—Anansi had said they could. The bees immediately declared that of course they could fly into the jar—which they at once did. As soon as they were safely inside, Anansi sealed up the jar and sent it off to Nyankupon."],
+    ["Next day he took a long stick and set out in search of a boa-constrictor. When he arrived at the place where one lived he began speaking to himself again. “He will just be as long as this stick”—“No, he will not be so long as this”—“Yes, he will be as long as this.” These words he repeated several times, till the boa came out and asked him what was the matter. “Oh, we have been having a dispute in Nyankupon’s town about you. Nyankupon’s people say you are not as long as this stick. I say you are. Please let me measure you by it.” The boa innocently laid himself out straight, and Spider lost no time in tying him on to the stick from end to end. He then sent him to Nyankupon."],
+    ["The third day he took a needle and thread and sewed up his eye. He then set out for a den where he knew a tiger lived. As he approached the place he began to shout and sing so loudly that the tiger came out to see what was the matter. “Can you not see?” said Spider. “My eye is sewn up and now I can see such wonderful things that I must sing about them.” “Sew up my eyes,” said the tiger, “then I too can see these surprising sights.” Spider immediately did so. Having thus made the tiger helpless, he led him straight to Nyankupon’s house. Nyankupon was amazed at Spider’s cleverness in fulfilling the three conditions. He immediately gave him permission for the future to call all the old tales Anansi tales."]
+  ],
+  "image": "/folklore/art/covers/how-we-got-spider-tales.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/how-we-got-spider-tales/02-turning.webp", "alt": "Cecilia Sinclair’s 1917 plate of bees flying into Anansi’s earthen jar."},
+    {"page": 3, "image": "/folklore/art/how-we-got-spider-tales/04-ending.webp", "alt": "Anansi presents the sealed bee jar, bound boa, and captured great cat before Nyankupon."}
+  ]
+}

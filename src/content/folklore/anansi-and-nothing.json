@@ -1,0 +1,44 @@
+{
+  "id": "anansi-and-nothing",
+  "order": 88,
+  "featured": false,
+  "published": true,
+  "title": "Anansi and Nothing",
+  "originalTitle": "Original Fante title not recorded in the 1917 source",
+  "tradition": "Fante Anansi tale",
+  "region": "Africa",
+  "culture": "Fante",
+  "place": "Fante-land, present-day Ghana",
+  "language": "English",
+  "ages": "9–12",
+  "minutes": 4,
+  "themes": ["deception", "envy", "wordplay", "Anansi"],
+  "color": "#704434",
+  "colorSoft": "#e5ccba",
+  "sourceTitle": "West African Folk-Tales",
+  "sourceAuthor": "William H. Barker and Cecilia Sinclair",
+  "sourceYear": "1917",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/66923",
+  "note": "The reading copy reproduces the public-domain text of “III. Anansi and Nothing” without condensation; only page divisions and typography are editorial. The source does not record a Fante-language title. Barker wrote from the position of a British colonial education official, and the edition’s English wording and labels reflect that setting; its attribution is therefore treated as one early printed witness, not a singularly authoritative form of the tale. The edition has no illustration for this story, so all three images are newly generated. This tale includes deception, a fatal trap, grief, and a closing English-language pun.",
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies the 1917 edition containing this tale as public domain in the United States.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Anansi and the richly dressed Nothing walk together toward a neighboring town.",
+  "art": "anansi-and-nothing",
+  "scenes": [
+    ["Near Anansi’s miserable little hut there was a fine palace where lived a very rich man called Nothing. Nothing and Anansi proposed, one day, to go to the neighbouring town to get some wives. Accordingly, they set off together.", "Nothing, being a rich man, wore a very fine velvet cloth, while Anansi had a ragged cotton one. While they were on their way Anansi persuaded Nothing to change clothes for a little while, promising to give back the fine velvet before they reached the town. He delayed doing this, however, first on one pretext, then on another—till they arrived at their destination."],
+    ["Anansi, being dressed in such a fine garment, found no difficulty in getting as many wives as he wished. Poor Nothing, with his ragged and miserable cloth, was treated with great contempt. At first he could not get even one wife. At last, however, a woman took pity on him and gave him her daughter. The poor girl was laughed at very heartily by Anansi’s wives for choosing such a beggar as Nothing appeared to be. She wisely took no notice of their scorn."],
+    ["The party set off for home. When they reached the cross-roads leading to their respective houses the women were astonished. The road leading to Anansi’s house was only half cleared. The one which led to Nothing’s palace was, of course, wide and well made. Not only so, but his servants had strewn it with beautiful skins and carpets, in preparation for his return. Servants were there, awaiting him, with fine clothes for himself and his wife. No one was waiting for Anansi.", "Nothing’s wife was queen over the whole district and had everything her heart could desire. Anansi’s wives could not even get proper food; they had to live on unripe bananas with peppers. The wife of Nothing heard of her friends’ miserable state and invited them to a great feast in her palace. They came, and were so pleased with all they saw that they agreed to stay there. Accordingly, they refused to come back to Anansi’s hut."],
+    ["He was very angry, and tried in many ways to kill Nothing, but without success. Finally, however, he persuaded some rat friends to dig a deep tunnel in front of Nothing’s door. When the hole was finished Anansi lined it with knives and broken bottles. He then smeared the steps of the palace with okro to make them very slippery, and withdrew to a little distance.", "When he thought Nothing’s household was safely in bed and asleep, he called to Nothing to come out to the courtyard and see something. Nothing’s wife, however, dissuaded him from going. Anansi tried again and again, and each time she bade her husband not to listen. At last Nothing determined to go and see this thing. As he placed his foot on the first step, of course he slipped, and down he fell into the hole. The noise alarmed the household. Lights were fetched and Nothing was found in the ditch, so much wounded by the knives that he soon died."],
+    ["His wife was terribly grieved at his untimely death. She boiled many yams, mashed them, and took a great dishful of them round the district. To every child she met she gave some, so that the child might help her to cry for her husband. This is why, if you find a child crying and ask the cause, you will often be told he is “crying for nothing.”"]
+  ],
+  "image": "/folklore/art/covers/anansi-and-nothing.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/anansi-and-nothing/03-turning.webp", "alt": "Nothing and his wife are welcomed along the broad palace road while Anansi’s poor path is revealed."},
+    {"page": 4, "image": "/folklore/art/anansi-and-nothing/05-ending.webp", "alt": "Nothing’s grieving wife shares mashed yams with children who help her mourn."}
+  ]
+}
