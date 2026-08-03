@@ -1,0 +1,77 @@
+{
+  "id": "baba-yaga-kind-heart",
+  "order": 78,
+  "featured": false,
+  "published": true,
+  "title": "Baba Yaga and the Little Girl with the Kind Heart",
+  "originalTitle": "Баба-яга · Baba-yaga",
+  "tradition": "Russian tale",
+  "region": "Europe",
+  "culture": "Russia",
+  "place": "A village and the deep forest",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 10,
+  "themes": [
+    "kindness",
+    "courage",
+    "help returned"
+  ],
+  "color": "#6b5138",
+  "colorSoft": "#dfd0ba",
+  "sourceTitle": "Old Peter’s Russian Tales",
+  "sourceAuthor": "Arthur Ransome; illustrated by Dmitri Mitrokhin",
+  "sourceYear": "1916",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/16981",
+  "note": "A condensed reading of Ransome’s public-domain tale on pp. 88–105 of the 1916 Frederick A. Stokes edition. The framing conversation, some descriptive repetition, and several exchanges are shortened; the sequence, gifts, escape, and ending are retained. The cover is Mitrokhin’s chapter-opening vignette from the cited edition; the two interior scenes were newly made for this reading.",
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies the 1916 Arthur Ransome text and Dmitri Mitrokhin illustrations as public domain in the United States (ebook 16981).",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed"
+  },
+  "artLabel": "Dmitri Mitrokhin’s birch-forest vignette opens Ransome’s Baba Yaga chapter.",
+  "art": "baba-yaga",
+  "scenes": [
+    [
+      "Once there was a widowed old man who lived in a hut with his little daughter. They were merry together until the old man married again. Then everything changed. The stepmother blamed the girl for whatever went wrong, gave her only a dry crust, and sent her to eat alone in the shed.",
+      "One day, as the girl cried over her crust, a little gray mouse came scratching from a hole. Because she had a kind heart, she fed it crumb after crumb until none was left for herself.",
+      "“Thank you,” squeaked the mouse. “Your stepmother is sister to Baba Yaga, the bony-legged witch. If she ever sends you to your aunt, come and tell me. Baba Yaga would eat you with her iron teeth if you did not know what to do.”"
+    ],
+    [
+      "The very next morning, while the old man was away, the stepmother ordered the girl to visit her aunt in the forest and ask for a needle and thread. She gave the child a bundle for the road and watched until she was out of sight.",
+      "At a fallen tree the mouse appeared. “Take all the things you find in the road,” it advised. The girl opened her bundle: the stepmother had packed only stones. But before her eyes the stones became bread and jam, and she and the mouse ate together.",
+      "On her way onward the girl found a handkerchief, a bottle of oil, scraps of meat, a blue ribbon, and a loaf. She took them all, thinking someone might need them."
+    ],
+    [
+      "At last she reached Baba Yaga’s high gates. They squeaked miserably, so the girl oiled their hinges. In the yard stood a servant crying over her hard tasks; the girl gave her the handkerchief. A thin dog gnawed a dry crust; she gave him the loaf. A birch tree lashed across the path; she tied its branches with the pretty ribbon.",
+      "Baba Yaga’s hut stood on hen’s legs and walked about the yard. Inside, the witch sat weaving. “Good day, auntie,” said the girl, trying not to tremble. Baba Yaga smiled, showing her iron teeth, and set the girl at the loom while she ordered her servant to heat the bath and scrub the child for dinner."
+    ],
+    [
+      "A thin black cat watched beside the loom. The girl gave it the scraps of meat. “Catkin dear,” she whispered, “help me, for Baba Yaga means to eat me.”",
+      "The cat told her to run while the witch was in the bath-house. “Take your towel and the comb from your hair. When Baba Yaga comes close, throw down the towel; it will become a river. If she crosses, throw down the comb; it will grow into a forest.” Then the cat took her place at the loom, keeping it clickety-clacking while the girl fled.",
+      "The dog remembered her loaf and let her pass. The oiled gates opened without a sound, and the ribboned birch held still. None of Baba Yaga’s neglected servants would stop the kind-hearted girl."
+    ],
+    [
+      "When Baba Yaga discovered the cat at the loom, she leapt into her mortar, drove it with the pestle, swept her tracks with a birch besom, and flew after the girl.",
+      "Bang, bang, bangety-bang! The girl heard the mortar close behind. She threw the towel to the ground. It grew wider and wetter until a deep river rushed between her and Baba Yaga. The witch could not float across. She drove her cattle to drink the river dry, then flew on in pursuit."
+    ],
+    [
+      "Again the girl heard the pestle pounding nearer. She threw down her comb. Its teeth sprouted into a forest so thick that not even Baba Yaga could force a way through. Gnashing her iron teeth and screaming with rage, the witch turned home.",
+      "The girl ran on to her village and hid in the shed. Scratch, scratch! The little mouse came out. “You escaped, my dear. Your father is home now. Go in and tell him everything.”"
+    ],
+    [
+      "The girl climbed onto her father’s knee and told him how the stepmother had sent her to be eaten. The old man was so angry that he drove the wicked woman from the hut. After that he and his daughter lived alone together, and it was much better for them both.",
+      "And the little mouse came to live in the hut. Every day it sat on the table to eat crumbs and warm its paws against the girl’s glass of tea."
+    ]
+  ],
+  "image": "/folklore/art/covers/baba-yaga-kind-heart.webp",
+  "pageArt": [
+    {"page": 4, "image": "/folklore/art/baba-yaga-kind-heart/05-river.webp", "alt": "The kind-hearted girl throws down her towel and a broad river rises between her and Baba Yaga’s flying mortar."},
+    {"page": 6, "image": "/folklore/art/baba-yaga-kind-heart/07-home.webp", "alt": "Safe in the warm hut, the girl tells her father her story while the little mouse warms its paws by her tea."}
+  ]
+}

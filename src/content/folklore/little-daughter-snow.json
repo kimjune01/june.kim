@@ -1,0 +1,74 @@
+{
+  "id": "little-daughter-snow",
+  "order": 79,
+  "featured": false,
+  "published": true,
+  "title": "The Little Daughter of the Snow",
+  "originalTitle": "Снегурочка · Snegurochka",
+  "tradition": "Russian tale",
+  "region": "Europe",
+  "culture": "Russia",
+  "place": "A village at the forest edge",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 9,
+  "themes": [
+    "love",
+    "winter",
+    "keeping faith"
+  ],
+  "color": "#4d7183",
+  "colorSoft": "#d4e4e7",
+  "sourceTitle": "Old Peter’s Russian Tales",
+  "sourceAuthor": "Arthur Ransome; illustrated by Dmitri Mitrokhin",
+  "sourceYear": "1916",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/16981",
+  "note": "A condensed reading of Ransome’s public-domain tale on pp. 122–135 of the 1916 Frederick A. Stokes edition. The Old Peter framing, repeated winter play, and some dialogue are shortened; the snow girl’s songs, the forest rescue, the broken promise, and Ransome’s final northern return are retained. The cover is Mitrokhin’s chapter-opening vignette from the cited edition; the two interior scenes were newly made for this reading.",
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies the 1916 Arthur Ransome text and Dmitri Mitrokhin illustrations as public domain in the United States (ebook 16981).",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed"
+  },
+  "artLabel": "Dmitri Mitrokhin’s forest vignette opens Ransome’s Little Daughter of the Snow.",
+  "art": "snow-daughter",
+  "scenes": [
+    [
+      "There were once an old man and an old woman who lived in a hut at the edge of the forest. Though their village had eight huts at least, and children played all around, the two were unhappy because they had no child of their own.",
+      "One winter day the village children rolled snow into a great snow woman. Watching from the window, the old man said, “Wife, let us make a little snow girl. Perhaps she will come alive and be a daughter to us.” So they put on their coats and fur hats and went into the yard."
+    ],
+    [
+      "Very tenderly they shaped the snow into little arms and legs. By evening the snow girl was finished, with blind white eyes and snow lips tightly closed. Then, in the twilight, her eyes shone blue, her lips flushed, and black hair stirred in the wind.",
+      "She danced like snowflakes whirling and sang: “No warm blood in me does glow; water in my veins does flow. Yet I’ll laugh and sing and play by frosty night and frosty day—little daughter of the Snow. But whenever I do know that you love me little, then I shall melt away again.”"
+    ],
+    [
+      "The old people dressed her in a white coat, a fur hat, and little red boots. But she would not sleep near the stove. “I am the little daughter of the Snow,” she said, and ran into the moonlit yard, chasing her shadow and throwing snowballs at the stars.",
+      "All winter she laughed and played with the village children. She ran faster and threw straighter than any of them. Each morning she ate ice crushed in a wooden bowl; each night she danced outside until dawn. The old people were proud of their little white pigeon, and all the children loved her."
+    ],
+    [
+      "When spring came and the snow began to melt, the children walked into the forest. One day the snow girl ran laughing farther among the trees. The others were afraid to follow as dusk fell, and hurried home without her.",
+      "Lost and alone, she climbed a tree and cried for help. A brown bear offered to lead her home, but she feared he would eat her. A gray wolf offered next, but she feared him too. Then a red fox came padding beneath the tree. “I am not afraid of you,” she told him. “I will go with you if you will take me.”"
+    ],
+    [
+      "The snow girl climbed down, held the fox by the fur of his back, and ran with him through the dark forest. Soon village lights appeared between the trees.",
+      "At the old people’s door she called, “Here I am! The kind red fox brought me home. You must shut up the dogs.” The old man did so, and thanked the fox. “I am very hungry,” said the fox. “Your little snow girl is surely worth a nice plump hen.”"
+    ],
+    [
+      "The old woman promised the hen, but then grudged the price. She and her husband put a plump hen in one sack and their fiercest dog in another. When the fox came, they released the hen—and then the dog. Frightened, the fox ran all the way back to the forest and received nothing.",
+      "“That was well done,” said the old people. “We have our snow girl and still have our hen.” Then they heard their daughter singing inside: “Old ones, old ones, now I know less you love me than a hen. I shall go away again.”"
+    ],
+    [
+      "They ran into the hut. Before the stove lay a little pool of water, and in it her fur hat, white coat, and red boots. A cold wind blew open the door. The little daughter of the Snow shimmered in the room, laughing softly, and vanished into the night.",
+      "She leapt into the arms of Frost her father and Snow her mother, who carried her over the stars to the far north. There she plays all summer on the frozen seas. In winter she returns to Russia—and someday, while children make a snow girl, they may find the little daughter of the Snow standing there instead."
+    ]
+  ],
+  "image": "/folklore/art/covers/little-daughter-snow.webp",
+  "pageArt": [
+    {"page": 4, "image": "/folklore/art/little-daughter-snow/05-fox.webp", "alt": "The little Daughter of the Snow travels through the twilight forest with the red fox toward distant village lights."},
+    {"page": 6, "image": "/folklore/art/little-daughter-snow/07-ending.webp", "alt": "The snow girl’s bright spirit rises from a pool of meltwater toward the open winter sky as the old couple reach after her."}
+  ]
+}
