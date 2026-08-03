@@ -1,11 +1,11 @@
 {
-  "id": "goldilocks-and-three-bears", "order": 63, "featured": false, "published": false,
+  "id": "goldilocks-and-three-bears", "order": 63, "featured": false, "published": true,
   "title": "Goldilocks and the Three Bears", "originalTitle": "Goldilocks and the Three Bears",
   "tradition": "English literary fairy tale", "region": "Europe", "culture": "English", "place": "A cottage in the woods", "language": "English", "ages": "4–8", "minutes": 4,
   "themes": ["curiosity", "boundaries", "consequences"], "color": "#a87535", "colorSoft": "#ead5a9",
   "sourceTitle": "World Stories Retold for Modern Boys and Girls", "sourceAuthor": "William James Sly", "sourceYear": "1914", "sourceUrl": "https://www.gutenberg.org/ebooks/55786",
   "note": "William James Sly’s concise public-domain telling is reproduced directly; only page divisions and typographic styling are editorial.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 55786 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 55786 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "Goldilocks peers into the woodland cottage belonging to three bears.", "art": "goldilocks-bears", "image": "/folklore/art/covers/goldilocks-and-three-bears.webp",
   "pageArt": [{"page": 2, "image": "/folklore/art/goldilocks-and-three-bears/03-turning.webp", "alt": "Goldilocks sits in Baby Bear’s little chair just as it breaks beneath her."}, {"page": 4, "image": "/folklore/art/goldilocks-and-three-bears/05-ending.webp", "alt": "Goldilocks leaps from the window while the astonished Three Bears look on."}],
   "scenes": [

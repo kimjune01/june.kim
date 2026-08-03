@@ -1,5 +1,5 @@
 {
-  "id": "princess-and-pea", "order": 61, "featured": false, "published": false,
+  "id": "princess-and-pea", "order": 61, "featured": false, "published": true,
   "title": "The Princess and the Pea", "originalTitle": "Prindsessen paa Ærten",
   "tradition": "Danish literary fairy tale", "region": "Europe", "culture": "Danish",
   "place": "A royal castle", "language": "English", "ages": "5–9", "minutes": 4,
@@ -7,7 +7,7 @@
   "sourceTitle": "The Art of the Story-Teller", "sourceAuthor": "Marie L. Shedlock; tale by Hans Christian Andersen", "sourceYear": "1915", "sourceUrl": "https://www.gutenberg.org/ebooks/5957",
   "note": "The public-domain English text printed by Marie L. Shedlock is reproduced directly; one obvious transcription error is repaired, and italics and page divisions are editorially normalized.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 5957 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
-  "review": {"adaptation": "draft", "cultural": "pending"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "A rain-soaked princess stands at the castle gate beneath a stormy sky.", "art": "princess-pea", "image": "/folklore/art/covers/princess-and-pea.webp",
   "pageArt": [{"page": 2, "image": "/folklore/art/princess-and-pea/03-turning.webp", "alt": "The old Queen places one tiny pea beneath a towering stack of mattresses and quilts."}, {"page": 4, "image": "/folklore/art/princess-and-pea/05-ending.webp", "alt": "The Prince and the real Princess stand together while the pea is carried to the museum."}],
   "scenes": [

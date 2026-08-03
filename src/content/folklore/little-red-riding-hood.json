@@ -1,12 +1,12 @@
 {
-  "id": "little-red-riding-hood", "order": 62, "featured": false, "published": false,
+  "id": "little-red-riding-hood", "order": 62, "featured": false, "published": true,
   "title": "Little Red Riding Hood", "originalTitle": "Le Petit Chaperon rouge",
   "tradition": "French literary fairy tale", "region": "Europe", "culture": "French",
   "place": "A village and nearby wood", "language": "English", "ages": "8–12", "minutes": 8,
   "themes": ["caution", "deception", "strangers"], "color": "#a33c3c", "colorSoft": "#efc4b8",
   "sourceTitle": "The Fairy Tales of Charles Perrault", "sourceAuthor": "Charles Perrault; translated by Robert Samber and revised by J. E. Mansion", "sourceYear": "1922", "sourceUrl": "https://www.gutenberg.org/ebooks/29021",
   "note": "The public-domain Samber–Mansion text is reproduced directly, including Perrault’s ending and moral; only page divisions and typographic styling are editorial. The cover reproduces Harry Clarke’s plate captioned “He asked her whither she was going” from the same Project Gutenberg edition (source image image_026.jpg).",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 29021, including Harry Clarke’s 1922 illustrations, as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 29021, including Harry Clarke’s 1922 illustrations, as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "A girl in a red hood meets a watchful wolf on a flowered woodland path.", "art": "red-riding-hood", "image": "/folklore/art/covers/little-red-riding-hood.webp",
   "pageArt": [{"page": 2, "image": "/folklore/art/little-red-riding-hood/03-turning.webp", "alt": "The Wolf knocks at Grandmother’s cottage while the girl gathers flowers far away."}, {"page": 4, "image": "/folklore/art/little-red-riding-hood/05-ending.webp", "alt": "Little Red Riding-Hood recognizes the Wolf beneath Grandmother’s bedclothes."}],
   "scenes": [

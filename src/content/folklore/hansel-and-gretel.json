@@ -1,11 +1,11 @@
 {
-  "id": "hansel-and-gretel", "order": 64, "featured": false, "published": false,
+  "id": "hansel-and-gretel", "order": 64, "featured": false, "published": true,
   "title": "Hansel and Gretel", "originalTitle": "Hänsel und Gretel",
   "tradition": "Grimm fairy tale", "region": "Europe", "culture": "German", "place": "A cottage and a great forest", "language": "English", "ages": "8–12", "minutes": 12,
   "themes": ["resourcefulness", "siblings", "survival"], "color": "#506c45", "colorSoft": "#ceddb1",
   "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob and Wilhelm Grimm; English translator not identified in the ebook metadata", "sourceYear": "Undated English edition", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
   "note": "This is a condensed reading adaptation of the public-domain Project Gutenberg text, preserving its principal sequence and much of its wording; it is not a direct transcription.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "Hansel and Gretel discover a little house made of bread and sugar deep in the forest.", "art": "hansel-gretel", "image": "/folklore/art/covers/hansel-and-gretel.webp",
   "pageArt": [{"page": 3, "image": "/folklore/art/hansel-and-gretel/03-turning.webp", "alt": "Hansel and Gretel break bread and sugar from the witch’s little forest house."}, {"page": 6, "image": "/folklore/art/hansel-and-gretel/05-ending.webp", "alt": "The children embrace their father as pearls and precious stones spill from their pockets."}],
   "scenes": [
