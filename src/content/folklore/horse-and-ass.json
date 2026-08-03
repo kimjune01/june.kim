@@ -1,10 +1,10 @@
 {
-  "id": "horse-and-ass", "order": 48, "featured": false, "published": false,
-  "title": "The Horse and the Ass", "originalTitle": "Greek title not preserved in this edition",
+  "id": "horse-and-ass", "order": 48, "featured": false, "published": true,
+  "title": "The Horse and the Ass", "originalTitle": "The Horse and the Ass · English",
   "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A road and battlefield in ancient Greece", "language": "English", "ages": "7–11", "minutes": 2,
   "themes": ["envy", "security", "appearances"], "color": "#806044", "colorSoft": "#e4cfad",
   "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
-  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial. The cover is the matching “Ass and the Charger” plate from Project Gutenberg ebook 18732 (images/image29.png). No other suitable source plates were found, so the turning point and ending are new collection illustrations in a historically appropriate ancient Greek setting.",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A richly harnessed horse and a burdened ass travel along a road.", "art": "horse-ass", "image": "/folklore/art/covers/horse-and-ass.webp",

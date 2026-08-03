@@ -1,9 +1,9 @@
 {
-  "id": "lions-share", "order": 41, "featured": false, "published": false,
-  "title": "The Lion’s Share", "originalTitle": "Greek title not preserved in this edition",
+  "id": "lions-share", "order": 41, "featured": false, "published": true,
+  "title": "The Lion’s Share", "originalTitle": "The Lion’s Share · English",
   "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "The hunting grounds", "language": "English", "ages": "6–10", "minutes": 2,
   "themes": ["power", "fairness", "greed"], "color": "#a46b28", "colorSoft": "#edd396",
-  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial. The cover and turning-point illustrations come from Project Gutenberg ebooks 39187 (images/i_067.jpg) and 19994 (images/i105_th.jpg). No suitable third source plate was found, so the ending is a new collection illustration in a historically appropriate Mediterranean setting.",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A lion stands over four shares of a stag before his uneasy hunting partners.", "art": "lions-share", "image": "/folklore/art/covers/lions-share.webp",
   "pageArt": [{"page": 1, "image": "/folklore/art/lions-share/03-turning.webp", "alt": "The Fox, Jackal, and Wolf divide the Stag into four parts at the Lion’s command."}, {"page": 2, "image": "/folklore/art/lions-share/05-ending.webp", "alt": "The Lion guards every share while the Fox walks away with his tail lowered."}],
