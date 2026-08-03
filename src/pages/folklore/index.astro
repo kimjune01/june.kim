@@ -7,6 +7,15 @@ import { loadFolkloreStories } from '../../lib/folklore';
 
 const stories = await loadFolkloreStories();
 const featuredStories = stories.filter(story => story.featured);
+const cultureShelfNames: Record<string, string> = {
+  China: 'Chinese tales',
+  Fante: 'Anansi tales',
+  India: 'Indian tales',
+  Japan: 'Japanese tales',
+  Korea: 'Korean tales',
+  Norway: 'Norwegian tales',
+  Russia: 'Russian tales',
+};
 const shelfFor = (story: (typeof stories)[number]) => {
   if (story.tradition.includes('Aesop') || story.tradition.includes('Aesopic')) return 'Aesop’s fables';
   if (story.tradition.includes('Arabian Nights')) return 'Arabian Nights';
@@ -16,7 +25,7 @@ const shelfFor = (story: (typeof stories)[number]) => {
   if (['German', 'Germany'].includes(story.culture)) return 'German tales';
   if (story.culture === 'French') return 'French tales';
   if (story.culture === 'U.S. logging-camp folklore and print folklore' || story.culture === 'African American railroad-worker tradition') return 'North American legends';
-  return `${story.culture} tales`;
+  return cultureShelfNames[story.culture] ?? `${story.culture} tales`;
 };
 const shelfGroups = Object.entries(Object.groupBy(stories, shelfFor))
   .map(([shelf, items]) => ({ shelf, stories: items ?? [] }))
