@@ -1,0 +1,26 @@
+{
+  "id": "fisherman-and-his-wife", "order": 70, "featured": false, "published": false,
+  "title": "The Fisherman and His Wife", "originalTitle": "Von dem Fischer un syner Fru",
+  "tradition": "Grimms’ fairy tale", "region": "Europe", "culture": "German and Low German", "place": "A coast beside an enchanted sea", "language": "English", "ages": "8–12", "minutes": 10,
+  "themes": ["greed", "contentment", "consequences"], "color": "#326b77", "colorSoft": "#bfdae0",
+  "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob Grimm and Wilhelm Grimm; English text based on Edgar Taylor and Marian Edwardes", "sourceYear": "1812–1857", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
+  "note": "A concise reading retelling faithful to the public-domain Project Gutenberg text. The recurring requests and the sea’s worsening condition are preserved; compression and page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A fisherman releases an enchanted flounder into the shining sea.", "art": "fisherman-wife", "image": "/folklore/art/covers/fisherman-and-his-wife.webp",
+  "pageArt": [
+    {"page": 4, "image": "/folklore/art/fisherman-and-his-wife/03-turning.webp", "alt": "The fisherman calls to the enchanted fish as a darkening sea rises before him."},
+    {"page": 8, "image": "/folklore/art/fisherman-and-his-wife/05-ending.webp", "alt": "The fisherman and his wife sit once more beside their old humble home as the sea grows calm."}
+  ],
+  "scenes": [
+    ["There was once a fisherman who lived with his wife in a poor hut close beside the sea. One day he caught a great flounder. The fish spoke, saying that he was an enchanted prince, and begged to be released. The fisherman wanted nothing from a talking fish and put him back into the shining water."],
+    ["When his wife heard what had happened, she said the fisherman should have asked for a wish. She sent him back to request a pleasant cottage. At the shore the water looked yellow and green. The fish granted the wish, and the fisherman found his wife in a neat cottage with a garden and farmyard."],
+    ["After a week or two, the cottage seemed too small to his wife. She demanded a great stone castle. The sea had turned purple and dark blue when the fisherman called the fish. Again the wish was granted, and his wife sat in a splendid castle filled with servants and treasure."],
+    ["The next morning she decided that she wanted to be king. The sea was grey and thick, and the wind blew cold, but the fish made her king. Soon she wanted to be emperor. The fisherman protested, but she sent him back. Black waves rose and the wind howled; nevertheless, the fish made her emperor."],
+    ["Still she was not satisfied. She wanted to be pope. The fisherman went to a raging sea beneath a black sky and made the request. When he returned, his wife sat in a vast church surrounded by kings and emperors, with candles shining all around her."],
+    ["For a little while she seemed content. But at dawn she watched the sun rise and thought that even as pope she could not command it. She shook the fisherman awake and declared that she wished to be lord of the sun and moon."],
+    ["The terrified fisherman went out into a storm so fierce that trees and rocks shook. The sky was black, lightning flashed, and mountains of water rolled toward the shore. He called the enchanted fish and confessed that his wife wished to rule the sun and moon."],
+    ["The fish answered, “Go home. She is sitting in her poor hut again.”"],
+    ["The fisherman returned and found his wife beside the same old hut where they had begun. There they lived afterward."]
+  ]
+}

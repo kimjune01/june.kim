@@ -1,0 +1,23 @@
+{
+  "id": "henny-penny", "order": 67, "featured": false, "published": false,
+  "title": "Chicken Little, or Henny-Penny", "originalTitle": "Henny-Penny",
+  "tradition": "English cumulative tale", "region": "Europe", "culture": "English", "place": "An English farmyard and woodland", "language": "English", "ages": "5–9", "minutes": 6,
+  "themes": ["panic", "credulity", "caution"], "color": "#a7682f", "colorSoft": "#efd8a8",
+  "sourceTitle": "English Fairy Tales", "sourceAuthor": "Joseph Jacobs, collector and editor", "sourceYear": "1890", "sourceUrl": "https://www.gutenberg.org/ebooks/7439",
+  "note": "A concise reading adaptation faithful to Joseph Jacobs’s public-domain “Henny-Penny.” The opening and recurring dialogue retain Jacobs’s wording; cumulative passages are compressed, and page divisions are editorial. “Chicken Little” is included in the display title as the familiar American name for the tale.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 7439 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "Henny-Penny hurries from the farmyard beneath a wide and harmless sky.", "art": "henny-penny", "image": "/folklore/art/covers/henny-penny.webp",
+  "pageArt": [
+    {"page": 3, "image": "/folklore/art/henny-penny/03-turning.webp", "alt": "Foxy-woxy offers to guide the five birds toward the king."},
+    {"page": 5, "image": "/folklore/art/henny-penny/05-ending.webp", "alt": "Henny-Penny runs safely home from the mouth of Foxy-woxy’s dark cave."}
+  ],
+  "scenes": [
+    ["One day Henny-penny was picking up corn in the cornyard when—whack!—something hit her upon the head. “Goodness gracious me!” said Henny-penny; “the sky’s a-going to fall; I must go and tell the king.”"],
+    ["So she went along and she went along and she went along till she met Cocky-locky. “Where are you going, Henny-penny?” says Cocky-locky. “Oh! I’m going to tell the king the sky’s a-falling,” says Henny-penny. “May I come with you?” says Cocky-locky. “Certainly,” says Henny-penny."],
+    ["They went along till they met Ducky-daddles, then Goosey-poosey, and then Turkey-lurkey. Each asked where they were going; each heard that the sky was falling; and each joined the company going to tell the king."],
+    ["So they went along till they met Foxy-woxy. When the birds told him their errand, Foxy-woxy said: “Oh! but this is not the way to the king. I know the proper way; shall I show it you?” They all agreed, and followed him."],
+    ["They came to a narrow and dark hole, the door of Foxy-woxy’s cave. Foxy-woxy called it the short way to the king’s palace and went in first. Turkey-lurkey followed, then Goosey-poosey and Ducky-daddles; and Foxy-woxy snapped off each one’s head. Cocky-locky went next, but Foxy-woxy’s first bite only hurt him, and Cocky-locky called out to Henny-penny."],
+    ["So she turned tail and ran back home, so she never told the king the sky was a-falling."]
+  ]
+}

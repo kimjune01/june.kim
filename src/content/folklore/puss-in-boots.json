@@ -1,0 +1,42 @@
+{
+  "id": "puss-in-boots",
+  "order": 66,
+  "featured": false,
+  "published": false,
+  "title": "Puss in Boots",
+  "originalTitle": "Le Maître chat, ou le Chat botté",
+  "tradition": "French literary fairy tale",
+  "region": "Europe",
+  "culture": "French",
+  "place": "The roads, fields, and castles of an imagined France",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 8,
+  "themes": ["cleverness", "fortune", "appearances"],
+  "color": "#8f4d31",
+  "colorSoft": "#ead0ae",
+  "sourceTitle": "The Fairy Tales of Charles Perrault",
+  "sourceAuthor": "Charles Perrault; translated by J. E. Mansion and Robert Samber",
+  "sourceYear": "1922",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/29021",
+  "note": "A concise reading retelling faithful to Perrault’s plot, published in this 1922 English collection as “The Master Cat; or, Puss in Boots.” The linked Project Gutenberg edition supplies the public-domain source text; compression and page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 29021 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A booted cat bows confidently beside his young master on a French country road.",
+  "art": "puss-boots",
+  "image": "/folklore/art/covers/puss-in-boots.webp",
+  "pageArt": [
+    {"page": 3, "image": "/folklore/art/puss-in-boots/03-turning.webp", "alt": "Puss bows before the king and presents game in the name of the Marquis of Carabas."},
+    {"page": 7, "image": "/folklore/art/puss-in-boots/05-ending.webp", "alt": "Puss stands proudly beside the newly married Marquis and princess at the castle."}
+  ],
+  "scenes": [
+    ["A miller left his mill to his eldest son, his donkey to the second, and only his cat to the youngest. The youngest son was discouraged by so small an inheritance, but the Cat told him not to worry. “Give me a bag and have a pair of boots made for me,” he said, “and you shall see that you are not so badly provided for as you think.”"],
+    ["Once booted, the Cat put bran and lettuce in his bag, went to a rabbit warren, and lay down as if dead. A young rabbit crept into the bag, and the Cat caught it. He carried the rabbit to the king and said it was a gift from his master, the Marquis of Carabas—a grand title he had invented for the miller’s son."],
+    ["For two or three months the Cat continued bringing partridges and other game to the king in the Marquis’s name. Then he learned that the king and his daughter would drive beside the river. He told his master to bathe there and leave the rest to him."],
+    ["As the royal coach approached, the Cat cried that the Marquis of Carabas was drowning. The king remembered the generous Marquis and sent his guards to help. Puss hid his master’s poor clothes and declared that thieves had stolen them, so the king dressed the young man in a fine suit. The princess found him very handsome."],
+    ["Puss ran ahead and warned the mowers and reapers that they must say their fields belonged to the Marquis of Carabas, or face a dreadful punishment. When the king asked whose rich lands he saw, everyone answered, “The Marquis of Carabas.” The king marvelled at his companion’s wealth."],
+    ["At last Puss reached a magnificent castle belonging to an Ogre who could change himself into any creature. The Cat praised this power and asked to see him become a lion. The Ogre did so, terrifying Puss. Then the Cat wondered aloud whether so great a creature could become something tiny, such as a mouse. The proud Ogre changed into a mouse, and Puss sprang upon him and ate him."],
+    ["When the king arrived, Puss welcomed him to the castle of the Marquis of Carabas. The halls were prepared for a feast, and the king, impressed by the castle and lands, offered the Marquis his daughter’s hand. The young man gladly accepted."],
+    ["The miller’s son married the princess, and Puss became a great lord. After that he hunted mice only for his amusement."]
+  ]
+}

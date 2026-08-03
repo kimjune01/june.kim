@@ -13,6 +13,7 @@
     "build:blog": "astro build",
     "build:reading": "astro build --config astro.config.reading.mjs --outDir dist-reading",
     "build:assemble": "cp -r dist-reading/reading dist/reading && cp -rn dist-reading/_astro/* dist/_astro/",
+    "validate:folklore": "node scripts/validate-folklore.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run"

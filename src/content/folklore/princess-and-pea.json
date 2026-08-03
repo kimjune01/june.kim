@@ -1,0 +1,20 @@
+{
+  "id": "princess-and-pea", "order": 61, "featured": false, "published": false,
+  "title": "The Princess and the Pea", "originalTitle": "Prindsessen paa Ærten",
+  "tradition": "Danish literary fairy tale", "region": "Europe", "culture": "Danish",
+  "place": "A royal castle", "language": "English", "ages": "5–9", "minutes": 4,
+  "themes": ["identity", "discernment", "royalty"], "color": "#74558f", "colorSoft": "#dfd0ea",
+  "sourceTitle": "The Art of the Story-Teller", "sourceAuthor": "Marie L. Shedlock; tale by Hans Christian Andersen", "sourceYear": "1915", "sourceUrl": "https://www.gutenberg.org/ebooks/5957",
+  "note": "The public-domain English text printed by Marie L. Shedlock is reproduced directly; one obvious transcription error is repaired, and italics and page divisions are editorially normalized.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 5957 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A rain-soaked princess stands at the castle gate beneath a stormy sky.", "art": "princess-pea", "image": "/folklore/art/covers/princess-and-pea.webp",
+  "pageArt": [{"page": 2, "image": "/folklore/art/princess-and-pea/03-turning.webp", "alt": "The old Queen places one tiny pea beneath a towering stack of mattresses and quilts."}, {"page": 4, "image": "/folklore/art/princess-and-pea/05-ending.webp", "alt": "The Prince and the real Princess stand together while the pea is carried to the museum."}],
+  "scenes": [
+    ["There was once a Prince who wished to marry a Princess, but she must be a real Princess. He travelled all over the world to find one, but there was always something wrong. There were plenty of Princesses, but whether they were real or not he could not be sure. There was always something that was not quite right. So he came home again, feeling very sad, for he was so anxious to have a real Princess."],
+    ["One evening there was a terrible storm; it lightened and thundered, and the rain came down in torrents; it was a fearful night. In the midst of the storm there came a knocking at the town-gate, and the old King himself went down to open it. There, outside stood a princess. But what a state she was in from the rain and the storm! The water was running out of her hair on to her clothes, into her shoes and out at the heels; and yet she said she was a real Princess."],
+    ["“We shall soon find out about that,” thought the old Queen. But she said never a word. She went into the bedroom, took off all the bedclothes and put a pea on the bedstead. Then she took twenty mattresses and laid them on the pea and twenty eider-down quilts on the mattresses. And the Princess was to sleep on the top of all."],
+    ["In the morning they came to her and asked her how she had slept.", "“Oh! wretchedly,” said the Princess. “I scarcely closed my eyes the whole night long. Heaven knows what could have been in the bed! I have lain upon something hard, so that my whole body is black and blue. It is quite dreadful.”"],
+    ["They could see now that she was a real Princess, because she had felt the pea through twenty mattresses and twenty eider-down quilts. Nobody but a real Princess could be so sensitive.", "So the Prince married her, for now he knew that he had found a real Princess, and the pea was sent to an Art Museum, where it can still be seen, if nobody has taken it away.", "Now, mark you: This is a true story."]
+  ]
+}

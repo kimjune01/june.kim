@@ -1,0 +1,18 @@
+{
+  "id": "goldilocks-and-three-bears", "order": 63, "featured": false, "published": false,
+  "title": "Goldilocks and the Three Bears", "originalTitle": "Goldilocks and the Three Bears",
+  "tradition": "English literary fairy tale", "region": "Europe", "culture": "English", "place": "A cottage in the woods", "language": "English", "ages": "4–8", "minutes": 4,
+  "themes": ["curiosity", "boundaries", "consequences"], "color": "#a87535", "colorSoft": "#ead5a9",
+  "sourceTitle": "World Stories Retold for Modern Boys and Girls", "sourceAuthor": "William James Sly", "sourceYear": "1914", "sourceUrl": "https://www.gutenberg.org/ebooks/55786",
+  "note": "William James Sly’s concise public-domain telling is reproduced directly; only page divisions and typographic styling are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 55786 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "Goldilocks peers into the woodland cottage belonging to three bears.", "art": "goldilocks-bears", "image": "/folklore/art/covers/goldilocks-and-three-bears.webp",
+  "pageArt": [{"page": 2, "image": "/folklore/art/goldilocks-and-three-bears/03-turning.webp", "alt": "Goldilocks sits in Baby Bear’s little chair just as it breaks beneath her."}, {"page": 4, "image": "/folklore/art/goldilocks-and-three-bears/05-ending.webp", "alt": "Goldilocks leaps from the window while the astonished Three Bears look on."}],
+  "scenes": [
+    ["Three bears lived in a home of their own in the woods—one, a great, big Bear, the Father, with a great, big voice; a middle-sized Bear, the Mother, with a middle-sized voice; and Little Baby Bear, with a little, wee voice. One morning, when the three bears were taking a walk while waiting for their breakfast of milk and honey to cool, a naughty, disobedient, runaway girl, named Goldilocks, came along and peeped into their window."],
+    ["Seeing no one, she walked into the kitchen and began to taste the breakfast. Father Bear’s was too hot; Mother Bear’s was too cold; Baby Bear’s was just right, so she ate it all up."],
+    ["Then she went into the parlor to rest, and saw three chairs. Father Bear’s was too hard; Mother Bear’s was too soft; Baby Bear’s was just right, so she sat on it and broke it down."],
+    ["Then Goldilocks went up the narrow stairs to the bears’ bedroom. She climbed on Father Bear’s bed, but that was too high for her; the Mother’s was too low; but the Baby Bear’s bed was just right, so she fell fast asleep.", "Soon the three hungry bears came home. Father Bear roared, “SOME ONE HAS BEEN TASTING MY BREAKFAST AND SITTING ON MY CHAIR!” Mother Bear growled out: “Some one has been tasting my breakfast and sitting on my chair!” Baby Bear screamed, “Some one has been tasting my breakfast and eaten it all up, and sitting in my chair and broken it down!”"],
+    ["The bears then rushed upstairs. “SOME ONE HAS BEEN ON MY BED!” roared Father Bear. “Some one has been on my bed too!” growled Mother Bear. “Some one has been in my bed, and here she is!” screamed Baby Bear. This awoke Goldilocks, who was so frightened she sprang out on the other side of the bed, jumped out of the window, and ran home as fast as she could."]
+  ]
+}

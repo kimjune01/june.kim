@@ -1,0 +1,24 @@
+{
+  "id": "twelve-dancing-princesses", "order": 69, "featured": false, "published": false,
+  "title": "The Twelve Dancing Princesses", "originalTitle": "Die zertanzten Schuhe",
+  "tradition": "Grimms’ fairy tale", "region": "Europe", "culture": "German", "place": "A royal palace and an enchanted underground kingdom", "language": "English", "ages": "8–12", "minutes": 9,
+  "themes": ["mystery", "perseverance", "enchantment"], "color": "#594d89", "colorSoft": "#d8d1e8",
+  "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob Grimm and Wilhelm Grimm; English text based on Edgar Taylor and Marian Edwardes", "sourceYear": "1812–1857", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
+  "note": "A concise reading retelling faithful to the public-domain Project Gutenberg text. Compression and page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "Twelve princesses descend a hidden stair toward a glittering underground lake.", "art": "dancing-princesses", "image": "/folklore/art/covers/twelve-dancing-princesses.webp",
+  "pageArt": [
+    {"page": 3, "image": "/folklore/art/twelve-dancing-princesses/03-turning.webp", "alt": "An invisible soldier follows the princesses through a grove with silver leaves."},
+    {"page": 6, "image": "/folklore/art/twelve-dancing-princesses/05-ending.webp", "alt": "The soldier presents three enchanted branches and a golden cup before the king and princesses."}
+  ],
+  "scenes": [
+    ["A king had twelve beautiful daughters who slept in twelve beds in one room. Every night their door was locked, yet every morning their dancing shoes were worn through. The king promised that whoever discovered where they danced might choose one princess for his wife and inherit the kingdom. Anyone who failed after three nights would lose his life."],
+    ["Many princes tried and failed. Then an old soldier met an old woman on the road. She advised him not to drink the wine offered at bedtime and gave him a cloak that would make him invisible. He chose the eldest princess, wisely thinking himself too old for the youngest."],
+    ["That night he pretended to drink the wine and soon pretended to snore. The princesses dressed in splendid gowns. The eldest knocked on her bed, which sank into the floor and revealed a secret stair. Wearing the cloak, the soldier followed them, accidentally stepping on the youngest princess’s dress."],
+    ["They passed through three enchanted groves whose leaves were silver, gold, and diamonds. The soldier broke a branch from each, though the noise frightened the youngest princess. At a lake, twelve princes waited in twelve boats. The invisible soldier stepped into the eldest princess’s boat, making it unusually heavy."],
+    ["Across the lake stood a brilliantly lit castle where music played. The princesses danced until three in the morning and wore out their shoes. The soldier danced unseen among them, drank from their cups, and returned before them to lie in his bed. He followed them for three nights and kept a golden cup as proof."],
+    ["On the third day the king asked for his answer. The soldier declared that the princesses danced in an underground castle, then laid the silver, golden, and diamond branches and the golden cup before him. The princesses could no longer deny the truth."],
+    ["The soldier chose the eldest princess, and they were married that day. The twelve enchanted princes were left under their spell for as many years as they had danced with the princesses."]
+  ]
+}

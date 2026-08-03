@@ -1,0 +1,21 @@
+{
+  "id": "ugly-duckling", "order": 59, "published": false, "featured": false,
+  "title": "The Ugly Duckling", "originalTitle": "Den grimme Ælling",
+  "tradition": "Danish literary fairy tale", "region": "Europe", "culture": "Denmark", "place": "A farmyard, marsh, and lake", "language": "English", "ages": "6–10", "minutes": 6,
+  "themes": ["belonging", "growth", "self-worth"], "color": "#657c86", "colorSoft": "#cfdee2",
+  "sourceTitle": "Aunt Friendly’s Picture Book", "sourceAuthor": "Hans Christian Andersen; anonymous English adaptation", "sourceYear": "1867", "sourceUrl": "https://www.gutenberg.org/ebooks/25442",
+  "note": "This reading copy follows the concise public-domain adaptation printed in “Aunt Friendly’s Picture Book,” with connecting passages lightly condensed; it is not presented as a full translation of Andersen’s Danish text. Page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The nineteenth-century source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"}, "artLabel": "A lonely gray duckling sees graceful white swans reflected in a spring lake.", "art": "duckling-swan",
+  "scenes": [
+    ["Once there was a duck who had just hatched a brood of ducklings; one of them had been longer coming out of the shell than the others, and when it came it was very ugly. But its mother did not love it less on that account; mothers never think their little ones ugly."],
+    ["It could swim very well, so she knew it was not a young turkey, as an old duck had said it might be, and she took it with all the rest of the brood to the farm-yard to introduce it into good society."],
+    ["An old turkey, who was very grand, came up to the duck, and said, “Your children are all pretty except one. There is one ugly duckling. I wish you could improve him a little.” “That is impossible, your grace,” replied the mother, “he is not pretty; but he has a good disposition, and swims even better than the others.”"],
+    ["But how could the ugly duckling make himself at home? The ducks bit him, the hens pecked him, and the girl who fed the poultry kicked him. At last he ran away, frightening the little birds in the hedge as he flew over it."],
+    ["He came to a great moor, where the wild ducks lived. They allowed him to remain, but told him he was very ugly. Afterward he wandered on through a hard autumn and a bitter winter, often hungry and alone."],
+    ["One evening a whole flock of handsome white birds rose from the bushes. They were dazzlingly white, with long flexible necks; they were swans. The ugly duckling had never seen any birds so beautiful, and could not forget them."],
+    ["When the sun began to shine warmly again, he found himself in a beautiful garden where three splendid white swans came sailing toward him. “I will fly to those royal birds,” he thought; “they will kill me because I am so ugly, but it is better to be killed by them than bitten by ducks and pecked by hens.”"],
+    ["He bowed his head over the water and awaited death. But what did he see in the clear stream? His own image—not a dark, gray bird, ugly and disagreeable to look at, but a graceful and beautiful swan.", "The other swans swam round the newcomer and stroked his neck with their beaks. He felt quite glad that he had passed through so much trouble, for now he could better enjoy his happiness."]
+  ],
+  "image": "/folklore/art/covers/ugly-duckling.webp", "pageArt": [{"page": 5, "image": "/folklore/art/ugly-duckling/03-turning.webp", "alt": "The gray duckling watches a flock of dazzling white swans rise into the evening sky."}, {"page": 7, "image": "/folklore/art/ugly-duckling/05-ending.webp", "alt": "The grown swan sees his reflection as the other swans welcome him on the spring lake."}]
+}
