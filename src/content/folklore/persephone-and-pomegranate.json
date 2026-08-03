@@ -1,0 +1,22 @@
+{
+  "id": "persephone-and-pomegranate", "order": 94, "featured": false, "published": true,
+  "title": "Persephone and the Pomegranate", "originalTitle": "Περσεφόνη · Persephonē",
+  "tradition": "Greek myth", "region": "Europe", "culture": "Ancient Greece", "place": "Mythic Greece and the underworld", "language": "English", "ages": "8–12", "minutes": 6,
+  "themes": ["seasons", "separation", "return"], "color": "#7b433b", "colorSoft": "#dfc3ad",
+  "sourceTitle": "A Wonder Book and Tanglewood Tales, for Girls and Boys", "sourceAuthor": "Nathaniel Hawthorne; illustrated by Maxfield Parrish", "sourceYear": "1910", "sourceUrl": "https://www.gutenberg.org/ebooks/35377",
+  "note": "A substantially condensed reading of Hawthorne’s public-domain chapter “The Pomegranate Seeds.” The Victorian frame, extensive dialogue, and many ornamental incidents are omitted; the separation, Demeter’s search, the barren earth, the seeds, and the seasonal return are retained. The cover is Maxfield Parrish’s “Proserpina” plate from the cited edition (images/illus8.jpg); the two 3:2 interior scenes are new collection artwork. The Greek line records the traditional name rather than a single ancient work title.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 35377 and its 1910 Parrish illustrations as public domain in the United States. The displayed condensation and two new interior illustrations were prepared for this collection.", "jurisdiction": "United States", "checked": "2026-08-03"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Persephone stands in the shadowed underworld in Maxfield Parrish’s 1910 illustration.", "art": "persephone", "image": "/folklore/art/covers/persephone-pomegranate.webp",
+  "pageArt": [{"page": 3, "image": "/folklore/art/persephone-pomegranate/04-turning.webp", "alt": "Demeter crosses withered Greek fields by torchlight as she searches for Persephone."}, {"page": 7, "image": "/folklore/art/persephone-pomegranate/08-ending.webp", "alt": "Persephone returns from the underworld and embraces Demeter as spring flowers and grain rise around them."}],
+  "scenes": [
+    ["Persephone lived with her mother Demeter, who cared for the grain and every growing thing. One morning Persephone wandered into a meadow where flowers covered the grass."],
+    ["The earth opened. Hades, lord of the underworld, rose in his dark chariot and carried Persephone below. The meadow closed again, and no one could tell Demeter where her daughter had gone."],
+    ["Demeter searched with torches through nine days and nights. She crossed mountains, cities, and empty roads, calling Persephone’s name, but heard no answer."],
+    ["In her grief Demeter let the earth grow barren. Seed would not sprout; leaves fell; fields became dry. Unless Persephone returned, mortals would soon have no bread."],
+    ["At last Zeus sent Hermes below with a command: Persephone must be released. Hades agreed, but before she left he offered her a pomegranate. She ate a few of its seeds."],
+    ["Hermes brought Persephone upward. Demeter ran to meet her, and at their embrace green shoots rose through the soil and flowers opened again."],
+    ["But because Persephone had eaten food of the underworld, she could not remain above forever. For part of each year she would return below; for the rest she would live with Demeter."],
+    ["So when Persephone comes home, Demeter rejoices and the earth blooms. When Persephone goes below, growth rests and winter returns—until mother and daughter meet again."]
+  ]
+}

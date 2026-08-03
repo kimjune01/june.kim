@@ -1,0 +1,22 @@
+{
+  "id": "theseus-and-minotaur", "order": 93, "featured": false, "published": true,
+  "title": "Theseus and the Minotaur", "originalTitle": "Θησεύς καὶ Μινώταυρος · Thēseus kai Minōtauros",
+  "tradition": "Greek myth", "region": "Europe", "culture": "Ancient Greece", "place": "Mythic Athens and Crete", "language": "English", "ages": "9–13", "minutes": 7,
+  "themes": ["courage", "cleverness", "rescue"], "color": "#8a3f2c", "colorSoft": "#e4c09f",
+  "sourceTitle": "A Wonder Book and Tanglewood Tales, for Girls and Boys", "sourceAuthor": "Nathaniel Hawthorne; illustrated by Maxfield Parrish", "sourceYear": "1910", "sourceUrl": "https://www.gutenberg.org/ebooks/35377",
+  "note": "A substantially condensed reading of Hawthorne’s public-domain chapter “The Minotaur.” The frame story, extended dialogue, Theseus’s earlier adventures, and later events on Naxos are omitted so the reading follows the tribute, Ariadne’s thread, the Labyrinth, and the escape. No suitable three-scene set exists in the cited edition, so all three illustrations are new 3:2 collection artwork in a mythic Bronze Age Aegean setting. The Greek line supplies the traditional names, not the title of a single ancient source.",
+  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 35377, reproducing Hawthorne’s text and Parrish’s 1910 illustrations, as public domain in the United States. The displayed condensation and new artwork were prepared for this collection.", "jurisdiction": "United States", "checked": "2026-08-03"},
+  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "artLabel": "Theseus stands before the dark Labyrinth while Ariadne lowers a coil of red thread.", "art": "theseus", "image": "/folklore/art/covers/theseus-minotaur.webp",
+  "pageArt": [{"page": 3, "image": "/folklore/art/theseus-minotaur/04-turning.webp", "alt": "Theseus confronts the Minotaur inside the torchlit Labyrinth, with Ariadne’s red thread leading back through the passages."}, {"page": 7, "image": "/folklore/art/theseus-minotaur/08-ending.webp", "alt": "Ariadne leads Theseus and the rescued Athenian youths from the Labyrinth toward their waiting ship at sunrise."}],
+  "scenes": [
+    ["Every ninth year, seven young men and seven maidens were sent from Athens to Crete. There King Minos shut them in the Labyrinth, a maze so tangled that no one who entered could find the way out. At its heart waited the Minotaur."],
+    ["Theseus, son of the king of Athens, offered to go among the fourteen. He promised his father that, if he returned alive, his ship would raise a white sail instead of the black sail of mourning."],
+    ["When the Athenians reached Crete, Minos’s daughter Ariadne saw Theseus and resolved to help him. She gave him a sword and a ball of thread. “Fasten one end at the entrance,” she said, “and unwind it as you go.”"],
+    ["Theseus tied the thread and entered. Passage crossed passage; shadows turned every corner into another trap. He kept one hand on the red line until a roar shook the stones and the Minotaur came from the darkness."],
+    ["The creature charged. Theseus stood his ground, escaped its horns, and fought until the Minotaur fell. Then the maze was silent—but victory would mean nothing if he could not lead the others out."],
+    ["He gathered the thread and followed it backward, turn after turn. At last he saw the entrance and Ariadne waiting there. Together they freed the other Athenians."],
+    ["Before Minos’s guards could stop them, the young people hurried to the harbor. They boarded their ship, raised the sail, and pushed away from Crete."],
+    ["Dawn reached across the sea as the Labyrinth disappeared behind them. The courage of Theseus had faced the monster; the foresight of Ariadne had brought everyone home from the maze."]
+  ]
+}

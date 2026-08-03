@@ -22,7 +22,7 @@ const shelfFor = (story: (typeof stories)[number]) => {
   if (['Ancient Greek', 'Ancient Greece'].includes(story.culture)) return 'Greek myths';
   if (['Danish', 'Denmark'].includes(story.culture)) return 'Danish tales';
   if (['England', 'English', 'English and American', 'Scotland'].includes(story.culture)) return 'British tales';
-  if (['German', 'Germany'].includes(story.culture)) return 'German tales';
+  if (['German', 'Germany', 'German and Low German'].includes(story.culture)) return 'German tales';
   if (story.culture === 'French') return 'French tales';
   if (story.culture === 'U.S. logging-camp folklore and print folklore' || story.culture === 'African American railroad-worker tradition') return 'North American legends';
   return cultureShelfNames[story.culture] ?? `${story.culture} tales`;
