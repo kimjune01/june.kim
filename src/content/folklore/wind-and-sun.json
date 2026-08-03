@@ -1,10 +1,10 @@
 {
   "id": "wind-and-sun",
   "order": 30,
-  "published": false,
+  "published": true,
   "featured": false,
   "title": "The Wind and the Sun",
-  "originalTitle": "No source-language title supplied in this edition",
+  "originalTitle": "The Wind and the Sun · English",
   "tradition": "Aesopic fable",
   "region": "Europe",
   "culture": "Ancient Greece",
@@ -23,7 +23,7 @@
   "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs",
   "sourceYear": "1894",
   "sourceUrl": "https://www.gutenberg.org/ebooks/28",
-  "note": "The public-domain text of “The Wind and the Sun” is reproduced directly from this edition. Page divisions are editorial.",
+  "note": "The public-domain text of “The Wind and the Sun” is reproduced directly from this edition; page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image167.png), 53103 (images/image10.jpg), and 39187 (images/i_095.jpg).",
   "rights": {
     "status": "verified",
     "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.",

@@ -1,10 +1,10 @@
 {
-  "id": "wolf-and-lamb", "order": 26, "published": false, "featured": false,
-  "title": "The Wolf and the Lamb", "originalTitle": "No source-language title supplied in this edition",
+  "id": "wolf-and-lamb", "order": 26, "published": true, "featured": false,
+  "title": "The Wolf and the Lamb", "originalTitle": "The Wolf and the Lamb · English",
   "tradition": "Aesopic fable", "region": "Europe", "culture": "Ancient Greece", "place": "A hillside spring", "language": "English", "ages": "7–11", "minutes": 2,
   "themes": ["power", "injustice", "reason"], "color": "#667381", "colorSoft": "#cbd2d9",
   "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
-  "note": "The public-domain text of “The Wolf and the Lamb” is reproduced directly from this edition. Page divisions are editorial.",
+  "note": "The public-domain text of “The Wolf and the Lamb” is reproduced directly from this edition; page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image8.png), 53103 (images/image42.jpg), and 39187 (images/i_017.jpg).",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"}, "artLabel": "A wolf confronts a small lamb beside a clear hillside spring.", "art": "wolf-spring",
   "scenes": [["Once upon a time a Wolf was lapping at a spring on a hillside, when, looking up, what should he see but a Lamb just beginning to drink a little lower down. “There’s my supper,” thought he, “if only I can find some excuse to seize it.” Then he called out to the Lamb, “How dare you muddle the water from which I am drinking?”", "“Nay, master, nay,” said Lambikin; “if the water be muddy up there, I cannot be the cause of it, for it runs down from you to me.”"], ["“Well, then,” said the Wolf, “why did you call me bad names this time last year?”", "“That cannot be,” said the Lamb; “I am only six months old.”"], ["“I don’t care,” snarled the Wolf; “if it was not you it was your father;” and with that he rushed upon the poor little Lamb and", "WARRA WARRA WARRA WARRA WARRA", "ate her all up. But before she died she gasped out—", "“Any excuse will serve a tyrant.”"]],
