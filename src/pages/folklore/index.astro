@@ -6,7 +6,6 @@ import CollectionCard from '../../components/folklore/CollectionCard.astro';
 import { loadFolkloreStories } from '../../lib/folklore';
 
 const stories = await loadFolkloreStories();
-const recentStories = stories.toSorted((a, b) => b.order - a.order || a.title.localeCompare(b.title)).slice(0, 12);
 const cultureShelfNames: Record<string, string> = {
   China: 'Chinese tales',
   Fante: 'Anansi tales',
@@ -193,9 +192,11 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
           <p class="intro">{storyCount} old tales, gathered from many traditions. Pick a story and settle in—there are clever creatures just beyond the page.</p>
         </header>
         <div class="library-tree" aria-label="Story library">
-          <StoryShelf title="Recent stories" path="World library" description="The newest tales added to the reading room." count={recentStories.length}>
-            {recentStories.map((story) => <StoryCard story={story} />)}
-          </StoryShelf>
+          <div id="recent-shelf" hidden>
+            <StoryShelf title="Recent stories" path="Your library" description="Stories you opened recently, saved only on this device." count={0}>
+              <span id="recent-placeholder" hidden></span>
+            </StoryShelf>
+          </div>
           <StoryShelf title="Explore the shelves" path="Story traditions" description="Browse tales together by culture and storytelling tradition." count={shelfGroups.length} compact>
             {shelfGroups.map(group => {
               const lead = group.stories[0];
@@ -240,6 +241,9 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       const prev = document.querySelector('#prev');
       const next = document.querySelector('#next');
       const settings = document.querySelector('#settings');
+      const recentShelf = document.querySelector('#recent-shelf');
+      const recentRail = recentShelf?.querySelector('.shelf-rail');
+      const recentCount = recentShelf?.querySelector('.shelf-count');
       let activeStory = null;
       let page = 0;
       let direction = 'forward';
@@ -251,10 +255,39 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
         return illustration ? `<figure class="scene-art"><img src="${escapeHtml(illustration.image)}" alt="${escapeHtml(illustration.alt)}" loading="eager" decoding="async"></figure>` : '';
       };
       const sourceCitation = story => `<aside class="story-source" aria-label="Story source"><span class="story-source-label">Source</span><cite>Adapted from <a href="${escapeHtml(story.sourceUrl)}" rel="external">${escapeHtml(story.sourceTitle)}</a>, ${escapeHtml(story.sourceAuthor)} (${escapeHtml(story.sourceYear)}).</cite></aside>`;
+      const recentKey = 'folklore:recent';
+      const recentIds = () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem(recentKey) || '[]');
+          return Array.isArray(saved) ? saved.filter(id => stories.some(story => story.id === id)).slice(0, 12) : [];
+        } catch { return []; }
+      };
+      function rememberStory(id) {
+        localStorage.setItem(recentKey, JSON.stringify([id, ...recentIds().filter(savedId => savedId !== id)].slice(0, 12)));
+      }
+      function openFromButton(button) {
+        history.pushState({ folklore: true }, '', `#${button.dataset.story}`);
+        openStory(button.dataset.story);
+      }
+      function renderRecentStories() {
+        if (!recentShelf || !recentRail || !recentCount) return;
+        recentRail.querySelectorAll('[data-recent-card]').forEach(card => card.remove());
+        const ids = recentIds();
+        recentShelf.hidden = ids.length === 0;
+        recentCount.textContent = `${ids.length} ${ids.length === 1 ? 'story' : 'stories'}`;
+        ids.forEach(id => {
+          const source = document.querySelector(`[data-story="${id}"]`);
+          if (!source) return;
+          const card = source.cloneNode(true);
+          card.dataset.recentCard = '';
+          recentRail.append(card);
+        });
+      }
 
       function openStory(id, requestedPage = null) {
         activeStory = stories.find(story => story.id === id);
         if (!activeStory) return;
+        rememberStory(id);
         page = requestedPage === null ? Number(localStorage.getItem(`folklore:${id}`) || 0) : requestedPage;
         page = Math.min(page, activeStory.scenes.length - 1);
         document.documentElement.style.setProperty('--accent', activeStory.color);
@@ -291,7 +324,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
           });
         });
       }
-      function showLibrary() { reader.hidden = true; library.hidden = false; activeStory = null; updateLibraryStates(); }
+      function showLibrary() { reader.hidden = true; library.hidden = false; activeStory = null; renderRecentStories(); updateLibraryStates(); }
       function closeStory() {
         if (history.state && history.state.folklore) history.back();
         else { showLibrary(); history.replaceState(null, '', location.pathname); }
@@ -302,7 +335,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
         if (stories.some(story => story.id === route.id)) { if (!activeStory || activeStory.id !== route.id || route.page !== null) openStory(route.id, route.page); }
         else if (activeStory) showLibrary();
       });
-      document.querySelectorAll('[data-story]').forEach(button => button.addEventListener('click', () => { history.pushState({ folklore: true }, '', `#${button.dataset.story}`); openStory(button.dataset.story); }));
+      document.addEventListener('click', event => { const button = event.target.closest('[data-story]'); if (button) openFromButton(button); });
       document.querySelector('#back').addEventListener('click', closeStory);
       prev.addEventListener('click', () => { if (page > 0) { direction = 'back'; page -= 1; renderPage(); } });
       next.addEventListener('click', () => { if (page < activeStory.scenes.length - 1) { direction = 'forward'; page += 1; renderPage(); } else { localStorage.setItem(`folklore:done:${activeStory.id}`, 'true'); closeStory(); } });
@@ -323,6 +356,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       document.documentElement.dataset.theme = savedTheme === 'night' || (savedTheme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'night' : 'day';
       selectSetting('data-size', savedSize);
       selectSetting('data-theme', savedTheme);
+      renderRecentStories();
       updateLibraryStates();
       const initial = hashRoute(); if (stories.some(story => story.id === initial.id)) openStory(initial.id, initial.page);
       const availability = document.querySelector('#availability');
