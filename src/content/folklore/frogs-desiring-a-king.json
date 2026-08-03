@@ -1,9 +1,9 @@
 {
-  "id": "frogs-desiring-a-king", "order": 43, "featured": false, "published": false,
-  "title": "The Frogs Desiring a King", "originalTitle": "Greek title not preserved in this edition",
+  "id": "frogs-desiring-a-king", "order": 43, "featured": false, "published": true,
+  "title": "The Frogs Desiring a King", "originalTitle": "The Frogs Desiring a King · English",
   "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A marshy swamp", "language": "English", "ages": "7–11", "minutes": 3,
   "themes": ["government", "contentment", "consequences"], "color": "#49734c", "colorSoft": "#c7ddb2",
-  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image91.png) and 53103 (images/image35.jpg and images/image36.jpg).",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A crowd of frogs gathers around a great log newly fallen into their swamp.", "art": "frogs-king", "image": "/folklore/art/covers/frogs-desiring-a-king.webp",
   "pageArt": [{"page": 1, "image": "/folklore/art/frogs-desiring-a-king/03-turning.webp", "alt": "The Frogs dance upon King Log after discovering that it cannot move."}, {"page": 2, "image": "/folklore/art/frogs-desiring-a-king/05-ending.webp", "alt": "A great Stork wades into the swamp as the frightened Frogs scatter."}],
