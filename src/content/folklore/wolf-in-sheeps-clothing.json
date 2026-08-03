@@ -1,10 +1,10 @@
 {
   "id": "wolf-in-sheeps-clothing",
   "order": 32,
-  "published": false,
+  "published": true,
   "featured": false,
   "title": "The Wolf in Sheep’s Clothing",
-  "originalTitle": "No source-language title supplied in this edition",
+  "originalTitle": "The Wolf in Sheep’s Clothing · English",
   "tradition": "Aesopic fable",
   "region": "Europe",
   "culture": "Ancient Greece",
@@ -23,7 +23,7 @@
   "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs",
   "sourceYear": "1894",
   "sourceUrl": "https://www.gutenberg.org/ebooks/28",
-  "note": "The public-domain text of “The Wolf in Sheep’s Clothing” is reproduced directly from this edition. Page divisions are editorial.",
+  "note": "The public-domain text of “The Wolf in Sheep’s Clothing” is reproduced directly from this edition; page divisions are editorial. The cover and turning-point illustrations come from Project Gutenberg ebooks 39187 (images/i_039.jpg) and 19994 (images/i071_th.jpg). No suitable third source plate was found, so the ending is a new collection illustration in a historically appropriate ancient Mediterranean setting.",
   "rights": {
     "status": "verified",
     "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.",
