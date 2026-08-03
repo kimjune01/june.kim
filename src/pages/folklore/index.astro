@@ -412,7 +412,9 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       if (speechSupported) {
         const populateVoices = () => {
           const savedVoice = localStorage.getItem('folklore:voice') || '';
-          speechVoices = window.speechSynthesis.getVoices().toSorted((a, b) => a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name));
+          speechVoices = window.speechSynthesis.getVoices()
+            .filter(voice => /^en(?:-|$)/i.test(voice.lang))
+            .toSorted((a, b) => a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name));
           voiceSelect.replaceChildren(new Option('Device default', ''), ...speechVoices.map(voice => new Option(`${voice.name} (${voice.lang})`, voice.voiceURI)));
           voiceSelect.value = speechVoices.some(voice => voice.voiceURI === savedVoice) ? savedVoice : '';
         };
