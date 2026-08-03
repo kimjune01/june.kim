@@ -96,6 +96,8 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       .eyebrow { margin: 0 0 .6rem; color: #8c3c2b; font-size: .78rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
       h1 { max-width: 15ch; margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: clamp(2.2rem, 4.5vw, 4rem); font-weight: 650; line-height: 1.02; letter-spacing: -.035em; }
       .intro { max-width: 35rem; margin: var(--sp-4) 0 0; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.3rem); line-height: 1.45; }
+      .voice-setting { display: flex; align-items: center; gap: .65rem; width: fit-content; margin: calc(var(--sp-6) * -.35) 0 var(--sp-6); color: var(--muted); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: .75rem; font-weight: 720; }
+      .voice-setting select { min-height: 44px; max-width: min(24rem, 65vw); padding: .55rem 2rem .55rem .75rem; border: 1px solid var(--line); border-radius: .75rem; background: color-mix(in srgb, #fffaf0 88%, transparent); color: var(--ink); font: inherit; cursor: pointer; }
       .library-tree { display: grid; gap: clamp(2.8rem, 5.5vw, 4.5rem); }
       .library-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: var(--sp-6); padding-top: var(--sp-4); border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
       .library-foot button { min-height: 44px; border: 0; border-bottom: 1px solid currentColor; background: none; cursor: pointer; }
@@ -175,7 +177,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
 
       :root[data-theme="night"] { --paper: #1f2828; --paper-deep: #172020; --ink: #f3ead9; --muted: #b9b2a6; --line: rgba(243,234,217,.18); color-scheme: dark; }
       :root[data-theme="night"] .library { background: radial-gradient(circle at 10% 10%, #35403d, transparent 28rem), var(--paper); }
-      :root[data-theme="night"] .book, :root[data-theme="night"] .collection-card, :root[data-theme="night"] .settings, :root[data-theme="night"] .setting-row button, :root[data-theme="night"] .reader-nav button, :root[data-theme="night"] .colophon-dialog { background: #293331; }
+      :root[data-theme="night"] .book, :root[data-theme="night"] .collection-card, :root[data-theme="night"] .settings, :root[data-theme="night"] .setting-row button, :root[data-theme="night"] .reader-nav button, :root[data-theme="night"] .colophon-dialog, :root[data-theme="night"] .voice-setting select { background: #293331; }
       :root[data-theme="night"] .reader-nav .next { background: var(--accent); }
 
       @keyframes arrive-forward { from { opacity: 0; transform: translateX(1rem); } to { opacity: 1; transform: none; } }
@@ -195,6 +197,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
           <h1>Small stories, wide world.</h1>
           <p class="intro">{storyCount} old tales, gathered from many traditions. Pick a story and settle in—there are clever creatures just beyond the page.</p>
         </header>
+        <label id="voice-setting" class="voice-setting" hidden>Read-aloud voice <select id="voice-select" aria-label="Default read-aloud voice"><option value="">Device default</option></select></label>
         <div class="library-tree" aria-label="Story library">
           <div id="recent-shelf" hidden>
             <StoryShelf title="Recent stories" path="Your library" description="Stories you opened recently, saved only on this device." count={0}>
@@ -245,6 +248,8 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       const prev = document.querySelector('#prev');
       const next = document.querySelector('#next');
       const listen = document.querySelector('#listen');
+      const voiceSetting = document.querySelector('#voice-setting');
+      const voiceSelect = document.querySelector('#voice-select');
       const settings = document.querySelector('#settings');
       const recentShelf = document.querySelector('#recent-shelf');
       const recentRail = recentShelf?.querySelector('.shelf-rail');
@@ -254,6 +259,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       let direction = 'forward';
       let speechActive = false;
       let speechRun = 0;
+      let speechVoices = [];
 
       const escapeHtml = (value) => value.replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
       const art = (id) => document.querySelector(`#art-${id}`)?.innerHTML || '';
@@ -331,6 +337,8 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
         const speakParagraph = index => {
           if (!speechActive || run !== speechRun || index >= paragraphs.length) { if (run === speechRun) stopSpeech(); return; }
           const utterance = new SpeechSynthesisUtterance(paragraphs[index].textContent);
+          const selectedVoice = speechVoices.find(voice => voice.voiceURI === voiceSelect.value);
+          if (selectedVoice) utterance.voice = selectedVoice;
           utterance.onstart = () => paragraphs[index].classList.add('speaking');
           utterance.onend = () => { paragraphs[index].classList.remove('speaking'); speakParagraph(index + 1); };
           utterance.onerror = () => { if (run === speechRun) stopSpeech(); };
@@ -398,7 +406,27 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       document.documentElement.dataset.theme = savedTheme === 'night' || (savedTheme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches) ? 'night' : 'day';
       selectSetting('data-size', savedSize);
       selectSetting('data-theme', savedTheme);
-      listen.hidden = !('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window);
+      const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+      listen.hidden = !speechSupported;
+      voiceSetting.hidden = !speechSupported;
+      if (speechSupported) {
+        const populateVoices = () => {
+          const savedVoice = localStorage.getItem('folklore:voice') || '';
+          speechVoices = window.speechSynthesis.getVoices().toSorted((a, b) => a.lang.localeCompare(b.lang) || a.name.localeCompare(b.name));
+          voiceSelect.replaceChildren(new Option('Device default', ''), ...speechVoices.map(voice => new Option(`${voice.name} (${voice.lang})`, voice.voiceURI)));
+          voiceSelect.value = speechVoices.some(voice => voice.voiceURI === savedVoice) ? savedVoice : '';
+        };
+        voiceSelect.addEventListener('change', () => {
+          localStorage.setItem('folklore:voice', voiceSelect.value);
+          window.speechSynthesis.cancel();
+          const preview = new SpeechSynthesisUtterance('Small stories, wide world.');
+          const selectedVoice = speechVoices.find(voice => voice.voiceURI === voiceSelect.value);
+          if (selectedVoice) preview.voice = selectedVoice;
+          window.speechSynthesis.speak(preview);
+        });
+        window.speechSynthesis.addEventListener('voiceschanged', populateVoices);
+        populateVoices();
+      }
       renderRecentStories();
       updateLibraryStates();
       const initial = hashRoute(); if (stories.some(story => story.id === initial.id)) openStory(initial.id, initial.page);
