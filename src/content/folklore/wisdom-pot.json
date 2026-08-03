@@ -10,7 +10,7 @@
   "place": "Fante-land, present-day Ghana",
   "language": "English",
   "ages": "6–10",
-  "minutes": 3,
+  "minutes": 2,
   "themes": [
     "wisdom",
     "family",
@@ -22,7 +22,7 @@
   "sourceAuthor": "William H. Barker and Cecilia Sinclair",
   "sourceYear": "1917",
   "sourceUrl": "https://www.gutenberg.org/ebooks/66923",
-  "note": "A new adaptation of “How Wisdom Became the Property of the Human Race,” collected in Fante-land. Anansi is the famous spider trickster; Kweku Tsin is his son in this source.",
+  "note": "The public-domain text of “Ii. How Wisdom Became The Property Of The Human Race” is reproduced directly from this edition. Gutenberg illustration placeholders were omitted; line wrapping and page divisions are editorial.",
   "rights": {
     "status": "verified",
     "basis": "Source edition published before 1929 and identified as public domain by Project Gutenberg.",
@@ -37,28 +37,28 @@
   "art": "anansi",
   "scenes": [
     [
-      "Long ago, Father Anansi possessed all the wisdom in the world. People visited him each day to ask what to plant, how to settle arguments, and what to do when trouble came."
+      "There once lived, in Fanti-land, a man named Father Anansi. He possessed all the wisdom in the world. People came to him daily for advice and help.",
+      "One day the men of the country were unfortunate enough to offend Father Anansi, who immediately resolved to punish them. After much thought he decided that the severest penalty he could inflict would be to hide all his wisdom from them. He set to work at once to gather again all that he had already given. When he had succeeded, as he thought, in collecting it, he placed all in one great pot. This he carefully sealed, and determined to put it in a spot where no human being could reach it."
     ],
     [
-      "One day Anansi became angry with the people. “They do not deserve my wisdom,” he said.",
-      "He gathered every bit of it into a great clay pot, sealed the lid, and set off to hide it. His son, Kweku Tsin, quietly followed."
+      "Now, Father Anansi had a son, whose name was Kweku Tsin. This boy began to suspect his father of some secret design, so he made up his mind to watch carefully. Next day he saw his father quietly slip out of the house, with his precious pot hung round his neck. Kweku Tsin followed. Father Anansi went through the forest till he had left the village far behind. Then, selecting the highest and most inaccessible-looking tree, he began to climb. The heavy pot, hanging in front of him, made his ascent almost impossible. Again and again he tried to reach the top of the tree, where he intended to hang the pot. There, he thought, Wisdom would indeed be beyond the reach of every one but himself. He was unable, however, to carry out his desire. At each trial the pot swung in his way."
     ],
     [
-      "Anansi chose the tallest tree in the forest. He hung the heavy pot in front of his belly and began to climb.",
-      "The pot bumped against the trunk. It caught on every branch. Again and again, Anansi slid back to the ground."
-    ],
-    [
-      "At last Kweku Tsin called from the bushes, “Father, why not tie the pot behind you? Then it will not block your way.”",
-      "Anansi froze. He had gathered all the world’s wisdom—or so he thought—yet his son knew something that was not inside the pot."
-    ],
-    [
-      "In a flash of anger, Anansi threw the pot down. It struck a rock and shattered.",
-      "Wisdom scattered everywhere: through the forest, across the villages, and out into the wide world. That is why no one person possesses it all—and why a good idea may come from anyone."
+      "For some time Kweku Tsin watched his father’s vain attempts. At last, unable to contain himself any longer, he cried out: “Father, why do you not hang the pot on your back? Then you could easily climb the tree.”",
+      "Father Anansi turned and said: “I thought I had all the world’s wisdom in this pot. But I find you possess more than I do. All my wisdom was insufficient to show me what to do, yet you have been able to tell me.” In his anger he threw the pot down. It struck on a great rock and broke. The wisdom contained in it escaped and spread throughout the world."
     ]
   ],
   "image": "/folklore/art/covers/wisdom-pot.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/wisdom-pot/03-turning.webp", "alt": "Anansi tries to climb the tallest tree with the clay pot tied in front while his son watches below."},
-    {"page": 4, "image": "/folklore/art/wisdom-pot/05-ending.webp", "alt": "Wisdom scatters from the broken clay pot through the forest, village, and wide sky."}
+    {
+      "page": 1,
+      "image": "/folklore/art/wisdom-pot/03-turning.webp",
+      "alt": "Anansi tries to climb the tallest tree with the clay pot tied in front while his son watches below."
+    },
+    {
+      "page": 2,
+      "image": "/folklore/art/wisdom-pot/05-ending.webp",
+      "alt": "Wisdom scatters from the broken clay pot through the forest, village, and wide sky."
+    }
   ]
 }

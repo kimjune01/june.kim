@@ -10,5 +10,7 @@ export async function loadFolkloreStories(): Promise<FolkloreStory[]> {
     if (ids.has(story.id)) throw new Error(`Duplicate folklore story id: ${story.id}`);
     ids.add(story.id);
   }
-  return stories.sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
+  return stories
+    .filter(story => story.published !== false)
+    .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
 }

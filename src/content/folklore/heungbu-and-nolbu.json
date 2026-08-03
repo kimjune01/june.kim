@@ -1,23 +1,188 @@
 {
-  "id": "heungbu-and-nolbu", "order": 17, "featured": true,
-  "title": "Heungbu and Nolbu", "originalTitle": "흥부와 놀부 · Heungbu-wa Nolbu",
-  "tradition": "Korean pansori tale", "region": "Asia", "culture": "Korea",
-  "place": "Jeolla Province in old Korea", "language": "English", "ages": "7–11", "minutes": 5,
-  "themes": ["kindness", "greed", "swallows"], "color": "#3f7259", "colorSoft": "#bed8bd",
-  "sourceTitle": "Korean Tales", "sourceAuthor": "Horace Newton Allen", "sourceYear": "1889", "sourceUrl": "https://www.gutenberg.org/ebooks/55539",
-  "note": "A new adaptation of “Hyung Bo and Nahl Bo; or, The Swallow-King’s Rewards.” Modern romanization is used, and the long historical telling is condensed around the swallow and gourds.",
-  "rights": {"status": "verified", "basis": "The 1889 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
-  "review": {"adaptation": "draft", "cultural": "pending"},
-  "artLabel": "Heungbu tends a swallow beneath the curved tiled eaves of a Korean house as gourds grow nearby.", "art": "heungbu", "image": "/folklore/art/covers/heungbu-and-nolbu.webp",
+  "id": "heungbu-and-nolbu",
+  "order": 17,
+  "featured": true,
+  "title": "Heungbu and Nolbu",
+  "originalTitle": "흥부와 놀부 · Heungbu-wa Nolbu",
+  "tradition": "Korean pansori tale",
+  "region": "Asia",
+  "culture": "Korea",
+  "place": "Jeolla Province in old Korea",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 33,
+  "themes": [
+    "kindness",
+    "greed",
+    "swallows"
+  ],
+  "color": "#3f7259",
+  "colorSoft": "#bed8bd",
+  "sourceTitle": "Korean Tales",
+  "sourceAuthor": "Horace Newton Allen",
+  "sourceYear": "1889",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/55539",
+  "note": "The public-domain text of “Hyung Bo And Nahl Bo;” is reproduced directly from this edition. Gutenberg illustration placeholders were omitted; line wrapping and page divisions are editorial.",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1889 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "Heungbu tends a swallow beneath the curved tiled eaves of a Korean house as gourds grow nearby.",
+  "art": "heungbu",
+  "image": "/folklore/art/covers/heungbu-and-nolbu.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/heungbu-and-nolbu/03-turning.webp", "alt": "Gourds open beneath Heungbu’s thatched eaves to reveal food, cloth, and useful tools."},
-    {"page": 4, "image": "/folklore/art/heungbu-and-nolbu/05-ending.webp", "alt": "Heungbu welcomes his ashamed brother Nolbu at the courtyard gate."}
+    {
+      "page": 23,
+      "image": "/folklore/art/heungbu-and-nolbu/03-turning.webp",
+      "alt": "Gourds open beneath Heungbu’s thatched eaves to reveal food, cloth, and useful tools."
+    },
+    {
+      "page": 41,
+      "image": "/folklore/art/heungbu-and-nolbu/05-ending.webp",
+      "alt": "Heungbu welcomes his ashamed brother Nolbu at the courtyard gate."
+    }
   ],
   "scenes": [
-    ["Two brothers lived very differently. Nolbu kept the family wealth and wanted still more. Heungbu had little, yet shared whatever he could with his family and neighbors."],
-    ["Swallows nested beneath Heungbu’s eaves. When a young bird hurt its leg, he gently set it straight and cared for it until it could fly south."],
-    ["The next spring, the swallow returned with a gourd seed. Heungbu planted it, and vines curled over his small roof.", "When the gourds ripened, each opened to reveal food, cloth, tools, and enough treasure for a comfortable life."],
-    ["Nolbu heard the story and wanted the same reward. Instead of helping a bird, he hurt one and then bound its leg, pretending to be kind."],
-    ["The gourds grown from Nolbu’s seed released troublesome visitors and bills until his hoarded wealth was gone.", "Ashamed, Nolbu went to Heungbu, who welcomed him. The brothers began again with generosity between them."]
+    [
+      "I."
+    ],
+    [
+      "In the province of Chullado, in Southern Korea, lived two brothers. One was very rich, the other very poor. For in dividing the inheritance, the elder brother, instead of taking the father's place, and providing for the younger children, kept the whole property to himself, allowing his younger brother nothing at all, and reducing him to a condition of abject misery. Both men were married. Nahl Bo, the elder, had many concubines, in addition to his wife, but had no children; while Hyung Bo had but one wife and several children. The former's wives were continually quarrelling; the latter lived in contentment and peace with his wife, each endeavoring to help the other bear the heavy burdens circumstances had placed upon them. The elder brother lived in a fine, large compound, with warm, comfortable houses; the younger had built himself a hut of broom straw, the thatch of which was so poor that when it rained they were deluged inside, upon the earthern floor. The room was so small, too, that when Hyung Bo stretched out his legs in his sleep his feet were apt to be thrust through the wall. They had no kang, and had to sleep upon the cold dirt floor, where insects were so abundant as to often succeed in driving the sleepers out of doors."
+    ],
+    [
+      "They had no money for the comforts of life, and were glad when a stroke of good fortune enabled them to obtain the necessities. Hyung Bo worked whenever he could get work, but rainy days and dull seasons were a heavy strain upon them. The wife did plain sewing, and together they made straw sandals for the peasants and vendors. At fair time the sandal business was good, but then came a time when no more food was left in the house, the string for making the sandals was all used up, and they had no money for a new supply. Then the children cried to their mother for food, till her heart ached for them, and the father wandered off in a last attempt to get something to keep the breath of life in his family."
+    ],
+    [
+      "Not a kernel of rice was left. A poor rat which had cast in his lot with this kind family, became desperate when, night after night, he chased around the little house without being able to find the semblance of a meal. Becoming desperate, he vented his despair in such loud squealing that he wakened the neighbors, who declared that the mouse said his legs were worn off running about in a vain search for a grain of rice with which to appease his hunger. The famine became so serious in the little home, that at last the mother commanded her son to go to his uncle and tell him plainly how distressed they were, and ask him to loan them enough rice to subsist on till they could get work, when they would surely return the loan."
+    ],
+    [
+      "The boy did not want to go. His uncle would never recognize him on the street, and he was afraid to go inside his house lest he should whip him. But the mother commanded him to go, and he obeyed. Outside his uncle's house were many cows, well fed and valuable. In pens he saw great fat pigs in abundance, and fowls were everywhere in great numbers. Many dogs also were there, and they ran barking at him, tearing his clothes with their teeth and frightening him so much that he was tempted to run; but speaking kindly to them, they quieted down, and one dog came and licked his hand as if ashamed of the conduct of the others. A female servant ordered him away, but he told her he was her master's nephew, and wanted to see him; whereupon she smiled but let him pass into an inner court, where he found his uncle sitting on the little veranda under the broad, overhanging eaves."
+    ],
+    [
+      "The man gruffly demanded, \"who are you?\" \"I am your brother's son,\" he said. \"We are starving at our house, and have had no food for three days. My father is away now trying to find work, but we are very hungry, and only ask you to loan us a little rice till we can get some to return you.\""
+    ],
+    [
+      "The uncle's eyes drew down to a point, his brows contracted, and he seemed very angry, so that the nephew began looking for an easy way of escape in case he should come at him. At last he looked up and said: \"My rice is locked up, and I have ordered the granaries not to be opened. The flour is sealed and cannot be broken into. If I give you some cold victuals, the dogs will bark at you and try to take it from you. If I give you the leavings of the wine-press, the pigs will be jealous and squeal at you. If I give you bran, the cows and fowls will take after you. Get out, and let me never see you here again.\" So saying, he caught the poor boy by the collar and threw him into the outer court, hurting him, and causing him to cry bitterly with pain of body and distress of mind."
+    ],
+    [
+      "At home the poor mother sat jogging her babe in her weak arms, and appeasing the other children by saying that brother had gone to their uncle for food, and soon the pot would be boiling and they would all be satisfied. When, hearing a foot-fall, all scrambled eagerly to the door, only to see the empty-handed, red-eyed boy coming along, trying manfully to look cheerful.",
+      "\"Did your uncle whip you?\" asked the mother, more eager for the safety of her son, than to have her own crying want allayed.",
+      "\"No,\" stammered the brave boy. \"He had gone to the capital on business,\" said he, hoping to thus prevent further questioning, on so troublesome a subject."
+    ],
+    [
+      "\"What shall I do\"? queried the poor woman, amidst the crying and moaning of her children. There was nothing to do but starve, it seemed. However, she thought of her own straw shoes, which were scarcely used, and these she sent to the market, where they brought three cash (3/15 of a cent). This pittance was invested equally in rice, beans, and vegetables; eating which they were relieved for the present, and with full stomachs the little ones fell to playing happily once more, but the poor mother was full of anxiety for the morrow."
+    ],
+    [
+      "Their fortune had turned, however, with their new lease of life, for the father returned with a bale of faggots he had gathered on the mountains, and with the proceeds of these the shoes were redeemed and more food was purchased. Bright and early then next morning both parents went forth in search of work. The wife secured employment winnowing rice. The husband overtook a boy bearing a pack, but his back was so blistered, he could with difficulty carry his burden. Hyung Bo adjusted the saddle of the pack frame to his own back, and carried it for the boy, who, at their arrival at his destination in the evening, gave his helper some cash, in addition to his lodging and meals. During the night, however, a gentleman wished to send a letter by rapid dispatch to a distant place, and Hyung Bo was paid well for carrying it."
+    ],
+    [
+      "Returning from this profitable errand, he heard of a very rich man, who had been seized by the corrupt local magistrate, on a false accusation, and was to be beaten publicly, unless he consented to pay a heavy sum as hush money. Hearing of this, Hyung went to see the rich prisoner, and arranged with him that he would act as his substitute for three thousand cash (two dollars). The man was very glad to get off so easily, and Hyung took the beating. He limped to his house, where his poor wife greeted him with tears and lamentations, for he was a sore and sorry sight indeed. He was cheerful, however, for he explained to them that this had been a rich day's work; he had simply submitted to a little whipping, and was to get three thousand cash for it."
+    ],
+    [
+      "The money did not come, however, for the fraud was detected, and the original prisoner was also punished. Being of rather a close disposition, the man seemed to think it unnecessary to pay for what did him no good. Then the wife cried indeed over her husband's wrongs and their own more unfortunate condition. But the husband cheered her, saying: \"If we do right we will surely succeed.\" He was right. Spring was coming on, and he soon got work at plowing and sowing seed. They gave their little house the usual spring cleaning, and decorated the door with appropriate legends, calling upon the fates to bless with prosperity the little home."
+    ],
+    [
+      "With the spring came the birds from the south country, and they seemed to have a preference for the home of this poor family--as indeed did the rats and insects. The birds built their nests under the eaves. They were swallows, and as they made their little mud air-castles, Hyung Bo said to his wife: \"I am afraid to have these birds build their nests there. Our house is so weak it may fall down, and then what will the poor birds do?\" But the little visitors seemed not alarmed, and remained with the kind people, apparently feeling safe under the friendly roof."
+    ],
+    [
+      "By and by the little nests were full of commotion and bluster; the eggs had opened, and circles of wide opened mouths could be seen in every nest. Hyung and his children were greatly interested in this new addition to their family circle, and often gave them bits of their own scanty allowance of food, so that the birds became quite tame and hopped in and out of the hut at will."
+    ],
+    [
+      "One day, when the little birds were taking their first lesson in flying, Hyung was lying on his back on the ground, and saw a huge roof-snake crawl along and devour several little birds before he could arise and help them. One bird struggled from the reptile and fell, but, catching both legs in the fine meshes of a reed-blind, they were broken, and the little fellow hung helplessly within the snake's reach. Hyung hastily snatched it down, and with the help of his wife he bound up the broken limbs, using dried fish-skin for splints. He laid the little patient in a warm place, and the bones speedily united, so that the bird soon began to hop around the room, and pick up bits of food laid out for him. Soon the splints were removed, however, and he flew away, happily, to join his fellows."
+    ],
+    [
+      "The autumn came; and one evening--it was the ninth day of the ninth moon--as the little family were sitting about the door, they noticed the bird with the crooked legs sitting on the clothes-line and singing to them.",
+      "\"I believe he is thanking us and saying good-by,\" said Hyung, \"for the birds are all going south now.\"",
+      "That seemed to be the truth, for they saw their little friend no longer, and they felt lonely without the occupants of the now deserted nests. The birds, however, were paying homage to the king of birds in the bird-land beyond the frosts. And as the king saw the little crooked-legged bird come along, he demanded an explanation of the strange sight. Thereupon the little fellow related his narrow escape from a snake that had already devoured many of his brothers and cousins, the accident in the blind, and his rescue and subsequent treatment by a very poor but very kind man."
+    ],
+    [
+      "His bird majesty was very much entertained and pleased. He thereupon gave the little cripple a seed engraved with fine characters in gold, denoting that the seed belonged to the gourd family. This seed the bird was to give to his benefactor in the spring.",
+      "The winter wore away, and the spring found the little family almost as destitute as when first we described them. One day they heard a familiar bird song, and, running out, they saw their little crooked-legged friend with something in its mouth, that looked like a seed. Dropping its burden to the ground, the little bird sang to them of the king's gratitude, and of the present he had sent, and then flew away."
+    ],
+    [
+      "Hyung picked up the seed with curiosity, and on one side he saw the name of its kind, on the other, in fine gold characters, was a message saying: \"Bury me in soft earth, and give me plenty of water.\" They did so, and in four days the little shoot appeared in the fine earth. They watched its remarkable growth with eager interest as the stem shot up, and climbed all over the house, covering it up as a bower, and threatening to break down the frail structure with the added weight. It blossomed, and soon four small gourds began to form. They grew to an enormous size, and Hyung could scarcely keep from cutting them. His wife prevailed on him to wait till the frost had made them ripe, however, as then they could cut them, eat the inside, and make water-vessels of the shells, which they could then sell, and thus make a double profit. He waited, though with a poor grace, till the ninth moon, when the gourds were left alone, high upon the roof, with only a trace of the shrivelled stems which had planted them there."
+    ],
+    [
+      "Hyung got a saw and sawed open the first huge gourd. He worked so long, that when his task was finished he feared he must be in a swoon, for out of the opened gourd stepped two beautiful boys, with fine bottles of wine and a table of jade set with dainty cups. Hyung staggered back and sought assurance of his wife, who was fully as dazed as was her husband. The surprise was somewhat relieved by one of the handsome youths stepping forth, placing the table before them, and announcing that the bird king had sent them with these presents to the benefactor of one of his subjects--the bird with broken legs. Ere they could answer, the other youth placed a silver bottle on the table, saying: \"This wine will restore life to the dead.\" Another, which he placed on the table, would, he said, restore sight to the blind. Then going to the gourd, he brought two gold bottles, one contained a tobacco, which, being smoked, would give speech to the dumb, while the other gold bottle contained wine, which would prevent the approach of age and ward off death."
+    ],
+    [
+      "Having made these announcements, the pair disappeared, leaving Hyung and his wife almost dumb with amazement. They looked at the gourd, then at the little table and its contents, and each looked at the other to be sure it was not a dream. At length Hyung broke the silence, remarking that, as he was very hungry, he would venture to open another gourd, in the hope that it would be found full of something good to eat, since it was not so important for him to have something with which to restore life just now as it was to have something to sustain life with."
+    ],
+    [
+      "The next gourd was opened as was the first, when by some means out flowed all manner of household furniture, and clothing, with rolls upon rolls of fine silk and satin cloth, linen goods, and the finest cotton. The satin alone was far greater in bulk than the gourd had been, yet, in addition, the premises were literally strewn with costly furniture and the finest fabrics. They barely examined the goods now, their amazement having become so great that they could scarcely wait until all had been opened, and the whole seemed so unreal, that they feared delay might be dangerous. Both sawed away on the next gourd, when out came a body of carpenters, all equipped with tools and lumber, and, to their utter and complete amazement, began putting up a house as quickly and quietly as thought, so that before they could arise from the ground they saw a fine house standing before them, with courts and servants' quarters, stables, and granaries. Simultaneously a great train of bulls and ponies appeared, loaded down with rice and other products as tributes from the district in which the place was located. Others came bringing money tribute, servants, male and female, and clothing."
+    ],
+    [
+      "They felt sure they were in dreamland now, and that they might enjoy the exercise of power while it lasted, they began commanding the servants to put the goods away, the money in the sahrang, or reception-room, the clothing in the tarack, or garret over the fireplace, the rice in the granaries, and animals in their stables. Others were sent to prepare a bath, that they might don the fine clothing before it should be too late. The servants obeyed, increasing the astonishment of the pair, and causing them to literally forget the fourth gourd in their amazed contemplation of the wondrous miracles being performed, and the dreamy air of satisfaction and contentment with which it surrounded them."
+    ],
+    [
+      "Their attention was called to the gourd by the servants, who were then commanded to carefully saw it open. They did so, and out stepped a maiden, as beautiful as were the gifts that had preceded her. Never before had Hyung looked on any one who could at all compare with the matchless beauty and grace of the lovely creature who now stood so modestly and confidingly before him. He could find no words to express his boundless admiration, and could only stand in mute wonder and feast himself upon her beauty. Not so with his wife, however. She saw only a rival in the beautiful girl, and straightway demanded who she was, whence she came, and what she wanted. The maid replied: \"I am sent by the bird king to be this man's concubine.\" Whereupon the wife grew dark in the face, and ordered her to go whence she came and not see her husband again. She upbraided him for not being content with a house and estate, numbers of retainers and quantities of money, and declared this last trouble was all due to his greed in opening the fourth gourd."
+    ],
+    [
+      "Her husband had by this time found his speech, however, and severely reprimanding her for conducting herself in such a manner upon the receipt of such heavenly gifts, while yesterday she had been little more than a beggar; he commanded her to go at once to the women's quarters, where she should reign supreme, and never make such a display of her ill-temper again, under penalty of being consigned to a house by herself. The maiden he gladly welcomed, and conducted her to apartments set aside for her.",
+      "II."
+    ],
+    [
+      "When Nahl Bo heard of the wonderful change taking place at his brother's establishment, he went himself to look into the matter. He found the report not exaggerated, and began to upbraid his brother with dishonest methods, which accusation the brother stoutly denied, and further demanded where, and of whom, he could steal a house, such rich garments, fine furniture, and have it removed in a day to the site of his former hovel. Nahl Bo demanded an explanation, and Hyung Bo frankly told him how he had saved the bird from the snake and had bound up its broken limbs, so that it recovered; how the bird in return brought him a seed engraved with gold characters, instructing him how to plant and rear it; and how, having done so, the four gourds were born on the stalk, and from them, on ripening, had appeared these rich gifts. The ill-favored brother even then persisted in his charges, and in a gruff, ugly manner accused Hyung Bo of being worse than a thief in keeping all these fine goods, instead of dutifully sharing them with his elder brother. This insinuation of undutiful conduct really annoyed Hyung Bo, who, in his kindness of heart, forgave this unbrotherly senior, his former ill conduct, and thinking only of his own present good fortune, he kindly bestowed considerable gifts upon the undeserving brother, and doubtless would have done more but that the covetous man espyed the fair maiden, and at once insisted on having her. This was too much even for the patient Hyung Bo, who refused with a determination remarkable for him. A quarrel ensued, during which the elder brother took his departure in a rage, fully determined to use the secret of his brother's success for all it was worth in securing rich gifts for himself."
+    ],
+    [
+      "Going home he struck at all the birds he could see, and ordered his servants to do the same. After killing many, he succeeded in catching one, and, breaking its legs, he took fish-skin and bound them up in splints, laying the little sufferer in a warm place, till it recovered and flew away, bandages and all. The result was as expected. The bird being questioned by the bird king concerning its crooked legs, related its story, dwelling, however, on the man's cruelty in killing so many birds and then breaking its own legs. The king understood thoroughly, and gave the little cripple a seed to present to the wicked man on its return in the spring."
+    ],
+    [
+      "Springtime came, and one day, as Nahl Bo was sitting cross-legged in the little room opening on the veranda off his court, he heard a familiar bird-song. Dropping his long pipe, he threw open the paper windows, and there, sure enough, sat a crooked-legged bird on the clothes line, bearing a seed in its mouth. Nahl Bo would let no one touch it, but as the bird dropped the seed and flew away, he jumped out so eagerly that he forgot to slip his shoes on, and got his clean white stockings all befouled. He secured the seed, however, and felt that his fortune was made. He planted it carefully, as directed, and gave it his personal attention."
+    ],
+    [
+      "The vines were most luxurious. They grew with great rapidity, till they had well nigh covered the whole of his large house and out-buildings. Instead of one gourd, or even four, as in the brother's case, the new vines bore twelve gourds, which grew and grew till the great beams of his house fairly groaned under their weight, and he had to block them in place to keep them from rolling off the roofs. He had to hire men to guard them carefully, for now that the source of Hyung Bo's riches was understood, every one was anxious for a gourd. They did not know the secret, however, which Nahl Bo concealed through selfishness, and Hyung through fear that every one would take to killing and maiming birds as his wicked brother had done."
+    ],
+    [
+      "Maintaining a guard was expensive, and the plant so loosened the roof tiles, by the tendrils searching for earth and moisture in the great layer of clay under the tiles, that the rainy season made great havoc with his house. Large portions of plaster from the inside fell upon the paper ceilings, which in turn gave way, letting the dirty water drip into the rooms, and making the house almost uninhabitable. At last, however, the plants could do no more harm; the frost had come, the vines had shrivelled away, and the enormous ripe gourds were carefully lowered, amid the yelling of a score of coolies, as each seemed to get in the others' way trying to manipulate the ropes and poles with which the gourds were let down to the ground. Once inside the court, and the great doors locked, Nahl Bo felt relieved, and shutting out every one but a carpenter and his assistant, he prepared for the great surprise which he knew must await him, in spite of his most vivid dreams."
+    ],
+    [
+      "The carpenter insisted upon the enormous sum of 1,000 cash for opening each gourd, and as he was too impatient to await the arrival of another, and as he expected to be of princely wealth in a few moments, Nahl Bo agreed to the exorbitant price. Whereupon, carefully bracing a gourd, the men began sawing it through. It seemed a long time before the gourd fell in halves. When it did, out came a party of rope-dancers, such as perform at fairs and public places. Nahl Bo was unprepared for any such surprise as this, and fancied it must be some great mistake. They sang and danced about as well as the crowded condition of the court would allow, and the family looked on complacently, supposing that the band had been sent to celebrate their coming good fortune. But Nahl Bo soon had enough of this. He wanted to get at his riches, and seeing that the actors were about to stretch their ropes for a more extensive performance, he ordered them to cease and take their departure. To his amazement, however, they refused to do this, until he had paid them 5,000 cash for their trouble. \"You sent for us and we came,\" said the leader. \"Now pay us, or we will live with you till you do.\" There was no help for it, and with great reluctance and some foreboding, he gave them the money and dismissed them. Then Nahl Bo turned to the carpenter, who chanced to be a man with an ugly visage, made uglier by a great hare-lip. \"You,\" he said, \"are the cause of all this. Before you entered this court these gourds were filled with gold, and your ugly face has changed it to beggars.\""
+    ],
+    [
+      "Number two was opened with no better results, for out came a body of Buddhist priests, begging for their temple, and promising many sons in return for offerings of suitable merit. Although disgusted beyond measure, Nahl Bo still had faith in the gourds, and to get rid of the priests, lest they should see his riches, he gave them also 5,000 cash."
+    ],
+    [
+      "As soon as the priests were gone, gourd number three was opened, with still poorer results, for out came a procession of paid mourners followed by a corpse borne by bearers. The mourners wept as loudly as possible, and all was in a perfect uproar. When ordered to go, the mourners declared they must have money for mourning, and to pay for burying the body. Seeing no possible help for it, 5,000 cash was finally given them, and they went out with the bier. Then Nahl Bo's wife came into the court, and began to abuse the hare-lipped man for bringing upon them all this trouble. Whereupon the latter became angry and demanded his money that he might leave. They had no intention of giving up the search as yet, however, and, as it was too late to change carpenters, the ugly fellow was paid for the work already done, and given an advance on that yet remaining. He therefore set to work upon the fourth gourd, which Nahl Bo watched with feverish anxiety."
+    ],
+    [
+      "From this one there came a band of gee sang, or dancing girls. There was one woman from each province, and each had her song and dance. One sang of the yang wang, or wind god; another of the wang jay, or pan deity; one sang of the sung jee, or money that is placed as a christening on the roof tree of every house. There was the cuckoo song. The song of the ancient tree that has lived so long that its heart is dead and gone, leaving but a hollow space, yet the leaves spring forth every spring-tide. The song of laughter and mourning, with an injunction to see to it that the rice offering be made to the departed spirits. To the king of the sun and stars a song was sung. And last of all, one votary sang of the twelve months that make the year, the twelve hours that make the day, the thirty days that make the month, and of the new year's birth, as the old year dies, taking with it their ills to be buried in the past, and reminding all people to celebrate the New Year holidays by donning clean clothes and feasting on good food, that the following year may be to them one of plenty and prosperity. Having finished their songs and their graceful posturing and waving of their gay silk banners, the gee sang demanded their pay, which had to be given them, reducing the family wealth 5,000 cash more."
+    ],
+    [
+      "The wife now tried to persuade Nahl Bo to stop and not open more, but the hare-lip man offered to open the next for 500 cash, as he was secretly enjoying the sport. So the fifth was opened a little, when a yellow-looking substance was seen inside, which was taken to be gold, and they hurriedly opened it completely. But instead of gold, out came an acrobatic pair,--being a strong man with a youth dressed to represent a girl. The man danced about, holding his young companion balanced upon his shoulders, singing meanwhile a song of an ancient king, whose riotous living was so distasteful to his subjects that he built him a cavernous palace, the floor of which was covered with quicksilver, the walls were decorated with jewels, and myriad lamps turned the darkness into day. Here were to be found the choicest viands and wines, with bands of music to entertain the feasters: most beautiful women; and he enjoyed himself most luxuriously until his enemy, learning the secret, threw open the cavern to the light of day, when all of the beautiful women immediately disappeared in the sun's rays."
+    ],
+    [
+      "Before he could get these people to discontinue their performance, Nahl Bo had to give them also 5,000 cash. Yet in spite of all his ill luck, he decided to open another. Which being done, a jester came forth, demanding the expense money for his long journey. This was finally given him, for Nahl Bo had hit upon what he deemed a clever expedient. He took the wise fool aside, and asked him to use his wisdom in pointing out to him which of these gourds contained gold. Whereupon the jester looked wise, tapped several gourds, and motioned to each one as being filled with gold."
+    ],
+    [
+      "The seventh was therefore opened, and a lot of yamen runners came forth, followed by an official. Nahl Bo tried to run from what he knew must mean an exorbitant \"squeeze,\" but he was caught and beaten for his indiscretion. The official called for his valise, and took from it a paper, which his secretary read, announcing that Nahl Bo was the serf of this lord and must hereafter pay to him a heavy tribute. At this they groaned in their hearts, and the wife declared that even now the money was all gone, even to the last cash, while the rabble which had collected had stolen nearly every thing worth removing. Yet the officer's servants demanded pay for their services, and they had to be given a note secured on the property before they would leave. Matters were now so serious that they could not be made much worse, and it was decided to open each remaining gourd, that if there were any gold they might have it."
+    ],
+    [
+      "When the next one was opened a bevy of moo tang women (soothsayers) came forth, offering to drive away the spirit of disease and restore the sick to health. They arranged their banners for their usual dancing ceremony, brought forth their drums, with which to exorcise the demons, and called for rice to offer to the spirits and clothes to burn for the spirits' apparel.",
+      "\"Get out!\" roared Nahl Bo. \"I am not sick except for the visitation of such as yourselves, who are forever burdening the poor, and demanding pay for your supposed services. Away with you, and befool some other pah sak ye (eight month's man--fool) if you can. I want none of your services.\"",
+      "They were no easier to drive away, however, than were the other annoying visitors that had come with his supposed good fortune. He had finally to pay them as he had the others; and dejectedly he sat, scarcely noticing the opening of the ninth gourd."
+    ],
+    [
+      "The latter proved to contain a juggler, and the exasperated Nahl Bo, seeing but one small man, determined to make short work of him. Seizing him by his topknot of hair, he was about to drag him to the door, when the dexterous fellow, catching his tormentor by the thighs, threw him headlong over his own back, nearly breaking his neck, and causing him to lie stunned for a time, while the expert bound him hand and foot, and stood him on his head, so that the wife was glad to pay the fellow and dismiss him ere the life should be departed from her lord."
+    ],
+    [
+      "On opening the tenth a party of blind men came out, picking their way with their long sticks, while their sightless orbs were raised towards the unseen heavens. They offered to tell the fortunes of the family. But, while their services might have been demanded earlier, the case was now too desperate for any such help. The old men tinkled their little bells, and chanted some poetry addressed to the four good spirits stationed at the four corners of the earth, where they patiently stand bearing the world upon their shoulders; and to the distant heavens that arch over and fold the earth in their embrace, where the two meet at the far horizon (as pictured in the Korean flag). The blind men threw their dice, and, fearing lest they should prophesy death, Nahl Bo quickly paid and dismissed them."
+    ],
+    [
+      "The next gourd was opened but a trifle, that they might first determine as to the wisdom of letting out its contents. Before they could determine, however, a voice like thunder was heard from within, and the huge form of a giant arose, splitting open the gourd as he came forth. In his anger he seized poor Nahl Bo and tossed him upon his shoulders as though he would carry him away. Whereupon the wife plead with tears for his release, and gladly gave an order for the amount of the ransom. After which the monster allowed the frightened man to fall to the ground, nearly breaking his aching bones in the fall."
+    ],
+    [
+      "The carpenter did not relish the sport any longer; it seemed to be getting entirely too dangerous. He thereupon demanded the balance of his pay, which they finally agreed to give him, providing he would open the last remaining gourd. For the desperate people hoped to find this at least in sufficient condition that they might cook or make soup of it, since they had no food left at all and no money, while the other gourds were so spoiled by the tramping of the feet of their unbidden guests, as to be totally unfit for food."
+    ],
+    [
+      "The man did as requested, but had only sawed a very little when the gourd split open as though it were rotten, while a most awful stench arose, driving every one from the premises. This was followed by a gale of wind, so severe as to destroy the buildings, which, in falling, took fire from the kang, and while the once prosperous man looked on in helpless misery, the last of his remaining property was swept forever from him.",
+      "The seed that had brought prosperity to his honest, deserving brother had turned prosperity into ruin to the cruel, covetous Nahl Bo, who now had to subsist upon the charity of his kind brother, whom he had formerly treated so cruelly."
+    ]
   ]
 }

@@ -10,7 +10,7 @@
   "place": "A bridge below a green mountain meadow",
   "language": "English",
   "ages": "5–9",
-  "minutes": 3,
+  "minutes": 2,
   "themes": [
     "courage",
     "siblings",
@@ -22,7 +22,7 @@
   "sourceAuthor": "Peter Christen Asbjørnsen and Jørgen Moe; translated by George Webbe Dasent",
   "sourceYear": "1859",
   "sourceUrl": "https://www.gutenberg.org/ebooks/8933",
-  "note": "A new adaptation of “The Three Billy-Goats Gruff,” preserving the familiar trip-trap pattern and softening the source’s violent ending.",
+  "note": "The public-domain text of “The Three Billy-Goats Gruff” is reproduced directly from this edition. Gutenberg illustration placeholders were omitted; line wrapping and page divisions are editorial.",
   "rights": {
     "status": "verified",
     "basis": "Source edition published in the nineteenth century and identified as public domain by Project Gutenberg.",
@@ -37,24 +37,47 @@
   "art": "goats",
   "scenes": [
     [
-      "Three goats named Gruff longed for the sweet grass on the mountain. To reach it, they had to cross a bridge where a hungry troll lived."
+      "Once on a time there were three Billy-goats, who were to go up to the hill-side to make themselves fat, and the name of all three was “Gruff”.",
+      "On the way up was a bridge over a burn they had to cross; and under the bridge lived a great ugly Troll, with eyes as big as saucers, and a nose as long as a poker.",
+      "So first of all came the youngest billy-goat Gruff to cross the bridge.",
+      "“Trip, trap; trip, trap!” went the bridge.",
+      "“WHO’S THAT tripping over my bridge?” roared the Troll.",
+      "“Oh! it is only I, the tiniest billy-goat Gruff; and I’m going up to the hill-side to make myself fat”, said the billy-goat, with such a small voice.",
+      "“Now, I’m coming to gobble you up”, said the Troll.",
+      "“Oh, no! pray don’t take me. I’m too little, that I am”, said the billy-goat; “wait a bit till the second billy-goat Gruff comes, he’s much bigger.”"
     ],
     [
-      "Trip-trap went the littlest goat. The troll roared, but the goat said, “Wait for my brother—he is much bigger.” The troll let him pass."
+      "“Well! be off with you”, said the Troll.",
+      "A little while after came the second billy-goat Gruff to cross the bridge.",
+      "“TRIP, TRAP! TRIP, TRAP! TRIP, TRAP!” went the bridge.",
+      "“WHO’S THAT tripping over my bridge?” roared the Troll.",
+      "“Oh! it’s the second billy-goat Gruff, and I’m going up to the hill-side to make myself fat”, said the billy-goat, who hadn’t such a small voice.",
+      "“Now, I’m coming to gobble you up”, said the Troll.",
+      "“Oh, no! don’t take me, wait a little till the big billy-goat Gruff comes, he’s much bigger.”",
+      "“Very well! be off with you”, said the Troll.",
+      "But just then up came the big billy-goat Gruff.",
+      "“TRIP, TRAP! TRIP, TRAP! TRIP, TRAP!” went the bridge, for the billy-goat was so heavy that the bridge creaked and groaned under him.",
+      "“WHO’S THAT tramping over my bridge?” roared the Troll.",
+      "“IT’S I! THE BIG BILLY-GOAT GRUFF”, said the billy-goat, who had an ugly hoarse voice of his own."
     ],
     [
-      "Trip-trap, trip-trap went the middle goat. He gave the same warning, and the greedy troll waited again."
-    ],
-    [
-      "TRAMP-TRAMP came the biggest Gruff. The troll leaped onto the bridge. Big Gruff lowered his strong horns and charged."
-    ],
-    [
-      "The troll tumbled into the rushing river and floated far downstream. All three goats climbed safely to the meadow, where there was enough green grass for everyone."
+      "“Now, I’m coming to gobble you up”, roared the Troll.",
+      "Well, come along! I’ve got two spears, And I’ll poke your eyeballs out at your ears; I’ve got besides two curling-stones, And I’ll crush you to bits, body and bones.",
+      "That was what the big billy-goat said; and so he flew at the Troll and poked his eyes out with his horns, and crushed him to bits, body and bones, and tossed him out into the burn, and after that he went up to the hill-side. There the billy-goats got so fat they were scarce able to walk home again; and if the fat hasn’t fallen off them, why they’re still fat; and so:",
+      "Snip, snap, snout, This tale’s told out."
     ]
   ],
   "image": "/folklore/art/covers/three-billy-goats-gruff.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/three-billy-goats-gruff/03-turning.webp", "alt": "The middle billy goat trip-traps across the wooden bridge while the troll peers up from below."},
-    {"page": 4, "image": "/folklore/art/three-billy-goats-gruff/05-ending.webp", "alt": "All three billy goats graze together in the green mountain meadow above the river."}
+    {
+      "page": 1,
+      "image": "/folklore/art/three-billy-goats-gruff/03-turning.webp",
+      "alt": "The middle billy goat trip-traps across the wooden bridge while the troll peers up from below."
+    },
+    {
+      "page": 2,
+      "image": "/folklore/art/three-billy-goats-gruff/05-ending.webp",
+      "alt": "All three billy goats graze together in the green mountain meadow above the river."
+    }
   ]
 }

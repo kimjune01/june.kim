@@ -23,6 +23,7 @@ const folklore = defineCollection({
     id: z.string(),
     order: z.number().int(),
     featured: z.boolean(),
+    published: z.boolean().optional(),
     title: z.string(),
     originalTitle: z.string(),
     tradition: z.string(),

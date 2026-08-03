@@ -10,7 +10,7 @@
   "place": "Near the stone Miryek by the Kingin River",
   "language": "English",
   "ages": "6–10",
-  "minutes": 4,
+  "minutes": 7,
   "themes": [
     "belonging",
     "family",
@@ -22,7 +22,7 @@
   "sourceAuthor": "William Elliot Griffis",
   "sourceYear": "1922",
   "sourceUrl": "https://www.gutenberg.org/ebooks/67180",
-  "note": "A new adaptation of “A Bridegroom for Miss Mole,” retaining its chain of Sky, Sun, Cloud, Wind, Stone, and Mole while shortening the courtship frame.",
+  "note": "The public-domain text of “A Bridegroom For Miss Mole” is reproduced directly from this edition. Gutenberg illustration placeholders were omitted; line wrapping and page divisions are editorial.",
   "rights": {
     "status": "verified",
     "basis": "Source edition published in 1922 and identified as public domain by Project Gutenberg.",
@@ -37,26 +37,60 @@
   "art": "mole",
   "scenes": [
     [
-      "Father Mole adored his daughter and vowed that she would marry the mightiest being in the universe.",
-      "The wise moles named the great blue Sky, so Father Mole climbed up to make his request."
+      "By the river Kingin stands the great stone image, or Miryek, that was cut out of the solid rock ages ago. Its base lies far beneath the ground and around its granite cap many feet square the storm-clouds gather and play as they roll down the mountain.",
+      "Down under the earth near this mighty colossus lived a soft-furred mole and his wife. One day a daughter was born to them. It was the most wonderful mole baby that ever was known. The father was so proud of his lovely offspring that he determined to marry her only to the grandest thing in the whole universe. Nothing else would satisfy his pride in the beautiful creature he called his own."
     ],
     [
-      "But Sky said, “Sun is mightier, for only when Sun rises can my colors be seen.” Sun replied, “Cloud can cover me completely.”"
+      "Father Mole sought long and hard to find out where and what, in all nature, was considered the most wonderful. He called in his neighbors and talked over the matter with them. Then he visited the king of the moles and asked the wise ones in his court to decide for him. One and all agreed that the Great Blue Sky was above everything else in glory and greatness.",
+      "So up to the Sky the Mole Father went and offered his daughter to be the bride of the Great Blue, telling how with his vast azure robe the Sky had the reputation, both on the earth and under it, of being the greatest thing in the universe.",
+      "But much to the Mole Father’s surprise, the Sky declined."
     ],
     [
-      "Cloud rumbled, then admitted, “Wind drives me wherever it pleases.” Wind sighed, “The great stone Miryek does not move, however hard I blow.”"
+      "“No, I am not the greatest. I must refer you to the Sun. He controls me, for he can make it day or night as he pleases. Only when he rises can I wear my bright colors. When he goes down darkness covers the world and men do not see me at all, but the stars instead. Better take your charming daughter to him.”",
+      "So to the Sun went Mr. Mole and though afraid to look directly into his face, he made his plea. He would have the Sun marry his attractive daughter.",
+      "But the mighty luminary, that usually seemed so fierce, dazzling men’s eyesight and able to burn up the grass of the field, seemed suddenly very modest. Instead of accepting at once the offer, the Sun said to the father:"
     ],
     [
-      "Miryek listened patiently. “I withstand sky, sun, cloud, and wind,” said the stone. “Yet Mole tunnels beneath my feet. One day his burrows could topple me.”"
+      "“Alas! I am not master. The Cloud is greater than I, for he is able to cover me up and make me invisible for days and weeks. I am not as powerful as you think me to be. Let me advise you to offer your daughter to the Cloud.”",
+      "Surprised at this, the Mole Father looked quite disappointed. Now he was in doubt as to what time he had best propose to the Cloud,—when it was silvery white and glistening in a summer afternoon, or when it was black and threatening a tempest. However, his ambition to get for his daughter the mightiest possible bridegroom prompted him to wait until the lightnings flashed and the thunder rolled. Then appearing before the terrible dark Cloud that shot out fire, he told of the charms of his wonderful daughter and offered her as bride."
     ],
     [
-      "After traveling around the world, Father Mole found the answer close to home. His daughter married a kind young mole.",
-      "Their underground wedding was joyful—and Miss Mole was pleased that someone had finally asked what suited her."
+      "“But why do you come to me?” asked the Cloud, its face inky black with the wrath of a storm and its eyes red with the fires of lightning.",
+      "“Because you are not only the greatest thing in the universe, but you have proved it by your terrible power,” replied the Father Mole.",
+      "At this the Cloud ceased its rolling, stopped its fire and thunder and almost laughed.",
+      "“So far from being the greatest thing in the world, I am not even my own master. See already how the wind is driving me. Soon I shall be invisible, dissolved in air. Let me commend you to the Wind. The Master of the Cloud will make a grand son-in-law.”",
+      "Thereupon Papa Mole waited until the Wind calmed down, after blowing away the clouds. Then telling of his daughter’s accomplishments and loveliness, he made proffer of his only child as bride to the Wind."
+    ],
+    [
+      "But the Wind was not half so proud as the Mole Father had expected to find him. Very modest, almost bashful seemed the Wind, as he confessed that before Miryek, the colossal stone image, his power was naught.",
+      "“Why, I smite that Great Stone Face and its eyes do not even blink. I roar in his ears, but he minds it not. I try to make him sneeze, but he will not. Smite him as I may, he still stands unmoved and smiling. Alas, no. I am not the grandest thing in the universe, while Miryek stands. Go to him. He alone is worthy to marry your daughter.”",
+      "By this time the Mole Father was not only footsore and weary, but much discouraged also. Evidently all appreciated his shining daughter; but would he be able, after all, to get her a worthy husband?"
+    ],
+    [
+      "He rested himself a while and then proceeded to Miryek, the colossus of granite as large as a lighthouse, its head far up in the air, but with ears ready to hear.",
+      "The Mole Father squeaked out compliments to the image as being by common confession the greatest thing on earth. He presented his request for a son-in-law and then in detail mentioned the accomplishments of his daughter, sounding her praise at great length. Indeed, he almost ruined his case by talking so long.",
+      "With stony patience Miryek listened to the proud father with a twinkle in his white granite eyes. When his lips moved, he was heard to say:"
+    ],
+    [
+      "“Fond Parent, what you say is true. I am great. I care not for the sky day or night, for I remain the same in daylight and darkness. I fear not the sun, that cannot melt me, nor the frost that is not able to make me crumble. Cold or hot, in summer or in winter time, I remain unchanged. The clouds come and go, but they cannot move me. Their fire and noise, lightning and thunder, I fear not. Yes, I am great.” Then the stone lips closed again.",
+      "“You will make, then, a good bridegroom for my daughter? You will marry her, I understand?” asked the proud father as his hopes began to rise, though he was still doubtful."
+    ],
+    [
+      "“I would gladly do so, if I were greatest. But I am not,” said Miryek. “Down under my feet is the Mole. He digs with his shovellike hands and makes burrows day and night. His might I cannot resist. Soon he shall undermine my base and I shall topple down and lie like common stone along the earth. Yes! by universal confession, the Mole is the greatest thing in the universe and to him I yield. Better marry your daughter to him.”",
+      "So after all his journeying, the father sought no further. Advised on all sides, and opinion being unanimous, he found out that the Mole was the greatest thing in the universe. His daughter’s bridegroom was found at home and of the same family of creatures. He married her to a young and handsome Mole, and great was the joy and rejoicing at the wedding. The pair were well-mated and lived happily ever afterward."
     ]
   ],
   "image": "/folklore/art/covers/bridegroom-for-miss-mole.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/bridegroom-for-miss-mole/03-turning.webp", "alt": "Father Mole watches wind push a cloud around the unmoving stone Miryek beside a Korean river."},
-    {"page": 4, "image": "/folklore/art/bridegroom-for-miss-mole/05-ending.webp", "alt": "Miss Mole and a kind young mole celebrate their joyful underground wedding."}
+    {
+      "page": 4,
+      "image": "/folklore/art/bridegroom-for-miss-mole/03-turning.webp",
+      "alt": "Father Mole watches wind push a cloud around the unmoving stone Miryek beside a Korean river."
+    },
+    {
+      "page": 8,
+      "image": "/folklore/art/bridegroom-for-miss-mole/05-ending.webp",
+      "alt": "Miss Mole and a kind young mole celebrate their joyful underground wedding."
+    }
   ]
 }

@@ -10,7 +10,7 @@
   "place": "The road to Bremen",
   "language": "English",
   "ages": "6–10",
-  "minutes": 5,
+  "minutes": 7,
   "themes": [
     "friendship",
     "music",
@@ -22,7 +22,7 @@
   "sourceAuthor": "Dinah Maria Mulock Craik",
   "sourceYear": "1863",
   "sourceUrl": "https://www.gutenberg.org/ebooks/19734",
-  "note": "A new shortened adaptation of the Brothers Grimm tale as printed in Dinah Maria Mulock Craik’s public-domain collection.",
+  "note": "The public-domain text of “The Bremen Town Musicians” is reproduced directly from this edition. Gutenberg illustration placeholders were omitted; line wrapping and page divisions are editorial.",
   "rights": {
     "status": "verified",
     "basis": "Source edition published in the nineteenth century and identified as public domain by Project Gutenberg.",
@@ -37,25 +37,57 @@
   "art": "musicians",
   "scenes": [
     [
-      "An old donkey left home and set out for Bremen. “Perhaps I can become a town musician,” he thought."
+      "There was a man who owned a donkey, which had carried his sacks to the mill industriously for many years, but whose strength had come to an end, so that the poor beast grew more and more unfit for work. The master determined to stop his food, but the donkey, discovering that there was no good intended to him, ran away and took the road to Bremen: \"There,\" thought he, \"I can turn Town Musician.\"",
+      "When he had gone a little way, he found a hound lying on the road and panting, like one who was tired with running. \"Hollo! what are you panting so for, worthy Seize 'em?\" asked the donkey.",
+      "\"Oh!\" said the dog, \"just because I am old, and get weaker every day, and cannot go out hunting, my master wanted to kill me, so I have taken leave of him; but how shall I gain my living now?\""
     ],
     [
-      "On the road he met an old dog, an old cat, and a rooster in trouble. “Come with me,” said the donkey. “Together we can make music.”"
+      "\"I'll tell you what,\" said the donkey, \"I am going to Bremen to be Town Musician; come with me and take to music too. I will play the lute, and you shall beat the drum.\"",
+      "The dog liked the idea, and they travelled on. It was not long before they saw a cat sitting by the road, making a face like three rainy days.",
+      "\"Now then, what has gone wrong with you old Whiskers?\" said the donkey.",
+      "\"Who can be merry when his neck is in danger?\" answered the cat. \"Because I am advanced in years, and my teeth are blunt, and I like sitting before the fire and purring better than chasing the mice about, my mistress wanted to drown me. I have managed to escape, but good advice is scarce; tell me where I shall go to?\"",
+      "\"Come with us two to Bremen; you understand serenading; you also can become a Town Musician.\""
     ],
     [
-      "At night they saw a cottage where robbers feasted. The animals stacked themselves—donkey, dog, cat, then rooster—and performed their loudest song through the window."
+      "The cat thought it a capital idea, and went with them. Soon after the three runaways came to a farmyard, and there sat a cock on the gate, crowing with might and main.",
+      "\"You crow loud enough to deafen one,\" said the donkey; \"what is the matter with you?\"",
+      "\"I prophesied fair weather,\" said the cock, \"because it is our good mistress's washing-day, and she wants to dry the clothes; but because to-morrow is Sunday, and company is coming, the mistress has no pity on me, and has told the cook to put me into the soup to-morrow, and I must have my head cut off to-night: so now I am crowing with all my might as long as I can.\""
     ],
     [
-      "The terrified robbers fled. When one crept back, the cat scratched, the dog barked, the donkey kicked, and the rooster crowed from the roof. He raced away with a wild tale of monsters."
+      "\"O you old Redhead,\" said the donkey, \"you had better come with us; we are going to Bremen, where you will certainly find something better than having your head cut off; you have a good voice, and if we all make music together, it will be something striking.\"",
+      "The cock liked the proposal, and they went on, all four together."
     ],
     [
-      "The four friends found the cottage so comfortable that they never reached Bremen.",
-      "They had set out to become musicians, and in their own noisy fashion, music had found them a home."
+      "But they could not reach the city of Bremen in one day, and they came in the evening to a wood, where they agreed to spend the night. The donkey and the dog laid themselves down under a great tree, but the cat and the cock went higher--the cock flying up to the topmost branch, where he was safest. Before he went to sleep he looked round towards all the four points of the compass, and he thought he saw a spark shining in the distance. He called to his companions that there must be a house not far off; for he could see a light. The donkey said: \"Then we must rise and go to it, for the lodgings here are very bad;\" and the dog said, \"Yes; a few bones with a little flesh on them would do me good.\" So they took the road in the direction where the light was, and soon saw it shine brighter; and it got larger and larger till they came to a brilliantly-illumined robber's house. The donkey, being the biggest, got up at the window and looked in."
+    ],
+    [
+      "\"What do you see, Greybeard?\" said the cock.",
+      "\"What do I see?\" answered the donkey: \"a table covered with beautiful food and drink, and robbers are sitting round it and enjoying themselves.\"",
+      "\"That would do nicely for us,\" said the cock.",
+      "\"Yes, indeed, if we were only there,\" replied the donkey."
+    ],
+    [
+      "The animals then consulted together how they should manage to drive out the robbers, till at last they settled on a plan. Tie donkey was to place himself with his forefeet on the window-sill, the dog to climb on the donkey's back, and the cat on the dog's, and, at last, the cock was to fly up and perch himself on the cat's head. When that was done, at a signal they began their music all together: the donkey brayed, the dog barked, the cat mewed, and the cock crowed; then, with one great smash, they dashed through the window into the room, so that the glass clattered down. The robbers jumped up at this dreadful noise, thinking that nothing less than a ghost was coming in, and ran away into the wood in a great fright. The four companions then sat down at the table, quite content with what was left there, and ate as if they were expecting to fast for a month to come."
+    ],
+    [
+      "When the four musicians had finished, they put out the light, and each one looked out for a suitable and comfortable sleeping-place. The donkey lay down on the dunghill, the dog behind the door, the cat on the hearth near the warm ashes, and the cock set himself on the hen-roost; and, as they were all tired with their long journey, they soon went to sleep. Soon after midnight, as the robbers in the distance could see that no more lights were burning in the house, and as all seemed quiet, the captain said, \"We ought not to have let ourselves be scared so easily,\" and sent one of them to examine the house. The messenger found everything quiet, went into the kitchen to light a candle, and, thinking the cat's shining fiery eyes were live coals, he held a match to them to light it. But the cat did not understand the joke, flew in his face, spat at him, and scratched. He was dreadfully frightened, ran away, and was going out of the back door; when the dog, who was lying there, jumped up and bit him in the leg. As he ran through the yard, past the dunghill, the donkey gave him a good kick with his hind-foot; and the cock being awakened, and made quite lively by the noise, called out from the hen-roost \"Cock-a-doodle-doo!\""
+    ],
+    [
+      "The robber ran as hard as he could, back to the captain, and said: \"Oh, dear! in the house sits a horrid old witch, who blew at me, and scratched my face with her long fingers; and by the door stands a man with a knife, who stabbed me in the leg; and in the yard lies a black monster, who hit me with a club; and up on the roof there sits the judge, who called out, 'Bring the rascal up here'--so I made the best of my way off.\"",
+      "From that time the robbers never trusted themselves again in the house; but the four musicians liked it so well that they could not make up their minds to leave it, and spent there the remainder of their days, as the last person who told the story is ready to avouch for a fact."
     ]
   ],
   "image": "/folklore/art/covers/bremen-town-musicians.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/bremen-town-musicians/03-turning.webp", "alt": "Donkey, dog, cat, and rooster stack themselves outside a glowing cottage window and make their loudest music."},
-    {"page": 4, "image": "/folklore/art/bremen-town-musicians/05-ending.webp", "alt": "The four animal friends rest contentedly together inside the cottage that became their home."}
+    {
+      "page": 4,
+      "image": "/folklore/art/bremen-town-musicians/03-turning.webp",
+      "alt": "Donkey, dog, cat, and rooster stack themselves outside a glowing cottage window and make their loudest music."
+    },
+    {
+      "page": 8,
+      "image": "/folklore/art/bremen-town-musicians/05-ending.webp",
+      "alt": "The four animal friends rest contentedly together inside the cottage that became their home."
+    }
   ]
 }

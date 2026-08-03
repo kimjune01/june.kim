@@ -1,30 +1,88 @@
-# Folklore records
+# Folklore collection
 
-Each `.json` file is one complete story. The directory is the `folklore` content
-collection; the zod schema in `src/content.config.ts` validates every record during
-the Astro build.
+This is a small, illustrated reading room for familiar folk tales and fables. Each
+story should be pleasant to read on a tablet and should point interested readers to
+a reasonable public-domain edition or interpretation.
 
-- `id` is the permanent URL/storage key and must be unique.
-- `originalTitle` is the source-language or traditional title shown beside the English title. If the historical source does not preserve one, say so rather than back-translating.
-- `order` controls display order.
-- `featured` controls the curated first shelf; all stories still appear under regions.
-- `region` creates or selects a regional shelf.
-- `culture` is the more specific tradition shown beneath that region.
-- `language` describes the adaptation, while `themes` support future discovery.
-- `art` selects a built-in illustration. Unknown keys receive a neutral book cover,
-  so artwork can be added after editorial entry rather than blocking it.
-- `scenes` is an array of pages, each containing an array of paragraphs.
-- Story length is editorial, not templated. Use as many pages as the tale's natural
-  rhythm needs; five pages is not a target or requirement.
-- Each finished story targets exactly three illustrations: its cover, one turning-point
-  image, and one ending image. `pageArt` attaches the two interior images to zero-based
-  page numbers. Records without both entries are still editorial drafts, even when their
-  text and cover are present.
-- The reader builds a citation from `sourceTitle`, `sourceAuthor`, `sourceYear`, and
-  `sourceUrl` and displays it after the text on the final story page.
-- `rights` records the edition-level determination, jurisdiction, basis, and date.
-- `review` tracks adaptation and cultural review independently. New work should begin
-  as `draft` / `pending`; those states are visible in “For grown-ups & sources.”
+It is not a critical edition or archival transcription project. The aim is simpler:
+keep a readable copy of each tale, identify where that version came from, and make it
+easy to explore related traditions.
 
-Copy an existing record when adding a tale. A malformed record or duplicate ID stops
-the build with a filename and validation error.
+Each JSON file is one story and acts as the source of truth for its shelves, card,
+reader pages, citation, and illustrations. Astro validates the records during builds.
+
+## Editorial approach
+
+For each story:
+
+1. Choose a recognizable version from a credible public-domain collection.
+2. Confirm that the linked edition contains the story and is reusable in the intended
+   publication jurisdiction.
+3. Make a comfortable reading copy. It is fine to remove book furniture, repair
+   obvious transcription errors, normalize awkward line breaks, and divide the story
+   into screen-sized pages.
+4. Keep the tale recognizably faithful to the chosen version. If it is substantially
+   shortened, simplified, combined with another version, or newly written, describe
+   it as a retelling rather than implying that it is the source text.
+5. Give the reader a useful pointer: collection title, author, editor or translator,
+   year, and a working link to the edition.
+
+This project does not need to settle which variant is definitive. Older collections
+may use dated wording or framing; use reasonable judgment about audience and context.
+Legal availability does not automatically make every presentation considerate, but
+formal scholarly review is not a prerequisite for adding a story.
+
+Set `published` to `false` when the source pointer is wrong, missing, or still being
+worked out. The record will continue to validate without appearing in the library.
+
+## Record anatomy
+
+- `id` is the permanent URL and local-storage key. Avoid changing it after release.
+- `order` controls shelf order; `featured` selects the opening shelf.
+- `published: false` withholds an incomplete record. It may be omitted otherwise.
+- `title` is the English reading title. `originalTitle` records a documented
+  source-language or traditional title when one is reasonably available; avoid
+  presenting a newly back-translated title as historical fact.
+- `tradition`, `region`, and `culture` organize the shelves. Use the most useful
+  attribution supported by the chosen collection.
+- `place`, `ages`, `minutes`, and `themes` help readers browse. `language` describes
+  the text displayed by the site.
+- `sourceTitle`, `sourceAuthor`, `sourceYear`, and `sourceUrl` form the pointer shown
+  at the end of the story. `note` briefly explains how the reading copy relates to it.
+- `rights` records the edition-level rights check. `review` is lightweight editorial
+  bookkeeping for text and cultural checks, not a claim of scholarly certification.
+- `scenes` contains the reading pages; each page is an array of paragraphs. Page
+  divisions are part of the screen layout, not the underlying tale.
+- `image` is the cover. `pageArt` places two additional illustrations on distinct,
+  zero-based, non-cover pages. Every image needs useful alt text.
+- `art`, `artLabel`, `color`, and `colorSoft` supply visual metadata and palette.
+
+## Reading and illustration rhythm
+
+Story length follows the story. Five pages is neither a target nor a maximum. Break
+at natural paragraph or scene boundaries and favor comfortable tablet-sized pages.
+
+Each finished story has three illustrations: a cover, a turning-point image, and an
+ending image. They should keep a consistent cast and visual language, suit the tale’s
+setting where practical, and appear near the passage they depict. All artwork is shown
+at its natural aspect ratio; the reader scrolls rather than cropping an illustration.
+
+If page divisions change, recheck `pageArt.page`. The schema rejects cover placements,
+out-of-range indexes, duplicate interior pages, and records without two interior images.
+
+## Adding a story
+
+Copy a nearby JSON record and assign a unique, stable `id`. Put optimized web images
+under `public/folklore/art/`, following the existing cover and story-directory naming
+conventions. Then run:
+
+```sh
+pnpm exec astro build
+```
+
+The schema lives in `src/content.config.ts`. `src/lib/folklore.ts` rejects duplicate
+IDs, orders the collection, and filters withheld records. A malformed record stops the
+build with a validation error.
+
+The practical test is straightforward: can a child or grown-up enjoy this version,
+and can they follow the citation to understand where it came from?

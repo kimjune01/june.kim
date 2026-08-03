@@ -2,6 +2,7 @@
   "id": "gigantic-turnip",
   "order": 12,
   "featured": true,
+  "published": false,
   "title": "The Gigantic Turnip",
   "originalTitle": "Репка · Repka",
   "tradition": "Russian tale",

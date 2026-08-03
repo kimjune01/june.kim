@@ -10,7 +10,7 @@
   "place": "Gangwon, Korea",
   "language": "English",
   "ages": "7–11",
-  "minutes": 4,
+  "minutes": 6,
   "themes": [
     "cleverness",
     "gratitude",
@@ -22,7 +22,7 @@
   "sourceAuthor": "William Elliot Griffis",
   "sourceYear": "1922",
   "sourceUrl": "https://www.gutenberg.org/ebooks/67180",
-  "note": "A new, shortened adaptation of a tale printed in a 1922 collection. The source calls the tiger “Mountain Uncle” and places him in Kang Wen, an older spelling of Gangwon.",
+  "note": "The public-domain text of “The Unmannerly Tiger” is reproduced directly from this edition. Gutenberg illustration placeholders were omitted; line wrapping and page divisions are editorial.",
   "rights": {
     "status": "verified",
     "basis": "Source edition published before 1929 and identified as public domain by Project Gutenberg.",
@@ -37,30 +37,52 @@
   "art": "tiger",
   "scenes": [
     [
-      "High in the mountains of Gangwon lived a great striped tiger. The villagers called him Mountain Uncle.",
-      "He boasted that no hunter could fool him. He knew every rope, every cage, every trail of leaves laid over a pit—or so he believed."
+      "“Mountain Uncle” was the name given by the villagers to a splendid striped tiger that lived among the highlands of Kang Wen, the long province which from its cliffs overlooks the Sea of Japan. Hunters rarely saw him, and among his fellow-tigers the Mountain Uncle boasted that, though often fired at, he had never been wounded; while as for traps—he knew all about them and laughed at the devices used by man to catch him and to strip him of his coveted skin. In summer he kept among the high hills and lived on fat deer. In winter, when heavy snow, biting winds, and terrible cold kept human beings within doors, old Mountain Uncle would sally forth to the villages. There he would prowl around the stables, the cattle enclosures, or the pig pens, in hopes of clawing and dragging out a young donkey, a fat calf, or a suckling pig. Too often he succeeded, so that he was the terror of the country for leagues around."
     ],
     [
-      "One autumn morning, Mountain Uncle rounded a rock and stopped. Another tiger stood directly in his path.",
-      "He twitched his tail. The stranger twitched too. He bared his teeth. The stranger did the same.",
-      "Mountain Uncle sprang—and crashed through a roof of branches into a deep trap. The fierce stranger had been his own face in a mirror."
+      "One day in autumn, Mountain Uncle was rambling among the lower hills. Though far from any village, he kept a sharp lookout for traps and hunters, but none seemed to be near. He was very hungry and hoped for game.",
+      "But on coming round a great rock, Mountain Uncle suddenly saw in his path some feet ahead, as he thought, a big tiger like himself.",
+      "He stopped, twitched his tail most ferociously as a challenge, showed fight by growling, and got ready to spring. What was his surprise to see the other tiger doing exactly the same things. Mountain Uncle was sure there would be a terrible struggle, but this was just what he wanted, for he expected to win."
     ],
     [
-      "A Buddhist monk heard him groaning. Because the monk tried to be kind to every living creature, he lowered a log into the pit.",
-      "The tiger climbed out, shook the dust from his coat, and bowed. “Thank you,” he said. “But I am terribly hungry, so now I must eat you.”"
+      "But after a tremendous leap in the air he landed in a pit and all of a heap, bruised and disappointed. There was no tiger to be seen, but instead a heavy lid of logs had closed over his head with a crash and he lay in darkness. Old Mountain Uncle was caught at last. Yes, the hunter had concealed the pit with sticks and leaves, and on the upright timbers, covered with vines and brushwood, had hung a looking-glass. Mountain Uncle had often beheld his own face and body in the water, when he stooped to drink, but this time not seeing any water he was deceived into thinking a real tiger wanted to fight him.",
+      "By and by, a Buddhist priest came along, who believed in being kind to all living creatures. Hearing an animal moaning, he opened the trap and lifting the lid saw old Mountain Uncle at the bottom licking his bruised paw."
     ],
     [
-      "The monk protested. A tree rustled that such ingratitude was shameful. A rock agreed. Still the tiger crept closer.",
-      "At last a little toad offered to judge—but first, he said, he must inspect the trap. While the tiger hurried ahead, the monk ran safely home."
+      "“Oh, please, Mr. Man, let me get out. I’m hurt badly,” said the tiger.",
+      "Thereupon the priest lifted up one of the logs and slid it down, until it rested on the bottom of the pit. Then the tiger climbed up and out. Old Mountain Uncle expressed his thanks volubly, saying to the shaven head:",
+      "“I am deeply grateful to you, sir, for helping me out of my trouble. Nevertheless, as I am very hungry, I must eat you up.”",
+      "The priest, very much surprised and indignant, protested against such vile ingratitude. To say the least, it was very bad manners and entirely against the law of the mountains, and he appealed to a big tree to decide between them.",
+      "The spirit in the tree spoke through the rustling leaves and declared that the man should go free and that the tiger was both ungrateful and unmannerly."
     ],
     [
-      "The toad slipped into a narrow crack and called out his decision: “A creature who answers kindness with cruelty has very bad manners indeed.”",
-      "Mountain Uncle clawed uselessly at the stone. The little toad remained safe inside, and told the story for many years: strength may be loud, but good sense knows when to hop aside."
+      "Old Mountain Uncle was not satisfied yet, especially as the priest was unusually fat and would make a very good dinner. However, he allowed the man to appeal once more and this time to a big rock.",
+      "“The man is certainly right venerable Mountain Uncle, and you are wholly wrong,” said the spirit in the rock. “Your master, the Mountain Spirit, who rides on the green bull and the piebald horse to punish his enemies, will certainly chastise you if you devour this priest. You will be no fit messenger of the Mountain Lord if you are so ungrateful as to eat the man who saved you from starvation or death in the trap. It is shockingly bad manners even to think of such a thing.”",
+      "The tiger felt ashamed, but his eyes still glared with hunger; so, to be sure of saving his own skin, the priest proposed to make the toad a judge. The tiger agreed."
+    ],
+    [
+      "But the toad, with his gold-rimmed eyes, looked very wise, and instead of answering quickly, as the tree and rock did, deliberated a long time. The priest’s heart sank while the tiger moved his jaws as if anticipating his feast. He felt sure that Old Speckled Back would decide in his favor.",
+      "“I must go and see the trap before I can make up my mind,” said the toad, who looked as solemn as a magistrate. So all three leaped, hopped, or walked to the trap. The tiger, moving fast, was there first, which was just what the toad, who was a friend of the priest, wanted. Besides, Old Speckled Back was diligently looking for a crack in the rocks near by."
+    ],
+    [
+      "So while the toad and the tiger were studying the matter, the priest ran off and saved himself within the monastery gates. When at last Old Speckled Back decided against Mountain Uncle and in favor of the man, he had no sooner finished his judgment than he hopped into the rock crevice, and, crawling far inside defied the tiger, calling him an unmannerly brute and an ungrateful beast, and daring him to do his worst.",
+      "Old Mountain Uncle was so mad with rage and hunger that his craftiness seemed turned into stupidity. He clawed at the rock to get at the toad, but Speckled Back, safe within, only laughed. Unable to do any harm, the tiger flew into a passion of rage. The hotter his temper grew, the more he lost his wit. Poking his nose inside the crack he rubbed it so hard on the rough rock that he soon bled to death."
+    ],
+    [
+      "When the hunter came along he marveled at what he saw, but he was glad to get rich by selling the tiger’s fur, bones, and claws; for in Korea nothing sells so well as a tiger. As for the toad, he told to several generations of his descendants the story of how he outwitted the old Mountain Uncle."
     ]
   ],
   "image": "/folklore/art/covers/unmannerly-tiger.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/unmannerly-tiger/03-turning.webp", "alt": "A Buddhist monk lowers a log into the stone pit so Mountain Uncle Tiger can climb out."},
-    {"page": 4, "image": "/folklore/art/unmannerly-tiger/05-ending.webp", "alt": "A tiny toad speaks safely from a narrow stone crack while the large tiger waits outside."}
+    {
+      "page": 4,
+      "image": "/folklore/art/unmannerly-tiger/03-turning.webp",
+      "alt": "A Buddhist monk lowers a log into the stone pit so Mountain Uncle Tiger can climb out."
+    },
+    {
+      "page": 7,
+      "image": "/folklore/art/unmannerly-tiger/05-ending.webp",
+      "alt": "A tiny toad speaks safely from a narrow stone crack while the large tiger waits outside."
+    }
   ]
 }

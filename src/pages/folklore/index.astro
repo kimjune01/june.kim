@@ -109,7 +109,14 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       .story-kicker { margin: 0 0 .7rem; color: var(--accent); font-size: .76rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
       .story-heading { max-width: 18ch; margin: 0 0 var(--sp-4); font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: clamp(2rem, 4.5vw, 3.45rem); font-weight: 650; line-height: 1.05; letter-spacing: -.03em; }
       .story-original-title { display: block; margin-top: .35rem; color: var(--muted); font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif; font-size: .42em; font-weight: 400; line-height: 1.25; letter-spacing: 0; }
-      .hero-art { display: block; width: min(100%, 34rem); max-height: 36vh; margin: var(--sp-3) auto 0; }
+      .reader .hero-art {
+        display: block;
+        width: min(100%, 34rem);
+        height: auto;
+        max-height: none;
+        margin: var(--sp-3) auto 0;
+        object-fit: contain;
+      }
       .cover-text { margin-top: var(--sp-5); }
       .story-text { width: min(65ch, 100%); margin-inline: auto; padding-top: clamp(2rem, 10vh, 7rem); font-family: 'Charter', 'Bitstream Charter', 'Sitka Text', Cambria, serif; font-size: calc(clamp(1.15rem, 2.1vw, 1.4rem) * var(--font-scale)); line-height: 1.4; letter-spacing: 0; }
       .story-text.cover-text { padding-top: 0; }
@@ -118,8 +125,8 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       .story-source-label { display: block; margin-bottom: .2rem; color: var(--accent); font-size: .64rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
       .story-source cite { font-style: normal; }
       .story-source a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: .2em; }
-      .scene-art { width: min(100%, 38rem); margin: 0 auto clamp(1.2rem, 3vw, 2rem); }
-      .scene-art img { display: block; width: 100%; max-height: 45vh; border-radius: 1.2rem; object-fit: cover; box-shadow: 0 .8rem 2.2rem rgba(60,45,25,.12); }
+      .scene-art { width: min(100%, 34rem); margin: 0 auto clamp(1.2rem, 3vw, 2rem); }
+      .scene-art img { display: block; width: 100%; height: auto; max-height: none; border-radius: 1.2rem; object-fit: contain; box-shadow: 0 .8rem 2.2rem rgba(60,45,25,.12); }
       .scene:has(.scene-art) .story-text { padding-top: 0; }
       .page-number { display: block; margin: auto auto 0; padding-top: var(--sp-5); color: var(--muted); font-size: .72rem; font-weight: 750; letter-spacing: .1em; text-align: center; }
 
@@ -152,7 +159,6 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       @keyframes arrive-forward { from { opacity: 0; transform: translateX(1rem); } to { opacity: 1; transform: none; } }
       @keyframes arrive-back { from { opacity: 0; transform: translateX(-1rem); } to { opacity: 1; transform: none; } }
       @media (min-width: 900px) { .library-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, .72fr); column-gap: clamp(3rem, 7vw, 7rem); align-items: end; } .library-head .eyebrow { grid-column: 1; } .library-head h1 { grid-column: 1; } .library-head .intro { grid-column: 2; grid-row: 1 / span 2; margin: 0 0 .2rem; } }
-      @media (min-width: 900px) and (orientation: landscape) { .scene-inner.illustrated { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .65fr); grid-template-rows: 1fr auto; align-items: center; gap: 1.5rem clamp(1.5rem, 4vw, 3.5rem); } .scene-inner.illustrated .scene-art { width: 100%; margin: 0; } .scene-inner.illustrated .scene-art img { max-height: min(58vh, 32rem); } .scene-inner.illustrated .story-text { width: 100%; margin: 0; } .scene-inner.illustrated .story-source { grid-column: 2; width: 100%; margin-top: 0; } .scene-inner.illustrated .page-number { grid-column: 1 / -1; } }
       @media (max-width: 760px) { .library { padding-inline: 0; } .library-head, .library-foot { margin-inline: 1.1rem; } .library-foot { align-items: flex-start; flex-direction: column; } }
       @media (max-width: 470px) { .back-label { display: none; } .reader-title { max-width: 50vw; } }
       @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; transition-duration: .001ms !important; } }
@@ -183,7 +189,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
             </StoryShelf>
           </div>)}
         </div>
-        <footer class="library-foot"><span>New adaptations from public-domain editions. No ads, accounts, or tracking. <span id="availability" role="status">Available online.</span></span><span><button id="about-open">For grown-ups &amp; sources</button> · <a class="site-link" href="/">june.kim</a></span></footer>
+        <footer class="library-foot"><span>Reading copies from public-domain editions. No ads, accounts, or tracking. <span id="availability" role="status">Available online.</span></span><span><button id="about-open">For grown-ups &amp; sources</button> · <a class="site-link" href="/">june.kim</a> · <a class="site-link" href="https://github.com/kimjune01/june.kim/tree/master/src/content/folklore" rel="external">GitHub source</a></span></footer>
       </div>
     </main>
 
@@ -198,7 +204,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       <nav class="reader-nav" aria-label="Story pages"><button id="prev" class="prev" aria-label="Previous page">←</button><div id="dots" class="dots" aria-hidden="true"></div><button id="next" class="next" aria-label="Next page">→</button></nav>
     </section>
 
-    <dialog id="colophon" class="colophon-dialog"><div class="colophon-inner"><div class="dialog-head"><h2>About this little library</h2><button id="about-close" class="icon-button" aria-label="Close">×</button></div><p class="colophon-copy">The publication target is public-domain source text presented directly, with editorial work limited to selection, page divisions, illustration, and provenance. Some records remain prototype adaptations pending replacement and are marked as drafts. Every record carries separate rights, text, and cultural-review notes.</p><ul class="source-list">{stories.map(story => <li><a href={story.sourceUrl} rel="external">{story.sourceTitle}</a> — {story.sourceAuthor}, {story.sourceYear}<p>{story.note}</p><span class="review-state">Rights: {story.rights.status}</span><span class="review-state">Text review: {story.review.adaptation}</span><span class="review-state">Cultural review: {story.review.cultural}</span><p>Rights basis: {story.rights.basis} · {story.rights.jurisdiction} · checked {story.rights.checked}</p></li>)}</ul></div></dialog>
+    <dialog id="colophon" class="colophon-dialog"><div class="colophon-inner"><div class="dialog-head"><h2>About this little library</h2><button id="about-close" class="icon-button" aria-label="Close">×</button></div><p class="colophon-copy">This is a collection of comfortable reading copies, not critical editions. Each tale follows a recognizable public-domain version and includes a pointer to the collection, author, editor, or translator behind it. The text may be cleaned up and divided for screens; substantial retellings are identified as such.</p><ul class="source-list">{stories.map(story => <li><a href={story.sourceUrl} rel="external">{story.sourceTitle}</a> — {story.sourceAuthor}, {story.sourceYear}<p>{story.note}</p><span class="review-state">Rights: {story.rights.status}</span><span class="review-state">Text review: {story.review.adaptation}</span><span class="review-state">Cultural review: {story.review.cultural}</span><p>Rights basis: {story.rights.basis} · {story.rights.jurisdiction} · checked {story.rights.checked}</p></li>)}</ul></div></dialog>
 
     <div id="art-templates" hidden aria-hidden="true">
       {stories.map(story => <template id={`art-${story.id}`}><StoryArt kind={story.art} label={story.artLabel} image={story.image} class="hero-art" /></template>)}
