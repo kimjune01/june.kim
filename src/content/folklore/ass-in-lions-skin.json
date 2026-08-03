@@ -1,0 +1,11 @@
+{
+  "id": "ass-in-lions-skin", "order": 37, "featured": false, "published": false,
+  "title": "The Ass in the Lion’s Skin", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A village road", "language": "English", "ages": "5–9", "minutes": 2,
+  "themes": ["disguise", "vanity", "truth"], "color": "#a76a32", "colorSoft": "#ecd3a4",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "An ass wearing a lion skin proudly enters a frightened village.", "art": "ass-lion-skin", "image": "/folklore/art/covers/ass-in-lions-skin.webp",
+  "pageArt": [{"page": 1, "image": "/folklore/art/ass-in-lions-skin/03-turning.webp", "alt": "The disguised Ass opens his mouth and brays as the villagers turn to look."}, {"page": 2, "image": "/folklore/art/ass-in-lions-skin/05-ending.webp", "alt": "A knowing Fox recognizes the Ass beneath the loose lion skin."}],
+  "scenes": [["An Ass once found a Lion’s skin which the hunters had left out in the sun to dry. He put it on and went towards his native village."], ["All fled at his approach, both men and animals, and he was a proud Ass that day. In his delight he lifted up his voice and brayed, but then every one knew him, and his owner came up and gave him a sound cudgelling for the fright he had caused."], ["And shortly afterwards a Fox came up to him and said: “Ah, I knew you by your voice.”", "Fine clothes may disguise, but silly words will disclose a fool."]]
+}

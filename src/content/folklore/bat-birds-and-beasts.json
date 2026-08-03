@@ -1,0 +1,37 @@
+{
+  "id": "bat-birds-and-beasts",
+  "order": 44,
+  "featured": false,
+  "published": false,
+  "title": "The Bat, the Birds, and the Beasts",
+  "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable",
+  "region": "Europe",
+  "culture": "Ancient Greece",
+  "place": "A woodland in ancient Greece",
+  "language": "English",
+  "ages": "5–9",
+  "minutes": 2,
+  "themes": ["loyalty", "identity", "friendship"],
+  "color": "#74513b",
+  "colorSoft": "#e7cfad",
+  "sourceTitle": "The Fables of Aesop",
+  "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs",
+  "sourceYear": "1894",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A bat hangs between gathered birds and beasts in a woodland.",
+  "art": "bat-birds-beasts",
+  "image": "/folklore/art/covers/bat-birds-and-beasts.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/bat-birds-and-beasts/03-turning.webp", "alt": "The bat approaches the celebrating birds, who turn him away."},
+    {"page": 2, "image": "/folklore/art/bat-birds-and-beasts/05-ending.webp", "alt": "The bat flies alone as both birds and beasts withdraw into the woodland."}
+  ],
+  "scenes": [
+    ["A great conflict was about to come off between the Birds and the Beasts. When the two armies were collected together the Bat hesitated which to join. The Birds that passed his perch said: “Come with us”; but he said: “I am a Beast.” Later on, some Beasts who were passing underneath him looked up and said: “Come with us”; but he said: “I am a Bird.”"],
+    ["Luckily at the last moment peace was made, and no battle took place, so the Bat came to the Birds and wished to join in the rejoicings, but they all turned against him and he had to fly away."],
+    ["He then went to the Beasts, but soon had to beat a retreat, or else they would have torn him to pieces. “Ah,” said the Bat, “I see now,", "“He that is neither one thing nor the other has no friends.”"]
+  ]
+}

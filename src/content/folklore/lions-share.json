@@ -1,0 +1,11 @@
+{
+  "id": "lions-share", "order": 41, "featured": false, "published": false,
+  "title": "The Lion’s Share", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "The hunting grounds", "language": "English", "ages": "6–10", "minutes": 2,
+  "themes": ["power", "fairness", "greed"], "color": "#a46b28", "colorSoft": "#edd396",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A lion stands over four shares of a stag before his uneasy hunting partners.", "art": "lions-share", "image": "/folklore/art/covers/lions-share.webp",
+  "pageArt": [{"page": 1, "image": "/folklore/art/lions-share/03-turning.webp", "alt": "The Fox, Jackal, and Wolf divide the Stag into four parts at the Lion’s command."}, {"page": 2, "image": "/folklore/art/lions-share/05-ending.webp", "alt": "The Lion guards every share while the Fox walks away with his tail lowered."}],
+  "scenes": [["The Lion went once a-hunting along with the Fox, the Jackal, and the Wolf. They hunted and they hunted till at last they surprised a Stag, and soon took its life."], ["Then came the question how the spoil should be divided. “Quarter me this Stag,” roared the Lion; so the other animals skinned it and cut it into four parts."], ["Then the Lion took his stand in front of the carcass and pronounced judgment: The first quarter is for me in my capacity as King of Beasts; the second is mine as arbiter; another share comes to me for my part in the chase; and as for the fourth quarter, well, as for that, I should like to see which of you will dare to lay a paw upon it.”", "“Humph,” grumbled the Fox as he walked away with his tail between his legs; but he spoke in a low growl—", "“You may share the labours of the great, but you will not share the spoil.”"]]
+}

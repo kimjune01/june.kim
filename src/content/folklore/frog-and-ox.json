@@ -1,0 +1,21 @@
+{
+  "id": "frog-and-ox", "order": 34, "featured": false, "published": false,
+  "title": "The Frog and the Ox", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece",
+  "place": "Beside a pool", "language": "English", "ages": "5–9", "minutes": 2,
+  "themes": ["pride", "envy", "contentment"], "color": "#477a59", "colorSoft": "#cde3b7",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A proud frog puffs himself up beside a young frog and a distant ox.", "art": "frog-ox", "image": "/folklore/art/covers/frog-and-ox.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/frog-and-ox/03-turning.webp", "alt": "The old Frog swells himself while the young Frog says the Ox was bigger."},
+    {"page": 2, "image": "/folklore/art/frog-and-ox/05-ending.webp", "alt": "The proud Frog takes one final enormous breath beside the quiet pool."}
+  ],
+  "scenes": [
+    ["“Oh Father,” said a little Frog to the big one sitting by the side of a pool, “I have seen such a terrible monster! It was as big as a mountain, with horns on its head, and a long tail, and it had hoofs divided in two.”"],
+    ["“Tush, child, tush,” said the old Frog, “that was only Farmer White’s Ox. It isn’t so big either; he may be a little bit taller than I, but I could easily make myself quite as broad; just you see.” So he blew himself out, and blew himself out, and blew himself out. “Was he as big as that?” asked he.", "“Oh, much bigger than that,” said the young Frog.", "Again the old one blew himself out, and asked the young one if the Ox was as big as that.", "“Bigger, father, bigger,” was the reply."],
+    ["So the Frog took a deep breath, and blew and blew and blew, and swelled and swelled and swelled. And then he said: “I’m sure the Ox is not as big as this. But at this moment he burst."]
+  ]
+}

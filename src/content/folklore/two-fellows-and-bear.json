@@ -1,0 +1,11 @@
+{
+  "id": "two-fellows-and-bear", "order": 38, "featured": false, "published": false,
+  "title": "The Two Fellows and the Bear", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A woodland path", "language": "English", "ages": "6–10", "minutes": 2,
+  "themes": ["friendship", "loyalty", "danger"], "color": "#67503c", "colorSoft": "#ddccb1",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28", "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A bear sniffs one traveller lying still while the other hides in a tree.", "art": "fellows-bear", "image": "/folklore/art/covers/two-fellows-and-bear.webp",
+  "pageArt": [{"page": 1, "image": "/folklore/art/two-fellows-and-bear/03-turning.webp", "alt": "The Bear lowers its muzzle beside the traveller lying face down in the leaves."}, {"page": 2, "image": "/folklore/art/two-fellows-and-bear/05-ending.webp", "alt": "The two travellers speak beneath the tree after the Bear has gone."}],
+  "scenes": [["Two Fellows were travelling together through a wood, when a Bear rushed out upon them. One of the travellers happened to be in front, and he seized hold of the branch of a tree, and hid himself among the leaves."], ["The other, seeing no help for it, threw himself flat down upon the ground, with his face in the dust. The Bear, coming up to him, put his muzzle close to his ear, and sniffed and sniffed. But at last with a growl he shook his head and slouched off, for bears will not touch dead meat."], ["Then the fellow in the tree came down to his comrade, and, laughing, said “What was it that Master Bruin whispered to you?”", "“He told me,” said the other,", "“Never trust a friend who deserts you at a pinch.”"]]
+}

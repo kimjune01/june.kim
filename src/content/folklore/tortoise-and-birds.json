@@ -1,0 +1,20 @@
+{
+  "id": "tortoise-and-birds", "order": 46, "featured": false, "published": false,
+  "title": "The Tortoise and the Birds", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A rocky country in ancient Greece", "language": "English", "ages": "7–11", "minutes": 2,
+  "themes": ["ambition", "trust", "danger"], "color": "#687146", "colorSoft": "#dce0ae",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "An eagle carries a tortoise high above a rocky landscape.", "art": "tortoise-birds", "image": "/folklore/art/covers/tortoise-and-birds.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/tortoise-and-birds/03-turning.webp", "alt": "A crow speaks to the eagle carrying the tortoise above sharp rocks."},
+    {"page": 2, "image": "/folklore/art/tortoise-and-birds/05-ending.webp", "alt": "The eagle and crow descend toward the cracked shell on a sharp rock."}
+  ],
+  "scenes": [
+    ["A Tortoise desired to change its place of residence, so he asked an Eagle to carry him to his new home, promising her a rich reward for her trouble. The Eagle agreed and seizing the Tortoise by the shell with her talons soared aloft."],
+    ["On their way they met a Crow, who said to the Eagle: “Tortoise is good eating.” “The shell is too hard,” said the Eagle in reply. “The rocks will soon crack the shell,” was the Crow’s answer;"],
+    ["and the Eagle, taking the hint, let fall the Tortoise on a sharp rock, and the two birds made a hearty meal of the Tortoise.", "Never soar aloft on an enemy’s pinions."]
+  ]
+}

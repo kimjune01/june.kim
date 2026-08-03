@@ -1,0 +1,46 @@
+{
+  "id": "tale-of-bamboo-cutter",
+  "order": 52,
+  "published": false,
+  "featured": false,
+  "title": "The Tale of the Bamboo Cutter",
+  "originalTitle": "竹取物語 · Taketori Monogatari",
+  "tradition": "Japanese monogatari",
+  "region": "Asia",
+  "culture": "Japan",
+  "place": "A bamboo grove, the imperial court, and the moon",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 6,
+  "themes": ["the moon", "belonging", "farewell"],
+  "color": "#66735c",
+  "colorSoft": "#d4d8bf",
+  "sourceTitle": "The Tale of the Bamboo Cutter",
+  "sourceAuthor": "Anonymous; illustrated Japanese manuscript",
+  "sourceYear": "Edo period, 17th century",
+  "sourceUrl": "https://www.loc.gov/resource/gdcwdl.wdl_07354/",
+  "note": "A concise reading-copy retelling of the public-domain Taketori Monogatari, with the Library of Congress illustrated manuscript as its source pointer. It is presented as a retelling rather than a transcription of that Japanese manuscript.",
+  "rights": {
+    "status": "verified",
+    "basis": "The underlying tale dates to the early Heian period, and the linked 17th-century illustrated manuscript is made available by the Library of Congress as a public-domain historical work. This English reading copy is newly written for the collection.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A bamboo cutter discovers a tiny shining princess inside a glowing bamboo stalk.",
+  "art": "bamboo-princess",
+  "image": "/folklore/art/covers/tale-of-bamboo-cutter.webp",
+  "pageArt": [
+    {"page": 3, "image": "/folklore/art/tale-of-bamboo-cutter/03-turning.webp", "alt": "Kaguya-hime gives five noble suitors the impossible tasks that will test their claims."},
+    {"page": 6, "image": "/folklore/art/tale-of-bamboo-cutter/05-ending.webp", "alt": "A luminous procession carries Kaguya-hime toward the full moon as her elderly parents say farewell."}
+  ],
+  "scenes": [
+    ["Long ago, an old bamboo cutter named Taketori no Okina went each day into the grove. One evening he saw a single bamboo stalk glowing like a lantern. Inside it sat a tiny girl, no larger than his thumb.", "He carried her home to his wife, and together they raised her as their daughter. They named her Nayotake no Kaguya-hime—the Shining Princess of the Young Bamboo."],
+    ["After that day, the old man often found gold inside the bamboo he cut. The family prospered, and the tiny child grew with marvelous speed. In only three months she became a young woman whose beauty seemed to fill the house with light."],
+    ["News of Kaguya-hime traveled throughout the land. Five noblemen came to ask for her hand, each promising that his devotion was unequalled. Kaguya-hime did not wish to marry any of them.", "She told each suitor to bring her an impossible treasure: the Buddha’s stone bowl, a jeweled branch from Mount Hōrai, the robe of the fire-rat, a jewel from a dragon’s neck, or the cowrie shell hidden by a swallow."],
+    ["Some suitors tried to fool her with imitations. Others set out and turned back when the journey became dangerous. Every false treasure revealed itself, and every boast came to nothing.", "At last the emperor himself heard of Kaguya-hime. He admired her deeply, but she would not leave her parents or go to the palace. The emperor accepted her answer, and for several years they exchanged letters."],
+    ["Then, as autumn approached, Kaguya-hime began to gaze at the moon and weep. She told her parents that she had come from the Moon Capital and must return on the next full moon.", "The emperor sent soldiers to guard the house. The bamboo cutter barred every door. But when the moon rose, a radiance brighter than day poured over the roof, and the soldiers found that they could not lift their bows."],
+    ["A heavenly procession descended along a road of light. Before Kaguya-hime put on the feathered robe that would make her forget the earth, she embraced her parents and left a letter and an elixir of immortality for the emperor.", "The moon people carried her into the sky. Her parents watched until the last light vanished."],
+    ["The emperor read Kaguya-hime’s farewell, but he would not drink the elixir. Without her, he said, endless life held no joy.", "He ordered that the letter and the elixir be carried to the highest mountain and burned. The smoke rose toward the moon, and the mountain came to be called Fuji—the immortal mountain."]
+  ]
+}

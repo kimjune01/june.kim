@@ -1,0 +1,12 @@
+{
+  "id": "goose-with-golden-eggs", "order": 29, "published": false, "featured": false,
+  "title": "The Goose With the Golden Eggs", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesopic fable", "region": "Europe", "culture": "Ancient Greece", "place": "A countryman’s farm", "language": "English", "ages": "6–10", "minutes": 2,
+  "themes": ["greed", "patience", "gratitude"], "color": "#a47b32", "colorSoft": "#ead9ab",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and told anew by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "The public-domain text of “The Goose With the Golden Eggs” is reproduced directly from this edition. Page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"}, "artLabel": "A countryman discovers a shining golden egg in a goose’s nest.", "art": "golden-goose",
+  "scenes": [["One day a countryman going to the nest of his Goose found there an egg all yellow and glittering. When he took it up it was as heavy as lead and he was going to throw it away, because he thought a trick had been played upon him."], ["But he took it home on second thoughts, and soon found to his delight that it was an egg of pure gold. Every morning the same thing occurred, and he soon became rich by selling his eggs."], ["As he grew rich he grew greedy; and thinking to get at once all the gold the Goose could give, he killed it and opened it only to find nothing.", "Greed oft o’er reaches itself."]],
+  "image": "/folklore/art/covers/goose-with-golden-eggs.webp", "pageArt": [{"page": 1, "image": "/folklore/art/goose-with-golden-eggs/03-turning.webp", "alt": "The delighted countryman holds a heavy golden egg beside the goose’s nest."}, {"page": 2, "image": "/folklore/art/goose-with-golden-eggs/05-ending.webp", "alt": "The countryman sits in regret beside the goose and an empty nest."}]
+}

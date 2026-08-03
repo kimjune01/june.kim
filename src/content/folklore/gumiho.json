@@ -1,0 +1,23 @@
+{
+  "id": "gumiho", "order": 55, "published": false, "featured": false,
+  "title": "A Story of the Fox", "originalTitle": "구미호 · Gumiho",
+  "tradition": "Korean supernatural tale", "region": "Asia", "culture": "Korea", "place": "A provincial governor’s residence in Pyongan",
+  "language": "English", "ages": "10–14", "minutes": 3,
+  "themes": ["transformation", "discernment", "fox spirits"], "color": "#8a4434", "colorSoft": "#dfbd9d",
+  "sourceTitle": "Korean Folk Tales: Imps, Ghosts and Fairies", "sourceAuthor": "Im Bang and Yi Ryuk; translated by James S. Gale", "sourceYear": "1913", "sourceUrl": "https://www.gutenberg.org/ebooks/51002",
+  "note": "A reading copy of Im Bang’s public-domain “A Story of the Fox,” with page divisions and light line-wrap cleanup. Korean fox-spirit traditions have many variants; this telling involves a fox transformed into a woman but does not describe nine visible tails.",
+  "rights": {"status": "verified", "basis": "The 1913 English translation is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A mysterious fox-woman appears at midnight in a scholar’s garden pavilion.", "art": "gumiho",
+  "image": "/folklore/art/covers/gumiho.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/gumiho/03-turning.webp", "alt": "Yi Kwai watches the silent stranger in the lamplit pavilion and suspects that she is a fox spirit."},
+    {"page": 3, "image": "/folklore/art/gumiho/05-ending.webp", "alt": "The fox spirit escapes through the moonlit garden gate while Yi Kwai calls for help."}
+  ],
+  "scenes": [
+    ["Yi Kwai was the son of a minister. He passed his examinations and held high office. When his father was Governor of Pyong-an Province, Kwai was a little boy and accompanied him.", "In the rear garden of the official quarters was a pavilion, called the Hill Pagoda, that was connected by a narrow gateway with the public hall. Frequently Kwai took one of the yamen boys with him and went there to study."],
+    ["Once at night when it had grown late and the boy who accompanied him had taken his departure, the door opened suddenly and a young woman came in. Her clothes were neat and clean, and she was very pretty. Kwai looked carefully at her, but did not recognize her.", "He remained looking at her, in doubt as to who she was, while she on the other hand took her place in the corner of the room and said nothing."],
+    ["“Who are you?” he asked. She merely laughed and made no reply. He called her. She came and knelt down before him. The woman smiled and pretended to enjoy his welcome.", "He concluded, however, that she was not a real woman, but a goblin of some kind, or perhaps a fox, and what to do he knew not."],
+    ["Suddenly he decided on a plan, caught her, swung her on to his back, and rushed out through the gate into the yamen quarters, where he shouted at the top of his voice for his stepmother and the servants to come.", "It was midnight and all were asleep. No one replied, and no one came. The woman, then, being on his back, bit him furiously at the nape of the neck. By this he knew that she was the fox. Unable to stand the pain of it, he loosened his grasp, when she jumped to the ground, made her escape and was seen no more."]
+  ]
+}

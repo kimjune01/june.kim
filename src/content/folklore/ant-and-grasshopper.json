@@ -1,0 +1,21 @@
+{
+  "id": "ant-and-grasshopper", "order": 23, "featured": false,
+  "title": "The Ant and the Grasshopper", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A field through summer and winter",
+  "language": "English", "ages": "6–10", "minutes": 2,
+  "themes": ["preparation", "work", "seasons"], "color": "#68733d", "colorSoft": "#d8d39b",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "A reading copy of Joseph Jacobs’s public-domain text; line wrapping and page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "An ant carries grain while a grasshopper plays in a summer field.", "art": "ant-grasshopper", "image": "/folklore/art/covers/ant-and-grasshopper.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/ant-and-grasshopper/03-turning.webp", "alt": "Ants carry grain into their store as autumn wind blows past Grasshopper and his reed pipe."},
+    {"page": 2, "image": "/folklore/art/ant-and-grasshopper/05-ending.webp", "alt": "Grasshopper asks at the glowing doorway of the ants’ grain store on a snowy winter day."}
+  ],
+  "scenes": [
+    ["In a field one summer’s day a Grasshopper was hopping about, chirping and singing to its heart’s content. An Ant passed by, bearing along with great toil an ear of corn he was taking to the nest."],
+    ["“Why not come and chat with me,” said the Grasshopper, “instead of toiling and moiling in that way?”", "“I am helping to lay up food for the winter,” said the Ant, “and recommend you to do the same.”", "“Why bother about winter?” said the Grasshopper; we have got plenty of food at present.” But the Ant went on its way and continued its toil."],
+    ["When the winter came the Grasshopper had no food and found itself dying of hunger, while it saw the ants distributing every day corn and grain from the stores they had collected in the summer. Then the Grasshopper knew:", "It is best to prepare for the days of necessity."]
+  ]
+}

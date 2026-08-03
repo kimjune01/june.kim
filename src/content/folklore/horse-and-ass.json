@@ -1,0 +1,20 @@
+{
+  "id": "horse-and-ass", "order": 48, "featured": false, "published": false,
+  "title": "The Horse and the Ass", "originalTitle": "Greek title not preserved in this edition",
+  "tradition": "Aesop’s fable", "region": "Europe", "culture": "Ancient Greece", "place": "A road and battlefield in ancient Greece", "language": "English", "ages": "7–11", "minutes": 2,
+  "themes": ["envy", "security", "appearances"], "color": "#806044", "colorSoft": "#e4cfad",
+  "sourceTitle": "The Fables of Aesop", "sourceAuthor": "Aesop; selected and retold by Joseph Jacobs", "sourceYear": "1894", "sourceUrl": "https://www.gutenberg.org/ebooks/28",
+  "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial.",
+  "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A richly harnessed horse and a burdened ass travel along a road.", "art": "horse-ass", "image": "/folklore/art/covers/horse-and-ass.webp",
+  "pageArt": [
+    {"page": 1, "image": "/folklore/art/horse-and-ass/03-turning.webp", "alt": "The harnessed horse charges into battle while the ass remains on the road."},
+    {"page": 2, "image": "/folklore/art/horse-and-ass/05-ending.webp", "alt": "The ass stands beside the mortally wounded horse after the battle."}
+  ],
+  "scenes": [
+    ["A Horse and an Ass were travelling together, the Horse prancing along in its fine trappings, the Ass carrying with difficulty the heavy weight in its panniers. “I wish I were you,” sighed the Ass; “nothing to do and well fed, and all that fine harness upon you.”"],
+    ["Next day, however, there was a great battle, and the Horse was wounded to death in the final charge of the day."],
+    ["His friend, the Ass, happened to pass by shortly afterwards and found him on the point of death. “I was wrong,” said the Ass:", "“Better humble security than gilded danger.”"]
+  ]
+}
