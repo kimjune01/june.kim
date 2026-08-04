@@ -77,8 +77,8 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       }
 
       * { box-sizing: border-box; }
-      html { min-height: 100%; background: var(--paper); }
-      body { min-height: 100%; margin: 0; background: var(--paper); }
+      html { min-height: 100%; overflow-x: clip; background: var(--paper); }
+      body { min-width: 0; min-height: 100%; margin: 0; overflow-x: clip; background: var(--paper); }
       button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
       button { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: inherit; }
       button:focus-visible, a:focus-visible { outline: 4px solid #126d83; outline-offset: 3px; }
@@ -183,7 +183,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       @keyframes arrive-forward { from { opacity: 0; transform: translateX(1rem); } to { opacity: 1; transform: none; } }
       @keyframes arrive-back { from { opacity: 0; transform: translateX(-1rem); } to { opacity: 1; transform: none; } }
       @media (min-width: 900px) { .library-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(20rem, .72fr); column-gap: clamp(3rem, 7vw, 7rem); align-items: end; } .library-head .eyebrow { grid-column: 1; } .library-head h1 { grid-column: 1; } .library-head .intro { grid-column: 2; grid-row: 1 / span 2; margin: 0 0 .2rem; } }
-      @media (max-width: 760px) { .library { padding-inline: 0; } .library-head, .library-foot { margin-inline: 1.1rem; } .library-foot { align-items: flex-start; flex-direction: column; } }
+      @media (max-width: 820px) { .library { padding-inline: 0; } .library-head, .library-foot { margin-inline: 1.1rem; } .library-foot { align-items: flex-start; flex-direction: column; } }
       @media (max-width: 470px) { .back-label { display: none; } .reader-title { max-width: 50vw; } }
       @media (max-width: 560px) { .listen-label { display: none; } }
       @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; transition-duration: .001ms !important; } }
