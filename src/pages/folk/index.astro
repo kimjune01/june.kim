@@ -337,6 +337,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
         const speakParagraph = index => {
           if (!speechActive || run !== speechRun || index >= paragraphs.length) { if (run === speechRun) stopSpeech(); return; }
           const utterance = new SpeechSynthesisUtterance(paragraphs[index].textContent);
+          utterance.rate = 0.8;
           const selectedVoice = speechVoices.find(voice => voice.voiceURI === voiceSelect.value);
           if (selectedVoice) utterance.voice = selectedVoice;
           utterance.onstart = () => paragraphs[index].classList.add('speaking');
@@ -422,6 +423,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
           localStorage.setItem('folklore:voice', voiceSelect.value);
           window.speechSynthesis.cancel();
           const preview = new SpeechSynthesisUtterance('Small stories, wide world.');
+          preview.rate = 0.8;
           const selectedVoice = speechVoices.find(voice => voice.voiceURI === voiceSelect.value);
           if (selectedVoice) preview.voice = selectedVoice;
           window.speechSynthesis.speak(preview);
