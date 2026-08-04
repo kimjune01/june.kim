@@ -15,7 +15,7 @@ const { story } = Astro.props;
     <span class="book-place">{story.tradition}</span>
     <span class="book-title">{story.title}</span>
     <span class="book-original-title">({story.originalTitle})</span>
-    <span class="book-meta">{story.minutes} min · ages {story.ages}</span>
+    <span class="book-meta">{story.scenes.length} {story.scenes.length === 1 ? 'page' : 'pages'} · ages {story.ages}</span>
     <span class="book-status" data-book-status={story.id} aria-live="polite"></span>
   </span>
 </button>
