@@ -1,0 +1,66 @@
+{
+  "id": "stone-soup",
+  "order": 96,
+  "featured": false,
+  "published": true,
+  "title": "Stone Soup",
+  "originalTitle": "O caldo de pedra",
+  "tradition": "Portuguese trickster tale",
+  "region": "Europe",
+  "culture": "Portuguese",
+  "place": "Porto, Portugal",
+  "language": "English",
+  "ages": "5–9",
+  "minutes": 3,
+  "themes": ["ingenuity", "hospitality", "hunger", "food"],
+  "color": "#8c4f2d",
+  "colorSoft": "#dfbd7a",
+  "sourceTitle": "Contos Tradicionaes do Povo Portuguez",
+  "sourceAuthor": "Teófilo Braga, collector and editor",
+  "sourceYear": "1883",
+  "sourceUrl": "https://pt.wikisource.org/wiki/Contos_Tradicionaes_do_Povo_Portuguez/O_caldo_de_pedra",
+  "note": "A complete new English translation of Teófilo Braga’s public-domain Portuguese text “O caldo de pedra,” without condensation. Page divisions and English punctuation are editorial. Braga labels the collected tale “(Porto.)” This printed witness centers a hungry friar’s cleverness rather than the communal feast familiar from some later retellings. The source edition has no story-specific illustration, so all three images are newly generated.",
+  "rights": {
+    "status": "verified",
+    "basis": "The source text and edition were published in 1883; Wikisource links the edition scan and identifies the work as public domain in the United States, Portugal, Brazil, and other life-plus-70 jurisdictions.",
+    "jurisdiction": "United States and Portugal",
+    "checked": "2026-08-03"
+  },
+  "review": {"adaptation": "draft", "cultural": "pending"},
+  "artLabel": "A hungry friar examines the stone with which he promises to make broth.",
+  "art": "stone-soup",
+  "image": "/folklore/art/covers/stone-soup.webp",
+  "pageArt": [
+    {"page": 2, "image": "/folklore/art/stone-soup/03-turning.webp", "alt": "The farmer’s wife brings two tender cabbages while the friar’s stone broth simmers in an earthenware pot."},
+    {"page": 4, "image": "/folklore/art/stone-soup/05-ending.webp", "alt": "The satisfied friar washes the stone to carry it away after finishing the broth."}
+  ],
+  "scenes": [
+    [
+      "A friar was going from door to door asking for alms. He came to a farmer’s door, but they would give him nothing there. The friar was faint with hunger, and said, “I shall see whether I can make a little stone broth.”",
+      "He picked up a stone from the ground, shook off the dirt, and looked it over to see whether it was good for making broth. The people of the house laughed at the friar and at such an idea.",
+      "“Have you never eaten stone broth?” asked the friar. “I can only tell you that it is very good.”",
+      "“We should like to see that,” they answered."
+    ],
+    [
+      "That was just what the friar wanted to hear. After washing the stone, he said, “If you would lend me a little pot.”",
+      "They gave him an earthenware pot. He filled it with water and dropped the stone inside.",
+      "“Now, if you would let me set the little pot there beside the embers.” They let him.",
+      "As soon as the pot began to hiss, he said, “With a little bit of lard, this broth would be first-rate.” They fetched him a piece of lard. It boiled and boiled, while the people of the house watched in amazement."
+    ],
+    [
+      "The friar tasted the broth and said, “It is a little bland. It certainly needs a little stone of salt.” They gave him the salt as well.",
+      "He seasoned the broth, tasted it, and said, “Now, with a few tender cabbage leaves, it would be fit for the angels to eat.”",
+      "The mistress of the house went to the garden and brought him two young cabbages. The friar cleaned them, tore them with his fingers, and dropped the leaves into the pot."
+    ],
+    [
+      "When the cabbage had begun to cook, the friar said, “Ah, a little piece of chouriço would give it such flavor…”",
+      "They brought him a piece of chouriço. He put it into the pot and, while it cooked, took bread from his bag and settled down to eat at his leisure.",
+      "The broth smelled delightful. He ate it and licked his lips. When the pot was empty, the stone remained at the bottom.",
+      "The people of the house, who had kept their eyes on him, asked, “But, Friar—what about the stone?”"
+    ],
+    [
+      "The friar answered, “I shall wash the stone and take it with me for another time.”",
+      "And so he got a meal where they had been unwilling to give him anything."
+    ]
+  ]
+}
