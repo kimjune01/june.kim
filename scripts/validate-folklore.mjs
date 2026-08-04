@@ -29,7 +29,7 @@ for (const { file, record } of records) {
 
   const artPages = new Set();
   for (const art of record.pageArt ?? []) {
-    if (!Number.isInteger(art.page) || art.page < 0 || art.page >= (record.scenes?.length ?? 0)) {
+    if (!Number.isInteger(art.page) || art.page <= 0 || art.page >= (record.scenes?.length ?? 0)) {
       errors.push(`${label}: pageArt page ${art.page} is outside the scene range`);
     }
     if (artPages.has(art.page)) errors.push(`${label}: duplicate pageArt page ${art.page}`);
@@ -39,9 +39,13 @@ for (const { file, record } of records) {
 
   if (record.published !== false) {
     const images = [record.image, ...(record.pageArt ?? []).map((art) => art.image)];
+    if (new Set(images).size !== 3) errors.push(`${label}: cover, turning-point, and ending art must use three distinct files`);
     for (const image of images) {
-      if (!image || !fs.existsSync(path.join(root, "public", image.replace(/^\//, "")))) {
+      const imagePath = image && path.join(root, "public", image.replace(/^\//, ""));
+      if (!imagePath || !fs.existsSync(imagePath)) {
         errors.push(`${label}: published story is missing ${image ?? "an image path"}`);
+      } else if (fs.statSync(imagePath).size === 0) {
+        errors.push(`${label}: published story has an empty image file at ${image}`);
       }
     }
   }
