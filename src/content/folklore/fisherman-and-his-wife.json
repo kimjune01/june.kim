@@ -7,10 +7,10 @@
   "note": "A concise reading retelling faithful to the public-domain Project Gutenberg text. The recurring requests and the sea’s worsening condition are preserved; compression and page divisions are editorial.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
-  "artLabel": "A fisherman releases an enchanted flounder into the shining sea.", "art": "fisherman-wife", "image": "/folklore/art/covers/fisherman-and-his-wife.webp",
+  "artLabel": "A fisherman releases an enchanted flounder into the shining sea.", "art": "fisherman-wife", "image": "/folk/art/covers/fisherman-and-his-wife.webp",
   "pageArt": [
-    {"page": 4, "image": "/folklore/art/fisherman-and-his-wife/03-turning.webp", "alt": "The fisherman calls to the enchanted fish as a darkening sea rises before him."},
-    {"page": 8, "image": "/folklore/art/fisherman-and-his-wife/05-ending.webp", "alt": "The fisherman and his wife sit once more beside their old humble home as the sea grows calm."}
+    {"page": 4, "image": "/folk/art/fisherman-and-his-wife/03-turning.webp", "alt": "The fisherman calls to the enchanted fish as a darkening sea rises before him."},
+    {"page": 8, "image": "/folk/art/fisherman-and-his-wife/05-ending.webp", "alt": "The fisherman and his wife sit once more beside their old humble home as the sea grows calm."}
   ],
   "scenes": [
     ["There was once a fisherman who lived with his wife in a poor hut close beside the sea. One day he caught a great flounder. The fish spoke, saying that he was an enchanted prince, and begged to be released. The fisherman wanted nothing from a talking fish and put him back into the shining water."],

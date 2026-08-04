@@ -39,9 +39,9 @@
     ["Again she ran with her brother. The geese saw them and swept down, beating their wings, ready to tear him from her arms. Luckily, the oven stood beside the road.", "“Lady Oven, hide me!” “Eat my rye cake.” The girl quickly put the cake in her mouth and climbed into the oven’s opening. The geese flew round and round, cried out and cried out, and at last went away empty-winged."],
     ["The girl hurried home with her brother. It was well that she ran so quickly, for no sooner had they reached the yard than their father and mother returned."]
   ],
-  "image": "/folklore/art/covers/magic-swan-geese.webp",
+  "image": "/folk/art/covers/magic-swan-geese.webp",
   "pageArt": [
-    {"page": 4, "image": "/folklore/art/magic-swan-geese/05-turning.webp", "alt": "The girl peers from the birches toward Baba Yaga’s forest hut, where her little brother sits with golden apples."},
-    {"page": 7, "image": "/folklore/art/magic-swan-geese/08-ending.webp", "alt": "The sister and brother return safely to their wooden home as their parents come back at sunset."}
+    {"page": 4, "image": "/folk/art/magic-swan-geese/05-turning.webp", "alt": "The girl peers from the birches toward Baba Yaga’s forest hut, where her little brother sits with golden apples."},
+    {"page": 7, "image": "/folk/art/magic-swan-geese/08-ending.webp", "alt": "The sister and brother return safely to their wooden home as their parents come back at sunset."}
   ]
 }

@@ -8,10 +8,10 @@
   "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image46.png), 11339 (images/110.jpg), and 39187 (images/i_075.jpg).",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
-  "artLabel": "A proud frog puffs himself up beside a young frog and a distant ox.", "art": "frog-ox", "image": "/folklore/art/covers/frog-and-ox.webp",
+  "artLabel": "A proud frog puffs himself up beside a young frog and a distant ox.", "art": "frog-ox", "image": "/folk/art/covers/frog-and-ox.webp",
   "pageArt": [
-    {"page": 1, "image": "/folklore/art/frog-and-ox/03-turning.webp", "alt": "The old Frog swells himself while the young Frog says the Ox was bigger."},
-    {"page": 2, "image": "/folklore/art/frog-and-ox/05-ending.webp", "alt": "The proud Frog takes one final enormous breath beside the quiet pool."}
+    {"page": 1, "image": "/folk/art/frog-and-ox/03-turning.webp", "alt": "The old Frog swells himself while the young Frog says the Ox was bigger."},
+    {"page": 2, "image": "/folk/art/frog-and-ox/05-ending.webp", "alt": "The proud Frog takes one final enormous breath beside the quiet pool."}
   ],
   "scenes": [
     ["“Oh Father,” said a little Frog to the big one sitting by the side of a pool, “I have seen such a terrible monster! It was as big as a mountain, with horns on its head, and a long tail, and it had hoofs divided in two.”"],

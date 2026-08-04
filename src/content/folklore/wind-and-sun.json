@@ -48,16 +48,16 @@
       "Kindness effects more than severity."
     ]
   ],
-  "image": "/folklore/art/covers/wind-and-sun.webp",
+  "image": "/folk/art/covers/wind-and-sun.webp",
   "pageArt": [
     {
       "page": 1,
-      "image": "/folklore/art/wind-and-sun/03-turning.webp",
+      "image": "/folk/art/wind-and-sun/03-turning.webp",
       "alt": "The Wind blows fiercely as the traveller wraps his cloak more tightly."
     },
     {
       "page": 2,
-      "image": "/folklore/art/wind-and-sun/05-ending.webp",
+      "image": "/folk/art/wind-and-sun/05-ending.webp",
       "alt": "The warm Sun shines while the traveller removes his cloak."
     }
   ]

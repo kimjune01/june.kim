@@ -1,0 +1,68 @@
+{
+  "id": "monkey-and-turtle",
+  "order": 100,
+  "featured": false,
+  "published": true,
+  "title": "The Monkey and the Turtle",
+  "originalTitle": "The Monkey and the Turtle",
+  "tradition": "Ilocano animal tale",
+  "region": "Asia",
+  "culture": "Ilocano, Philippines",
+  "place": "A banana grove beside a Philippine river",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "minutes": 6,
+  "themes": [
+    "greed",
+    "patience",
+    "cleverness"
+  ],
+  "color": "#447b4e",
+  "colorSoft": "#c9dfbd",
+  "sourceTitle": "Philippine Folk Tales",
+  "sourceAuthor": "Mabel Cook Cole",
+  "sourceYear": "1916",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/12814",
+  "note": "A child-facing retelling of Cole’s Ilocano text. The banana-plant contest, refusal to share, thorn trap, and “anything but the water” escape are retained; the source’s killing and cannibalism episodes are omitted.",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1916 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "Turtle tends a thriving banana plant while Monkey watches from a branch.",
+  "art": "monkey-turtle",
+  "image": "/folk/art/covers/monkey-and-turtle.webp",
+  "pageArt": [
+    {
+      "page": 1,
+      "image": "/folk/art/monkey-and-turtle/03-turning.webp",
+      "alt": "Monkey eats ripe bananas high in the tree while Turtle waits below among green peels."
+    },
+    {
+      "page": 2,
+      "image": "/folk/art/monkey-and-turtle/05-ending.webp",
+      "alt": "Turtle smiles from the river with bananas on the bank while the surprised Monkey watches."
+    }
+  ],
+  "scenes": [
+    [
+      "One day Monkey and Turtle found two young banana plants beside a river. They agreed to plant them and share whatever fruit grew.",
+      "Monkey chose the taller plant and set it high in a tree, thinking it was already closer to the sun. Turtle planted the smaller one carefully in the earth and watered it whenever the soil was dry.",
+      "Monkey’s plant withered because its roots had no ground to hold. Turtle’s plant grew broad green leaves and, in time, a heavy bunch of ripe bananas."
+    ],
+    [
+      "“I can climb for us,” Monkey offered. He scrambled up Turtle’s tree, but instead of sharing, he ate one banana after another. To Turtle he tossed only hard green skins.",
+      "Turtle quietly gathered thorny branches and laid them beneath the tree. “Crocodile is coming!” he called. Monkey leaped down without looking and landed among the thorns. While Monkey pulled them from his fur, Turtle carried the remaining bananas away.",
+      "Monkey was furious. He caught Turtle and threatened to break his shell. Turtle only laughed. “That will make my shell stronger.” Then Monkey threatened to throw him into the river."
+    ],
+    [
+      "At once Turtle began to plead. “Anything but the water!” Monkey believed he had discovered Turtle’s greatest fear and flung him far into the river.",
+      "Turtle surfaced smiling. “The river is my home,” he called. Monkey had been greedy twice and fooled twice. From then on, Turtle kept his garden well away from Monkey’s clever hands."
+    ]
+  ]
+}

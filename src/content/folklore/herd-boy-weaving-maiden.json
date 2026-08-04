@@ -35,16 +35,16 @@
   },
   "artLabel": "A cowherd and celestial weaver meet on a bridge of magpies across the starry Milky Way.",
   "art": "magpie-bridge",
-  "image": "/folklore/art/covers/herd-boy-weaving-maiden.webp",
+  "image": "/folk/art/covers/herd-boy-weaving-maiden.webp",
   "pageArt": [
     {
       "page": 4,
-      "image": "/folklore/art/herd-boy-weaving-maiden/03-turning.webp",
+      "image": "/folk/art/herd-boy-weaving-maiden/03-turning.webp",
       "alt": "The Queen Mother draws the shining Silver River between Niulang and Zhinü."
     },
     {
       "page": 7,
-      "image": "/folklore/art/herd-boy-weaving-maiden/05-ending.webp",
+      "image": "/folk/art/herd-boy-weaving-maiden/05-ending.webp",
       "alt": "Niulang and Zhinü approach each other across a bridge formed by magpies over the Milky Way."
     }
   ],

@@ -41,9 +41,9 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f6f0df" />
     <meta name="description" content="A small library of folktales from around the world, adapted from public-domain sources." />
-    <link rel="manifest" href="/folklore/manifest.webmanifest" />
-    <link rel="icon" href="/folklore/icon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/folklore/apple-touch-icon.png" />
+    <link rel="manifest" href="/folk/manifest.webmanifest" />
+    <link rel="icon" href="/folk/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/folk/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>Small Stories, Wide World</title>
@@ -434,7 +434,7 @@ const storyCount = countWords[stories.length] ?? String(stories.length);
       const initial = hashRoute(); if (stories.some(story => story.id === initial.id)) openStory(initial.id, initial.page);
       const availability = document.querySelector('#availability');
       function updateAvailability() { availability.textContent = navigator.onLine ? 'Saved for offline reading.' : 'Reading offline.'; }
-      if ('serviceWorker' in navigator) navigator.serviceWorker.register('/folklore/service-worker.js').then(() => navigator.serviceWorker.ready).then(updateAvailability).catch(() => { availability.textContent = 'Offline saving unavailable.'; });
+      if ('serviceWorker' in navigator) navigator.serviceWorker.register('/folk/service-worker.js').then(() => navigator.serviceWorker.ready).then(updateAvailability).catch(() => { availability.textContent = 'Offline saving unavailable.'; });
       window.addEventListener('online', updateAvailability);
       window.addEventListener('offline', updateAvailability);
       window.addEventListener('pagehide', stopSpeech);

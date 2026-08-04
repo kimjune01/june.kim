@@ -1,0 +1,68 @@
+{
+  "id": "maui-snaring-sun",
+  "order": 99,
+  "featured": false,
+  "published": true,
+  "title": "Māui Slows the Sun",
+  "originalTitle": "Māui Snaring the Sun",
+  "tradition": "Hawaiian Māui legend",
+  "region": "Oceania",
+  "culture": "Hawaiian",
+  "place": "Maui and the summit of Haleakalā",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "minutes": 6,
+  "themes": [
+    "ingenuity",
+    "helping family",
+    "sunlight"
+  ],
+  "color": "#d0582f",
+  "colorSoft": "#f6c99e",
+  "sourceTitle": "Hawaiian Folk Tales: A Collection of Native Legends",
+  "sourceAuthor": "Thomas G. Thrum, editor; Rev. A. O. Forbes, narrator",
+  "sourceYear": "1907",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/18450",
+  "note": "A lightly normalized reading of Forbes’s early English telling “Snaring the Sun.” It is presented specifically as a Hawaiian version of a wider Polynesian Māui tradition.",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1907 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "Māui casts a strong coconut-fibre rope toward the rising sun on Haleakalā.",
+  "art": "maui-sun",
+  "image": "/folk/art/covers/maui-snaring-sun.webp",
+  "pageArt": [
+    {
+      "page": 2,
+      "image": "/folk/art/maui-snaring-sun/03-turning.webp",
+      "alt": "Māui loops his rope around the sun’s bright rays at the edge of Haleakalā crater."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/maui-snaring-sun/05-ending.webp",
+      "alt": "Māui returns to his mother as kapa cloth dries through the newly lengthened afternoon."
+    }
+  ],
+  "scenes": [
+    [
+      "Maui was the son of Hina-lau-ae and Hina, and they dwelt at a place called Makalia, above Kahakuloa, on West Maui. Now, his mother Hina made _kapas_. And as she spread them out to dry, the days were so short that she was put to great trouble and labor in hanging them out and taking them in day after day until they were dry. Maui, seeing this, was filled with pity for her, for the days were so short that, no sooner had she got her kapas all spread out to dry, than the Sun went down, and she had to take them in again. So he determined to make the Sun go slower. He first went to Wailohi, in Hamakua, on East Maui, to observe the motions of the Sun. There he saw that it rose toward Hana. He then went up on Haleakala, and saw that the Sun in its course came directly over that mountain. He then went home again, and after a few days went to a place called Paeloko, at Waihee. There he cut down all the cocoanut-trees, and gathered the fibre of the cocoanut husks in great quantity. This he manufactured into strong cord. One Moemoe, seeing this, said tauntingly to him: \"Thou wilt never catch the Sun. Thou art an idle nobody.\""
+    ],
+    [
+      "Maui answered: \"When I conquer my enemy, and my desire is attained, I will be your death.\" So he went up Haleakala again, taking his cord with him. And when the Sun arose above where he was stationed, he prepared a noose of the cord and, casting it, snared one of the Sun's larger beams and broke it off. And thus he snared and broke off, one after another, all the strong rays of the Sun.",
+      "Then shouted he exultingly: \"Thou art my captive, and now I will kill thee for thy going so swiftly.\""
+    ],
+    [
+      "And the Sun said: \"Let me live, and thou shalt see me go more slowly hereafter. Behold, hast thou not broken off all my strong legs, and left me only the weak ones?\"",
+      "So the agreement was made, and Maui permitted the Sun to pursue its course, and from that time on it went more slowly; and that is the reason why the days are longer at one season of the year than at another. It was this that gave the name to that mountain, which should properly be called _Alehe-ka-la_ (sun snarer), and not _Haleakala_."
+    ],
+    [
+      "When Maui returned from this exploit, he went to find Moemoe, who had reviled him. But that individual was not at home. He went on in his pursuit till he came upon him at a place called Kawaiopilopilo, on the shore to the eastward of the black rock called Kekaa, north of Lahaina. Moemoe dodged him up hill and down, until at last Maui, growing wroth, leaped upon and slew the fugitive. And the dead body was transformed into a long rock, which is there to this day, by the side of the road."
+    ]
+  ]
+}

@@ -24,10 +24,10 @@
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "Lambikin trots along a Punjab path toward Granny’s house.",
   "art": "lambikin",
-  "image": "/folklore/art/covers/lambikin.webp",
+  "image": "/folk/art/covers/lambikin.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/lambikin/03-turning.webp", "alt": "Granny prepares a little wool-lined drum in which Lambikin can roll home unseen."},
-    {"page": 5, "image": "/folklore/art/lambikin/05-ending.webp", "alt": "The sharp-eared jackal stops the rolling drum after recognizing Lambikin’s voice."}
+    {"page": 3, "image": "/folk/art/lambikin/03-turning.webp", "alt": "Granny prepares a little wool-lined drum in which Lambikin can roll home unseen."},
+    {"page": 5, "image": "/folk/art/lambikin/05-ending.webp", "alt": "The sharp-eared jackal stops the rolling drum after recognizing Lambikin’s voice."}
   ],
   "scenes": [
     ["Once upon a time there was a wee wee Lambikin, who frolicked about on his little tottery legs, and enjoyed himself amazingly.", "Now one day he set off to visit his Granny, and was jumping with joy to think of all the good things he should get from her, when who should he meet but a Jackal, who looked at the tender young morsel and said: “Lambikin! Lambikin! I’ll EAT YOU!”", "But Lambikin only gave a little frisk and said:", "“To Granny’s house I go, / Where I shall fatter grow, / Then you can eat me so.”", "The Jackal thought this reasonable, and let Lambikin pass."],

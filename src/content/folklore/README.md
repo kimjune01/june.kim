@@ -73,7 +73,7 @@ out-of-range indexes, duplicate interior pages, and records without two interior
 ## Adding a story
 
 Copy a nearby JSON record and assign a unique, stable `id`. Put optimized web images
-under `public/folklore/art/`, following the existing cover and story-directory naming
+under `public/folk/art/`, following the existing cover and story-directory naming
 conventions. Then run:
 
 ```sh

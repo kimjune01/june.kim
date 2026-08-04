@@ -8,10 +8,10 @@
   "note": "Joseph Jacobs’s public-domain text is reproduced directly; only page divisions are editorial. The fable is commonly catalogued as Perry 150.",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
-  "artLabel": "A small mouse gnaws through a rope net around a golden lion.", "art": "lion-mouse", "image": "/folklore/art/covers/lion-and-mouse.webp",
+  "artLabel": "A small mouse gnaws through a rope net around a golden lion.", "art": "lion-mouse", "image": "/folk/art/covers/lion-and-mouse.webp",
   "pageArt": [
-    {"page": 1, "image": "/folklore/art/lion-and-mouse/03-turning.webp", "alt": "Lion struggles in a hunter’s rope net as Mouse arrives at the edge of the woodland clearing."},
-    {"page": 2, "image": "/folklore/art/lion-and-mouse/05-ending.webp", "alt": "The freed Lion bows his great head gratefully to his tiny friend Mouse."}
+    {"page": 1, "image": "/folk/art/lion-and-mouse/03-turning.webp", "alt": "Lion struggles in a hunter’s rope net as Mouse arrives at the edge of the woodland clearing."},
+    {"page": 2, "image": "/folk/art/lion-and-mouse/05-ending.webp", "alt": "The freed Lion bows his great head gratefully to his tiny friend Mouse."}
   ],
   "scenes": [
     ["Once when a Lion was asleep a little Mouse began running up and down upon him; this soon wakened the Lion, who placed his huge paw upon him, and opened his big jaws to swallow him. “Pardon, O King,” cried the little Mouse: “forgive me this time, I shall never forget it: who knows but what I may be able to do you a turn some of these days?” The Lion was so tickled at the idea of the Mouse being able to help him, that he lifted up his paw and let him go."],

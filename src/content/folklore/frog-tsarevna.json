@@ -39,9 +39,9 @@
     ["At the oak, the grateful bear uprooted the tree and broke the trunk. Ivan’s hare caught the hare that sprang out; his duck struck down the duck that flew from it. The egg fell into the sea, but the fish Ivan had saved brought it back in its mouth. Ivan broke the egg and found the magic needle."],
     ["When Ivan broke the needle, Kostshei lost his strength and power forever. Ivan entered his dominions and found his own dear wife, Vassilissa. He took her home, and they were very happy ever after."]
   ],
-  "image": "/folklore/art/covers/frog-tsarevna.webp",
+  "image": "/folk/art/covers/frog-tsarevna.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/frog-tsarevna/04-turning.webp", "alt": "Vassilissa stands revealed in a lamplit wooden terem while attendants prepare her marvelous loaf and woven rug."},
-    {"page": 7, "image": "/folklore/art/frog-tsarevna/08-ending.webp", "alt": "Ivan and Vassilissa are reunited beneath an ancient oak at sunrise, with their horse waiting nearby."}
+    {"page": 3, "image": "/folk/art/frog-tsarevna/04-turning.webp", "alt": "Vassilissa stands revealed in a lamplit wooden terem while attendants prepare her marvelous loaf and woven rug."},
+    {"page": 7, "image": "/folk/art/frog-tsarevna/08-ending.webp", "alt": "Ivan and Vassilissa are reunited beneath an ancient oak at sunrise, with their horse waiting nearby."}
   ]
 }

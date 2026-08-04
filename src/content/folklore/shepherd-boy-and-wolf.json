@@ -8,10 +8,10 @@
   "note": "Joseph Jacobs’s public-domain text is reproduced directly; only page divisions are editorial. The fable is commonly known as “The Boy Who Cried Wolf” and catalogued as Perry 210.",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
-  "artLabel": "A shepherd boy calls toward a stone village while a wolf watches the flock from tall grass.", "art": "boy-wolf", "image": "/folklore/art/covers/shepherd-boy-and-wolf.webp",
+  "artLabel": "A shepherd boy calls toward a stone village while a wolf watches the flock from tall grass.", "art": "boy-wolf", "image": "/folk/art/covers/shepherd-boy-and-wolf.webp",
   "pageArt": [
-    {"page": 1, "image": "/folklore/art/shepherd-boy-and-wolf/03-turning.webp", "alt": "A real wolf emerges near the flock while the shepherd boy calls toward the Greek village."},
-    {"page": 2, "image": "/folklore/art/shepherd-boy-and-wolf/05-ending.webp", "alt": "The shepherd boy stands with his flock after the villagers no longer believe his call."}
+    {"page": 1, "image": "/folk/art/shepherd-boy-and-wolf/03-turning.webp", "alt": "A real wolf emerges near the flock while the shepherd boy calls toward the Greek village."},
+    {"page": 2, "image": "/folk/art/shepherd-boy-and-wolf/05-ending.webp", "alt": "The shepherd boy stands with his flock after the villagers no longer believe his call."}
   ],
   "scenes": [
     ["There was once a young Shepherd Boy who tended his sheep at the foot of a mountain near a dark forest. It was rather lonely for him all day, so he thought upon a plan by which he could get a little company and some excitement."],

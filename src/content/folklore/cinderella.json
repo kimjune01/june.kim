@@ -35,16 +35,16 @@
   },
   "artLabel": "Cinderella stands beneath a hazel tree as white birds bring a silver dress and golden slipper.",
   "art": "cinderella-hazel",
-  "image": "/folklore/art/covers/cinderella.webp",
+  "image": "/folk/art/covers/cinderella.webp",
   "pageArt": [
     {
       "page": 8,
-      "image": "/folklore/art/cinderella/03-turning.webp",
+      "image": "/folk/art/cinderella/03-turning.webp",
       "alt": "White birds bring Cinderella a shining dress and golden slippers beneath the hazel tree."
     },
     {
       "page": 14,
-      "image": "/folklore/art/cinderella/05-ending.webp",
+      "image": "/folk/art/cinderella/05-ending.webp",
       "alt": "A royal messenger discovers that the golden slipper fits Cinderella."
     }
   ],

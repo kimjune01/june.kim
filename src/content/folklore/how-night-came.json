@@ -1,0 +1,68 @@
+{
+  "id": "how-night-came",
+  "order": 97,
+  "featured": false,
+  "published": true,
+  "title": "How Night Came",
+  "originalTitle": "How Night Came",
+  "tradition": "Brazilian origin tale",
+  "region": "South America",
+  "culture": "Brazilian folk tradition",
+  "place": "The first earth and the kingdom beneath the sea",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "minutes": 6,
+  "themes": [
+    "rest",
+    "curiosity",
+    "day and night"
+  ],
+  "color": "#263b68",
+  "colorSoft": "#c8d1e6",
+  "sourceTitle": "Fairy Tales from Brazil",
+  "sourceAuthor": "Elsie Spicer Eells",
+  "sourceYear": "1917",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/24714",
+  "note": "A concise retelling of Eells’s “How Night Came.” The messengers replace the source edition’s enslaved attendants, and its appended punishment episode is omitted; the creation of night, dawn, and the morning chorus is retained.",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1917 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "Night birds and stars pour from a great opened bag beneath a royal palm.",
+  "art": "how-night-came",
+  "image": "/folk/art/covers/how-night-came.webp",
+  "pageArt": [
+    {
+      "page": 1,
+      "image": "/folk/art/how-night-came/03-turning.webp",
+      "alt": "Three messengers open the rustling sealed bag as moths, bats, and deep blue darkness rush out."
+    },
+    {
+      "page": 2,
+      "image": "/folk/art/how-night-came/05-ending.webp",
+      "alt": "The morning star shines above a royal palm while a rooster crows and birds greet the first dawn."
+    }
+  ],
+  "scenes": [
+    [
+      "Long ago, in a story told in Brazil, daylight lasted from one hour to the next. The world had no sunset, no moonlight, and no cool darkness in which to rest.",
+      "A daughter of the Great Sea Serpent left her home in the shadowy depths and came to live on land. She loved her new home, but the endless brightness made her eyes weary. “If only we had a little night,” she said.",
+      "Her husband had never heard of night. When she described its quiet shadows, he sent three trusted messengers to ask her father for some. They traveled to the sea and returned carrying a tightly sealed bag."
+    ],
+    [
+      "“Do not open it until you reach my daughter,” the Great Sea Serpent had warned. But on the journey home the bag rustled, chirped, croaked, and hummed. Every night bird, beast, and insect seemed to be calling from inside.",
+      "The messengers grew frightened and curious. At last they loosened the seal. Out flew the bats and moths. Out hopped the frogs. Out poured a deep blue darkness that spread across the whole sky."
+    ],
+    [
+      "The Sea Serpent’s daughter saw night approaching and clapped her hands. Beneath a royal palm she closed her tired eyes and slept. For the first time, the people and animals of the land rested too.",
+      "After many hours, a bright star appeared above the palm. The princess named it the morning star. She asked the rooster to watch for its light and the birds to greet it with their songs.",
+      "The rooster crowed, the birds began to sing, and the first dawn opened over the earth. From then on, day followed night and night followed day, giving every creature a time to wake and a time to rest."
+    ]
+  ]
+}

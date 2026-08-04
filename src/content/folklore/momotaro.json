@@ -35,16 +35,16 @@
   },
   "artLabel": "Momotarō carries a banner beside a dog, monkey, and pheasant under a peach tree.",
   "art": "momotaro",
-  "image": "/folklore/art/covers/momotaro.webp",
+  "image": "/folk/art/covers/momotaro.webp",
   "pageArt": [
     {
       "page": 16,
-      "image": "/folklore/art/momotaro/03-turning.webp",
+      "image": "/folk/art/momotaro/03-turning.webp",
       "alt": "Momotarō shares millet dumplings with Dog, Monkey, and Pheasant on a rural Japanese road."
     },
     {
       "page": 30,
-      "image": "/folklore/art/momotaro/05-ending.webp",
+      "image": "/folk/art/momotaro/05-ending.webp",
       "alt": "Momotarō and his animal companions sail home to a welcome beneath flowering peach branches."
     }
   ],

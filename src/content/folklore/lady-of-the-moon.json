@@ -28,10 +28,10 @@
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "Chang’e rises toward a crystal moon palace while Hou I watches from earth.",
   "art": "moon-lady",
-  "image": "/folklore/art/covers/lady-of-the-moon.webp",
+  "image": "/folk/art/covers/lady-of-the-moon.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/lady-of-the-moon/03-turning.webp", "alt": "The emperor and two sorcerers stand beneath the cassia tree in the moon world, in the source edition’s original illustration."},
-    {"page": 4, "image": "/folklore/art/lady-of-the-moon/05-ending.webp", "alt": "Chang’e and attendants dance beneath the cassia tree while the jade rabbit works beside a white marble mortar."}
+    {"page": 2, "image": "/folk/art/lady-of-the-moon/03-turning.webp", "alt": "The emperor and two sorcerers stand beneath the cassia tree in the moon world, in the source edition’s original illustration."},
+    {"page": 4, "image": "/folk/art/lady-of-the-moon/05-ending.webp", "alt": "Chang’e and attendants dance beneath the cassia tree while the jade rabbit works beside a white marble mortar."}
   ],
   "scenes": [
     ["In the days of the Emperor Yau lived a prince by the name of Hou I, who was a mighty hero and a good archer. Once ten suns rose together in the sky, and shone so brightly and burned so fiercely that the people on earth could not endure them. So the Emperor ordered Hou I to shoot at them. And Hou I shot nine of them down from the sky."],

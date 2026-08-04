@@ -24,10 +24,10 @@
   "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
   "artLabel": "A booted cat bows confidently beside his young master on a French country road.",
   "art": "puss-boots",
-  "image": "/folklore/art/covers/puss-in-boots.webp",
+  "image": "/folk/art/covers/puss-in-boots.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/puss-in-boots/03-turning.webp", "alt": "Puss bows before the king and presents game in the name of the Marquis of Carabas."},
-    {"page": 6, "image": "/folklore/art/puss-in-boots/05-ending.webp", "alt": "The Marquis gives his hand to the princess and follows the king into the castle, with Puss beside them."}
+    {"page": 3, "image": "/folk/art/puss-in-boots/03-turning.webp", "alt": "Puss bows before the king and presents game in the name of the Marquis of Carabas."},
+    {"page": 6, "image": "/folk/art/puss-in-boots/05-ending.webp", "alt": "The Marquis gives his hand to the princess and follows the king into the castle, with Puss beside them."}
   ],
   "scenes": [
     ["A miller left his mill to his eldest son, his donkey to the second, and only his cat to the youngest. The youngest son was discouraged by so small an inheritance, but the Cat told him not to worry. “Give me a bag and have a pair of boots made for me,” he said, “and you shall see that you are not so badly provided for as you think.”"],

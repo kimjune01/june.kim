@@ -47,6 +47,21 @@ Status after the 2026-08-03 production pass:
 - **David and Goliath — deferred.** This is viable as a short reading, but publication is blocked until the collection has an explicit policy for presenting narratives sacred to living communities on a folklore shelf.
 - **Noah's Ark — deferred.** Publication is likewise blocked on the living-religion collection policy, as well as a decision about which scriptural tradition and public-domain translation the reading would represent.
 
+## 2026-08-04 variety pass
+
+Published with complete three-image art sets:
+
+- How Night Came — Brazilian origin tale
+- Why the Sun and Moon Live in the Sky — Efik origin tale
+- Māui Slows the Sun — Hawaiian Māui legend
+- The Monkey and the Turtle — Ilocano animal tale
+- The Fisherman and the Genie — Arabian Nights tale
+- Aladdin and the Wonderful Lamp — Syrian-origin Arabian Nights literary tale
+- Rapunzel — Grimm fairy tale
+- Snow White — Grimm fairy tale
+- Sleeping Beauty — Perrault literary fairy tale
+- Beauty and the Beast — French literary fairy tale
+
 ## Deliberately excluded
 
 These are authored books, novellas, or long narratives whose picture-book versions would be abridgments rather than folk-sized source copies:

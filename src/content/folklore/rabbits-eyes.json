@@ -35,16 +35,16 @@
   },
   "artLabel": "A rabbit rides on a turtle’s shell beneath blue waves.",
   "art": "rabbit-sea",
-  "image": "/folklore/art/covers/rabbits-eyes.webp",
+  "image": "/folk/art/covers/rabbits-eyes.webp",
   "pageArt": [
     {
       "page": 4,
-      "image": "/folklore/art/rabbits-eyes/03-overheard.webp",
+      "image": "/folk/art/rabbits-eyes/03-overheard.webp",
       "alt": "Rabbit listens from behind a painted palace pillar while Turtle and the fish physicians confer."
     },
     {
       "page": 8,
-      "image": "/folklore/art/rabbits-eyes/05-escape.webp",
+      "image": "/folk/art/rabbits-eyes/05-escape.webp",
       "alt": "Rabbit leaps onto the rocky shore while Turtle watches from the clear water."
     }
   ],

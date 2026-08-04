@@ -7,10 +7,10 @@
   "note": "A concise reading retelling faithful to the plot of the public-domain Project Gutenberg text, where the story is titled “The Valiant Little Tailor.” Compression and page divisions are editorial.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
-  "artLabel": "A little tailor wears his bold belt and sets out into the wide world.", "art": "brave-tailor", "image": "/folklore/art/covers/brave-little-tailor.webp",
+  "artLabel": "A little tailor wears his bold belt and sets out into the wide world.", "art": "brave-tailor", "image": "/folk/art/covers/brave-little-tailor.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/brave-little-tailor/03-turning.webp", "alt": "The tailor tricks a giant by squeezing cheese while the giant crushes a stone."},
-    {"page": 7, "image": "/folklore/art/brave-little-tailor/05-ending.webp", "alt": "The little tailor is welcomed at the royal court after completing his trials."}
+    {"page": 3, "image": "/folk/art/brave-little-tailor/03-turning.webp", "alt": "The tailor tricks a giant by squeezing cheese while the giant crushes a stone."},
+    {"page": 7, "image": "/folk/art/brave-little-tailor/05-ending.webp", "alt": "The little tailor is welcomed at the royal court after completing his trials."}
   ],
   "scenes": [
     ["A little tailor was eating bread and jam when flies settled on it. He struck at them with a cloth and found seven dead. Proud of the deed, he made a belt embroidered “Seven at one blow!” and set out so that the whole world might hear of his bravery."],

@@ -7,10 +7,10 @@
   "note": "Joseph Jacobs’s public-domain prose is reproduced directly; only page divisions are editorial. The three public-domain illustrations come from Project Gutenberg ebooks 18732 (images/image141.png) and 11339 (images/165-2.jpg and images/165-3.jpg).",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
-  "artLabel": "A man and boy travel with their donkey toward a market town.", "art": "man-boy-donkey", "image": "/folklore/art/covers/man-boy-and-donkey.webp",
+  "artLabel": "A man and boy travel with their donkey toward a market town.", "art": "man-boy-donkey", "image": "/folk/art/covers/man-boy-and-donkey.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/man-boy-and-donkey/03-turning.webp", "alt": "The man and boy both ride the donkey as townspeople jeer and point."},
-    {"page": 4, "image": "/folklore/art/man-boy-and-donkey/05-ending.webp", "alt": "The donkey tumbles from Market Bridge as the startled man and boy lose hold of the pole."}
+    {"page": 2, "image": "/folk/art/man-boy-and-donkey/03-turning.webp", "alt": "The man and boy both ride the donkey as townspeople jeer and point."},
+    {"page": 4, "image": "/folk/art/man-boy-and-donkey/05-ending.webp", "alt": "The donkey tumbles from Market Bridge as the startled man and boy lose hold of the pole."}
   ],
   "scenes": [
     ["A Man and his son were once going with their Donkey to market. As they were walking along by its side a countryman passed them and said: “You fools, what is a Donkey for but to ride upon?”", "So the Man put the Boy on the Donkey and they went on their way. But soon they passed a group of men, one of whom said: “See that lazy youngster, he lets his father walk while he rides.”"],

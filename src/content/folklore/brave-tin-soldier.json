@@ -7,8 +7,8 @@
   "note": "A lightly condensed reading of the public-domain H. P. Paull translation, where the story is titled “The Brave Tin Soldier.” Some descriptive repetition is shortened and page divisions are editorial; the tale’s sequence and ending are retained. The cited ebook has no story-specific plate set, so the illustrations are new collection artwork in a nineteenth-century Danish toy-room setting.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 1597 and its English Andersen text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed"},
-  "artLabel": "A one-legged tin soldier gazes toward a paper dancer in a toy castle.", "art": "tin-soldier", "image": "/folklore/art/covers/brave-tin-soldier.webp",
-  "pageArt": [{"page": 2, "image": "/folklore/art/brave-tin-soldier/03-turning.webp", "alt": "The tin soldier sails through a gutter in a folded paper boat."}, {"page": 5, "image": "/folklore/art/brave-tin-soldier/05-ending.webp", "alt": "A small tin heart and the dancer’s spangle remain together in the ashes."}],
+  "artLabel": "A one-legged tin soldier gazes toward a paper dancer in a toy castle.", "art": "tin-soldier", "image": "/folk/art/covers/brave-tin-soldier.webp",
+  "pageArt": [{"page": 2, "image": "/folk/art/brave-tin-soldier/03-turning.webp", "alt": "The tin soldier sails through a gutter in a folded paper boat."}, {"page": 5, "image": "/folk/art/brave-tin-soldier/05-ending.webp", "alt": "A small tin heart and the dancer’s spangle remain together in the ashes."}],
   "scenes": [
     ["On a boy’s birthday, twenty-five tin soldiers came out of a box. They had been cast from one old spoon and looked like brothers. The last soldier had only one leg because the tin had run short, but he stood as firmly as all the rest."],
     ["Among the toys was a paper castle. At its door stood a little dancer, balancing with one leg lifted so high that the soldier thought she had only one leg too. He watched her all evening. A goblin in a toy box warned him to turn his eyes away, but the soldier did not answer."],

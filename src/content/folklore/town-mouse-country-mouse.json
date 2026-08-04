@@ -8,10 +8,10 @@
   "note": "A reading copy of Joseph Jacobs’s public-domain text; line wrapping and page divisions are editorial.",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
-  "artLabel": "A country mouse welcomes a town mouse to a simple cottage meal.", "art": "two-mice", "image": "/folklore/art/covers/town-mouse-country-mouse.webp",
+  "artLabel": "A country mouse welcomes a town mouse to a simple cottage meal.", "art": "two-mice", "image": "/folk/art/covers/town-mouse-country-mouse.webp",
   "pageArt": [
-    {"page": 1, "image": "/folklore/art/town-mouse-country-mouse/03-turning.webp", "alt": "The two mice flee across a grand dining room as a household dog rushes through the doorway."},
-    {"page": 2, "image": "/folklore/art/town-mouse-country-mouse/05-ending.webp", "alt": "Country Mouse eats peacefully beside his cottage while Town Mouse returns toward the distant city."}
+    {"page": 1, "image": "/folk/art/town-mouse-country-mouse/03-turning.webp", "alt": "The two mice flee across a grand dining room as a household dog rushes through the doorway."},
+    {"page": 2, "image": "/folk/art/town-mouse-country-mouse/05-ending.webp", "alt": "Country Mouse eats peacefully beside his cottage while Town Mouse returns toward the distant city."}
   ],
   "scenes": [
     ["Now you must know that a Town Mouse once upon a time went on a visit to his cousin in the country. He was rough and ready, this cousin, but he loved his town friend and made him heartily welcome. Beans and bacon, cheese and bread, were all he had to offer, but he offered them freely."],

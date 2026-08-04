@@ -8,10 +8,10 @@
   "note": "A reading copy of Joseph Jacobs’s public-domain text; line wrapping and page divisions are editorial.",
   "rights": {"status": "verified", "basis": "The 1894 source edition is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "draft", "cultural": "pending"},
-  "artLabel": "An ant carries grain while a grasshopper plays in a summer field.", "art": "ant-grasshopper", "image": "/folklore/art/covers/ant-and-grasshopper.webp",
+  "artLabel": "An ant carries grain while a grasshopper plays in a summer field.", "art": "ant-grasshopper", "image": "/folk/art/covers/ant-and-grasshopper.webp",
   "pageArt": [
-    {"page": 1, "image": "/folklore/art/ant-and-grasshopper/03-turning.webp", "alt": "Ants carry grain into their store as autumn wind blows past Grasshopper and his reed pipe."},
-    {"page": 2, "image": "/folklore/art/ant-and-grasshopper/05-ending.webp", "alt": "Grasshopper asks at the glowing doorway of the ants’ grain store on a snowy winter day."}
+    {"page": 1, "image": "/folk/art/ant-and-grasshopper/03-turning.webp", "alt": "Ants carry grain into their store as autumn wind blows past Grasshopper and his reed pipe."},
+    {"page": 2, "image": "/folk/art/ant-and-grasshopper/05-ending.webp", "alt": "Grasshopper asks at the glowing doorway of the ants’ grain store on a snowy winter day."}
   ],
   "scenes": [
     ["In a field one summer’s day a Grasshopper was hopping about, chirping and singing to its heart’s content. An Ant passed by, bearing along with great toil an ear of corn he was taking to the nest."],

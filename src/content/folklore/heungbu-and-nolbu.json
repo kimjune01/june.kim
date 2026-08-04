@@ -35,16 +35,16 @@
   },
   "artLabel": "Heungbu tends a swallow beneath the curved tiled eaves of a Korean house as gourds grow nearby.",
   "art": "heungbu",
-  "image": "/folklore/art/covers/heungbu-and-nolbu.webp",
+  "image": "/folk/art/covers/heungbu-and-nolbu.webp",
   "pageArt": [
     {
       "page": 23,
-      "image": "/folklore/art/heungbu-and-nolbu/03-turning.webp",
+      "image": "/folk/art/heungbu-and-nolbu/03-turning.webp",
       "alt": "Gourds open beneath Heungbu’s thatched eaves to reveal food, cloth, and useful tools."
     },
     {
       "page": 41,
-      "image": "/folklore/art/heungbu-and-nolbu/05-ending.webp",
+      "image": "/folk/art/heungbu-and-nolbu/05-ending.webp",
       "alt": "Heungbu welcomes his ashamed brother Nolbu at the courtyard gate."
     }
   ],

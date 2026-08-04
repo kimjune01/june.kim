@@ -7,10 +7,10 @@
   "note": "A concise reading retelling faithful to the public-domain Project Gutenberg text. Compression and page divisions are editorial.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
-  "artLabel": "Twelve princesses descend a hidden stair toward a glittering underground lake.", "art": "dancing-princesses", "image": "/folklore/art/covers/twelve-dancing-princesses.webp",
+  "artLabel": "Twelve princesses descend a hidden stair toward a glittering underground lake.", "art": "dancing-princesses", "image": "/folk/art/covers/twelve-dancing-princesses.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/twelve-dancing-princesses/03-turning.webp", "alt": "An invisible soldier follows the princesses through a grove with silver leaves."},
-    {"page": 6, "image": "/folklore/art/twelve-dancing-princesses/05-ending.webp", "alt": "The soldier presents three enchanted branches and a golden cup before the king and princesses."}
+    {"page": 3, "image": "/folk/art/twelve-dancing-princesses/03-turning.webp", "alt": "An invisible soldier follows the princesses through a grove with silver leaves."},
+    {"page": 6, "image": "/folk/art/twelve-dancing-princesses/05-ending.webp", "alt": "The soldier presents three enchanted branches and a golden cup before the king and princesses."}
   ],
   "scenes": [
     ["A king had twelve beautiful daughters who slept in twelve beds in one room. Every night their door was locked, yet every morning their dancing shoes were worn through. The king promised that whoever discovered where they danced might choose one princess for his wife and inherit the kingdom. Anyone who failed after three nights would lose his life."],

@@ -29,10 +29,10 @@
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A bamboo cutter discovers a tiny shining princess inside a glowing bamboo stalk.",
   "art": "bamboo-princess",
-  "image": "/folklore/art/covers/tale-of-bamboo-cutter.webp",
+  "image": "/folk/art/covers/tale-of-bamboo-cutter.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/tale-of-bamboo-cutter/03-turning.webp", "alt": "Kaguya-hime gives five noble suitors the impossible tasks that will test their claims."},
-    {"page": 6, "image": "/folklore/art/tale-of-bamboo-cutter/05-ending.webp", "alt": "A luminous procession carries Kaguya-hime toward the full moon as her elderly parents say farewell."}
+    {"page": 3, "image": "/folk/art/tale-of-bamboo-cutter/03-turning.webp", "alt": "Kaguya-hime gives five noble suitors the impossible tasks that will test their claims."},
+    {"page": 6, "image": "/folk/art/tale-of-bamboo-cutter/05-ending.webp", "alt": "A luminous procession carries Kaguya-hime toward the full moon as her elderly parents say farewell."}
   ],
   "scenes": [
     ["Long ago, an old bamboo cutter named Taketori no Okina went each day into the grove. One evening he saw a single bamboo stalk glowing like a lantern. Inside it sat a tiny girl, no larger than his thumb.", "He carried her home to his wife, and together they raised her as their daughter. They named her Nayotake no Kaguya-hime—the Shining Princess of the Young Bamboo."],

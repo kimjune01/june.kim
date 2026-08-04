@@ -9,10 +9,10 @@
   "rights": {"status": "verified", "basis": "The 1889 English collection is identified as public domain in the United States by Project Gutenberg. This concise reading copy is newly written for the collection.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed"},
   "artLabel": "Chunhyang and Mongryong meet beside the flowering pavilion at Gwanghallu in Namwon.", "art": "chunhyang",
-  "image": "/folklore/art/covers/chunhyang.webp",
+  "image": "/folk/art/covers/chunhyang.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/chunhyang/03-turning.webp", "alt": "Chunhyang refuses the corrupt magistrate before his court in Namwon."},
-    {"page": 6, "image": "/folklore/art/chunhyang/05-ending.webp", "alt": "Mongryong reveals his royal inspector’s seal and reunites with Chunhyang after justice is restored."}
+    {"page": 3, "image": "/folk/art/chunhyang/03-turning.webp", "alt": "Chunhyang refuses the corrupt magistrate before his court in Namwon."},
+    {"page": 6, "image": "/folk/art/chunhyang/05-ending.webp", "alt": "Mongryong reveals his royal inspector’s seal and reunites with Chunhyang after justice is restored."}
   ],
   "scenes": [
     ["In Namwon lived Yi Mongryong, the young son of the district magistrate. One spring day he visited the pavilion of Gwanghallu and saw Chunhyang riding on a swing among the flowering trees."],

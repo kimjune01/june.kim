@@ -39,9 +39,9 @@
     ["Emelya sent a servant across the crystal bridge to invite the King and his court to dinner. Curious to meet the unknown lord, the King came. Emelya welcomed him into the castle, where the tables were spread with sweets and honey drinks.", "After the feast Emelya asked, “Does Your Majesty know me?” The King did not. “Do you remember the fool who rode to court on a stove, whom you sealed in a cask with your daughter and cast into the sea? I am that Emelya.” The terrified King did not know what to do."],
     ["Emelya brought out the princess. The King rejoiced to see his daughter alive and said, “I was very unjust to you, and now I gladly give you my daughter in marriage.”", "Emelya thanked him. The wedding was celebrated with great magnificence, and the next day Emelya gave a feast for the ministers and all the people. The King offered him the crown, but Emelya did not want it. So the King returned to his own realm, while Emelya and the princess remained in their castle and lived happily."]
   ],
-  "image": "/folklore/art/covers/emelya-and-the-pike.webp",
+  "image": "/folk/art/covers/emelya-and-the-pike.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/emelya-and-the-pike/04-turning.webp", "alt": "Emelya rides his great white stove along a snowy road while astonished villagers stand safely aside."},
-    {"page": 7, "image": "/folklore/art/emelya-and-the-pike/08-ending.webp", "alt": "Emelya and the princess welcome the reconciled King before their island castle and crystal bridge."}
+    {"page": 3, "image": "/folk/art/emelya-and-the-pike/04-turning.webp", "alt": "Emelya rides his great white stove along a snowy road while astonished villagers stand safely aside."},
+    {"page": 7, "image": "/folk/art/emelya-and-the-pike/08-ending.webp", "alt": "Emelya and the princess welcome the reconciled King before their island castle and crystal bridge."}
   ]
 }

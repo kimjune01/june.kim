@@ -24,10 +24,10 @@
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "Two hamsas offer to carry a tortoise from his Himalayan pond.",
   "art": "flying-tortoise",
-  "image": "/folklore/art/covers/talkative-tortoise.webp",
+  "image": "/folk/art/covers/talkative-tortoise.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/talkative-tortoise/02-turning.webp", "alt": "Two wild ducks carry the tortoise high above Benares while villagers point from below."},
-    {"page": 4, "image": "/folklore/art/talkative-tortoise/04-ending.webp", "alt": "In the palace courtyard, the wise adviser explains the tortoise’s lesson to the chastened king."}
+    {"page": 2, "image": "/folk/art/talkative-tortoise/02-turning.webp", "alt": "Two wild ducks carry the tortoise high above Benares while villagers point from below."},
+    {"page": 4, "image": "/folk/art/talkative-tortoise/04-ending.webp", "alt": "In the palace courtyard, the wise adviser explains the tortoise’s lesson to the chastened king."}
   ],
   "scenes": [
     ["The future Buddha was once born in a minister’s family, when Brahma-datta was reigning in Benares; and when he grew up, he became the king’s adviser in things temporal and spiritual.", "Now this king was very talkative; while he was speaking, others had no opportunity for a word. And the future Buddha, wanting to cure this talkativeness of his, was constantly seeking for some means of doing so."],

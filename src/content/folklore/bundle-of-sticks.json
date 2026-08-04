@@ -49,16 +49,16 @@
       "Union gives strength."
     ]
   ],
-  "image": "/folklore/art/covers/bundle-of-sticks.webp",
+  "image": "/folk/art/covers/bundle-of-sticks.webp",
   "pageArt": [
     {
       "page": 1,
-      "image": "/folklore/art/bundle-of-sticks/03-turning.webp",
+      "image": "/folk/art/bundle-of-sticks/03-turning.webp",
       "alt": "The sons strain in turn but cannot break the tightly bound sticks."
     },
     {
       "page": 2,
-      "image": "/folklore/art/bundle-of-sticks/05-ending.webp",
+      "image": "/folk/art/bundle-of-sticks/05-ending.webp",
       "alt": "Each son easily snaps one stick as their father explains the lesson."
     }
   ]

@@ -53,9 +53,9 @@
       "The mouse held the cat, the cat held the dog, the dog held the granddaughter, the granddaughter held Grandmother, Grandmother held Grandfather, Grandfather held the turnip. They pulled and pulled—and pulled out the turnip."
     ]
   ],
-  "image": "/folklore/art/covers/gigantic-turnip.webp",
+  "image": "/folk/art/covers/gigantic-turnip.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/gigantic-turnip/03-turning.webp", "alt": "A Russian family, their dog, and their cat tug in a long line while the giant turnip only wiggles."},
-    {"page": 4, "image": "/folklore/art/gigantic-turnip/05-ending.webp", "alt": "The turnip lies free as the whole family and their animals laugh together after their tumble."}
+    {"page": 2, "image": "/folk/art/gigantic-turnip/03-turning.webp", "alt": "A Russian family, their dog, and their cat tug in a long line while the giant turnip only wiggles."},
+    {"page": 4, "image": "/folk/art/gigantic-turnip/05-ending.webp", "alt": "The turnip lies free as the whole family and their animals laugh together after their tumble."}
   ]
 }

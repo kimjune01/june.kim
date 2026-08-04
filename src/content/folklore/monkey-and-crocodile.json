@@ -35,16 +35,16 @@
   },
   "artLabel": "A monkey rides a crocodile across a broad river toward a fruit-covered island.",
   "art": "monkey-crocodile",
-  "image": "/folklore/art/covers/monkey-and-crocodile.webp",
+  "image": "/folk/art/covers/monkey-and-crocodile.webp",
   "pageArt": [
     {
       "page": 3,
-      "image": "/folklore/art/monkey-and-crocodile/03-turning.webp",
+      "image": "/folk/art/monkey-and-crocodile/03-turning.webp",
       "alt": "Midstream, Monkey calmly tells Crocodile that his heart was left hanging in the fruit tree."
     },
     {
       "page": 6,
-      "image": "/folklore/art/monkey-and-crocodile/05-ending.webp",
+      "image": "/folk/art/monkey-and-crocodile/05-ending.webp",
       "alt": "Safe in the riverside fruit tree, Monkey speaks to Crocodile below about the trust he has lost."
     }
   ],

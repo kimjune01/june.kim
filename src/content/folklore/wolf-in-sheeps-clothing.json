@@ -48,16 +48,16 @@
       "Appearances are deceptive."
     ]
   ],
-  "image": "/folklore/art/covers/wolf-in-sheeps-clothing.webp",
+  "image": "/folk/art/covers/wolf-in-sheeps-clothing.webp",
   "pageArt": [
     {
       "page": 1,
-      "image": "/folklore/art/wolf-in-sheeps-clothing/03-turning.webp",
+      "image": "/folk/art/wolf-in-sheeps-clothing/03-turning.webp",
       "alt": "The wolf pulls a discarded fleece over its dark pelt."
     },
     {
       "page": 2,
-      "image": "/folklore/art/wolf-in-sheeps-clothing/05-ending.webp",
+      "image": "/folk/art/wolf-in-sheeps-clothing/05-ending.webp",
       "alt": "A lamb follows the sheep-clad wolf away from the unsuspecting flock."
     }
   ]

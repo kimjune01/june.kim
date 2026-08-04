@@ -9,10 +9,10 @@
   "rights": {"status": "verified", "basis": "The 1913 English translation is identified as public domain in the United States by Project Gutenberg.", "jurisdiction": "United States", "checked": "2026-08-02"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed"},
   "artLabel": "A mysterious fox-woman appears at midnight in a scholar’s garden pavilion.", "art": "gumiho",
-  "image": "/folklore/art/covers/gumiho.webp",
+  "image": "/folk/art/covers/gumiho.webp",
   "pageArt": [
-    {"page": 1, "image": "/folklore/art/gumiho/03-turning.webp", "alt": "Yi Kwai watches the silent stranger in the lamplit pavilion and suspects that she is a fox spirit."},
-    {"page": 3, "image": "/folklore/art/gumiho/05-ending.webp", "alt": "The fox spirit escapes through the moonlit garden gate while Yi Kwai calls for help."}
+    {"page": 1, "image": "/folk/art/gumiho/03-turning.webp", "alt": "Yi Kwai watches the silent stranger in the lamplit pavilion and suspects that she is a fox spirit."},
+    {"page": 3, "image": "/folk/art/gumiho/05-ending.webp", "alt": "The fox spirit escapes through the moonlit garden gate while Yi Kwai calls for help."}
   ],
   "scenes": [
     ["Yi Kwai was the son of a minister. He passed his examinations and held high office. When his father was Governor of Pyong-an Province, Kwai was a little boy and accompanied him.", "In the rear garden of the official quarters was a pavilion, called the Hill Pagoda, that was connected by a narrow gateway with the public hall. Frequently Kwai took one of the yamen boys with him and went there to study."],

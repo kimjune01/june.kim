@@ -7,8 +7,8 @@
   "note": "A condensed prose reading of Browning’s public-domain poem, retaining its sequence, principal details, and somber ending. The conversion from verse to prose, compression, and page divisions are editorial. The three illustrations are Kate Greenaway plates (images/img21.jpg, img20.jpg, and img38.jpg) from the cited edition. The German title is the conventional name of the Hamelin legend.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 18343, including Browning’s text and Greenaway’s illustrations, as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed"},
-  "artLabel": "The strange piper stands before Hamelin’s crowded roofs.", "art": "pied-piper", "image": "/folklore/art/covers/pied-piper.webp",
-  "pageArt": [{"page": 3, "image": "/folklore/art/pied-piper/03-turning.webp", "alt": "The Piper returns to Hamelin’s council after completing his work."}, {"page": 4, "image": "/folklore/art/pied-piper/05-ending.webp", "alt": "The town’s children follow the Piper away from Hamelin."}],
+  "artLabel": "The strange piper stands before Hamelin’s crowded roofs.", "art": "pied-piper", "image": "/folk/art/covers/pied-piper.webp",
+  "pageArt": [{"page": 3, "image": "/folk/art/pied-piper/03-turning.webp", "alt": "The Piper returns to Hamelin’s council after completing his work."}, {"page": 4, "image": "/folk/art/pied-piper/05-ending.webp", "alt": "The town’s children follow the Piper away from Hamelin."}],
   "scenes": [
     ["Hamelin town was overrun with rats. They fought the dogs, killed the cats, bit babies, spoiled the soup, and nested in hats. At last the people crowded into the town hall and demanded that the mayor and council find a remedy."],
     ["A stranger entered, tall and thin, wearing a coat half red and half yellow. He called himself a piper and said that, by a secret charm, he could free the town of every rat. The mayor promised him a thousand guilders when the work was done."],

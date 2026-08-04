@@ -24,10 +24,10 @@
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "Balna and her son face the magician Punchkin in a palace garden.",
   "art": "punchkin",
-  "image": "/folklore/art/covers/punchkin.webp",
+  "image": "/folk/art/covers/punchkin.webp",
   "pageArt": [
-    {"page": 7, "image": "/folklore/art/punchkin/07-prisoners.webp", "alt": "The prince holds Punchkin’s green parrot while the magician’s prisoners return to life, in the plate from the cited 1892 edition."},
-    {"page": 9, "image": "/folklore/art/punchkin/09-ending.webp", "alt": "Balna and her son rejoice with the seven restored princes and the people freed from enchantment."}
+    {"page": 7, "image": "/folk/art/punchkin/07-prisoners.webp", "alt": "The prince holds Punchkin’s green parrot while the magician’s prisoners return to life, in the plate from the cited 1892 edition."},
+    {"page": 9, "image": "/folk/art/punchkin/09-ending.webp", "alt": "Balna and her son rejoice with the seven restored princes and the people freed from enchantment."}
   ],
   "scenes": [
     ["Once upon a time there was a Raja who had seven beautiful daughters. They were all good girls; but the youngest, named Balna, was more clever than the rest. Their mother died while they were little, and the princesses took turns cooking their father’s dinner.", "A Prudhan’s widow came daily to beg fire. While no one watched she threw mud into the dishes, then spoke so cunningly when the Raja discovered her that he married her and made her Ranee.", "The new Ranee hated the seven princesses. She gave them scarcely any food, hoping her own daughter would take their place. The sisters wept beside their dead mother’s tomb, where a beautiful pomelo tree sprang up and fed them."],

@@ -7,8 +7,8 @@
   "note": "A condensed reading of Jean Lang’s public-domain chapter “King Midas of the Golden Touch.” It follows that chapter’s Silenus, golden-touch, and Pactolus episodes; introductory commentary and some ornament are omitted. No three-scene set of source plates was available, so the illustrations are new collection artwork in a historically informed mythic Phrygian setting. Page divisions are editorial.",
   "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 22693 and its illustrated 1914 edition as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
   "review": {"adaptation": "reviewed", "cultural": "reviewed"},
-  "artLabel": "Midas reaches toward a rose as gold spreads beneath his fingers.", "art": "midas", "image": "/folklore/art/covers/king-midas.webp",
-  "pageArt": [{"page": 2, "image": "/folklore/art/king-midas/03-turning.webp", "alt": "King Midas stares at a feast transformed into hard gold."}, {"page": 4, "image": "/folklore/art/king-midas/05-ending.webp", "alt": "Midas washes the golden power from his hands in the river Pactolus."}],
+  "artLabel": "Midas reaches toward a rose as gold spreads beneath his fingers.", "art": "midas", "image": "/folk/art/covers/king-midas.webp",
+  "pageArt": [{"page": 2, "image": "/folk/art/king-midas/03-turning.webp", "alt": "King Midas stares at a feast transformed into hard gold."}, {"page": 4, "image": "/folk/art/king-midas/05-ending.webp", "alt": "Midas washes the golden power from his hands in the river Pactolus."}],
   "scenes": [
     ["Midas, king of Phrygia, loved gold more than anything else. One day his servants found the old satyr Silenus sleeping among the roses. Midas knew him as a companion of Dionysus, treated him kindly, and led him safely back to the god."],
     ["Dionysus offered Midas any reward he wished. The king asked that everything he touched should turn to gold. The god granted the wish, though he warned that it was not a wise one. Midas touched an oak twig, a stone, and an apple; each became solid gold."],

@@ -48,16 +48,16 @@
       "“Ah, people often grudge others what they cannot enjoy themselves.”"
     ]
   ],
-  "image": "/folklore/art/covers/dog-in-manger.webp",
+  "image": "/folk/art/covers/dog-in-manger.webp",
   "pageArt": [
     {
       "page": 1,
-      "image": "/folklore/art/dog-in-manger/03-turning.webp",
+      "image": "/folk/art/dog-in-manger/03-turning.webp",
       "alt": "The dog stands barking from the manger as the tired ox approaches its straw."
     },
     {
       "page": 2,
-      "image": "/folklore/art/dog-in-manger/05-ending.webp",
+      "image": "/folk/art/dog-in-manger/05-ending.webp",
       "alt": "The ox walks away hungry while the dog remains upon the straw."
     }
   ]

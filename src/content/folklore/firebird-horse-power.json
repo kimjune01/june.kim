@@ -39,9 +39,9 @@
     ["Vasilissa passed her hand over the cauldron. The archer leapt in, sank twice among the bubbles, and sprang out transformed into so beautiful a youth that everyone cried aloud in wonder. The old tsar, thinking the water would renew him too, climbed into the cauldron and was boiled to death."],
     ["The people buried the old tsar and made the young archer tsar in his place. He married Princess Vasilissa, and they lived for many years in love and good fellowship. He built a golden stable for the Horse of Power and never forgot what he owed to his faithful friend."]
   ],
-  "image": "/folklore/art/covers/firebird-horse-power.webp",
+  "image": "/folk/art/covers/firebird-horse-power.webp",
   "pageArt": [
-    {"page": 3, "image": "/folklore/art/firebird-horse-power/04-turning.webp", "alt": "The Horse of Power helps the young archer safely capture the radiant Firebird in a moonlit field."},
-    {"page": 7, "image": "/folklore/art/firebird-horse-power/08-ending.webp", "alt": "The young archer and Princess Vasilissa ride together beneath the freed Firebird at sunrise."}
+    {"page": 3, "image": "/folk/art/firebird-horse-power/04-turning.webp", "alt": "The Horse of Power helps the young archer safely capture the radiant Firebird in a moonlit field."},
+    {"page": 7, "image": "/folk/art/firebird-horse-power/08-ending.webp", "alt": "The young archer and Princess Vasilissa ride together beneath the freed Firebird at sunrise."}
   ]
 }

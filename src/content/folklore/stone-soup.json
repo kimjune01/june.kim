@@ -29,10 +29,10 @@
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A hungry friar examines the stone with which he promises to make broth.",
   "art": "stone-soup",
-  "image": "/folklore/art/covers/stone-soup.webp",
+  "image": "/folk/art/covers/stone-soup.webp",
   "pageArt": [
-    {"page": 2, "image": "/folklore/art/stone-soup/03-turning.webp", "alt": "The farmer’s wife brings two tender cabbages while the friar’s stone broth simmers in an earthenware pot."},
-    {"page": 4, "image": "/folklore/art/stone-soup/05-ending.webp", "alt": "The satisfied friar washes the stone to carry it away after finishing the broth."}
+    {"page": 2, "image": "/folk/art/stone-soup/03-turning.webp", "alt": "The farmer’s wife brings two tender cabbages while the friar’s stone broth simmers in an earthenware pot."},
+    {"page": 4, "image": "/folk/art/stone-soup/05-ending.webp", "alt": "The satisfied friar washes the stone to carry it away after finishing the broth."}
   ],
   "scenes": [
     [

@@ -1,0 +1,71 @@
+{
+  "id": "fisherman-and-genie",
+  "order": 101,
+  "featured": false,
+  "published": true,
+  "title": "The Fisherman and the Genie",
+  "originalTitle": "The Story of the Fisherman",
+  "tradition": "Arabian Nights tale",
+  "region": "Middle East",
+  "culture": "Arabic literary and oral tale tradition",
+  "place": "A seashore and an enchanted lake",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "minutes": 12,
+  "themes": [
+    "wit",
+    "mercy",
+    "promises"
+  ],
+  "color": "#347d91",
+  "colorSoft": "#bcdde0",
+  "sourceTitle": "The Arabian Nights Entertainments",
+  "sourceAuthor": "Andrew Lang, editor",
+  "sourceYear": "1898",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/128",
+  "note": "The public-domain text of “The Story of the Fisherman” is lightly normalized and divided for reading. The record stops at the conclusion of the fisherman’s encounter with the genie rather than continuing into the nested enchanted-fish tale.",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1898 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "artLabel": "A poor fisherman faces a towering genie rising from a brass jar on the shore.",
+  "art": "fisherman-genie",
+  "image": "/folk/art/covers/fisherman-and-genie.webp",
+  "pageArt": [
+    {
+      "page": 2,
+      "image": "/folk/art/fisherman-and-genie/03-turning.webp",
+      "alt": "A vast genie forms from blue smoke while the fisherman stands beside the open jar."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/fisherman-and-genie/05-ending.webp",
+      "alt": "The clever fisherman watches the freed genie reveal an enchanted lake beyond the dunes."
+    }
+  ],
+  "scenes": [
+    [
+      "Long ago an old fisherman lived beside the sea. He was very poor, and each morning he cast his net no more than four times. On the first three casts he caught only rubbish. Before the fourth, he asked for one useful catch.",
+      "The net came up heavy. Inside it was a brass jar sealed with lead and stamped with the mark of the great King Solomon. “I can sell this jar,” thought the fisherman. He broke the seal and tipped it over, but nothing fell out."
+    ],
+    [
+      "Then smoke curled from the jar. It rose higher than a tower and gathered into an enormous genie. The fisherman trembled, but the genie cried, “Choose how you will die!”",
+      "The fisherman asked why his rescue had earned such a reward. The genie said that King Solomon had imprisoned him. For a hundred years he had promised riches to anyone who freed him. For another hundred he had promised treasure. After centuries passed, his hope had turned to anger, and he had sworn to punish whoever opened the jar."
+    ],
+    [
+      "The fisherman knew that strength would not save him, so he used his wits. “I cannot believe that such a huge genie was inside this little jar,” he said. “Not even one of your feet would fit.”",
+      "“Watch and believe,” boomed the genie. He became smoke again. The cloud streamed into the jar until every wisp had disappeared. From inside came his voice: “Now do you believe me?”",
+      "The fisherman quickly pressed the lead seal back into place. “Now,” he said, “you may choose whether I throw you into the sea or bury you on shore. I will warn every fisherman never to open your jar.”"
+    ],
+    [
+      "The genie begged to be released and promised to do no harm. The fisherman reminded him that promises made in anger can bring anger in return. Only after the genie swore a solemn oath to help him did the fisherman open the jar.",
+      "The genie kept his new promise. He led the fisherman beyond the dunes to an enchanted lake filled with fish of four bright colors. The fisherman returned home safely, carrying a catch more wonderful than anything his old net had ever held."
+    ]
+  ]
+}

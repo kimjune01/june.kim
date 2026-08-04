@@ -28,10 +28,10 @@
   "review": {"adaptation": "draft", "cultural": "pending"},
   "artLabel": "A fox flatters a crow holding cheese in an olive tree.",
   "art": "fox-crow",
-  "image": "/folklore/art/covers/fox-and-crow.webp",
+  "image": "/folk/art/covers/fox-and-crow.webp",
   "pageArt": [
-    {"page": 1, "image": "/folklore/art/fox-and-crow/03-turning.webp", "alt": "Crow opens her beak to sing as the cheese begins to fall toward Fox in the olive grove."},
-    {"page": 2, "image": "/folklore/art/fox-and-crow/05-ending.webp", "alt": "Fox carries away the cheese while Crow watches from the olive branch above."}
+    {"page": 1, "image": "/folk/art/fox-and-crow/03-turning.webp", "alt": "Crow opens her beak to sing as the cheese begins to fall toward Fox in the olive grove."},
+    {"page": 2, "image": "/folk/art/fox-and-crow/05-ending.webp", "alt": "Fox carries away the cheese while Crow watches from the olive branch above."}
   ],
   "scenes": [
     ["A Fox once saw a Crow fly off with a piece of cheese in its beak and settle on a branch of a tree. “That’s for me, as I am a Fox,” said Master Reynard, and he walked up to the foot of the tree."],
