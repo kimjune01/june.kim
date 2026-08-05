@@ -38,9 +38,19 @@
   "image": "/folk/art/covers/herd-boy-weaving-maiden.webp",
   "pageArt": [
     {
+      "page": 2,
+      "image": "/folk/art/herd-boy-weaving-maiden/03-scene.webp",
+      "alt": "The Cowherd discovers a wondrous green lake filled with golden fish and celestial birds."
+    },
+    {
       "page": 4,
       "image": "/folk/art/herd-boy-weaving-maiden/03-turning.webp",
       "alt": "The Queen Mother draws the shining Silver River between Niulang and Zhinü."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/herd-boy-weaving-maiden/06-scene.webp",
+      "alt": "The Cowherd and Weaver Girl reach toward each other across the starry Silver River."
     },
     {
       "page": 7,

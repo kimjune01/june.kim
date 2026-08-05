@@ -38,9 +38,24 @@
   "image": "/folk/art/covers/cinderella.webp",
   "pageArt": [
     {
+      "page": 3,
+      "image": "/folk/art/cinderella/04-scene.webp",
+      "alt": "White doves help Cinderella sort lentils from the hearth ashes."
+    },
+    {
+      "page": 6,
+      "image": "/folk/art/cinderella/07-scene.webp",
+      "alt": "A white bird brings Cinderella a shimmering gown beneath the flowering hazel tree."
+    },
+    {
       "page": 8,
       "image": "/folk/art/cinderella/03-turning.webp",
       "alt": "White birds bring Cinderella a shining dress and golden slippers beneath the hazel tree."
+    },
+    {
+      "page": 11,
+      "image": "/folk/art/cinderella/12-scene.webp",
+      "alt": "The golden slipper fits Cinderella as the prince and her family look on."
     },
     {
       "page": 14,

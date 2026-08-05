@@ -118,9 +118,29 @@
   "image": "/folk/art/covers/wee-bannock.webp",
   "pageArt": [
     {
+      "page": 3,
+      "image": "/folk/art/wee-bannock/04-scene.webp",
+      "alt": "The lively bannock rolls around a tailor shop while everyone tries to catch it."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/wee-bannock/06-scene.webp",
+      "alt": "The bannock dodges a ball of yarn beside a cottage butter churn."
+    },
+    {
       "page": 7,
       "image": "/folk/art/wee-bannock/03-turning.webp",
       "alt": "The wee bannock rolls over a Scottish brae ahead of a weaver, butter-maker, miller, and blacksmith."
+    },
+    {
+      "page": 8,
+      "image": "/folk/art/wee-bannock/09-scene.webp",
+      "alt": "The bannock hides behind a chair while a flax-working couple searches the room."
+    },
+    {
+      "page": 10,
+      "image": "/folk/art/wee-bannock/11-scene.webp",
+      "alt": "A shepherd family follows the laughing bannock across a sunny hillside."
     },
     {
       "page": 13,

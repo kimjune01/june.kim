@@ -1,22 +1,88 @@
 {
-  "id": "jason-and-golden-fleece", "order": 95, "featured": false, "published": true,
-  "title": "Jason Wins the Golden Fleece", "originalTitle": "Ἰάσων καὶ τὸ χρυσόμαλλον δέρας · Iasōn kai to chrysómallon déras",
-  "tradition": "Greek myth", "region": "Europe", "culture": "Ancient Greece", "place": "Mythic Iolcos and Colchis", "language": "English", "ages": "10–14", "minutes": 8,
-  "themes": ["quests", "impossible tasks", "help"], "color": "#6d5936", "colorSoft": "#dacaa5",
-  "sourceTitle": "A Wonder Book and Tanglewood Tales, for Girls and Boys", "sourceAuthor": "Nathaniel Hawthorne; illustrated by Maxfield Parrish", "sourceYear": "1910", "sourceUrl": "https://www.gutenberg.org/ebooks/35377",
+  "id": "jason-and-golden-fleece",
+  "order": 95,
+  "featured": false,
+  "published": true,
+  "title": "Jason Wins the Golden Fleece",
+  "originalTitle": "Ἰάσων καὶ τὸ χρυσόμαλλον δέρας · Iasōn kai to chrysómallon déras",
+  "tradition": "Greek myth",
+  "region": "Europe",
+  "culture": "Ancient Greece",
+  "place": "Mythic Iolcos and Colchis",
+  "language": "English",
+  "ages": "10–14",
+  "minutes": 8,
+  "themes": [
+    "quests",
+    "impossible tasks",
+    "help"
+  ],
+  "color": "#6d5936",
+  "colorSoft": "#dacaa5",
+  "sourceTitle": "A Wonder Book and Tanglewood Tales, for Girls and Boys",
+  "sourceAuthor": "Nathaniel Hawthorne; illustrated by Maxfield Parrish",
+  "sourceYear": "1910",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/35377",
   "note": "A substantial condensation of Hawthorne’s public-domain chapter “The Golden Fleece,” limited to Jason’s claim, the voyage’s arrival in Colchis, Aeëtes’s trials, Medea’s aid, and the winning of the fleece. Most Argonaut episodes, the frame story, and the return journey are omitted. The cover is Parrish’s “Jason and the Talking Oak” (images/illus1.jpg) and the ending is “The Argonauts in Quest of the Golden Fleece” (images/illus10.jpg) from the cited edition; the 3:2 trial scene is new. The Greek line is a descriptive traditional title, not the title of one ancient source.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 35377 and its 1910 Parrish illustrations as public domain in the United States. The displayed condensation and new turning-point illustration were prepared for this collection.", "jurisdiction": "United States", "checked": "2026-08-03"},
-  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
-  "artLabel": "Jason listens to the speaking oak before his voyage in Maxfield Parrish’s 1910 illustration.", "art": "golden-fleece", "image": "/folk/art/covers/jason-golden-fleece.webp",
-  "pageArt": [{"page": 3, "image": "/folk/art/jason-golden-fleece/04-turning.webp", "alt": "Jason guides the plough behind two fire-breathing, bronze-footed bulls while Medea and King Aeëtes watch."}, {"page": 7, "image": "/folk/art/jason-golden-fleece/08-ending.webp", "alt": "The Argonauts sail in quest of the Golden Fleece in Maxfield Parrish’s 1910 illustration."}],
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies ebook 35377 and its 1910 Parrish illustrations as public domain in the United States. The displayed condensation and new turning-point illustration were prepared for this collection.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed"
+  },
+  "artLabel": "Jason listens to the speaking oak before his voyage in Maxfield Parrish’s 1910 illustration.",
+  "art": "golden-fleece",
+  "image": "/folk/art/covers/jason-golden-fleece.webp",
+  "pageArt": [
+    {
+      "page": 2,
+      "image": "/folk/art/jason-and-golden-fleece/03-scene.webp",
+      "alt": "Jason guides the magical bronze-hoofed bulls as they plough the sunlit field."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/jason-golden-fleece/04-turning.webp",
+      "alt": "Jason guides the plough behind two fire-breathing, bronze-footed bulls while Medea and King Aeëtes watch."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/jason-and-golden-fleece/06-scene.webp",
+      "alt": "Jason and Medea discover the radiant Golden Fleece above a peacefully sleeping dragon."
+    },
+    {
+      "page": 7,
+      "image": "/folk/art/jason-golden-fleece/08-ending.webp",
+      "alt": "The Argonauts sail in quest of the Golden Fleece in Maxfield Parrish’s 1910 illustration."
+    }
+  ],
   "scenes": [
-    ["Jason returned to Iolcos to claim the kingdom taken from his father. King Pelias promised to yield it only if Jason brought back the Golden Fleece, which hung far away in Colchis and was guarded by a dragon."],
-    ["Jason called heroes from across Greece and sailed with them in the ship Argo. After many dangers they reached Colchis, where King Aeëtes heard Jason’s request and set him tasks no ordinary person could survive."],
-    ["First Jason must yoke two bulls whose feet were bronze and whose breath was flame. Then he must plough a field, sow it with dragon’s teeth, and overcome the armed men who would spring from the furrows."],
-    ["Aeëtes’s daughter Medea knew magic. She gave Jason a salve that would protect him for one day and told him how to defeat the earth-born warriors: throw a stone among them, and each would blame the others."],
-    ["Jason faced the bulls, forced them beneath the yoke, and ploughed the field. He sowed the teeth. Armed men rose from the earth, but when he cast the stone they turned upon one another until the field was still."],
-    ["Aeëtes still refused the fleece. That night Medea led Jason to the sacred grove. The Golden Fleece shone from an oak, and the sleepless dragon coiled beneath it."],
-    ["Medea used her knowledge of herbs and song to quiet the dragon. Jason lifted the fleece from the branches, and together they hurried toward the Argo before the king’s guards could close the harbor."],
-    ["The Argonauts raised their oars and carried Jason, Medea, and the Golden Fleece out to sea. Jason had completed the impossible tasks—but only because courage had accepted the help that wisdom offered."]
+    [
+      "Jason returned to Iolcos to claim the kingdom taken from his father. King Pelias promised to yield it only if Jason brought back the Golden Fleece, which hung far away in Colchis and was guarded by a dragon."
+    ],
+    [
+      "Jason called heroes from across Greece and sailed with them in the ship Argo. After many dangers they reached Colchis, where King Aeëtes heard Jason’s request and set him tasks no ordinary person could survive."
+    ],
+    [
+      "First Jason must yoke two bulls whose feet were bronze and whose breath was flame. Then he must plough a field, sow it with dragon’s teeth, and overcome the armed men who would spring from the furrows."
+    ],
+    [
+      "Aeëtes’s daughter Medea knew magic. She gave Jason a salve that would protect him for one day and told him how to defeat the earth-born warriors: throw a stone among them, and each would blame the others."
+    ],
+    [
+      "Jason faced the bulls, forced them beneath the yoke, and ploughed the field. He sowed the teeth. Armed men rose from the earth, but when he cast the stone they turned upon one another until the field was still."
+    ],
+    [
+      "Aeëtes still refused the fleece. That night Medea led Jason to the sacred grove. The Golden Fleece shone from an oak, and the sleepless dragon coiled beneath it."
+    ],
+    [
+      "Medea used her knowledge of herbs and song to quiet the dragon. Jason lifted the fleece from the branches, and together they hurried toward the Argo before the king’s guards could close the harbor."
+    ],
+    [
+      "The Argonauts raised their oars and carried Jason, Medea, and the Golden Fleece out to sea. Jason had completed the impossible tasks—but only because courage had accepted the help that wisdom offered."
+    ]
   ]
 }

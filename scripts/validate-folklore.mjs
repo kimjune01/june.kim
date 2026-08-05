@@ -11,6 +11,7 @@ const records = files.map((file) => ({
 const errors = [];
 const ids = new Map();
 const orders = new Map();
+const desiredArtCount = (sceneCount) => sceneCount <= 6 ? Math.max(2, Math.floor(sceneCount / 2)) : sceneCount <= 12 ? 4 : 6;
 
 for (const { file, record } of records) {
   const label = `${file} (${record.id ?? "missing id"})`;
@@ -20,7 +21,10 @@ for (const { file, record } of records) {
   }
   if (!Number.isInteger(record.order)) errors.push(`${label}: order must be an integer`);
   if (!Array.isArray(record.scenes) || record.scenes.length === 0) errors.push(`${label}: scenes must not be empty`);
-  if (!Array.isArray(record.pageArt) || record.pageArt.length !== 2) errors.push(`${label}: expected two interior pageArt entries`);
+  const maxArt = desiredArtCount(record.scenes?.length ?? 0);
+  if (!Array.isArray(record.pageArt) || record.pageArt.length < 2 || record.pageArt.length > maxArt) {
+    errors.push(`${label}: expected 2–${maxArt} interior pageArt entries`);
+  }
 
   if (ids.has(record.id)) errors.push(`${label}: duplicate id also used by ${ids.get(record.id)}`);
   else ids.set(record.id, file);
@@ -39,7 +43,7 @@ for (const { file, record } of records) {
 
   if (record.published !== false) {
     const images = [record.image, ...(record.pageArt ?? []).map((art) => art.image)];
-    if (new Set(images).size !== 3) errors.push(`${label}: cover, turning-point, and ending art must use three distinct files`);
+    if (new Set(images).size !== images.length) errors.push(`${label}: cover and interior art must use distinct files`);
     for (const image of images) {
       const imagePath = image && path.join(root, "public", image.replace(/^\//, ""));
       if (!imagePath || !fs.existsSync(imagePath)) {

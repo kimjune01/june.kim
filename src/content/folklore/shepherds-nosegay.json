@@ -1,0 +1,74 @@
+{
+  "featured": false,
+  "published": true,
+  "tradition": "Czech fairy tale",
+  "region": "Europe",
+  "culture": "Czechia",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "sourceTitle": "The Shoemaker's Apron: A Second Book of Czechoslovak Fairy Tales and Folk Tales",
+  "sourceAuthor": "Parker Fillmore",
+  "sourceYear": "1920",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/33002",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1920 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "id": "shepherds-nosegay",
+  "order": 109,
+  "title": "The Shepherd’s Nosegay",
+  "originalTitle": "Pastýřova kytice",
+  "place": "A hillside pasture below a Czech royal castle",
+  "minutes": 7,
+  "themes": [
+    "courtesy",
+    "humility",
+    "friendship"
+  ],
+  "color": "#6c7440",
+  "colorSoft": "#dce0b8",
+  "note": "A concise child-facing retelling of Fillmore’s “The Shepherd’s Nosegay.” Its lesson about courtesy is preserved without presenting rank or obedience as virtues in themselves.",
+  "artLabel": "A young shepherd offers a wildflower nosegay to a curious princess on a sunny hillside.",
+  "art": "shepherds-nosegay",
+  "pageArt": [
+    {
+      "page": 3,
+      "image": "/folk/art/shepherds-nosegay/03-turning.webp",
+      "alt": "The disguised princess struggles with sheep while the shepherd calmly asks for help using kind words."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/shepherds-nosegay/05-ending.webp",
+      "alt": "Princess and shepherd plant a castle garden where children gather flowers together."
+    }
+  ],
+  "scenes": [
+    [
+      "A princess lived in a hilltop castle. She was clever and lively, but she had never learned to ask. “Bring my cloak!” she called. “Open the gate!” “Move aside!” Everyone hurried to obey, yet no one enjoyed helping her.",
+      "Below the castle, a young shepherd named Janko watched his flock. Each morning he gathered wildflowers into a nosegay for his grandmother. He spoke gently to people and animals alike, and even the most stubborn sheep seemed willing to follow him."
+    ],
+    [
+      "One day the princess rode past and saw the flowers. “Give those to me,” she said. Janko held the bouquet behind his back. “They are promised to my grandmother.” The princess stared. No one had ever refused her.",
+      "“You may have tomorrow’s flowers,” Janko added, “if you can find one small word that makes a request a gift instead of an order.” The princess guessed “now,” “quickly,” and “at once.” Janko only shook his head."
+    ],
+    [
+      "The next morning the princess dressed as a village girl and returned to discover Janko’s secret. Just then several lambs slipped through a gap in the hedge. She chased them, waved her arms, and shouted, but the lambs scattered farther.",
+      "“Will you please stand by that tree?” Janko asked. Surprised by his calm voice, she did. “Thank you,” he said. Together they guided every lamb home. The two simple words felt warmer than praise at court."
+    ],
+    [
+      "The princess tried them herself. “Will you please show me how to tie this gate?” Janko showed her. “Thank you.” She asked to carry the nosegay to his grandmother, and this time Janko gladly placed it in her hands.",
+      "At the cottage, the grandmother recognized the princess but said nothing. She poured three cups of berry tea. The princess listened to stories of the hillside and discovered how much people shared when they were not being ordered about."
+    ],
+    [
+      "Back at the castle, the princess began asking instead of commanding. At first everyone blinked in surprise. Soon the halls felt lighter, and people offered ideas she had never heard before.",
+      "She invited Janko and his grandmother to help make a wildflower garden beside the castle gate. Any child could pick a small nosegay there—after leaving enough blossoms for the bees. The princess had found the word she wanted, but more importantly, she had learned what it meant."
+    ]
+  ],
+  "image": "/folk/art/covers/shepherds-nosegay.webp"
+}

@@ -1,0 +1,75 @@
+{
+  "featured": false,
+  "published": true,
+  "tradition": "Czech fairy tale",
+  "region": "Europe",
+  "culture": "Czechia",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "sourceTitle": "The Shoemaker's Apron: A Second Book of Czechoslovak Fairy Tales and Folk Tales",
+  "sourceAuthor": "Parker Fillmore",
+  "sourceYear": "1920",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/33002",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1920 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "id": "twelve-months",
+  "order": 107,
+  "title": "The Twelve Months",
+  "originalTitle": "O dvanácti měsíčkách",
+  "place": "A snowy village and a firelit mountain in Bohemia",
+  "minutes": 8,
+  "themes": [
+    "kindness",
+    "seasons",
+    "patience"
+  ],
+  "color": "#315f78",
+  "colorSoft": "#c9dde4",
+  "note": "A concise child-facing retelling of Fillmore’s “The Twelve Months,” which he attributes to Božena Němcová. The source’s fatal ending is softened: Holena and her mother return home cold and chastened.",
+  "artLabel": "Marushka stands before the twelve Months around a glowing winter fire.",
+  "art": "twelve-months",
+  "pageArt": [
+    {
+      "page": 3,
+      "image": "/folk/art/twelve-months/03-turning.webp",
+      "alt": "Young March raises his staff and violets bloom through the snow for Marushka."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/twelve-months/05-ending.webp",
+      "alt": "Marushka tends a peaceful garden where flowers and fruit arrive in their proper seasons."
+    }
+  ],
+  "scenes": [
+    [
+      "In a cottage near the snowy hills lived gentle Marushka with her stepsister Holena and Holena’s mother. Marushka did the sweeping, cooking, spinning, and wood carrying. She worked without complaint, yet Holena was never satisfied.",
+      "One bitter January day Holena cried, “I want violets! Go into the forest and bring me a bunch.” Marushka looked at the snow piled against the door. “Violets do not bloom in winter.” But Holena pushed a basket into her hands and sent her out."
+    ],
+    [
+      "Snow covered every path. Wind slipped through Marushka’s shawl, and soon she could no longer see the village. Then, high on the mountain, she noticed a red glow.",
+      "Around a great fire sat twelve figures. Three had snowy beards, three wore garlands of spring flowers, three shone like summer sunshine, and three carried autumn leaves. On the highest stone sat old January with a silver staff.",
+      "“What brings you here, child?” January asked. Marushka bowed. “My sister sent me for violets. I know it is not their time, but I cannot return without them.”"
+    ],
+    [
+      "January turned to a bright-eyed youth. “Brother March, will you help her?” March took the silver staff and touched the fire. At once the wind softened. Snow shrank into the earth, green grass appeared, and purple violets opened beneath the bushes.",
+      "“Gather quickly,” March said. Marushka picked one small bunch, thanked every Month, and hurried home. Holena snatched the flowers without thanking her."
+    ],
+    [
+      "Soon Holena demanded strawberries, and later red apples. Each time Marushka climbed the mountain. June warmed a sunny patch where berries ripened; September bent an apple tree until two red apples rested in Marushka’s hands. She always took only what she needed and always gave thanks.",
+      "Holena wanted more. She wrapped herself in furs, found the twelve Months, and ordered them to make summer come at once. When January asked her to be patient, she spoke rudely and tried to seize his staff. The fire dimmed, snow whirled, and Holena fled down the mountain."
+    ],
+    [
+      "Holena and her mother reached home at last, shivering and ashamed. They had learned that no amount of demanding could hurry the seasons.",
+      "After that winter, Marushka was allowed to tend her own garden. She welcomed every month as it came: violets in spring, berries in summer, apples in autumn, and quiet stories by the fire in winter. Because she knew how to wait and how to be grateful, every season brought her something good."
+    ]
+  ],
+  "image": "/folk/art/covers/twelve-months.webp"
+}

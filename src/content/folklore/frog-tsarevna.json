@@ -12,7 +12,12 @@
   "language": "English",
   "ages": "7–11",
   "minutes": 9,
-  "themes": ["appearances", "patience", "kindness", "loyalty"],
+  "themes": [
+    "appearances",
+    "patience",
+    "kindness",
+    "loyalty"
+  ],
   "color": "#476b58",
   "colorSoft": "#cbd9cf",
   "sourceTitle": "Folk Tales from the Russian",
@@ -26,22 +31,60 @@
     "jurisdiction": "United States",
     "checked": "2026-08-03"
   },
-  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed"
+  },
   "artLabel": "Ivan finds his arrow in a marsh, held by the frog he must marry.",
   "art": "frog-tsarevna",
   "scenes": [
-    ["In an old Russian tsardom lived a sovereign prince with three brave sons. When they were grown, he gave each an arrow and said, “Draw your strong bows. In whatever court your arrow falls, there shall you find a wife.”", "The eldest son’s arrow fell at a boyar’s house, and the second son’s at a rich merchant’s porch. The arrow of Ivan Tsarevitch, the youngest, flew into a swamp, where a croaking frog held it. “How can I marry a frog?” Ivan asked. But his father answered, “Such is evidently your destiny.”"],
-    ["After the weddings, the sovereign ordered each wife to bake a loaf by morning. Ivan went home sorrowful, but the frog said, “Do not worry. The morning hour is a better adviser than the dark evening.” When he slept, she cast off her frogskin and became Vassilissa, a beautiful and wise maiden. She called her nurses, and by dawn a marvelous white loaf stood ready, adorned with towns and fortresses."],
-    ["Next the sovereign commanded the wives to weave rugs. Again Vassilissa laid aside the frogskin at night, and by morning there was a silk rug interwoven with silver and gold. The sovereign praised Ivan’s gifts above the rough work brought by his elder sons."],
-    ["Then all three wives were summoned to a feast. Ivan came alone, ashamed, until the palace shook with the arrival of a golden carriage. From it stepped Vassilissa, beautiful beyond description. At dinner she poured a little wine into one sleeve and put swan bones into the other. When she danced, a lake appeared from one sleeve and white swans from the other. Everyone marveled."],
-    ["Ivan slipped home, found the frogskin, and burned it. Vassilissa returned and wept. “What hast thou done? Only a short time remained. Now seek me in a far country, at the palace of Kostshei the Deathless.” She became a white swan and flew away."],
-    ["Ivan set out. An old man gave him a magic ball to guide him. Along the way Ivan spared a bear, a duck, and a hare, and pushed a stranded fish back into the sea. At last the ball led him to Baba Yaga’s hut. After he had eaten and told his story, she revealed Kostshei’s secret: his death lay in a needle, inside an egg, inside a duck, inside a hare, inside a trunk hidden in an ancient oak."],
-    ["At the oak, the grateful bear uprooted the tree and broke the trunk. Ivan’s hare caught the hare that sprang out; his duck struck down the duck that flew from it. The egg fell into the sea, but the fish Ivan had saved brought it back in its mouth. Ivan broke the egg and found the magic needle."],
-    ["When Ivan broke the needle, Kostshei lost his strength and power forever. Ivan entered his dominions and found his own dear wife, Vassilissa. He took her home, and they were very happy ever after."]
+    [
+      "In an old Russian tsardom lived a sovereign prince with three brave sons. When they were grown, he gave each an arrow and said, “Draw your strong bows. In whatever court your arrow falls, there shall you find a wife.”",
+      "The eldest son’s arrow fell at a boyar’s house, and the second son’s at a rich merchant’s porch. The arrow of Ivan Tsarevitch, the youngest, flew into a swamp, where a croaking frog held it. “How can I marry a frog?” Ivan asked. But his father answered, “Such is evidently your destiny.”"
+    ],
+    [
+      "After the weddings, the sovereign ordered each wife to bake a loaf by morning. Ivan went home sorrowful, but the frog said, “Do not worry. The morning hour is a better adviser than the dark evening.” When he slept, she cast off her frogskin and became Vassilissa, a beautiful and wise maiden. She called her nurses, and by dawn a marvelous white loaf stood ready, adorned with towns and fortresses."
+    ],
+    [
+      "Next the sovereign commanded the wives to weave rugs. Again Vassilissa laid aside the frogskin at night, and by morning there was a silk rug interwoven with silver and gold. The sovereign praised Ivan’s gifts above the rough work brought by his elder sons."
+    ],
+    [
+      "Then all three wives were summoned to a feast. Ivan came alone, ashamed, until the palace shook with the arrival of a golden carriage. From it stepped Vassilissa, beautiful beyond description. At dinner she poured a little wine into one sleeve and put swan bones into the other. When she danced, a lake appeared from one sleeve and white swans from the other. Everyone marveled."
+    ],
+    [
+      "Ivan slipped home, found the frogskin, and burned it. Vassilissa returned and wept. “What hast thou done? Only a short time remained. Now seek me in a far country, at the palace of Kostshei the Deathless.” She became a white swan and flew away."
+    ],
+    [
+      "Ivan set out. An old man gave him a magic ball to guide him. Along the way Ivan spared a bear, a duck, and a hare, and pushed a stranded fish back into the sea. At last the ball led him to Baba Yaga’s hut. After he had eaten and told his story, she revealed Kostshei’s secret: his death lay in a needle, inside an egg, inside a duck, inside a hare, inside a trunk hidden in an ancient oak."
+    ],
+    [
+      "At the oak, the grateful bear uprooted the tree and broke the trunk. Ivan’s hare caught the hare that sprang out; his duck struck down the duck that flew from it. The egg fell into the sea, but the fish Ivan had saved brought it back in its mouth. Ivan broke the egg and found the magic needle."
+    ],
+    [
+      "When Ivan broke the needle, Kostshei lost his strength and power forever. Ivan entered his dominions and found his own dear wife, Vassilissa. He took her home, and they were very happy ever after."
+    ]
   ],
   "image": "/folk/art/covers/frog-tsarevna.webp",
   "pageArt": [
-    {"page": 3, "image": "/folk/art/frog-tsarevna/04-turning.webp", "alt": "Vassilissa stands revealed in a lamplit wooden terem while attendants prepare her marvelous loaf and woven rug."},
-    {"page": 7, "image": "/folk/art/frog-tsarevna/08-ending.webp", "alt": "Ivan and Vassilissa are reunited beneath an ancient oak at sunrise, with their horse waiting nearby."}
+    {
+      "page": 2,
+      "image": "/folk/art/frog-tsarevna/03-scene.webp",
+      "alt": "Vassilissa reveals her magnificent gold-and-silver woven rug to Prince Ivan."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/frog-tsarevna/04-turning.webp",
+      "alt": "Vassilissa stands revealed in a lamplit wooden terem while attendants prepare her marvelous loaf and woven rug."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/frog-tsarevna/06-scene.webp",
+      "alt": "Prince Ivan and his animal friends follow a glowing ball toward the forest hut."
+    },
+    {
+      "page": 7,
+      "image": "/folk/art/frog-tsarevna/08-ending.webp",
+      "alt": "Ivan and Vassilissa are reunited beneath an ancient oak at sunrise, with their horse waiting nearby."
+    }
   ]
 }

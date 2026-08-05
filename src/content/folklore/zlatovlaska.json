@@ -1,0 +1,74 @@
+{
+  "featured": false,
+  "published": true,
+  "tradition": "Czech fairy tale",
+  "region": "Europe",
+  "culture": "Czechia",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "sourceTitle": "The Shoemaker's Apron: A Second Book of Czechoslovak Fairy Tales and Folk Tales",
+  "sourceAuthor": "Parker Fillmore",
+  "sourceYear": "1920",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/33002",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1920 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "id": "zlatovlaska",
+  "order": 108,
+  "title": "Zlatovlaska the Golden-Haired",
+  "originalTitle": "Zlatovláska",
+  "place": "A Czech castle, forest, and island kingdom",
+  "minutes": 10,
+  "themes": [
+    "kindness to animals",
+    "courage",
+    "keeping promises"
+  ],
+  "color": "#9a6425",
+  "colorSoft": "#ead7aa",
+  "note": "A concise retelling of Fillmore’s version, which he associates with Karel Jaromír Erben. Violent details are omitted while the animal helpers, three tasks, and enchanted water are retained.",
+  "artLabel": "Yirik sees golden-haired Zlatovlaska shining at an island palace window.",
+  "art": "zlatovlaska",
+  "pageArt": [
+    {
+      "page": 3,
+      "image": "/folk/art/zlatovlaska/03-turning.webp",
+      "alt": "Ants, ravens, and a golden fish help Yirik complete three impossible tasks."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/zlatovlaska/05-ending.webp",
+      "alt": "Yirik and Zlatovlaska greet their animal friends beside a bright castle garden."
+    }
+  ],
+  "scenes": [
+    [
+      "A mysterious old woman once brought a king a silver-covered dish. “Whoever tastes what is beneath this lid will understand the speech of animals,” she said. The king ordered his young servant Yirik to cook the strange meal but never taste it.",
+      "As it cooked, Yirik touched one drop to his tongue. At once he heard flies arguing and birds gossiping outside the window. He hid his surprise, but during dinner the king noticed Yirik smile at a bird’s joke. “You disobeyed me,” the king said. “You may earn forgiveness only by bringing me Zlatovlaska, the princess with golden hair.”"
+    ],
+    [
+      "Yirik rode out sadly. On the road he found ants trapped by a small fire, two hungry raven chicks, and a fish stranded in the reeds. He stamped out the fire, shared his food with the ravens, and returned the fish to deep water.",
+      "“Call us if you need us,” buzzed the ants. “We will remember,” croaked the ravens. The fish flashed its golden tail. “Kindness travels farther than any horse.”"
+    ],
+    [
+      "Across the sea, Yirik found Zlatovlaska’s palace. Her father agreed to let her go only if Yirik completed three tasks. First he scattered a sack of tiny pearls through a meadow and demanded every pearl before sunset. The ants arrived in a shining line and gathered them all.",
+      "Next the king demanded a lost golden ring from the deepest part of the sea. The golden fish brought it in its mouth. Last, he asked for water of life and water of sleep from two distant springs. The ravens flew beyond the mountains and returned carrying two little flasks."
+    ],
+    [
+      "The king brought out twelve princesses wearing long veils. “Choose Zlatovlaska,” he said. They looked exactly alike, but a small fly settled above one veil and whispered, “Here is the one whose hair shines like sunrise.” Yirik chose correctly.",
+      "On the journey home, Zlatovlaska heard that Yirik had been sent as a punishment. She also saw how every creature trusted him. “A person who listens to the smallest animal,” she said, “may be worth listening to himself.”"
+    ],
+    [
+      "At the old king’s castle, Yirik used the enchanted waters to wake a swallow that had flown into a window. The bird rose, healthy and singing, and everyone understood that the waters should heal, never harm.",
+      "The king released Yirik from his service. Zlatovlaska chose Yirik as her companion, and together they built a garden with ponds for fish, crumbs for ravens, and safe paths for ants. There Yirik never again had to hide that he could hear what the animals said."
+    ]
+  ],
+  "image": "/folk/art/covers/zlatovlaska.webp"
+}

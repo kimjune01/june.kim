@@ -1,25 +1,89 @@
 {
-  "id": "brave-little-tailor", "order": 68, "featured": false, "published": true,
-  "title": "The Brave Little Tailor", "originalTitle": "Das tapfere Schneiderlein",
-  "tradition": "Grimms’ fairy tale", "region": "Europe", "culture": "German", "place": "Villages, forests, and a royal court in a German wonder-tale", "language": "English", "ages": "8–12", "minutes": 10,
-  "themes": ["cleverness", "confidence", "misunderstanding"], "color": "#77583f", "colorSoft": "#e5d1af",
-  "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob Grimm and Wilhelm Grimm; English text based on Edgar Taylor and Marian Edwardes", "sourceYear": "1812–1857", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
+  "id": "brave-little-tailor",
+  "order": 68,
+  "featured": false,
+  "published": true,
+  "title": "The Brave Little Tailor",
+  "originalTitle": "Das tapfere Schneiderlein",
+  "tradition": "Grimms’ fairy tale",
+  "region": "Europe",
+  "culture": "German",
+  "place": "Villages, forests, and a royal court in a German wonder-tale",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 10,
+  "themes": [
+    "cleverness",
+    "confidence",
+    "misunderstanding"
+  ],
+  "color": "#77583f",
+  "colorSoft": "#e5d1af",
+  "sourceTitle": "Grimms’ Fairy Tales",
+  "sourceAuthor": "Jacob Grimm and Wilhelm Grimm; English text based on Edgar Taylor and Marian Edwardes",
+  "sourceYear": "1812–1857",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
   "note": "A concise reading retelling faithful to the plot of the public-domain Project Gutenberg text, where the story is titled “The Valiant Little Tailor.” Compression and page divisions are editorial.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"},
-  "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
-  "artLabel": "A little tailor wears his bold belt and sets out into the wide world.", "art": "brave-tailor", "image": "/folk/art/covers/brave-little-tailor.webp",
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies ebook 2591 and its English text as public domain in the United States.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed",
+    "reviewer": "Codex editorial review, 2026-08-03"
+  },
+  "artLabel": "A little tailor wears his bold belt and sets out into the wide world.",
+  "art": "brave-tailor",
+  "image": "/folk/art/covers/brave-little-tailor.webp",
   "pageArt": [
-    {"page": 3, "image": "/folk/art/brave-little-tailor/03-turning.webp", "alt": "The tailor tricks a giant by squeezing cheese while the giant crushes a stone."},
-    {"page": 7, "image": "/folk/art/brave-little-tailor/05-ending.webp", "alt": "The little tailor is welcomed at the royal court after completing his trials."}
+    {
+      "page": 2,
+      "image": "/folk/art/brave-little-tailor/03-scene.webp",
+      "alt": "Palace guards welcome the cheerful little tailor after noticing his remarkable belt."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/brave-little-tailor/03-turning.webp",
+      "alt": "The tailor tricks a giant by squeezing cheese while the giant crushes a stone."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/brave-little-tailor/06-scene.webp",
+      "alt": "The tailor and princess celebrate together as the king and court applaud."
+    },
+    {
+      "page": 7,
+      "image": "/folk/art/brave-little-tailor/05-ending.webp",
+      "alt": "The little tailor is welcomed at the royal court after completing his trials."
+    }
   ],
   "scenes": [
-    ["A little tailor was eating bread and jam when flies settled on it. He struck at them with a cloth and found seven dead. Proud of the deed, he made a belt embroidered “Seven at one blow!” and set out so that the whole world might hear of his bravery."],
-    ["On a mountain he met a giant, who thought the words meant seven men. The giant squeezed water from a stone; the tailor squeezed whey from a soft cheese. The giant threw a stone high into the air; the tailor released a bird, which never came down. When challenged to carry a tree, the tailor took the light branches while the giant bore the trunk."],
-    ["The giants invited him to their cave and planned to kill him in bed, but the tailor slept in a corner. They smashed the empty bed and were astonished to see him alive in the morning. Soon afterward, the tailor reached a royal palace, where soldiers saw his belt and reported the mighty warrior to the king."],
-    ["The king feared the stranger but offered him half the kingdom and the princess’s hand if he would destroy two dangerous giants. The tailor found them sleeping beneath a tree and dropped stones upon each in turn. Each giant blamed the other; they fought until both fell."],
-    ["Next the king ordered him to capture a unicorn. The tailor stood before a tree until the animal charged, then sprang aside. Its horn stuck deep in the trunk, and he led it away. He trapped a wild boar just as cleverly by luring it into an empty chapel and shutting the door."],
-    ["The king had to keep his promise, and the tailor married the princess. But she heard him talking in his sleep about sewing and guessed that he had once been only a tailor. She asked her father to have him carried away during the night."],
-    ["The tailor’s faithful armour-bearer warned him. When the king’s servants came, the tailor pretended to sleep and cried out that he had struck down seven, killed giants, led away a unicorn, and trapped a boar—and that he did not fear men outside his door. The frightened servants fled."],
-    ["No one dared trouble him again. The brave little tailor remained a king for the rest of his life."]
+    [
+      "A little tailor was eating bread and jam when flies settled on it. He struck at them with a cloth and found seven dead. Proud of the deed, he made a belt embroidered “Seven at one blow!” and set out so that the whole world might hear of his bravery."
+    ],
+    [
+      "On a mountain he met a giant, who thought the words meant seven men. The giant squeezed water from a stone; the tailor squeezed whey from a soft cheese. The giant threw a stone high into the air; the tailor released a bird, which never came down. When challenged to carry a tree, the tailor took the light branches while the giant bore the trunk."
+    ],
+    [
+      "The giants invited him to their cave and planned to kill him in bed, but the tailor slept in a corner. They smashed the empty bed and were astonished to see him alive in the morning. Soon afterward, the tailor reached a royal palace, where soldiers saw his belt and reported the mighty warrior to the king."
+    ],
+    [
+      "The king feared the stranger but offered him half the kingdom and the princess’s hand if he would destroy two dangerous giants. The tailor found them sleeping beneath a tree and dropped stones upon each in turn. Each giant blamed the other; they fought until both fell."
+    ],
+    [
+      "Next the king ordered him to capture a unicorn. The tailor stood before a tree until the animal charged, then sprang aside. Its horn stuck deep in the trunk, and he led it away. He trapped a wild boar just as cleverly by luring it into an empty chapel and shutting the door."
+    ],
+    [
+      "The king had to keep his promise, and the tailor married the princess. But she heard him talking in his sleep about sewing and guessed that he had once been only a tailor. She asked her father to have him carried away during the night."
+    ],
+    [
+      "The tailor’s faithful armour-bearer warned him. When the king’s servants came, the tailor pretended to sleep and cried out that he had struck down seven, killed giants, led away a unicorn, and trapped a boar—and that he did not fear men outside his door. The frightened servants fled."
+    ],
+    [
+      "No one dared trouble him again. The brave little tailor remained a king for the rest of his life."
+    ]
   ]
 }

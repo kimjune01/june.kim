@@ -48,7 +48,7 @@ const folklore = defineCollection({
       page: z.number().int().nonnegative(),
       image: z.string(),
       alt: z.string(),
-    })).length(2),
+    })).min(2).max(6),
     scenes: z.array(z.array(z.string()).nonempty()).nonempty(),
     rights: z.object({
       status: z.enum(['verified', 'review']),

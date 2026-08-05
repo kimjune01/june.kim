@@ -71,7 +71,25 @@
   ],
   "image": "/folk/art/covers/baba-yaga-kind-heart.webp",
   "pageArt": [
-    {"page": 4, "image": "/folk/art/baba-yaga-kind-heart/05-river.webp", "alt": "The kind-hearted girl throws down her towel and a broad river rises between her and Baba Yaga’s flying mortar."},
-    {"page": 6, "image": "/folk/art/baba-yaga-kind-heart/07-home.webp", "alt": "Safe in the warm hut, the girl tells her father her story while the little mouse warms its paws by her tea."}
+    {
+      "page": 2,
+      "image": "/folk/art/baba-yaga-kind-heart/03-scene.webp",
+      "alt": "The kind-hearted girl helps the gate, dog, and birch outside the cottage on chicken legs."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/baba-yaga-kind-heart/04-scene.webp",
+      "alt": "A clever black cat shows the girl a towel and comb glowing with helpful magic."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/baba-yaga-kind-heart/05-river.webp",
+      "alt": "The kind-hearted girl throws down her towel and a broad river rises between her and Baba Yaga’s flying mortar."
+    },
+    {
+      "page": 6,
+      "image": "/folk/art/baba-yaga-kind-heart/07-home.webp",
+      "alt": "Safe in the warm hut, the girl tells her father her story while the little mouse warms its paws by her tea."
+    }
   ]
 }

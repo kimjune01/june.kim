@@ -1,23 +1,90 @@
 {
-  "id": "east-of-the-sun-and-west-of-the-moon", "order": 84, "featured": false, "published": true,
-  "title": "East of the Sun and West of the Moon", "originalTitle": "Østenfor sol og vestenfor måne",
-  "tradition": "Norwegian tale", "region": "Europe", "culture": "Norway", "place": "The mountains and the castle east of the sun and west of the moon", "language": "English", "ages": "8–12", "minutes": 12,
-  "themes": ["courage", "devotion", "perseverance", "enchantment"], "color": "#45637a", "colorSoft": "#d4dfea",
-  "sourceTitle": "Popular Tales from the Norse, “East o’ the Sun and West o’ the Moon”", "sourceAuthor": "Peter Christen Asbjørnsen and Jørgen Moe; translated by George Webbe Dasent", "sourceYear": "1903",
+  "id": "east-of-the-sun-and-west-of-the-moon",
+  "order": 84,
+  "featured": false,
+  "published": true,
+  "title": "East of the Sun and West of the Moon",
+  "originalTitle": "Østenfor sol og vestenfor måne",
+  "tradition": "Norwegian tale",
+  "region": "Europe",
+  "culture": "Norway",
+  "place": "The mountains and the castle east of the sun and west of the moon",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 12,
+  "themes": [
+    "courage",
+    "devotion",
+    "perseverance",
+    "enchantment"
+  ],
+  "color": "#45637a",
+  "colorSoft": "#d4dfea",
+  "sourceTitle": "Popular Tales from the Norse, “East o’ the Sun and West o’ the Moon”",
+  "sourceAuthor": "Peter Christen Asbjørnsen and Jørgen Moe; translated by George Webbe Dasent",
+  "sourceYear": "1903",
   "sourceUrl": "https://archive.org/details/populartalesfrom00daseuoft/page/22/mode/2up",
   "note": "A condensed reading copy of Dasent’s public-domain English translation in the cited 1903 edition. It retains the white bear’s bargain, the forbidden candle, the three old women and four winds, the golden gifts, the washing test, and the rescue. Repeated dialogue and journey detail are shortened; spelling and punctuation are lightly modernized. The illustrations are newly generated because the cited edition supplies no suitable plates for all three required moments.",
-  "rights": {"status":"verified","basis":"The cited 1903 David Douglas edition was published before 1931 and is public domain in the United States.","jurisdiction":"United States","checked":"2026-08-03"},
-  "review": {"adaptation":"reviewed","cultural":"reviewed"}, "artLabel": "The youngest daughter rides through the mountains on the great white bear.", "art": "white-bear",
+  "rights": {
+    "status": "verified",
+    "basis": "The cited 1903 David Douglas edition was published before 1931 and is public domain in the United States.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed"
+  },
+  "artLabel": "The youngest daughter rides through the mountains on the great white bear.",
+  "art": "white-bear",
   "scenes": [
-    ["Once there was a poor husbandman with many children. The youngest daughter was the loveliest of them all. One wild Thursday evening a great White Bear tapped at the cottage window and promised to make the family rich if the man would give him his youngest daughter.", "At first the lassie said no. But when the Bear returned the next Thursday, she had made herself ready. She climbed upon his back, held fast to his shaggy coat, and rode far away through the darkness."],
-    ["The Bear carried her into a splendid castle inside a steep hill. There she had everything she wished for, and each night a man came to her after the light was out and departed before dawn. Yet she grew lonely, and the Bear allowed her to visit her family if she promised not to speak privately with her mother."],
-    ["Her mother drew her aside and gave her a candle, warning that her unseen companion might be a troll. Back at the castle, the lassie lit it while he slept. Beside her lay the loveliest Prince she had ever seen. As she bent to kiss him, three hot drops of tallow fell upon his shirt and woke him."],
-    ["The Prince grieved. One year more would have freed him from his stepmother’s spell; now he must go to her castle, east of the sun and west of the moon, and marry a troll princess. By morning Prince and castle were gone, and the lassie stood alone in a dark wood."],
-    ["She walked until she met three old women, one after another. None knew the way, but each lent her a horse, sent her onward, and gave her a golden gift: an apple, a carding-comb, and a spinning-wheel. At last the third woman sent her to the East Wind, who carried her to the West Wind, then the South Wind."],
-    ["Only the North Wind had ever blown as far as the castle. Though the journey nearly exhausted him, he bore her across the world and cast her beneath the castle windows. There she traded each golden gift for one night beside the Prince. Twice a sleeping draught kept him from hearing her; on the third night, warned by captive folk, he did not drink it."],
-    ["Together they made a plan. The next day the Prince declared he would marry only the woman who could wash the three tallow spots from his shirt. The troll princess scrubbed until the stains spread; her mother and all the trolls tried, but the shirt grew blacker."],
-    ["Then the true lassie was called. At her touch the shirt became white as snow. The trolls burst with rage, and the Prince was free. He and the lassie released the people held in the castle, took its gold and silver, and journeyed home together."]
+    [
+      "Once there was a poor husbandman with many children. The youngest daughter was the loveliest of them all. One wild Thursday evening a great White Bear tapped at the cottage window and promised to make the family rich if the man would give him his youngest daughter.",
+      "At first the lassie said no. But when the Bear returned the next Thursday, she had made herself ready. She climbed upon his back, held fast to his shaggy coat, and rode far away through the darkness."
+    ],
+    [
+      "The Bear carried her into a splendid castle inside a steep hill. There she had everything she wished for, and each night a man came to her after the light was out and departed before dawn. Yet she grew lonely, and the Bear allowed her to visit her family if she promised not to speak privately with her mother."
+    ],
+    [
+      "Her mother drew her aside and gave her a candle, warning that her unseen companion might be a troll. Back at the castle, the lassie lit it while he slept. Beside her lay the loveliest Prince she had ever seen. As she bent to kiss him, three hot drops of tallow fell upon his shirt and woke him."
+    ],
+    [
+      "The Prince grieved. One year more would have freed him from his stepmother’s spell; now he must go to her castle, east of the sun and west of the moon, and marry a troll princess. By morning Prince and castle were gone, and the lassie stood alone in a dark wood."
+    ],
+    [
+      "She walked until she met three old women, one after another. None knew the way, but each lent her a horse, sent her onward, and gave her a golden gift: an apple, a carding-comb, and a spinning-wheel. At last the third woman sent her to the East Wind, who carried her to the West Wind, then the South Wind."
+    ],
+    [
+      "Only the North Wind had ever blown as far as the castle. Though the journey nearly exhausted him, he bore her across the world and cast her beneath the castle windows. There she traded each golden gift for one night beside the Prince. Twice a sleeping draught kept him from hearing her; on the third night, warned by captive folk, he did not drink it."
+    ],
+    [
+      "Together they made a plan. The next day the Prince declared he would marry only the woman who could wash the three tallow spots from his shirt. The troll princess scrubbed until the stains spread; her mother and all the trolls tried, but the shirt grew blacker."
+    ],
+    [
+      "Then the true lassie was called. At her touch the shirt became white as snow. The trolls burst with rage, and the Prince was free. He and the lassie released the people held in the castle, took its gold and silver, and journeyed home together."
+    ]
   ],
   "image": "/folk/art/covers/east-of-the-sun-and-west-of-the-moon.webp",
-  "pageArt": [{"page":2,"image":"/folk/art/east-of-the-sun-and-west-of-the-moon/03-turning.webp","alt":"By candlelight, the young woman discovers the enchanted prince as three drops of tallow fall."},{"page":7,"image":"/folk/art/east-of-the-sun-and-west-of-the-moon/08-ending.webp","alt":"The freed prince and his courageous bride leave the troll castle at sunrise."}]
+  "pageArt": [
+    {
+      "page": 1,
+      "image": "/folk/art/east-of-the-sun-and-west-of-the-moon/02-scene.webp",
+      "alt": "The great white bear welcomes the young traveler into the castle beneath the mountain."
+    },
+    {
+      "page": 2,
+      "image": "/folk/art/east-of-the-sun-and-west-of-the-moon/03-turning.webp",
+      "alt": "By candlelight, the young woman discovers the enchanted prince as three drops of tallow fall."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/east-of-the-sun-and-west-of-the-moon/06-scene.webp",
+      "alt": "The North Wind carries the traveler over snowy mountains toward the golden castle."
+    },
+    {
+      "page": 7,
+      "image": "/folk/art/east-of-the-sun-and-west-of-the-moon/08-ending.webp",
+      "alt": "The freed prince and his courageous bride leave the troll castle at sunrise."
+    }
+  ]
 }

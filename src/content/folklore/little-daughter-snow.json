@@ -68,7 +68,25 @@
   ],
   "image": "/folk/art/covers/little-daughter-snow.webp",
   "pageArt": [
-    {"page": 4, "image": "/folk/art/little-daughter-snow/05-fox.webp", "alt": "The little Daughter of the Snow travels through the twilight forest with the red fox toward distant village lights."},
-    {"page": 6, "image": "/folk/art/little-daughter-snow/07-ending.webp", "alt": "The snow girl’s bright spirit rises from a pool of meltwater toward the open winter sky as the old couple reach after her."}
+    {
+      "page": 2,
+      "image": "/folk/art/little-daughter-snow/03-scene.webp",
+      "alt": "The Little Daughter of the Snow plays beneath the moon with her village friends."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/little-daughter-snow/04-scene.webp",
+      "alt": "A friendly red fox offers to guide the snow girl home through the spring forest."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/little-daughter-snow/05-fox.webp",
+      "alt": "The little Daughter of the Snow travels through the twilight forest with the red fox toward distant village lights."
+    },
+    {
+      "page": 6,
+      "image": "/folk/art/little-daughter-snow/07-ending.webp",
+      "alt": "The snow girl’s bright spirit rises from a pool of meltwater toward the open winter sky as the old couple reach after her."
+    }
   ]
 }

@@ -12,7 +12,11 @@
   "language": "English",
   "ages": "6–10",
   "minutes": 6,
-  "themes": ["courage", "responsibility", "hospitality"],
+  "themes": [
+    "courage",
+    "responsibility",
+    "hospitality"
+  ],
   "color": "#8f3f3d",
   "colorSoft": "#ead2c8",
   "sourceTitle": "Народные русские сказки · Narodnye russkie skazki, no. 113, “Гуси-лебеди”",
@@ -26,22 +30,69 @@
     "jurisdiction": "United States",
     "checked": "2026-08-03"
   },
-  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed"
+  },
   "artLabel": "A village girl races after the white swan-geese carrying her little brother toward the dark forest.",
   "art": "swan-geese",
   "scenes": [
-    ["Once an old man and an old woman lived with their daughter and their little son.", "“Daughter, daughter,” said her mother, “we are going to work. We shall bring you a bun, sew you a dress, and buy you a kerchief. Be sensible, look after your brother, and do not leave the yard.”"],
-    ["The elders went away, and the daughter forgot their words. She set her brother on the grass beneath the window, then ran into the street and lost herself in play.", "The swan-geese swooped down, caught up the boy, and carried him away on their wings. When the girl returned, her brother was gone. She called and wept, but he did not answer. Out in the open field she glimpsed the swan-geese vanishing beyond the dark forest. They had long borne a wicked name for stealing little children. She knew they had taken him and ran after them."],
-    ["She ran and ran until she came to an oven. “Oven, oven, tell me where the geese flew.”", "“Eat one of my rye cakes, and I shall tell you.”", "“At my father’s house, even wheat cakes go uneaten!” The oven said nothing.", "Farther on stood an apple tree. “Apple tree, tell me where the geese flew.” “Eat one of my wild apples.” “At my father’s house, even garden apples go uneaten!” The tree said nothing."],
-    ["She came to a river of milk with banks of pudding. “River of milk, pudding banks, where did the geese fly?”", "“Taste my plain pudding with milk, and I shall tell you.”", "“At my father’s house, even cream goes uneaten!” She hurried on. She might have wandered through field and forest for a long time, but luckily she met a hedgehog. She was about to nudge it, then feared the prickles. “Hedgehog, have you seen where the geese flew?” “That way,” it said, and pointed."],
-    ["She ran on and found a little hut on hen’s legs, turning where it stood. Inside sat Baba Yaga, sinewy of face and clay of leg. The girl’s brother sat on a bench, playing with golden apples.", "His sister saw him, crept near, snatched him up, and carried him away. But the swan-geese flew after her. They would soon catch her—where could she go?"],
-    ["She reached the river of milk. “Mother River, hide me!” “Eat some of my pudding.” There was nothing else to do, so she ate. The river sheltered her beneath its bank, and the geese flew past. She came out, said, “Thank you,” and ran on with her brother.", "The geese turned back and flew to meet them. The apple tree stood ahead. “Mother Apple Tree, hide me!” “Eat my wild apple.” She quickly ate it. The tree covered them with branches and leaves, and the geese flew past."],
-    ["Again she ran with her brother. The geese saw them and swept down, beating their wings, ready to tear him from her arms. Luckily, the oven stood beside the road.", "“Lady Oven, hide me!” “Eat my rye cake.” The girl quickly put the cake in her mouth and climbed into the oven’s opening. The geese flew round and round, cried out and cried out, and at last went away empty-winged."],
-    ["The girl hurried home with her brother. It was well that she ran so quickly, for no sooner had they reached the yard than their father and mother returned."]
+    [
+      "Once an old man and an old woman lived with their daughter and their little son.",
+      "“Daughter, daughter,” said her mother, “we are going to work. We shall bring you a bun, sew you a dress, and buy you a kerchief. Be sensible, look after your brother, and do not leave the yard.”"
+    ],
+    [
+      "The elders went away, and the daughter forgot their words. She set her brother on the grass beneath the window, then ran into the street and lost herself in play.",
+      "The swan-geese swooped down, caught up the boy, and carried him away on their wings. When the girl returned, her brother was gone. She called and wept, but he did not answer. Out in the open field she glimpsed the swan-geese vanishing beyond the dark forest. They had long borne a wicked name for stealing little children. She knew they had taken him and ran after them."
+    ],
+    [
+      "She ran and ran until she came to an oven. “Oven, oven, tell me where the geese flew.”",
+      "“Eat one of my rye cakes, and I shall tell you.”",
+      "“At my father’s house, even wheat cakes go uneaten!” The oven said nothing.",
+      "Farther on stood an apple tree. “Apple tree, tell me where the geese flew.” “Eat one of my wild apples.” “At my father’s house, even garden apples go uneaten!” The tree said nothing."
+    ],
+    [
+      "She came to a river of milk with banks of pudding. “River of milk, pudding banks, where did the geese fly?”",
+      "“Taste my plain pudding with milk, and I shall tell you.”",
+      "“At my father’s house, even cream goes uneaten!” She hurried on. She might have wandered through field and forest for a long time, but luckily she met a hedgehog. She was about to nudge it, then feared the prickles. “Hedgehog, have you seen where the geese flew?” “That way,” it said, and pointed."
+    ],
+    [
+      "She ran on and found a little hut on hen’s legs, turning where it stood. Inside sat Baba Yaga, sinewy of face and clay of leg. The girl’s brother sat on a bench, playing with golden apples.",
+      "His sister saw him, crept near, snatched him up, and carried him away. But the swan-geese flew after her. They would soon catch her—where could she go?"
+    ],
+    [
+      "She reached the river of milk. “Mother River, hide me!” “Eat some of my pudding.” There was nothing else to do, so she ate. The river sheltered her beneath its bank, and the geese flew past. She came out, said, “Thank you,” and ran on with her brother.",
+      "The geese turned back and flew to meet them. The apple tree stood ahead. “Mother Apple Tree, hide me!” “Eat my wild apple.” She quickly ate it. The tree covered them with branches and leaves, and the geese flew past."
+    ],
+    [
+      "Again she ran with her brother. The geese saw them and swept down, beating their wings, ready to tear him from her arms. Luckily, the oven stood beside the road.",
+      "“Lady Oven, hide me!” “Eat my rye cake.” The girl quickly put the cake in her mouth and climbed into the oven’s opening. The geese flew round and round, cried out and cried out, and at last went away empty-winged."
+    ],
+    [
+      "The girl hurried home with her brother. It was well that she ran so quickly, for no sooner had they reached the yard than their father and mother returned."
+    ]
   ],
   "image": "/folk/art/covers/magic-swan-geese.webp",
   "pageArt": [
-    {"page": 4, "image": "/folk/art/magic-swan-geese/05-turning.webp", "alt": "The girl peers from the birches toward Baba Yaga’s forest hut, where her little brother sits with golden apples."},
-    {"page": 7, "image": "/folk/art/magic-swan-geese/08-ending.webp", "alt": "The sister and brother return safely to their wooden home as their parents come back at sunset."}
+    {
+      "page": 2,
+      "image": "/folk/art/magic-swan-geese/03-scene.webp",
+      "alt": "The girl asks a friendly oven and apple tree where the magic swan-geese flew."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/magic-swan-geese/05-turning.webp",
+      "alt": "The girl peers from the birches toward Baba Yaga’s forest hut, where her little brother sits with golden apples."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/magic-swan-geese/06-scene.webp",
+      "alt": "The apple tree shelters the sister and brother as the swan-geese fly overhead."
+    },
+    {
+      "page": 7,
+      "image": "/folk/art/magic-swan-geese/08-ending.webp",
+      "alt": "The sister and brother return safely to their wooden home as their parents come back at sunset."
+    }
   ]
 }

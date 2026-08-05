@@ -62,6 +62,13 @@ Published with complete three-image art sets:
 - Sleeping Beauty — Perrault literary fairy tale
 - Beauty and the Beast — French literary fairy tale
 
+### 2026-08-04 Czechia pass
+
+- The Twelve Months — Czech fairy tale associated with Božena Němcová
+- Zlatovlaska the Golden-Haired — Czech fairy tale associated with Karel Jaromír Erben
+- The Shepherd’s Nosegay — Czech fairy tale
+- Clever Manka — Czech and Slovak folk favorite
+
 ## Deliberately excluded
 
 These are authored books, novellas, or long narratives whose picture-book versions would be abridgments rather than folk-sized source copies:

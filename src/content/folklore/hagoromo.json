@@ -12,7 +12,11 @@
   "language": "English",
   "ages": "8–12",
   "minutes": 5,
-  "themes": ["trust", "dance", "the heavens"],
+  "themes": [
+    "trust",
+    "dance",
+    "the heavens"
+  ],
   "color": "#557985",
   "colorSoft": "#c9dce0",
   "sourceTitle": "The Nō Plays of Japan",
@@ -26,21 +30,62 @@
     "jurisdiction": "United States",
     "checked": "2026-08-02"
   },
-  "review": {"adaptation": "draft", "cultural": "pending"},
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
   "artLabel": "A celestial maiden dances in her feather mantle above the pine shore of Miho.",
   "art": "feather-mantle",
   "image": "/folk/art/covers/hagoromo.webp",
   "pageArt": [
-    {"page": 2, "image": "/folk/art/hagoromo/03-turning.webp", "alt": "The sorrowful celestial maiden asks Hakuryō to return the feather mantle he found on a pine."},
-    {"page": 5, "image": "/folk/art/hagoromo/05-ending.webp", "alt": "Wearing the feather mantle, the maiden dances above Miho Bay before disappearing into the clouds near Mount Fuji."}
+    {
+      "page": 1,
+      "image": "/folk/art/hagoromo/02-scene.webp",
+      "alt": "Hakuryō discovers the shimmering feather mantle beneath the coastal pines."
+    },
+    {
+      "page": 2,
+      "image": "/folk/art/hagoromo/03-turning.webp",
+      "alt": "The sorrowful celestial maiden asks Hakuryō to return the feather mantle he found on a pine."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/hagoromo/05-scene.webp",
+      "alt": "Hakuryō respectfully returns the feather mantle to the celestial maiden."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/hagoromo/05-ending.webp",
+      "alt": "Wearing the feather mantle, the maiden dances above Miho Bay before disappearing into the clouds near Mount Fuji."
+    }
   ],
   "scenes": [
-    ["On a spring morning, the fisherman Hakuryō came ashore beside the pine woods of Miho. Mist rested on the sea, the moon lingered faintly in the sky, and Mount Fuji rose beyond the quiet bay."],
-    ["Music sounded in the air. Flowers drifted down though no hand had scattered them, and an unearthly fragrance moved among the pines.", "On one branch Hakuryō found a marvelous cloak. Its feathers shone with colors he had never seen. He took it down, thinking it would become a treasure for his house."],
-    ["A celestial maiden appeared and called to him. The mantle was hers, she said. Without it she had no wings and could not climb the paths of the sky.", "Hakuryō refused. If it truly belonged to an angel, he thought, it would be an even greater treasure among mortals."],
-    ["The maiden looked toward heaven, but the cloud roads were hidden from her. The flowers in her crown seemed to fade, and she sank beneath the sorrow of being left on earth.", "Seeing her grief, Hakuryō’s heart changed. He promised to return the mantle if she would show him one of the dances of heaven."],
-    ["The maiden agreed, but said she could not dance without her robe. Hakuryō feared she would fly away the moment he returned it.", "“Doubt is for mortals,” she told him. “In heaven there is no deceit.” Ashamed of his suspicion, Hakuryō placed the feather mantle in her hands."],
-    ["The heavenly lady put on the garment and began the Dance of the Rainbow Skirt. Its sleeves opened like flowers in rain. Music of harp, zither, pipes, and flute seemed to sound beyond the clouds.", "She danced of the palace of the Moon God, of the waxing and waning moon, and of the beauty of the shore beneath Fuji. Her feathered sleeves swept left and right, scattering a snow of blossoms over the pines."],
-    ["As the dance ended, the mantle became a garment of spring mist. The maiden rose above the pine woods of Miho, passed the floating islands, and flew through the feet of the clouds.", "Her form grew faint beyond Mount Ashitaka and the high peak of Fuji, until at last she mingled with the mists of heaven and was lost to sight."]
+    [
+      "On a spring morning, the fisherman Hakuryō came ashore beside the pine woods of Miho. Mist rested on the sea, the moon lingered faintly in the sky, and Mount Fuji rose beyond the quiet bay."
+    ],
+    [
+      "Music sounded in the air. Flowers drifted down though no hand had scattered them, and an unearthly fragrance moved among the pines.",
+      "On one branch Hakuryō found a marvelous cloak. Its feathers shone with colors he had never seen. He took it down, thinking it would become a treasure for his house."
+    ],
+    [
+      "A celestial maiden appeared and called to him. The mantle was hers, she said. Without it she had no wings and could not climb the paths of the sky.",
+      "Hakuryō refused. If it truly belonged to an angel, he thought, it would be an even greater treasure among mortals."
+    ],
+    [
+      "The maiden looked toward heaven, but the cloud roads were hidden from her. The flowers in her crown seemed to fade, and she sank beneath the sorrow of being left on earth.",
+      "Seeing her grief, Hakuryō’s heart changed. He promised to return the mantle if she would show him one of the dances of heaven."
+    ],
+    [
+      "The maiden agreed, but said she could not dance without her robe. Hakuryō feared she would fly away the moment he returned it.",
+      "“Doubt is for mortals,” she told him. “In heaven there is no deceit.” Ashamed of his suspicion, Hakuryō placed the feather mantle in her hands."
+    ],
+    [
+      "The heavenly lady put on the garment and began the Dance of the Rainbow Skirt. Its sleeves opened like flowers in rain. Music of harp, zither, pipes, and flute seemed to sound beyond the clouds.",
+      "She danced of the palace of the Moon God, of the waxing and waning moon, and of the beauty of the shore beneath Fuji. Her feathered sleeves swept left and right, scattering a snow of blossoms over the pines."
+    ],
+    [
+      "As the dance ended, the mantle became a garment of spring mist. The maiden rose above the pine woods of Miho, passed the floating islands, and flew through the feet of the clouds.",
+      "Her form grew faint beyond Mount Ashitaka and the high peak of Fuji, until at last she mingled with the mists of heaven and was lost to sight."
+    ]
   ]
 }

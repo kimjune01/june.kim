@@ -1,0 +1,74 @@
+{
+  "featured": false,
+  "published": true,
+  "tradition": "Czech fairy tale",
+  "region": "Europe",
+  "culture": "Czechia",
+  "language": "English",
+  "ages": "6–8 with an adult",
+  "sourceTitle": "The Shoemaker's Apron: A Second Book of Czechoslovak Fairy Tales and Folk Tales",
+  "sourceAuthor": "Parker Fillmore",
+  "sourceYear": "1920",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/33002",
+  "rights": {
+    "status": "verified",
+    "basis": "The 1920 source edition is identified as public domain in the United States by Project Gutenberg.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-04"
+  },
+  "review": {
+    "adaptation": "draft",
+    "cultural": "pending"
+  },
+  "id": "clever-manka",
+  "order": 110,
+  "title": "Clever Manka",
+  "originalTitle": "Chytrá Manka",
+  "place": "A Czech farming village and a young burgomaster’s hall",
+  "minutes": 8,
+  "themes": [
+    "cleverness",
+    "fairness",
+    "partnership"
+  ],
+  "color": "#7b3f51",
+  "colorSoft": "#e5c8d0",
+  "note": "A concise retelling of Fillmore’s Czech and Slovak favorite “Clever Manka.” The riddles and Manka’s insistence on fair judgment are retained; the marriage is framed as an equal partnership.",
+  "artLabel": "Manka arrives neither riding nor walking, wrapped in a fishing net beside a small goat.",
+  "art": "clever-manka",
+  "pageArt": [
+    {
+      "page": 3,
+      "image": "/folk/art/clever-manka/03-turning.webp",
+      "alt": "Manka approaches the burgomaster in a fishing net with one foot on a goat and one foot touching the road."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/clever-manka/05-ending.webp",
+      "alt": "Manka and the burgomaster listen together as villagers bring a question to their open hall."
+    }
+  ],
+  "scenes": [
+    [
+      "A poor farmer and his daughter Manka lived in a small cottage. They owned little, but Manka noticed everything and could untangle a puzzle as neatly as thread from a spindle.",
+      "One day two neighbors argued before the young burgomaster. A mare had given birth beside another man’s cart, and the cart owner claimed the foal belonged to the cart. The burgomaster, wishing to finish quickly, agreed."
+    ],
+    [
+      "The farmer told Manka about the foolish judgment. The next morning she stood beside the road tossing a fishing net over a dusty field. “What are you doing?” asked the burgomaster as he passed. “Catching fish,” Manka replied.",
+      "“There are no fish in a field!” he laughed. “No,” said Manka, “and carts do not give birth to foals.” The burgomaster stopped laughing. He called the neighbors back and returned the foal to the mare’s owner."
+    ],
+    [
+      "Impressed, the burgomaster sent Manka a riddle: come to his hall neither by day nor by night, neither dressed nor undressed, neither riding nor walking, and bring a gift that is not a gift.",
+      "At dawn, while the sky was neither dark nor bright, Manka wrapped herself in a fishing net. She placed one foot on a little goat and let the other touch the road. In her hands she carried a sparrow. When the burgomaster reached for it, she opened her palms and it flew away."
+    ],
+    [
+      "“You have answered every part,” the burgomaster said. He asked Manka to stay and help him judge difficult questions. Manka agreed on one condition: “You must care more about a fair answer than about appearing clever.” He promised.",
+      "For a time they worked well together. Then pride returned. After Manka corrected another hurried judgment, the burgomaster snapped, “Go home, and take with you the one thing in this hall you love most.”"
+    ],
+    [
+      "Manka quietly prepared a farewell supper. The burgomaster ate, apologized too late, and fell asleep in his chair. When he woke, he was in Manka’s cottage. “Why did you bring me here?” he asked.",
+      "“You told me to take what I loved most,” she said, “and I chose my partner—even when he is being foolish.” The burgomaster laughed at himself and asked her forgiveness. From then on they listened before judging, and the hall’s door stayed open to anyone with a hard question."
+    ]
+  ],
+  "image": "/folk/art/covers/clever-manka.webp"
+}

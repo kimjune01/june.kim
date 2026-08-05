@@ -38,9 +38,19 @@
   "image": "/folk/art/covers/monkey-and-crocodile.webp",
   "pageArt": [
     {
+      "page": 2,
+      "image": "/folk/art/monkey-and-crocodile/03-scene.webp",
+      "alt": "The clever monkey points back toward his fruit tree while riding across the river."
+    },
+    {
       "page": 3,
       "image": "/folk/art/monkey-and-crocodile/03-turning.webp",
       "alt": "Midstream, Monkey calmly tells Crocodile that his heart was left hanging in the fruit tree."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/monkey-and-crocodile/05-scene.webp",
+      "alt": "The monkey studies a suspicious crocodile-shaped rock in the moonlit river."
     },
     {
       "page": 6,
