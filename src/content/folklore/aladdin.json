@@ -39,9 +39,29 @@
   "image": "/folk/art/covers/aladdin.webp",
   "pageArt": [
     {
+      "page": 11,
+      "image": "/folk/art/aladdin/12-scene.webp",
+      "alt": "Aladdin holds the old lamp as its friendly genie presents a splendid feast to him and his astonished mother."
+    },
+    {
+      "page": 22,
+      "image": "/folk/art/aladdin/23-scene.webp",
+      "alt": "Aladdin’s dignified mother returns before the Sultan as he remembers his promise and confers quietly with the vizier."
+    },
+    {
       "page": 28,
       "image": "/folk/art/aladdin/03-turning.webp",
       "alt": "A luminous genie rises from the lamp before the astonished Aladdin in the underground chamber."
+    },
+    {
+      "page": 33,
+      "image": "/folk/art/aladdin/34-scene.webp",
+      "alt": "The newly arrived traveler asks townspeople about Aladdin’s marvelous luminous palace across the capital."
+    },
+    {
+      "page": 44,
+      "image": "/folk/art/aladdin/45-scene.webp",
+      "alt": "Reunited in the many-windowed palace, Aladdin points to the lamp’s empty cornice as the princess explains the mistaken exchange."
     },
     {
       "page": 55,

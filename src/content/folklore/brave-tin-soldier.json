@@ -1,20 +1,77 @@
 {
-  "id": "brave-tin-soldier", "order": 77, "featured": false, "published": true,
-  "title": "The Brave Tin Soldier", "originalTitle": "Den standhaftige Tinsoldat",
-  "tradition": "Andersen literary fairy tale", "region": "Europe", "culture": "Danish", "place": "A nineteenth-century child’s room, street, and canal", "language": "English", "ages": "8–12", "minutes": 7,
-  "themes": ["steadfastness", "chance", "devotion"], "color": "#74443e", "colorSoft": "#dfbeb2",
-  "sourceTitle": "Andersen’s Fairy Tales", "sourceAuthor": "Hans Christian Andersen; English translation by H. P. Paull", "sourceYear": "1872", "sourceUrl": "https://www.gutenberg.org/ebooks/1597",
+  "id": "brave-tin-soldier",
+  "order": 77,
+  "featured": false,
+  "published": true,
+  "title": "The Brave Tin Soldier",
+  "originalTitle": "Den standhaftige Tinsoldat",
+  "tradition": "Andersen literary fairy tale",
+  "region": "Europe",
+  "culture": "Danish",
+  "place": "A nineteenth-century child’s room, street, and canal",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 7,
+  "themes": [
+    "steadfastness",
+    "chance",
+    "devotion"
+  ],
+  "color": "#74443e",
+  "colorSoft": "#dfbeb2",
+  "sourceTitle": "Andersen’s Fairy Tales",
+  "sourceAuthor": "Hans Christian Andersen; English translation by H. P. Paull",
+  "sourceYear": "1872",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/1597",
   "note": "A lightly condensed reading of the public-domain H. P. Paull translation, where the story is titled “The Brave Tin Soldier.” Some descriptive repetition is shortened and page divisions are editorial; the tale’s sequence and ending are retained. The cited ebook has no story-specific plate set, so the illustrations are new collection artwork in a nineteenth-century Danish toy-room setting.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 1597 and its English Andersen text as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-03"},
-  "review": {"adaptation": "reviewed", "cultural": "reviewed"},
-  "artLabel": "A one-legged tin soldier gazes toward a paper dancer in a toy castle.", "art": "tin-soldier", "image": "/folk/art/covers/brave-tin-soldier.webp",
-  "pageArt": [{"page": 2, "image": "/folk/art/brave-tin-soldier/03-turning.webp", "alt": "The tin soldier sails through a gutter in a folded paper boat."}, {"page": 5, "image": "/folk/art/brave-tin-soldier/05-ending.webp", "alt": "A small tin heart and the dancer’s spangle remain together in the ashes."}],
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies ebook 1597 and its English Andersen text as public domain in the United States.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-03"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed"
+  },
+  "artLabel": "A one-legged tin soldier gazes toward a paper dancer in a toy castle.",
+  "art": "tin-soldier",
+  "image": "/folk/art/covers/brave-tin-soldier.webp",
+  "pageArt": [
+    {
+      "page": 2,
+      "image": "/folk/art/brave-tin-soldier/03-turning.webp",
+      "alt": "The tin soldier sails through a gutter in a folded paper boat."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/brave-tin-soldier/04-scene.webp",
+      "alt": "The rediscovered tin soldier stands safely on the kitchen table and sees the paper dancer still poised before her castle."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/brave-tin-soldier/05-ending.webp",
+      "alt": "A small tin heart and the dancer’s spangle remain together in the ashes."
+    }
+  ],
   "scenes": [
-    ["On a boy’s birthday, twenty-five tin soldiers came out of a box. They had been cast from one old spoon and looked like brothers. The last soldier had only one leg because the tin had run short, but he stood as firmly as all the rest."],
-    ["Among the toys was a paper castle. At its door stood a little dancer, balancing with one leg lifted so high that the soldier thought she had only one leg too. He watched her all evening. A goblin in a toy box warned him to turn his eyes away, but the soldier did not answer."],
-    ["Next morning the soldier fell from a high window. Two boys found him, set him in a paper boat, and sent him racing down the gutter. He passed under a dark bridge, faced a water rat demanding his passport, and kept his musket steady as the current swept him onward."],
-    ["The boat filled and sank. A great fish swallowed the soldier. Later the fish was caught, sold, and cut open in the very same kitchen from which the soldier had fallen. He was placed again on the table and saw the little dancer still poised before her castle."],
-    ["Without warning, a boy threw the soldier into the stove. Whether the goblin caused it or a draft did, no one could say. The soldier stood in the flames, steadfast as ever, looking toward the dancer."],
-    ["A wind caught the dancer and carried her into the stove beside him. By morning the soldier had melted into a little tin heart. Of the dancer, only her spangle remained, burned black as coal, lying near the heart in the ashes."]
+    [
+      "On a boy’s birthday, twenty-five tin soldiers came out of a box. They had been cast from one old spoon and looked like brothers. The last soldier had only one leg because the tin had run short, but he stood as firmly as all the rest."
+    ],
+    [
+      "Among the toys was a paper castle. At its door stood a little dancer, balancing with one leg lifted so high that the soldier thought she had only one leg too. He watched her all evening. A goblin in a toy box warned him to turn his eyes away, but the soldier did not answer."
+    ],
+    [
+      "Next morning the soldier fell from a high window. Two boys found him, set him in a paper boat, and sent him racing down the gutter. He passed under a dark bridge, faced a water rat demanding his passport, and kept his musket steady as the current swept him onward."
+    ],
+    [
+      "The boat filled and sank. A great fish swallowed the soldier. Later the fish was caught, sold, and cut open in the very same kitchen from which the soldier had fallen. He was placed again on the table and saw the little dancer still poised before her castle."
+    ],
+    [
+      "Without warning, a boy threw the soldier into the stove. Whether the goblin caused it or a draft did, no one could say. The soldier stood in the flames, steadfast as ever, looking toward the dancer."
+    ],
+    [
+      "A wind caught the dancer and carried her into the stove beside him. By morning the soldier had melted into a little tin heart. Of the dancer, only her spangle remained, burned black as coal, lying near the heart in the ashes."
+    ]
   ]
 }

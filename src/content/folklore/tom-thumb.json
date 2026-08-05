@@ -1,20 +1,86 @@
 {
-  "id": "tom-thumb", "order": 65, "featured": false, "published": true,
-  "title": "Tom Thumb", "originalTitle": "Daumesdick",
-  "tradition": "Grimm fairy tale", "region": "Europe", "culture": "German", "place": "A woodman’s cottage and countryside", "language": "English", "ages": "7–11", "minutes": 10,
-  "themes": ["cleverness", "adventure", "home"], "color": "#89602d", "colorSoft": "#e4d0a2",
-  "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob and Wilhelm Grimm; English translator not identified in the ebook metadata", "sourceYear": "Undated English edition", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
+  "id": "tom-thumb",
+  "order": 65,
+  "featured": false,
+  "published": true,
+  "title": "Tom Thumb",
+  "originalTitle": "Daumesdick",
+  "tradition": "Grimm fairy tale",
+  "region": "Europe",
+  "culture": "German",
+  "place": "A woodman’s cottage and countryside",
+  "language": "English",
+  "ages": "7–11",
+  "minutes": 10,
+  "themes": [
+    "cleverness",
+    "adventure",
+    "home"
+  ],
+  "color": "#89602d",
+  "colorSoft": "#e4d0a2",
+  "sourceTitle": "Grimms’ Fairy Tales",
+  "sourceAuthor": "Jacob and Wilhelm Grimm; English translator not identified in the ebook metadata",
+  "sourceYear": "Undated English edition",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
   "note": "This is a condensed reading adaptation of the public-domain Project Gutenberg story titled “Tom Thumb,” the Grimm tale Daumesdick; it preserves the main incidents but is not a direct transcription.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
-  "artLabel": "Tiny Tom Thumb stands in his father’s palm beside a great workhorse and wooden cart.", "art": "tom-thumb", "image": "/folk/art/covers/tom-thumb.webp",
-  "pageArt": [{"page": 2, "image": "/folk/art/tom-thumb/03-turning.webp", "alt": "Tom Thumb sits inside the horse’s ear and calls directions while two strangers stare in amazement."}, {"page": 6, "image": "/folk/art/tom-thumb/05-ending.webp", "alt": "Tom Thumb returns safely to his delighted parents at their cottage fireside."}],
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed",
+    "reviewer": "Codex editorial review, 2026-08-03"
+  },
+  "artLabel": "Tiny Tom Thumb stands in his father’s palm beside a great workhorse and wooden cart.",
+  "art": "tom-thumb",
+  "image": "/folk/art/covers/tom-thumb.webp",
+  "pageArt": [
+    {
+      "page": 1,
+      "image": "/folk/art/tom-thumb/02-scene.webp",
+      "alt": "Tiny Tom directs the gentle cart horse from beside its ear while two astonished travelers follow the moving timber cart."
+    },
+    {
+      "page": 2,
+      "image": "/folk/art/tom-thumb/03-turning.webp",
+      "alt": "Tom Thumb sits inside the horse’s ear and calls directions while two strangers stare in amazement."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/tom-thumb/05-scene.webp",
+      "alt": "The astonished farmer and housekeeper listen to Tom’s tiny muffled voice beside their perfectly healthy and puzzled cow."
+    },
+    {
+      "page": 6,
+      "image": "/folk/art/tom-thumb/05-ending.webp",
+      "alt": "Tom Thumb returns safely to his delighted parents at their cottage fireside."
+    }
+  ],
   "scenes": [
-    ["A poor woodman and his wife wished dearly for a child, even if he were no bigger than a thumb. Before long their wish came true. They had a healthy, strong little boy who was not much bigger than a thumb, and they called him Thomas Thumb. Though he never grew taller, he was a sharp and clever fellow."],
-    ["One day the woodman was preparing to fetch timber and wished that someone could bring the cart after him. Tom offered to do it. He climbed into the horse’s ear and called out which way to go, and the horse obeyed as if its master held the reins. Two strangers saw the empty cart moving along and followed it into the wood."],
-    ["When they discovered tiny Tom, the strangers offered the woodman money for him. Tom whispered that he would soon return, so his father reluctantly agreed. Tom rode on the brim of one man’s hat, but when evening came he tricked them into setting him down and hid in a mouse-hole."],
-    ["Later Tom overheard two thieves planning to rob a parson’s house. He offered to help by slipping through the bars and handing treasure out. Once inside he shouted as loudly as he could, asking whether they wanted everything. The cook woke, and the frightened thieves ran away."],
-    ["Tom hid in the hay, but in the morning the hay was carried to a cow, and Tom was swallowed with it. From inside the cow he cried that no more fodder should be brought. The astonished household killed the cow, and the stomach in which Tom was hidden was thrown away."],
-    ["A hungry wolf swallowed the stomach whole. Tom spoke from inside and promised the wolf a fine meal in his parents’ house. He guided the wolf to the pantry and let him eat until he was too fat to escape. Then Tom shouted until his father and mother woke."],
-    ["The woodman struck the wolf and freed his little son. Tom’s parents embraced him and said they would never again sell him for all the riches in the world. Master Thumb stayed at home in peace; for though he had been a great traveller and had seen many fine things, he agreed that there was no place like home."]
+    [
+      "A poor woodman and his wife wished dearly for a child, even if he were no bigger than a thumb. Before long their wish came true. They had a healthy, strong little boy who was not much bigger than a thumb, and they called him Thomas Thumb. Though he never grew taller, he was a sharp and clever fellow."
+    ],
+    [
+      "One day the woodman was preparing to fetch timber and wished that someone could bring the cart after him. Tom offered to do it. He climbed into the horse’s ear and called out which way to go, and the horse obeyed as if its master held the reins. Two strangers saw the empty cart moving along and followed it into the wood."
+    ],
+    [
+      "When they discovered tiny Tom, the strangers offered the woodman money for him. Tom whispered that he would soon return, so his father reluctantly agreed. Tom rode on the brim of one man’s hat, but when evening came he tricked them into setting him down and hid in a mouse-hole."
+    ],
+    [
+      "Later Tom overheard two thieves planning to rob a parson’s house. He offered to help by slipping through the bars and handing treasure out. Once inside he shouted as loudly as he could, asking whether they wanted everything. The cook woke, and the frightened thieves ran away."
+    ],
+    [
+      "Tom hid in the hay, but in the morning the hay was carried to a cow, and Tom was swallowed with it. From inside the cow he cried that no more fodder should be brought. The astonished household killed the cow, and the stomach in which Tom was hidden was thrown away."
+    ],
+    [
+      "A hungry wolf swallowed the stomach whole. Tom spoke from inside and promised the wolf a fine meal in his parents’ house. He guided the wolf to the pantry and let him eat until he was too fat to escape. Then Tom shouted until his father and mother woke."
+    ],
+    [
+      "The woodman struck the wolf and freed his little son. Tom’s parents embraced him and said they would never again sell him for all the riches in the world. Master Thumb stayed at home in peace; for though he had been a great traveller and had seen many fine things, he agreed that there was no place like home."
+    ]
   ]
 }

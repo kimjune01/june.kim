@@ -39,9 +39,29 @@
   "image": "/folk/art/covers/sleeping-beauty.webp",
   "pageArt": [
     {
+      "page": 5,
+      "image": "/folk/art/sleeping-beauty/06-scene.webp",
+      "alt": "A benevolent fairy reassures the worried king and queen beside their sleeping infant princess."
+    },
+    {
+      "page": 10,
+      "image": "/folk/art/sleeping-beauty/11-scene.webp",
+      "alt": "The king asks the worried attendants to let the princess rest peacefully in her royal bedchamber."
+    },
+    {
       "page": 12,
       "image": "/folk/art/sleeping-beauty/03-turning.webp",
       "alt": "A prince walks through flowering thorn branches as the hidden castle appears ahead."
+    },
+    {
+      "page": 14,
+      "image": "/folk/art/sleeping-beauty/15-scene.webp",
+      "alt": "A marvelous wall of flowering trees and brambles grows around the palace while woodland animals watch."
+    },
+    {
+      "page": 19,
+      "image": "/folk/art/sleeping-beauty/20-scene.webp",
+      "alt": "The prince discovers the palace guards, stable hands, horses, and dogs all sleeping peacefully in the sunny courtyard."
     },
     {
       "page": 24,

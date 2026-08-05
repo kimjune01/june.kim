@@ -63,6 +63,11 @@
   "image": "/folk/art/covers/king-of-the-ants.webp",
   "pageArt": [
     {
+      "page": 2,
+      "image": "/folk/art/king-of-the-ants/03-scene.webp",
+      "alt": "A patterned banner leads the tiny ant king and his magnificent royal procession through a Chinese garden."
+    },
+    {
       "page": 3,
       "image": "/folk/art/king-of-the-ants/03-turning.webp",
       "alt": "A tiny ant king arrives with miniature riders and banners around the scholar’s ink saucer."

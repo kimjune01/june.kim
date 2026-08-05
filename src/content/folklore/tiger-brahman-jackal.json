@@ -94,6 +94,16 @@
   "image": "/folk/art/covers/tiger-brahman-jackal.webp",
   "pageArt": [
     {
+      "page": 3,
+      "image": "/folk/art/tiger-brahman-jackal/04-scene.webp",
+      "alt": "A sorrowful Brahman meets a curious golden jackal on the road leading back toward the tiger’s cage."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/tiger-brahman-jackal/05-scene.webp",
+      "alt": "The Brahman explains his trouble while the clever jackal pretends to be confused and proposes returning to the cage."
+    },
+    {
       "page": 5,
       "image": "/folk/art/tiger-brahman-jackal/03-turning.webp",
       "alt": "Jackal pretends not to understand how Tiger and the Brahman stood beside the open cage."

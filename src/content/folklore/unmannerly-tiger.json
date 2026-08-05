@@ -75,9 +75,19 @@
   "image": "/folk/art/covers/unmannerly-tiger.webp",
   "pageArt": [
     {
+      "page": 2,
+      "image": "/folk/art/unmannerly-tiger/03-scene.webp",
+      "alt": "A Buddhist priest opens a camouflaged log pit and looks compassionately down at the trapped tiger in the Korean mountains."
+    },
+    {
       "page": 4,
       "image": "/folk/art/unmannerly-tiger/03-turning.webp",
       "alt": "A Buddhist monk lowers a log into the stone pit so Mountain Uncle Tiger can climb out."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/unmannerly-tiger/06-scene.webp",
+      "alt": "The tiger approaches the hidden mountain trap while a worried Buddhist priest and a wise speckled toad follow behind."
     },
     {
       "page": 7,

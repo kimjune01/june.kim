@@ -1,20 +1,86 @@
 {
-  "id": "hansel-and-gretel", "order": 64, "featured": false, "published": true,
-  "title": "Hansel and Gretel", "originalTitle": "Hänsel und Gretel",
-  "tradition": "Grimm fairy tale", "region": "Europe", "culture": "German", "place": "A cottage and a great forest", "language": "English", "ages": "8–12", "minutes": 12,
-  "themes": ["resourcefulness", "siblings", "survival"], "color": "#506c45", "colorSoft": "#ceddb1",
-  "sourceTitle": "Grimms’ Fairy Tales", "sourceAuthor": "Jacob and Wilhelm Grimm; English translator not identified in the ebook metadata", "sourceYear": "Undated English edition", "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
+  "id": "hansel-and-gretel",
+  "order": 64,
+  "featured": false,
+  "published": true,
+  "title": "Hansel and Gretel",
+  "originalTitle": "Hänsel und Gretel",
+  "tradition": "Grimm fairy tale",
+  "region": "Europe",
+  "culture": "German",
+  "place": "A cottage and a great forest",
+  "language": "English",
+  "ages": "8–12",
+  "minutes": 12,
+  "themes": [
+    "resourcefulness",
+    "siblings",
+    "survival"
+  ],
+  "color": "#506c45",
+  "colorSoft": "#ceddb1",
+  "sourceTitle": "Grimms’ Fairy Tales",
+  "sourceAuthor": "Jacob and Wilhelm Grimm; English translator not identified in the ebook metadata",
+  "sourceYear": "Undated English edition",
+  "sourceUrl": "https://www.gutenberg.org/ebooks/2591",
   "note": "This is a condensed reading adaptation of the public-domain Project Gutenberg text, preserving its principal sequence and much of its wording; it is not a direct transcription.",
-  "rights": {"status": "verified", "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.", "jurisdiction": "United States", "checked": "2026-08-02"}, "review": {"adaptation": "reviewed", "cultural": "reviewed", "reviewer": "Codex editorial review, 2026-08-03"},
-  "artLabel": "Hansel and Gretel discover a little house made of bread and sugar deep in the forest.", "art": "hansel-gretel", "image": "/folk/art/covers/hansel-and-gretel.webp",
-  "pageArt": [{"page": 3, "image": "/folk/art/hansel-and-gretel/03-turning.webp", "alt": "Hansel and Gretel break bread and sugar from the witch’s little forest house."}, {"page": 6, "image": "/folk/art/hansel-and-gretel/05-ending.webp", "alt": "The children embrace their father as pearls and precious stones spill from their pockets."}],
+  "rights": {
+    "status": "verified",
+    "basis": "Project Gutenberg identifies ebook 2591 as public domain in the United States.",
+    "jurisdiction": "United States",
+    "checked": "2026-08-02"
+  },
+  "review": {
+    "adaptation": "reviewed",
+    "cultural": "reviewed",
+    "reviewer": "Codex editorial review, 2026-08-03"
+  },
+  "artLabel": "Hansel and Gretel discover a little house made of bread and sugar deep in the forest.",
+  "art": "hansel-gretel",
+  "image": "/folk/art/covers/hansel-and-gretel.webp",
+  "pageArt": [
+    {
+      "page": 2,
+      "image": "/folk/art/hansel-and-gretel/03-scene.webp",
+      "alt": "Hansel and Gretel look back with concern as woodland birds eat the trail of bread crumbs behind them."
+    },
+    {
+      "page": 3,
+      "image": "/folk/art/hansel-and-gretel/03-turning.webp",
+      "alt": "Hansel and Gretel break bread and sugar from the witch’s little forest house."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/hansel-and-gretel/05-scene.webp",
+      "alt": "Hansel offers a tiny bone through the pantry gate while the near-sighted witch peers closely and Gretel watches his clever trick."
+    },
+    {
+      "page": 6,
+      "image": "/folk/art/hansel-and-gretel/05-ending.webp",
+      "alt": "The children embrace their father as pearls and precious stones spill from their pockets."
+    }
+  ],
   "scenes": [
-    ["Hard by a great forest dwelt a poor wood-cutter with his wife and his two children. The boy was called Hansel and the girl Gretel. When great dearth fell on the land, the wood-cutter could no longer procure even daily bread. His wife persuaded him to lead the children into the thickest part of the forest and leave them there. Hansel and Gretel heard what she said. Gretel wept, but Hansel comforted her. When their parents slept, he slipped outside and filled his pockets with white pebble-stones that shone in the moonlight."],
-    ["The next morning the family went into the forest. Hansel walked behind and dropped the pebbles one by one upon the path. The parents made a fire for the children and went away. When night came and the moon had risen, the pebbles shone like newly-coined silver pieces and showed Hansel and Gretel the way home. Their father rejoiced to see them, for it had cut him to the heart to leave them behind."],
-    ["Before long hunger returned. This time the door was locked, so Hansel could gather no stones. He scattered crumbs from his piece of bread as they walked, but the birds ate every crumb. When the children awoke alone, they wandered for three days and could not find the way home."],
-    ["On the third morning a beautiful snow-white bird led them to a little house built of bread and covered with cakes, with windows of clear sugar. Hungry Hansel broke a piece from the roof, while Gretel ate from a window-pane. An old woman came out and invited them inside. She gave them milk and pancakes, sugar, apples, and nuts, and showed them two clean little beds."],
-    ["But the old woman was a wicked witch who had built the house to entice children. She locked Hansel behind a grated door and made Gretel cook for him so that he would grow fat. Every morning she asked Hansel to stretch out his finger. He held out a little bone instead, and because her eyes were dim she could not understand why he remained so thin."],
-    ["At last the witch would wait no longer. She heated the oven and ordered Gretel to climb inside. Gretel guessed her plan and pretended not to understand. When the witch thrust her own head into the oven to show her, Gretel pushed her in, shut the iron door, and fastened the bolt. Then she ran to Hansel and set him free."],
-    ["In the witch’s house they found caskets of pearls and precious stones. They filled their pockets and left the enchanted forest. A white duck carried them across a great stretch of water, and soon they recognized their father’s house. Their father had not known one happy hour since leaving them, and his wife was dead. Hansel and Gretel poured out the jewels, and all their sorrows were ended. They lived together in great happiness."]
+    [
+      "Hard by a great forest dwelt a poor wood-cutter with his wife and his two children. The boy was called Hansel and the girl Gretel. When great dearth fell on the land, the wood-cutter could no longer procure even daily bread. His wife persuaded him to lead the children into the thickest part of the forest and leave them there. Hansel and Gretel heard what she said. Gretel wept, but Hansel comforted her. When their parents slept, he slipped outside and filled his pockets with white pebble-stones that shone in the moonlight."
+    ],
+    [
+      "The next morning the family went into the forest. Hansel walked behind and dropped the pebbles one by one upon the path. The parents made a fire for the children and went away. When night came and the moon had risen, the pebbles shone like newly-coined silver pieces and showed Hansel and Gretel the way home. Their father rejoiced to see them, for it had cut him to the heart to leave them behind."
+    ],
+    [
+      "Before long hunger returned. This time the door was locked, so Hansel could gather no stones. He scattered crumbs from his piece of bread as they walked, but the birds ate every crumb. When the children awoke alone, they wandered for three days and could not find the way home."
+    ],
+    [
+      "On the third morning a beautiful snow-white bird led them to a little house built of bread and covered with cakes, with windows of clear sugar. Hungry Hansel broke a piece from the roof, while Gretel ate from a window-pane. An old woman came out and invited them inside. She gave them milk and pancakes, sugar, apples, and nuts, and showed them two clean little beds."
+    ],
+    [
+      "But the old woman was a wicked witch who had built the house to entice children. She locked Hansel behind a grated door and made Gretel cook for him so that he would grow fat. Every morning she asked Hansel to stretch out his finger. He held out a little bone instead, and because her eyes were dim she could not understand why he remained so thin."
+    ],
+    [
+      "At last the witch would wait no longer. She heated the oven and ordered Gretel to climb inside. Gretel guessed her plan and pretended not to understand. When the witch thrust her own head into the oven to show her, Gretel pushed her in, shut the iron door, and fastened the bolt. Then she ran to Hansel and set him free."
+    ],
+    [
+      "In the witch’s house they found caskets of pearls and precious stones. They filled their pockets and left the enchanted forest. A white duck carried them across a great stretch of water, and soon they recognized their father’s house. Their father had not known one happy hour since leaving them, and his wife was dead. Hansel and Gretel poured out the jewels, and all their sorrows were ended. They lived together in great happiness."
+    ]
   ]
 }

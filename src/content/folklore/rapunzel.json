@@ -39,9 +39,19 @@
   "image": "/folk/art/covers/rapunzel.webp",
   "pageArt": [
     {
+      "page": 4,
+      "image": "/folk/art/rapunzel/05-scene.webp",
+      "alt": "The hidden prince listens to Rapunzel singing from the doorless tower as the enchantress approaches below."
+    },
+    {
       "page": 6,
       "image": "/folk/art/rapunzel/03-turning.webp",
       "alt": "Rapunzel and the prince plan their escape together inside the round tower room."
+    },
+    {
+      "page": 7,
+      "image": "/folk/art/rapunzel/08-scene.webp",
+      "alt": "Rapunzel and the prince knot colorful silk ropes into a sturdy escape ladder beside the tower window."
     },
     {
       "page": 11,

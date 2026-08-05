@@ -38,9 +38,29 @@
   "image": "/folk/art/covers/heungbu-and-nolbu.webp",
   "pageArt": [
     {
+      "page": 8,
+      "image": "/folk/art/heungbu-and-nolbu/09-scene.webp",
+      "alt": "The worried mother watches her children play after feeding them a small meal bought by sacrificing her straw shoes."
+    },
+    {
+      "page": 16,
+      "image": "/folk/art/heungbu-and-nolbu/17-scene.webp",
+      "alt": "Heungbu’s grateful family welcomes the returning swallow as it drops the Bird King’s shining gourd seed."
+    },
+    {
       "page": 23,
       "image": "/folk/art/heungbu-and-nolbu/03-turning.webp",
       "alt": "Gourds open beneath Heungbu’s thatched eaves to reveal food, cloth, and useful tools."
+    },
+    {
+      "page": 25,
+      "image": "/folk/art/heungbu-and-nolbu/26-scene.webp",
+      "alt": "A recovered swallow reports to the concerned Bird King, who offers a plain gourd seed before the gathered bird court."
+    },
+    {
+      "page": 33,
+      "image": "/folk/art/heungbu-and-nolbu/34-scene.webp",
+      "alt": "Two traveling acrobats and musicians emerge from a split gourd as Nolbu, his wife, and their neighbors watch in surprise."
     },
     {
       "page": 41,

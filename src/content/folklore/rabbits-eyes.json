@@ -38,9 +38,19 @@
   "image": "/folk/art/covers/rabbits-eyes.webp",
   "pageArt": [
     {
+      "page": 3,
+      "image": "/folk/art/rabbits-eyes/04-scene.webp",
+      "alt": "Brother Bunny praises Korea’s mountains and seashore while Dr. Turtle imagines the jeweled kingdom beneath the sea."
+    },
+    {
       "page": 4,
       "image": "/folk/art/rabbits-eyes/03-overheard.webp",
       "alt": "Rabbit listens from behind a painted palace pillar while Turtle and the fish physicians confer."
+    },
+    {
+      "page": 5,
+      "image": "/folk/art/rabbits-eyes/06-scene.webp",
+      "alt": "Brother Bunny rides on Dr. Turtle’s shell as the fish princes and princesses welcome them to the jeweled underwater palace."
     },
     {
       "page": 8,

@@ -39,9 +39,29 @@
   "image": "/folk/art/covers/snow-white.webp",
   "pageArt": [
     {
+      "page": 6,
+      "image": "/folk/art/snow-white/07-scene.webp",
+      "alt": "The seven adult miners return by candlelight and discover that someone has gently disturbed their cottage table."
+    },
+    {
+      "page": 12,
+      "image": "/folk/art/snow-white/13-scene.webp",
+      "alt": "The queen prepares a plain traveler's cloak and basket before setting out across the seven mountains."
+    },
+    {
       "page": 15,
       "image": "/folk/art/snow-white/03-turning.webp",
       "alt": "The disguised queen offers Snow White a bright red apple at the cottage window."
+    },
+    {
+      "page": 17,
+      "image": "/folk/art/snow-white/18-scene.webp",
+      "alt": "Snow White cautiously admires an ornate comb held up by the elderly peddler at the cottage doorway."
+    },
+    {
+      "page": 23,
+      "image": "/folk/art/snow-white/24-scene.webp",
+      "alt": "The queen stands calmly before the magic mirror after it declares her the fairest in the land."
     },
     {
       "page": 29,

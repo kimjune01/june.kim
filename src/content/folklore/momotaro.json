@@ -38,9 +38,29 @@
   "image": "/folk/art/covers/momotaro.webp",
   "pageArt": [
     {
+      "page": 6,
+      "image": "/folk/art/momotaro/07-scene.webp",
+      "alt": "The joyful elderly couple welcomes the miraculous baby Momotarō beside the two halves of the great peach."
+    },
+    {
+      "page": 12,
+      "image": "/folk/art/momotaro/13-scene.webp",
+      "alt": "Momotarō calmly meets a large grumbling dog while eating a millet cake beneath a roadside pine."
+    },
+    {
       "page": 16,
       "image": "/folk/art/momotaro/03-turning.webp",
       "alt": "Momotarō shares millet dumplings with Dog, Monkey, and Pheasant on a rural Japanese road."
+    },
+    {
+      "page": 18,
+      "image": "/folk/art/momotaro/19-scene.webp",
+      "alt": "Momotarō welcomes the bowed pheasant while the dog and monkey watch their newly reconciled companion."
+    },
+    {
+      "page": 24,
+      "image": "/folk/art/momotaro/25-scene.webp",
+      "alt": "The pheasant flies from Momotarō’s boat toward the distant cliff-top castle as the companions await their orders."
     },
     {
       "page": 30,

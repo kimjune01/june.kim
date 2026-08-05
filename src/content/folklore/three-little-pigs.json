@@ -85,9 +85,19 @@
   "image": "/folk/art/covers/three-little-pigs.webp",
   "pageArt": [
     {
+      "page": 2,
+      "image": "/folk/art/three-little-pigs/03-scene.webp",
+      "alt": "The clever little pig shows his early basket of turnips from inside the sturdy brick cottage as the puzzled wolf arrives."
+    },
+    {
       "page": 3,
       "image": "/folk/art/three-little-pigs/03-turning.webp",
       "alt": "Wolf huffs outside the brick house while the three pigs watch safely through a window."
+    },
+    {
+      "page": 4,
+      "image": "/folk/art/three-little-pigs/05-scene.webp",
+      "alt": "The little pig climbs down the apple tree while the distracted wolf chases a bright apple rolling across the orchard."
     },
     {
       "page": 6,

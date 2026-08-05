@@ -38,9 +38,29 @@
   "image": "/folk/art/covers/tongue-cut-sparrow.webp",
   "pageArt": [
     {
+      "page": 5,
+      "image": "/folk/art/tongue-cut-sparrow/06-scene.webp",
+      "alt": "At dusk, the worried old man asks his guarded wife where Suzume has gone beside the sparrow’s empty cage."
+    },
+    {
+      "page": 10,
+      "image": "/folk/art/tongue-cut-sparrow/11-scene.webp",
+      "alt": "Lady Sparrow bows gratefully to the kind old man inside her beautiful house in the bamboo grove."
+    },
+    {
       "page": 14,
       "image": "/folk/art/tongue-cut-sparrow/03-turning.webp",
       "alt": "Sparrows offer the kind woodcutter a large basket and a small basket inside their bamboo-grove home."
+    },
+    {
+      "page": 16,
+      "image": "/folk/art/tongue-cut-sparrow/17-scene.webp",
+      "alt": "The astonished old couple joyfully examines the gold, silver, and treasures inside Lady Sparrow’s gift box."
+    },
+    {
+      "page": 21,
+      "image": "/folk/art/tongue-cut-sparrow/22-scene.webp",
+      "alt": "Lady Sparrow bows politely at her bamboo-house doorway while her impatient former mistress makes a blunt request."
     },
     {
       "page": 26,
