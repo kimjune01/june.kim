@@ -56,6 +56,7 @@ const sections = [
 
     <main>
       <section class="hero wrap">
+        <img class="hero-scribble" src="/assets/human-signal/flavor-scribble.png" alt="" aria-hidden="true" />
         <p class="eyebrow">AI-NATIVE ENGINEERING ASSESSMENTS</p>
         <h1>See who catches<br /><em>what the AI misses.</em></h1>
         <p class="lede">Review candidate judgment without watching every session.</p>
@@ -432,11 +433,13 @@ const sections = [
   .section-nav a { text-decoration: none; }
   .section-nav a:hover { color: var(--accent); }
   .nav-cta { justify-self: end; text-underline-offset: 4px; }
-  .hero { min-height: 720px; padding: 104px 0 60px; }
+  .hero { position: relative; min-height: 720px; padding: 104px 0 60px; isolation: isolate; }
+  .hero > :not(.hero-scribble) { position: relative; z-index: 1; }
+  .hero-scribble { position: absolute; z-index: 0; top: 122px; right: -34px; width: min(38vw, 440px); height: auto; opacity: .94; pointer-events: none; }
   .eyebrow { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
   h1, h2, h3, p { margin-top: 0; }
   h1, h2, h3 { font-family: Avenir, "Avenir Next", system-ui, -apple-system, "Segoe UI", sans-serif; text-wrap: balance; }
-  h1 { max-width: 1050px; margin: 25px 0 34px; font-size: clamp(48px, 7.7vw, 102px); font-weight: 500; line-height: .94; letter-spacing: -.045em; }
+  h1 { max-width: 850px; margin: 25px 0 34px; font-size: clamp(48px, 7.7vw, 102px); font-weight: 500; line-height: .94; letter-spacing: -.045em; }
   h1 s { color: #596057; text-decoration-thickness: .06em; }
   h1 em { color: var(--accent); font-style: normal; }
   .lede { max-width: 850px; margin-bottom: 18px; font: 500 clamp(22px, 2.6vw, 34px)/1.24 Lora, Georgia, serif; letter-spacing: -.015em; }
@@ -619,6 +622,7 @@ const sections = [
     .nav-cta { font-size: 0; }
     .nav-cta::after { content: "PARTNER ↗"; font-size: 10px; }
     .hero { min-height: auto; padding-top: 75px; }
+    .hero-scribble { top: 84px; right: -22%; width: 76vw; opacity: .22; }
     h1 { font-size: clamp(40px, 11vw, 56px); line-height: .98; letter-spacing: -.035em; }
     .lede { font-size: clamp(21px, 6vw, 28px); }
     .sub { font-size: 16px; }
