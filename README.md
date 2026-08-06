@@ -42,6 +42,7 @@ signal analysis and produces web-ready images. It requires `ffmpeg` and `cwebp`.
 ## License
 
 This repository is copyleft. Site code and templates are licensed under
-[AGPL-3.0-or-later](LICENSE). Written content is licensed under CC BY-SA 4.0
-with the Network Services source-availability condition described in
-[LICENSE](LICENSE). Third-party components retain their stated licenses.
+[AGPL-3.0-or-later](LICENSE). Human Signal materials and other written content
+are licensed under [CC BY-SA-NS](https://june.kim/cc-by-sa-ns), the CC BY-SA
+4.0 terms plus the Network Services source-availability condition reproduced
+in [LICENSE](LICENSE). Third-party components retain their stated licenses.
