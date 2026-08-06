@@ -43,11 +43,11 @@ const sections = [
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>△</text></svg>" />
+    <link rel="icon" type="image/png" href="/assets/human-signal/mark.png" />
   </head>
   <body>
     <header class="nav wrap">
-      <a class="brand" href="/human-signal" aria-label="Human Signal home"><span>△</span> HUMAN SIGNAL</a>
+      <a class="brand" href="/human-signal" aria-label="Human Signal home"><img src="/assets/human-signal/mark.png" alt="" /> HUMAN SIGNAL</a>
       <nav class="section-nav" aria-label="Page sections">
         {sections.map(({ id, label }) => <a href={`#${id}`}>{label}</a>)}
       </nav>
@@ -311,7 +311,7 @@ const sections = [
     </main>
 
     <footer class="site-footer wrap">
-      <a class="brand" href="/"><span>△</span> HUMAN SIGNAL</a>
+      <a class="brand" href="/"><img src="/assets/human-signal/mark.png" alt="" /> HUMAN SIGNAL</a>
       <p>A research project by <a href="/about">June Kim</a>.</p>
       <p><a href="/cc-by-sa-ns">CC BY-SA-NS</a> · <a href="/the-complementarity-test">Methodology</a></p>
     </footer>
@@ -335,8 +335,8 @@ const sections = [
   :global(p) { text-wrap: pretty; }
   .wrap { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
   .nav { min-height: 78px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; border-bottom: 1px solid #3a3e39; font-size: 12px; }
-  .brand { text-decoration: none; font-weight: 800; letter-spacing: .08em; }
-  .brand span { display: inline-grid; place-items: center; width: 25px; height: 25px; margin-right: 8px; background: var(--accent); color: #0b0d0c; }
+  .brand { display: inline-flex; align-items: center; text-decoration: none; font-weight: 800; letter-spacing: .08em; }
+  .brand img { width: 30px; height: 30px; margin-right: 9px; object-fit: contain; }
   .section-nav { display: flex; gap: 20px; color: #92998f; font-size: 10px; letter-spacing: .06em; }
   .section-nav a { text-decoration: none; }
   .section-nav a:hover { color: var(--accent); }
