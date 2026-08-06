@@ -89,12 +89,27 @@ const sections = [
           </div>
           <p>Observe candidates directing agents, questioning their output, and taking responsibility for what ships.</p>
         </div>
-        <ul class="better-loop">
-          <li><b>REAL WORK</b><span>Candidates use the agents they will use on the job.</span></li>
-          <li><b>FAIR COMPARISON</b><span>Each candidate faces the same consequential decisions.</span></li>
-          <li><b>FAST REVIEW</b><span>Start with the signal. Open the trace only when needed.</span></li>
-          <li><b>HUMAN JUDGMENT</b><span>Your team decides. Every claim keeps its receipt.</span></li>
-        </ul>
+        <figure class="work-loop">
+          <div class="complement-diagram" role="img" aria-label="Human judgment and AI execution combine in real work">
+            <div class="complement-part human-part">
+              <span class="complement-emoji" aria-hidden="true">🧑‍💻</span>
+              <b>HUMAN</b>
+              <p>Frames · questions · decides</p>
+            </div>
+            <span class="complement-plus" aria-hidden="true">+</span>
+            <div class="complement-part ai-part">
+              <span class="complement-emoji" aria-hidden="true">🤖</span>
+              <b>AI</b>
+              <p>Generates · tests · documents</p>
+            </div>
+            <div class="complement-result">
+              <span aria-hidden="true">↓</span>
+              <b>THE WORK</b>
+              <strong>Fast output. Human judgment.</strong>
+            </div>
+          </div>
+          <figcaption>Assess the contribution only a human can make.</figcaption>
+        </figure>
       </section>
 
       <section class="hero-rule wrap" aria-label="Human Signal principle">
@@ -501,13 +516,19 @@ const sections = [
   .benefits { padding-block: 110px; }
   .benefits-head { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; align-items: end; margin-bottom: 48px; }
   .benefits-head > p { color: #969d94; font: 400 16px/1.6 Lora, Georgia, serif; }
-  .better-loop { display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; border: 1px solid #4a5048; list-style: none; }
-  .better-loop li { min-height: 126px; padding: 20px; border-right: 1px solid #4a5048; border-bottom: 1px solid #4a5048; }
-  .better-loop li:nth-child(2n) { border-right: 0; }
-  .better-loop li:nth-last-child(-n + 2) { border-bottom: 0; }
-  .better-loop b, .better-loop span { display: block; }
-  .better-loop b { margin-bottom: 14px; color: var(--accent); font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; }
-  .better-loop span { color: #d6dbd4; font-size: 15px; line-height: 1.5; }
+  .work-loop { margin: 0; }
+  .complement-diagram { display: grid; grid-template-columns: 1fr 64px 1fr; gap: 18px; align-items: center; padding: 40px; border: 1px solid #4a5048; background: #111411; }
+  .complement-part { display: grid; justify-items: center; min-height: 210px; align-content: center; padding: 24px; border: 1px solid #4a5048; text-align: center; }
+  .human-part { border-color: #7f934c; background: rgba(183, 213, 106, .045); }
+  .complement-emoji { font-size: clamp(58px, 7vw, 88px); line-height: 1; }
+  .complement-part b, .complement-result b { margin-top: 20px; color: var(--accent); font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .12em; }
+  .complement-part p { margin: 9px 0 0; color: #c9cfc7; font: 500 16px/1.4 Lora, Georgia, serif; }
+  .complement-plus { color: #777e75; font: 300 42px/1 Lora, Georgia, serif; text-align: center; }
+  .complement-result { grid-column: 1 / -1; display: grid; justify-items: center; padding-top: 2px; text-align: center; }
+  .complement-result > span { color: #777e75; font-size: 28px; }
+  .complement-result b { margin-top: 8px; }
+  .complement-result strong { margin-top: 8px; font: 500 clamp(22px, 3vw, 34px)/1.25 Lora, Georgia, serif; }
+  .work-loop figcaption { padding-top: 14px; color: #868d84; font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; text-transform: uppercase; }
   .shim, .artifact, .workflow { padding-block: 110px; }
   .section-head { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; align-items: end; }
   .section-head > p { color: #969d94; font: 400 16px/1.6 Lora, Georgia, serif; }
@@ -643,9 +664,10 @@ const sections = [
     .status-proof { grid-template-columns: 1fr 130px; gap: 18px; }
     .status-proof > p { font-size: clamp(21px, 6.2vw, 27px); }
     .benefits-head { grid-template-columns: 1fr; gap: 20px; }
-    .better-loop { grid-template-columns: 1fr; }
-    .better-loop li, .better-loop li:nth-child(2n), .better-loop li:nth-last-child(-n + 2) { min-height: auto; border-right: 0; border-bottom: 1px solid #4a5048; }
-    .better-loop li:last-child { border-bottom: 0; }
+    .complement-diagram { grid-template-columns: 1fr; gap: 14px; padding: 18px; }
+    .complement-part { width: 100%; min-height: 180px; }
+    .complement-plus { font-size: 30px; }
+    .complement-result { grid-column: 1; }
     .scenario-map { grid-template-columns: 1fr; }
     .scenario-arrow { transform: rotate(90deg); min-height: 40px; }
     .scenario-branches { grid-template-columns: 1fr; }
