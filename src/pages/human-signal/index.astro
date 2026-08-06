@@ -1,21 +1,29 @@
 ---
-const subject = encodeURIComponent('Human Signal design partner');
+const subject = encodeURIComponent('How we assess AI-assisted engineers');
 const body = encodeURIComponent(`Hi June,
 
-We are reconsidering how we assess engineers who use coding agents.
+Here is how we currently assess engineers who use coding agents.
 
 Role(s) we hire for:
-What our current process misses:
-An agent failure our strongest engineers would catch:
-Last time this caused a problem:
+What feels unreliable or expensive:
+What we still cannot see about a candidate:
+What we have already tried:
 
-I'd like to discuss a Human Signal pilot.`);
+Happy to compare notes.`);
 const contact = `mailto:june@june.kim?subject=${subject}&body=${body}`;
+const skillSubject = encodeURIComponent('Request the Human Signal skill');
+const skillBody = encodeURIComponent(`Hi June,
+
+I'd like to try the Human Signal skill.
+
+Role(s) we hire for:
+How we currently assess AI-assisted work:
+The part we do not trust:`);
+const requestSkill = `mailto:june@june.kim?subject=${skillSubject}&body=${skillBody}`;
 const canonicalURL = new URL('/human-signal', Astro.site);
 const sections = [
   { id: 'problem', label: 'Problem' },
-  { id: 'shim', label: 'The shim' },
-  { id: 'signal', label: 'Signal' },
+  { id: 'solution', label: 'Hypothesis' },
   { id: 'sample-report', label: 'Report' },
 ] as const;
 ---
@@ -25,13 +33,16 @@ const sections = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Human Signal — watch candidates supervise AI in-frame</title>
-    <meta name="description" content="Human Signal introduces controlled failures into live coding-agent work, observes how candidates respond, and produces hiring claims with receipts." />
+    <title>Human Signal — see who catches what the agent misses</title>
+    <meta name="description" content="Human Signal reveals how engineering candidates direct, challenge, and verify coding agents—without requiring reviewers to watch every session." />
     <link rel="canonical" href={canonicalURL} />
     <meta property="og:title" content="Human Signal" />
-    <meta property="og:description" content="The agent fails on purpose. See what the candidate does next—with receipts." />
+    <meta property="og:description" content="See who catches what the agent misses. Keep the evidence attached." />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>△</text></svg>" />
   </head>
   <body>
@@ -40,46 +51,72 @@ const sections = [
       <nav class="section-nav" aria-label="Page sections">
         {sections.map(({ id, label }) => <a href={`#${id}`}>{label}</a>)}
       </nav>
-      <a class="nav-cta" href={contact}>BECOME A DESIGN PARTNER ↗</a>
+      <a class="nav-cta" href={contact}>COMPARE NOTES ↗</a>
     </header>
 
     <main>
       <section class="hero wrap">
-        <p class="eyebrow">CONTROLLED HUMAN–AGENT WORK SAMPLES</p>
-        <h1>The agent fails<br />on purpose.<br /><em>What happens next?</em></h1>
-        <p class="lede">Comparable pressure. Real judgment. Receipts underneath.</p>
-        <p class="sub">Human Signal introduces subtle, realistic failures into a live coding-agent session. Candidates respond in-frame: accept, investigate, redirect, verify, or stop. You get an executive summary backed by every prompt, action, check, and artifact.</p>
+        <p class="eyebrow">AI-NATIVE ENGINEERING ASSESSMENTS</p>
+        <h1>See who catches<br /><em>what the AI misses.</em></h1>
+        <p class="lede">Review candidate judgment without watching every session.</p>
+        <p class="sub">Comparable agent failures. Inspectable human decisions. Receipts underneath.</p>
         <div class="actions">
-          <a class="button primary" href="#sample-report">VIEW SAMPLE REPORT <span>↓</span></a>
-          <a class="button" href="/the-complementarity-test">READ THE METHOD <span>↗</span></a>
+          <a class="button primary" href="#sample-report" data-open-details="sample-report">VIEW SAMPLE REPORT <span>↓</span></a>
+          <a class="button" href={requestSkill}>REQUEST SKILL <span>↗</span></a>
         </div>
         <div class="hero-rule">
-          <span>THE PRODUCT</span>
-          <strong>An evals shim between<br />the human and the agent.</strong>
+          <span>THE PRINCIPLE</span>
+          <strong>Let AI compile the evidence.<br />Don't let it decide.</strong>
         </div>
       </section>
 
       <section class="problem band" id="problem">
         <div class="wrap two-col">
           <div>
-            <p class="eyebrow">01 / THE FAILURE</p>
-            <h2>A flawless agent produces no human signal.</h2>
+            <p class="eyebrow">01 / THE STATUS QUO</p>
+            <h2>Your interview assesses nothing about the job.</h2>
           </div>
           <div class="copy">
-            <p>Traditional coding tests pretend the agent is not there. AI-enabled assessments often swing to the other extreme: let the model solve the task, record the session, and infer “AI fluency” afterward.</p>
-            <p>If the agent happens to perform perfectly, the candidate never has to exercise judgment. If it fails by chance, candidates face different tests.</p>
-            <p class="callout">The missing layer creates comparable decisions—then records what the human actually does.</p>
+            <p>Your engineers direct agents, review their output, and own what ships. Your interview probably does one of three things:</p>
+            <ol class="current-loop">
+              <li><b>BAN THE AGENT</b><span>Measure work the candidate will not do after joining.</span></li>
+              <li><b>ALLOW THE AGENT</b><span>Receive a polished patch with no clear human contribution.</span></li>
+              <li><b>RECORD EVERYTHING</b><span>Ask a senior engineer to reconstruct an hour-long session.</span></li>
+            </ol>
+            <p class="callout">AI-native teams are already redesigning the interview. Every old-format hire widens the gap between the people you select and the work you need.</p>
           </div>
         </div>
       </section>
 
+      <section class="benefits wrap" aria-label="Benefits of the Human Signal approach">
+        <div class="benefits-head">
+          <div>
+            <p class="eyebrow">02 / THE BETTER LOOP</p>
+            <h2>Assess the work they'll actually do.</h2>
+          </div>
+          <p>Observe candidates directing agents, questioning their output, and taking responsibility for what ships.</p>
+        </div>
+        <ul class="better-loop">
+          <li><b>REAL WORK</b><span>Candidates use the agents they will use on the job.</span></li>
+          <li><b>FAIR COMPARISON</b><span>Each candidate faces the same consequential decisions.</span></li>
+          <li><b>FAST REVIEW</b><span>Start with the signal. Open the trace only when needed.</span></li>
+          <li><b>HUMAN JUDGMENT</b><span>Your team decides. Every claim keeps its receipt.</span></li>
+        </ul>
+      </section>
+
+      <details class="solution-disclosure wrap" id="solution">
+        <summary>
+          <span><small>THE HYPOTHESIS</small><strong>Create comparable decisions. Keep the evidence attached.</strong></span>
+          <b>EXPLORE <i>+</i></b>
+        </summary>
+        <div class="disclosure-body">
       <section class="shim wrap" id="shim">
         <div class="section-head">
           <div>
-            <p class="eyebrow">02 / THE EVALS SHIM</p>
+            <p class="eyebrow">03 / THE EVALS SHIM</p>
             <h2>A Socratic agent for technical judgment.</h2>
           </div>
-          <p>The agent works normally until the assessment needs evidence. Then the shim introduces a validated perturbation and adapts to the candidate's response.</p>
+          <p>The agent works normally until the shim introduces a controlled decision point.</p>
         </div>
 
         <div class="scenario-map" aria-label="Adaptive assessment sequence">
@@ -99,16 +136,16 @@ const sections = [
         <div class="perturbations">
           <span>OMITTED CONTRACT</span><span>MISLEADING GREEN</span><span>SCOPE DRIFT</span><span>REGRESSION</span><span>BOUNDARY VIOLATION</span><span>CORRECT COMPLETION</span>
         </div>
-        <p class="shim-note">The trajectory is partly manufactured. The work, evidence, and candidate decisions are real. Every branch is preregistered so adaptation does not become interviewer improvisation.</p>
+        <p class="shim-note">The decision points are controlled. The work and candidate responses are real. Every branch is preregistered.</p>
       </section>
 
       <section class="artifact wrap" id="evidence">
         <div class="section-head">
           <div>
-            <p class="eyebrow">03 / IN-FRAME RESPONSE</p>
+            <p class="eyebrow">04 / IN-FRAME RESPONSE</p>
             <h2>Don't ask what they would do. Watch them do it.</h2>
           </div>
-          <p>Every verdict points to its provenance, names the check, and states what would make it fail.</p>
+          <p>Every claim points to its source, check, and failure condition.</p>
         </div>
 
         <div class="trace-window">
@@ -141,42 +178,42 @@ const sections = [
 
       <section class="axes band" id="signal">
         <div class="wrap">
-          <p class="eyebrow">04 / THE SIGNAL</p>
+          <p class="eyebrow">05 / THE SIGNAL</p>
           <h2>Measure the composition, not the performance of the model.</h2>
           <div class="axis-grid">
-            <article><span>01 / CAPABILITY</span><h3>VERIFIED TASK LIFT</h3><p>Did the person's decisions produce a better verified outcome than the agent and harness alone?</p><dl><dt>RECEIPT</dt><dd>gold / defect contrast</dd><dt>CHECK</dt><dd>outcome changed</dd></dl><strong>OBSERVED</strong></article>
-            <article><span>02 / AUTOMATION</span><h3>ATTENTION REQUIRED</h3><p>How much active human attention was needed to obtain that lift across the session?</p><dl><dt>RECEIPT</dt><dd>3 interventions</dd><dt>CHECK</dt><dd>progress per attention</dd></dl><strong>BOUNDED</strong></article>
-            <article><span>03 / ALIGNMENT</span><h3>CONSTRAINTS PRESERVED</h3><p>Did the person reject defective action, preserve the contract, and accept the verified good state?</p><dl><dt>RECEIPT</dt><dd>decision sequence</dd><dt>CHECK</dt><dd>all controls passed</dd></dl><strong>OBSERVED</strong></article>
+            <article><span>01 / CAPABILITY</span><h3>VERIFIED TASK LIFT</h3><p>Did human decisions improve the verified outcome?</p><dl><dt>RECEIPT</dt><dd>gold / defect contrast</dd><dt>CHECK</dt><dd>outcome changed</dd></dl><strong>OBSERVED</strong></article>
+            <article><span>02 / AUTOMATION</span><h3>ATTENTION REQUIRED</h3><p>How much human attention did that improvement require?</p><dl><dt>RECEIPT</dt><dd>3 interventions</dd><dt>CHECK</dt><dd>progress per attention</dd></dl><strong>BOUNDED</strong></article>
+            <article><span>03 / ALIGNMENT</span><h3>CONSTRAINTS PRESERVED</h3><p>Did the candidate reject defects and accept verified work?</p><dl><dt>RECEIPT</dt><dd>decision sequence</dd><dt>CHECK</dt><dd>all controls passed</dd></dl><strong>OBSERVED</strong></article>
           </div>
         </div>
       </section>
 
       <section class="workflow wrap" id="pilot">
-        <p class="eyebrow">05 / THE PILOT</p>
+        <p class="eyebrow">06 / A POSSIBLE WORKFLOW</p>
         <h2>Start with failures your team already recognizes.</h2>
         <ol>
-          <li><b>01</b><div><h3>CALIBRATE</h3><p>Bring one role, representative work, and failures that distinguish trusted operators on your team.</p></div><span>YOUR CONTEXT</span></li>
-          <li><b>02</b><div><h3>PERTURB</h3><p>We turn real failure modes into subtle, controlled branches with gold, defect, and acceptance controls.</p></div><span>THE SHIM</span></li>
-          <li><b>03</b><div><h3>OBSERVE</h3><p>Candidates work asynchronously with a frontier agent and respond to comparable decisions in-frame.</p></div><span>UNDER 60 MIN</span></li>
-          <li><b>04</b><div><h3>COMPILE</h3><p>Receive the compression you want—from an executive recommendation down to replayable receipts and the complete trace.</p></div><span>ONE CLICK DEEPER</span></li>
+          <li><b>01</b><div><h3>CALIBRATE</h3><p>Choose one role, real work, and failures strong engineers catch.</p></div><span>YOUR CONTEXT</span></li>
+          <li><b>02</b><div><h3>PERTURB</h3><p>Turn those failures into controlled decision points.</p></div><span>THE SHIM</span></li>
+          <li><b>03</b><div><h3>OBSERVE</h3><p>Watch candidates respond while working with an agent.</p></div><span>UNDER 60 MIN</span></li>
+          <li><b>04</b><div><h3>COMPILE</h3><p>Move from performance synthesis to receipts and full trace.</p></div><span>CHOOSE THE DEPTH</span></li>
         </ol>
       </section>
-
-      <section class="promise band" id="promise">
-        <div class="wrap">
-          <p class="eyebrow">THE INCREDIBLE PROMISE</p>
-          <blockquote>Know what they do when the agent is confidently wrong.</blockquote>
-          <p>In under an hour, expose comparable decisions and produce a recommendation another reviewer can inspect. The open bet is whether controlled perturbations remain ecologically faithful and discriminate between people; the pilot tests that rather than assuming it.</p>
         </div>
-      </section>
+      </details>
 
-      <section class="report-section wrap" id="sample-report">
+      <details class="solution-disclosure wrap" id="sample-report">
+        <summary>
+          <span><small>THE OUTPUT</small><strong>Change the resolution. Never lose the receipt.</strong></span>
+          <b>VIEW REPORT <i>+</i></b>
+        </summary>
+        <div class="disclosure-body">
+      <section class="report-section wrap">
         <div class="report-intro">
           <div>
-            <p class="eyebrow">06 / THE OUTPUT</p>
-            <h2>Read one paragraph.<br />Drill down to the trace.</h2>
+            <p class="eyebrow">07 / THE OUTPUT</p>
+            <h2>Choose the resolution.<br />Keep the evidence attached.</h2>
           </div>
-          <p>Every report has an executive summary. Every sentence can expand into the decision profile, cited receipts, artifacts, and complete session.</p>
+          <p>Move from synthesis to profile, claims, artifacts, and full trace. The evidence stays attached.</p>
         </div>
 
         <article class="candidate-report" aria-labelledby="report-title">
@@ -196,13 +233,13 @@ const sections = [
           </div>
 
           <nav class="report-depth" aria-label="Report compression levels">
-            <span class="active">EXECUTIVE</span><span>DECISION PROFILE</span><span>RECEIPTS</span><span>FULL TRACE</span>
+            <span class="active">SYNTHESIS</span><span>DECISION PROFILE</span><span>RECEIPTS</span><span>FULL TRACE</span>
           </nav>
 
           <section class="report-summary">
             <div>
-              <small>EVIDENCE-BOUNDED RECOMMENDATION</small>
-              <h3 id="report-title">ADVANCE WITH TARGETED FOLLOW-UP</h3>
+              <small>PERFORMANCE SYNTHESIS · LEVEL 1</small>
+              <h3 id="report-title">ONE MATERIAL UNCERTAINTY REMAINS</h3>
               <p>The candidate rejected a green but contract-incomplete patch, redirected scope drift, and accepted the corrected state after independent checks. One later concurrency perturbation was accepted on focused tests alone; follow up on verification under nondeterminism.</p>
             </div>
             <div class="verdict-total">
@@ -244,27 +281,29 @@ const sections = [
               </section>
               <section>
                 <div class="report-label"><b>LIMITS</b></div>
-                <p>This report describes behavior elicited in one work sample. It does not infer personality, general intelligence, or future job performance.</p>
+                <p>This report describes behavior elicited in one work sample. It does not infer personality, future job performance, or whether to hire. That decision remains with the accountable reviewers.</p>
               </section>
             </aside>
           </div>
 
           <footer class="report-footer">
-            <span>EXECUTIVE SUMMARY → PROFILE → RECEIPTS → TRACE</span>
-            <span>EVERY CLAIM IS ONE CLICK FROM ITS CHECK</span>
+            <span>SYNTHESIS → PROFILE → CLAIMS → RECEIPTS → ARTIFACTS → TRACE</span>
+            <span>ABSTRACT FREELY · PRESERVE PROVENANCE</span>
           </footer>
         </article>
       </section>
+        </div>
+      </details>
 
-      <section class="cta band" id="design-partner">
+      <section class="cta band" id="compare-notes">
         <div class="wrap cta-inner">
           <div>
-            <p class="eyebrow">DESIGN PARTNERS WANTED</p>
-            <h2>Manufacture the decisions your interview currently misses.</h2>
+            <p class="eyebrow">I'M LISTENING</p>
+            <h2>What can’t you learn from your interview today?</h2>
           </div>
           <div>
-            <p>Bring one role, one representative task, and the agent failures your strongest engineers catch. We will turn them into a controlled pilot and find out whether the resulting signal survives replay.</p>
-            <a class="button primary" href={contact}>DESIGN A PILOT <span>→</span></a>
+            <p>If you hire engineers who work with AI, I want to understand what feels unreliable, expensive, or invisible in your current process. No pitch required.</p>
+            <a class="button primary" href={contact}>COMPARE NOTES <span>→</span></a>
             <small>june@june.kim · Vancouver / async</small>
           </div>
         </div>
@@ -276,78 +315,114 @@ const sections = [
       <p>A research project by <a href="/about">June Kim</a>.</p>
       <p><a href="/cc-by-sa-ns">CC BY-SA-NS</a> · <a href="/the-complementarity-test">Methodology</a></p>
     </footer>
+    <script>
+      document.querySelectorAll('[data-open-details]').forEach((link) => {
+        link.addEventListener('click', () => {
+          const id = link.getAttribute('data-open-details');
+          const details = id && document.getElementById(id);
+          if (details instanceof HTMLDetailsElement) details.open = true;
+        });
+      });
+    </script>
   </body>
 </html>
 
 <style>
   :global(*) { box-sizing: border-box; }
-  :global(html) { background: #0b0d0c; color: #eff4ee; font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace; scroll-behavior: smooth; scroll-padding-top: 24px; }
-  :global(body) { margin: 0; background: radial-gradient(circle at 77% 8%, rgba(177,255,70,.08), transparent 25rem), #0b0d0c; }
+  :global(html) { --accent: #e5a083; background: #0b0d0c; color: #eff4ee; font-family: Avenir, "Avenir Next", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 18px; scroll-behavior: smooth; scroll-padding-top: 24px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  :global(body) { margin: 0; background: radial-gradient(circle at 77% 8%, rgba(229,160,131,.07), transparent 25rem), #0b0d0c; }
   :global(a) { color: inherit; }
+  :global(p) { text-wrap: pretty; }
   .wrap { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
   .nav { min-height: 78px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; border-bottom: 1px solid #3a3e39; font-size: 12px; }
   .brand { text-decoration: none; font-weight: 800; letter-spacing: .08em; }
-  .brand span { display: inline-grid; place-items: center; width: 25px; height: 25px; margin-right: 8px; background: #b7ff46; color: #0b0d0c; }
+  .brand span { display: inline-grid; place-items: center; width: 25px; height: 25px; margin-right: 8px; background: var(--accent); color: #0b0d0c; }
   .section-nav { display: flex; gap: 20px; color: #92998f; font-size: 10px; letter-spacing: .06em; }
   .section-nav a { text-decoration: none; }
-  .section-nav a:hover { color: #b7ff46; }
+  .section-nav a:hover { color: var(--accent); }
   .nav-cta { justify-self: end; text-underline-offset: 4px; }
-  .hero { min-height: 760px; padding: 110px 0 60px; }
-  .eyebrow { color: #b7ff46; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .hero { min-height: 720px; padding: 104px 0 60px; }
+  .eyebrow { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
   h1, h2, h3, p { margin-top: 0; }
-  h1 { max-width: 1050px; margin: 22px 0 28px; font-family: Arial, Helvetica, sans-serif; font-size: clamp(52px, 8.8vw, 118px); font-weight: 800; line-height: .88; letter-spacing: -.065em; }
+  h1, h2, h3 { font-family: Avenir, "Avenir Next", system-ui, -apple-system, "Segoe UI", sans-serif; text-wrap: balance; }
+  h1 { max-width: 1050px; margin: 25px 0 34px; font-size: clamp(48px, 7.7vw, 102px); font-weight: 500; line-height: .94; letter-spacing: -.045em; }
   h1 s { color: #596057; text-decoration-thickness: .06em; }
-  h1 em { color: #b7ff46; font-style: normal; }
-  .lede { margin-bottom: 12px; font: 700 clamp(22px, 3vw, 39px)/1.15 Arial, sans-serif; letter-spacing: -.03em; }
-  .sub { max-width: 770px; color: #aeb5ac; font: 17px/1.6 Arial, sans-serif; }
+  h1 em { color: var(--accent); font-style: normal; }
+  .lede { max-width: 850px; margin-bottom: 18px; font: 500 clamp(22px, 2.6vw, 34px)/1.24 Lora, Georgia, serif; letter-spacing: -.015em; }
+  .sub { max-width: 760px; color: #aeb5ac; font: 400 17px/1.65 Lora, Georgia, serif; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 38px 0 76px; }
   .button { display: inline-flex; min-height: 51px; align-items: center; justify-content: space-between; gap: 40px; padding: 0 18px; border: 1px solid #646a62; text-decoration: none; font-size: 12px; font-weight: 800; }
-  .button:hover { border-color: #b7ff46; }
-  .button.primary { border-color: #b7ff46; background: #b7ff46; color: #0b0d0c; }
+  .button:hover { border-color: var(--accent); }
+  .button.primary { border-color: var(--accent); background: var(--accent); color: #0b0d0c; }
   .button span { font-size: 20px; }
   .hero-rule { display: grid; grid-template-columns: 1fr 2fr; padding-top: 24px; border-top: 1px solid #3a3e39; }
   .hero-rule span { color: #737a71; font-size: 11px; }
-  .hero-rule strong { font: 500 21px/1.4 Arial, sans-serif; }
+  .hero-rule strong { font: 500 21px/1.4 Lora, Georgia, serif; }
   .band { border-block: 1px solid #3a3e39; background: #111411; }
+  .solution-disclosure { margin-block: 34px; border-block: 1px solid #3a3e39; }
+  .solution-disclosure > summary { display: flex; min-height: 132px; align-items: center; justify-content: space-between; gap: 30px; padding: 28px 4px; cursor: pointer; list-style: none; }
+  .solution-disclosure > summary::-webkit-details-marker { display: none; }
+  .solution-disclosure > summary span { display: grid; gap: 10px; }
+  .solution-disclosure > summary small { color: #777e75; font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .1em; }
+  .solution-disclosure > summary strong { font: 500 clamp(22px, 3vw, 34px)/1.25 Lora, Georgia, serif; }
+  .solution-disclosure > summary b { color: var(--accent); font: 11px "SFMono-Regular", Consolas, monospace; white-space: nowrap; }
+  .solution-disclosure > summary i { display: inline-block; margin-left: 10px; font-size: 18px; font-style: normal; transition: transform .2s ease; }
+  .solution-disclosure[open] > summary i { transform: rotate(45deg); }
+  .solution-disclosure[open] > summary { border-bottom: 1px solid #3a3e39; }
+  .solution-disclosure .disclosure-body > .wrap { width: 100%; }
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding-block: 100px; }
-  h2 { max-width: 780px; font: 750 clamp(36px, 5vw, 69px)/.98 Arial, sans-serif; letter-spacing: -.045em; }
-  .copy { color: #b7bdb5; font: 19px/1.55 Arial, sans-serif; }
-  .callout { margin-top: 36px; padding: 22px; border-left: 4px solid #b7ff46; background: #191d19; color: #eff4ee; font-weight: 700; }
+  h2 { max-width: 800px; font-size: clamp(34px, 4.3vw, 60px); font-weight: 500; line-height: 1.05; letter-spacing: -.035em; }
+  .copy { color: #b7bdb5; font: 400 18px/1.65 Lora, Georgia, serif; }
+  .current-loop { margin: 30px 0; padding: 0; border-top: 1px solid #3d423c; list-style: none; }
+  .current-loop li { display: grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid #3d423c; }
+  .current-loop b { color: var(--accent); font: 10px/1.5 "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; }
+  .current-loop span { font-size: 16px; line-height: 1.5; }
+  .callout { margin-top: 36px; padding: 22px; border-left: 4px solid var(--accent); background: #191d19; color: #eff4ee; font-weight: 700; }
+  .benefits { padding-block: 110px; }
+  .benefits-head { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; align-items: end; margin-bottom: 48px; }
+  .benefits-head > p { color: #969d94; font: 400 16px/1.6 Lora, Georgia, serif; }
+  .better-loop { display: grid; grid-template-columns: 1fr 1fr; margin: 0; padding: 0; border: 1px solid #4a5048; list-style: none; }
+  .better-loop li { min-height: 126px; padding: 20px; border-right: 1px solid #4a5048; border-bottom: 1px solid #4a5048; }
+  .better-loop li:nth-child(2n) { border-right: 0; }
+  .better-loop li:nth-last-child(-n + 2) { border-bottom: 0; }
+  .better-loop b, .better-loop span { display: block; }
+  .better-loop b { margin-bottom: 14px; color: var(--accent); font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; }
+  .better-loop span { color: #d6dbd4; font-size: 15px; line-height: 1.5; }
   .shim, .artifact, .workflow { padding-block: 110px; }
   .section-head { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; align-items: end; }
-  .section-head > p { color: #969d94; font: 16px/1.5 Arial, sans-serif; }
+  .section-head > p { color: #969d94; font: 400 16px/1.6 Lora, Georgia, serif; }
   .scenario-map { display: grid; grid-template-columns: minmax(230px, .72fr) 55px 1.6fr; gap: 16px; align-items: stretch; margin-top: 48px; }
-  .scenario-start { display: flex; flex-direction: column; justify-content: center; min-height: 260px; padding: 28px; border: 1px solid #b7ff46; background: rgba(183,255,70,.045); }
-  .scenario-start small, .scenario-branches span { color: #b7ff46; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
-  .scenario-start strong { margin: 34px 0 12px; font: 700 23px/1.15 Arial, sans-serif; letter-spacing: -.025em; }
-  .scenario-start p, .scenario-branches p { margin: 0; color: #8f978d; font: 13px/1.45 Arial, sans-serif; }
-  .scenario-arrow { display: grid; place-items: center; color: #b7ff46; font-size: 34px; }
+  .scenario-start { display: flex; flex-direction: column; justify-content: center; min-height: 260px; padding: 28px; border: 1px solid var(--accent); background: rgba(229,160,131,.045); }
+  .scenario-start small, .scenario-branches span { color: var(--accent); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+  .scenario-start strong { margin: 34px 0 12px; font-size: 23px; font-weight: 500; line-height: 1.2; letter-spacing: -.015em; }
+  .scenario-start p, .scenario-branches p { margin: 0; color: #8f978d; font: 400 13px/1.55 Lora, Georgia, serif; }
+  .scenario-arrow { display: grid; place-items: center; color: var(--accent); font-size: 34px; }
   .scenario-branches { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #454b43; }
   .scenario-branches article { min-height: 260px; padding: 24px 20px; border-right: 1px solid #454b43; }
   .scenario-branches article:last-child { border-right: 0; }
-  .scenario-branches b { display: block; margin: 62px 0 14px; font: 700 17px/1.2 Arial, sans-serif; }
+  .scenario-branches b { display: block; margin: 62px 0 14px; font-size: 17px; font-weight: 600; line-height: 1.25; }
   .perturbations { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
   .perturbations span { padding: 8px 10px; border: 1px solid #3e443c; color: #858c83; font-size: 9px; }
-  .shim-note { max-width: 780px; margin: 30px 0 0 auto; padding-left: 22px; border-left: 3px solid #b7ff46; color: #a4aba2; font: 15px/1.55 Arial, sans-serif; }
+  .shim-note { max-width: 780px; margin: 30px 0 0 auto; padding-left: 22px; border-left: 3px solid var(--accent); color: #a4aba2; font: 400 15px/1.65 Lora, Georgia, serif; }
   .trace-window { margin-top: 45px; border: 1px solid #555b53; background: #0e100f; box-shadow: 16px 16px 0 #1c211b; }
   .window-bar { display: flex; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #555b53; color: #8d948b; font-size: 10px; }
-  .window-bar span:last-child { color: #b7ff46; }
+  .window-bar span:last-child { color: var(--accent); }
   .trace-grid { display: grid; grid-template-columns: 150px 1fr 260px; min-height: 420px; }
   .trace-grid aside { display: flex; flex-direction: column; gap: 15px; padding: 22px 16px; border-right: 1px solid #343933; color: #747b72; font-size: 11px; }
   .trace-grid aside b { margin-bottom: 12px; color: #dadfd8; }
   .trace-grid aside .done { color: #8fa97c; }
-  .trace-grid aside .active { color: #b7ff46; }
+  .trace-grid aside .active { color: var(--accent); }
   .conversation { padding: 28px; }
   .conversation > div { max-width: 90%; margin-bottom: 23px; padding: 17px 19px; border: 1px solid #3a3f39; }
-  .conversation .human { margin-left: auto; border-color: #83ad45; background: rgba(183,255,70,.05); }
+  .conversation .human { margin-left: auto; border-color: #a9715c; background: rgba(229,160,131,.05); }
   .conversation label { display: block; margin-bottom: 10px; color: #838a80; font-size: 10px; }
-  .conversation p { margin: 0; color: #d9ded7; font: 15px/1.5 Arial, sans-serif; }
-  code { color: #b7ff46; }
+  .conversation p { margin: 0; color: #d9ded7; font: 400 15px/1.6 Lora, Georgia, serif; }
+  code { color: var(--accent); }
   .muted { opacity: .53; }
   .trace-grid aside.rubric { border-right: 0; border-left: 1px solid #343933; }
   .rubric div { padding-bottom: 14px; border-bottom: 1px solid #292d28; }
   .rubric span, .rubric strong { display: block; }
-  .rubric strong { margin-top: 5px; color: #b7ff46; }
+  .rubric strong { margin-top: 5px; color: var(--accent); }
   .rubric strong.false, .axis-grid strong.false { color: #ff735c; }
   .rubric strong.untrue { color: #8d948b; }
   .rubric small { margin-top: auto; color: #777e75; line-height: 1.5; }
@@ -357,30 +432,30 @@ const sections = [
   .axis-grid article:last-child { border: 0; }
   .axis-grid article > span { color: #6e756c; font-size: 11px; }
   .axis-grid h3 { margin: 55px 0 17px; font-size: 17px; }
-  .axis-grid p { min-height: 92px; color: #9fa69d; font: 15px/1.5 Arial, sans-serif; }
+  .axis-grid p { min-height: 92px; color: #9fa69d; font: 400 15px/1.55 Lora, Georgia, serif; }
   .axis-grid dl { display: grid; grid-template-columns: 90px 1fr; gap: 7px 12px; margin: 20px 0; padding-top: 16px; border-top: 1px solid #343933; font-size: 10px; }
   .axis-grid dt { color: #70776e; }
   .axis-grid dd { margin: 0; color: #c3c9c1; }
-  .axis-grid article > strong { display: block; margin-top: 24px; color: #b7ff46; font-size: 13px; }
+  .axis-grid article > strong { display: block; margin-top: 24px; color: var(--accent); font-size: 13px; }
   .workflow ol { margin: 45px 0 0; padding: 0; border-top: 1px solid #4b5049; list-style: none; }
   .workflow li { display: grid; grid-template-columns: 70px 1fr 140px; gap: 30px; padding: 28px 5px; border-bottom: 1px solid #363b35; align-items: start; }
-  .workflow li > b { color: #b7ff46; }
+  .workflow li > b { color: var(--accent); }
   .workflow h3 { margin: 0 0 8px; font-size: 15px; }
-  .workflow li p { max-width: 670px; margin: 0; color: #979e95; font: 16px/1.45 Arial, sans-serif; }
+  .workflow li p { max-width: 670px; margin: 0; color: #979e95; font: 400 16px/1.55 Lora, Georgia, serif; }
   .workflow li > span { justify-self: end; color: #6f766d; font-size: 10px; }
   .promise .wrap { padding-block: 110px; }
-  blockquote { max-width: 1000px; margin: 30px 0 40px; color: #b7ff46; font: 750 clamp(42px, 6vw, 80px)/1 Arial, sans-serif; letter-spacing: -.045em; }
-  .promise .wrap > p:last-child { max-width: 750px; color: #9ca39a; font: 17px/1.6 Arial, sans-serif; }
+  blockquote { max-width: 1000px; margin: 34px 0 44px; color: var(--accent); font: 500 clamp(40px, 5.2vw, 68px)/1.08 Lora, Georgia, serif; letter-spacing: -.035em; }
+  .promise .wrap > p:last-child { max-width: 750px; color: #9ca39a; font: 400 17px/1.65 Lora, Georgia, serif; }
   .report-section { padding-block: 110px; }
   .report-intro { display: grid; grid-template-columns: 1.5fr 1fr; gap: 70px; align-items: end; margin-bottom: 44px; }
-  .report-intro > p { color: #969d94; font: 16px/1.5 Arial, sans-serif; }
+  .report-intro > p { color: #969d94; font: 400 16px/1.6 Lora, Georgia, serif; }
   .candidate-report { border: 1px solid #5b6258; background: #e8eadf; color: #141713; box-shadow: 18px 18px 0 #20251f; }
   .report-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px; border-bottom: 2px solid #141713; }
   .report-header > div { display: flex; align-items: center; gap: 12px; }
   .report-header b, .report-header small { display: block; }
   .report-header b { font-size: 13px; letter-spacing: .08em; }
   .report-header small { margin-top: 3px; color: #596056; font-size: 8px; }
-  .report-mark { display: grid; place-items: center; width: 34px; height: 34px; background: #141713; color: #b7ff46; }
+  .report-mark { display: grid; place-items: center; width: 34px; height: 34px; background: #141713; color: var(--accent); }
   .specimen { padding: 6px 9px; border: 1px solid #141713; font-size: 9px; font-weight: 800; transform: rotate(1deg); }
   .candidate-meta { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #747a70; }
   .candidate-meta > div { min-height: 100px; padding: 17px; border-right: 1px solid #747a70; }
@@ -388,19 +463,19 @@ const sections = [
   .candidate-meta small, .candidate-meta strong, .candidate-meta span { display: block; }
   .candidate-meta small { margin-bottom: 15px; color: #656b62; font-size: 8px; }
   .candidate-meta strong { font-size: 11px; }
-  .candidate-meta span { margin-top: 5px; color: #666c63; font: 12px Arial, sans-serif; }
+  .candidate-meta span { margin-top: 5px; color: #666c63; font: 12px Lora, Georgia, serif; }
   .report-depth { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #747a70; background: #daddd1; }
   .report-depth span { padding: 11px 14px; border-right: 1px solid #92988e; color: #666d63; font-size: 8px; font-weight: 800; text-align: center; }
   .report-depth span:last-child { border: 0; }
-  .report-depth span.active { background: #141713; color: #b7ff46; }
+  .report-depth span.active { background: #141713; color: var(--accent); }
   .report-summary { display: grid; grid-template-columns: 1.6fr 1fr; gap: 35px; padding: 30px 24px; border-bottom: 2px solid #141713; }
   .report-summary small { color: #676e64; font-size: 8px; }
   .report-summary h3 { margin: 10px 0 12px; color: #141713; font-size: clamp(22px, 3vw, 36px); }
-  .report-summary p { max-width: 700px; margin: 0; color: #40463e; font: 14px/1.5 Arial, sans-serif; }
+  .report-summary p { max-width: 700px; margin: 0; color: #40463e; font: 14px/1.6 Lora, Georgia, serif; }
   .verdict-total { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #747a70; }
   .verdict-total div { display: grid; place-content: center; text-align: center; border-right: 1px solid #747a70; }
   .verdict-total div:last-child { border: 0; }
-  .verdict-total strong { font: 700 34px Arial, sans-serif; }
+  .verdict-total strong { font-size: 34px; font-weight: 600; }
   .verdict-total span { margin-top: 4px; font-size: 8px; }
   .report-grid { display: grid; grid-template-columns: 2fr 1fr; }
   .claim-list { border-right: 1px solid #747a70; }
@@ -411,19 +486,20 @@ const sections = [
   .claim-verdict.false { color: #a23727; }
   .claim-verdict.untrue { color: #6d716b; }
   .claim-list article b { font-size: 11px; }
-  .claim-list article p { margin: 6px 0 8px; color: #4c524a; font: 12px/1.45 Arial, sans-serif; }
+  .claim-list article p { margin: 6px 0 8px; color: #4c524a; font: 12px/1.55 Lora, Georgia, serif; }
   .claim-list article a { color: #2f4f29; font-size: 8px; font-weight: 800; text-underline-offset: 3px; }
   .report-side > section { border-bottom: 1px solid #747a70; }
   .report-side > section:last-child { border: 0; }
   .report-side dl { display: grid; grid-template-columns: 1fr auto; gap: 10px 18px; margin: 0; padding: 18px 16px; font-size: 10px; }
   .report-side dt { color: #5e655c; }
   .report-side dd { margin: 0; font-weight: 800; }
-  .report-side p { margin: 0; padding: 18px 16px; color: #4c524a; font: 12px/1.5 Arial, sans-serif; }
-  .report-footer { display: flex; justify-content: space-between; padding: 12px 16px; border-top: 2px solid #141713; background: #141713; color: #b7ff46; font-size: 8px; }
+  .report-side p { margin: 0; padding: 18px 16px; color: #4c524a; font: 12px/1.55 Lora, Georgia, serif; }
+  .report-footer { display: flex; justify-content: space-between; padding: 12px 16px; border-top: 2px solid #141713; background: #141713; color: var(--accent); font-size: 8px; }
   .cta-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; padding-block: 120px; }
-  .cta-inner > div:last-child { color: #aab1a8; font: 17px/1.55 Arial, sans-serif; }
-  .cta .button { margin-top: 20px; font-family: "IBM Plex Mono", monospace; }
-  .cta small { display: block; margin-top: 18px; color: #6f766d; font: 11px monospace; }
+  .cta-inner > div:last-child { color: #aab1a8; font: 400 17px/1.65 Lora, Georgia, serif; }
+  .cta .button { margin-top: 20px; }
+  .cta small { display: block; margin-top: 18px; color: #6f766d; font: 11px "SFMono-Regular", Consolas, monospace; }
+  .eyebrow, .brand, .section-nav, .nav-cta, .button, .hero-rule > span, .scenario-start small, .scenario-branches span, .perturbations, .window-bar, .trace-grid aside, .conversation label, .axis-grid article > span, .axis-grid dl, .axis-grid article > strong, .workflow li > b, .workflow li > span, .report-header, .candidate-meta small, .candidate-meta strong, .report-depth, .report-summary small, .verdict-total span, .report-label, .claim-verdict, .claim-list article b, .claim-list article a, .report-side dl, .report-footer, .site-footer { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
   .site-footer { display: grid; grid-template-columns: 1fr auto auto; gap: 40px; align-items: center; min-height: 100px; border-top: 1px solid #3a3e39; color: #767d74; font-size: 11px; }
   .site-footer p { margin: 0; }
   @media (max-width: 760px) {
@@ -433,7 +509,17 @@ const sections = [
     .nav-cta { font-size: 0; }
     .nav-cta::after { content: "PARTNER ↗"; font-size: 10px; }
     .hero { min-height: auto; padding-top: 75px; }
+    h1 { font-size: clamp(40px, 11vw, 56px); line-height: .98; letter-spacing: -.035em; }
+    .lede { font-size: clamp(21px, 6vw, 28px); }
+    .sub { font-size: 16px; }
+    .actions { display: grid; grid-template-columns: 1fr; margin-bottom: 64px; }
+    .button { width: 100%; }
     .hero-rule, .two-col, .section-head, .report-intro, .cta-inner { grid-template-columns: 1fr; gap: 30px; }
+    .current-loop li { grid-template-columns: 1fr; gap: 6px; }
+    .benefits-head { grid-template-columns: 1fr; gap: 20px; }
+    .better-loop { grid-template-columns: 1fr; }
+    .better-loop li, .better-loop li:nth-child(2n), .better-loop li:nth-last-child(-n + 2) { min-height: auto; border-right: 0; border-bottom: 1px solid #4a5048; }
+    .better-loop li:last-child { border-bottom: 0; }
     .scenario-map { grid-template-columns: 1fr; }
     .scenario-arrow { transform: rotate(90deg); min-height: 40px; }
     .scenario-branches { grid-template-columns: 1fr; }
