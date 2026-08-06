@@ -63,10 +63,27 @@ const sections = [
           <a class="button primary" href="#sample-report" data-open-details="sample-report">VIEW SAMPLE REPORT <span>↓</span></a>
           <a class="button" href={requestSkill}>REQUEST SKILL <span>↗</span></a>
         </div>
-        <div class="hero-rule">
-          <span>THE PRINCIPLE</span>
-          <strong>Let AI compile the evidence without letting it subsume your decision.</strong>
+      </section>
+
+      <section class="problem band" id="problem">
+        <div class="wrap two-col">
+          <div>
+            <p class="eyebrow">01 / THE STATUS QUO</p>
+            <h2>Do you ban AI in your interview?</h2>
+          </div>
+          <div class="status-proof">
+            <p>Ban AI and cheaters route around it. <strong>Only honest candidates comply.</strong></p>
+            <figure>
+              <img src="/assets/human-signal/cheat.jpg" alt="A candidate concealing a phone that generates answers during a remote interview" loading="lazy" />
+              <figcaption>THE BAN DOESN'T REMOVE AI.<br />IT REMOVES TRANSPARENCY.</figcaption>
+            </figure>
+          </div>
         </div>
+      </section>
+
+      <section class="hero-rule wrap" aria-label="Human Signal principle">
+        <span>THE PRINCIPLE</span>
+        <strong>Let AI compile the evidence without letting it subsume your decision.</strong>
       </section>
 
       <figure class="signal-lens wrap" aria-labelledby="signal-lens-caption">
@@ -159,22 +176,6 @@ const sections = [
         </svg>
         <figcaption id="signal-lens-caption"><span>FULL CONTEXT WHEN NEEDED</span><strong>Start with the decisions that changed the outcome.</strong></figcaption>
       </figure>
-
-      <section class="problem band" id="problem">
-        <div class="wrap two-col">
-          <div>
-            <p class="eyebrow">01 / THE STATUS QUO</p>
-            <h2>Does your interview resemble the work?</h2>
-          </div>
-          <div class="status-proof">
-            <p>Ban AI and cheaters route around it. <strong>Only honest candidates comply.</strong></p>
-            <figure>
-              <img src="/assets/human-signal/cheat.jpg" alt="A candidate concealing a phone that generates answers during a remote interview" loading="lazy" />
-              <figcaption>THE BAN DOESN'T REMOVE AI.<br />IT REMOVES TRANSPARENCY.</figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
 
       <section class="benefits wrap" aria-label="Benefits of the Human Signal approach">
         <div class="benefits-head">
@@ -429,7 +430,7 @@ const sections = [
   .section-nav a { text-decoration: none; }
   .section-nav a:hover { color: var(--accent); }
   .nav-cta { justify-self: end; text-underline-offset: 4px; }
-  .hero { position: relative; min-height: 720px; padding: 104px 0 60px; isolation: isolate; }
+  .hero { position: relative; min-height: 650px; padding: 104px 0 76px; isolation: isolate; }
   .hero > :not(.hero-scribble) { position: relative; z-index: 1; }
   .hero-scribble { position: absolute; z-index: 0; top: 122px; right: -34px; width: min(38vw, 440px); height: auto; opacity: .94; pointer-events: none; }
   .eyebrow { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
@@ -445,10 +446,10 @@ const sections = [
   .button:hover { border-color: var(--accent); }
   .button.primary { border-color: var(--accent); background: var(--accent); color: #0b0d0c; }
   .button span { font-size: 20px; }
-  .hero-rule { display: grid; grid-template-columns: 1fr 2fr; padding-top: 24px; border-top: 1px solid #3a3e39; }
+  .hero-rule { display: grid; grid-template-columns: 1fr 2fr; padding-block: 62px; border-bottom: 1px solid #3a3e39; }
   .hero-rule span { color: #737a71; font-size: 11px; }
   .hero-rule strong { font: 500 21px/1.4 Lora, Georgia, serif; }
-  .signal-lens { margin-top: -34px; padding: 0 0 104px; }
+  .signal-lens { padding: 72px 0 104px; }
   .signal-lens svg { display: block; width: 100%; height: auto; overflow: visible; }
   .signal-lens figcaption { display: grid; grid-template-columns: 1fr 2fr; padding-top: 18px; border-top: 1px solid #3a3e39; }
   .signal-lens figcaption span { color: #737a71; font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; }
