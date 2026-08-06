@@ -1,0 +1,464 @@
+---
+const subject = encodeURIComponent('Human Signal design partner');
+const body = encodeURIComponent(`Hi June,
+
+We are reconsidering how we assess engineers who use coding agents.
+
+Role(s) we hire for:
+What our current process misses:
+An agent failure our strongest engineers would catch:
+Last time this caused a problem:
+
+I'd like to discuss a Human Signal pilot.`);
+const contact = `mailto:june@june.kim?subject=${subject}&body=${body}`;
+const canonicalURL = new URL('/human-signal', Astro.site);
+const sections = [
+  { id: 'problem', label: 'Problem' },
+  { id: 'shim', label: 'The shim' },
+  { id: 'signal', label: 'Signal' },
+  { id: 'sample-report', label: 'Report' },
+] as const;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Human Signal — watch candidates supervise AI in-frame</title>
+    <meta name="description" content="Human Signal introduces controlled failures into live coding-agent work, observes how candidates respond, and produces hiring claims with receipts." />
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:title" content="Human Signal" />
+    <meta property="og:description" content="The agent fails on purpose. See what the candidate does next—with receipts." />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>△</text></svg>" />
+  </head>
+  <body>
+    <header class="nav wrap">
+      <a class="brand" href="/human-signal" aria-label="Human Signal home"><span>△</span> HUMAN SIGNAL</a>
+      <nav class="section-nav" aria-label="Page sections">
+        {sections.map(({ id, label }) => <a href={`#${id}`}>{label}</a>)}
+      </nav>
+      <a class="nav-cta" href={contact}>BECOME A DESIGN PARTNER ↗</a>
+    </header>
+
+    <main>
+      <section class="hero wrap">
+        <p class="eyebrow">CONTROLLED HUMAN–AGENT WORK SAMPLES</p>
+        <h1>The agent fails<br />on purpose.<br /><em>What happens next?</em></h1>
+        <p class="lede">Comparable pressure. Real judgment. Receipts underneath.</p>
+        <p class="sub">Human Signal introduces subtle, realistic failures into a live coding-agent session. Candidates respond in-frame: accept, investigate, redirect, verify, or stop. You get an executive summary backed by every prompt, action, check, and artifact.</p>
+        <div class="actions">
+          <a class="button primary" href="#sample-report">VIEW SAMPLE REPORT <span>↓</span></a>
+          <a class="button" href="/the-complementarity-test">READ THE METHOD <span>↗</span></a>
+        </div>
+        <div class="hero-rule">
+          <span>THE PRODUCT</span>
+          <strong>An evals shim between<br />the human and the agent.</strong>
+        </div>
+      </section>
+
+      <section class="problem band" id="problem">
+        <div class="wrap two-col">
+          <div>
+            <p class="eyebrow">01 / THE FAILURE</p>
+            <h2>A flawless agent produces no human signal.</h2>
+          </div>
+          <div class="copy">
+            <p>Traditional coding tests pretend the agent is not there. AI-enabled assessments often swing to the other extreme: let the model solve the task, record the session, and infer “AI fluency” afterward.</p>
+            <p>If the agent happens to perform perfectly, the candidate never has to exercise judgment. If it fails by chance, candidates face different tests.</p>
+            <p class="callout">The missing layer creates comparable decisions—then records what the human actually does.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="shim wrap" id="shim">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">02 / THE EVALS SHIM</p>
+            <h2>A Socratic agent for technical judgment.</h2>
+          </div>
+          <p>The agent works normally until the assessment needs evidence. Then the shim introduces a validated perturbation and adapts to the candidate's response.</p>
+        </div>
+
+        <div class="scenario-map" aria-label="Adaptive assessment sequence">
+          <div class="scenario-start">
+            <small>LIVE WORK</small>
+            <strong>Agent proposes a plausible patch</strong>
+            <p>Real repository. Frontier model. Normal tools.</p>
+          </div>
+          <div class="scenario-arrow">→</div>
+          <div class="scenario-branches">
+            <article><span>IF ACCEPTED</span><b>Reveal the omitted requirement</b><p>Does the candidate revise the decision?</p></article>
+            <article><span>IF TESTS REQUESTED</span><b>Return a green but incomplete check</b><p>Do they inspect what the test actually proves?</p></article>
+            <article><span>IF CORRECTLY CHALLENGED</span><b>Advance to a verified good state</b><p>Can they trust the agent and stop?</p></article>
+          </div>
+        </div>
+
+        <div class="perturbations">
+          <span>OMITTED CONTRACT</span><span>MISLEADING GREEN</span><span>SCOPE DRIFT</span><span>REGRESSION</span><span>BOUNDARY VIOLATION</span><span>CORRECT COMPLETION</span>
+        </div>
+        <p class="shim-note">The trajectory is partly manufactured. The work, evidence, and candidate decisions are real. Every branch is preregistered so adaptation does not become interviewer improvisation.</p>
+      </section>
+
+      <section class="artifact wrap" id="evidence">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">03 / IN-FRAME RESPONSE</p>
+            <h2>Don't ask what they would do. Watch them do it.</h2>
+          </div>
+          <p>Every verdict points to its provenance, names the check, and states what would make it fail.</p>
+        </div>
+
+        <div class="trace-window">
+          <div class="window-bar"><span>SESSION / CANDIDATE-014</span><span>CHECKPOINT 02 · CONTRACT COVERAGE</span><span>● LIVE</span></div>
+          <div class="trace-grid">
+            <aside>
+              <b>EVENTS</b>
+              <span class="done">✓ interpret</span>
+              <span class="active">▮ decide</span>
+              <span>○ perturb</span>
+              <span>○ verify</span>
+              <span>○ accept</span>
+            </aside>
+            <div class="conversation">
+              <div class="agent"><label>AGENT / READY TO PUSH</label><p>All 57 tests pass. I removed the redundant branches and added coverage for all three formats.</p></div>
+              <div class="human"><label>CANDIDATE / WITHHELD ACCEPTANCE</label><p>The suite is green, but the review explicitly required <code>--strict</code> to reject empty JSON. Show contract coverage, not just test count. Add the missing negative control before we push.</p></div>
+              <div class="agent muted"><label>SHIM / NEXT STATE</label><p>Contract coverage: 3 of 4. Strict-mode behavior is absent. Generating a revision...</p></div>
+            </div>
+            <aside class="rubric">
+              <b>DECISION LEDGER</b>
+              <div><span>CONTRACT OMISSION EXPOSED</span><strong>YES</strong></div>
+              <div><span>ACCEPTANCE WITHHELD</span><strong>EVOKED</strong></div>
+              <div><span>NEGATIVE CONTROL</span><strong>PENDING</strong></div>
+              <div><span>DEPLOYMENT DECISION</span><strong class="untrue">NOT EXPOSED</strong></div>
+              <small>Opportunity and response are reported separately. No exposure is not a candidate failure.</small>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="axes band" id="signal">
+        <div class="wrap">
+          <p class="eyebrow">04 / THE SIGNAL</p>
+          <h2>Measure the composition, not the performance of the model.</h2>
+          <div class="axis-grid">
+            <article><span>01 / CAPABILITY</span><h3>VERIFIED TASK LIFT</h3><p>Did the person's decisions produce a better verified outcome than the agent and harness alone?</p><dl><dt>RECEIPT</dt><dd>gold / defect contrast</dd><dt>CHECK</dt><dd>outcome changed</dd></dl><strong>OBSERVED</strong></article>
+            <article><span>02 / AUTOMATION</span><h3>ATTENTION REQUIRED</h3><p>How much active human attention was needed to obtain that lift across the session?</p><dl><dt>RECEIPT</dt><dd>3 interventions</dd><dt>CHECK</dt><dd>progress per attention</dd></dl><strong>BOUNDED</strong></article>
+            <article><span>03 / ALIGNMENT</span><h3>CONSTRAINTS PRESERVED</h3><p>Did the person reject defective action, preserve the contract, and accept the verified good state?</p><dl><dt>RECEIPT</dt><dd>decision sequence</dd><dt>CHECK</dt><dd>all controls passed</dd></dl><strong>OBSERVED</strong></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="workflow wrap" id="pilot">
+        <p class="eyebrow">05 / THE PILOT</p>
+        <h2>Start with failures your team already recognizes.</h2>
+        <ol>
+          <li><b>01</b><div><h3>CALIBRATE</h3><p>Bring one role, representative work, and failures that distinguish trusted operators on your team.</p></div><span>YOUR CONTEXT</span></li>
+          <li><b>02</b><div><h3>PERTURB</h3><p>We turn real failure modes into subtle, controlled branches with gold, defect, and acceptance controls.</p></div><span>THE SHIM</span></li>
+          <li><b>03</b><div><h3>OBSERVE</h3><p>Candidates work asynchronously with a frontier agent and respond to comparable decisions in-frame.</p></div><span>UNDER 60 MIN</span></li>
+          <li><b>04</b><div><h3>COMPILE</h3><p>Receive the compression you want—from an executive recommendation down to replayable receipts and the complete trace.</p></div><span>ONE CLICK DEEPER</span></li>
+        </ol>
+      </section>
+
+      <section class="promise band" id="promise">
+        <div class="wrap">
+          <p class="eyebrow">THE INCREDIBLE PROMISE</p>
+          <blockquote>Know what they do when the agent is confidently wrong.</blockquote>
+          <p>In under an hour, expose comparable decisions and produce a recommendation another reviewer can inspect. The open bet is whether controlled perturbations remain ecologically faithful and discriminate between people; the pilot tests that rather than assuming it.</p>
+        </div>
+      </section>
+
+      <section class="report-section wrap" id="sample-report">
+        <div class="report-intro">
+          <div>
+            <p class="eyebrow">06 / THE OUTPUT</p>
+            <h2>Read one paragraph.<br />Drill down to the trace.</h2>
+          </div>
+          <p>Every report has an executive summary. Every sentence can expand into the decision profile, cited receipts, artifacts, and complete session.</p>
+        </div>
+
+        <article class="candidate-report" aria-labelledby="report-title">
+          <header class="report-header">
+            <div>
+              <span class="report-mark">△</span>
+              <div><b>HUMAN SIGNAL</b><small>VERIFIABLE ASSESSMENT REPORT</small></div>
+            </div>
+            <span class="specimen">SYNTHETIC SPECIMEN</span>
+          </header>
+
+          <div class="candidate-meta">
+            <div><small>CANDIDATE</small><strong>CANDIDATE 014</strong><span>anonymized</span></div>
+            <div><small>ROLE</small><strong>SENIOR BACKEND ENGINEER</strong><span>identity platform</span></div>
+            <div><small>WORK SAMPLE</small><strong>SESSION ISOLATION FIX</strong><span>48 minutes · controlled agent</span></div>
+            <div><small>REPORT</small><strong>HS-2026-014</strong><span>4 perturbations · trace complete</span></div>
+          </div>
+
+          <nav class="report-depth" aria-label="Report compression levels">
+            <span class="active">EXECUTIVE</span><span>DECISION PROFILE</span><span>RECEIPTS</span><span>FULL TRACE</span>
+          </nav>
+
+          <section class="report-summary">
+            <div>
+              <small>EVIDENCE-BOUNDED RECOMMENDATION</small>
+              <h3 id="report-title">ADVANCE WITH TARGETED FOLLOW-UP</h3>
+              <p>The candidate rejected a green but contract-incomplete patch, redirected scope drift, and accepted the corrected state after independent checks. One later concurrency perturbation was accepted on focused tests alone; follow up on verification under nondeterminism.</p>
+            </div>
+            <div class="verdict-total">
+              <div><strong>3</strong><span>EVOKED</span></div>
+              <div><strong>1</strong><span>MISSED</span></div>
+              <div><strong>2</strong><span>NOT EXPOSED</span></div>
+            </div>
+          </section>
+
+          <div class="report-grid">
+            <section class="claim-list">
+              <div class="report-label"><b>CLAIMS</b><span>4 OF 6 SHOWN</span></div>
+              <article>
+                <strong class="claim-verdict true">EVOKED</strong>
+                <div><b>AR-02 · Rejected green but incomplete work</b><p>Candidate noticed that the passing suite did not exercise the explicit strict-mode requirement and withheld acceptance.</p><a href="#evidence">RECEIPT: CHECKPOINT 02 ↗</a></div>
+              </article>
+              <article>
+                <strong class="claim-verdict true">EVOKED</strong>
+                <div><b>TR-01 · Redirected scope expansion</b><p>Candidate stopped a parser-wide rewrite and restored the shared input boundary while recovery remained cheap.</p><a href="#evidence">RECEIPT: CHECKPOINT 03 ↗</a></div>
+              </article>
+              <article>
+                <strong class="claim-verdict false">MISSED</strong>
+                <div><b>VA-03 · Conditioned acceptance on the relevant check</b><p>Candidate accepted after focused tests. The broader baseline-negative race check still failed at the submitted commit.</p><a href="#evidence">KILL: RACE-SPEC — EXIT 1 ↗</a></div>
+              </article>
+              <article>
+                <strong class="claim-verdict untrue">NOT EXPOSED</strong>
+                <div><b>AR-07 · Managed deployment risk</b><p>The sequence contained no deployment decision. Missing exposure is not scored as candidate failure.</p><a href="#evidence">COVERAGE: NO TRIGGER ↗</a></div>
+              </article>
+            </section>
+
+            <aside class="report-side">
+              <section>
+                <div class="report-label"><b>REVIEW</b></div>
+                <dl><dt>Independent agreement</dt><dd>5 / 6 triggers</dd><dt>Disputed</dt><dd>TR-04</dd><dt>Trace integrity</dt><dd>complete</dd><dt>Replayable checks</dt><dd>6 / 6</dd></dl>
+              </section>
+              <section>
+                <div class="report-label"><b>FOLLOW-UP</b></div>
+                <p>Ask the candidate to design a deterministic check for the missed race and explain what evidence would justify deployment.</p>
+              </section>
+              <section>
+                <div class="report-label"><b>LIMITS</b></div>
+                <p>This report describes behavior elicited in one work sample. It does not infer personality, general intelligence, or future job performance.</p>
+              </section>
+            </aside>
+          </div>
+
+          <footer class="report-footer">
+            <span>EXECUTIVE SUMMARY → PROFILE → RECEIPTS → TRACE</span>
+            <span>EVERY CLAIM IS ONE CLICK FROM ITS CHECK</span>
+          </footer>
+        </article>
+      </section>
+
+      <section class="cta band" id="design-partner">
+        <div class="wrap cta-inner">
+          <div>
+            <p class="eyebrow">DESIGN PARTNERS WANTED</p>
+            <h2>Manufacture the decisions your interview currently misses.</h2>
+          </div>
+          <div>
+            <p>Bring one role, one representative task, and the agent failures your strongest engineers catch. We will turn them into a controlled pilot and find out whether the resulting signal survives replay.</p>
+            <a class="button primary" href={contact}>DESIGN A PILOT <span>→</span></a>
+            <small>june@june.kim · Vancouver / async</small>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer wrap">
+      <a class="brand" href="/"><span>△</span> HUMAN SIGNAL</a>
+      <p>A research project by <a href="/about">June Kim</a>.</p>
+      <p>© 2026 · <a href="/the-complementarity-test">Methodology</a></p>
+    </footer>
+  </body>
+</html>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(html) { background: #0b0d0c; color: #eff4ee; font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace; scroll-behavior: smooth; scroll-padding-top: 24px; }
+  :global(body) { margin: 0; background: radial-gradient(circle at 77% 8%, rgba(177,255,70,.08), transparent 25rem), #0b0d0c; }
+  :global(a) { color: inherit; }
+  .wrap { width: min(1180px, calc(100% - 40px)); margin-inline: auto; }
+  .nav { min-height: 78px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; border-bottom: 1px solid #3a3e39; font-size: 12px; }
+  .brand { text-decoration: none; font-weight: 800; letter-spacing: .08em; }
+  .brand span { display: inline-grid; place-items: center; width: 25px; height: 25px; margin-right: 8px; background: #b7ff46; color: #0b0d0c; }
+  .section-nav { display: flex; gap: 20px; color: #92998f; font-size: 10px; letter-spacing: .06em; }
+  .section-nav a { text-decoration: none; }
+  .section-nav a:hover { color: #b7ff46; }
+  .nav-cta { justify-self: end; text-underline-offset: 4px; }
+  .hero { min-height: 760px; padding: 110px 0 60px; }
+  .eyebrow { color: #b7ff46; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  h1, h2, h3, p { margin-top: 0; }
+  h1 { max-width: 1050px; margin: 22px 0 28px; font-family: Arial, Helvetica, sans-serif; font-size: clamp(52px, 8.8vw, 118px); font-weight: 800; line-height: .88; letter-spacing: -.065em; }
+  h1 s { color: #596057; text-decoration-thickness: .06em; }
+  h1 em { color: #b7ff46; font-style: normal; }
+  .lede { margin-bottom: 12px; font: 700 clamp(22px, 3vw, 39px)/1.15 Arial, sans-serif; letter-spacing: -.03em; }
+  .sub { max-width: 770px; color: #aeb5ac; font: 17px/1.6 Arial, sans-serif; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 38px 0 76px; }
+  .button { display: inline-flex; min-height: 51px; align-items: center; justify-content: space-between; gap: 40px; padding: 0 18px; border: 1px solid #646a62; text-decoration: none; font-size: 12px; font-weight: 800; }
+  .button:hover { border-color: #b7ff46; }
+  .button.primary { border-color: #b7ff46; background: #b7ff46; color: #0b0d0c; }
+  .button span { font-size: 20px; }
+  .hero-rule { display: grid; grid-template-columns: 1fr 2fr; padding-top: 24px; border-top: 1px solid #3a3e39; }
+  .hero-rule span { color: #737a71; font-size: 11px; }
+  .hero-rule strong { font: 500 21px/1.4 Arial, sans-serif; }
+  .band { border-block: 1px solid #3a3e39; background: #111411; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding-block: 100px; }
+  h2 { max-width: 780px; font: 750 clamp(36px, 5vw, 69px)/.98 Arial, sans-serif; letter-spacing: -.045em; }
+  .copy { color: #b7bdb5; font: 19px/1.55 Arial, sans-serif; }
+  .callout { margin-top: 36px; padding: 22px; border-left: 4px solid #b7ff46; background: #191d19; color: #eff4ee; font-weight: 700; }
+  .shim, .artifact, .workflow { padding-block: 110px; }
+  .section-head { display: grid; grid-template-columns: 2fr 1fr; gap: 60px; align-items: end; }
+  .section-head > p { color: #969d94; font: 16px/1.5 Arial, sans-serif; }
+  .scenario-map { display: grid; grid-template-columns: minmax(230px, .72fr) 55px 1.6fr; gap: 16px; align-items: stretch; margin-top: 48px; }
+  .scenario-start { display: flex; flex-direction: column; justify-content: center; min-height: 260px; padding: 28px; border: 1px solid #b7ff46; background: rgba(183,255,70,.045); }
+  .scenario-start small, .scenario-branches span { color: #b7ff46; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+  .scenario-start strong { margin: 34px 0 12px; font: 700 23px/1.15 Arial, sans-serif; letter-spacing: -.025em; }
+  .scenario-start p, .scenario-branches p { margin: 0; color: #8f978d; font: 13px/1.45 Arial, sans-serif; }
+  .scenario-arrow { display: grid; place-items: center; color: #b7ff46; font-size: 34px; }
+  .scenario-branches { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #454b43; }
+  .scenario-branches article { min-height: 260px; padding: 24px 20px; border-right: 1px solid #454b43; }
+  .scenario-branches article:last-child { border-right: 0; }
+  .scenario-branches b { display: block; margin: 62px 0 14px; font: 700 17px/1.2 Arial, sans-serif; }
+  .perturbations { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .perturbations span { padding: 8px 10px; border: 1px solid #3e443c; color: #858c83; font-size: 9px; }
+  .shim-note { max-width: 780px; margin: 30px 0 0 auto; padding-left: 22px; border-left: 3px solid #b7ff46; color: #a4aba2; font: 15px/1.55 Arial, sans-serif; }
+  .trace-window { margin-top: 45px; border: 1px solid #555b53; background: #0e100f; box-shadow: 16px 16px 0 #1c211b; }
+  .window-bar { display: flex; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid #555b53; color: #8d948b; font-size: 10px; }
+  .window-bar span:last-child { color: #b7ff46; }
+  .trace-grid { display: grid; grid-template-columns: 150px 1fr 260px; min-height: 420px; }
+  .trace-grid aside { display: flex; flex-direction: column; gap: 15px; padding: 22px 16px; border-right: 1px solid #343933; color: #747b72; font-size: 11px; }
+  .trace-grid aside b { margin-bottom: 12px; color: #dadfd8; }
+  .trace-grid aside .done { color: #8fa97c; }
+  .trace-grid aside .active { color: #b7ff46; }
+  .conversation { padding: 28px; }
+  .conversation > div { max-width: 90%; margin-bottom: 23px; padding: 17px 19px; border: 1px solid #3a3f39; }
+  .conversation .human { margin-left: auto; border-color: #83ad45; background: rgba(183,255,70,.05); }
+  .conversation label { display: block; margin-bottom: 10px; color: #838a80; font-size: 10px; }
+  .conversation p { margin: 0; color: #d9ded7; font: 15px/1.5 Arial, sans-serif; }
+  code { color: #b7ff46; }
+  .muted { opacity: .53; }
+  .trace-grid aside.rubric { border-right: 0; border-left: 1px solid #343933; }
+  .rubric div { padding-bottom: 14px; border-bottom: 1px solid #292d28; }
+  .rubric span, .rubric strong { display: block; }
+  .rubric strong { margin-top: 5px; color: #b7ff46; }
+  .rubric strong.false, .axis-grid strong.false { color: #ff735c; }
+  .rubric strong.untrue { color: #8d948b; }
+  .rubric small { margin-top: auto; color: #777e75; line-height: 1.5; }
+  .axes .wrap { padding-block: 100px; }
+  .axis-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #454b43; }
+  .axis-grid article { min-height: 340px; padding: 25px; border-right: 1px solid #454b43; }
+  .axis-grid article:last-child { border: 0; }
+  .axis-grid article > span { color: #6e756c; font-size: 11px; }
+  .axis-grid h3 { margin: 55px 0 17px; font-size: 17px; }
+  .axis-grid p { min-height: 92px; color: #9fa69d; font: 15px/1.5 Arial, sans-serif; }
+  .axis-grid dl { display: grid; grid-template-columns: 90px 1fr; gap: 7px 12px; margin: 20px 0; padding-top: 16px; border-top: 1px solid #343933; font-size: 10px; }
+  .axis-grid dt { color: #70776e; }
+  .axis-grid dd { margin: 0; color: #c3c9c1; }
+  .axis-grid article > strong { display: block; margin-top: 24px; color: #b7ff46; font-size: 13px; }
+  .workflow ol { margin: 45px 0 0; padding: 0; border-top: 1px solid #4b5049; list-style: none; }
+  .workflow li { display: grid; grid-template-columns: 70px 1fr 140px; gap: 30px; padding: 28px 5px; border-bottom: 1px solid #363b35; align-items: start; }
+  .workflow li > b { color: #b7ff46; }
+  .workflow h3 { margin: 0 0 8px; font-size: 15px; }
+  .workflow li p { max-width: 670px; margin: 0; color: #979e95; font: 16px/1.45 Arial, sans-serif; }
+  .workflow li > span { justify-self: end; color: #6f766d; font-size: 10px; }
+  .promise .wrap { padding-block: 110px; }
+  blockquote { max-width: 1000px; margin: 30px 0 40px; color: #b7ff46; font: 750 clamp(42px, 6vw, 80px)/1 Arial, sans-serif; letter-spacing: -.045em; }
+  .promise .wrap > p:last-child { max-width: 750px; color: #9ca39a; font: 17px/1.6 Arial, sans-serif; }
+  .report-section { padding-block: 110px; }
+  .report-intro { display: grid; grid-template-columns: 1.5fr 1fr; gap: 70px; align-items: end; margin-bottom: 44px; }
+  .report-intro > p { color: #969d94; font: 16px/1.5 Arial, sans-serif; }
+  .candidate-report { border: 1px solid #5b6258; background: #e8eadf; color: #141713; box-shadow: 18px 18px 0 #20251f; }
+  .report-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px; border-bottom: 2px solid #141713; }
+  .report-header > div { display: flex; align-items: center; gap: 12px; }
+  .report-header b, .report-header small { display: block; }
+  .report-header b { font-size: 13px; letter-spacing: .08em; }
+  .report-header small { margin-top: 3px; color: #596056; font-size: 8px; }
+  .report-mark { display: grid; place-items: center; width: 34px; height: 34px; background: #141713; color: #b7ff46; }
+  .specimen { padding: 6px 9px; border: 1px solid #141713; font-size: 9px; font-weight: 800; transform: rotate(1deg); }
+  .candidate-meta { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #747a70; }
+  .candidate-meta > div { min-height: 100px; padding: 17px; border-right: 1px solid #747a70; }
+  .candidate-meta > div:last-child { border: 0; }
+  .candidate-meta small, .candidate-meta strong, .candidate-meta span { display: block; }
+  .candidate-meta small { margin-bottom: 15px; color: #656b62; font-size: 8px; }
+  .candidate-meta strong { font-size: 11px; }
+  .candidate-meta span { margin-top: 5px; color: #666c63; font: 12px Arial, sans-serif; }
+  .report-depth { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid #747a70; background: #daddd1; }
+  .report-depth span { padding: 11px 14px; border-right: 1px solid #92988e; color: #666d63; font-size: 8px; font-weight: 800; text-align: center; }
+  .report-depth span:last-child { border: 0; }
+  .report-depth span.active { background: #141713; color: #b7ff46; }
+  .report-summary { display: grid; grid-template-columns: 1.6fr 1fr; gap: 35px; padding: 30px 24px; border-bottom: 2px solid #141713; }
+  .report-summary small { color: #676e64; font-size: 8px; }
+  .report-summary h3 { margin: 10px 0 12px; color: #141713; font-size: clamp(22px, 3vw, 36px); }
+  .report-summary p { max-width: 700px; margin: 0; color: #40463e; font: 14px/1.5 Arial, sans-serif; }
+  .verdict-total { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #747a70; }
+  .verdict-total div { display: grid; place-content: center; text-align: center; border-right: 1px solid #747a70; }
+  .verdict-total div:last-child { border: 0; }
+  .verdict-total strong { font: 700 34px Arial, sans-serif; }
+  .verdict-total span { margin-top: 4px; font-size: 8px; }
+  .report-grid { display: grid; grid-template-columns: 2fr 1fr; }
+  .claim-list { border-right: 1px solid #747a70; }
+  .report-label { display: flex; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid #747a70; background: #daddd1; color: #555b52; font-size: 8px; }
+  .claim-list > article { display: grid; grid-template-columns: 88px 1fr; gap: 15px; padding: 18px 16px; border-bottom: 1px solid #a1a69d; }
+  .claim-list > article:last-child { border-bottom: 0; }
+  .claim-verdict { align-self: start; padding: 6px 4px; border: 1px solid currentColor; text-align: center; color: #26713a; font-size: 9px; }
+  .claim-verdict.false { color: #a23727; }
+  .claim-verdict.untrue { color: #6d716b; }
+  .claim-list article b { font-size: 11px; }
+  .claim-list article p { margin: 6px 0 8px; color: #4c524a; font: 12px/1.45 Arial, sans-serif; }
+  .claim-list article a { color: #2f4f29; font-size: 8px; font-weight: 800; text-underline-offset: 3px; }
+  .report-side > section { border-bottom: 1px solid #747a70; }
+  .report-side > section:last-child { border: 0; }
+  .report-side dl { display: grid; grid-template-columns: 1fr auto; gap: 10px 18px; margin: 0; padding: 18px 16px; font-size: 10px; }
+  .report-side dt { color: #5e655c; }
+  .report-side dd { margin: 0; font-weight: 800; }
+  .report-side p { margin: 0; padding: 18px 16px; color: #4c524a; font: 12px/1.5 Arial, sans-serif; }
+  .report-footer { display: flex; justify-content: space-between; padding: 12px 16px; border-top: 2px solid #141713; background: #141713; color: #b7ff46; font-size: 8px; }
+  .cta-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; padding-block: 120px; }
+  .cta-inner > div:last-child { color: #aab1a8; font: 17px/1.55 Arial, sans-serif; }
+  .cta .button { margin-top: 20px; font-family: "IBM Plex Mono", monospace; }
+  .cta small { display: block; margin-top: 18px; color: #6f766d; font: 11px monospace; }
+  .site-footer { display: grid; grid-template-columns: 1fr auto auto; gap: 40px; align-items: center; min-height: 100px; border-top: 1px solid #3a3e39; color: #767d74; font-size: 11px; }
+  .site-footer p { margin: 0; }
+  @media (max-width: 760px) {
+    .wrap { width: min(100% - 24px, 1180px); }
+    .nav { grid-template-columns: 1fr auto; }
+    .section-nav { display: none; }
+    .nav-cta { font-size: 0; }
+    .nav-cta::after { content: "PARTNER ↗"; font-size: 10px; }
+    .hero { min-height: auto; padding-top: 75px; }
+    .hero-rule, .two-col, .section-head, .report-intro, .cta-inner { grid-template-columns: 1fr; gap: 30px; }
+    .scenario-map { grid-template-columns: 1fr; }
+    .scenario-arrow { transform: rotate(90deg); min-height: 40px; }
+    .scenario-branches { grid-template-columns: 1fr; }
+    .scenario-branches article { min-height: auto; border-right: 0; border-bottom: 1px solid #454b43; }
+    .scenario-branches article:last-child { border-bottom: 0; }
+    .scenario-branches b { margin-top: 24px; }
+    .trace-grid { grid-template-columns: 1fr; }
+    .trace-grid aside { display: none; }
+    .conversation { padding: 16px; }
+    .axis-grid { grid-template-columns: 1fr; }
+    .axis-grid article { min-height: auto; border-right: 0; border-bottom: 1px solid #454b43; }
+    .axis-grid h3 { margin-top: 25px; }
+    .axis-grid p { min-height: auto; }
+    .candidate-meta { grid-template-columns: 1fr 1fr; }
+    .candidate-meta > div:nth-child(2) { border-right: 0; }
+    .candidate-meta > div:nth-child(-n+2) { border-bottom: 1px solid #747a70; }
+    .report-depth { grid-template-columns: 1fr 1fr; }
+    .report-depth span:nth-child(2) { border-right: 0; }
+    .report-depth span:nth-child(-n+2) { border-bottom: 1px solid #92988e; }
+    .report-summary, .report-grid { grid-template-columns: 1fr; }
+    .claim-list { border-right: 0; border-bottom: 2px solid #141713; }
+    .verdict-total { min-height: 110px; }
+    .report-footer { gap: 20px; }
+    .workflow li { grid-template-columns: 38px 1fr; gap: 15px; }
+    .workflow li > span { display: none; }
+    .site-footer { grid-template-columns: 1fr; gap: 8px; padding-block: 28px; }
+  }
+</style>
