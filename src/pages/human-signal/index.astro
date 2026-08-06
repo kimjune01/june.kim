@@ -11,6 +11,11 @@ What we have already tried:
 
 Happy to compare notes.`);
 const contact = `mailto:june@june.kim?subject=${subject}&body=${body}`;
+const resultsSubject = encodeURIComponent('Send me the Human Signal research findings');
+const resultsBody = encodeURIComponent(`Hi June,
+
+Please send me the compiled findings from your research on AI-native engineering interviews.`);
+const researchResults = `mailto:june@june.kim?subject=${resultsSubject}&body=${resultsBody}`;
 const skillSubject = encodeURIComponent('Request the Human Signal skill');
 const skillBody = encodeURIComponent(`Hi June,
 
@@ -403,12 +408,15 @@ const sections = [
       <section class="cta band" id="compare-notes">
         <div class="wrap cta-inner">
           <div>
-            <p class="eyebrow">I'M LISTENING</p>
-            <h2>What can’t you learn from your interview today?</h2>
+            <p class="eyebrow">OPEN RESEARCH</p>
+            <h2>Help map how engineering interviews are changing.</h2>
           </div>
           <div>
-            <p>If you hire engineers who work with AI, I want to understand what feels unreliable, expensive, or invisible in your current process. No pitch required.</p>
-            <a class="button primary" href={contact}>COMPARE NOTES <span>→</span></a>
+            <p>Share what your team is seeing in a short research conversation. Participants receive the compiled findings. No pitch required.</p>
+            <div class="cta-actions">
+              <a class="button primary" href={contact}>PARTICIPATE <span>→</span></a>
+              <a class="button" href={researchResults}>GET THE RESULTS <span>→</span></a>
+            </div>
             <small>june@june.kim · Vancouver / async</small>
           </div>
         </div>
@@ -640,7 +648,7 @@ const sections = [
   .report-footer { display: flex; justify-content: space-between; padding: 12px 16px; border-top: 2px solid #141713; background: #141713; color: var(--accent); font-size: 8px; }
   .cta-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 100px; padding-block: 120px; }
   .cta-inner > div:last-child { color: #aab1a8; font: 400 17px/1.65 Lora, Georgia, serif; }
-  .cta .button { margin-top: 20px; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
   .cta small { display: block; margin-top: 18px; color: #6f766d; font: 11px "SFMono-Regular", Consolas, monospace; }
   .eyebrow, .brand, .section-nav, .nav-cta, .button, .hero-rule > span, .scenario-start small, .scenario-branches span, .perturbations, .window-bar, .trace-grid aside, .conversation label, .axis-grid article > span, .axis-grid dl, .axis-grid article > strong, .workflow li > b, .workflow li > span, .report-header, .candidate-meta small, .candidate-meta strong, .report-depth, .report-summary small, .verdict-total span, .report-label, .claim-verdict, .claim-list article b, .claim-list article a, .report-side dl, .report-footer, .site-footer { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
   .site-footer { display: grid; grid-template-columns: 1fr auto auto; gap: 40px; align-items: center; min-height: 100px; border-top: 1px solid #3a3e39; color: #767d74; font-size: 11px; }
