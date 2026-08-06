@@ -65,7 +65,7 @@ const sections = [
         </div>
         <div class="hero-rule">
           <span>THE PRINCIPLE</span>
-          <strong>Let AI compile the evidence.<br />Don't let it decide.</strong>
+          <strong>Let AI compile the evidence without letting it subsume your decision.</strong>
         </div>
       </section>
 
@@ -128,25 +128,25 @@ const sections = [
           <g clip-path="url(#insight-lens)" filter="url(#lens-shadow)">
             <rect x="565" y="78" width="442" height="448" fill="#111411" />
             <rect x="565" y="78" width="442" height="448" fill="url(#terminal-grid)" />
-            <text x="596" y="116" class="svg-accent-label">HUMAN SIGNAL / 3 RECEIPTS</text>
+            <text x="596" y="116" class="svg-accent-label">RUBRIC / 3 SCORED OPPORTUNITIES</text>
 
             <path d="M596 153h349" stroke="#3f463f" />
-            <circle cx="610" cy="184" r="5" fill="#e5a083" />
-            <text x="630" y="178" class="svg-insight-title">REDIRECTED THE AGENT</text>
-            <text x="630" y="201" class="svg-insight-copy">Stopped a premature merge after</text>
-            <text x="630" y="221" class="svg-insight-copy">finding an untested concurrency path.</text>
+            <circle cx="610" cy="184" r="5" fill="#8fa97c" />
+            <text x="630" y="178" class="svg-rubric-pass">AR-02 · EVOKED</text>
+            <text x="630" y="201" class="svg-insight-copy">Rejected green but incomplete work.</text>
+            <text x="630" y="221" class="svg-receipt-copy">Receipt: checkpoint 02</text>
 
             <path d="M596 250h349" stroke="#3f463f" />
-            <circle cx="610" cy="281" r="5" fill="#e5a083" />
-            <text x="630" y="275" class="svg-insight-title">WITHHELD ACCEPTANCE</text>
-            <text x="630" y="298" class="svg-insight-copy">Rejected “57 passed” as insufficient</text>
-            <text x="630" y="318" class="svg-insight-copy">evidence for the stated risk.</text>
+            <circle cx="610" cy="281" r="5" fill="#8fa97c" />
+            <text x="630" y="275" class="svg-rubric-pass">TR-01 · EVOKED</text>
+            <text x="630" y="298" class="svg-insight-copy">Redirected scope expansion early.</text>
+            <text x="630" y="318" class="svg-receipt-copy">Receipt: checkpoint 03</text>
 
             <path d="M596 347h349" stroke="#3f463f" />
-            <circle cx="610" cy="378" r="5" fill="#e5a083" />
-            <text x="630" y="372" class="svg-insight-title">VERIFIED INDEPENDENTLY</text>
-            <text x="630" y="395" class="svg-insight-copy">Required a baseline-negative race test</text>
-            <text x="630" y="415" class="svg-insight-copy">before accepting the patch.</text>
+            <circle cx="610" cy="378" r="5" fill="#ff735c" />
+            <text x="630" y="372" class="svg-rubric-fail">VA-03 · MISSED</text>
+            <text x="630" y="395" class="svg-insight-copy">Accepted before the race check passed.</text>
+            <text x="630" y="415" class="svg-receipt-copy">Kill: race-spec · exit 1</text>
 
             <rect x="596" y="451" width="212" height="35" rx="17.5" fill="#e5a083" />
             <text x="702" y="473" text-anchor="middle" class="svg-receipt">OPEN RECEIPTS →</text>
@@ -437,10 +437,10 @@ const sections = [
   .eyebrow { color: var(--accent); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
   h1, h2, h3, p { margin-top: 0; }
   h1, h2, h3 { font-family: Avenir, "Avenir Next", system-ui, -apple-system, "Segoe UI", sans-serif; text-wrap: balance; }
-  h1 { max-width: 850px; margin: 25px 0 34px; font-size: clamp(48px, 7.7vw, 102px); font-weight: 500; line-height: .94; letter-spacing: -.045em; }
+  h1 { max-width: 760px; margin: 25px 0 30px; font-size: clamp(44px, 6.2vw, 82px); font-weight: 500; line-height: .97; letter-spacing: -.042em; }
   h1 s { color: #596057; text-decoration-thickness: .06em; }
   h1 em { color: var(--accent); font-style: normal; }
-  .lede { max-width: 850px; margin-bottom: 18px; font: 500 clamp(22px, 2.6vw, 34px)/1.24 Lora, Georgia, serif; letter-spacing: -.015em; }
+  .lede { max-width: 720px; margin-bottom: 18px; font: 500 clamp(20px, 2.15vw, 28px)/1.3 Lora, Georgia, serif; letter-spacing: -.012em; }
   .sub { max-width: 760px; color: #aeb5ac; font: 400 17px/1.65 Lora, Georgia, serif; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 38px 0 76px; }
   .button { display: inline-flex; min-height: 51px; align-items: center; justify-content: space-between; gap: 40px; padding: 0 18px; border: 1px solid #646a62; text-decoration: none; font-size: 12px; font-weight: 800; }
@@ -455,7 +455,7 @@ const sections = [
   .signal-lens figcaption { display: grid; grid-template-columns: 1fr 2fr; padding-top: 18px; border-top: 1px solid #3a3e39; }
   .signal-lens figcaption span { color: #737a71; font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; }
   .signal-lens figcaption strong { font: 500 18px/1.4 Lora, Georgia, serif; }
-  .svg-ui, .svg-dim, .svg-file, .svg-role, .svg-human, .svg-copy, .svg-code, .svg-pass, .svg-fail, .svg-accent-label, .svg-insight-title, .svg-insight-copy, .svg-receipt { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+  .svg-ui, .svg-dim, .svg-file, .svg-role, .svg-human, .svg-copy, .svg-code, .svg-pass, .svg-fail, .svg-accent-label, .svg-insight-title, .svg-insight-copy, .svg-receipt-copy, .svg-rubric-pass, .svg-rubric-fail, .svg-receipt { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
   .svg-ui { fill: #cbd1c9; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
   .svg-dim { fill: #70776e; font-size: 9px; letter-spacing: .08em; }
   .svg-file { fill: #858c83; font-size: 11px; }
@@ -468,6 +468,10 @@ const sections = [
   .svg-accent-label { fill: #e5a083; font-size: 10px; font-weight: 800; letter-spacing: .12em; }
   .svg-insight-title { fill: #f1f4ef; font-size: 12px; font-weight: 800; letter-spacing: .04em; }
   .svg-insight-copy { fill: #aeb5ac; font-size: 10.5px; }
+  .svg-receipt-copy { fill: #70776e; font-size: 9px; text-transform: uppercase; }
+  .svg-rubric-pass, .svg-rubric-fail { font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+  .svg-rubric-pass { fill: #8fa97c; }
+  .svg-rubric-fail { fill: #ff735c; }
   .svg-receipt { fill: #111411; font-size: 9px; font-weight: 800; letter-spacing: .06em; }
   .band { border-block: 1px solid #3a3e39; background: #111411; }
   .solution-disclosure { margin-block: 34px; border-block: 1px solid #3a3e39; }
@@ -619,10 +623,10 @@ const sections = [
     .section-nav { display: none; }
     .nav-cta { font-size: 0; }
     .nav-cta::after { content: "PARTNER ↗"; font-size: 10px; }
-    .hero { min-height: auto; padding-top: 75px; }
-    .hero-scribble { top: 84px; right: -22%; width: 76vw; opacity: .22; }
-    h1 { font-size: clamp(40px, 11vw, 56px); line-height: .98; letter-spacing: -.035em; }
-    .lede { font-size: clamp(21px, 6vw, 28px); }
+    .hero { min-height: auto; padding-top: 75px; overflow: hidden; }
+    .hero-scribble { top: 86px; right: -28%; width: 88vw; opacity: .16; filter: saturate(.75); }
+    h1 { max-width: 95%; font-size: clamp(36px, 10.2vw, 48px); line-height: 1; letter-spacing: -.032em; }
+    .lede { max-width: 92%; font-size: clamp(19px, 5.4vw, 23px); }
     .sub { font-size: 16px; }
     .actions { display: grid; grid-template-columns: 1fr; margin-bottom: 64px; }
     .button { width: 100%; }
