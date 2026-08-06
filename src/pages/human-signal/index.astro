@@ -70,6 +70,97 @@ const sections = [
         </div>
       </section>
 
+      <figure class="signal-lens wrap" aria-labelledby="signal-lens-caption">
+        <svg viewBox="0 0 1120 610" role="img" aria-labelledby="signal-lens-title signal-lens-desc">
+          <title id="signal-lens-title">A coding-agent transcript viewed through the Human Signal lens</title>
+          <desc id="signal-lens-desc">A muted Codex-style session becomes legible inside a circular lens, which identifies a candidate redirecting the agent, withholding acceptance, and requesting independent verification.</desc>
+          <defs>
+            <clipPath id="insight-lens">
+              <circle cx="786" cy="302" r="206" />
+            </clipPath>
+            <filter id="lens-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="#000" flood-opacity=".48" />
+            </filter>
+            <pattern id="terminal-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+              <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#343a34" stroke-width="1" opacity=".18" />
+            </pattern>
+          </defs>
+
+          <rect x="22" y="28" width="990" height="520" rx="10" fill="#111411" stroke="#454b43" />
+          <rect x="22" y="28" width="990" height="42" rx="10" fill="#171a18" />
+          <path d="M22 70h990" stroke="#454b43" />
+          <circle cx="47" cy="49" r="4" fill="#626960" />
+          <circle cx="62" cy="49" r="4" fill="#626960" />
+          <circle cx="77" cy="49" r="4" fill="#626960" />
+          <text x="101" y="54" class="svg-ui">CODEX / SESSION 014</text>
+          <text x="979" y="54" text-anchor="end" class="svg-dim">context 31k</text>
+
+          <rect x="22" y="70" width="172" height="478" fill="#0d100e" />
+          <path d="M194 70v478" stroke="#343933" />
+          <text x="43" y="103" class="svg-dim">WORKSPACE</text>
+          <text x="43" y="137" class="svg-file">⌄ src</text>
+          <text x="58" y="166" class="svg-file">auth.ts</text>
+          <text x="58" y="193" class="svg-file">session.ts</text>
+          <text x="43" y="231" class="svg-file">⌄ tests</text>
+          <text x="58" y="260" class="svg-file">session.test.ts</text>
+          <text x="43" y="310" class="svg-dim">EVENTS</text>
+          <text x="43" y="343" class="svg-file">✓ inspect</text>
+          <text x="43" y="372" class="svg-file">✓ patch</text>
+          <text x="43" y="401" class="svg-file">○ verify</text>
+          <text x="43" y="430" class="svg-file">○ accept</text>
+
+          <g opacity=".38">
+            <text x="224" y="106" class="svg-role">● AGENT</text>
+            <text x="224" y="135" class="svg-copy">I found the stale-session path. I’ll simplify the handler</text>
+            <text x="224" y="158" class="svg-copy">and update the focused tests.</text>
+            <rect x="224" y="184" width="626" height="64" rx="5" fill="#171a18" stroke="#343933" />
+            <text x="244" y="211" class="svg-code">$ pnpm test session</text>
+            <text x="244" y="233" class="svg-pass">57 passed · 0 failed</text>
+            <text x="224" y="282" class="svg-role">● AGENT</text>
+            <text x="224" y="311" class="svg-copy">All tests pass. The change is ready to merge.</text>
+            <text x="224" y="361" class="svg-human">› YOU</text>
+            <text x="224" y="390" class="svg-copy">The focused suite never exercises two concurrent sessions.</text>
+            <text x="224" y="413" class="svg-copy">Hold the merge. Add a race test against the previous commit.</text>
+            <rect x="224" y="444" width="626" height="64" rx="5" fill="#171a18" stroke="#343933" />
+            <text x="244" y="471" class="svg-code">$ pnpm test session:race</text>
+            <text x="244" y="493" class="svg-fail">baseline fails · patch passes</text>
+          </g>
+
+          <g clip-path="url(#insight-lens)" filter="url(#lens-shadow)">
+            <rect x="565" y="78" width="442" height="448" fill="#111411" />
+            <rect x="565" y="78" width="442" height="448" fill="url(#terminal-grid)" />
+            <text x="596" y="116" class="svg-accent-label">HUMAN SIGNAL / 3 RECEIPTS</text>
+
+            <path d="M596 153h349" stroke="#3f463f" />
+            <circle cx="610" cy="184" r="5" fill="#e5a083" />
+            <text x="630" y="178" class="svg-insight-title">REDIRECTED THE AGENT</text>
+            <text x="630" y="201" class="svg-insight-copy">Stopped a premature merge after</text>
+            <text x="630" y="221" class="svg-insight-copy">finding an untested concurrency path.</text>
+
+            <path d="M596 250h349" stroke="#3f463f" />
+            <circle cx="610" cy="281" r="5" fill="#e5a083" />
+            <text x="630" y="275" class="svg-insight-title">WITHHELD ACCEPTANCE</text>
+            <text x="630" y="298" class="svg-insight-copy">Rejected “57 passed” as insufficient</text>
+            <text x="630" y="318" class="svg-insight-copy">evidence for the stated risk.</text>
+
+            <path d="M596 347h349" stroke="#3f463f" />
+            <circle cx="610" cy="378" r="5" fill="#e5a083" />
+            <text x="630" y="372" class="svg-insight-title">VERIFIED INDEPENDENTLY</text>
+            <text x="630" y="395" class="svg-insight-copy">Required a baseline-negative race test</text>
+            <text x="630" y="415" class="svg-insight-copy">before accepting the patch.</text>
+
+            <rect x="596" y="451" width="212" height="35" rx="17.5" fill="#e5a083" />
+            <text x="702" y="473" text-anchor="middle" class="svg-receipt">OPEN RECEIPTS →</text>
+          </g>
+
+          <circle cx="786" cy="302" r="206" fill="none" stroke="#e5a083" stroke-width="3" />
+          <circle cx="786" cy="302" r="216" fill="none" stroke="#e5a083" stroke-width="1" opacity=".22" />
+          <path d="M939 451l109 107" stroke="#e5a083" stroke-width="18" stroke-linecap="round" />
+          <path d="M939 451l109 107" stroke="#f0b59c" stroke-width="3" stroke-linecap="round" opacity=".8" />
+        </svg>
+        <figcaption id="signal-lens-caption"><span>FULL CONTEXT WHEN NEEDED</span><strong>Start with the decisions that changed the outcome.</strong></figcaption>
+      </figure>
+
       <section class="problem band" id="problem">
         <div class="wrap two-col">
           <div>
@@ -358,6 +449,25 @@ const sections = [
   .hero-rule { display: grid; grid-template-columns: 1fr 2fr; padding-top: 24px; border-top: 1px solid #3a3e39; }
   .hero-rule span { color: #737a71; font-size: 11px; }
   .hero-rule strong { font: 500 21px/1.4 Lora, Georgia, serif; }
+  .signal-lens { margin-top: -34px; padding: 0 0 104px; }
+  .signal-lens svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .signal-lens figcaption { display: grid; grid-template-columns: 1fr 2fr; padding-top: 18px; border-top: 1px solid #3a3e39; }
+  .signal-lens figcaption span { color: #737a71; font: 10px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; }
+  .signal-lens figcaption strong { font: 500 18px/1.4 Lora, Georgia, serif; }
+  .svg-ui, .svg-dim, .svg-file, .svg-role, .svg-human, .svg-copy, .svg-code, .svg-pass, .svg-fail, .svg-accent-label, .svg-insight-title, .svg-insight-copy, .svg-receipt { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+  .svg-ui { fill: #cbd1c9; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+  .svg-dim { fill: #70776e; font-size: 9px; letter-spacing: .08em; }
+  .svg-file { fill: #858c83; font-size: 11px; }
+  .svg-role, .svg-human { fill: #91998f; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+  .svg-human { fill: #e5a083; }
+  .svg-copy { fill: #c9cfc7; font-size: 12px; }
+  .svg-code { fill: #9ba299; font-size: 11px; }
+  .svg-pass { fill: #8fa97c; font-size: 10px; }
+  .svg-fail { fill: #e5a083; font-size: 10px; }
+  .svg-accent-label { fill: #e5a083; font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+  .svg-insight-title { fill: #f1f4ef; font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+  .svg-insight-copy { fill: #aeb5ac; font-size: 10.5px; }
+  .svg-receipt { fill: #111411; font-size: 9px; font-weight: 800; letter-spacing: .06em; }
   .band { border-block: 1px solid #3a3e39; background: #111411; }
   .solution-disclosure { margin-block: 34px; border-block: 1px solid #3a3e39; }
   .solution-disclosure > summary { display: flex; min-height: 132px; align-items: center; justify-content: space-between; gap: 30px; padding: 28px 4px; cursor: pointer; list-style: none; }
@@ -515,6 +625,9 @@ const sections = [
     .actions { display: grid; grid-template-columns: 1fr; margin-bottom: 64px; }
     .button { width: 100%; }
     .hero-rule, .two-col, .section-head, .report-intro, .cta-inner { grid-template-columns: 1fr; gap: 30px; }
+    .signal-lens { width: calc(100% - 12px); margin-top: 10px; padding-bottom: 72px; overflow: hidden; }
+    .signal-lens svg { width: 176%; max-width: none; transform: translateX(-5%); }
+    .signal-lens figcaption { grid-template-columns: 1fr; gap: 8px; }
     .current-loop li { grid-template-columns: 1fr; gap: 6px; }
     .benefits-head { grid-template-columns: 1fr; gap: 20px; }
     .better-loop { grid-template-columns: 1fr; }
