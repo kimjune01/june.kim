@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 810 190" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <line x1="180" y1="16" x2="180" y2="168" stroke="#999" stroke-width="1"/>
+
+  <text x="170" y="47" text-anchor="end" font-size="12" fill="#222">unaided humans</text>
+  <rect x="180" y="30" width="261" height="26" rx="3" fill="#9a9a9a"/>
+  <text x="449" y="47" font-size="12" fill="#333">18.89%</text>
+
+  <text x="170" y="99" text-anchor="end" font-size="12" fill="#222">standalone models</text>
+  <rect x="180" y="82" width="9" height="26" rx="3" fill="#9a9a9a"/>
+  <text x="197" y="99" font-size="12" fill="#333">0.67%</text>
+
+  <text x="170" y="151" text-anchor="end" font-size="12" fill="#222">human-AI collaboration</text>
+  <rect x="180" y="134" width="430" height="26" rx="3" fill="#444"/>
+  <text x="618" y="151" font-size="12" fill="#333">31.11%</text>
+
+  <text x="180" y="182" font-size="10" fill="#777">pass rate on CentaurEval collaboration-necessary tasks</text>
+</svg>
