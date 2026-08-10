@@ -62,14 +62,14 @@ AI safety has spent a decade re-deriving the conceptual inventory of law.
 | long-term benefit trust | trust | *same* | [Anthropic's LTBT](https://www.anthropic.com/news/the-long-term-benefit-trust) is a trust in the ordinary legal sense. |
 | model welfare | animal welfare law | analogy | Duties regarding an entity, possibly duties toward one. |
 
-## Non-mappings
+## What does not transfer
 
-Four gaps remain, and they share a cause.
+Law presupposes four things the substrate does not supply.
 
 - *Mens rea.* Every intent doctrine assumes a mind at the origin of the act: actual malice, incitement, scienter. Nobody home to take the test. Ayres and Balkin's answer is to skip the mind and hold the risky agent to objective standards.
-- *Legal terminus.* Attribution rules need a party who can be found and billed. Open weights dissolve the party.
+- *Legal terminus.* Attribution rules need a party who can be found and billed. Whoever runs the model qualifies, but open weights leave the runners unregistered and too many to sue, and an agent that buys its own compute leaves no runner at all.
 - *Enforcement substrate.* Law compiles norms to consequences applied to persons who fear them. Deterrence has no purchase on a forward pass.
-- *The control problem.* Law's machinery presupposes that consequences applied to humans propagate into the artifact's behavior. The control problem names the case where the propagation fails. No legal concept survives it, because law itself does not.
+- *Loss of control.* Law's machinery presupposes that consequences applied to humans propagate into the artifact's behavior. Loss of control names the case where the propagation fails. No legal concept survives it, because law itself does not.
 
 Are safety and alignment just law and compliance?
 
