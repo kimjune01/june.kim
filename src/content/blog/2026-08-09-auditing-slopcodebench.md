@@ -43,13 +43,19 @@ Those checks produce findings immediately:
 
 No independent adversarial validity audit is disclosed, and the internal process missed defects across the claim, selection, gold, frame, and score clauses. [Review-process receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/05-review-process.md)
 
-## The experiment
+## The next experiment
 
-At checkpoint *n*, give one agent its checkpoint *n−1* workspace. Give another an empty workspace plus the complete specification through *n*. Hold model, harness, budget, specification, and tests fixed.
+The repair is concrete.
 
-If accumulated workspaces lose at equal scope, iteration has a causal cost. If erosion predicts the time or defects of blinded maintainers making checkpoint *n+1* after controlling for LOC, it measures extension robustness.
+At checkpoint *n*, give one agent its checkpoint *n−1* workspace. Give another an empty workspace plus the complete specification through *n*. Hold model, harness, budget, specification, and tests fixed. The difference estimates the cost of accumulated history; their shared decline estimates task growth.
 
-Until then, report *static code-shape drift under iterative specification refinement*. SlopCodeBench has the right object and the wrong inference. The next version needs a control group more than another model.
+Then validate erosion against an external outcome: defects in checkpoint *n+1*, maintenance time, or success by a blinded agent inheriting the code. Control for LOC. If the metric does not predict future maintenance cost, call it static code-shape drift.
+
+Publish the sampling funnel: every candidate, exclusion, screening model, and one-shot result. Test preservation requirements, run mutation and frame-breaking probes, and verify every gold in the public harness. Release immutable benchmark versions, scored workspaces, per-checkpoint rows, and the leaderboard calculation.
+
+Finally, commission an independent team to attack the evaluator before release, then publish the attacks and fixes. That is the missing red team.
+
+Until those controls exist, report *static code-shape drift under iterative specification refinement*. SlopCodeBench has the right object and the wrong inference. The next version needs a control group more than another model.
 
 Full audit, scripts, and rerunnable receipts: [kimjune01/slopcodebench-audit](https://github.com/kimjune01/slopcodebench-audit).
 
