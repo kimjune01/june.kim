@@ -49,6 +49,6 @@ Commission an independent team to attack the evaluator before release, then publ
 
 Until those controls exist, report *static code-shape drift under iterative specification refinement*. The next version needs a control group more than another model.
 
-Full audit, scripts, and rerunnable receipts: [kimjune01/slopcodebench-audit](https://github.com/kimjune01/slopcodebench-audit).
+[Reproduce the audit](https://github.com/kimjune01/slopcodebench-audit): pinned sources, scripts, tests, and finding-level receipts.
 
 *Disclosure: Claude challenged candidate findings during the audit. Its objections narrowed the claims; the receipts decide them.*
