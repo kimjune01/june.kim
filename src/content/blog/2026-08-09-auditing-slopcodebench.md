@@ -5,7 +5,7 @@ subtitle: "It measures static code-shape drift, not yet extension robustness."
 tags: methodology, epistemology, coding
 ---
 
-[SlopCodeBench](https://www.scbench.ai/) measures two static code-shape metrics that usually rise as specifications expand. From this the paper concludes that agents lack the design discipline iterative development demands. But that inference needs two links: that the metrics measure extension robustness, and that iteration moved them. The paper supplies neither. [Construct receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/00-construct.md)
+[SlopCodeBench](https://www.scbench.ai/) asks whether iteration degrades agent code, and answers that agents lack the design discipline iterative development demands. The instrument between question and answer is a pair of static code-shape metrics that usually rise as specifications expand. Connecting the two needs two links: that the metrics measure extension robustness, and that iteration moved them. The paper supplies neither. [Construct receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/00-construct.md)
 
 I audit public benchmarks to make them better. This one asks a question worth answering, so it gets the full treatment.
 
