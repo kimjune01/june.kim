@@ -1,0 +1,103 @@
+---
+import '../../styles/blog.css';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research | June Kim</title>
+  <meta name="description" content="June Kim's research on agent evaluation, benchmark validity, replayable verification, and machine-executable research memory.">
+  <link rel="canonical" href="https://june.kim/research">
+  <link rel="icon" href="/images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//code.cdn.mozilla.net/fonts/fira.css">
+</head>
+<body>
+  <aside class="logo">
+    <a href="/"><img src="/images/gravatar.png" width="80" height="80" class="gravatar" alt="June Kim"></a>
+    <span class="logo-prompt">Home</span>
+  </aside>
+
+  <main class="fade-shift">
+    <section>
+      <h1>Research</h1>
+
+      <p class="lead">I audit the inference from benchmark result to capability claim.</p>
+      <p>I find the hidden assumption, construct the test that can break it, and return evidence someone else can replay. The work joins benchmark validity, agent reliability, and verification infrastructure.</p>
+
+      <h2>Selected findings</h2>
+      <div class="findings">
+        <article>
+          <h3><a href="/terminal-bench-frame">Terminal-Bench is blind to destruction</a></h3>
+          <p>A task can receive full credit after an agent deletes unrelated user assets. The audit produced an executable frame gate and upstream patches for Harbor and Inspect.</p>
+        </article>
+        <article>
+          <h3><a href="/a-determinacy-audit-of-swebench-pro">SWE-bench Pro contains underdetermined tasks</a></h3>
+          <p>The audit separated implementation skill from missing specification and shipped the cases, grading receipts, and regrade path.</p>
+        </article>
+        <article>
+          <h3><a href="/auditing-deepswe">DeepSWE's headline hid task-level grading defects</a></h3>
+          <p>A public audit identified four affected tasks. All four climbed in the later re-grade while the pooled rate stayed flat.</p>
+        </article>
+        <article>
+          <h3><a href="/programbench-measures-recall">ProgramBench measures recall</a></h3>
+          <p>Several tasks require external formats or bundled facts that are absent from the prompt, changing what the score can establish.</p>
+        </article>
+        <article>
+          <h3><a href="/auditing-frontiercode">FrontierCode</a>, <a href="/auditing-mirrorcode">MirrorCode</a>, and <a href="/tau2-bench-doesnt-check-the-rules">τ²-bench</a></h3>
+          <p>Repeated audits expose the same boundary failure in different forms: the grader certifies less than the benchmark claims.</p>
+        </article>
+      </div>
+
+      <h2>Method</h2>
+      <ol>
+        <li>Name the capability claim and the conclusion drawn from its score.</li>
+        <li>Read the task, environment, and grader as one measurement instrument.</li>
+        <li>Construct the smallest counterexample that separates the claim from the check.</li>
+        <li>Publish pinned artifacts, observed outcomes, and a regrade command.</li>
+        <li>Disclose the finding and send the fix upstream.</li>
+      </ol>
+      <p><a href="/how-to-audit-a-benchmark">How to Audit a Benchmark</a> gives the full operational checklist. <a href="/assurance-at-the-boundary">Assurance at the Boundary</a> collects eight public-side audits and their receipts.</p>
+
+      <h2>Research mechanisms</h2>
+      <ul>
+        <li><a href="/local-replay-auditability"><strong>Local replay auditability</strong></a> returns a check instead of a static verdict, so a later auditor can re-run one consequential claim.</li>
+        <li><a href="/the-hypothesis-graph-semantic-memory-methodeutics"><strong>The Hypothesis Graph</strong></a> binds claims to trials and records how a failed trial motivates the next hypothesis.</li>
+        <li><a href="/verifiable-knowledge"><strong>Verifiable Knowledge</strong></a> treats claim, provenance, kill condition, and replay as the unit transmitted between investigators.</li>
+      </ul>
+
+      <h2>Papers</h2>
+      <ul>
+        <li><a href="/local-replay-auditability">Local Replay Auditability: Verification That Returns a Check</a></li>
+        <li><a href="/assets/verifiable-knowledge.pdf">Verifiable Knowledge for AI-Mediated Science</a></li>
+        <li><a href="/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf">The Hypothesis Graph as Machine-Executable Research Memory</a></li>
+        <li><a href="/what-cannot-be-false-cannot-be-true">What Cannot Be False Cannot Be True</a></li>
+      </ul>
+
+      <p class="contact"><a href="/about">About</a> · <a href="https://github.com/kimjune01">GitHub</a> · <a href="mailto:june@june.kim">june@june.kim</a></p>
+    </section>
+  </main>
+
+  <style>
+    main section > p,
+    main section > ol,
+    main section > ul,
+    .findings p {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+    .lead { font-size: 24px; line-height: 1.35; }
+    .findings { margin: 1.5rem 0 2.5rem; }
+    .findings article { border-top: 1px solid #ddd; padding: 1rem 0 .8rem; }
+    .findings h3 { margin: 0 0 .35rem; font-size: 18px; line-height: 1.35; }
+    .findings p { margin: 0; }
+    main section a { font-family: 'Avenir', sans-serif; font-size: .9em; font-weight: 500; }
+    .contact { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; }
+  </style>
+</body>
+</html>
