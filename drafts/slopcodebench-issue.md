@@ -1,5 +1,7 @@
 # Issue draft: SprocketLab/slop-code-bench
 
+Filed 2026-08-11: https://github.com/SprocketLab/slop-code-bench/issues/27
+
 Title: Pinned answer keys fail evaluation in the official image; sampled Core tests require behavior the specs do not determine
 
 ---
