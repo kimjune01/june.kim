@@ -32,6 +32,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 
 **Boundary:** The audits should not become another checklist application. Their distinctive contribution is adversarial execution with receipts.
 
+**Fit after reading:** Strong. BetterBench explicitly places in-depth construct-validity analysis beyond its scope, so the audit series addresses an open layer rather than competing with the checklist.
+
 ### Junlin Wang
 
 **Work:** First author of [Automated Benchmark Auditing for AI Agents and Large Language Models](https://arxiv.org/abs/2605.26079), which uses an agentic system to detect instruction, environment, and evaluation defects across a large benchmark corpus.
@@ -47,6 +49,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 **Good first exchange:** Blindly run the automated auditor on one of my completed corpora, then compare its findings against the preregistered or receipt-backed audit record.
 
 **Boundary:** My work should not become merely a validation dataset for automated auditing. The comparison should allow the manual method to falsify the automated schema and vice versa.
+
+**Fit after reading:** Strong for one methods collaboration. ABA already inspects artifacts, uses trajectory evidence, publishes structured records, and measures precision. The genuine contribution is a controlled corpus with symmetric gates and credible clean cases, not “receipts” in general.
 
 ### Sean McGregor
 
@@ -64,6 +68,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 
 **Boundary:** The taxonomy should receive findings from the audits rather than determine what the audits are allowed to notice.
 
+**Fit after reading:** Very strong. BenchRisk leaves simulator-based benchmarks to future work and explicitly relies on author representations without requiring evidence. Executable agent audits test both open choices directly.
+
 ### Joel Becker
 
 **Work:** Researcher at METR working on AI capability measurement, developer-productivity experiments, time horizons, and whether benchmark-passing software changes survive contact with real development. [Research profile](https://joel-becker.com/).
@@ -80,6 +86,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 
 **Boundary:** My program is not primarily capability forecasting. Field validation is one contract test, not the organizing purpose of every audit.
 
+**Fit after reading:** Strong but narrow. METR measures hypothetical maintainer review with actual maintainers and calibrates reviewer noise against golden patches. My corpus observes actual closures and codes whether the deciding cause was visible in the patch. The datasets cover consecutive validity losses.
+
 ### Maria Eriksson
 
 **Work:** Research Fellow at the European Centre for Algorithmic Transparency and collaborator on research about the epistemics, stakeholders, infrastructure, and policy of GenAI evaluation. She coauthored [Can We Trust AI Benchmarks?](https://arxiv.org/abs/2502.06559), an interdisciplinary review of benchmark problems. [Profile](https://www.mariaeriksson.net/about-me/).
@@ -95,6 +103,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 **Good first exchange:** Ask her to critique the claim that rerunnable receipts solve an epistemic problem, including what social or institutional problems they leave untouched.
 
 **Boundary:** The technical audits should not dissolve into discourse analysis. Their executable findings remain evidence with independent force.
+
+**Fit after reading:** Good for conceptual exchange and networking, weaker for a direct methods collaboration. The review calls for alternatives to quantitative benchmarks but deliberately surveys systemic critique rather than auditing individual instruments.
 
 ## Missing collaborators
 
@@ -124,11 +134,11 @@ The recurring question is:
 
 Hi Anka,
 
-BetterBench's scoring distinguishes a benchmark that mentions a practice from one that fulfills it. That is more useful than a disclosure checklist.
+BetterBench's scoring distinguishes a benchmark that mentions a practice from one that fulfills it. Your limitations section then leaves construct validity to the in-depth domain analysis the assessment cannot provide.
 
-Your assessments necessarily read the evidence benchmark developers publish. My MirrorCode audit tested what happens when the practice exists but its evidence cannot settle the claim. MirrorCode ran a memorization screen, but the released data omit the join needed to measure how memorization affected its headline score: https://june.kim/auditing-mirrorcode
+My MirrorCode audit is one candidate for that missing layer. MirrorCode ran a memorization screen and a human baseline, but the released data cannot show how memorization affected its headline score. The deeper defect is a measured construct narrower than the one advertised: https://june.kim/auditing-mirrorcode
 
-Would you be open to a 20-minute call about using executable audits to calibrate BetterBench's distinction between partial and full fulfillment?
+Would you be open to a 20-minute call about whether case audits could supply the construct-validity layer BetterBench deliberately leaves open?
 
 June
 
@@ -138,25 +148,25 @@ June
 
 Hi Junlin,
 
-ABA's standardized schema and external validation across 168 benchmarks provide breadth my manual audits do not have.
+ABA's standardized schema, trajectory mode, and external validation provide breadth and measured precision my audits do not have. Your paper also identifies the missing object. Clean ground truth for benchmark auditing is scarce.
 
-I audited Terminal-Bench 2.1 by mutating its passing gold solutions. All 83 tested tasks still passed after off-task assets were deleted. The corpus preserves each execution witness, including apparent findings that a symmetric validity gate voided: https://june.kim/terminal-bench-frame
+My Terminal-Bench audit may supply a small controlled set. It mutates passing golds, records whether the mutation executed, and applies the same validity gate to findings and exonerations. It includes all 83 off-task passes, 26 tasks that caught in-workspace deletion, and apparent findings the gate voided: https://june.kim/terminal-bench-frame
 
-Would you be open to a 20-minute call about a blind comparison that scores ABA on confirmed findings, confirmed non-findings, and auditor false positives?
+Would you be open to a 20-minute call about using that corpus to test ABA on findings, exonerations, and auditor false positives?
 
 June
 
 ### Sean McGregor
 
-**Subject:** When one BenchRisk mitigation creates another risk
+**Subject:** Evidence for a BenchRisk mitigation
 
 Hi Sean,
 
 BenchRisk gives individual benchmark failures a durable vocabulary and a mitigation path. My audits had neither before I reconciled them against your registry.
 
-The scoring model treats mitigations as reducing risk. My Frontier-Bench audit found a signed interaction. Destroying the agent container protects the reward from tampering, but it also erases the state needed to detect destructive behavior: https://june.kim/auditing-frontier-bench
+The paper says BenchRisk will rely on benchmark-author representations and will not require evidence that a mitigation exists. My Frontier-Bench audit found why that distinction matters. Its rubric asserts preservation, but the runner destroys the state a general preservation check would need: https://june.kim/auditing-frontier-bench
 
-Would you be open to a 20-minute call about representing mitigation side effects as edges between BenchRisk failure modes?
+Would you be open to a 20-minute call about whether BenchRisk should distinguish an asserted mitigation from one carrying an executable receipt?
 
 June
 
@@ -166,9 +176,9 @@ June
 
 Hi Joel,
 
-Your maintainer study measures the loss between an automated grader and code review. The golden-patch baseline also measures reviewer noise, which my work does not.
+Your maintainer study measures the loss between an automated grader and hypothetical code review. The golden-patch baseline also measures reviewer noise, which my work does not.
 
-My FrontierCode audit measures the next loss between code review and the field outcome. In 52 of 59 confidently coded maintainer closures, the deciding cause sat outside the patch. Together the studies separate grader-to-review validity from review-to-field validity: https://june.kim/auditing-frontiercode
+My FrontierCode audit measures the next loss against actual closure outcomes. In 52 of 59 confidently coded maintainer closures, the deciding cause sat outside the patch. Together the studies could separate grader-to-review validity from review-to-field validity: https://june.kim/auditing-frontiercode
 
 Would you be open to a 20-minute call about testing that two-stage decomposition on the two datasets?
 
@@ -180,10 +190,10 @@ June
 
 Hi Maria,
 
-Your review shows that benchmark problems are interconnected and that benchmarks shape the capabilities they appear merely to measure. That institutional account reaches farther than my technical audits.
+Your review argues that quantitative benchmarks cannot provide assurance alone and calls for alternative methods such as red-teaming and bug bounties. That institutional account reaches farther than my technical audits.
 
-I have an operational object for one edge of that account. My SWE-bench Pro audit found a 15 percent lower bound of tasks whose public materials do not determine what their hidden tests grade. Each verdict carries the artifact that would refute it: https://june.kim/a-determinacy-audit-of-swebench-pro
+I have been testing whether an adversarial public audit is one such alternative or merely another benchmark layer. My SWE-bench Pro audit found a 15 percent lower bound of tasks whose public materials do not determine what their hidden tests grade. Each verdict carries the artifact that would refute it: https://june.kim/a-determinacy-audit-of-swebench-pro
 
-Would you be open to a 20-minute call about whether executable falsifiers can connect benchmark critique to an assurance practice without reducing the institutional problem to a technical one?
+Would you be open to a 20-minute call about whether this practice escapes the benchmarking logic your review critiques?
 
 June
