@@ -31,9 +31,9 @@ The paper does not report the screening models and versions, the number removed,
 
 ## The spec is not the contract
 
-At each checkpoint the agent sees one spec file, its own prior code, and nothing else. The tests stay hidden. That design is sound when the tests grade what the spec states. They don't always. In a 12-problem sample covering 65 checkpoints, 29 of 343 core tests assert exact values no visible spec states, implies by rule, or shows in an example. Core tests alone decide checkpoint success. Each of the 29 survived an adversarial pass instructed to refute it under the paper's own definition of core: "functionality explicitly mentioned or shown in the specification." [Oracle receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/08-oracle.md)
+At each checkpoint the agent sees one spec file, its own prior code, and nothing else. The tests stay hidden. That design is sound when the tests grade what the spec states. They don't always. In a 12-problem sample covering 65 checkpoints, 28 of 343 core tests assert exact values no visible spec states, implies by rule, or shows in an example, and one more is contested. Core tests alone decide checkpoint success. Each of the 28 survived an adversarial pass instructed to refute it under the paper's own definition of core: "functionality explicitly mentioned or shown in the specification." [Oracle receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/08-oracle.md)
 
-<svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;margin:1.6em auto;display:block" role="img" aria-label="Horizontal bars, one per sampled problem: grey bar length is the problem's core test count, red segment is the number of core tests verified to assert values no visible spec determines. Totals: 29 of 343.">
+<svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;margin:1.6em auto;display:block" role="img" aria-label="Horizontal bars, one per sampled problem: grey bar length is the problem's core test count, red segment is the number of core tests confirmed to assert values no visible spec determines. Totals: 28 of 343.">
   <style>
     .lbl{font-family:ui-monospace,Menlo,monospace;fill:#555;font-size:12px}
     .tk{font-family:ui-monospace,Menlo,monospace;fill:#888;font-size:11px}
@@ -53,10 +53,10 @@ At each checkpoint the agent sees one spec file, its own prior code, and nothing
   <text class="lbl" x="198" y="194" text-anchor="end">migrate_configs</text><rect class="b" x="205" y="184" width="50.4" height="12" rx="2"/><text class="tk" x="263" y="194">0/9</text>
   <text class="lbl" x="198" y="216" text-anchor="end">mocked_http</text><rect class="b" x="205" y="206" width="229.6" height="12" rx="2"/><rect class="r" x="205" y="206" width="33.6" height="12" rx="2"/><text class="tk" x="442" y="216">6/41</text>
   <text class="lbl" x="198" y="238" text-anchor="end">sheeteval</text><rect class="b" x="205" y="228" width="134.4" height="12" rx="2"/><rect class="r" x="205" y="228" width="22.4" height="12" rx="2"/><text class="tk" x="347" y="238">4/24</text>
-  <text class="lbl" x="198" y="260" text-anchor="end">trajectory_api</text><rect class="b" x="205" y="250" width="184.8" height="12" rx="2"/><rect class="r" x="205" y="250" width="11.2" height="12" rx="2"/><text class="tk" x="397" y="260">2/33</text>
+  <text class="lbl" x="198" y="260" text-anchor="end">trajectory_api</text><rect class="b" x="205" y="250" width="184.8" height="12" rx="2"/><rect class="r" x="205" y="250" width="5.6" height="12" rx="2"/><text class="tk" x="397" y="260">1/33</text>
   <text class="lbl" x="198" y="282" text-anchor="end">xjq</text><rect class="b" x="205" y="272" width="386.4" height="12" rx="2"/><rect class="r" x="205" y="272" width="11.2" height="12" rx="2"/><text class="tk" x="599" y="282">2/69</text>
-  <text class="cap" x="340" y="316" text-anchor="middle">Core tests per sampled problem. Red: verified to grade a value the agent-visible specs never state,</text>
-  <text class="cap" x="340" y="332" text-anchor="middle">imply, or show. 29 of 343 total. One failing core test fails the checkpoint.</text>
+  <text class="cap" x="340" y="316" text-anchor="middle">Core tests per sampled problem. Red: confirmed to grade a value the agent-visible specs never state,</text>
+  <text class="cap" x="340" y="332" text-anchor="middle">imply, or show. 28 of 343 total. One failing core test fails the checkpoint.</text>
 </svg>
 
 - The `trajectory_api` answer key returns 200 on create when a toolpack is active. Every visible spec says creation returns 201. The special case exists in two places: the gold and the test that grades it.
