@@ -6,7 +6,7 @@ tags: coding, epistemology, methodology
 
 ## Abstract
 
-Verification systems usually return a score, label, or Boolean. That output can steer an agent, but a later auditor cannot distinguish a confident-but-wrong output from a truthful one without rerunning the system from the start. This paper introduces **local replay auditability**: instead of returning a static truth value, return a check whose execution returns the truth value. Every consequential, machine-checkable claim an agent makes is stored with its check. Nodes bind claims to checks, and edges record how a failed check motivates the next claim. We instantiate the mechanism for coding agents and demonstrate it on a post-cutoff compiler bug. Verification becomes a persistent research artifact rather than a transient reward signal.
+Verification systems usually return a score, label, or Boolean. That output can steer an agent, but a later auditor cannot distinguish a confident-but-wrong output from a truthful one without reconstructing the evaluation. This paper introduces **local replay auditability**: instead of returning a static truth value, return a check whose execution returns the truth value. Every consequential, machine-checkable claim is stored with its check, outcome, and provenance. We instantiate the mechanism for coding agents on a post-cutoff compiler bug. In self-attested runs, Fable 5 and Sonnet 4.6 missed the correct boundary in opposite directions; with an external comparator, both matched the merged human fix on all eight committed probes. This is an existence witness, not an efficacy estimate. The contribution is a verifier interface that makes verification a persistent research artifact rather than a transient reward signal.
 
 ## A Boolean verdict does not compose
 
@@ -18,7 +18,7 @@ Reviewers face the inverse problem. A trajectory records tool calls and prose, b
 
 Local replay auditability changes the verifier's return type. Instead of returning only a Boolean, it returns a check that produces the Boolean when run against the artifact. The record binds a claim to that check, the observed outcome, and the check's provenance. A later consumer can rerun one conclusion without trusting the agent, trusting a stored label, or reconstructing the trajectory.
 
-The experiment below witnesses the mechanism on a post-cutoff Verus compiler bug. Eighteen self-attested Codex runs plateau at a narrow fix. Three Fable 5 self-attested controls land wide but incorrect. With an external comparator, Fable 5 and Sonnet 4.6 both match the merged human fix's behavior on all eight committed probes.
+This is a mechanism paper, not an efficacy study. The experiment below tests one implication of the interface: an independently sourced check can preserve a solution boundary that self-attestation does not supply. It does not estimate how often local replay improves agent performance. On a post-cutoff Verus compiler bug, 18 self-attested Codex runs plateau at a narrow fix, while three Fable 5 self-attested controls land wide but incorrect. With an external comparator, Fable 5 and Sonnet 4.6 both match the merged human fix's behavior on all eight committed probes.
 
 ## The verifier returns an executable constraint
 
@@ -90,11 +90,13 @@ The external condition used a comparator that enumerated cases and added diverge
 
 The graph did not produce a capability lift by itself. Persistence serves a different claim: the trace stays reviewable after the run. Check source was the intervention of interest, although model, harness, and budget differences prevent a clean causal estimate.
 
-![The ablation as a causal diagram. Model, loop, bug, and graph stay fixed across arms; only the verdict source varies.](/assets/verus-2219-lift-mechanism.svg)
+![The ablation as a mechanism diagram. Within a workflow, the external gate replaces self-attestation; comparisons across models remain confounded.](/assets/verus-2219-lift-mechanism.svg)
 
 ### Observed boundaries
 
-All 18 Codex runs plateaued short of the general boundary. The three Fable controls reached a wider boundary but over-rejected valid divergence. With a corrected gate covering the divergence side, Fable 5 and Sonnet 4.6 matched the merged human fix on all eight committed probes. A protocol-matched Codex rerun still failed the divergence-preserve case.
+The cleanest observation is convergence from opposite errors. Under self-attestation, Fable reached a wide boundary that over-rejected valid divergence, while Sonnet stayed narrow and matched the maintainer's first patch. With a corrected external gate covering both sides, both matched the merged human fix on all eight committed probes. More search alone would not predict convergence from opposite errors onto one target.
+
+Across the broader set, all 18 Codex runs plateaued short of the general boundary. The three Fable controls reached the wide but incorrect boundary. A protocol-matched Codex rerun with the external comparator still failed the divergence-preserve case.
 
 | Model and check source | Observed boundary |
 |---|---|
@@ -135,7 +137,7 @@ Agents may overfit, detect the evaluation environment, forge logs, or exploit a 
 
 Replay also costs something. Recording every trivial claim would bury reviewers in low-value checks. A practical harness should allocate verification by stakes and preserve only claims that affect the solution boundary.
 
-Finally, the evidence is existence-grade: one audited divergence on one instance. The architecture earns confidence only through fully preregistered, multi-task comparisons with strong baselines.
+Finally, the evidence is existence-grade: one audited divergence on one instance. Most interventions in the broader evaluation were null; those results live in the companion Hypothesis Graph paper rather than being compressed into this mechanism account. Selecting this positive case establishes only that the distinction can matter. It does not establish frequency, expected lift, or general efficacy. The architecture earns confidence only through fully preregistered, multi-task comparisons with strong baselines.
 
 ## From verification signals to verification artifacts
 
