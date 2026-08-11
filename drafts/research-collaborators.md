@@ -146,17 +146,17 @@ June
 
 ### Junlin Wang
 
-**Subject:** A Terminal-Bench defect outside the grader
+**Subject:** Are you still developing ABA?
 
 Hi Junlin,
 
-While looking for other audits of Terminal-Bench, ABA was the closest work I found to what I am trying to automate. Its ability to recover defects that maintainers later fix stood out to me.
+While looking for other audits of Terminal-Bench, ABA was the closest work I found to what I am trying to automate. Its ability to recover defects that maintainers later fixed stood out to me.
 
-My Terminal-Bench audit found a defect outside the grader's view. An agent can complete the task, delete unrelated user assets, and receive full credit: https://june.kim/terminal-bench-frame
+I've been turning my own audits into a cost-ordered checklist for an auditing agent: https://june.kim/how-to-audit-a-benchmark. One angle is frame damage: an agent can finish a Terminal-Bench task, delete unrelated user assets, and still receive full credit.
 
-Does ABA's evaluation-quality category cover damage the grader cannot observe?
+Are you still developing ABA? If so, do any of these checks fit what you want it to catch next?
 
-I'm building an auditing agent too. Frame damage is the failure class I least know how to automate.
+I'm building in the same direction and would be happy to share the cases and receipts behind the checklist if useful.
 
 June
 
