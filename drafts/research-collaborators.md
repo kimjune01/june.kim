@@ -115,3 +115,75 @@ Do not ask anyone to endorse or join the whole program. Lead with one disagreeme
 The recurring question is:
 
 > What can we test together that neither approach can settle alone?
+
+## Outreach drafts
+
+### Anka Reuel
+
+**Subject:** BetterBench and executable agent benchmarks
+
+Hi Anka,
+
+BetterBench evaluates benchmark quality across the full lifecycle. I have been testing a narrower problem by rerunning the golds and graders of executable agent benchmarks.
+
+My MirrorCode audit found a carefully built instrument with real cheat-proofing and an incomplete memorization screen. It also found that the benchmark measures scoped reimplementation from a live oracle rather than the autonomous creation named in its headline: https://june.kim/auditing-mirrorcode
+
+Does BetterBench express that gap cleanly, or does this case expose something missing?
+
+June
+
+### Junlin Wang
+
+**Subject:** Two audits of Terminal-Bench
+
+Hi Junlin,
+
+Your automated benchmark auditor found instruction, environment, and evaluation defects in Terminal-Bench 2. I audited Terminal-Bench 2.1 by mutating its passing gold solutions and recording what its graders missed.
+
+The audit found that all 83 tested tasks still passed after off-task user assets were deleted. Each run carries an execution witness, including the false findings my own validity gate voided: https://june.kim/terminal-bench-frame
+
+Would a blind comparison against these receipts help test what ABA detects and misses?
+
+June
+
+### Sean McGregor
+
+**Subject:** Agent benchmark failures missing from BenchRisk
+
+Hi Sean,
+
+BenchRisk turns benchmark failure modes and mitigations into a shared registry. I reconciled its modes against eleven audits of executable agent benchmarks.
+
+My Frontier-Bench audit found a mitigation interaction that may complicate a flat registry. The harness protects its reward by destroying the agent container before grading, but that erases the state needed to detect destructive behavior: https://june.kim/auditing-frontier-bench
+
+Does that interaction belong in BenchRisk, or should I file the two failure modes separately?
+
+June
+
+### Joel Becker
+
+**Subject:** Benchmark verdicts against maintainer decisions
+
+Hi Joel,
+
+Your work asks whether SWE-bench-passing changes would survive real review. I tested the same boundary from the benchmark side.
+
+I coded 98 closed pull requests while auditing FrontierCode. Among 59 confidently attributed maintainer closures, the patch itself decided three. The audit proposes ecological accuracy as agreement between the benchmark verdict and the field outcome: https://june.kim/auditing-frontiercode
+
+Does that operationalization hold up against METR's mergeability work?
+
+June
+
+### Maria Eriksson
+
+**Subject:** Rerunnable evidence and benchmark authority
+
+Hi Maria,
+
+Your benchmark review connects technical infrastructure to the epistemic and political authority of evaluation results. I have been examining the artifact-level mechanisms underneath that authority.
+
+My SWE-bench Pro audit found a 15 percent lower bound of tasks whose public materials do not determine the behavior their hidden tests grade. Every case carries the artifact needed to dispute the verdict: https://june.kim/a-determinacy-audit-of-swebench-pro
+
+Does rerunnability address the epistemic problem your review identifies, or only its technical part?
+
+June
