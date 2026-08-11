@@ -194,16 +194,16 @@ June
 
 ### Maria Eriksson
 
-**Subject:** Can public audits provide benchmark assurance?
+**Subject:** What can a public benchmark audit establish?
 
 Hi Maria,
 
 I found your review while looking for work that connects benchmark defects to epistemology and policy. Its move from benchmarks toward red-teaming and bug bounties caught my attention.
 
-I audited SWE-bench Pro before OpenAI raised its own concerns. The audit found hidden tests grading choices the public task never specified: https://june.kim/a-determinacy-audit-of-swebench-pro
+I've been publishing benchmark audits as claims a stranger can rerun, with the evidence and right of reply attached: https://june.kim/how-to-audit-a-benchmark
 
-Can adversarial public audits supply part of the missing assurance, or do they remain another benchmark layer?
+Do rerunnable receipts address part of the epistemic problem your review identifies, or do they remain another technical artifact whose authority still depends on institutions?
 
-I'm building an auditing agent. I want to know what its findings would need to show before they could count toward the assurance your review says benchmarks cannot supply alone.
+I'm building an auditing agent and want its findings to be independently checkable. I also want to understand what that cannot solve.
 
 June
