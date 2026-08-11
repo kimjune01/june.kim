@@ -162,17 +162,17 @@ June
 
 ### Sean McGregor
 
-**Subject:** Declared vs demonstrated mitigations
+**Subject:** BenchRisk for agent benchmarks?
 
 Hi Sean,
 
-I came across BenchRisk while mapping failures from my audits into existing registries. Its decision to accept an author's statement that a mitigation exists caught my attention.
+I found BenchRisk while reconciling my audit checklist with existing failure-mode registries. Its decision to leave simulator-based benchmarks to future work caught my attention.
 
-Frontier-Bench declares a preservation requirement, but its runner destroys the state needed to enforce it. The mitigation exists in the rubric. The verdict never checks it: https://june.kim/auditing-frontier-bench
+I filed one missing case from my agent-benchmark audits as BenchRisk #8: https://github.com/BenchRisk/BenchRisk/issues/8. It covers tasks that give full credit after an agent damages parts of the environment the grader never inspects.
 
-Should BenchRisk distinguish declared mitigations from demonstrated ones?
+Are you still extending BenchRisk toward agent benchmarks? If so, would a small set of executable failure modes and receipts be useful?
 
-I'm building an auditing agent, and I want it to test whether each claimed mitigation actually works.
+I'm building an auditing agent and would like its findings to land in a shared taxonomy rather than remain a pile of individual audits.
 
 June
 
