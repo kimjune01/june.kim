@@ -134,11 +134,11 @@ The recurring question is:
 
 Hi Anka,
 
-BetterBench criterion 2 asks whether authors describe how a construct translates into the benchmark task. Section 9 leaves the harder question, whether that translation is valid, to in-depth domain analysis.
+BetterBench leaves construct validity to deeper domain analysis.
 
-My MirrorCode audit tests that second question. The paper describes its task clearly, but its live reference oracle turns autonomous creation into reimplementation and lets two targets test recalled specifications: https://june.kim/auditing-mirrorcode
+I ran that analysis on MirrorCode. Its paper describes the task clearly, but the live reference oracle changes autonomous creation into reimplementation: https://june.kim/auditing-mirrorcode
 
-Would BetterBench score criterion 2 as fulfilled when authors describe the translation clearly but the audit shows that the measured construct is narrower?
+Would BetterBench still count criterion 2 as fulfilled?
 
 June
 
@@ -148,11 +148,11 @@ June
 
 Hi Junlin,
 
-ABA reports 66.7 percent strict recall against Terminal-Bench 2's maintainer fixes. Your paper also names scarce clean ground truth as the harder validation problem.
+ABA recovered 66.7 percent of Terminal-Bench 2's maintainer fixes.
 
-My Terminal-Bench 2.1 audit supplies observed mutation outcomes. All 83 graders accepted deletion of off-task assets, while 26 caught deletion inside their workspaces. Each result includes an execution witness and the same validity gate: https://june.kim/terminal-bench-frame
+I tested a different defect on Terminal-Bench 2.1. All 83 graders accepted deletion of off-task assets, while 26 caught deletion inside their workspaces: https://june.kim/terminal-bench-frame
 
-Would ABA treat a grader that accepts witnessed off-task deletion as an evaluation-quality defect, or does that fall outside its current schema?
+Would ABA classify the off-task result as an evaluation-quality defect?
 
 June
 
@@ -162,11 +162,11 @@ June
 
 Hi Sean,
 
-BenchRisk's Algorithm 1 gives every recorded mitigation a positive reduction in likelihood or severity. The paper also says an author's representation is sufficient to affirm that mitigation.
+BenchRisk accepts a benchmark author's statement that a mitigation exists.
 
-Frontier-Bench provides a counterexample. Its rubric requires preservation checks, but its runner destroys the state a general check would need. Nine witnessed deletions still received reward 1: https://june.kim/auditing-frontier-bench
+Frontier-Bench says tasks must enforce preservation. But its runner destroys the state needed to check it, and nine witnessed deletions still received reward 1: https://june.kim/auditing-frontier-bench
 
-Would BenchRisk count the rubric's preservation clause as a mitigation when the runner cannot observe the state it promises to preserve?
+Would BenchRisk count that rubric clause as a mitigation?
 
 June
 
@@ -176,11 +176,11 @@ June
 
 Hi Joel,
 
-Your study had four maintainers review 296 agent patches and calibrated their decisions against golden patches. That measures reviewer noise my FrontierCode audit cannot.
+Your study had four maintainers review 296 agent patches.
 
-My audit codes actual closure threads. In 52 of 59 confident cases, the deciding cause sat outside the patch in identity, process, interaction, or repository state: https://june.kim/auditing-frontiercode
+I coded 98 actual closure threads. In 52 of 59 confident cases, the deciding cause sat outside the patch: https://june.kim/auditing-frontiercode
 
-Do your natural-language review reasons distinguish patch-internal rejection from causes outside the patch, or would that require a second coding pass?
+Do your review labels separate patch defects from process, identity, and repository state?
 
 June
 
@@ -190,10 +190,10 @@ June
 
 Hi Maria,
 
-Your conclusion says quantitative benchmarks cannot provide assurance alone and points to red-teaming and bug bounties as alternative methods.
+Your review says benchmarks cannot provide assurance alone and points to red-teaming and bug bounties.
 
-I am unsure where my practice falls. A public audit of SWE-bench Pro found a 15 percent lower bound of tasks whose materials do not determine what their hidden tests grade. Each verdict carries its own falsifier: https://june.kim/a-determinacy-audit-of-swebench-pro
+I audit benchmark claims using fixed falsifiers. One audit found that at least 15 percent of SWE-bench Pro tasks do not determine what their hidden tests grade: https://june.kim/a-determinacy-audit-of-swebench-pro
 
-Does a public audit with fixed falsifiers count as an alternative evaluation in your framework, or does it reproduce benchmark logic at another level?
+Is that an alternative evaluation, or another benchmark layer?
 
 June
