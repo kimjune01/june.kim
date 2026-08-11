@@ -184,11 +184,11 @@ Hi Joel,
 
 I found your developer-productivity work while looking at how benchmark performance translates into real work. The finding that 75% of participants read every line of AI-generated code stuck with me.
 
-My SlopCodeBench audit found that its code-quality metrics were not validated against future extension or maintenance outcomes: https://june.kim/auditing-slopcodebench. That leaves me unsure how we could establish parity between human and AI review before comparing their productivity.
+My SlopCodeBench audit made me wonder what "read every line" actually guarantees: https://june.kim/auditing-slopcodebench. If AI review is faster because it applies a weaker quality bar than human review, the speed comparison is hard to interpret.
 
-Have you thought about how to test whether AI review enforces the same quality standard as human review?
+Have you thought about how to establish quality parity before measuring speed or output?
 
-I'm building an auditing agent, and I want to know what quality gate it would need to clear before its speed could count as a productivity gain.
+I'm building an auditing agent and trying to define the gate it should clear before its output can count as a productivity gain.
 
 June
 
