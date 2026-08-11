@@ -130,70 +130,70 @@ The recurring question is:
 
 ### Anka Reuel
 
-**Subject:** BetterBench criterion 2 against three audited benchmarks
+**Subject:** Documented construct vs validated construct
 
 Hi Anka,
 
 BetterBench leaves construct validity to deeper domain analysis.
 
-I ran that analysis on MirrorCode. Its paper describes the task clearly, but the live reference oracle changes autonomous creation into reimplementation: https://june.kim/auditing-mirrorcode
+My MirrorCode audit shows why that layer matters. The paper describes its task clearly, but the live reference oracle changes autonomous creation into reimplementation: https://june.kim/auditing-mirrorcode
 
-Would BetterBench still count criterion 2 as fulfilled?
+Should BetterBench separate a documented construct translation from a validated one?
 
 June
 
 ### Junlin Wang
 
-**Subject:** Can ABA predict Terminal-Bench mutation outcomes?
+**Subject:** A Terminal-Bench defect outside the grader
 
 Hi Junlin,
 
-ABA recovered 66.7 percent of Terminal-Bench 2's maintainer fixes.
+ABA shows that automated audits can recover defects maintainers later fix.
 
-I tested a different defect on Terminal-Bench 2.1. All 83 graders accepted deletion of off-task assets, while 26 caught deletion inside their workspaces: https://june.kim/terminal-bench-frame
+My Terminal-Bench audit found a defect outside the grader's view. An agent can complete the task, delete unrelated user assets, and receive full credit: https://june.kim/terminal-bench-frame
 
-Would ABA classify the off-task result as an evaluation-quality defect?
+Does ABA's evaluation-quality category cover damage the grader cannot observe?
 
 June
 
 ### Sean McGregor
 
-**Subject:** An evidence field for BenchRisk mitigations
+**Subject:** Declared vs demonstrated mitigations
 
 Hi Sean,
 
 BenchRisk accepts a benchmark author's statement that a mitigation exists.
 
-Frontier-Bench says tasks must enforce preservation. But its runner destroys the state needed to check it, and nine witnessed deletions still received reward 1: https://june.kim/auditing-frontier-bench
+Frontier-Bench declares a preservation requirement, but its runner destroys the state needed to enforce it. The mitigation exists in the rubric and not in the verdict: https://june.kim/auditing-frontier-bench
 
-Would BenchRisk count that rubric clause as a mitigation?
+Should BenchRisk distinguish declared mitigations from demonstrated ones?
 
 June
 
 ### Joel Becker
 
-**Subject:** Cross-coding two sets of maintainer decisions
+**Subject:** From test passing to an actual merge
 
 Hi Joel,
 
-Your study had four maintainers review 296 agent patches.
+Your study shows that test passing overstates whether maintainers would accept a patch.
 
-I coded 98 actual closure threads. In 52 of 59 confident cases, the deciding cause sat outside the patch: https://june.kim/auditing-frontiercode
+My FrontierCode audit suggests that review is still only part of the field outcome. Actual closures were usually decided by process, identity, interaction, or repository state rather than patch quality: https://june.kim/auditing-frontiercode
 
-Do your review labels separate patch defects from process, identity, and repository state?
+Does mergeability need separate calibration from grader to review and from review to field outcome?
 
 June
 
 ### Maria Eriksson
 
-**Subject:** Is a public claim audit still a benchmark?
+**Subject:** Can public audits provide benchmark assurance?
 
 Hi Maria,
 
 Your review says benchmarks cannot provide assurance alone and points to red-teaming and bug bounties.
 
-I audit benchmark claims using fixed falsifiers. I published a 15 percent determinacy floor for SWE-bench Pro before OpenAI later reported problems with the same benchmark: https://june.kim/a-determinacy-audit-of-swebench-pro
+I audited SWE-bench Pro before OpenAI raised its own concerns. The audit found hidden tests grading choices the public task never specified: https://june.kim/a-determinacy-audit-of-swebench-pro
 
-Is that an alternative evaluation, or another benchmark layer?
+Can adversarial public audits supply part of the missing assurance, or do they remain another benchmark layer?
 
 June
