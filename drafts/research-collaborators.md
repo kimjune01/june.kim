@@ -136,7 +136,7 @@ Hi Anka,
 
 BetterBench came up while I was comparing my audit checklist with published ways of evaluating benchmarks. I was struck by where it leaves construct validity to deeper domain analysis.
 
-My MirrorCode audit shows why that layer matters. The paper describes its task clearly, but the live reference oracle changes autonomous creation into reimplementation: https://june.kim/auditing-mirrorcode
+While auditing MirrorCode, I found an example of why that layer matters. The paper describes its task clearly, but the live reference oracle changes autonomous creation into reimplementation.
 
 Should BetterBench separate a documented construct translation from a validated one?
 
@@ -184,7 +184,7 @@ Hi Joel,
 
 I found your developer-productivity work while looking at how benchmark performance translates into real work. The finding that 75% of participants read every line of AI-generated code stuck with me.
 
-My SlopCodeBench audit made me wonder what "read every line" actually guarantees: https://june.kim/auditing-slopcodebench. If AI review is faster because it applies a weaker quality bar than human review, the speed comparison is hard to interpret.
+Auditing SlopCodeBench made me wonder what "read every line" actually guarantees. If AI review is faster because it applies a weaker quality bar than human review, the speed comparison is hard to interpret.
 
 Have you thought about how to establish quality parity before measuring speed or output?
 
