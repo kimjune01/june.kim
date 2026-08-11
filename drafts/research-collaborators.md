@@ -192,7 +192,7 @@ Hi Maria,
 
 Your review says benchmarks cannot provide assurance alone and points to red-teaming and bug bounties.
 
-I audit benchmark claims using fixed falsifiers. One audit found that at least 15 percent of SWE-bench Pro tasks do not determine what their hidden tests grade: https://june.kim/a-determinacy-audit-of-swebench-pro
+I audit benchmark claims using fixed falsifiers. I published a 15 percent determinacy floor for SWE-bench Pro before OpenAI later reported problems with the same benchmark: https://june.kim/a-determinacy-audit-of-swebench-pro
 
 Is that an alternative evaluation, or another benchmark layer?
 
