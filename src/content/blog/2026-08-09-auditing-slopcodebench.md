@@ -62,7 +62,7 @@ At each checkpoint the agent sees one spec file, its own prior code, and nothing
 - Three problems ship checkpoint-*n* tests that require conventions the spec introduces at checkpoint *n+1*. `cfgpipe` error tests demand the literal word "duplicate" one checkpoint before the spec first uses it. A `dag_execution` core test writes unquoted list syntax first shown a checkpoint later. `datagate` tests configure the cache through an environment variable the spec names a checkpoint later. An agent that implements exactly what it has been shown fails; one that guesses the next spec passes.
 - The `meshctl` spec says "Vault error order is not part of the contract." A test asserts the exact order. [Determinacy receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/09-determinacy.md)
 
-For those checkpoints the benchmark does not measure whether an agent can implement a specification. It measures whether the agent guesses unpublished author conventions, and one wrong guess fails the checkpoint.
+For those checkpoints the benchmark grades agreement with unpublished author conventions, and one wrong guess fails the checkpoint.
 
 ## Nobody disclosed a red team
 
