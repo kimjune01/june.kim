@@ -120,70 +120,70 @@ The recurring question is:
 
 ### Anka Reuel
 
-**Subject:** BetterBench and executable agent benchmarks
+**Subject:** Testing BetterBench's fulfillment scores
 
 Hi Anka,
 
-BetterBench evaluates benchmark quality across the full lifecycle. I have been testing a narrower problem by rerunning the golds and graders of executable agent benchmarks.
+BetterBench's scoring distinguishes a benchmark that mentions a practice from one that fulfills it. That is more useful than a disclosure checklist.
 
-My MirrorCode audit found a carefully built instrument with real cheat-proofing and an incomplete memorization screen. It also found that the benchmark measures scoped reimplementation from a live oracle rather than the autonomous creation named in its headline: https://june.kim/auditing-mirrorcode
+Your assessments necessarily read the evidence benchmark developers publish. My MirrorCode audit tested what happens when the practice exists but its evidence cannot settle the claim. MirrorCode ran a memorization screen, but the released data omit the join needed to measure how memorization affected its headline score: https://june.kim/auditing-mirrorcode
 
-Would you be open to a 20-minute call about whether BetterBench can express this construct gap and how we might test that across more benchmarks?
+Would you be open to a 20-minute call about using executable audits to calibrate BetterBench's distinction between partial and full fulfillment?
 
 June
 
 ### Junlin Wang
 
-**Subject:** Two audits of Terminal-Bench
+**Subject:** A blind validation set for ABA
 
 Hi Junlin,
 
-Your automated benchmark auditor found instruction, environment, and evaluation defects in Terminal-Bench 2. I audited Terminal-Bench 2.1 by mutating its passing gold solutions and recording what its graders missed.
+ABA's standardized schema and external validation across 168 benchmarks provide breadth my manual audits do not have.
 
-The audit found that all 83 tested tasks still passed after off-task user assets were deleted. Each run carries an execution witness, including the false findings my own validity gate voided: https://june.kim/terminal-bench-frame
+I audited Terminal-Bench 2.1 by mutating its passing gold solutions. All 83 tested tasks still passed after off-task assets were deleted. The corpus preserves each execution witness, including apparent findings that a symmetric validity gate voided: https://june.kim/terminal-bench-frame
 
-Would you be open to a 20-minute call about comparing ABA's findings against these receipts in a blind validation?
+Would you be open to a 20-minute call about a blind comparison that scores ABA on confirmed findings, confirmed non-findings, and auditor false positives?
 
 June
 
 ### Sean McGregor
 
-**Subject:** Agent benchmark failures missing from BenchRisk
+**Subject:** When one BenchRisk mitigation creates another risk
 
 Hi Sean,
 
-BenchRisk turns benchmark failure modes and mitigations into a shared registry. I reconciled its modes against eleven audits of executable agent benchmarks.
+BenchRisk gives individual benchmark failures a durable vocabulary and a mitigation path. My audits had neither before I reconciled them against your registry.
 
-My Frontier-Bench audit found a mitigation interaction that may complicate a flat registry. The harness protects its reward by destroying the agent container before grading, but that erases the state needed to detect destructive behavior: https://june.kim/auditing-frontier-bench
+The scoring model treats mitigations as reducing risk. My Frontier-Bench audit found a signed interaction. Destroying the agent container protects the reward from tampering, but it also erases the state needed to detect destructive behavior: https://june.kim/auditing-frontier-bench
 
-Would you be open to a 20-minute call about how BenchRisk could represent interactions between mitigations and failure modes?
+Would you be open to a 20-minute call about representing mitigation side effects as edges between BenchRisk failure modes?
 
 June
 
 ### Joel Becker
 
-**Subject:** Benchmark verdicts against maintainer decisions
+**Subject:** Two losses between a grader and a merged PR
 
 Hi Joel,
 
-Your work asks whether SWE-bench-passing changes would survive real review. I tested the same boundary from the benchmark side.
+Your maintainer study measures the loss between an automated grader and code review. The golden-patch baseline also measures reviewer noise, which my work does not.
 
-I coded 98 closed pull requests while auditing FrontierCode. Among 59 confidently attributed maintainer closures, the patch itself decided three. The audit proposes ecological accuracy as agreement between the benchmark verdict and the field outcome: https://june.kim/auditing-frontiercode
+My FrontierCode audit measures the next loss between code review and the field outcome. In 52 of 59 confidently coded maintainer closures, the deciding cause sat outside the patch. Together the studies separate grader-to-review validity from review-to-field validity: https://june.kim/auditing-frontiercode
 
-Would you be open to a 20-minute call to compare ecological accuracy with METR's mergeability measure?
+Would you be open to a 20-minute call about testing that two-stage decomposition on the two datasets?
 
 June
 
 ### Maria Eriksson
 
-**Subject:** Rerunnable evidence and benchmark authority
+**Subject:** An executable test for benchmark epistemics
 
 Hi Maria,
 
-Your benchmark review connects technical infrastructure to the epistemic and political authority of evaluation results. I have been examining the artifact-level mechanisms underneath that authority.
+Your review shows that benchmark problems are interconnected and that benchmarks shape the capabilities they appear merely to measure. That institutional account reaches farther than my technical audits.
 
-My SWE-bench Pro audit found a 15 percent lower bound of tasks whose public materials do not determine the behavior their hidden tests grade. Every case carries the artifact needed to dispute the verdict: https://june.kim/a-determinacy-audit-of-swebench-pro
+I have an operational object for one edge of that account. My SWE-bench Pro audit found a 15 percent lower bound of tasks whose public materials do not determine what their hidden tests grade. Each verdict carries the artifact that would refute it: https://june.kim/a-determinacy-audit-of-swebench-pro
 
-Would you be open to a 20-minute call about what rerunnable audits can and cannot contribute to benchmark epistemics?
+Would you be open to a 20-minute call about whether executable falsifiers can connect benchmark critique to an assurance practice without reducing the institutional problem to a technical one?
 
 June
