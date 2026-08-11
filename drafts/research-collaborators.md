@@ -178,17 +178,17 @@ June
 
 ### Joel Becker
 
-**Subject:** From test passing to an actual merge
+**Subject:** What does "read every line" establish?
 
 Hi Joel,
 
-Your maintainer study gave me field evidence to check my FrontierCode result against. It shows that test passing overstates whether maintainers would accept a patch.
+I found your developer-productivity work while looking at how benchmark performance translates into real work. The finding that 75% of participants read every line of AI-generated code stuck with me.
 
-My FrontierCode audit suggests that review is still only part of the field outcome. Actual closures were usually decided by process, identity, interaction, or repository state rather than patch quality: https://june.kim/auditing-frontiercode
+My SlopCodeBench audit found that its code-quality metrics were not validated against future extension or maintenance outcomes: https://june.kim/auditing-slopcodebench. That leaves me unsure how we could establish parity between human and AI review before comparing their productivity.
 
-Does mergeability need separate calibration from grader to review and from review to field outcome?
+Have you thought about how to test whether AI review enforces the same quality standard as human review?
 
-I'm building an auditing agent, and your maintainer-review data may be the closest thing to a field answer key I could calibrate it against.
+I'm building an auditing agent, and I want to know what quality gate it would need to clear before its speed could count as a productivity gain.
 
 June
 
