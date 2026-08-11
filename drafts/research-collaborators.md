@@ -20,6 +20,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 
 **Work:** Lead author of [BetterBench](https://arxiv.org/abs/2411.12990). Her research develops measurement-theoretic and psychometric foundations for AI evaluation and asks when evaluation results justify capability or risk claims. [Research profile](https://ankareuel.com/research).
 
+**Contact:** `anka@cs.stanford.edu` ([published on her site](https://ankareuel.com/)).
+
 **Intersection:** BetterBench addresses benchmark quality across the evaluation lifecycle. My work supplies a more operational account for executable agent benchmarks: inspect the actual grader, run the gold, mutate the environment, retrieve the verdict receipt, and test whether the scored construct matches the advertised one.
 
 **What might interest her:** The audits provide concrete cases where lifecycle best practices are satisfied while the measurement still fails, or where a technically sound mitigation transfers validity loss into a neighboring clause. They could test whether BetterBench's criteria predict defects found under execution and reveal criteria needed specifically for stateful agent benchmarks.
@@ -33,6 +35,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 ### Junlin Wang
 
 **Work:** First author of [Automated Benchmark Auditing for AI Agents and Large Language Models](https://arxiv.org/abs/2605.26079), which uses an agentic system to detect instruction, environment, and evaluation defects across a large benchmark corpus.
+
+**Contact:** `junlin.wang2@duke.edu` ([Duke profile](https://scholars.duke.edu/person/junlin.wang2)).
 
 **Intersection:** We independently arrived at benchmark auditing through complementary methods. Their work offers automated breadth; mine emphasizes exhaustive artifact reads, executable witnesses, lower-bound claims, symmetric validity gates, and an auditor's own error ledger.
 
@@ -48,6 +52,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 
 **Work:** Lead author of [BenchRisk](https://arxiv.org/abs/2510.21460), a taxonomy of benchmark failure modes and mitigations with a public [registry](https://github.com/BenchRisk/BenchRisk).
 
+**Contact:** `computer23@seanbmcgregor.com` (public research address). An older organizational address is `sean@incidentdatabase.ai`.
+
 **Intersection:** My checklist already reconciles its contract clauses against BenchRisk. Several executable-agent failures are absent or only adjacent: underdetermined hidden tests, failing answer keys, self-capturing goldens, unavailable environmental frames, miscomputed denominators, and claim/construct equivocation by benchmark producers.
 
 **What might interest him:** The audits supply new registry entries with concrete witnesses and proposed mitigations. They also expose interactions between mitigations: isolating a grader may protect oracle integrity while destroying the state needed to audit the frame. That suggests BenchRisk may need relationships among failure modes, not only a flat inventory.
@@ -62,6 +68,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 
 **Work:** Researcher at METR working on AI capability measurement, developer-productivity experiments, time horizons, and whether benchmark-passing software changes survive contact with real development. [Research profile](https://joel-becker.com/).
 
+**Contact:** `joel@metr.org` ([published on his site](https://joel-becker.com/)).
+
 **Intersection:** My FrontierCode audit measured the gap between a patch grader marketed as mergeability and the reasons maintainers actually close pull requests. It proposes ecological accuracy: agreement between a benchmark verdict and a field outcome. Joel's work addresses the same benchmark-to-field gap from the deployment side.
 
 **What might interest him:** I have a coded population of real maintainer closures and a general method for decomposing where a proxy loses the claimed construct. The result offers a mechanism behind the benchmark/productivity gap: benchmarks can accurately score a narrow artifact while omitting the interaction and judgment that decide outcomes in the field.
@@ -75,6 +83,8 @@ I am looking for collaborators and an intellectual network, not an employer, fun
 ### Maria Eriksson
 
 **Work:** Research Fellow at the European Centre for Algorithmic Transparency and collaborator on research about the epistemics, stakeholders, infrastructure, and policy of GenAI evaluation. She coauthored [Can We Trust AI Benchmarks?](https://arxiv.org/abs/2502.06559), an interdisciplinary review of benchmark problems. [Profile](https://www.mariaeriksson.net/about-me/).
+
+**Contact:** `maria.eriksson@ec.europa.eu` (corresponding-author address in her benchmark review).
 
 **Intersection:** Her work asks how evaluations acquire authority and how technical infrastructure, institutional interests, and policy uses shape what benchmark numbers mean. My audits show the artifact-level mechanisms through which that authority outruns the evidence.
 
