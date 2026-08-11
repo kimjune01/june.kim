@@ -130,70 +130,70 @@ The recurring question is:
 
 ### Anka Reuel
 
-**Subject:** Testing BetterBench's fulfillment scores
+**Subject:** BetterBench criterion 2 against three audited benchmarks
 
 Hi Anka,
 
-BetterBench's scoring distinguishes a benchmark that mentions a practice from one that fulfills it. Your limitations section then leaves construct validity to the in-depth domain analysis the assessment cannot provide.
+BetterBench criterion 2 asks whether authors describe how a construct translates into the benchmark task. Section 9 leaves the harder question, whether that translation is valid, to in-depth domain analysis.
 
-My MirrorCode audit is one candidate for that missing layer. MirrorCode ran a memorization screen and a human baseline, but the released data cannot show how memorization affected its headline score. The deeper defect is a measured construct narrower than the one advertised: https://june.kim/auditing-mirrorcode
+My MirrorCode audit tests that second question. The paper describes its task clearly, but its live reference oracle turns autonomous creation into reimplementation and lets two targets test recalled specifications: https://june.kim/auditing-mirrorcode
 
-Would you be open to a 20-minute call about whether case audits could supply the construct-validity layer BetterBench deliberately leaves open?
+Would you be open to a 20-minute call about coding MirrorCode and two other audits against criterion 2 to see whether the disclosure score predicts the observed construct gap?
 
 June
 
 ### Junlin Wang
 
-**Subject:** A blind validation set for ABA
+**Subject:** Can ABA predict Terminal-Bench mutation outcomes?
 
 Hi Junlin,
 
-ABA's standardized schema, trajectory mode, and external validation provide breadth and measured precision my audits do not have. Your paper also identifies the missing object. Clean ground truth for benchmark auditing is scarce.
+ABA reports 66.7 percent strict recall against Terminal-Bench 2's maintainer fixes. Your paper also names scarce clean ground truth as the harder validation problem.
 
-My Terminal-Bench audit may supply a small controlled set. It mutates passing golds, records whether the mutation executed, and applies the same validity gate to findings and exonerations. It includes all 83 off-task passes, 26 tasks that caught in-workspace deletion, and apparent findings the gate voided: https://june.kim/terminal-bench-frame
+My Terminal-Bench 2.1 audit supplies observed mutation outcomes. All 83 graders accepted deletion of off-task assets, while 26 caught deletion inside their workspaces. Each result includes an execution witness and the same validity gate: https://june.kim/terminal-bench-frame
 
-Would you be open to a 20-minute call about using that corpus to test ABA on findings, exonerations, and auditor false positives?
+Would you be open to a 20-minute call about testing whether ABA can predict which graders accept each witnessed mutation?
 
 June
 
 ### Sean McGregor
 
-**Subject:** Evidence for a BenchRisk mitigation
+**Subject:** An evidence field for BenchRisk mitigations
 
 Hi Sean,
 
-BenchRisk gives individual benchmark failures a durable vocabulary and a mitigation path. My audits had neither before I reconciled them against your registry.
+BenchRisk's Algorithm 1 gives every recorded mitigation a positive reduction in likelihood or severity. The paper also says an author's representation is sufficient to affirm that mitigation.
 
-The paper says BenchRisk will rely on benchmark-author representations and will not require evidence that a mitigation exists. My Frontier-Bench audit found why that distinction matters. Its rubric asserts preservation, but the runner destroys the state a general preservation check would need: https://june.kim/auditing-frontier-bench
+Frontier-Bench provides a counterexample. Its rubric requires preservation checks, but its runner destroys the state a general check would need. Nine witnessed deletions still received reward 1: https://june.kim/auditing-frontier-bench
 
-Would you be open to a 20-minute call about whether BenchRisk should distinguish an asserted mitigation from one carrying an executable receipt?
+Would you be open to a 20-minute call about adding an evidence-status field for mitigations and testing it on this case?
 
 June
 
 ### Joel Becker
 
-**Subject:** Two losses between a grader and a merged PR
+**Subject:** Cross-coding two sets of maintainer decisions
 
 Hi Joel,
 
-Your maintainer study measures the loss between an automated grader and hypothetical code review. The golden-patch baseline also measures reviewer noise, which my work does not.
+Your study had four maintainers review 296 agent patches and calibrated their decisions against golden patches. That measures reviewer noise my FrontierCode audit cannot.
 
-My FrontierCode audit measures the next loss against actual closure outcomes. In 52 of 59 confidently coded maintainer closures, the deciding cause sat outside the patch. Together the studies could separate grader-to-review validity from review-to-field validity: https://june.kim/auditing-frontiercode
+My audit codes actual closure threads. In 52 of 59 confident cases, the deciding cause sat outside the patch in identity, process, interaction, or repository state: https://june.kim/auditing-frontiercode
 
-Would you be open to a 20-minute call about testing that two-stage decomposition on the two datasets?
+Would you be open to a 20-minute call about cross-coding a sample of your review rationales and my closure threads under one preregistered cause taxonomy?
 
 June
 
 ### Maria Eriksson
 
-**Subject:** An executable test for benchmark epistemics
+**Subject:** Is a public claim audit still a benchmark?
 
 Hi Maria,
 
-Your review argues that quantitative benchmarks cannot provide assurance alone and calls for alternative methods such as red-teaming and bug bounties. That institutional account reaches farther than my technical audits.
+Your conclusion says quantitative benchmarks cannot provide assurance alone and points to red-teaming and bug bounties as alternative methods.
 
-I have been testing whether an adversarial public audit is one such alternative or merely another benchmark layer. My SWE-bench Pro audit found a 15 percent lower bound of tasks whose public materials do not determine what their hidden tests grade. Each verdict carries the artifact that would refute it: https://june.kim/a-determinacy-audit-of-swebench-pro
+I am unsure where my practice falls. A public audit of SWE-bench Pro found a 15 percent lower bound of tasks whose materials do not determine what their hidden tests grade. Each verdict carries its own falsifier: https://june.kim/a-determinacy-audit-of-swebench-pro
 
-Would you be open to a 20-minute call about whether this practice escapes the benchmarking logic your review critiques?
+Would you be open to a 20-minute call to classify this practice against your nine issue categories and the alternatives named in your conclusion?
 
 June
