@@ -9,7 +9,7 @@ tags: methodology, epistemology, coding
 
 ## The ruler misses
 
-Structural erosion is the share of complexity concentrated in functions above a cyclomatic-complexity threshold. The paper reports its correlation with passing the next checkpoint: **−0.018**. Lines of code reaches **−0.212**. For next-checkpoint cost, erosion reaches **0.167** and LOC **0.502**.
+Structural erosion is the share of complexity concentrated in functions above a cyclomatic-complexity threshold. The paper reports its correlation with passing the next checkpoint: **−0.018**. Lines of code reaches **−0.212**. For next-checkpoint cost, erosion reaches **0.167** and LOC **0.502**. A plain line count reads the future better than the instrument built for it.
 
 Verbosity has a different problem. Its 137 rules were developed partly from observed agent code, then used to conclude that agent code is 2.3 times as verbose as human repositories. A ruler built partly from one population's characteristic marks will distinguish that population by construction. The comparison needs to survive on clone coverage alone, on rules developed without the evaluated agents, or under blinded human judgment. None is reported.
 
@@ -66,7 +66,7 @@ For those checkpoints the benchmark grades agreement with unpublished author con
 
 ## Nobody disclosed a red team
 
-The paper describes coauthor review and agent-assisted refinement of ambiguous tests. That is maker QC. It does not disclose an independent team asked to break the construct, run the answer keys, mutate passing golds, or rederive the scores.
+The paper describes coauthor review and agent-assisted refinement of ambiguous tests. That is maker QC. It does not disclose an independent team asked to break the construct, run the answer keys, mutate passing golds, or rederive the scores. As far as the paper discloses, this audit is the first adversarial contact the evaluator has had.
 
 - All 196 answer keys ran through the benchmark's own harness in its own Docker image. Four are deterministically defective: `dynamic_buffer` checkpoints 2 through 4 and `env_manager` checkpoint 3. One is unstable: `pwd_manager` checkpoint 4 fails a different regression test on each run. Eight more grade TypeScript through an unpinned `npx` toolchain that resolves to a broken version today. [Gold sweep receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/06-gold-sweep.md)
 - A wrapper deletes a test-unreferenced file from the passing `trajectory_api` workspace and delegates to the unchanged gold. The probe confirms the file is gone; all 373 tests still pass. [Frame receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/03-frame.md)
