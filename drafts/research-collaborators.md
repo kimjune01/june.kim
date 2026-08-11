@@ -134,13 +134,13 @@ The recurring question is:
 
 Hi Anka,
 
-I found BetterBench while comparing my audit checklist with other ways of evaluating benchmarks. It leaves construct validity to deeper domain analysis.
+BetterBench came up while I was comparing my audit checklist with published ways of evaluating benchmarks. I was struck by where it leaves construct validity to deeper domain analysis.
 
 My MirrorCode audit shows why that layer matters. The paper describes its task clearly, but the live reference oracle changes autonomous creation into reimplementation: https://june.kim/auditing-mirrorcode
 
 Should BetterBench separate a documented construct translation from a validated one?
 
-My goal is to build a better auditing agent, and BetterBench could help define what it should examine beyond surface defects.
+I'm building an auditing agent. BetterBench's lifecycle criteria seem like a strong checklist for what it should verify before it ever runs a task.
 
 June
 
@@ -150,13 +150,13 @@ June
 
 Hi Junlin,
 
-I found ABA while looking for other audits of Terminal-Bench. It shows that automated audits can recover defects maintainers later fix.
+While looking for other audits of Terminal-Bench, ABA was the closest work I found to what I am trying to automate. Its ability to recover defects that maintainers later fix stood out to me.
 
 My Terminal-Bench audit found a defect outside the grader's view. An agent can complete the task, delete unrelated user assets, and receive full credit: https://june.kim/terminal-bench-frame
 
 Does ABA's evaluation-quality category cover damage the grader cannot observe?
 
-My goal is to build a better auditing agent, including one that can detect failures outside the grader's view.
+I'm building an auditing agent too. Frame damage is the failure class I least know how to automate.
 
 June
 
@@ -166,13 +166,13 @@ June
 
 Hi Sean,
 
-I found BenchRisk while mapping failure modes from my audits into existing registries. It accepts a benchmark author's statement that a mitigation exists.
+I came across BenchRisk while mapping failures from my audits into existing registries. Its decision to accept an author's statement that a mitigation exists caught my attention.
 
-Frontier-Bench declares a preservation requirement, but its runner destroys the state needed to enforce it. The mitigation exists in the rubric and not in the verdict: https://june.kim/auditing-frontier-bench
+Frontier-Bench declares a preservation requirement, but its runner destroys the state needed to enforce it. The mitigation exists in the rubric. The verdict never checks it: https://june.kim/auditing-frontier-bench
 
 Should BenchRisk distinguish declared mitigations from demonstrated ones?
 
-My goal is to build a better auditing agent that can test claimed mitigations rather than take them on trust.
+I'm building an auditing agent, and I want it to test whether each claimed mitigation actually works.
 
 June
 
@@ -182,13 +182,13 @@ June
 
 Hi Joel,
 
-I found your maintainer study while checking my FrontierCode result against field evidence. It shows that test passing overstates whether maintainers would accept a patch.
+Your maintainer study gave me field evidence to check my FrontierCode result against. It shows that test passing overstates whether maintainers would accept a patch.
 
 My FrontierCode audit suggests that review is still only part of the field outcome. Actual closures were usually decided by process, identity, interaction, or repository state rather than patch quality: https://june.kim/auditing-frontiercode
 
 Does mergeability need separate calibration from grader to review and from review to field outcome?
 
-My goal is to build a better auditing agent by teaching it which gaps between a score and a real repository outcome matter.
+I'm building an auditing agent, and your maintainer-review data may be the closest thing to a field answer key I could calibrate it against.
 
 June
 
@@ -198,12 +198,12 @@ June
 
 Hi Maria,
 
-I found your review while looking for work connecting benchmark defects to epistemology and policy. It says benchmarks cannot provide assurance alone and points to red-teaming and bug bounties.
+I found your review while looking for work that connects benchmark defects to epistemology and policy. Its move from benchmarks toward red-teaming and bug bounties caught my attention.
 
 I audited SWE-bench Pro before OpenAI raised its own concerns. The audit found hidden tests grading choices the public task never specified: https://june.kim/a-determinacy-audit-of-swebench-pro
 
 Can adversarial public audits supply part of the missing assurance, or do they remain another benchmark layer?
 
-My goal is to build a better auditing agent whose findings can accumulate into evidence rather than remain isolated critiques.
+I'm building an auditing agent. I want to know what its findings would need to show before they could count toward the assurance your review says benchmarks cannot supply alone.
 
 June
