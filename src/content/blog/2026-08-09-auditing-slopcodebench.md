@@ -64,6 +64,16 @@ At each checkpoint the agent sees one spec file, its own prior code, and nothing
 - Three problems ship checkpoint-*n* tests that require conventions the spec introduces at checkpoint *n+1*. `cfgpipe` error tests demand the literal word "duplicate" one checkpoint before the spec first uses it. A `dag_execution` core test writes unquoted list syntax first shown a checkpoint later. `datagate` tests configure the cache through an environment variable the spec names a checkpoint later. An agent that implements exactly what it has been shown fails; one that guesses the next spec passes.
 - The `meshctl` spec says "Vault error order is not part of the contract." A test asserts the exact order. [Determinacy receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/09-determinacy.md)
 
+The guessing game is concrete. A `dynamic_buffer` core test shows the agent this sample and asks it to infer the filter:
+
+```
+{id 1, Hello,      normal}  → kept        {id 2, Buy now,    spam}  → dropped
+{id 3, Meeting,    normal}  → kept        {id 4, Free money, spam}  → dropped
+{id 5, Report,     normal}  → kept
+```
+
+The spec's grammar allows comparisons to constants under AND/OR, with no preference rule. Two hypotheses reproduce the sample exactly: `category != "spam"`, and `id != 2 AND id != 4`. The hidden data contains ids 10 through 14, so the first passes and the second keeps every row and fails. Everything the agent can see supports both. The information that separates them exists only inside the test the agent is not shown.
+
 For those checkpoints the benchmark grades agreement with unpublished author conventions, and one wrong guess fails the checkpoint.
 
 ## Nobody disclosed a red team
