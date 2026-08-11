@@ -138,7 +138,7 @@ BetterBench criterion 2 asks whether authors describe how a construct translates
 
 My MirrorCode audit tests that second question. The paper describes its task clearly, but its live reference oracle turns autonomous creation into reimplementation and lets two targets test recalled specifications: https://june.kim/auditing-mirrorcode
 
-I can prepare a three-row crosswalk of criterion 2, the claimed construct, and the observed construct. Would you be open to a 15-minute call to check whether it operationalizes the distinction correctly?
+Would BetterBench score criterion 2 as fulfilled when authors describe the translation clearly but the audit shows that the measured construct is narrower?
 
 June
 
@@ -152,7 +152,7 @@ ABA reports 66.7 percent strict recall against Terminal-Bench 2's maintainer fix
 
 My Terminal-Bench 2.1 audit supplies observed mutation outcomes. All 83 graders accepted deletion of off-task assets, while 26 caught deletion inside their workspaces. Each result includes an execution witness and the same validity gate: https://june.kim/terminal-bench-frame
 
-I can provide the pinned tasks, outcome labels, and scoring script. Would you be open to a 15-minute call to decide whether predicting those outcomes would be a valid ABA test?
+Would ABA treat a grader that accepts witnessed off-task deletion as an evaluation-quality defect, or does that fall outside its current schema?
 
 June
 
@@ -166,7 +166,7 @@ BenchRisk's Algorithm 1 gives every recorded mitigation a positive reduction in 
 
 Frontier-Bench provides a counterexample. Its rubric requires preservation checks, but its runner destroys the state a general check would need. Nine witnessed deletions still received reward 1: https://june.kim/auditing-frontier-bench
 
-I can draft one evidence-status field and score this mitigation with and without its receipt. Would you be open to a 15-minute call to decide whether that field belongs in BenchRisk?
+Would BenchRisk count the rubric's preservation clause as a mitigation when the runner cannot observe the state it promises to preserve?
 
 June
 
@@ -180,7 +180,7 @@ Your study had four maintainers review 296 agent patches and calibrated their de
 
 My audit codes actual closure threads. In 52 of 59 confident cases, the deciding cause sat outside the patch in identity, process, interaction, or repository state: https://june.kim/auditing-frontiercode
 
-I can send the closure taxonomy and a 20-thread coded sample. Would you be open to a 15-minute call to check whether the taxonomy can also code your review rationales?
+Do your natural-language review reasons distinguish patch-internal rejection from causes outside the patch, or would that require a second coding pass?
 
 June
 
@@ -194,6 +194,6 @@ Your conclusion says quantitative benchmarks cannot provide assurance alone and 
 
 I am unsure where my practice falls. A public audit of SWE-bench Pro found a 15 percent lower bound of tasks whose materials do not determine what their hidden tests grade. Each verdict carries its own falsifier: https://june.kim/a-determinacy-audit-of-swebench-pro
 
-I can send a one-page classification against your nine categories and proposed alternatives. Would you be open to a 15-minute call to identify where that classification fails?
+Does a public audit with fixed falsifiers count as an alternative evaluation in your framework, or does it reproduce benchmark logic at another level?
 
 June
