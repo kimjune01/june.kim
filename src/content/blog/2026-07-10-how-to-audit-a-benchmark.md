@@ -1,11 +1,11 @@
 ---
 variant: post-medium
 title: "How to Audit a Benchmark"
-subtitle: "Nine audits' worth of sins, ordered by how cheaply they're caught."
+subtitle: "Eleven audit passes' worth of sins, ordered by how cheaply they're caught."
 tags: methodology, epistemology
 ---
 
-Over the past few months I audited nine benchmarks: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), [MirrorCode](https://github.com/kimjune01/mirrorcode-audit), [FrontierCode](/auditing-frontiercode), and [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit). Each one broke in a different place, and one, re-audited after its revision, mostly held. This post compresses the lenses into a checklist a stranger can run.
+Over the past few months I audited ten benchmarks in eleven audit passes: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), [MirrorCode](https://github.com/kimjune01/mirrorcode-audit), [FrontierCode](/auditing-frontiercode), [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit), and [SlopCodeBench](/auditing-slopcodebench). They broke in different places, and DeepSWE, re-audited after its revision, mostly held. This post compresses the lenses into a checklist a stranger can run.
 
 *Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode, one of the audits drawn on here. An interest disclosure, not a funding one; it changes none of the receipts, which is the point of check 4 below.*
 
@@ -22,6 +22,7 @@ Over the past few months I audited nine benchmarks: [SWE-bench Verified](/sweben
 <tr><td><a href="https://github.com/kimjune01/mirrorcode-audit">MirrorCode</a></td><td>claim</td><td>title sells autonomous whole-program builds; metric scores scoped reimplementation from a live oracle, 17/25 targets contaminated</td></tr>
 <tr><td><a href="/auditing-frontiercode">FrontierCode</a></td><td>claim</td><td>sold as mergeability; of 59 coded closures, the patch decided 3</td></tr>
 <tr><td><a href="https://github.com/kimjune01/frontier-bench-audit">Frontier-Bench</a></td><td>frame</td><td>agent container torn down before grading; 9 of 9 pass after off-task destruction</td></tr>
+<tr><td><a href="/auditing-slopcodebench">SlopCodeBench</a></td><td>claim</td><td>static code-shape drift sold as extension robustness; iteration confounded with expanding scope</td></tr>
 </table>
 
 A benchmark is a measurement instrument, and an instrument makes a contract. Above every clause sits the claim: the capability the headline advertises has to be the one the metric measures (the *claim* clause), or the number is precise about the wrong thing. The instruction pins the target (the *spec* clause). The grader checks the target (the *oracle* clause). The grader guards everything the task never named (the *frame* clause: a run that completes the task by wrecking unrelated state must not pass). The answer key passes its own test (the *gold* clause). The headline number means what the leaderboard says it means (the *score* clause). And the number survives its own publication (the *decay* clause).
@@ -128,7 +129,7 @@ The gate mistaken for the verdict: an agent's internal green light is a stop sig
 
 ## The auditor's own contract
 
-The checks above are worthless without discipline on the reporting side, and the discipline compresses to a few rules that recur across all seven audits.
+The checks above are worthless without discipline on the reporting side, and the discipline compresses to a few rules that recur across the series.
 
 Audit yourself first. Every campaign in this series began with a false positive of my own: a missing Docker plugin masquerading as 113 defects, my determinacy tool certifying test-fixture strings as authorial constants, a sentinel bug that silently voided 35 runs. The instrument you trust least should be yours.
 
