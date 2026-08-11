@@ -128,7 +128,7 @@ BetterBench evaluates benchmark quality across the full lifecycle. I have been t
 
 My MirrorCode audit found a carefully built instrument with real cheat-proofing and an incomplete memorization screen. It also found that the benchmark measures scoped reimplementation from a live oracle rather than the autonomous creation named in its headline: https://june.kim/auditing-mirrorcode
 
-Does BetterBench express that gap cleanly, or does this case expose something missing?
+Would you be open to a 20-minute call about whether BetterBench can express this construct gap and how we might test that across more benchmarks?
 
 June
 
@@ -142,7 +142,7 @@ Your automated benchmark auditor found instruction, environment, and evaluation 
 
 The audit found that all 83 tested tasks still passed after off-task user assets were deleted. Each run carries an execution witness, including the false findings my own validity gate voided: https://june.kim/terminal-bench-frame
 
-Would a blind comparison against these receipts help test what ABA detects and misses?
+Would you be open to a 20-minute call about comparing ABA's findings against these receipts in a blind validation?
 
 June
 
@@ -156,7 +156,7 @@ BenchRisk turns benchmark failure modes and mitigations into a shared registry. 
 
 My Frontier-Bench audit found a mitigation interaction that may complicate a flat registry. The harness protects its reward by destroying the agent container before grading, but that erases the state needed to detect destructive behavior: https://june.kim/auditing-frontier-bench
 
-Does that interaction belong in BenchRisk, or should I file the two failure modes separately?
+Would you be open to a 20-minute call about how BenchRisk could represent interactions between mitigations and failure modes?
 
 June
 
@@ -170,7 +170,7 @@ Your work asks whether SWE-bench-passing changes would survive real review. I te
 
 I coded 98 closed pull requests while auditing FrontierCode. Among 59 confidently attributed maintainer closures, the patch itself decided three. The audit proposes ecological accuracy as agreement between the benchmark verdict and the field outcome: https://june.kim/auditing-frontiercode
 
-Does that operationalization hold up against METR's mergeability work?
+Would you be open to a 20-minute call to compare ecological accuracy with METR's mergeability measure?
 
 June
 
@@ -184,6 +184,6 @@ Your benchmark review connects technical infrastructure to the epistemic and pol
 
 My SWE-bench Pro audit found a 15 percent lower bound of tasks whose public materials do not determine the behavior their hidden tests grade. Every case carries the artifact needed to dispute the verdict: https://june.kim/a-determinacy-audit-of-swebench-pro
 
-Does rerunnability address the epistemic problem your review identifies, or only its technical part?
+Would you be open to a 20-minute call about what rerunnable audits can and cannot contribute to benchmark epistemics?
 
 June
