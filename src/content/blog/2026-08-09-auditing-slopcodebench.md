@@ -7,6 +7,8 @@ tags: methodology, epistemology, coding
 
 [SlopCodeBench](https://www.scbench.ai/) concludes that agents lack the design discipline iterative development demands. Its experiment establishes less: under expanding specifications, two static code-shape metrics usually rise. Neither metric is validated as extension robustness, and iteration is not isolated as the cause. [Construct receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/00-construct.md)
 
+I audit public benchmarks to make them better. This one asks a question worth answering, so it gets the full treatment.
+
 ## The ruler misses
 
 Structural erosion is the share of complexity concentrated in functions above a cyclomatic-complexity threshold. The paper reports its correlation with passing the next checkpoint: **−0.018**. Lines of code reaches **−0.212**. For next-checkpoint cost, erosion reaches **0.167** and LOC **0.502**. A plain line count reads the future better than the instrument built for it.
