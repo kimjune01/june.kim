@@ -10,7 +10,7 @@ import Repl from '../../../../components/Repl';
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Security and Uberty</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 2 · Peirce 1903, 1913, Popper 1934, Dewey 1938, Hanson 1958, Hintikka 1998</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 2 · Peirce 1903, 1913, Popper 1934, Dewey 1938, Hanson 1958, Hoare 1969, Hintikka 1998, O'Hearn 2020</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Every mode of reasoning trades certainty for fertility. Deduction is perfectly secure and adds no information beyond the premises. Abduction is maximally fertile and guarantees nothing. This tradeoff structures inquiry itself.</p>
@@ -146,6 +146,16 @@ for name, seq in hypotheses.items():
 
     <p>Abduction is insecure but not random. If hypothesis generation were random, the hit rate would be negligible and science impossible. That plausible hypotheses emerge above chance means abduction has structure, distinct from the institutional filters (replication, peer review, instruments) that catch bad guesses downstream.</p>
 
+    <h2>The same tradeoff in program logic</h2>
+
+    <p>One field re-derived the tradeoff with proof rules, with no sign of having read Peirce. In 1969 Tony Hoare gave a logic for proving programs correct. A Hoare triple over-approximates: it accounts for every behavior the program could exhibit, so a completed proof means no execution reaches a bad state. That verdict is secure. The price is paid in the other direction. To cover every possible behavior the analysis must include behaviors that never actually occur, so it raises alarms about hazards no run can reach, and it establishes nothing you didn't already write into the specification.</p>
+
+    <p>Fifty years later Peter O'Hearn, co-inventor of separation logic, built the mirror image. <a href="https://dl.acm.org/doi/10.1145/3371078">Incorrectness logic</a> under-approximates: it accounts only for behaviors the program certainly has, so every bug it reports arrives with a witness, a concrete input that drives execution into the bad state. No false alarms, ever. The price is the same coin flipped. Silence proves nothing, because the behaviors outside the under-approximation were never examined.</p>
+
+    <p>Neither logic dominates. An approximate analysis must choose which direction to be certain in; certainty of absence and certainty of presence cannot both be had. That is the security-uberty curve drawn in proof rules. Hoare logic sits at the deductive end, where nothing comes out that wasn't implicit in the spec you supplied. Incorrectness logic buys its fertility, a stream of real bugs nobody specified in advance, by surrendering any claim about the behaviors it didn't visit. Two communities, a century apart, one working from the logic of science and one from static analyzers, arrived at the same inverse law.</p>
+
+    <p>The rediscovery also contributes a discipline: a claim of failure should carry the input that reproduces it, exactly as a claim of safety carries a proof.</p>
+
     <h2>Thinking before the frame</h2>
 
     <p>In "A Neglected Argument for the Reality of God" (1908), Peirce called the pre-logical ground of abduction <em>musement</em>: "Pure Play" that is "antipodal to vacancy and dreaminess." The muser stays engaged and alert but holds no target: attention widens instead of narrowing. Musement is not abduction's conclusion. It is the condition under which candidate hypotheses become available.</p>
@@ -213,6 +223,8 @@ for name, seq in hypotheses.items():
 
     <p class="mb-3"><strong>2.5</strong> ★ Pick a system you know that scaled: a model, a product, a lab technique. Write down the frame someone chose before the scaling worked, as a single sentence of the form "X is Y" (the chapter's example: "language is next-token prediction"). Then propose a rival frame and the cheapest observation that would favor the rival. If you can't find a rival, explain what that says about the frame's security, or about your musement.</p>
 
+    <p class="mb-3"><strong>2.6</strong> A teammate's bug report says the cache "sometimes returns stale data," with no reproduction steps. Say in one sentence why incorrectness logic refuses this report. Then write the two artifacts that would repair it: the witness the report needs to be admissible, and the specification a Hoare-style proof of the eventual fix would need.</p>
+
     <hr class="border-zinc-700 my-8"/>
 
     <h2>Sources</h2>
@@ -243,6 +255,14 @@ for name, seq in hypotheses.items():
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Hanson 1958</td>
             <td class="text-gray-400"><em>Patterns of Discovery</em>. Observation is theory-laden; the context of discovery has logical structure.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Hoare 1969</td>
+            <td class="text-gray-400">"<a href="https://dl.acm.org/doi/10.1145/363235.363259">An Axiomatic Basis for Computer Programming</a>." <em>CACM</em> 12(10). Over-approximate proof rules: a completed proof certifies the absence of bad executions.</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">O'Hearn 2020</td>
+            <td class="text-gray-400">"<a href="https://dl.acm.org/doi/10.1145/3371078">Incorrectness Logic</a>." <em>POPL 2020</em>. Under-approximate proof rules: every reported bug carries a reachability witness. The security-uberty tradeoff, rediscovered as over- versus under-approximation.</td>
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Hintikka 1998</td>

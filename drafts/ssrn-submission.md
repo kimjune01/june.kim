@@ -1,8 +1,12 @@
 # SSRN submission — who-authored-the-spec
 
-**SUBMITTED 2026-07-18.** SSRN Abstract ID 7140418.
+**POSTED 2026-08-01.** SSRN Abstract ID 7140418. DOI 10.2139/ssrn.7140418.
 https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7140418
-Status: under SSRN staff review (email arrives when complete). SSRN will mint a DOI.
+Blog post links to it as of 2026-08-03. No review-complete email ever arrived; discovered posted via a scraper's solicitation email (IJPLD, predatory journal).
+
+Discrepancies noticed on the live page, unresolved:
+- License shows "All rights reserved. No reuse allowed without permission" instead of the intended CC BY-SA 4.0.
+- Author name displays as "June kim" (lowercase k) from the account profile.
 
 Paste-ready fields for https://hq.ssrn.com (Submit a Paper).
 

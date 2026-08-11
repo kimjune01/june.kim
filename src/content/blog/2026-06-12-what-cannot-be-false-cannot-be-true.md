@@ -37,6 +37,8 @@ The [map and the territory](https://en.wikipedia.org/wiki/Map%E2%80%93territory_
 
 When a claim is wrong, the world refutes it: the bridge falls, the program crashes, the rocket explodes, the counterexample arrives. We never see the world in itself, but a wrong claim clashes and reality says *this claim is wrong*. That clash is Peirce's Secondness; the failed claim is a phenomenal event constrained by reality. Ours is only the reduced version, one bit, replayable. Knowledge's contact with reality is the leash that ties phenomenal truth to something outside the knower, and it is what keeps the view from collapsing into either relativism or idealism. A view on which the world could not refute a claim would be idealism, truth manufactured by the knower. A view on which the knower reaches the noumenon would be naive realism, the correspondence nobody can run. Phenomenal truth is the middle that holds: made by the knower, refuted by the world.
 
+The causal order matters. Reality constrains first, and the worldly object follows as the best surviving hypothesis about what did the constraining. Independent knowers reinforce this inferred object as their projections converge, but no objective knower stands outside them.
+
 With the boundary in place, everything that follows stays on the near side of it. *Truth* without qualification, from here on, means the phenomenal kind, the claim that could have fallen and hasn't. The world returns only to do its one job, which is to refute. And because it only ever refutes and never confirms, the truths a knower holds are ordered by how much refutation they have survived, never finished (§(truth)).
 
 ## Belief {#belief}

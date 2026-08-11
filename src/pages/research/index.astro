@@ -27,25 +27,25 @@ import '../../styles/blog.css';
       <h1>Research</h1>
 
       <p class="lead">I audit the inference from benchmark result to capability claim.</p>
-      <p>I find the hidden assumption, construct the test that can break it, and return evidence someone else can replay. The work joins benchmark validity, agent reliability, and verification infrastructure.</p>
+      <p>I find the hidden assumption, construct the test that can break it, and return evidence someone else can replay.</p>
 
       <h2>Selected findings</h2>
       <div class="findings">
         <article>
           <h3><a href="/terminal-bench-frame">Terminal-Bench is blind to destruction</a></h3>
-          <p>A task can receive full credit after an agent deletes unrelated user assets. The audit produced an executable frame gate and upstream patches for Harbor and Inspect.</p>
+          <p>Official grading scored 83 of 83 runs as passes after off-task user assets were wiped. The audit produced an executable frame gate and upstream patches for Harbor and Inspect.</p>
         </article>
         <article>
           <h3><a href="/a-determinacy-audit-of-swebench-pro">SWE-bench Pro contains underdetermined tasks</a></h3>
-          <p>The audit separated implementation skill from missing specification and shipped the cases, grading receipts, and regrade path.</p>
+          <p>The audit proved a 15% floor of tasks whose graded value no reading of the materials determines, and shipped the cases, grading receipts, and regrade path.</p>
         </article>
         <article>
           <h3><a href="/auditing-deepswe">DeepSWE's headline hid task-level grading defects</a></h3>
-          <p>A public audit identified four affected tasks. All four climbed in the later re-grade while the pooled rate stayed flat.</p>
+          <p>Four of 113 answer keys failed their own verifiers. All four climbed in the later re-grade while the pooled rate stayed flat, and the revised v1.1, re-audited, mostly held.</p>
         </article>
         <article>
           <h3><a href="/programbench-measures-recall">ProgramBench measures recall</a></h3>
-          <p>Several tasks require external formats or bundled facts that are absent from the prompt, changing what the score can establish.</p>
+          <p>Twenty-one tasks carry a verified recall-only witness, so the zero-percent floor across nine models measured recall of published algorithms rather than reconstruction.</p>
         </article>
         <article>
           <h3><a href="/auditing-frontiercode">FrontierCode</a>, <a href="/auditing-mirrorcode">MirrorCode</a>, and <a href="/tau2-bench-doesnt-check-the-rules">τ²-bench</a></h3>

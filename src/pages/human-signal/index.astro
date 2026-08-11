@@ -319,6 +319,7 @@ const sections = [
             <li><b>VA</b><span><strong>Verification before acceptance</strong>Condition acceptance on an independent, discriminating check.</span></li>
           </ol>
           <p class="methodology-states"><b>EVERY TRIGGER</b><span>EVOKED</span><span>MISSED</span><span>NOT WARRANTED</span><span>UNTRUE</span></p>
+          <p class="methodology-refs">Every scored construct has a published lineage: <a href="https://doi.org/10.1145/3411764.3445717">complementary performance</a> (Bansal et al., CHI 2021), <a href="https://doi.org/10.1145/3581641.3584066">appropriate reliance measured as conditional rates</a> (Schemmer et al., IUI 2023), <a href="https://arxiv.org/abs/2212.09746">evaluating the interaction rather than the final output</a> (Lee et al., TMLR 2023), and <a href="https://doi.org/10.1145/3630106.3659051">effective oversight as causal power plus epistemic access</a> (Sterz et al., FAccT 2024).</p>
           <a href="/the-complementarity-test">READ THE COMPLEMENTARITY TEST <span>→</span></a>
         </div>
       </details>
@@ -537,6 +538,9 @@ const sections = [
   .methodology-states b, .methodology-states span { padding: 7px 10px; font: 800 9px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; }
   .methodology-states b { padding-left: 0; color: #777e75; }
   .methodology-states span { border-radius: 999px; background: #242824; color: #cbd1c9; }
+  .methodology-refs { max-width: 780px; margin: 0 0 34px; color: #969d94; font: 400 15px/1.7 Lora, Georgia, serif; }
+  .methodology-refs a { color: #cbd1c9; text-underline-offset: 4px; }
+  .methodology-refs a:hover { color: var(--accent); }
   .methodology-body > a { color: var(--accent); font: 800 11px "SFMono-Regular", Consolas, monospace; letter-spacing: .06em; text-underline-offset: 5px; }
   .solution-disclosure .disclosure-body > .wrap { width: 100%; }
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; padding-block: 100px; }

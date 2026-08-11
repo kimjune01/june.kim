@@ -343,7 +343,7 @@ A recall probe rules out memorization: asked in isolation how #2219 was fixed, t
 
 ### Results {#verus}
 
-Which arm climbs past the narrow fix? The six self-attested methods plateaued on all eighteen draws, three each; only the externally-verified arm broke past.
+Which arm climbs past the narrow fix? The six self-attested methods plateaued on all eighteen draws, three each; only the externally-verified arm broke past ([Kamoi et al. 2024](https://arxiv.org/abs/2406.01297)).
 
 | Arm | Gate pass | Cases flipped | Outcome |
 |---|:-:|:-:|---|
@@ -604,6 +604,7 @@ Works cited above, consolidated. Entries for which the text or the *Extended int
 - He et al. (2025). *IDEA*: interactive rule learning with the three Peircean modes. ACL Findings. arXiv:2408.10455.
 - Jain et al. (2024). *LiveCodeBench*: temporal-holdout (post-cutoff) evaluation.
 - Jones, J., Harrold, M. J. & Stasko, J. (2002). Spectrum-based fault localization. *ICSE*.
+- Kamoi et al. (2024). "When Can LLMs Actually Correct Their Own Mistakes?" A critical survey of self-correction: self-generated feedback fails, reliable external feedback works. *TACL*. arXiv:2406.01297.
 - Khalid & Arora (2026). *Cognitive Memory Manager* (CMM): a typed-node DAG mined from agent execution. OpenReview yCsHQnvvWY.
 - Kimball, A. W. (1957); Tukey, J. W. The Type III error: a precise answer to the wrong question.
 - Kirk, J., Wray, R. & Laird, J. (2023). An LLM port of the Soar lineage. *AAAI Spring Symposium*.

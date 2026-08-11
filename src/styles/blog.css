@@ -112,6 +112,14 @@ article .footnotes .reversefootnote { border: 0; }
   border-color: transparent rgba(0,0,0,.5); position: absolute;
   top: 50%; left: -5px; margin-top: -5px;
 }
+.identity-contact {
+  margin: 32px 0 12px;
+  color: #666;
+  font-family: 'Avenir', sans-serif;
+  font-size: 0.78em;
+  text-align: center;
+}
+.identity-contact a { color: inherit; }
 /* Subtle, persistent door to the /junebot front desk, to the right of the logo.
    Sits just below center so it stacks with the hover-only "About June" prompt
    instead of overlapping it. */
@@ -250,4 +258,3 @@ span[data-note].open { background: #838383; }
 .highlight .vg { color: #008080 }
 .highlight .vi { color: #008080 }
 .highlight .il { color: #099 }
-

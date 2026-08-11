@@ -53,7 +53,7 @@ worked out. The record will continue to validate without appearing in the librar
   bookkeeping for text and cultural checks, not a claim of scholarly certification.
 - `scenes` contains the reading pages; each page is an array of paragraphs. Page
   divisions are part of the screen layout, not the underlying tale.
-- `image` is the cover. `pageArt` places two additional illustrations on distinct,
+- `image` is the cover. `pageArt` places interior illustrations on distinct,
   zero-based, non-cover pages. Every image needs useful alt text.
 - `art`, `artLabel`, `color`, and `colorSoft` supply visual metadata and palette.
 
@@ -62,13 +62,42 @@ worked out. The record will continue to validate without appearing in the librar
 Story length follows the story. Five pages is neither a target nor a maximum. Break
 at natural paragraph or scene boundaries and favor comfortable tablet-sized pages.
 
-Each finished story has three illustrations: a cover, a turning-point image, and an
-ending image. They should keep a consistent cast and visual language, suit the tale’s
-setting where practical, and appear near the passage they depict. All artwork is shown
-at its natural aspect ratio; the reader scrolls rather than cropping an illustration.
+Each finished story has a cover plus interior illustrations scaled to its length:
+roughly every other scene for stories up to six scenes, up to four interior images for
+stories up to twelve scenes, and up to six major-beat images for longer stories. They
+should keep a consistent cast and visual language, suit the tale’s setting where
+practical, and appear near the passage they depict. All artwork is shown at its natural
+aspect ratio; the reader scrolls rather than cropping an illustration.
 
 If page divisions change, recheck `pageArt.page`. The schema rejects cover placements,
-out-of-range indexes, duplicate interior pages, and records without two interior images.
+out-of-range indexes, duplicate interior pages, and records with too few or too many
+interior images for their length.
+
+## Expanding interior artwork
+
+`scripts/plan-folklore-art-expansion.mjs` derives missing illustration beats from the
+current story records and writes `drafts/folklore-art-expansion.json`. The checked-in
+manifest is also the completion ledger; its current 118-item expansion is fully drained.
+Regenerating it starts a fresh plan based on whatever artwork is then present.
+
+For each pending entry:
+
+1. Generate a landscape 4:3 scene from its prompt, adjusting frightening or harmful
+   passages to a faithful, child-safe beat when needed.
+2. Visually review the result for narrative accuracy, cultural cues, unwanted text,
+   character consistency, and suitability for ages 6–8.
+3. Optimize the approved image as WebP at the entry's `output` path. For a batch with
+   a strong sepia cast, run `folklore/desepia.sh <src_dir> <dst_dir>` first.
+4. Register the image and alt text in both the story and manifest:
+
+   ```sh
+   node scripts/record-folklore-art.mjs <story:page> <web-image-path> "<alt text>"
+   ```
+
+   `web-image-path` is the public URL form, such as
+   `/folk/art/snow-white/24-scene.webp`, not the `public/` filesystem path.
+5. Before committing, run `pnpm validate:folklore` and `git diff --check`. Confirm the
+   manifest counters agree with its entries and that every recorded image exists.
 
 ## Adding a story
 
@@ -77,6 +106,7 @@ under `public/folk/art/`, following the existing cover and story-directory namin
 conventions. Then run:
 
 ```sh
+pnpm validate:folklore
 pnpm exec astro build
 ```
 

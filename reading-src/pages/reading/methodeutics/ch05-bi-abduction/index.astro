@@ -239,7 +239,7 @@ for key in sorted(touched):
 
     <p><em>Compositionality.</em> Inferred contracts compose across boundaries. Function A's postcondition becomes function B's precondition context. The anti-frames and frames chain. The analysis scales linearly in the call graph, not exponentially in the state space.</p>
 
-    <p>The strategy transfers beyond programs, but only where the domain has something like separation: parts whose interactions are explicit enough that local conclusions can compose. Diagnose locally, compose globally.</p>
+    <p>The strategy transfers beyond programs, but only where the domain has something like separation: parts whose interactions are explicit enough that local conclusions can compose. Diagnose locally, compose globally. The frame rule itself transfers: each experiment has a footprint, and conclusions about the parts of the system it never touched survive a failed test unrevised.</p>
 
     <hr class="border-zinc-700 my-8"/>
 

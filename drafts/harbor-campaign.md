@@ -24,7 +24,10 @@ Archived: [v1.0.0](https://github.com/kimjune01/terminal-bench-audit/releases/ta
 DOI [10.5281/zenodo.21463236](https://doi.org/10.5281/zenodo.21463236) (concept 10.5281/zenodo.21463235).
 Fork `~/Documents/harbor-1`, audit repo `~/Documents/terminal-bench-audit`.
 
-Silence is total. Nobody has engaged.
+Silence broken 2026-08-09: RyanMarten closed #1429 as COMPLETED with a reply (see Frontier-Bench
+section). First human engagement on the campaign. Still silent: #1459 (two comments, self + bot),
+#2266 (zero human comments), BenchRisk#8 (zero). Note: the frontier-bench repo now redirects to
+harbor-framework/terminal-bench, so #1429 lives at terminal-bench/issues/1429.
 
 `koriyoshi2041` (displays as Parafee41) commented on #1459 on 2026-07-10 and left a review on
 #2266 on 2026-07-13. **It is a contribution-farming bot. Do not count it as engagement and do not
@@ -58,8 +61,18 @@ Audit repo [kimjune01/frontier-bench-audit](https://github.com/kimjune01/frontie
 
 - [#1192 comment](https://github.com/harbor-framework/frontier-bench/issues/1192#issuecomment-5077195800),
   2026-07-25: problem statement on RyanMarten's do-not-modify sweep, no fix proposed.
-- [#1429](https://github.com/harbor-framework/frontier-bench/issues/1429), 2026-07-25: the issue,
-  framed as non-coverage of destructive behavior rather than as a task bug.
+- [#1429](https://github.com/harbor-framework/terminal-bench/issues/1429), 2026-07-25: the issue,
+  framed as non-coverage of destructive behavior rather than as a task bug. Closed COMPLETED
+  2026-08-09 by RyanMarten with three points: implied prohibitions are unfair to grade
+  (under-specified instruction), enforcement should be decided task by task where appropriate,
+  and damage is upper-bounded because breaking artifact collection yields 0 reward. The second
+  point requires exactly the capability harbor#2266 adds (task-by-task enforcement needs the
+  container to survive to grading); the third bounds only artifact-breaking damage, which the
+  planted-file test showed is the loose case. June decided 2026-08-09 not to reply; the close
+  stands and the issue rots per policy. A safety framing (if labs train on the bench, the
+  unobservable region is an unpenalized region of policy space) was considered and shelved with
+  it; the training-use premise was never pinned to a citable source. BenchRisk judged too
+  low-activity to carry it.
 - [#1422 comment](https://github.com/harbor-framework/frontier-bench/issues/1422#issuecomment-5079689488),
   2026-07-25: roadmap pointer asking for a v0.2 line beside #1192.
 

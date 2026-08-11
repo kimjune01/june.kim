@@ -69,6 +69,7 @@ Full lineage from Peirce (1878) to Ramdas (2023). Organized chronologically with
 | Year | Figure | Key work | Contribution |
 |------|--------|----------|--------------|
 | 2019 | **Shafer & Vovk** | *Game-Theoretic Foundations* | Full mathematical foundation for game-theoretic probability. |
+| 2020 | **O'Hearn** | "Incorrectness Logic" (POPL) | Under-approximation: every reported bug carries a reachability witness. Security/uberty independently rediscovered as over- vs. under-approximate proof rules. |
 | 2020 | **Wasserman, Ramdas, Balakrishnan** | "Universal Inference" | Split LRT: valid tests for any parametric model without regularity conditions. Bridge between classical and e-value methods. |
 | 2021 | **Howard, Ramdas et al.** | "Confidence Sequences" | Nonparametric, finite-sample, time-uniform confidence sequences. Estimation counterpart of e-processes. |
 | 2021 | **Vovk & Wang** | "E-values" (*Annals of Statistics*) | Formal definition. E-values combine by averaging under arbitrary dependence. The algebraic advantage over p-values. |
