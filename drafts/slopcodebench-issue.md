@@ -6,6 +6,10 @@ Title: Pinned answer keys fail evaluation in the official image; sampled Core te
 
 I'm a benchmark auditor and came across SlopCodeBench. I found some discrepancies and wanted to share some findings with you. I'm hoping that this results in an improved version.
 
+---
+
+AGENT:
+
 I audited the pinned release (runner `06b5c06`, problems `ef6a9dd`) using the repository's `eval-snapshot`, first locally and then in the official `docker-python3.12-uv` image. Every claim below links to a receipt; pinned sources, scripts, and finding files are at https://github.com/kimjune01/slopcodebench-audit.
 
 Answer keys, measured in the official image ([full sweep](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/06-gold-sweep.md)):
