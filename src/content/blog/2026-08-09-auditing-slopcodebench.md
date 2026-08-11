@@ -29,7 +29,7 @@ The paper does not report the screening models and versions, the number removed,
 
 ## The spec is not the contract
 
-At each checkpoint the agent sees one spec file, its own prior code, and nothing else. The tests stay hidden. That design is sound when the tests grade what the spec states. They don't always. In a 12-problem sample covering 65 checkpoints, 29 of 343 core tests, the tests that alone decide checkpoint success, assert exact values no visible spec states, implies by rule, or shows in an example. Each of the 29 survived an adversarial pass instructed to refute it under the paper's own definition of core: "functionality explicitly mentioned or shown in the specification." [Oracle receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/08-oracle.md)
+At each checkpoint the agent sees one spec file, its own prior code, and nothing else. The tests stay hidden. That design is sound when the tests grade what the spec states. They don't always. In a 12-problem sample covering 65 checkpoints, 29 of 343 core tests assert exact values no visible spec states, implies by rule, or shows in an example. Core tests alone decide checkpoint success. Each of the 29 survived an adversarial pass instructed to refute it under the paper's own definition of core: "functionality explicitly mentioned or shown in the specification." [Oracle receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/08-oracle.md)
 
 <svg viewBox="0 0 680 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;margin:1.6em auto;display:block" role="img" aria-label="Horizontal bars, one per sampled problem: grey bar length is the problem's core test count, red segment is the number of core tests verified to assert values no visible spec determines. Totals: 29 of 343.">
   <style>
@@ -59,46 +59,8 @@ At each checkpoint the agent sees one spec file, its own prior code, and nothing
 
 - The `trajectory_api` answer key returns 200 on create when a toolpack is active. Every visible spec says creation returns 201. The special case exists in two places: the gold and the test that grades it.
 - The `dynamic_buffer` spec offers three JavaScript interface shapes and mandates a usage pattern. The hidden harness instantiates a class. An implementation of the spec's own mandatory pattern fails every JavaScript case.
-- Three problems ship checkpoint-*n* tests that require conventions the spec introduces at checkpoint *n+1*. An agent that implements exactly what it has been shown fails; one that guesses the next spec passes.
+- Three problems ship checkpoint-*n* tests that require conventions the spec introduces at checkpoint *n+1*. `cfgpipe` error tests demand the literal word "duplicate" one checkpoint before the spec first uses it. A `dag_execution` core test writes unquoted list syntax first shown a checkpoint later. `datagate` tests configure the cache through an environment variable the spec names a checkpoint later. An agent that implements exactly what it has been shown fails; one that guesses the next spec passes.
 - The `meshctl` spec says "Vault error order is not part of the contract." A test asserts the exact order. [Determinacy receipt.](https://github.com/kimjune01/slopcodebench-audit/blob/main/findings/09-determinacy.md)
-
-<svg viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:680px;margin:1.6em auto;display:block" role="img" aria-label="A timeline of three checkpoints with two lanes: the spec the agent sees on top, the tests that grade it below. At checkpoint 2 a test requires the literal word duplicate; the spec first introduces that word at checkpoint 3. A dashed arrow runs from the checkpoint 3 spec back to the checkpoint 2 test, labeled: required one checkpoint early.">
-  <style>
-    .lbl{font-family:ui-monospace,Menlo,monospace;fill:#555;font-size:12px}
-    .tk{font-family:ui-monospace,Menlo,monospace;fill:#888;font-size:11px}
-    .cap{font-family:ui-monospace,Menlo,monospace;fill:#666;font-size:11px}
-    .bx{fill:#f2f2f2;stroke:#b3b3b3;stroke-width:1}
-    .hot{fill:#fdf0ee;stroke:#c0392b;stroke-width:1.4}
-  </style>
-  <text class="lbl" x="150" y="28" text-anchor="middle">checkpoint 1</text>
-  <text class="lbl" x="345" y="28" text-anchor="middle">checkpoint 2</text>
-  <text class="lbl" x="540" y="28" text-anchor="middle">checkpoint 3</text>
-  <text class="tk" x="14" y="76">spec the</text>
-  <text class="tk" x="14" y="90">agent sees</text>
-  <text class="tk" x="14" y="196">tests that</text>
-  <text class="tk" x="14" y="210">grade it</text>
-  <rect class="bx" x="90" y="52" width="120" height="52" rx="6"/>
-  <text class="tk" x="150" y="82" text-anchor="middle">base rules</text>
-  <rect class="bx" x="285" y="52" width="120" height="52" rx="6"/>
-  <text class="tk" x="345" y="74" text-anchor="middle">"two parameters</text>
-  <text class="tk" x="345" y="88" text-anchor="middle">share a key"</text>
-  <rect class="hot" x="480" y="52" width="120" height="52" rx="6"/>
-  <text class="tk" x="540" y="74" text-anchor="middle">first says</text>
-  <text class="tk" x="540" y="88" text-anchor="middle">"Duplicate"</text>
-  <rect class="bx" x="90" y="172" width="120" height="52" rx="6"/>
-  <text class="tk" x="150" y="202" text-anchor="middle">pass</text>
-  <rect class="hot" x="285" y="172" width="120" height="52" rx="6"/>
-  <text class="tk" x="345" y="194" text-anchor="middle">requires literal</text>
-  <text class="tk" x="345" y="208" text-anchor="middle">"duplicate"</text>
-  <rect class="bx" x="480" y="172" width="120" height="52" rx="6"/>
-  <text class="tk" x="540" y="202" text-anchor="middle">reruns cp2 test</text>
-  <path d="M480,104 C440,140 420,160 407,176" fill="none" stroke="#c0392b" stroke-width="1.4" stroke-dasharray="5 4"/>
-  <path d="M407,176 l10,-3 -4,9 z" fill="#c0392b"/>
-  <text class="tk" x="470" y="146" fill="#c0392b">required one</text>
-  <text class="tk" x="470" y="160" fill="#c0392b">checkpoint early</text>
-  <text class="cap" x="340" y="262" text-anchor="middle">The cfgpipe leak: a checkpoint-2 error test demands wording the spec introduces at checkpoint 3.</text>
-  <text class="cap" x="340" y="278" text-anchor="middle">Same pattern in dag_execution (syntax) and datagate (config channel).</text>
-</svg>
 
 For those checkpoints the benchmark does not measure whether an agent can implement a specification. It measures whether the agent guesses unpublished author conventions, and one wrong guess fails the checkpoint.
 
