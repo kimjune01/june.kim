@@ -11,3 +11,7 @@ Four answer keys fail their own tests, and the eight TypeScript checkpoints brea
 Please say whether the dynamic_buffer failures reproduce on your side.
 
 June
+
+## Discord version
+
+hey Gabriel, I audited the SlopCodeBench pinned release with eval-snapshot in the official Docker image. Four answer keys fail their own tests, and the TypeScript checkpoints break on an unpinned npx toolchain. Receipts in issue 27: https://github.com/SprocketLab/slop-code-bench/issues/27. Does dynamic_buffer reproduce for you?
