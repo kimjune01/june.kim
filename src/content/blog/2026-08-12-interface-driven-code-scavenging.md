@@ -2,6 +2,7 @@
 variant: post-medium
 title: "Interface-Driven Code Scavenging"
 tags: coding, methodology
+image: "/assets/scavenging-five-gates.png"
 ---
 
 *Part of the [methodology](/methodology) series. Applies [New Reading](/new-reading) to source code and runs [Verifiable Knowledge](/verifiable-knowledge) as a design protocol.*
@@ -57,6 +58,8 @@ The receiving system supplies the boundary, and [characterization tests](https:/
 Not every scar crosses the cut. The discriminator is whose reality the scar recorded. Guards on shared external surfaces transfer: the push provider that rotates tokens, the timezone rules, the malformed human input. Guards on the donor's private infrastructure answer incidents the receiving system will never have; their cause stayed behind.
 
 Keep the scars whose cause you share. The rest is the machinery a transplant can safely shed.
+
+![The transplant as a graph cut. Inside a donor repository, a dashed cut encloses the coherent behavior: API handler, campaign tables with their state transitions, scheduler with its idempotency record, delivery worker with its retry classes. Scars from shared surfaces, timezone rules and token rotation, cross with the unit; the donor's dashboard and Kafka config stay outside, their scars' causes left behind. Characterization tests carry the unit across the interface into the receiving repository as the largest proven unit that fits.](/assets/scavenging-graph-cut-light.svg)
 
 ## Own means own
 
@@ -197,6 +200,8 @@ A different framework is not a stop condition. Neither is an untidy architecture
 3. *Map* (gate: is the selected behavior a coherent, observable ownership boundary?)
 4. *Review* (gate: are its claims checkable and its unresolved claims explicit?)
 5. *Approval* (gate: does the user authorize this revision as the transplant contract?)
+
+![The scavenging loop as a zigzag between an agent lane and a human lane. Agent work fills the valleys: eliciting the interface, wide-then-deep search producing the candidate table, selection and the feature-to-file map, the design document with its checks, and the feedback loop with re-checked claims. Five gates sit on the human lane: Intent, Search, Map, Review, Approval. After gate five the path exits to an optional transplant, one import commit.](/assets/scavenging-five-gates-light.svg)
 
 Everything between gates is agent work. Human attention stays on intent, selection, ownership, and acceptance.
 

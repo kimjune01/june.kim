@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 268" width="1000" height="268" font-family="system-ui, -apple-system, sans-serif">
+  <style>
+    .gate-num { text-anchor: middle; font-size: 9px; font-style: italic; fill: #94a3b8; }
+    .gate-name { text-anchor: middle; font-weight: 700; font-size: 13px; fill: #334155; }
+    .work { text-anchor: middle; font-size: 10px; fill: #64748b; }
+    .lane { stroke: #cbd5e1; stroke-width: 1; stroke-dasharray: 4 4; }
+    .lane-label { font-size: 10px; font-style: italic; fill: #94a3b8; }
+    .flow { stroke: #64748b; stroke-width: 1.5; fill: none; }
+    .caption { text-anchor: middle; font-size: 11px; font-style: italic; fill: #64748b; }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- lanes -->
+  <line class="lane" x1="20" y1="70" x2="985" y2="70"/>
+  <line class="lane" x1="20" y1="200" x2="860" y2="200"/>
+  <text class="lane-label" x="22" y="62">human</text>
+  <text class="lane-label" x="22" y="192">agent</text>
+
+  <!-- flow zigzag: agent valleys, human peaks -->
+  <polyline class="flow" points="60,200 140,70 220,200 300,70 380,200 460,70 540,200 620,70 700,200 780,70 855,200"/>
+  <line class="flow" x1="855" y1="200" x2="870" y2="200" marker-end="url(#ah)"/>
+
+  <!-- gate diamonds -->
+  <path d="M140,62 L148,70 L140,78 L132,70 Z" fill="#1d4ed8"/>
+  <path d="M300,62 L308,70 L300,78 L292,70 Z" fill="#1d4ed8"/>
+  <path d="M460,62 L468,70 L460,78 L452,70 Z" fill="#1d4ed8"/>
+  <path d="M620,62 L628,70 L620,78 L612,70 Z" fill="#1d4ed8"/>
+  <path d="M780,62 L788,70 L780,78 L772,70 Z" fill="#1d4ed8"/>
+
+  <!-- gate labels -->
+  <text class="gate-num" x="140" y="34">gate 1</text>
+  <text class="gate-name" x="140" y="50">Intent</text>
+  <text class="gate-num" x="300" y="34">gate 2</text>
+  <text class="gate-name" x="300" y="50">Search</text>
+  <text class="gate-num" x="460" y="34">gate 3</text>
+  <text class="gate-name" x="460" y="50">Map</text>
+  <text class="gate-num" x="620" y="34">gate 4</text>
+  <text class="gate-name" x="620" y="50">Review</text>
+  <text class="gate-num" x="780" y="34">gate 5</text>
+  <text class="gate-name" x="780" y="50">Approval</text>
+
+  <!-- agent work labels at valleys -->
+  <text class="work" x="100" y="224">elicit the interface</text>
+  <text class="work" x="220" y="224">wide-then-deep search,</text>
+  <text class="work" x="220" y="237">candidate table</text>
+  <text class="work" x="380" y="224">selection,</text>
+  <text class="work" x="380" y="237">feature-to-file map</text>
+  <text class="work" x="540" y="224">design document,</text>
+  <text class="work" x="540" y="237">claims with checks</text>
+  <text class="work" x="700" y="224">feedback loop,</text>
+  <text class="work" x="700" y="237">re-checked claims</text>
+
+  <!-- transplant box -->
+  <rect x="872" y="168" width="118" height="64" rx="8" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="931" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">transplant</text>
+  <text x="931" y="205" text-anchor="middle" font-size="10" fill="#64748b">(optional)</text>
+  <text x="931" y="219" text-anchor="middle" font-size="9" fill="#94a3b8">one import commit</text>
+
+  <!-- caption -->
+  <text class="caption" x="500" y="260">Everything between gates is agent work. Human attention stays on the gates.</text>
+</svg>
