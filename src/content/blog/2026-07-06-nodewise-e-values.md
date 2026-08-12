@@ -1,7 +1,7 @@
 ---
 variant: post-paper
 title: "Nodewise E-Values Under Graph Interference: Causal Abuse Filtering for Agent Platforms"
-tags: envelopay, methodology
+tags: methodology
 autonumber: true
 ---
 
