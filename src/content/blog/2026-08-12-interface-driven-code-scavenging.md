@@ -20,7 +20,13 @@ A repository match was never a component waiting to be picked up. A single behav
 
 Frontier coding agents collapse the costs after discovery. An agent can trace a feature across files, identify its dependency closure, write characterization tests, translate its storage layer, and fit it behind a local interface. None of those operations is new. Carrying the whole sequence through verification at software speed is.
 
-That completion creates the threshold. Faster generation would only accelerate the old boxes-and-arrows process. Cheap comprehension and transformation replace it for non-novel systems. Repositories become a searchable implementation space, and architecture becomes the diff between the desired interface and the closest working system.
+They also arrive with broad priors about how familiar systems fail. Those priors are not evidence and cannot establish provenance, but they help an agent recognize the retry loop, idempotency record, compatibility branch, or escape hatch that a clean design might dismiss as clutter. Search supplies the inspectable source. Tests establish whether its lessons survive the new environment.
+
+Mature code contains *scar tissue*. Its awkward branches often record incidents that no design document predicted. Its guards encode inputs that once caused damage. Its operational hooks exist because somebody once lacked them at 3 a.m. A clean-sheet implementation acquires this knowledge by reenacting the history of the problem: invent, fail, patch, and converge on patterns already present elsewhere. When the license permits copying, scavenging transfers part of that accumulated learning without transferring the original pain.
+
+That changes where engineering effort belongs. Coding agents make producing another implementation cheap; they do not make deployed software cheap. Verification, integration, observability, and maintenance remain. Reinvention spends the new abundance on generating code while preserving those downstream costs and risking the same old failures. Scavenging spends it on finding, adapting, and testing an implementation that has already survived some of them.
+
+This is the threshold. Faster generation alone would only accelerate the old boxes-and-arrows process. Cheap comprehension and transformation make a different process viable for non-novel systems. Repositories become a searchable implementation space, and architecture becomes the diff between the desired interface and the closest working system.
 
 ## Search implementations before architectures
 
@@ -154,7 +160,7 @@ Those tests define the unit of reuse. The agent follows calls inward to the impl
 
 The behavior stays fixed while the edges adapt to the receiving repository. Characterization tests land first. The extracted implementation follows, then local refactors. The repository's own tests and type checks confirm the transplant landed, discharging the *Adoption boundary* and *Diagnostic membrane* claims the document planned.
 
-The import occupies one commit. Its description names the approved design revision, source repository, full source revision, copied paths, applicable license, retained notices, and adaptations made during import. Required notices stay with the code. Later changes receive later commits, so the boundary between borrowed history and local history remains inspectable. This is what discharges *Provenance* from a plan to a record.
+The import occupies one commit. Its description names the approved design revision, source repository, exact source revision, copied paths, applicable license, retained notices, and adaptations made during import. Required notices stay with the code. Later changes receive later commits, so the boundary between borrowed history and local history remains inspectable. This is what discharges *Provenance* from a plan to a record.
 
 ### When it breaks
 
@@ -170,7 +176,7 @@ A different framework is not a stop condition. Neither is an untidy architecture
 4. *Review* (gate: are its claims checkable and its unresolved claims explicit?)
 5. *Approval* (gate: does the user authorize this revision as the transplant contract?)
 
-Everything between gates is agent work. Human attention stays on intent, selection, ownership, and evidence.
+Everything between gates is agent work. Human attention stays on intent, selection, ownership, and acceptance.
 
 *Intent* fixes *Interface* and *Operating regime*. *Search* fills *Candidates* and *Interface validation*. *Map* resolves *Mismatch* and plans the *Adoption boundary* and *Diagnostic membrane*. *Review* challenges the ledger and its *Novel design*. *Approval* pins the revision that transplantation may execute.
 
@@ -179,3 +185,9 @@ Scale claims come last. If the target says one billion notifications a day, firs
 [Code scavenging](https://homepages.cwi.nl/~paulk/publications/IFIP98.html/node10.html) was described in 1998 as frequent, underdocumented, and unsupported. A recent study calls the same behavior [copy-based reuse](https://arxiv.org/abs/2409.04830) and finds it common across open-source development. The practice never disappeared. Package ecosystems only made another kind of reuse cheaper for a while.
 
 Copy > invent. Search first, and make invention prove that no working implementation will do.
+
+### Lineage
+
+- Paul Klint, [“Code scavenging”](https://homepages.cwi.nl/~paulk/publications/IFIP98.html/node10.html) (2001). Names the practice: search existing programs for comparable functionality, edit it, and reuse it instead of starting from scratch. It also identifies the lost-provenance problem that the design document and import commit repair.
+- Otávio A. L. Lemos et al., [“A Test-Driven Approach to Code Search and Its Application to the Reuse of Auxiliary Functionality”](https://www.sciencedirect.com/science/article/pii/S0950584910002107) (2011). Uses tests as both the search interface and the suitability check. Interface-driven scavenging extends that move from small utility functions to whole system behaviors.
+- Mike Fullerton, [“Search for existing solutions before building”](https://agenticdevelopercookbook.com/guidelines/planning/code-quality/reuse-before-build), *The Agentic Developer Cookbook* (2026). States the contemporary agent rule without the cost inversion, provenance ledger, operating regimes, or design-document protocol developed here.
