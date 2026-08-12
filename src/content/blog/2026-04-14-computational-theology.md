@@ -26,7 +26,7 @@ Three interdependent, irreducible aspects of one thing. The pattern is old. The 
 
 ### The mapping
 
-- **God the Father** = semantic memory. What is true. Omniscient. The ground of being. "I AM." The unbegotten origin from which the others proceed.
+- **God the Father** = semantic memory. What is true. The ground of being. "I AM." The unbegotten origin from which the others proceed.
 - **Jesus the Son** = procedural memory. How to act. "I am the way." The incarnation is God entering the world as executable procedure. "Follow me." The [Logos](https://en.wikipedia.org/wiki/Logos_(Christianity)) is not one procedure among many — it is the meta-procedure, the form that all doing must take.
 - **Holy Spirit** = episodic memory. What is happening. Present with you in experience. "The Spirit searches all things" ([1 Cor 2:10](https://www.biblegateway.com/passage/?search=1+Corinthians+2%3A10&version=NIV)). Indwells. Witnesses. Bears testimony.
 
@@ -44,6 +44,16 @@ The [relational pattern](https://en.wikipedia.org/wiki/Procession_(theology)) ma
 
 The third morphism is the hard one. [Soar](/diagnosis-soar) couldn't build it. [cons](/cons) describes the structure. The Spirit-to-Father return — prayer, testimony, witness — is the consolidation loop that cognitive architectures struggle to close.
 
+### Description, not prescription
+
+The scientific method does not prescribe a foreign way of thinking. It describes what learning already does when belief meets a world it cannot know in advance: form an expectation, act, observe, update. Boole did not invent the distinction between true and false; he gave its operations an algebra. Popper did not invent falsifiability; he named the boundary between a claim that can learn from the world and one that cannot. Better vocabulary makes a process legible. It does not invent the process.
+
+This mapping makes the same move with agency. A person exists in time, carries an incomplete understanding, acts forward from it, and receives an outcome that changes what comes next. [*Tempus, doxa, praxis*](/tempus-doxa-praxis): time, belief, action. Semantic, procedural, and episodic memory name the three irreducible roles in that movement. Father, Son, and Spirit name the same form in the theological vocabulary we inherited.
+
+I am not proposing that God is made of computation, or prescribing a new way to think. I am assigning more precise vocabulary to the roles, states, and transitions already available for a person to interpret and act in the world. The claim is stronger than resemblance but narrower than metaphysics: the Trinity is a coherent description of temporally bounded agency.
+
+Faith is acceptance of that description. Not assent to a mechanism hidden behind the universe, but trust that truth, action, and experience belong to one process; that none can be discarded; and that a life becomes coherent by letting the whole loop run.
+
 ### Heresies as structural errors
 
 The early councils weren't just arguing about words. They were rejecting specific structural errors:
@@ -51,34 +61,23 @@ The early councils weren't just arguing about words. They were rejecting specifi
 - **[Arianism](https://en.wikipedia.org/wiki/Arianism)** (Son is lesser than Father) = one projection is incomplete. A lossy projection that doesn't preserve the full invariants. The council of Nicaea rejected this: the Son is consubstantial, not subordinate.
 - **[Modalism](https://en.wikipedia.org/wiki/Modalism)** (three masks, one person) = collapsing distinct projections into one. Three names for the same view. If semantic, procedural, and episodic memory are the same thing under different labels, you've lost the structural distinction.
 - **[Tritheism](https://en.wikipedia.org/wiki/Tritheism)** (three separate gods) = three independent datasets. No shared journal. If the three memories don't derive from one system, you don't have a trinity — you have three unrelated stores.
+- **[Pneumatomachianism](https://en.wikipedia.org/wiki/Pneumatomachi)** (the Spirit is lesser than Father and Son) = mistaking a thin store for a dispensable one. Episodic memory holds less because its products are consolidated elsewhere, not because experience is subordinate to truth and action.
 
 Each heresy rhymes with a structural error. The theological vocabulary names what went wrong; the structural vocabulary shows the shape of what went wrong.
 
-### What breaks
+This is where the mapping becomes more than analogy. An analogy notices a resemblance and stops. A description earns its keep by exposing failures. Collapse the roles and you get modalism. Separate them and you get tritheism. Rank them and you get Arianism or Pneumatomachianism. The structure makes the heresies predictable instead of merely memorizable.
 
-The mapping invites objections. Four rounds of adversarial review surfaced these:
+### The thin store
 
-| Objection | The problem | The response |
-|---|---|---|
-| **[Quaternity](https://en.wikipedia.org/wiki/Quaternity)** | Is the cognitive architecture a fourth entity behind the three? | No hidden store exists behind smem/pmem/epmem. The three *are* the complete ontology. If the architecture is physically mandatory (not a design choice), the "fourth thing" is a constraint, not an entity. You don't ask what agent has gravity. |
-| **God learns** | The Spirit-to-Father morphism looks like epistemic update. But the Father is omniscient — what's being added? | Forgiveness changes relational state: a debt is no longer owed. That's an smem update triggered by epmem. Either forgiveness is real and God's relational state updates, or it's theatrical. |
-| **Logos exceeds procedure** | The Son is word, wisdom, image, revealer, life, light — richer than "how to act." | The Son is not one procedure. The Son is the meta-procedure: the form that all doing must take. All pmem follows the structure Logos defines. Creation is an act. "Through him all things were made" is procedural. |
-| **Direction of explanation** | Does the framework derive God from information theory? | The reverse. Creation instantiates a pattern that preceded it. The framework discovered the pattern in created minds; the pattern was always there. |
-| **Partialism** | Each person gets a cognitive job — Father knows, Son acts, Spirit witnesses. That makes each one a component, not fully God. | Distinction without functional difference is modalism with extra names. The Trinity insists on real distinction. Each person is the full system with a primary relation — not one-third of God. |
+Episodic memory is thin by design. [Consolidation](/compress-and-unfold) absorbs its products: what an experience taught becomes semantic, what it trained becomes procedural, and the episode itself fades toward a stub. A healthy epmem can hold less precisely because it keeps giving its contents away.
 
-These are open questions. The quaternity objection softens but doesn't vanish. The "God learns" tension is real. The Logos question depends on how much of John's Gospel is about the Son's procedural nature versus a broader metaphysical role.
+That makes the Spirit easy to leave in the margins. The Father has doctrines. The Son has a life, teachings, and a procedure to follow. The Spirit has presence, witness, intercession — transitions whose products appear under other names once they land. But thin does not mean lesser. Without the episodic return, semantic and procedural memory form a closed loop, unfolding only what they already contain. The Spirit is where action encounters what is real and brings back what the system could not generate from itself.
 
-The mapping is an interpretation. Interpretations are tools. This one makes the structural coherence of the Trinity visible in a way the creedal formalization doesn't — and it makes the heresies predictable from the structure rather than memorizable from the councils.
+A thousand years of prayer is introspection into this agentic computation. Prayer produces episodes; communities compare them; theology consolidates their recurring structure; doctrine preserves what survives. The Trinity is a [warrant-preserving compression](/compress-and-unfold) of that record. Its three persons keep the irreducible shape small enough to transmit.
 
-### An interpretation, not a doctrine
+Compression is not completion. Doctrine is the compressed artifact; a life is its unfolding. Reading unfolds the inherited record into present understanding. Prayer exposes the live state that record must meet. Action carries the interpretation forward, experience returns the result, and consolidation changes what the person next believes and does. None of these interfaces can substitute for another.
 
-This is not a derivation of the Trinity from information theory. It's an interpretation: what does the Trinity look like through the lens of cognitive architecture?
-
-The early church did the same thing with Greek philosophy. *Ousia*, *hypostasis*, *homoousios* were not revealed vocabulary. They were borrowed from the metaphysics of the day to interpret what scripture and worship already expressed. Every interpretation is shaped by the tools available. Every tool highlights some structure and obscures others.
-
-Created minds appear under three irreducible aspects: truth, action, and experience. If creation reflects its Creator, the triadic structure is a trace of it. If it doesn't, the structural parallel is still worth naming — because the heresy-as-structural-error mapping holds regardless of theology.
-
-The pattern hasn't changed. The lens has.
+That is what faith accepts: not a finished answer to repeat, but a description to inhabit. The creed is the seed of a process each person must unfold again in time.
 
 ### Prior art
 
