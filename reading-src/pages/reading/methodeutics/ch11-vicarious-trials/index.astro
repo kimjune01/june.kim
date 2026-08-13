@@ -194,6 +194,43 @@ backport(G<sub>t</sub>, R<sub>t</sub>) &rarr; G<sub>t+1</sub></code></pre>
 
     <p>Not every residual is numeric. An absent fracture, an impossible event order, or an unrecorded intermediate state can still identify the part of the graph that failed. Numeric residuals add magnitude and shape; qualitative residuals add constraints. Both must remain attached to the observation and measurement process that produced them.</p>
 
+    <h3>Residuals between rival chains</h3>
+
+    <p>Two causal chains do not have a residual directly. Each chain must first pass through the same observation model. Let rival graphs <em>G</em><sub>1</sub> and <em>G</em><sub>2</sub> predict the traces the available instruments would record:</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>Ê<sub>1</sub> = observe(run(G<sub>1</sub>))
+Ê<sub>2</sub> = observe(run(G<sub>2</sub>))
+R<sub>1</sub> = discrepancy(E, Ê<sub>1</sub>)
+R<sub>2</sub> = discrepancy(E, Ê<sub>2</sub>)</code></pre>
+
+    <p>The comparison is between residual <em>signatures</em>, not graph shapes. One history may fit the final position but miss the timing; another may fit the trajectory but predict a fracture that is absent. A useful signature keeps the discrepancies separate by trace, time, and uncertainty rather than collapsing them immediately into one score.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Trace</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Observed</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Chain 1 predicts</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Chain 2 predicts</th>
+            <th class="text-left py-2 text-gray-400">Discriminator</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Trajectory</td><td class="pr-3 text-gray-400">Recorded series</td><td class="pr-3 text-gray-400">Series with uncertainty band</td><td class="pr-3 text-gray-400">Series with uncertainty band</td><td class="text-gray-400">Normalized error and temporal shape</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Event order</td><td class="pr-3 text-gray-400">Partial chronology</td><td class="pr-3 text-gray-400">Required order</td><td class="pr-3 text-gray-400">Required order</td><td class="text-gray-400">Constraint violation</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Physical residue</td><td class="pr-3 text-gray-400">Present, absent, or unknown</td><td class="pr-3 text-gray-400">Expected frequency</td><td class="pr-3 text-gray-400">Expected frequency</td><td class="text-gray-400">Likelihood or impossible trace</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Intermediate state</td><td class="pr-3 text-gray-400">Measured or unrecorded</td><td class="pr-3 text-gray-400">Required range</td><td class="pr-3 text-gray-400">Required range</td><td class="text-gray-400">Compatibility at instrument resolution</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Quantitative traces can use error normalized by measurement uncertainty, likelihood, or another preregistered discrepancy function. Qualitative traces use logical compatibility: required and present, required and absent, forbidden and present, or unobserved. Missing evidence is not a zero residual. It is an open coordinate.</p>
+
+    <p>A scalar ranking is justified only after the inquiry states how discrepancies compose. Squared error, likelihood, worst-case violation, and lexicographic safety constraints answer different questions. In a safety investigation, one impossible required trace may properly kill a chain despite an excellent aggregate fit elsewhere.</p>
+
+    <p>When both chains predict the same observable signature within uncertainty, existing evidence cannot attribute between them. The difference between their predictions specifies the next measurement obligation: find or invent the instrument, recorder field, component test, or surviving trace that makes the chains diverge.</p>
+
     <p>Backporting stops at an equivalence class when several graphs predict traces within the available resolution. Choosing one graph beyond that point would move the residual back into the reader's intuition. The honest output is the set of surviving histories and the observation that would separate them.</p>
 
     <h2>One loop, several disciplines</h2>
