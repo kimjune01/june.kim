@@ -20,7 +20,7 @@ import Repl from '../../../../components/Repl';
 
     <p>A driver turns the key and gets nothing: no crank, no start. Yesterday the car started fine. The mechanic turns the key herself, watches the dash lights dim and the starter give a single click, and two hypotheses fire: weak battery, or a bad connection at the terminals. Nobody taught her a hypothesis-generation algorithm. The shape of the failure named the next test.</p>
 
-    <p>Where did the hypotheses come from? She compared two states: the car that started yesterday, the car that won't crank today. She noted what changed (dim lights, a single click, voltage sagging under load) and what stayed the same (fuel level, security light, the key turning freely). The changes pointed at the starting circuit. The hypotheses followed from the diff.</p>
+    <p>Where did the hypotheses come from? She compared two states: the car that started yesterday, the car that won't crank today. She noted what changed (dim lights, a single click, voltage sagging under load) and what stayed the same (fuel level, security light, the key turning freely). The changes pointed at the starting circuit. The diff, run against a vocabulary she already had (batteries, terminals, starting circuits), named the hypotheses.</p>
 
     <p>Diff is computable. The mechanic performed it in her head. OBD-II, the on-board diagnostics port in every car since 1996, performs it in silicon. Facebook Infer performs it on code. The representation changes; the operation stays the same.</p>
 
@@ -34,7 +34,7 @@ import Repl from '../../../../components/Repl';
       <p class="text-gray-300" style="max-width:none">Given expected state <strong>E</strong>, observed state <strong>O</strong>, and background frame <strong>B</strong>, partition what differs from what remains invariant.</p>
     </div>
 
-    <p>Abduction then uses that partition to generate candidate causes <strong>H</strong>: minimal revisions to <em>B</em> that would make <em>O</em> unsurprising. The partition itself is the primitive. All eight names in Chapter 3 instantiate it. The simplest encoding: take two snapshots of a system's state, one before an event and one after. The comparison partitions state into two sets:</p>
+    <p>Abduction then uses that partition to enumerate candidate causes <strong>H</strong>: minimal revisions to <em>B</em> that would make <em>O</em> unsurprising. The partition itself is the primitive. All eight names in Chapter 3 instantiate it. The simplest encoding: take two snapshots of a system's state, one before an event and one after. The comparison partitions state into two sets:</p>
 
     <p><strong>Figure</strong>: what changed. Variables whose values differ between snapshots. In Gestalt terms, what pops out against a stable background.</p>
 
@@ -123,7 +123,7 @@ for k, v in ground.items():
 
     <p>The hypotheses follow from the figure. Dim lights, a single click, no crank. What connects them? The starting circuit: battery, wiring, the starter motor, the ignition switch. Each can starve a crank, and the battery and wiring sit upstream of the dimming lights and the sagging voltage too. The ground tells the mechanic what to deprioritize. Fuel is full and the security light is off, so neither a fuel fault nor an immobilizer lockout is implicated (though that doesn't eliminate them unless the measurement set is complete).</p>
 
-    <p>This is the contrast primitive. Hypothesis generation, ranking, and testing build on top of it.</p>
+    <p>This is the contrast primitive. Candidate enumeration, ranking, and testing build on top of it.</p>
 
     <h2>Degrees of freedom</h2>
 
@@ -268,7 +268,7 @@ for code in obd_diff(expected, observed):
 
     <h2>Code: full loop</h2>
 
-    <p>Combine the primitive with hypothesis generation. Given a diff, produce candidate explanations by examining what the figure touches in a dependency graph.</p>
+    <p>Combine the primitive with candidate enumeration. Given a diff, produce candidate explanations by examining what the figure touches in a dependency graph.</p>
 
     <Repl client:visible initialCode={`from dataclasses import dataclass
 
@@ -339,14 +339,14 @@ hypotheses = abduct(figure, dependencies)
 print("Diff result:")
 print(f"  Figure: {list(figure.keys())}")
 print(f"  Ground: {list(ground.keys())}")
-print(f"\\n{len(hypotheses)} hypotheses generated:")
+print(f"\\n{len(hypotheses)} candidates enumerated:")
 for h in hypotheses:
     print(f"  [{h.component}] {h.reason}")
 `} />
 
     <p>Four candidates from the figure: battery, wiring, starter motor, ignition switch. They don't weigh equally. The battery is upstream of every changed variable (the crank, the lights, the click, the resting voltage), and wiring of most; the starter motor explains the crank and the click, the ignition switch only the crank. The ground (full fuel, security off) keeps the fuel system and the immobilizer off the list. Check the battery and its connections first.</p>
 
-    <p>Notice what the code does <em>not</em> do. It does not test the hypotheses, rank them, or estimate their probability. It generates them. The diff is a hypothesis-generation primitive. Testing is induction. Ranking is economy of research (ch 8). The diff names the candidates.</p>
+    <p>Notice what the code does <em>not</em> do. It does not test the hypotheses, rank them, or estimate their probability. And it does not invent them: every candidate was already an entry in the supplied dependency map. The diff selects which entries fire. It is an enumeration primitive over a represented space, not a generation primitive (Chapter 8 owns that distinction). Testing is induction. Ranking is economy of research (ch 9). The diff names the candidates.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -395,6 +395,8 @@ print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
     <p>OBD-II shows this concretely. If a failure involves a sensor the ECU doesn't monitor, no code fires. Engineers add more sensors, but you can never instrument everything. Some state will always be unmeasured.</p>
 
     <p>Bi-abduction addresses this by inferring the frame: the state the operation <em>must not have touched</em> for the result to be valid. It reasons backward from the postcondition, including state never explicitly observed. The diff goes from "compare what you measured" to "infer what you must have missed."</p>
+
+    <p>Both operations run inside a supplied vocabulary. Bi-abduction can infer an unmeasured variable only if its assertion language can already express it. When the cause needs a variable the representation cannot state at all, no diff, map, or frame inference reaches it. That boundary is Chapter 8.</p>
     <hr class="border-zinc-700 my-8"/>
 
     <h2>Exercises</h2>
@@ -403,7 +405,7 @@ print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
 
     <p class="mb-3"><strong>4.1</strong> A variable lands in the figure. The chapter warns it may be a cause, an effect, a symptom, or coincident noise. Using the no-crank scenario's five figure entries, give a one-line example of each of the four.</p>
 
-    <p class="mb-3"><strong>4.2</strong> The Case of the Evening Wi-Fi. Before: the laptop holds its connection all day, the microwave is idle, router uptime reads three days, the neighbors' networks are visible. After, every evening around six: the connection drops, the microwave is running, router uptime is unchanged, the neighbors' networks are visible. Compute figure and ground by hand. Build a small dependency map and generate the candidate hypotheses. Then name one variable missing from both snapshots that could carry the real cause, and say how you would measure it.</p>
+    <p class="mb-3"><strong>4.2</strong> The Case of the Evening Wi-Fi. Before: the laptop holds its connection all day, the microwave is idle, router uptime reads three days, the neighbors' networks are visible. After, every evening around six: the connection drops, the microwave is running, router uptime is unchanged, the neighbors' networks are visible. Compute figure and ground by hand. Build a small dependency map and enumerate the candidate hypotheses. Then name one variable missing from both snapshots that could carry the real cause, and say how you would measure it.</p>
 
     <p class="mb-3"><strong>4.3</strong> Pick a machine you use daily (espresso machine, bicycle, printer, a login flow) and write before and after snapshots of six variables for a failure you have actually seen. Build the dependency map, run the abduction by hand, and check that the true cause appears among the candidates. Then delete one measurement from the snapshots so that the true cause becomes invisible, and name the gauge you just removed.</p>
 
@@ -450,7 +452,7 @@ print("Battery load voltage: not in snapshot. Hypothesis space is incomplete.")
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/reading/methodeutics/ch02-security-uberty/">Ch 2: Security and Uberty</a> &mdash; the tradeoff that makes abduction fertile</li>
-      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 9: Economy of Research</a> &mdash; selecting among the hypotheses this chapter generates</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 9: Economy of Research</a> &mdash; selecting among the hypotheses this chapter enumerates</li>
       <li><a href="/abduction">Abduction</a> &mdash; the blog post this chapter formalizes</li>
     </ul>
 
