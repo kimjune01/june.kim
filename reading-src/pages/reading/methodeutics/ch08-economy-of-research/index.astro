@@ -283,6 +283,8 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
 
     <p>The third strategy is the best single-step heuristic. GDE uses it. It is still myopic. It optimizes one step ahead without considering the trajectory. Hintikka's game tree optimizes the full sequence, but computing the optimal policy is exponential in the number of experiments. Under independence and uniform costs, information gain is submodular (each added experiment gains less than the one before), and greedy selection stays within a constant factor of optimal. Correlated outcomes and variable costs weaken this guarantee, but greedy remains hard to beat in practice.</p>
 
+    <p>Every example so far assumes the candidate trial is available. Cost changes the order, but not the form, of inquiry. That assumption will hold through the e-value chapters because software and sequential data let us ask again. Chapter 11 removes it. When the decisive trial is destructive, singular, or forbidden, the same economy selects a different inquiry regime.</p>
+
     <hr class="border-zinc-700 my-8"/>
 
     <h2>Gap: evidence trajectory</h2>

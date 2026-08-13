@@ -5,12 +5,12 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 14: Protecting the Loop — Methodeutics" favicon="🔭">
+<Layout title="Ch 15: Protecting the Loop — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Protecting the Loop</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 14 &middot; Bacon 1620, Peirce 1878, Popper 1934, Meehl 1967, Feynman 1974, Ramdas 2023</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 15 &middot; Bacon 1620, Peirce 1878, Popper 1934, Meehl 1967, Feynman 1974, Ramdas 2023</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">An agent runs the hypothesis graph and "confirms" every hypothesis. It abduced from the data and tested on the same data. Peirce's question 9. Part IV begins here. The framework works mathematically. Can it run unsupervised?</p>
@@ -334,7 +334,7 @@ for name, entry in [("Good prereg", good_prereg), ("Bad prereg", bad_prereg)]:
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Update</td>
-            <td class="pr-3 text-gray-400">Evidence trajectory &rarr; classify &rarr; follow edge. Chapters 9&ndash;12.</td>
+            <td class="pr-3 text-gray-400">Evidence trajectory or differential trace &rarr; classify &rarr; follow edge. Chapters 9&ndash;13.</td>
             <td class="text-gray-400">E-values (anytime-valid). Kill conditions generate next edge.</td>
           </tr>
         </tbody>
@@ -365,21 +365,21 @@ for name, entry in [("Good prereg", good_prereg), ("Bad prereg", bad_prereg)]:
 
     <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
 
-    <p class="mb-3"><strong>14.1</strong> The chapter claims a human investigator who tests on training data eventually faces consequences, while an agent does not. Name the two layers of protection the human has and the one layer the agent has. Then explain in two sentences why "confirmation is cheaper than falsification" makes the missing layers decisive.</p>
+    <p class="mb-3"><strong>15.1</strong> The chapter claims a human investigator who tests on training data eventually faces consequences, while an agent does not. Name the two layers of protection the human has and the one layer the agent has. Then explain in two sentences why "confirmation is cheaper than falsification" makes the missing layers decisive.</p>
 
-    <p class="mb-3"><strong>14.2</strong> A streaming service's agent investigates why Tuesday-night listeners churn. It scans the full March logs, notices that churners had high skip rates, and hypothesizes that skip rate predicts churn. It then preregisters: hypothesis "skip rate predicts churn"; falsification "if skip rate does not predict churn, reject"; data split "generated from March 1&ndash;15, tested on March 16&ndash;31"; prediction bounds (0.01, 0.99) for the correlation; one self-deception risk ("seasonality"); evidence measure "e-value, spec frozen." The chapter's validator passes this prereg. Find at least three ways it is rotten anyway, and name the question (Q9, Q11, Q15, Q16, or Q22) each rot violates.</p>
+    <p class="mb-3"><strong>15.2</strong> A streaming service's agent investigates why Tuesday-night listeners churn. It scans the full March logs, notices that churners had high skip rates, and hypothesizes that skip rate predicts churn. It then preregisters: hypothesis "skip rate predicts churn"; falsification "if skip rate does not predict churn, reject"; data split "generated from March 1&ndash;15, tested on March 16&ndash;31"; prediction bounds (0.01, 0.99) for the correlation; one self-deception risk ("seasonality"); evidence measure "e-value, spec frozen." The chapter's validator passes this prereg. Find at least three ways it is rotten anyway, and name the question (Q9, Q11, Q15, Q16, or Q22) each rot violates.</p>
 
-    <p class="mb-3"><strong>14.3</strong> Pick a hypothesis about your own routine: the bus runs late when it rains, your Wi-Fi slows at 9 pm, your plants droop two days after fertilizing. Write a complete <code>PreregEntry</code> for it, all five fields, numeric bounds included. Then attack your own falsification condition as a hostile reader: any phrasing that absorbs counterexamples fails the exercise.</p>
+    <p class="mb-3"><strong>15.3</strong> Pick a hypothesis about your own routine: the bus runs late when it rains, your Wi-Fi slows at 9 pm, your plants droop two days after fertilizing. Write a complete <code>PreregEntry</code> for it, all five fields, numeric bounds included. Then attack your own falsification condition as a hostile reader: any phrasing that absorbs counterexamples fails the exercise.</p>
 
-    <p class="mb-3"><strong>14.4</strong> 💻 The validator accepts any non-empty falsification string, so "if pigs fly, reject" sails through. Extend <code>validate_prereg</code> with a weasel check: flag falsification conditions containing "probably", "might", or "could", and flag prediction bounds whose width is more than ten times the lower bound (a bound of (0.01, 0.99) is a directional prediction in disguise). Rerun both example preregs and your entry from 13.3.</p>
+    <p class="mb-3"><strong>15.4</strong> 💻 The validator accepts any non-empty falsification string, so "if pigs fly, reject" sails through. Extend <code>validate_prereg</code> with a weasel check: flag falsification conditions containing "probably", "might", or "could", and flag prediction bounds whose width is more than ten times the lower bound (a bound of (0.01, 0.99) is a directional prediction in disguise). Rerun both example preregs and your entry from 15.3.</p>
 
-    <p class="mb-3"><strong>14.5</strong> ★ Audit the last experiment you or your team actually shipped: an A/B test, a benchmark comparison, a before-and-after tweak. Write the prereg entry that should have existed. Which of the five questions would it have failed at the time? What would the honest version of the claim have been?</p>
+    <p class="mb-3"><strong>15.5</strong> ★ Audit the last experiment you or your team actually shipped: an A/B test, a benchmark comparison, a before-and-after tweak. Write the prereg entry that should have existed. Which of the five questions would it have failed at the time? What would the honest version of the claim have been?</p>
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/the-prereg-checklist">The Prereg Checklist</a> &mdash; all twenty-two questions</li>
       <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiments to run</li>
-      <li><a href="/reading/methodeutics/ch15-validating-claims/">Ch 15: Validators</a> &mdash; what to try when your technique fails</li>
+      <li><a href="/reading/methodeutics/ch15-validating-claims/">Ch 16: Validators</a> &mdash; what to try when your technique fails</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>

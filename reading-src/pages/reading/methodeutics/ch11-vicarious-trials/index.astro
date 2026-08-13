@@ -1,0 +1,217 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Ch 11: Vicarious Trials — Methodeutics" favicon="🔭">
+  <main>
+    <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
+
+    <h1>Vicarious Trials</h1>
+    <p class="text-gray-400 text-sm mb-6">Chapter 11 &middot; Vincenti 1990, Downer 2017, Wang 2020, Leveson 2012</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">Everything so far has assumed you can run the trial again tomorrow. Strip that assumption and the same accounting produces a different discipline. An aircraft may crash once, destroy the mechanism that failed, and make repetition unthinkable. Inquiry survives by moving the perturbation from the world to the causal model: each candidate history predicts a different residue, and the wreckage kills the histories whose traces are missing.</p>
+    </div>
+
+    <p>Chapter 10 gave us an evidence machine for cheap trials. Place a bet against a hypothesis, observe another case, update the bankroll, repeat. Software is the clean substrate. A test costs seconds, the input can be replayed, and the output is mechanically visible. The e-value earns its trajectory one observation at a time.</p>
+
+    <p>Aviation breaks every convenience at once. The event is rare. The trial destroys its apparatus. The outcome kills people, so no investigator can reproduce it merely to settle a claim. Important components may burn, deform on impact, or disappear. The evidence arrives after the system has stopped producing it.</p>
+
+    <p>The loss of repetition does not end verification. It changes what receives the perturbation. A direct trial varies the system and reads the outcome. A <strong>vicarious trial</strong> holds the surviving evidence fixed, varies the proposed history, and asks what else each history would have left behind. The world ran the trial once. Investigation recovers its design from the differential traces.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Two crashes and a mechanism that left no mark</h2>
+
+    <p>United Airlines Flight 585 crashed near Colorado Springs in 1991 after an abrupt loss of control. The flight-data record was sparse, the aircraft was destroyed, and no physical examination produced a decisive mechanism. Weather, pilot action, and a rudder malfunction all remained live. The investigation could reconstruct the descent but could not yet discriminate its histories.</p>
+
+    <p>USAir Flight 427 crashed near Pittsburgh three years later with a similar upset. Its recorder supplied a richer trajectory. Simulator runs compared that trajectory against candidate failures, and only a rudder hardover reproduced the recorded motion closely enough to survive. That result moved inquiry toward the main rudder power-control unit, but it did not explain how the unit could reverse a pilot's command.</p>
+
+    <p>The mechanism appeared in 1996 when investigators injected hot hydraulic fluid into a cold control unit. Under the thermal differential, a secondary slide could jam while the primary slide overtraveled. The resulting hydraulic flow could drive the rudder opposite to the commanded direction. The test did not replay either crash. It reproduced a candidate mechanism and generated the feature the accident histories needed: an uncommanded reversal that could occur without leaving an obvious physical mark.</p>
+
+    <p>A surviving crew supplied another trace that wreckage could not. Eastwind Flight 517 experienced a similar upset in 1996 and landed. Its captain reported stiff rudder pedals, control inputs, and the sequence by which the upset ended. The intact aircraft and living witnesses added consequences predicted by rudder reversal but unavailable in the two fatal cases. In 1999 the NTSB attributed Flight 427 to a rudder movement opposite to the pilots' command, most likely produced by the jam-and-overtravel mechanism. In 2001 it revised Flight 585 to the same probable cause. The later evidence changed what the earlier event could support.</p>
+
+    <p>This inquiry was not one experiment repeated three times. Each occurrence exposed a different projection of the mechanism:</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Occurrence</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Trace gained</th>
+            <th class="text-left py-2 text-gray-400">Hypotheses constrained</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Flight 585</td><td class="pr-3 text-gray-400">Upset trajectory and wreckage</td><td class="text-gray-400">Bounded the event; did not settle the mechanism</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Flight 427</td><td class="pr-3 text-gray-400">Richer recorder trajectory</td><td class="text-gray-400">Selected rudder hardover among simulated failures</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Thermal test</td><td class="pr-3 text-gray-400">Reproducible valve reversal</td><td class="text-gray-400">Supplied a mechanism for opposite-command motion</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Flight 517</td><td class="pr-3 text-gray-400">Surviving aircraft and crew report</td><td class="text-gray-400">Connected the mechanism to an in-flight sequence</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The evidence accumulated across unlike trials because each one bore on a common causal claim. Their values cannot simply be multiplied as though they were independent e-values. The simulator was conditioned on the recorder data, the thermal test was chosen because the simulator implicated the rudder, and the later incident was recognized through the hypotheses already in view. The dependence is part of the provenance. What composes is the constraint: each trace removes histories the remaining traces cannot restore.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Reverse causal inference</h2>
+
+    <p>Direct experimentation runs from a candidate cause to its predicted effect. Failure investigation begins with the effect and leads backward. That reversal is Peirce's retroduction in its literal direction, but it needs more discipline than choosing the explanation that sounds best.</p>
+
+    <p>Yafeng Wang reconstructs this discipline from five NTSB investigations. Three operations recur:</p>
+
+    <ul>
+      <li><strong>Feature dependence.</strong> Change a feature of the proposed cause and ask whether the observed outcome should change with it. A causal account must explain the dependency, not merely resemble the event.</li>
+      <li><strong>Additional outcomes.</strong> Derive traces beyond the outcome that first suggested the hypothesis. A fuel-tank explosion and a missile strike may both explain a breakup; they predict different residue, sound, damage, and event order.</li>
+      <li><strong>Process tracing.</strong> Reconstruct the intermediate states that must connect the proposed cause to the observed outcome. Missing intermediates kill the path even when its endpoints fit.</li>
+    </ul>
+
+    <p>All three turn compatibility into exposure. A hypothesis that explains only the known endpoint can absorb almost anything. A hypothesis that commits to a dependency, an additional outcome, or an intermediate state can lose. The added consequence is the kill condition.</p>
+
+    <p>This is deduction doing the work Chapter 1 assigned it. Abduction proposes a history. Deduction unfolds the traces that history requires. Induction checks those requirements against the record, then simulations and component tests reproduce their consequences. The event runs backward only in the investigator's order of discovery. The modes keep their direction.</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto text-sm"><code>observed outcome
+    &darr; abduce
+candidate histories
+    &darr; deduce
+differential traces
+    &darr; check
+killed histories + surviving causal account</code></pre>
+
+    <p>The phrase <em>differential trace</em> matters. Smoke supports fire, but it may support a dozen fires equally. It moves no edge among them. A trace earns weight from the hypotheses it separates. Generic fit is cheap; discrimination is knowledge.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>The economics selects the inquiry regime</h2>
+
+    <p>Chapter 8 ranked experiments by information gain per unit cost. It treated the experiment as a choice within a regime. The aviation case reveals that cost also selects the regime itself.</p>
+
+    <p>Trial cost is not one number. Money and time matter, but neither distinguishes a slow laboratory assay from a fatal crash. The full cost is a vector:</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>C(T) = &lang;money, latency, harm, irreversibility, rarity, observability&rang;</code></pre>
+
+    <p>Those dimensions determine how often reality can answer and how sharply its answer separates hypotheses. Call that capacity <strong>falsification bandwidth</strong>: the rate at which an inquiry can expose competing claims to discriminating verdicts under its trial economics.</p>
+
+    <p>Software usually has high falsification bandwidth. The investigator can perturb one line, run thousands of cases, and inspect every intermediate state. A clinical trial has lower bandwidth because recruitment takes time and treatment can harm. An aircraft loss has lower bandwidth still because the event is rare, destructive, and unavailable by design. Yet a recorder can make one event highly observable, so rarity alone does not decide the bandwidth. Cost limits the number of answers; instrumentation determines their resolution.</p>
+
+    <p>The bandwidth selects the inquiry regime:</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Trial economics</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Inquiry regime</th>
+            <th class="text-left py-2 text-gray-400">Primary verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Cheap, repeatable, observable</td><td class="pr-3 text-gray-400">Sequential experiment</td><td class="text-gray-400">Execution and e-value trajectory</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Expensive but repeatable</td><td class="pr-3 text-gray-400">Designed experiment</td><td class="text-gray-400">Pooled, precommitted comparison</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Rare and uncontrolled</td><td class="pr-3 text-gray-400">Natural experiment</td><td class="text-gray-400">Variation supplied by the world</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Singular or destructive</td><td class="pr-3 text-gray-400">Vicarious trial</td><td class="text-gray-400">Differential traces among histories</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300">Catastrophic and prospective</td><td class="pr-3 text-gray-400">Simulation, certification, assurance</td><td class="text-gray-400">Surrogate behavior plus monitored barriers</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300">Neither trialable nor trace-bearing</td><td class="pr-3 text-gray-400">No empirical inquiry</td><td class="text-gray-400">No earned causal entitlement</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The table is not a ladder from weak to strong. A well-instrumented singular event can discriminate mechanisms that a thousand poorly framed repetitions cannot. Nor does low bandwidth license weaker standards by itself. It demands more informative traces, stronger deductions, and an honest residual category for what the evidence cannot settle.</p>
+
+    <p>The law is narrower than "expensive trials produce retrospective inquiry." Expensive prospective trials still exist. Wind tunnels, fatigue rigs, destructive structural tests, and certification flights spend heavily to avoid spending lives. Walter Vincenti called these substitutions <em>vicarious trial</em>. Analytical, experimental, and simulated methods shortcut direct trial of the finished artifact. Failure investigation extends the term backward. Both forms purchase information without paying the full worldly consequence.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>The hypothesis graph under low bandwidth</h2>
+
+    <p>A cheap-trial hypothesis graph stores a claim, a perturbation, a kill condition, and the observed verdict. Under low bandwidth, the perturbation may be unavailable. The node must instead bind a causal history to the traces that distinguish it from its rivals.</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto text-sm"><code>history: rudder moved opposite command
+requires:
+  - recorded motion consistent with rudder hardover
+  - a mechanism capable of hydraulic reversal
+  - no pilot input sufficient to produce the trajectory
+killed_by:
+  - recorder trajectory incompatible with hardover
+  - intact control unit unable to reverse under bounded conditions
+  - an alternative history predicting the traces more completely</code></pre>
+
+    <p>The graph also needs typed edges. Evidence supports a claim. Events cause or enable other events. Barriers block a causal path. A later finding may undercut the warrant connecting evidence to a claim without rebutting the claim itself. Writing all four as <code>reason</code> would return the causal structure to the reader's head.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Edge</th>
+            <th class="text-left py-2 text-gray-400">Question it answers</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><code>supports(trace, claim)</code></td><td class="text-gray-400">Why believe this feature occurred?</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><code>causes(event, outcome)</code></td><td class="text-gray-400">Which intervention would change the outcome?</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 pl-0 text-gray-300"><code>blocks(barrier, path)</code></td><td class="text-gray-400">Which safeguard should have broken the sequence?</td></tr>
+          <tr><td class="py-2 pr-3 pl-0 text-gray-300"><code>undercuts(trace, edge)</code></td><td class="text-gray-400">Why does this evidence fail to carry the claimed weight?</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>An accident report usually gives the reader all four relations in prose. It supplies the chronology and findings, then states probable cause, contributing factors, and recommendations. The integrated graph remains implicit. An explicit graph changes the burden. Every causal edge must name its differential trace. Every proposed barrier must name the path it would interrupt. Every unresolved rivalry stays open.</p>
+
+    <p>The recommendation begins a second inquiry rather than closing the first. Explaining how a rudder reversal occurred does not verify that a redesign prevents it. The redesign predicts behavior first in rigs and simulators, then in certification, service, and continuing assurance. Its graph faces forward. Accident reconstruction and safety assurance meet at the intervention they share.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>What low bandwidth cannot buy</h2>
+
+    <p>Vicarious trials do not turn residue into certainty. Several histories may entail every surviving trace. Fire may erase the feature that separated them. Investigators may never have recorded the variable that mattered. A simulation may encode the same assumption as the hypothesis it appears to test. Low bandwidth makes underdetermination visible; it does not remove it.</p>
+
+    <p>The proper verdict is therefore graded and scoped. Flight 427's report says <em>most likely</em> because the physical mechanism could occur without leaving an obvious mark. "Probable cause" records an earned causal entitlement, not correspondence recovered from wreckage. The alternative histories lost enough differential trials for action to proceed, while the surviving history remained below formal proof.</p>
+
+    <p>Institutions determine which traces survive. Aviation buys future falsification bandwidth through flight-data recorders and maintenance logs, confidential reporting and independent investigation, preserved wreckage and living witnesses. It pays before anyone knows which claim will need the evidence. A punitive reporting system can destroy evidence by teaching witnesses not to produce it. An organization that records only terminal outcomes removes the intermediate states process tracing requires. Instrumentation is prospective epistemology.</p>
+
+    <p>The economics of inquiry therefore begins before the inquiry. A system spends in advance on observability because catastrophe is too expensive to query afterward. Black boxes are not passive archives. They are prepaid experiments.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Exercises</h2>
+
+    <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
+
+    <p class="mb-3"><strong>11.1</strong> A component is found fractured after a crash. Give two causal histories consistent with the fracture, then name one differential trace that would separate fracture-before-impact from fracture-on-impact. Which reasoning mode generates the histories, which derives the trace, and which checks it?</p>
+
+    <p class="mb-3"><strong>11.2</strong> Classify each trial by its dominant cost dimension and inquiry regime: a unit test, a bridge load test to failure, a randomized drug trial, an eclipse observation, and an aircraft accident investigation. For each, name one change in instrumentation that would raise falsification bandwidth without making the event more frequent.</p>
+
+    <p class="mb-3"><strong>11.3</strong> A simulator reproduces an accident trajectory under hypothesis H. List three reasons this fit may fail to discriminate H from its rivals. Rewrite the simulator result as a falsifiable claim whose scope does not exceed what the run established.</p>
+
+    <p class="mb-3"><strong>11.4</strong> 💻 Represent the Flight 427 reconstruction as a directed graph with four edge types: <code>supports</code>, <code>causes</code>, <code>blocks</code>, and <code>undercuts</code>. Delete the thermal-test node and list which causal edges lose their warrant. Then delete the recorder node. Which deletion damages the graph more, and what definition of "more" did you use?</p>
+
+    <p class="mb-3"><strong>11.5</strong> ★ Choose a high-consequence system you know. Write its trial-cost vector and identify the event nobody may deliberately reproduce. Design three prepaid experiments: one instrument that preserves a trace, one safe surrogate trial, and one reporting rule that keeps human evidence available. State the causal claim each would expose to possible loss.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>Further reading</h2>
+
+    <ul>
+      <li><a href="https://www.press.jhu.edu/books/title/3022/what-engineers-know-and-how-they-know-it">Walter G. Vincenti, <em>What Engineers Know and How They Know It</em></a> &mdash; aeronautical history as an epistemology of engineering knowledge.</li>
+      <li><a href="https://philarchive.org/rec/WANRPE">Yafeng Wang, <em>Reconstructing Past Events</em></a> &mdash; five NTSB investigations and three forms of reverse causal inference.</li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5597678/">John Downer, "The Aviation Paradox"</a> &mdash; why operational experience can warrant claims that prospective assessment alone cannot.</li>
+      <li><a href="https://doi.org/10.7551/mitpress/8179.001.0001">Nancy Leveson, <em>Engineering a Safer World</em></a> &mdash; accidents as failures of constraints in sociotechnical control structures.</li>
+      <li><a href="https://www.ntsb.gov/investigations/Pages/DCA94MA076.aspx">NTSB, USAir Flight 427 investigation</a> and <a href="https://www.ntsb.gov/investigations/AccidentReports/Reports/AAR0101.pdf">revised United Flight 585 report</a> &mdash; the factual substrate used in this chapter.</li>
+    </ul>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <Neighbors>
+      <ul class="neighbors">
+        <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; information gain per unit cost</li>
+        <li><a href="/reading/methodeutics/ch10-e-values/">Ch 10: E-values</a> &mdash; evidence when trials are cheap and sequential</li>
+        <li><a href="/reading/methodeutics/ch11-four-bins/">Ch 12: Four Bins</a> &mdash; classification after the evidence arrives</li>
+      </ul>
+    </Neighbors>
+
+    <PrevNext prev={{ href: "/reading/methodeutics/ch10-e-values/", label: "E-values" }} next={{ href: "/reading/methodeutics/ch11-four-bins/", label: "Four bins" }} />
+  </main>
+</Layout>

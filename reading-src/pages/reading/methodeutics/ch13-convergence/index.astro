@@ -4,18 +4,18 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 13: Convergence — Methodeutics" favicon="🔭">
+<Layout title="Ch 14: Convergence — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Convergence</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 13 &middot; Kelly 1996, Gr&uuml;nwald 2024, Ramdas 2023, Chernoff 1959</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 14 &middot; Kelly 1996, Gr&uuml;nwald 2024, Ramdas 2023, Chernoff 1959</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Five sensor streams, each individually undetectable. Composed e-values classify the forcing pattern at F1&nbsp;=&nbsp;0.996. The math composes. But a human can&rsquo;t run this loop at scale.</p>
     </div>
 
-    <p>Chapters 9&ndash;12 built a pipeline: track evidence as a trajectory (ch&nbsp;9&ndash;10), classify the trajectory&rsquo;s shape into four bins (ch&nbsp;11), and use each classification&rsquo;s failure mode to generate edges in the hypothesis graph (ch&nbsp;12). Each piece works locally: one experiment, one trajectory, one kill condition. Does the graph as a whole converge? When you compose evidence across many experiments, each chosen adaptively based on the last, does the accumulated evidence settle on the truth?</p>
+    <p>Chapters 9&ndash;13 built a pipeline: track cheap evidence as a trajectory (ch&nbsp;9&ndash;10), recover expensive evidence through differential traces (ch&nbsp;11), classify the result into four bins (ch&nbsp;12), and use each classification&rsquo;s failure mode to generate edges in the hypothesis graph (ch&nbsp;13). Each piece works locally: one experiment, one trace, one kill condition. Does the graph as a whole converge? When you compose evidence across many experiments, each chosen adaptively based on the last, does the accumulated evidence settle on the truth?</p>
 
     <p>Two theorems, from two different fields, say yes. Neither cites the other.</p>
 
@@ -425,7 +425,7 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <h2>What this chapter establishes</h2>
 
-    <p>The evidence framework from Part III is complete. A practitioner with chapters 9&ndash;12 can:</p>
+    <p>The evidence framework from Part III is complete. A practitioner with chapters 9&ndash;13 can:</p>
 
     <ol class="list-decimal pl-5 mb-4">
       <li class="mb-2">Track evidence as a trajectory, not a scalar (ch&nbsp;9&ndash;10).</li>
@@ -448,15 +448,15 @@ cum_composed = np.cumprod(e_normal * e_poisson)
 
     <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
 
-    <p class="mb-3"><strong>13.1</strong> Two labs test the same null. Lab A reports e = 8; lab B reports e = 3. What is the combined evidence, what must each lab's e-value have been valid conditional on for the combination to hold, and why does averaging the two numbers waste information that multiplying preserves?</p>
+    <p class="mb-3"><strong>14.1</strong> Two labs test the same null. Lab A reports e = 8; lab B reports e = 3. What is the combined evidence, what must each lab's e-value have been valid conditional on for the combination to hold, and why does averaging the two numbers waste information that multiplying preserves?</p>
 
-    <p class="mb-3"><strong>13.2</strong> For each investigation, name the precondition that fails and describe what happens to its hypothesis graph. (a) A nutrition researcher composes e-values from five dietary questionnaires, all filled out by the same subjects on the same afternoon. (b) A theorist's two candidate models predict identical observations at every experimentally reachable energy. (c) A historian of the Bronze Age collapse has rich evidence streams and sharp rival hypotheses, and no way to intervene on the thirteenth century BC.</p>
+    <p class="mb-3"><strong>14.2</strong> For each investigation, name the precondition that fails and describe what happens to its hypothesis graph. (a) A nutrition researcher composes e-values from five dietary questionnaires, all filled out by the same subjects on the same afternoon. (b) A theorist's two candidate models predict identical observations at every experimentally reachable energy. (c) A historian of the Bronze Age collapse has rich evidence streams and sharp rival hypotheses, and no way to intervene on the thirteenth century BC.</p>
 
-    <p class="mb-3"><strong>13.3</strong> Your houseplant is dying. The simple hypothesis: overwatering. The complex one: a soil fungus whose damage depends on the light schedule. Both fit everything seen so far. Following Kelly's Ockham method, which do you output today? Construct an evidence sequence that would force the Ockham follower to retract and switch. Then count worst-case mind-changes for a rival method that outputs the fungus hypothesis first, and say which count Kelly's theorem guarantees can't be beaten.</p>
+    <p class="mb-3"><strong>14.3</strong> Your houseplant is dying. The simple hypothesis: overwatering. The complex one: a soil fungus whose damage depends on the light schedule. Both fit everything seen so far. Following Kelly's Ockham method, which do you output today? Construct an evidence sequence that would force the Ockham follower to retract and switch. Then count worst-case mind-changes for a rival method that outputs the fungus hypothesis first, and say which count Kelly's theorem guarantees can't be beaten.</p>
 
-    <p class="mb-3"><strong>13.4</strong> 💻 Extend the two-stream composition code with a third stream that is a copy of the normal stream plus small noise, violating independence. How does the composed e-value compare to the honest two-stream product? Then replace the copy with a genuinely independent Bernoulli stream carrying the same forcing. Compare again, and state in one sentence what the inflation you saw does to the error guarantee.</p>
+    <p class="mb-3"><strong>14.4</strong> 💻 Extend the two-stream composition code with a third stream that is a copy of the normal stream plus small noise, violating independence. How does the composed e-value compare to the honest two-stream product? Then replace the copy with a genuinely independent Bernoulli stream carrying the same forcing. Compare again, and state in one sentence what the inflation you saw does to the error guarantee.</p>
 
-    <p class="mb-3"><strong>13.5</strong> ★ Pick a question from your own field or life that cannot currently close: its graph has a permanent frontier edge. Write the edge down, name which of the three preconditions fails, and specify the new observable or natural experiment that would repair it. Astronomy repaired one such edge when gravitational waves became observable; find the analogous repair for yours.</p>
+    <p class="mb-3"><strong>14.5</strong> ★ Pick a question from your own field or life that cannot currently close: its graph has a permanent frontier edge. Write the edge down, name which of the three preconditions fails, and specify the new observable or natural experiment that would repair it. Astronomy repaired one such edge when gravitational waves became observable; find the analogous repair for yours.</p>
 
     <hr class="border-zinc-700 my-8"/>
 

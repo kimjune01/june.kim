@@ -281,7 +281,7 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
       <li class="mb-2"><em>Generate</em> hypotheses via abduction (Chapters 4&ndash;6).</li>
       <li class="mb-2"><em>Select</em> the next experiment via information gain per unit cost (Chapter 8).</li>
       <li class="mb-2"><em>Run</em> the experiment and track the e-value trajectory (Chapters 9&ndash;10).</li>
-      <li class="mb-2"><em>Read</em> the trajectory's shape to classify the system's dynamics (Chapter 11).</li>
+      <li class="mb-2"><em>Read</em> the trajectory's shape to classify the system's dynamics (Chapter 12).</li>
     </ol>
 
     <p>Step 3 is new. Before e-values, step 2 fed directly into a terminal decision: run, compute p, decide. Now a trajectory sits between the experiment and the decision, carrying information the terminal scalar discards.</p>
@@ -294,7 +294,7 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
 
     <p>Structural oscillation (cyclic dynamics in the system) and statistical oscillation (weak effect plus finite-sample noise) look the same in the raw trajectory. The trajectory alone cannot distinguish them.</p>
 
-    <p>Classifying whether evidence is converging, diverging, oscillating, or chaotic requires tools from dynamical systems theory: convergence rates, <a href="https://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponents</a>, stability analysis. These tools apply directly to evidence trajectories. <a href="/reading/methodeutics/ch11-four-bins/">Chapter 11</a> builds the classification scheme.</p>
+    <p>Classifying whether evidence is converging, diverging, oscillating, or chaotic requires tools from dynamical systems theory: convergence rates, <a href="https://en.wikipedia.org/wiki/Lyapunov_exponent">Lyapunov exponents</a>, stability analysis. These tools apply directly to evidence trajectories. <a href="/reading/methodeutics/ch11-four-bins/">Chapter 12</a> builds the classification scheme.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -347,7 +347,8 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
       <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 9: Evidence Has a Trajectory</a> &mdash; why snapshots lie, and the casino premise</li>
-      <li><a href="/reading/methodeutics/ch11-four-bins/">Ch 11: Four Bins</a> &mdash; how to read the trajectory's shape</li>
+      <li><a href="/reading/methodeutics/ch11-vicarious-trials/">Ch 11: Vicarious Trials</a> &mdash; evidence when repetition is unavailable</li>
+      <li><a href="/reading/methodeutics/ch11-four-bins/">Ch 12: Four Bins</a> &mdash; how to read the trajectory's shape</li>
       <li><a href="/reading/scientific-method/shafer-2021/">Shafer 2021</a> &mdash; testing by betting</li>
       <li><a href="/reading/scientific-method/ramdas-2023/">Ramdas 2023</a> &mdash; e-values and anytime validity</li>
       <li><a href="https://github.com/kimjune01/methodeutics">methodeutics (PyPI)</a> &mdash; this chapter as a package</li>
@@ -363,7 +364,7 @@ P-value at t=100: 0.0942  (snapshot at end)</code></pre>
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} next={{ href: "/reading/methodeutics/ch11-four-bins/", label: "Four bins" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} next={{ href: "/reading/methodeutics/ch11-vicarious-trials/", label: "Vicarious trials" }} />
 
   </main>
 </Layout>
