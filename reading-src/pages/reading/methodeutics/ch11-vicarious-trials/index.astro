@@ -182,6 +182,20 @@ killed_by:
 
     <p>An accident report usually gives the reader all four relations in prose. It supplies the chronology and findings, then states probable cause, contributing factors, and recommendations. The integrated graph remains implicit. An explicit graph changes the burden. Every causal edge must name its differential trace. Every proposed barrier must name the path it would interrupt. Every unresolved rivalry stays open.</p>
 
+    <h2>Backport the residual</h2>
+
+    <p>A vicarious trial runs the causal graph forward. Let <em>G</em><sub>t</sub> generate predicted evidence <em>Ê</em><sub>t</sub>, then compare that prediction with the preserved evidence <em>E</em>. Wherever measurement permits, compute the residual:</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>G<sub>t</sub> &rarr; Ê<sub>t</sub>
+R<sub>t</sub> = E - Ê<sub>t</sub>
+backport(G<sub>t</sub>, R<sub>t</sub>) &rarr; G<sub>t+1</sub></code></pre>
+
+    <p>To <strong>backport</strong> is to propagate the residual of a vicarious trial backward into the causal graph. The residual may revise a node, edge, timing relation, parameter, or omitted variable. Evidence does more than change confidence in a fixed graph. It changes the representation that generated the failed prediction.</p>
+
+    <p>Not every residual is numeric. An absent fracture, an impossible event order, or an unrecorded intermediate state can still identify the part of the graph that failed. Numeric residuals add magnitude and shape; qualitative residuals add constraints. Both must remain attached to the observation and measurement process that produced them.</p>
+
+    <p>Backporting stops at an equivalence class when several graphs predict traces within the available resolution. Choosing one graph beyond that point would move the residual back into the reader's intuition. The honest output is the set of surviving histories and the observation that would separate them.</p>
+
     <p>The recommendation begins a second inquiry rather than closing the first. Explaining how a rudder reversal occurred does not verify that a redesign prevents it. The redesign predicts behavior first in rigs and simulators, then in certification, service, and continuing assurance. Its graph faces forward. Accident reconstruction and safety assurance meet at the intervention they share.</p>
 
     <hr class="border-zinc-700 my-8"/>
@@ -208,7 +222,7 @@ killed_by:
 
     <p class="mb-3"><strong>12.3</strong> A simulator reproduces an accident trajectory under hypothesis H. List three reasons this fit may fail to discriminate H from its rivals. Rewrite the simulator result as a falsifiable claim whose scope does not exceed what the run established.</p>
 
-    <p class="mb-3"><strong>12.4</strong> 💻 Represent the Flight 427 reconstruction as a directed graph with four edge types: <code>supports</code>, <code>causes</code>, <code>blocks</code>, and <code>undercuts</code>. Delete the thermal-test node and list which causal edges lose their warrant. Then delete the recorder node. Which deletion damages the graph more, and what definition of "more" did you use?</p>
+    <p class="mb-3"><strong>12.4</strong> 💻 Represent the Flight 427 reconstruction as a directed graph with four edge types: <code>supports</code>, <code>causes</code>, <code>blocks</code>, and <code>undercuts</code>. Give one candidate history a predicted flight-data trajectory, compute its residual against an observed trajectory, and backport the mismatch into the graph. Which node, edge, parameter, or missing variable changes? Then delete the thermal-test node and list which causal edges lose their warrant.</p>
 
     <p class="mb-3"><strong>12.5</strong> ★ Choose a high-consequence system you know. Write its trial-cost vector and identify the event nobody may deliberately reproduce. Design three prepaid experiments: one instrument that preserves a trace, one safe surrogate trial, and one reporting rule that keeps human evidence available. State the causal claim each would expose to possible loss.</p>
 
