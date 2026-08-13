@@ -5,15 +5,15 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 12: Four Bins — Methodeutics" favicon="🔭">
+<Layout title="Ch 13: Four Bins — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Four Bins</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 12 &middot; Milnor 1985, Strogatz 2014, Ramdas 2023</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 13 &middot; Milnor 1985, Strogatz 2014, Ramdas 2023</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">You have the evidence. A cheap trial produced a trajectory; a vicarious trial produced differential traces. What happens next? Chapter 10 made accumulation visible, and Chapter 11 changed the inquiry regime when repetition disappeared. This chapter classifies what came back.</p>
+      <p class="text-lg" style="max-width:none">You have the evidence. A cheap trial produced a trajectory; a vicarious trial produced differential traces. What happens next? Chapter 11 made accumulation visible, and Chapter 12 changed the inquiry regime when repetition disappeared. This chapter classifies what came back.</p>
     </div>
 
     <p>An e-value stream is a time series. "Goes up" is not a diagnosis. "Goes up then down then up" is not a diagnosis either. You need a finite set of trajectory shapes, each mapping to a different kind of system and a different next move. Dynamical systems theory provides exactly four.</p>
@@ -141,7 +141,7 @@ import Repl from '../../../../components/Repl';
         # Indeterminate. Collect more data at the same node.
         return current_node</code></pre>
 
-    <p>Each bin maps to a graph operation: move to a neighbor, follow a dependency, test an interface, or decompose further. The bins prescribe the next move as well as classifying the last response. Chapter 13 shows how each prescription becomes an edge in the hypothesis graph.</p>
+    <p>Each bin maps to a graph operation: move to a neighbor, follow a dependency, test an interface, or decompose further. The bins prescribe the next move as well as classifying the last response. Chapter 14 shows how each prescription becomes an edge in the hypothesis graph.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -315,7 +315,7 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <h2>E-value trajectories have the same four shapes</h2>
 
-    <p>The e-value stream from Chapter 10 is itself a time series. Apply the classifier to it.</p>
+    <p>The e-value stream from Chapter 11 is itself a time series. Apply the classifier to it.</p>
 
     <p>An e-value that <em>converges</em> to a high value: evidence accumulated and stabilized. Redirect budget elsewhere.</p>
 
@@ -339,15 +339,15 @@ for name, series in [("convergent", conv), ("divergent", div),
 
     <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
 
-    <p class="mb-3"><strong>12.1</strong> Why can a linear system never land in the chaotic bin? Answer in two sentences using the eigenvalue table, then say which single number replaces the eigenvalues when the system is nonlinear.</p>
+    <p class="mb-3"><strong>13.1</strong> Why can a linear system never land in the chaotic bin? Answer in two sentences using the eigenvalue table, then say which single number replaces the eigenvalues when the system is nonlinear.</p>
 
-    <p class="mb-3"><strong>12.2</strong> Bin each trajectory and, using the prescription table, name the next experiment. (a) A group chat erupts after someone posts a hot take; message rate spikes to 40 per minute and is back to its usual 2 per minute by evening. (b) A student's sleep debt grows every week of the term, and each week's deficit is larger than the last. (c) Two roommates share a thermostat; the apartment cycles between 18&deg; and 24&deg; with a reliable daily period. (d) Your phone's battery level over a festival weekend stays between 5% and 80% with no discernible pattern and no repetition.</p>
+    <p class="mb-3"><strong>13.2</strong> Bin each trajectory and, using the prescription table, name the next experiment. (a) A group chat erupts after someone posts a hot take; message rate spikes to 40 per minute and is back to its usual 2 per minute by evening. (b) A student's sleep debt grows every week of the term, and each week's deficit is larger than the last. (c) Two roommates share a thermostat; the apartment cycles between 18&deg; and 24&deg; with a reliable daily period. (d) Your phone's battery level over a festival weekend stays between 5% and 80% with no discernible pattern and no repetition.</p>
 
-    <p class="mb-3"><strong>12.3</strong> Pick a system you touch daily (your inbox, a sourdough starter, a shared codebase, your commute) and design one concrete perturbation for it. Predict its bin. Then, for each of the other three bins, state what fact about the system's architecture would have to be true for the trajectory to land there instead. You now hold four rival hypotheses about one system; note that the perturbation was designed before any of them was favored.</p>
+    <p class="mb-3"><strong>13.3</strong> Pick a system you touch daily (your inbox, a sourdough starter, a shared codebase, your commute) and design one concrete perturbation for it. Predict its bin. Then, for each of the other three bins, state what fact about the system's architecture would have to be true for the trajectory to land there instead. You now hold four rival hypotheses about one system; note that the perturbation was designed before any of them was favored.</p>
 
-    <p class="mb-3"><strong>12.4</strong> 💻 Generate a damped oscillation, <code>5 * np.exp(-0.3 * t) * np.sin(2 * np.pi * 0.5 * t)</code> plus a little noise, and feed it to <code>classify_trajectory</code>. The eigenvalue table calls damped oscillation convergent. If the classifier disagrees, trace which of the three tests fired first, adjust exactly one threshold until the answer matches the table, then rerun the chapter's four demo series. What did your fix break, and what does that trade-off teach about the 40% threshold?</p>
+    <p class="mb-3"><strong>13.4</strong> 💻 Generate a damped oscillation, <code>5 * np.exp(-0.3 * t) * np.sin(2 * np.pi * 0.5 * t)</code> plus a little noise, and feed it to <code>classify_trajectory</code>. The eigenvalue table calls damped oscillation convergent. If the classifier disagrees, trace which of the three tests fired first, adjust exactly one threshold until the answer matches the table, then rerun the chapter's four demo series. What did your fix break, and what does that trade-off teach about the 40% threshold?</p>
 
-    <p class="mb-3"><strong>12.5</strong> ★ Export any personal time series you can get your hands on: screen time, spending, running pace, caffeine intake. Classify the full series, then classify it again on rolling windows a quarter of its length. If the bin flips between windows, decide whether you are watching a transient regime or an artifact of window size, and design the observation that would tell those apart.</p>
+    <p class="mb-3"><strong>13.5</strong> ★ Export any personal time series you can get your hands on: screen time, spending, running pace, caffeine intake. Classify the full series, then classify it again on rolling windows a quarter of its length. If the bin flips between windows, decide whether you are watching a transient regime or an artifact of window size, and design the observation that would tell those apart.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -374,7 +374,7 @@ for name, series in [("convergent", conv), ("divergent", div),
           </tr>
           <tr class="border-b border-zinc-800">
             <td class="py-2 pr-3 pl-0 text-gray-300">Ramdas et al. 2023</td>
-            <td class="text-gray-400"><a href="https://arxiv.org/abs/2103.06476">"Game-Theoretic Statistics and Safe Anytime-Valid Inference."</a> <em>Statistical Science</em>. E-values and anytime-valid inference. The evidence trajectory framework from Chapters 9&ndash;10.</td>
+            <td class="text-gray-400"><a href="https://arxiv.org/abs/2103.06476">"Game-Theoretic Statistics and Safe Anytime-Valid Inference."</a> <em>Statistical Science</em>. E-values and anytime-valid inference. The evidence trajectory framework from Chapters 10&ndash;11.</td>
           </tr>
           <tr>
             <td class="py-2 pr-3 pl-0 text-gray-300">Mann 1945 / Kendall 1975</td>
@@ -387,10 +387,10 @@ for name, series in [("convergent", conv), ("divergent", div),
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">Methodeutics</a></li>
-      <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 9: Evidence has a trajectory</a> &mdash; the case for watching evidence over time</li>
-      <li><a href="/reading/methodeutics/ch10-e-values/">Ch 10: E-values</a> &mdash; the bankroll made formal</li>
-      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiment to run next</li>
-      <li><a href="/reading/methodeutics/ch12-kill-conditions/">Ch 13: Kill conditions generate edges</a> &mdash; from shape classification to next experiment</li>
+      <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 10: Evidence has a trajectory</a> &mdash; the case for watching evidence over time</li>
+      <li><a href="/reading/methodeutics/ch10-e-values/">Ch 11: E-values</a> &mdash; the bankroll made formal</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 9: Economy of Research</a> &mdash; which experiment to run next</li>
+      <li><a href="/reading/methodeutics/ch12-kill-conditions/">Ch 14: Kill conditions generate edges</a> &mdash; from shape classification to next experiment</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>

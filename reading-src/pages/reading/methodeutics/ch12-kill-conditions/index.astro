@@ -5,20 +5,20 @@ import PrevNext from "../../../../components/PrevNext.astro";
 import Repl from '../../../../components/Repl';
 ---
 
-<Layout title="Ch 13: The Hypothesis Graph — Methodeutics" favicon="🔭">
+<Layout title="Ch 14: The Hypothesis Graph — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>The Hypothesis Graph</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 13 &middot; Kill conditions generate edges</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 14 &middot; Kill conditions generate edges</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">A monotone trend test fires but curvature is indeterminate. Is the system decelerating or drifting? You can&rsquo;t tell from the current data. But you know exactly what to run next: a longer experiment that resolves curvature. The failure mode named the next hypothesis.</p>
     </div>
 
-    <p>Chapter 12 classified trajectories into four bins: convergent, divergent, oscillatory, aperiodic. Given a trajectory, you can assign a label. But a label is a noun, not a verb. It tells you what the system did and leaves the next move unnamed.</p>
+    <p>Chapter 13 classified trajectories into four bins: convergent, divergent, oscillatory, aperiodic. Given a trajectory, you can assign a label. But a label is a noun, not a verb. It tells you what the system did and leaves the next move unnamed.</p>
 
-    <p>After Chapter 12, you look at a trajectory and say "oscillatory." After this chapter, you say "oscillatory: test the interface between the two subsystems that are fighting." The label becomes an action. The mechanism is the kill condition.</p>
+    <p>After Chapter 13, you look at a trajectory and say "oscillatory." After this chapter, you say "oscillatory: test the interface between the two subsystems that are fighting." The label becomes an action. The mechanism is the kill condition.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -32,7 +32,7 @@ import Repl from '../../../../components/Repl';
 
     <h2>Kill-condition decision tree</h2>
 
-    <p>The classifier from Chapter 12, as a decision tree. Each branch is annotated by its failure mode.</p>
+    <p>The classifier from Chapter 13, as a decision tree. Each branch is annotated by its failure mode.</p>
 
     <ol class="list-decimal pl-5 mb-4">
       <li class="mb-3"><em>Test for monotone trend.</em> Is the trajectory consistently increasing or decreasing? If no trend, skip to step 3 (periodicity).</li>
@@ -173,7 +173,7 @@ import Repl from '../../../../components/Repl';
 
     <h3>De Kleer &amp; Williams: the General Diagnostic Engine (1987)</h3>
 
-    <p>The General Diagnostic Engine (Chapter 8) computes which measurement maximally discriminates among remaining diagnoses. Kill conditions produce the edges; GDE ranks them by information gain per cost. Together: observe &rarr; classify &rarr; generate edges &rarr; rank edges (GDE) &rarr; run the best one &rarr; observe again.</p>
+    <p>The General Diagnostic Engine (Chapter 9) computes which measurement maximally discriminates among remaining diagnoses. Kill conditions produce the edges; GDE ranks them by information gain per cost. Together: observe &rarr; classify &rarr; generate edges &rarr; rank edges (GDE) &rarr; run the best one &rarr; observe again.</p>
 
     <h3>Schoenfeld: proof manual (1985)</h3>
 
@@ -478,7 +478,7 @@ graph.summary()`} />
 
     <p>Convergence means every frontier edge points to a node already tested and stably classified. With finite structure and stable classifications, the graph should close. But "should" is not a proof. Feedback can create cycles: convergent at node A points to node B, which oscillates, which points back to A with new data that changes A's classification. Classifications are data-dependent.</p>
 
-    <p>The pieces for a convergence proof exist independently: Chernoff (1959) proved adaptive experiment selection converges; Gr&uuml;nwald (2024) proved e-values compose across adaptive experiments. Connecting them to the hypothesis graph is open. That is Chapter 14.</p>
+    <p>The pieces for a convergence proof exist independently: Chernoff (1959) proved adaptive experiment selection converges; Gr&uuml;nwald (2024) proved e-values compose across adaptive experiments. Connecting them to the hypothesis graph is open. That is Chapter 15.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -486,22 +486,22 @@ graph.summary()`} />
 
     <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
 
-    <p class="mb-3"><strong>13.1</strong> In two sentences: what does a fired test give you, what does a misfired test give you, and why does this chapter treat the misfire as the more valuable of the two?</p>
+    <p class="mb-3"><strong>14.1</strong> In two sentences: what does a fired test give you, what does a misfired test give you, and why does this chapter treat the misfire as the more valuable of the two?</p>
 
-    <p class="mb-3"><strong>13.2</strong> Your sourdough starter won't rise. You double its feeding (the perturbation) and watch bubble activity for three days: activity climbs monotonically, but the watch is too short to tell whether the climb is decelerating toward a plateau or drifting without limit. Write this as a row of the misfire table: what did the curvature test need, and what edge does it generate? You follow the edge, and the longer watch fires convergent. State the structural claim that label makes about the starter, and where the next edge points.</p>
+    <p class="mb-3"><strong>14.2</strong> Your sourdough starter won't rise. You double its feeding (the perturbation) and watch bubble activity for three days: activity climbs monotonically, but the watch is too short to tell whether the climb is decelerating toward a plateau or drifting without limit. Write this as a row of the misfire table: what did the curvature test need, and what edge does it generate? You follow the edge, and the longer watch fires convergent. State the structural claim that label makes about the starter, and where the next edge points.</p>
 
-    <p class="mb-3"><strong>13.3</strong> A bicycle light is dead. Build the first three nodes of its hypothesis graph on paper: battery, bulb, wiring. For each node, give one perturbation, the classification you expect if that component is the fault, and the edge it would generate. Then invent one plausible misfire (a perturbation whose result is ambiguous), state what the test lacked, and add its edge to the graph. Which node does your graph test first, and is that choice Chapter 8's or this chapter's?</p>
+    <p class="mb-3"><strong>14.3</strong> A bicycle light is dead. Build the first three nodes of its hypothesis graph on paper: battery, bulb, wiring. For each node, give one perturbation, the classification you expect if that component is the fault, and the edge it would generate. Then invent one plausible misfire (a perturbation whose result is ambiguous), state what the test lacked, and add its edge to the graph. Which node does your graph test first, and is that choice Chapter 9's or this chapter's?</p>
 
-    <p class="mb-3"><strong>13.4</strong> 💻 The graph code opens exactly one edge per classification. Modify <code>classify_node</code> so an oscillatory result opens two edges, one per suspected interface partner. Rerun the three-round loop with the oscillatory trajectory moved to round two. How many frontier nodes do you end with? Write one sentence on what must be true of closures versus openings for a graph like this to ever converge; you are one sentence away from Chapter 14.</p>
+    <p class="mb-3"><strong>14.4</strong> 💻 The graph code opens exactly one edge per classification. Modify <code>classify_node</code> so an oscillatory result opens two edges, one per suspected interface partner. Rerun the three-round loop with the oscillatory trajectory moved to round two. How many frontier nodes do you end with? Write one sentence on what must be true of closures versus openings for a graph like this to ever converge; you are one sentence away from Chapter 15.</p>
 
-    <p class="mb-3"><strong>13.5</strong> ★ Pick a belief you hold about how something in your life works: what makes you productive, why a friendship cooled, what your manager values. Write its kill condition: a specific observable that, if seen, kills the belief. If after honest effort no such observable exists, apply Peirce's standard from this chapter and write down the mark the belief now carries.</p>
+    <p class="mb-3"><strong>14.5</strong> ★ Pick a belief you hold about how something in your life works: what makes you productive, why a friendship cooled, what your manager values. Write its kill condition: a specific observable that, if seen, kills the belief. If after honest effort no such observable exists, apply Peirce's standard from this chapter and write down the mark the belief now carries.</p>
 
     <Neighbors>
     <ul class="neighbors">
       <li><a href="/reading/methodeutics/">🔭 Methodeutics</a></li>
-      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 8: Economy of Research</a> &mdash; which experiments to run first</li>
+      <li><a href="/reading/methodeutics/ch08-economy-of-research/">Ch 9: Economy of Research</a> &mdash; which experiments to run first</li>
       <li><a href="/the-hypothesis-graph">The Hypothesis Graph</a> &mdash; the blog post with the full argument</li>
-      <li><a href="/reading/methodeutics/ch10-e-values/">Ch 10: E-values</a> &mdash; e-values and temporal structure</li>
+      <li><a href="/reading/methodeutics/ch10-e-values/">Ch 11: E-values</a> &mdash; e-values and temporal structure</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>

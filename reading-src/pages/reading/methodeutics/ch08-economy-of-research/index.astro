@@ -4,12 +4,12 @@ import Neighbors from "../../../../components/Neighbors.astro";
 import PrevNext from "../../../../components/PrevNext.astro";
 ---
 
-<Layout title="Ch 8: Economy of Research — Methodeutics" favicon="🔭">
+<Layout title="Ch 9: Economy of Research — Methodeutics" favicon="🔭">
   <main>
     <a href="/reading/methodeutics/" class="text-sm mb-4 inline-block">&larr; back to methodeutics</a>
 
     <h1>Economy of Research</h1>
-    <p class="text-gray-400 text-sm mb-6">Chapter 8 · Peirce 1879, 1903, Chamberlin 1890, Platt 1964, de Kleer 1987, Hintikka 1999</p>
+    <p class="text-gray-400 text-sm mb-6">Chapter 9 · Peirce 1879, 1903, Chamberlin 1890, Platt 1964, de Kleer 1987, Hintikka 1999</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Ten hypotheses, budget for three experiments. Which three? Chapters 4&ndash;6 formalized the abductive primitive (diff, bi-abduction, tri-abduction), and chapter 7 framed what to observe. The primitive generates hypotheses; the frame fixes what to look at. This chapter spends the budget: of the experiments the frame allows, which to run.</p>
@@ -36,7 +36,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Wald (1947) asked: given a stream of data, when should you stop collecting? Peirce asked the prior question: which stream should you open? Wald's work became a field. Peirce's note was ignored until historians rediscovered it in the 1960s.</p>
 
-    <p>Two limits kept the note unusable in its own century. Its utility term has no measure: the mathematics assumes you can put a number on the value of knowing something more exactly, and nobody in 1879 could produce one. And it optimizes against utility and cost curves it treats as known before the work begins, when in a real investigation you learn the cost of a result by paying for it, tracing the curve rather than receiving it. Neither limit is fatal, because the note was never delivering a number. It was isolating a form: spend so that marginal value per unit cost is equal across the active lines, and abandon a line when its marginal drops below the common frontier. Shannon's entropy, reaching this problem through Lindley and de Kleer's diagnostic engine below, later supplied the missing information term. The second limit dissolves in Chapter 9, where the sequential reading of evidence lets you quit the instant the running return crosses the frontier, without ever having had to know the frontier in advance.</p>
+    <p>Two limits kept the note unusable in its own century. Its utility term has no measure: the mathematics assumes you can put a number on the value of knowing something more exactly, and nobody in 1879 could produce one. And it optimizes against utility and cost curves it treats as known before the work begins, when in a real investigation you learn the cost of a result by paying for it, tracing the curve rather than receiving it. Neither limit is fatal, because the note was never delivering a number. It was isolating a form: spend so that marginal value per unit cost is equal across the active lines, and abandon a line when its marginal drops below the common frontier. Shannon's entropy, reaching this problem through Lindley and de Kleer's diagnostic engine below, later supplied the missing information term. The second limit dissolves in Chapter 10, where the sequential reading of evidence lets you quit the instant the running return crosses the frontier, without ever having had to know the frontier in advance.</p>
 
     <h2>Peirce again: the leading consideration (1903)</h2>
 
@@ -283,7 +283,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
 
     <p>The third strategy is the best single-step heuristic. GDE uses it. It is still myopic. It optimizes one step ahead without considering the trajectory. Hintikka's game tree optimizes the full sequence, but computing the optimal policy is exponential in the number of experiments. Under independence and uniform costs, information gain is submodular (each added experiment gains less than the one before), and greedy selection stays within a constant factor of optimal. Correlated outcomes and variable costs weaken this guarantee, but greedy remains hard to beat in practice.</p>
 
-    <p>Every example so far assumes the candidate trial is available. Cost changes the order, but not the form, of inquiry. That assumption will hold through the e-value chapters because software and sequential data let us ask again. Chapter 11 removes it. When the decisive trial is destructive, singular, or forbidden, the same economy selects a different inquiry regime.</p>
+    <p>Every example so far assumes the candidate trial is available. Cost changes the order, but not the form, of inquiry. That assumption will hold through the e-value chapters because software and sequential data let us ask again. Chapter 12 removes it. When the decisive trial is destructive, singular, or forbidden, the same economy selects a different inquiry regime.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -293,7 +293,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
 
     <p>A sequence of experiments might produce: evidence for H1, then against H1, then for H1 again. The posterior oscillates. Are you converging or chasing noise? Economy of research cannot answer this. It selects the next experiment but cannot read the trajectory of evidence across experiments.</p>
 
-    <p>That gap motivates Chapter 9. Evidence has a trajectory, and you need tools to read its shape.</p>
+    <p>That gap motivates Chapter 10. Evidence has a trajectory, and you need tools to read its shape.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -301,15 +301,15 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
 
     <p class="text-gray-400 text-sm mb-4">💻 marks exercises meant for a keyboard. ★ marks open-ended problems with no single right answer.</p>
 
-    <p class="mb-3"><strong>8.1</strong> Peirce says "abduction commits us to nothing. It merely causes a hypothesis to be set down upon our docket of cases to be tried." In two sentences: why does this make economy the leading consideration in hypothesis selection, rather than one consideration among several?</p>
+    <p class="mb-3"><strong>9.1</strong> Peirce says "abduction commits us to nothing. It merely causes a hypothesis to be set down upon our docket of cases to be tried." In two sentences: why does this make economy the leading consideration in hypothesis selection, rather than one consideration among several?</p>
 
-    <p class="mb-3"><strong>8.2</strong> Two lines of inquiry with diminishing returns. Successive dollars spent on X yield 10, 8, 6, 4, 2 units of information; successive dollars on Y yield 9, 7, 5, 3, 1. (a) Allocate a $6 budget dollar by dollar to maximize total information, and verify the final allocation equalizes marginal return across the two lines. (b) A third line Z appears, yielding a constant 5 units per dollar with no diminishing returns. Explain why Y never receives a fourth dollar at any budget, in the chapter's terms: Y's marginal has dropped below the common frontier.</p>
+    <p class="mb-3"><strong>9.2</strong> Two lines of inquiry with diminishing returns. Successive dollars spent on X yield 10, 8, 6, 4, 2 units of information; successive dollars on Y yield 9, 7, 5, 3, 1. (a) Allocate a $6 budget dollar by dollar to maximize total information, and verify the final allocation equalizes marginal return across the two lines. (b) A third line Z appears, yielding a constant 5 units per dollar with no diminishing returns. Explain why Y never receives a fourth dollar at any budget, in the chapter's terms: Y's marginal has dropped below the common frontier.</p>
 
-    <p class="mb-3"><strong>8.3</strong> Your sourdough didn't rise. Three hypotheses: dead starter (you rate it likely; the float test takes a day), oven too cool during proofing (unlikely; checking with a thermometer takes 5 minutes), bad flour (moderate; a side-by-side bake takes an hour). Order the tests by Peirce's selection rule and defend the order against the objection that the starter is the most probable culprit. Which of the three failure modes in "Three orderings, three failure modes" does likeliest-first commit here?</p>
+    <p class="mb-3"><strong>9.3</strong> Your sourdough didn't rise. Three hypotheses: dead starter (you rate it likely; the float test takes a day), oven too cool during proofing (unlikely; checking with a thermometer takes 5 minutes), bad flour (moderate; a side-by-side bake takes an hour). Order the tests by Peirce's selection rule and defend the order against the objection that the starter is the most probable culprit. Which of the three failure modes in "Three orderings, three failure modes" does likeliest-first commit here?</p>
 
-    <p class="mb-3"><strong>8.4</strong> 💻 Two extensions to the chapter's code. (a) Design an experiment D with cost and likelihoods that beats A on information gain per unit cost, and explain what makes it cheapest-decisive. (b) Implement the adaptive step: suppose A returns its positive outcome, update the priors by Bayes' rule, and re-rank B, C, D. Does C jump the queue as the chapter predicts?</p>
+    <p class="mb-3"><strong>9.4</strong> 💻 Two extensions to the chapter's code. (a) Design an experiment D with cost and likelihoods that beats A on information gain per unit cost, and explain what makes it cheapest-decisive. (b) Implement the adaptive step: suppose A returns its positive outcome, update the priors by Bayes' rule, and re-rank B, C, D. Does C jump the queue as the chapter predicts?</p>
 
-    <p class="mb-3"><strong>8.5</strong> ★ Write out the open questions in your current project as a docket. For each, estimate its testing cost and a rough information value, then compute the ratio. Find the expensive favorite you were about to run first, and the cheap decisive test Peirce would run instead. Run the cheap one this week and record whether the ranking of everything else changed.</p>
+    <p class="mb-3"><strong>9.5</strong> ★ Write out the open questions in your current project as a docket. For each, estimate its testing cost and a rough information value, then compute the ratio. Find the expensive favorite you were about to run first, and the cheap decisive test Peirce would run instead. Run the cheap one this week and record whether the ranking of everything else changed.</p>
 
     <Neighbors>
     <ul class="neighbors">
@@ -317,7 +317,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
       <li><a href="/reading/scientific-method/chamberlin-1890/">🔬 Chamberlin 1890</a> &mdash; multiple working hypotheses: the cognitive prerequisite</li>
       <li><a href="/reading/scientific-method/platt-1964/">🔬 Platt 1964</a> &mdash; strong inference: the elimination loop</li>
       <li><a href="/reading/scientific-method/peirce-1878/">🔬 Peirce 1878</a> &mdash; abduction and pragmatism</li>
-      <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 9: Evidence has a trajectory</a> &mdash; what happens after you select the experiment</li>
+      <li><a href="/reading/methodeutics/ch09-evidence-trajectory/">Ch 10: Evidence has a trajectory</a> &mdash; what happens after you select the experiment</li>
     </ul>
 
     <p class="text-sm text-gray-500 mb-2 mt-4">External</p>
@@ -330,7 +330,7 @@ B: full spectrum analysis              0.706    5.0      0.141</code></pre>
     </ul>
     </Neighbors>
 
-    <PrevNext prev={{ href: "/reading/methodeutics/ch07-origin-of-inquiry/", label: "Origin of Inquiry" }} next={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} />
+    <PrevNext prev={{ href: "/reading/methodeutics/ch08-missing-operation/", label: "Eureka" }} next={{ href: "/reading/methodeutics/ch09-evidence-trajectory/", label: "Evidence trajectory" }} />
 
   </main>
 </Layout>
