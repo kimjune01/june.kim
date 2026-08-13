@@ -19,7 +19,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>This book reached the gap by subtraction. Deduction unfolds consequences. Induction judges them. The diff locates surprise. Framing selects available variables. Economy ranks candidates. Search enumerates a supplied space, and analogy transports structure already represented elsewhere. Remove each implemented operation from the loop and eureka remains.</p>
 
-    <p><em>Discovery</em> is too broad a name for the residue. One may discover an island on a map or a hypothesis in an enumerated space. <em>Eureka</em> is discovery in a space that the current representation cannot enumerate. The space has no branching factor because the inquiry has no successor function over its missing concepts. Eureka supplies the representation from which candidates and branches first become available. Peirce called abduction "the only logical operation which introduces any new idea" and included under it the operations by which theories and conceptions are engendered. The claim gave eureka a place in logic. It did not supply its operation.</p>
+    <p><em>Discovery</em> is too broad a name for the residue. One may discover an island on a map or a hypothesis in an enumerated space. <em>Eureka</em> discovers a hypothesis that no space enumerable in the current representation contains. The answer is not a candidate with low prior; it is not a candidate. The inquiry has successor functions, but the missing concept lies outside their closure. Eureka extends the representation. Only then do new candidates, branches, and searches become available. Peirce called abduction "the only logical operation which introduces any new idea" and included under it the operations by which theories and conceptions are engendered. The claim gave eureka a place in logic. It did not supply its operation.</p>
 
     <p>This book does not supply it either. The responsible move is to mark the boundary, separate nearby operations that are often mistaken for generation, and state what a future theory would have to explain.</p>
 
@@ -35,7 +35,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <p>Call this <strong>conceptual generation</strong>: the construction of a representation that makes a previously inexpressible hypothesis available. It differs from finding a surprising value for a known variable. It changes what can count as a variable.</p>
 
-    <p><em>Unenumerable</em> is relative here, not a claim that the space is mathematically uncountable. The current inquiry lacks the grammar and successor operation needed to enumerate it. After eureka extends the representation, ordinary search may acquire a finite or countable branching factor.</p>
+    <p>The closure is relative to the inquiry, not a claim that the target is mathematically uncomputable. A larger system may already contain the representation. That fact no more makes the answer available to this inquiry than an alphabet makes every unwritten book available to its author. The open problem concerns availability: how failure directs an extension beyond the operations currently licensed.</p>
 
     <h2>The interface without an implementation</h2>
 
@@ -61,9 +61,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto"><code>eureka(surprise, purpose, frame, failures) -&gt; (representation, hypothesis)</code></pre>
 
-    <p>That is an interface, not an implementation. The caller can validate the return value without knowing how the function produced it. Every mechanism surveyed below either implements a neighboring operation or calls a larger hidden vocabulary that already contains the result.</p>
+    <p>That is an interface, not an implementation. The caller can validate the return value without knowing how the function produced it. Every mechanism surveyed below either implements a neighboring operation or searches a meta-space of representations. The meta-space relocates the question: what made the needed representation available there?</p>
 
-    <p>Nothing here proves that eureka is uncomputable or forever inaccessible. The narrower claim is enough: we do not yet possess a mechanism that explains its inner transformation without presupposing an enumerable space in which the answer was already expressible.</p>
+    <p>Nothing here proves that eureka is uncomputable or forever inaccessible. The narrower claim is enough: known mechanisms explain reachability once their operators are supplied. They do not yet explain how the structure of a failure supplies an operator outside the inquiry's current closure.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -123,6 +123,35 @@ Therefore there is reason to suspect A.</code></pre>
     </ol>
 
     <p>These are powerful operations. Calling them insufficient is not calling them useless. Each expands the reachable set relative to a smaller search procedure. The point is bookkeeping: every procedure has a closure, and conceptual generation is the change to the closure that the procedure itself did not already license.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>The strongest proposed mechanism</h2>
+
+    <p>Fodor's learning paradox gives the gap its sharpest negative form. If learning is hypothesis testing, the learner must represent each hypothesis before testing it. A hypothesis containing a genuinely new primitive therefore presupposes the primitive it is meant to explain. Fodor accepted the resulting continuity and treated lexical concepts as unlearned primitives.</p>
+
+    <p>Susan Carey's <strong>Quinian bootstrapping</strong> directly addresses hypotheses that a learner cannot initially state. The learner acquires explicit symbols as placeholders and represents relations among them before fully understanding what they mean. Partial interpretations connect the placeholders to existing concepts. Analogy, modeling, limiting cases, thought experiments, and induction then constrain the new system until its symbols acquire content.</p>
+
+    <p>This is more than search over finished hypotheses. The placeholder structure lets syntax arrive before semantics and gives the learner something new to compute with. It therefore corrects any blanket claim that no mechanism has been proposed.</p>
+
+    <p>Bootstrapping leaves the directed step partly open. A teacher, notation, or scientific tradition supplies the placeholders and much of their relational structure. The account describes how an initially uninterpreted structure can become grounded. It does not provide a general operation that maps the shape of any failed inquiry to the placeholder structure that inquiry needs.</p>
+
+    <hr class="border-zinc-700 my-8"/>
+
+    <h2>The shape of the open problem</h2>
+
+    <p>Four boundaries recur across the literature:</p>
+
+    <ol>
+      <li><strong>Level.</strong> Boden calls a change to the rules of a conceptual space transformational creativity. Wiggins formalizes it as exploration in a meta-space of conceptual spaces. The reduction works only after a meta-language and its operators are fixed, so it moves the closure boundary outward.</li>
+      <li><strong>Direction.</strong> Predicate invention, program synthesis, and evolutionary systems can extend an object language through meta-level search. Their supplied modes, grammars, and mutation operators determine which extensions are reachable. The unsolved part is how a particular failure constructs or selects an operator beyond that closure.</li>
+      <li><strong>Grounding.</strong> A new symbol can be introduced cheaply. The hard achievement is making it denote the distinction that resolves the surprise. Carey's placeholders explain how use can precede full meaning, but the transition from constrained symbol system to new conceptual content remains contested.</li>
+      <li><strong>Locus.</strong> The operation may not live inside one mind. Language, diagrams, instruments, collaborators, and material models can hold intermediate representations that no individual could construct internally. An implementation of eureka may therefore be a distributed process rather than a function of one agent.</li>
+    </ol>
+
+    <p>Recent formal creativity theory makes the boundary measurable. It calls an experience transformative when a learner outputs a different conceptual-space hypothesis after encountering it. That definition detects the interface transition. It deliberately treats the learner as a function and does not explain how the function constructs its next hypothesis.</p>
+
+    <p>The resulting open problem is narrower than creativity and stronger than search: explain how the structure of failed interaction directs the construction and grounding of an operator outside the inquiry's current closure. A theory may use a meta-space, external symbols, or social machinery. It must account for where those resources came from and why this failure recruited these resources.</p>
 
     <hr class="border-zinc-700 my-8"/>
 
@@ -210,6 +239,11 @@ Therefore there is reason to suspect A.</code></pre>
       <li>Hans Reichenbach, <em>Experience and Prediction</em> (1938) &mdash; the canonical separation of discovery from justification.</li>
       <li>Norwood Russell Hanson, <em>Patterns of Discovery</em> (1958) &mdash; anomaly and theory-laden observation as a return to the rational structure of discovery.</li>
       <li>Harry Frankfurt, "Peirce's Notion of Abduction" (1958) &mdash; why Peirce's inference licenses adoption rather than explaining invention.</li>
+      <li><a href="https://doi.org/10.1016/j.newideapsych.2006.02.001">Geraint Wiggins, "A Preliminary Framework for Description, Analysis and Comparison of Creative Systems"</a> (2006) &mdash; exploratory and transformational creativity formalized as object-level and meta-level search.</li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3489495/">Susan Carey, "The Origin of Concepts: A Pr&eacute;cis"</a> (2011) &mdash; Quinian bootstrapping through placeholders, partial interpretations, and modeling.</li>
+      <li><a href="https://arxiv.org/abs/2405.02148">Esp&iacute;rito Santo, Wiggins, and Cardoso, "Towards a Formal Creativity Theory"</a> (2024) &mdash; an operational definition of transformation as a change in the learner's conceptual-space hypothesis.</li>
+      <li><a href="https://doi.org/10.4230/OASIcs.ICCSW.2012.15">Dai and Muggleton, "Predicate Invention in Inductive Logic Programming"</a> (2012) &mdash; language extension reduced to meta-level abductive search.</li>
+      <li><a href="https://doi.org/10.1111/cogs.12203">Chandrasekharan and Nersessian, "Building Cognition"</a> (2015) &mdash; scientific discovery through constructing and manipulating external computational representations.</li>
     </ul>
 
     <Neighbors>
