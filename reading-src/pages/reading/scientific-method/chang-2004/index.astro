@@ -1,0 +1,126 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from "../../../../components/Neighbors.astro";
+import PrevNext from "../../../../components/PrevNext.astro";
+---
+
+<Layout title="Chang 2004 — Inventing Temperature" favicon="🔬">
+  <main>
+
+    <a href="/reading/scientific-method/" class="text-sm mb-4 inline-block">&larr; back to scientific method</a>
+
+    <h1>Inventing Temperature</h1>
+    <p class="text-gray-400 text-sm mb-6">Hasok Chang &middot; 2004 &middot; Oxford University Press</p>
+
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">You cannot build a thermometer without knowing what temperature is, and you cannot know what temperature is without a thermometer. Chang shows how science climbs out of the circle: start with a bad standard, use it to refine the concept, use the concept to correct the standard, repeat. No stage touches bottom. The ladder holds anyway.</p>
+    </div>
+
+    <!-- SVG: Epistemic iteration cycle -->
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 260" class="w-full max-w-sm" style="font-family: ui-monospace, monospace;">
+        <!-- Cycle arcs -->
+        <path d="M 255,60 C 320,65 340,120 315,160" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="313,156 319,164 309,164" fill="currentColor" fill-opacity="0.3"/>
+
+        <path d="M 270,195 C 240,230 160,230 130,200" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="134,200 126,204 130,194" fill="currentColor" fill-opacity="0.3"/>
+
+        <path d="M 90,165 C 60,130 75,75 135,58" fill="none" stroke="currentColor" stroke-width="1.5" stroke-opacity="0.3"/>
+        <polygon points="131,56 139,53 135,63" fill="currentColor" fill-opacity="0.3"/>
+
+        <!-- Nodes -->
+        <rect x="145" y="40" width="110" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#f59e0b" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="200" y="60" text-anchor="middle" fill="#f59e0b" font-size="10" fill-opacity="0.85">imperfect standard</text>
+
+        <rect x="255" y="163" width="110" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="310" y="183" text-anchor="middle" fill="#60a5fa" font-size="10" fill-opacity="0.85">concept refined</text>
+
+        <rect x="35" y="163" width="110" height="32" rx="5" fill="#a1a1aa" fill-opacity="0.15" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.5"/>
+        <text x="90" y="183" text-anchor="middle" fill="#34d399" font-size="10" fill-opacity="0.85">standard corrected</text>
+
+        <!-- Edge labels -->
+        <text x="330" y="105" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">measure with it anyway</text>
+        <text x="200" y="235" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">judge the old standard by the new concept</text>
+        <text x="60" y="100" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.35">iterate</text>
+
+        <text x="200" y="20" text-anchor="middle" fill="currentColor" font-size="8" fill-opacity="0.3">each cycle keeps the books of the last</text>
+      </svg>
+    </div>
+
+    <h2>Key concepts</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Concept</th>
+            <th class="text-left py-2 text-gray-400">What Chang means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Problem of nomic measurement</td><td class="text-gray-400">To justify an instrument you need the law relating its readings to the quantity. To establish the law you need measurements of the quantity. The circularity is real, not a pedant's puzzle.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Epistemic iteration</td><td class="text-gray-400">Progress without foundations. Adopt an imperfect standard, use it until its own results convict it, replace it by its successor's lights. Each stage is justified by the trajectory, never by bedrock.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Fixed points</td><td class="text-gray-400">Freezing and boiling look given; they were manufactured. Water supercools; boiling shifts with pressure and dissolved air. A century of procedure went into making the "fixed" points hold still.</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Comparability</td><td class="text-gray-400">Regnault's criterion: an instrument is validated when independent copies agree with each other. Agreement between instruments substitutes for access to the quantity itself.</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Complementary science</td><td class="text-gray-400">History and philosophy of science as a way to recover questions working science had to drop to move on. The book practices what it names.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>The argument</h2>
+
+    <p>Every chapter is the same climb run at a different altitude. Sensation ranks hot and cold but gives no numbers. The <a href="https://en.wikipedia.org/wiki/Thermoscope"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>thermoscope</a> gives ordering without a scale. Fixed points give a scale, then turn out not to be fixed, and get stabilized by procedure. Different working fluids (mercury, spirit, air) agree at the fixed points and disagree between them, with no way to say which is right, since "right" means tracking real temperature and real temperature is what the instruments were supposed to deliver. <a href="https://en.wikipedia.org/wiki/Henri_Victor_Regnault"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Regnault</a> broke the tie with comparability: the instrument whose copies agree is the instrument you keep. Kelvin then defined absolute temperature through Carnot's theory, freeing the concept from every substance, and the theoretical scale was realized in practice by the same air thermometers it superseded. Each stage used a standard it would later reject, and could not have reached its successor otherwise.</p>
+
+    <p>The pattern extends past the book's period. The <a href="https://en.wikipedia.org/wiki/Wedgwood_scale"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Wedgwood scale</a> pushed measurement into kiln temperatures where mercury boils, linked to the ordinary scale through an overlap region, and was later found wildly nonlinear; the linkage was still how high-temperature chemistry got started. In <a href="https://en.wikipedia.org/wiki/2019_revision_of_the_SI"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>2019 the SI</a> pinned the kelvin to the Boltzmann constant: the concept became fully theoretical, and the instruments that measure it are audited by mutual agreement, which is Regnault's criterion running at planetary scale.</p>
+
+    <h2>The iteration ladder</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Standard</th>
+            <th class="text-left py-2 pr-3 text-gray-400">What it enabled</th>
+            <th class="text-left py-2 text-gray-400">What convicted it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Bodily sensation</td><td class="pr-3 text-gray-400">Hot and cold as a dimension</td><td class="text-gray-400">The same bath feels hot to one hand and cold to the other</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Thermoscope</td><td class="pr-3 text-gray-400">Ordering independent of the observer</td><td class="text-gray-400">No numbers; readings drift with air pressure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Fixed points</td><td class="pr-3 text-gray-400">A numerical scale between freezing and boiling</td><td class="text-gray-400">Supercooling and pressure dependence; the points had to be manufactured by procedure</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Mercury thermometer</td><td class="pr-3 text-gray-400">Portable, repeatable measurement</td><td class="text-gray-400">Air and spirit thermometers disagree between the fixed points, and nothing adjudicates</td></tr>
+          <tr class="border-b border-zinc-800"><td class="py-2 pr-3 text-gray-300">Regnault's comparability</td><td class="pr-3 text-gray-400">A criterion that needs no access to true temperature</td><td class="text-gray-400">Agreement validates the instrument, but the quantity remains substance-bound</td></tr>
+          <tr><td class="py-2 pr-3 text-gray-300">Kelvin's absolute scale</td><td class="pr-3 text-gray-400">Temperature defined by theory, free of any thermometric substance</td><td class="text-gray-400">Realizable only through the imperfect instruments it transcends; the 2019 SI closes the loop at the Boltzmann constant</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Read the third column top to bottom: every conviction is written in evidence the convicted standard itself produced. That is the signature of epistemic iteration, and the reason the circularity never became a regress.</p>
+
+    <h2>Discussion</h2>
+
+    <p><a href="/reading/scientific-method/kuhn-1962/">Kuhn</a> and Chang describe the same mechanism at different scales. Kuhn's anomalies pile up until the paradigm breaks; Chang's standards are convicted by their own readings until replaced. But where Kuhn's revolutions are discontinuous gestalt switches, Chang's iteration conserves: each new standard must recover what the old one measured well, which is why thermometry never had to start over. The metrologist's revolution keeps the books.</p>
+
+    <p>The book also explains why measurement is where new science comes from. An instrument freezes a concept into hardware, and precision is what turns a vague misfit into a residual that no available hypothesis survives: Lavoisier's balance did this to phlogiston, Michelson's interferometer to the aether. Metrology feeds inquiry at both ends, stabilizing the vocabulary and sharpening the surprise. That is the argument behind the <em>measure better</em> step in <a href="/reading/scientific-method/">this collection's protocol</a>, and Chang is its theorist.</p>
+
+    <p>Epistemic iteration is also the measurement-world twin of Quinian bootstrapping: an uninterpreted placeholder, used before it is understood, acquiring content through cycles of constraint. The concept-learning version is Carey's; the two together put a floor under <a href="/reading/methodeutics/ch08-missing-operation/">the open problem of conceptual generation</a>, since both show directed construction proceeding without a foundation, and neither yet explains how the first placeholder gets chosen.</p>
+
+    <h2>The uncomfortable implication</h2>
+
+    <p>Nothing in measurement touches bottom. The kelvin rests on the Boltzmann constant, which was fixed by instruments calibrated by mutual agreement, which is Regnault's criterion, which was adopted because nothing better was available. Scientists trust thermometers the way Kuhn's scientists trust paradigms: coherently, productively, and without foundations. Chang's point is that this is not a scandal. Iteration converges, predictions land, kilns fire on schedule. The demand for bedrock was the mistake, and temperature was invented, not found, without ever being arbitrary.</p>
+
+    <Neighbors>
+
+    <ul class="neighbors">
+      <li><a href="/reading/scientific-method/kuhn-1962/">Kuhn 1962</a></li>
+      <li><a href="/reading/scientific-method/mayo-2018/">Mayo 2018</a></li>
+      <li><a href="/reading/methodeutics/ch08-missing-operation/">Methodeutics ch 8: Eureka</a></li>
+      <li><a href="/reading/scientific-method/">back to collection</a></li>
+    </ul>
+    </Neighbors>
+
+
+    <PrevNext prev={{ href: "/reading/scientific-method/pearl-2000/", label: "Pearl 2000" }} next={{ href: "/reading/scientific-method/ioannidis-2005/", label: "Ioannidis 2005" }} />
+  </main>
+</Layout>
