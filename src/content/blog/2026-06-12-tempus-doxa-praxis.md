@@ -11,7 +11,7 @@ the past. In between, you clicked. Was the sentence already true before the clic
 somewhere, waiting for you to catch up? Or did the click write it? Answer that for one click and
 you have answered it for everything you will ever do.
 
-[History is a lattice](/history-is-a-lattice): a web of every path that could have been taken, every fork and
+[History is a DAG](/history-is-a-dag): a web of every path that could have been taken, every fork and
 every branch, all of it there at once. Its telling is a linked list: a single thread,
 one bead after the next, the path that actually got walked. You only ever get the
 thread. You read it front to back, and you cannot read it backwards. The web is one

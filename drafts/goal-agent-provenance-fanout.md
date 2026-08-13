@@ -8,7 +8,7 @@ instrumental-to-action over a frame-compounding horizon.
 
 **Blog anchors to connect:** tempus-doxa-praxis / "You Cannot Ring a Semiring" (agency = attention
 that can act; doxa serves praxis), methodeutics textbook (diff/bi/tri-abduction; economy of
-research; cold-start frame problem), history-is-a-lattice, truth-is-buildable, belief-is-the-edge.
+research; cold-start frame problem), history-is-a-dag, truth-is-buildable, belief-is-the-edge.
 
 ---
 
