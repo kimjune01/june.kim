@@ -196,6 +196,65 @@ backport(G<sub>t</sub>, R<sub>t</sub>) &rarr; G<sub>t+1</sub></code></pre>
 
     <p>Backporting stops at an equivalence class when several graphs predict traces within the available resolution. Choosing one graph beyond that point would move the residual back into the reader's intuition. The honest output is the set of surviving histories and the observation that would separate them.</p>
 
+    <h2>One loop, several disciplines</h2>
+
+    <p>The same epistemic loop appears under different professional vocabularies. Each field prepares for failures its current model can express. A consequential event then leaves a residual the model did not absorb. Retrospective inquiry explains that surprise and backports it into future practice.</p>
+
+    <div class="overflow-x-auto my-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-zinc-700">
+            <th class="text-left py-2 pr-3 text-gray-400">Discipline</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Prospective preparation</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Residual evidence</th>
+            <th class="text-left py-2 pr-3 text-gray-400">Vicarious trial</th>
+            <th class="text-left py-2 text-gray-400">Backport</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Aviation</td>
+            <td class="pr-3 text-gray-400">Certification, redundancy, simulator training</td>
+            <td class="pr-3 text-gray-400">Recorder data, wreckage, witness sequence</td>
+            <td class="pr-3 text-gray-400">Reconstruct and simulate candidate histories</td>
+            <td class="text-gray-400">Design change, airworthiness directive, new recorder parameter</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Site reliability engineering</td>
+            <td class="pr-3 text-gray-400">Fault model, redundancy, chaos test, runbook</td>
+            <td class="pr-3 text-gray-400">Logs, metrics, traces, operator timeline</td>
+            <td class="pr-3 text-gray-400">Replay the incident against competing dependency graphs</td>
+            <td class="text-gray-400">Postmortem, new alert, revised architecture or runbook</td>
+          </tr>
+          <tr class="border-b border-zinc-800">
+            <td class="py-2 pr-3 pl-0 text-gray-300">Medicine</td>
+            <td class="pr-3 text-gray-400">Differential diagnosis, protocol, monitoring</td>
+            <td class="pr-3 text-gray-400">Symptoms, labs, imaging, treatment response</td>
+            <td class="pr-3 text-gray-400">Compare disease courses and counterfactual treatments</td>
+            <td class="text-gray-400">Revised diagnosis, protocol, contraindication or case definition</td>
+          </tr>
+          <tr>
+            <td class="py-2 pr-3 pl-0 text-gray-300">Structural engineering</td>
+            <td class="pr-3 text-gray-400">Load cases, safety factors, inspections</td>
+            <td class="pr-3 text-gray-400">Fracture surface, deformation, sensor and maintenance history</td>
+            <td class="pr-3 text-gray-400">Reconstruct load paths and reproduce component failure</td>
+            <td class="text-gray-400">Revised load case, detail, inspection rule or code</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>SRE makes the residual especially legible. Reliability engineering prepares responses for every failure the current fault model contains. An outage outside that closure creates a residual surprise. The postmortem earns its name only when it explains that residual and changes the model; restoring service and naming a broken component are not enough.</p>
+
+    <pre class="bg-zinc-800 rounded-lg p-4 overflow-x-auto text-sm"><code>fault model
+  &rarr; prepared response
+  &rarr; incident
+  &rarr; residual surprise
+  &rarr; postmortem
+  &rarr; backported fault model</code></pre>
+
+    <p>The table is a crosswalk, not an equivalence claim. Medicine cannot always rerun a treatment, software traces are often richer than wreckage, and structural codes aggregate failures across jurisdictions. What transfers is the operation: prospective models absorb known failures; retrospective inquiry converts residual surprise into a model future practice can express.</p>
+
     <p>The recommendation begins a second inquiry rather than closing the first. Explaining how a rudder reversal occurred does not verify that a redesign prevents it. The redesign predicts behavior first in rigs and simulators, then in certification, service, and continuing assurance. Its graph faces forward. Accident reconstruction and safety assurance meet at the intervention they share.</p>
 
     <hr class="border-zinc-700 my-8"/>
