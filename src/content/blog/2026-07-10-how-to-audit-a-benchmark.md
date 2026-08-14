@@ -2,28 +2,29 @@
 variant: post-medium
 title: "How to Audit a Benchmark"
 subtitle: "Eleven audit passes' worth of sins, ordered by how cheaply they're caught."
+numbersections: false
 tags: methodology, epistemology
 ---
+
+*[Download PDF](/assets/how-to-audit-a-benchmark.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.21939914](https://doi.org/10.5281/zenodo.21939914) (CC BY-SA 4.0).*
 
 Over the past few months I audited ten benchmarks in eleven audit passes: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), [MirrorCode](https://github.com/kimjune01/mirrorcode-audit), [FrontierCode](/auditing-frontiercode), [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit), and [SlopCodeBench](/auditing-slopcodebench). They broke in different places, and DeepSWE, re-audited after its revision, mostly held. This post compresses the lenses into a checklist a stranger can run.
 
 *Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode, one of the audits drawn on here. An interest disclosure, not a funding one; it changes none of the receipts, which is the point of check 4 below.*
 
-<table style="max-width:700px; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:11em"><col style="width:7em"><col></colgroup>
-<thead><tr><th style="background:#f0f0f0">audit</th><th style="background:#f0f0f0">broke at</th><th style="background:#f0f0f0">finding</th></tr></thead>
-<tr><td><a href="/swebench-verified">SWE-bench Verified</a>, as runner</td><td>the run itself</td><td>test-edit exploit caught; 44 unrunnable tasks scored zero</td></tr>
-<tr><td><a href="/auditing-deepswe">DeepSWE</a></td><td>gold</td><td>4 of 113 answer keys fail their own verifiers</td></tr>
-<tr><td><a href="/auditing-deepswe-v1-1">DeepSWE v1.1</a></td><td>mostly held</td><td>determinacy floor 2.7%; verdict receipts still unretrievable</td></tr>
-<tr><td><a href="/a-determinacy-audit-of-swebench-pro">SWE-bench Pro</a></td><td>spec</td><td>proven floor of 15% underdetermined</td></tr>
-<tr><td><a href="/programbench-measures-recall">ProgramBench</a></td><td>oracle</td><td>21 recall-only witnesses; 29 self-capturing goldens</td></tr>
-<tr><td><a href="/reprice-contamination">τ-bench</a></td><td>decay</td><td>memorized answer passes 0% regenerated, leaked query 100%</td></tr>
-<tr><td><a href="/terminal-bench-frame">Terminal-Bench</a></td><td>frame</td><td>83 of 83 pass after off-task destruction</td></tr>
-<tr><td><a href="https://github.com/kimjune01/mirrorcode-audit">MirrorCode</a></td><td>claim</td><td>title sells autonomous whole-program builds; metric scores scoped reimplementation from a live oracle, 17/25 targets contaminated</td></tr>
-<tr><td><a href="/auditing-frontiercode">FrontierCode</a></td><td>claim</td><td>sold as mergeability; of 59 coded closures, the patch decided 3</td></tr>
-<tr><td><a href="https://github.com/kimjune01/frontier-bench-audit">Frontier-Bench</a></td><td>frame</td><td>agent container torn down before grading; 9 of 9 pass after off-task destruction</td></tr>
-<tr><td><a href="/auditing-slopcodebench">SlopCodeBench</a></td><td>claim</td><td>static code-shape drift sold as extension robustness; iteration confounded with expanding scope</td></tr>
-</table>
+| audit | broke at | finding |
+|---|---|---|
+| [SWE-bench Verified](/swebench-verified), as runner | the run itself | test-edit exploit caught; 44 unrunnable tasks scored zero |
+| [DeepSWE](/auditing-deepswe) | gold | 4 of 113 answer keys fail their own verifiers |
+| [DeepSWE v1.1](/auditing-deepswe-v1-1) | mostly held | determinacy floor 2.7%; verdict receipts still unretrievable |
+| [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) | spec | proven floor of 15% underdetermined |
+| [ProgramBench](/programbench-measures-recall) | oracle | 21 recall-only witnesses; 29 self-capturing goldens |
+| [τ-bench](/reprice-contamination) | decay | memorized answer passes 0% regenerated, leaked query 100% |
+| [Terminal-Bench](/terminal-bench-frame) | frame | 83 of 83 pass after off-task destruction |
+| [MirrorCode](https://github.com/kimjune01/mirrorcode-audit) | claim | title sells autonomous whole-program builds; metric scores scoped reimplementation from a live oracle, 17/25 targets contaminated |
+| [FrontierCode](/auditing-frontiercode) | claim | sold as mergeability; of 59 coded closures, the patch decided 3 |
+| [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit) | frame | agent container torn down before grading; 9 of 9 pass after off-task destruction |
+| [SlopCodeBench](/auditing-slopcodebench) | claim | static code-shape drift sold as extension robustness; iteration confounded with expanding scope |
 
 A benchmark is a measurement instrument, and an instrument makes a contract. Above every clause sits the claim: the capability the headline advertises has to be the one the metric measures (the *claim* clause), or the number is precise about the wrong thing. The instruction pins the target (the *spec* clause). The grader checks the target (the *oracle* clause). The grader guards everything the task never named (the *frame* clause: a run that completes the task by wrecking unrelated state must not pass). The answer key passes its own test (the *gold* clause). The headline number means what the leaderboard says it means (the *score* clause). And the number survives its own publication (the *decay* clause).
 
@@ -31,23 +32,19 @@ Each clause can be broken, each break is a distinct sin, and each sin has a chec
 
 The clauses are not independent, and that is the one thing this list got wrong for a while. A mitigation for one clause can be a regression in another. [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit) runs every task with the verifier in its own container, which kills a real attack where agent-produced code double-forks a daemon and overwrites the reward file after the tests write it. It buys that by tearing down the agent's container before the verifier starts, so the state a frame check would read no longer exists. Sound oracle-integrity fix, straight subtraction from the frame. Neither the rubric nor the review pipeline registers the trade, because nothing scores a clause against its neighbours. When a maker hardens one clause, ask which other clause paid for it.
 
-<div class="table-wrap">
-<table style="max-width:100%; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:2em"><col style="width:16em"><col style="width:5em"><col style="width:11em"><col></colgroup>
-<thead><tr><th style="background:#f0f0f0">#</th><th style="background:#f0f0f0">check</th><th style="background:#f0f0f0">cost</th><th style="background:#f0f0f0">sin</th><th style="background:#f0f0f0">exemplar</th></tr></thead>
-<tr><td>1</td><td>read the claim against the construct</td><td>free</td><td>claim</td><td>title sells reconstruction, metric scores recall</td></tr>
-<tr><td>2</td><td>read the paper against the repo</td><td>free</td><td>wrong rulebook</td><td>a week and $1,000 on the wrong task</td></tr>
-<tr><td>3</td><td>ask how tasks were selected</td><td>free</td><td>selection by failure</td><td>0% floor read as a frontier</td></tr>
-<tr><td>4</td><td>recompute the headline</td><td>free</td><td>score</td><td>footer says 113, mean divides by 111</td></tr>
-<tr><td>5</td><td>retrieve one receipt</td><td>free</td><td>unfalsifiable verdicts</td><td><code>has_model_patch: true</code>, every path 404</td></tr>
-<tr><td>6</td><td>run the answer key</td><td>~$1</td><td>gold</td><td>4/113, 3/731, 6/89 golds fail</td></tr>
-<tr><td>7</td><td>read what the assertions pin</td><td>cheap</td><td>oracle</td><td>21 recall witnesses, 29 self-capturing goldens</td></tr>
-<tr><td>8</td><td>probe what pins the graded value</td><td>cheap</td><td>spec</td><td>15% proven underdetermined</td></tr>
-<tr><td>9</td><td>mutate the gold and regrade</td><td>cheap</td><td>frame</td><td><code>rm -rf .git</code> still scores 1</td></tr>
-<tr><td>10</td><td>ask what survives publication</td><td>reading</td><td>decay</td><td>memorized 0%, leaked query 100%</td></tr>
-<tr><td>11</td><td>audit the run</td><td>varies</td><td>run</td><td>restored tests bought 46 points</td></tr>
-</table>
-</div>
+| # | check | cost | sin | exemplar |
+|---|---|---|---|---|
+| 1 | read the claim against the construct | free | claim | title sells reconstruction, metric scores recall |
+| 2 | read the paper against the repo | free | wrong rulebook | a week and $1,000 on the wrong task |
+| 3 | ask how tasks were selected | free | selection by failure | 0% floor read as a frontier |
+| 4 | recompute the headline | free | score | footer says 113, mean divides by 111 |
+| 5 | retrieve one receipt | free | unfalsifiable verdicts | `has_model_patch: true`, every path 404 |
+| 6 | run the answer key | ~$1 | gold | 4/113, 3/731, 6/89 golds fail |
+| 7 | read what the assertions pin | cheap | oracle | 21 recall witnesses, 29 self-capturing goldens |
+| 8 | probe what pins the graded value | cheap | spec | 15% proven underdetermined |
+| 9 | mutate the gold and regrade | cheap | frame | `rm -rf .git` still scores 1 |
+| 10 | ask what survives publication | reading | decay | memorized 0%, leaked query 100% |
+| 11 | audit the run | varies | run | restored tests bought 46 points |
 
 ## 1. Read the claim against the construct
 
@@ -153,19 +150,15 @@ Two published metaevaluations already catalogue benchmark failure, and an audit 
 
 The reconciliation is one row per clause:
 
-<div class="table-wrap">
-<table style="max-width:100%; margin:1em auto; font-size:14px;">
-<colgroup><col style="width:5em"><col style="width:20em"><col></colgroup>
-<thead><tr><th style="background:#f0f0f0">clause</th><th style="background:#f0f0f0">nearest BenchRisk mode</th><th style="background:#f0f0f0">status</th></tr></thead>
-<tr><td>claim</td><td>47: benchmark does not measure a property linked to the user task</td><td>adjacent; the mode faults the reader's inference, while the quotable equivocation in the title is unregistered</td></tr>
-<tr><td>spec</td><td>none</td><td>hidden tests grading unstated choices are unregistered</td></tr>
-<tr><td>oracle</td><td>25: ground truth placed within the system chain</td><td>adjacent; the mode covers SUT developers cheating, while recall-only witnesses and self-capturing goldens are unregistered</td></tr>
-<tr><td>frame</td><td>none</td><td>filed from this checklist as <a href="https://github.com/BenchRisk/BenchRisk/issues/8">BenchRisk#8</a></td></tr>
-<tr><td>gold</td><td>none</td><td>answer keys failing their own graders are unregistered</td></tr>
-<tr><td>score</td><td>34&ndash;36, 57: sample size, uncertainty propagation and presentation</td><td>partial; miscomputed denominators and undisclosed exclusions are unregistered</td></tr>
-<tr><td>decay</td><td>4, 21, 23, 42, 44, 46, 49, 50</td><td>covered; cite the mode numbers</td></tr>
-</table>
-</div>
+| clause | nearest BenchRisk mode | status |
+|---|---|---|
+| claim | 47: benchmark does not measure a property linked to the user task | adjacent; the mode faults the reader's inference, while the quotable equivocation in the title is unregistered |
+| spec | none | hidden tests grading unstated choices are unregistered |
+| oracle | 25: ground truth placed within the system chain | adjacent; the mode covers SUT developers cheating, while recall-only witnesses and self-capturing goldens are unregistered |
+| frame | none | filed from this checklist as [BenchRisk#8](https://github.com/BenchRisk/BenchRisk/issues/8) |
+| gold | none | answer keys failing their own graders are unregistered |
+| score | 34–36, 57: sample size, uncertainty propagation and presentation | partial; miscomputed denominators and undisclosed exclusions are unregistered |
+| decay | 4, 21, 23, 42, 44, 46, 49, 50 | covered; cite the mode numbers |
 
 So the checklist ends with a routing rule. When an audit surfaces a sin the registry already carries, cite the mode number, because the shared name is what lets maintainers and other auditors connect the finding to its siblings on other benchmarks. When it surfaces a sin the registry lacks, file it through the new-failure-mode template with the receipt and the cure attached, one filing at a time. The registry is where a finding outlives its benchmark: the verdict covered one artifact, the check covers every later one, and the filed mode is how the next auditor inherits both.
 
