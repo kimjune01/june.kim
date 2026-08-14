@@ -1,161 +1,119 @@
 ---
 variant: post-paper
-title: "Local Replay Auditability: Verification That Returns a Check"
+title: "Replayable Claims: Epistemic Status Without Trusting the Sender"
 tags: coding, epistemology, methodology
 ---
 
 ## Abstract
 
-Verification systems usually return a score, label, or Boolean. That output can steer an agent, but a later auditor cannot distinguish truth from confidence without reconstructing the evaluation. This paper introduces **local replay auditability**: return a check whose execution returns the truth value. Store each consequential claim with its check, outcome, and provenance. On a post-cutoff compiler bug, two models missed the correct boundary in opposite directions under self-attestation. With an external comparator, both matched the merged human fix on all eight committed probes. The case is an existence witness, not an efficacy estimate.
+A receiving agent should be able to determine the epistemic status of another agent's output without trusting the sender's self-attestation. Scores, labels, and Boolean verdicts cannot provide that guarantee because they separate a conclusion from whatever made it answerable. This paper proposes a two-part protocol for epistemic communication: transmit the claim and whatever another agent needs to re-derive its claim-level verdict deterministically. The receiving agent acquires one of three statuses toward that output: the claim is **true** when replay completes and the claim survives, **false** when replay refutes it, and **untrue** when the receiver cannot run it by any available route. Replay clears testimonial uncertainty while specification uncertainty remains: a replayable check may still test the wrong property. We illustrate the distinction through two agent-assisted audits of [SWE-bench Pro](https://arxiv.org/abs/2509.16941). One published a self-attested estimate of roughly 30 percent broken tasks; the other published a 15.0 percent floor through 109 claim-level receipts. The substantive conclusions agree in direction. Only the receipt-backed claims let another agent derive their epistemic status. A compact replay of one task demonstrates the protocol directly.
 
-## A Boolean verdict does not compose
+## Agent output loses its entitlement at the boundary
 
-What is verification? It is often modeled as a Boolean property of a produced result. The verdict serves as checkpoint and feedback for the producing agent. But agents and context windows are ephemeral. After the session ends, verification flattens to a record. A downstream agent cannot identify which property was checked or rerun the check after a dependency changes.
+An agent finishes an inquiry and reports a verdict. The verdict steers the current run. It cannot carry the inquiry's entitlement to the next agent. A confidence score says how strongly the sender endorses its answer. A Boolean says which side the sender chose. Neither gives the receiver a way to find out.
 
-Coding agents make this failure concrete. A patch that passes a visible suite may still encode the wrong boundary. The verdict says tests passed, but not which tests. Authority arrives without an inspectable boundary.
+This is a communication failure before it is a verification failure. The sender may have run excellent tests, consulted several reviewers, and reached the right conclusion. If only the verdict crosses the boundary, the receiver inherits the sender's self-assessment. More internal deliberation may improve the hidden process while its output keeps the same epistemic form.
 
-Reviewers face the inverse problem. A trajectory records tool calls and prose, but rarely says which claim each command tested or which outcome would have killed that claim. Verifying the final patch can require reconstructing the entire inquiry. When checking costs as much as producing, review becomes rubber-stamping.
+A trustless protocol changes what crosses. The sender transmits two things:
 
-Local replay auditability changes the verifier's return type. Instead of returning only a Boolean, it returns a check that produces the Boolean when run against the artifact. The record binds a claim to that check, the observed outcome, and the check's provenance. A later consumer can rerun one conclusion without trusting the agent, trusting a stored label, or reconstructing the trajectory.
+1. the claim;
+2. whatever another agent needs to re-derive its claim-level verdict deterministically.
 
-The experiment below is a mechanism witness, not an efficacy estimate.
+The second part has no fixed schema; its function defines it. A mathematical claim may carry a proof. A software claim may carry a test, commit, and environment. An empirical claim may point to an instrument record or a live service. Proof is one species of replay among many.
 
-## The verifier returns an executable constraint
+The protocol is trustless in one sense: the receiver need not trust the sender's report. The replay may still depend on a compiler, dataset, sensor, or service. Those dependencies belong inside the replay path, where the receiver can see what the claim requires.
 
-Conventional verification consumes an artifact and returns a scalar:
+## Epistemic status describes the receiver's relation to agent output
 
-```python
-def verify(artifact: Artifact) -> bool: ...
-```
+A transmitted claim carries no globally authoritative status. Each receiver establishes the epistemic status supported by what it can replay from the agent's output. Reality remains fixed across those relations.
 
-Local replay auditability returns the executable check:
-
-```python
-Check = Callable[[Artifact], bool]
-
-def verify(artifact: Artifact) -> Check: ...
-```
-
-The check may include a concrete input, expected behavior, pinned dependencies, and the command that compares the artifact against that expectation. The current agent can use its Boolean result immediately. A later agent can apply the same check to a revised artifact.
-
-A visible test suite returns tests, but the producer authors them and may grade its own interpretation. A hidden test adjudicates independently, but only its Boolean escapes. The test that did the adjudicating never enters the record. Local replay auditability requires both independence and persistence.
-
-The verifier need not cover the entire artifact. It must produce one relevant check whose source is independent of the candidate. That check may come from an external comparator, a separately maintained invariant, or a human-approved artifact. Each source terminates in a fact of reality or a named human; a model's say-so is neither.
-
-| | Returns a Boolean | Returns a check |
-|---|---|---|
-| After the run | verdict dissolves into the trajectory | check persists with its claim |
-| Upstream change | staleness is undetectable | rerun separates live from stale |
-| Audit | reconstruct the trajectory | rerun one check |
-| Failure | a penalty to descend | a counterexample naming the next hypothesis |
-
-The check gives verification memory. It outlives the attempt that ran it.
-
-## The graph organizes returned checks
-
-The harness organizes checks using the [Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics). Each node binds a live hypothesis to its kill condition, exact check, observed outcome, and open, witnessed, or killed verdict. A refutation edge records how a failed check motivates the next candidate. The graph supplies organization; the check supplies verification.
-
-Without the graph, verifying a conclusion means interrogating the agent or reconstructing its trajectory. With it, each step binds a claim to a trial a reviewer can rerun without the agent's cooperation.
-
-Replay comes in two grades. Deterministic commands over pinned inputs support strong replay. Model or live-service calls support artifact-level replay, where an auditor verifies the recorded output and reruns a deterministic predicate over it.
-
-## Returned checks change the boundary
-
-We tested whether an external comparator changes the solution an agent reaches on Verus issue #2219. The issue opened in March 2026 after the solving models' reported knowledge cutoffs. The maintainer's first patch, #2230, handled only the surface case. PR #2501 later merged a general fix. The experiment treated #2501's behavior on committed probes as the reference boundary.
-
-### The bug
-
-Verus is a deductive verifier for Rust. Issue #2219 is an unsoundness: a ghost expression of type `!` is erased before compilation and does not actually diverge, yet it triggers rustc's never-type edge prune. Verus drops a live control-flow edge, skips reachable code behind it, and verifies a program it owes a rejection.
-
-Two programs look identical at the `!` token but require opposite verdicts. A ghost call's never-typed value disappears before runtime, so code behind it executes. A genuine runtime terminator ends the path, so proof code behind it never runs. The narrow fix keys on the surface token. The general fix handles the whole class of uninhabited types.
-
-![The #2219 unsoundness as a causal chain. A ghost-erased uninhabited return and genuine runtime divergence are identical at the token and opposite in required handling.](/assets/verus-2219-unsoundness.svg)
-
-The bug resists shallow search. The fault sits four steps up the causal chain from the wrongly accepted program, and the project's suite passes both narrow and general fixes. The suite cannot see the distinction the fix must make.
-
-### Ablation
-
-Before each loop, the protocol preregistered one sentence: testing X, predict Y, refuted by Z. Six self-attested prompt methods ran three times each in the Codex workflow. Three additional Fable 5 controls used strong, weak, and prompt-matched self-attestation.
-
-The external condition used a comparator that enumerated cases and added divergence goldens derived from the merged human fix. The model received only per-case pass or fail. It never received the reference build, its diff, or the governing predicate.
-
-| Method | Enumeration | Kill conditions | External check source |
-|---|:---:|:---:|:---:|
-| minimal or neutral prompt | no | no | no |
-| site-enumeration prompt | yes | no | no |
-| abduction prompt | no | yes | no |
-| hypothesis-graph prompt | no | yes | no |
-| self-verifier harness | yes | yes | no |
-| external-gate harness | yes | yes | yes |
-
-The graph did not produce a capability lift by itself. Persistence serves a different claim: the trace stays reviewable after the run. Check source was the intervention of interest, although model, harness, and budget differences prevent a clean causal estimate.
-
-![The ablation as a mechanism diagram. Within a workflow, the external gate replaces self-attestation; comparisons across models remain confounded.](/assets/verus-2219-lift-mechanism.svg)
-
-### Observed boundaries
-
-Fable and Sonnet converged from opposite errors. Under self-attestation, Fable over-rejected valid divergence; Sonnet stayed narrow and matched the maintainer's first patch. With a corrected external gate, both matched the merged human fix on all eight committed probes.
-
-Across the broader set, all 18 Codex runs plateaued short of the general boundary. The three Fable controls reached the wide but incorrect boundary. A protocol-matched Codex rerun with the external comparator still failed the divergence-preserve case.
-
-| Model and check source | Observed boundary |
+| The receiver's relation to the agent's claim | Epistemic status |
 |---|---|
-| Codex, 18 self-attested runs | narrow, no general fix |
-| Fable 5, self-attested | wide but incorrect |
-| Sonnet 4.6, self-attested | narrow, matched #2230 |
-| Sonnet 4.6, external comparator | behavior of #2501 on committed probes |
-| Fable 5, external comparator | behavior of #2501 on committed probes |
-| Codex, external comparator | failed the divergence-preserve probe |
+| Runs it; the claim survives | **True** |
+| Runs it; the claim is refuted | **False** |
+| Cannot run it by any available route | **Untrue** |
 
-The [`hygraph-mechanism`](https://github.com/kimjune01/hygraph-mechanism) archive contains the preregistration, rebuild-confirmed dataset, regrade script, captured diffs, and graph and gate traces. The standalone gate is archived as [`abductor`](https://github.com/kimjune01/abductor).
+The trichotomy comes from [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true). This paper applies it to agent output. A passing replay gives its receiver entitlement to the claim and emits no transferable truth bit.
 
-This single task supplies a mechanism witness: externally constrained workflows crossed a boundary the self-attested workflows did not.
+Ordinary observations need no bundled check. If the receiver can already check a claim from shared context, the context supplies the replay. For an agent able to observe the sky or consult a common source, “The daytime sky is blue when it is not cloudy” carries nothing extra.
 
-## The check carries more than its verdict
+Time matters when replay makes it matter. A claim about a pinned artifact remains true for any receiver who can still replay its evidence. A claim about the artifact's current state must run against the current artifact. If a required service later disappears, the claim is untrue for a new knower who cannot run it. A later opposing verdict makes the claim false.
 
-Without the comparator, the agent proposes a patch, writes compatible tests, and confirms its own interpretation. With it, an independently maintained constraint acts first. A failed check kills the current hypothesis, and the manner of failure names the next one.
+## Replay preserves one guarantee under misspecification
 
-A self-verifying Fable run built a 6,684-case generator and widened it to 7,026 variants. It still mislabeled the decisive boundary because it graded against its own predicate. Without the comparator, Fable and Sonnet miss in opposite directions. With it, both land on the same reference behavior. More search does not correct opposite errors onto one target; an external answer key does.
+Replay clears testimonial uncertainty while specification uncertainty remains. A check can return deterministically and still measure the wrong property. It can miss relevant cases, encode a bad oracle, or depend on a poisoned artifact. Local replay guarantees only that the receiver can derive the encoded claim-level verdict without trusting the sender.
 
-The gate's coverage remains both lever and limit. Its uninhabited cases pushed models beyond the narrow patch. Its first version lacked a divergence-preserve shape, so the resulting fix stayed wide but incorrect. Adding that golden let two models reach the shipped boundary, while Codex still failed to implement the distinction.
+That narrow guarantee keeps the failure visible. A self-attested verdict compresses two questions into one:
 
-Returning the trial frees a later agent from trusting the earlier model or execution. It can rerun the check, inspect the failure, and continue from the killed node. The next inquiry begins where the last one verifiably stood.
+1. Did the sender report the result faithfully?
+2. Did the procedure test what the claim says?
 
-## Five questions remain
+Replay removes the first question. The second stays open, where another agent can inspect, challenge, and replace the procedure. A replayable mistake is still a mistake, but it has a surface on which inquiry can continue.
 
-1. Does local replay reduce reviewer time relative to trajectories and prose summaries?
-2. How often do external checks change a patch rather than confirm it?
-3. Which sources remain independent enough to escape correlated model errors?
-4. Does preserving killed hypotheses reduce repeated mistakes across runs?
-5. Where no replayable artifact exists, can a timestamped human attestation stand in for the check?
+A replayable claim needs no confidence score to stand in for entitlement. When the receiver can run the procedure and find out, it need not estimate whether the sender is likely to be right. Probability can remain the content of a claim, such as a weather forecast. Probability no longer has to stand in for the missing path from claim to evidence.
 
-Benchmarks should measure off-suite behavior and audit time, replay success, and the distance between self-attested and externally verified solutions.
+## An epistemic ablation on SWE-bench Pro
 
-## Replay can still test the wrong property
+Picture two otherwise identical audit agents. Both inspect the same benchmark and reach the same conclusions. The self-attesting agent returns labels and a headline rate. The trustless agent returns each claim with its replay. Their discovery capability is held fixed; only the epistemic form of their output changes. The first leaves the receiver with an attestation. The second lets the receiver find out.
 
-Agents may overfit, detect the evaluation environment, forge logs, or exploit a weak comparator. Pinned artifacts and independent execution improve the evidence. They do not guarantee that the check measures the property the claim is about.
+Two real audits approximate this contrast. Both employed agents against the same benchmark under opposite communication protocols. Their different methods, scopes, categories, and denominators preclude a controlled performance estimate.
 
-Replay also costs something. Recording every trivial claim would bury reviewers in low-value checks. A practical harness should allocate verification by stakes and preserve only claims that affect the solution boundary.
+[OpenAI's audit of SWE-bench Pro](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) used an automated filter and repeated investigator-agent passes. A researcher and five software engineers reviewed the results. The post reports 200 tasks labeled broken by the agent pipeline, 249 by the human campaign, and a headline estimate of roughly 30 percent. The post does not publish the pipeline, the per-task labels, the annotations, or the disagreements. The author is “OpenAI,” so its agents and reviewers attest their own work.
 
-The evidence is existence-grade: one audited divergence on one instance. Most interventions in the broader evaluation were null and appear in the companion Hypothesis Graph paper. This case shows that the distinction can matter, not how often.
+The [public determinacy audit of SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) used agents under the trustless protocol. It reports a smaller, deliberately conservative floor. The audit mechanically witnesses 83 cases, and another 26 survive adversarial cross-family review. Together they make 109 of 728 public tasks, or 15.0 percent.
 
-## From verification signals to verification artifacts
+Each claimed task links to its case materials and witness. Beside them the audit publishes twelve proposed cases that adversarial review killed. A reader can reject the headline, enter at one row, and derive that row's verdict without trusting the auditor.
 
-Hidden tests already separate patch generation from evaluation, but the check normally disappears after grading. Trajectory replay re-executes a whole recorded run. Local replay instead reruns one claim's trial.
+The ablation concerns epistemic output. OpenAI may be right about every one of its 249 labels. The protocol leaves them untrue for an outside knower until their checks become replayable.
 
-The distinction matters whenever an institution publishes a verdict without its derivation. OpenAI later estimated that roughly 30% of SWE-bench Pro tasks were broken and retracted its recommendation, but the underlying pipeline and labels were not released. A reader could not reproduce the conclusion. The verdict shipped without its check. A companion [public audit](/a-determinacy-audit-of-swebench-pro) proves a smaller floor with per-task receipts a stranger can rerun.
+The diagnostic applies claim by claim. OpenAI publishes one detailed OpenLibrary example whose prompt and test conflict by one leading space. SWE-bench Pro's public artifacts let a reader cross-examine that example, so the example can acquire a status the unpublished aggregate cannot. One document can contain true, false, and untrue claims at once.
 
-The companion Hypothesis Graph work owns the representation and multi-agent coordination claim. This paper does not claim that graph structure caused the lift. Here the graph organizes externally sourced checks; the contribution is the verifier interface that returns the check instead of discarding it.
+## One claim, replayed
+
+The audit classifies `ansible_20ef733e` as underdetermined. Its requirements ask the password-hashing filter to accept a bcrypt identifier and make the result visibly begin with that identifier. The hidden test requires more. For one fixed secret and salt, the implementation must return this exact digest:
+
+```text
+$2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm
+```
+
+The receipt's claim is narrow: this exact graded constant appears in the hidden test but nowhere in the specification or base-commit source available to the solver. From the materialized case, the decisive search is compact:
+
+```sh
+DIGEST='$2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm'
+
+rg -n -F "$DIGEST" spec.md
+# no match
+
+rg -n -F "$DIGEST" hidden_test.diff
+# 201:+    assert_hash("$2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm",
+
+git -C ansible-at-base grep -n -F "$DIGEST"
+# no match
+```
+
+The [`ansible_20ef733e` receipt](https://github.com/kimjune01/swebench-pro-audit/tree/main/data/cases/ansible_20ef733e) pins the instance and supplies the complete case bundle and witness. The audit agent proposes what to inspect; the search produces the verdict. A receiving agent can replay the claim without the producing agent, its trajectory, or its confidence.
+
+That replay establishes the receipt's local claim. Other interpretations of the task remain open. The claim reaches exactly as far as the check.
+
+## Limits and scope
+
+Forged inputs and selective disclosure can corrupt the record; evaluation awareness and collusion remain possible. Artifact integrity and semantic adequacy remain claims of their own.
+
+Replay also costs time, compute, and access. A live service may vanish. A physical experiment may be too expensive to repeat. In each case the protocol exposes the limit in the agent's output. A confidence score would only price it in.
+
+The audit's 109 receipts show the protocol operating at benchmark scale. Agent capability and audit speed stay outside its claim. Other applications appear in the broader [benchmark-audit method](/how-to-audit-a-benchmark). Population-level accumulation belongs to [*Verifiable Knowledge*](/verifiable-knowledge), and the graph that composes replayable claims belongs to [*The Hypothesis Graph*](/the-hypothesis-graph-semantic-memory-methodeutics). This paper isolates the act between them: one agent sends a claim, and another derives its epistemic status.
 
 ## Conclusion
 
-Reliable coding agents need checks they cannot freely write for themselves. Local replay auditability makes those checks the verifier's return value and binds each one to the claim it adjudicates. The Boolean steers the current run. The returned check lets anyone reproduce the verdict.
+An agent should transmit more than its answer when another agent must decide what to know. The replayable-claims protocol sends the claim and whatever re-derives its claim-level verdict. The receiver runs it and acquires a relational status: true, false, or untrue.
 
-A later agent inherits a constraint it can rerun rather than a claim it must trust. The case study witnesses the mechanism: a human-derived divergence check moved models beyond the solution reached by self-attested arms while withholding the implementation answer. A transient judgment becomes an executable, composable research artifact. It enlightens whoever runs it.
+The protocol changes epistemic communication without requiring the receiver to trust the sender. In the SWE-bench Pro ablation, agents outside the protocol produced an opaque institutional estimate; agents under the protocol produced claims a stranger can rerun one at a time. The substantive findings point in the same direction while their epistemic outputs diverge.
+
+Show the claim. Show how to find out.
 
 ## Availability
 
-- [`hygraph-mechanism` experiment and regrade archive](https://github.com/kimjune01/hygraph-mechanism) · [Zenodo](https://doi.org/10.5281/zenodo.20754118)
-- [`abductor` external gate](https://github.com/kimjune01/abductor) · [Zenodo](https://doi.org/10.5281/zenodo.20738162)
-- [Hypothesis Graph companion paper](/the-hypothesis-graph-semantic-memory-methodeutics)
-- [Verifiable Knowledge companion paper](/verifiable-knowledge)
+- [SWE-bench Pro determinacy audit](https://github.com/kimjune01/swebench-pro-audit) · [Zenodo](https://doi.org/10.5281/zenodo.20738219)
+- [What Cannot Be False Cannot Be True](/what-cannot-be-false-cannot-be-true)
+- [Verifiable Knowledge](/verifiable-knowledge)
+- [The Hypothesis Graph](/the-hypothesis-graph-semantic-memory-methodeutics)
