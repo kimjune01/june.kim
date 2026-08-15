@@ -2,6 +2,57 @@
 import BlogPost from '../../layouts/BlogPost.astro';
 ---
 <BlogPost title="resume" date={new Date('2017-06-17')} slug="resume" tags="reading">
-  <p><a href="/assets/resume.pdf">PDF</a></p>
-  <p><a href="/assets/resume.md">markdown</a></p>
+  <p class="intro">I work where production software meets AI reliability. These are two views of the same career, tuned for different teams.</p>
+
+  <section class="resume-choice">
+    <p class="eyebrow">Research-adjacent engineering</p>
+    <h2>Evaluation &amp; Agent Reliability Engineer</h2>
+    <p>For teams building coding-agent evaluations, graders, harnesses, and reliable measurement systems.</p>
+    <p class="actions"><a href="/assets/june-kim-evaluation-resume.pdf">View résumé (PDF)</a> <span>|</span> <a href="/research">Research and receipts</a></p>
+  </section>
+
+  <section class="resume-choice">
+    <p class="eyebrow">AI-native product engineering</p>
+    <h2>Senior Applied AI &amp; Reliability Engineer</h2>
+    <p>For teams shipping agent workflows, retrieval systems, integrations, evaluation, and production infrastructure.</p>
+    <p class="actions"><a href="/assets/june-kim-applied-ai-resume.pdf">View résumé (PDF)</a> <span>|</span> <a href="https://github.com/kimjune01">GitHub</a></p>
+  </section>
 </BlogPost>
+
+<style>
+  .intro {
+    max-width: 34rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .resume-choice {
+    border-top: 1px solid currentColor;
+    padding: 1.35rem 0 1.6rem;
+  }
+
+  .resume-choice h2 {
+    margin: 0.15rem 0 0.55rem;
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .resume-choice p {
+    margin: 0.35rem 0;
+  }
+
+  .eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.68;
+  }
+
+  .actions {
+    margin-top: 0.8rem !important;
+  }
+
+  .actions span {
+    padding: 0 0.35rem;
+    opacity: 0.55;
+  }
+</style>
