@@ -8,7 +8,7 @@ tags: coding, epistemology, methodology
 
 The epistemic status of an agent's output should be checkable without trusting the sender's self-attestation. Scores, labels, and Boolean verdicts cannot provide that guarantee on their own because they present the conclusion without the procedure. We propose a protocol that attaches verifiability to the claim: transmit the claim alongside its deterministic re-derivation. Replay clears testimonial uncertainty; specification uncertainty remains. We illustrate an epistemic ablation on two independent audits of [SWE-bench Pro](https://arxiv.org/abs/2509.16941) using opposite protocols. One published a self-attested estimate of roughly 30 percent broken tasks; the other, a 15.0 percent floor through 109 claim-level receipts.
 
-## Agent output loses its entitlement at the boundary
+## Entitlement loss at the boundary
 
 An agent finishes an inquiry and reports a verdict; a second agent receives that verdict and must decide whether to trust it, but the verdict is all it receives. A confidence score says how strongly the sender endorses its answer, but it doesn't give the receiver a way to find out.
 
@@ -21,9 +21,11 @@ A trustless protocol therefore changes what crosses. The sender transmits two th
 
 The second part is a procedure. A mathematical claim may carry a proof. A software claim may carry a test, commit, and environment. An empirical claim may point to an instrument record or a live service. If the claim is obvious in a shared context, the procedure may be implied.
 
-The protocol is trustless in one sense: the receiver need not trust the sender's report. But the replay may still depend on a compiler, dataset, sensor, or service. Those dependencies belong inside the replay path, where the receiver can see what the claim requires.
+![The protocol, executed by the reader. The claim: the two smaller squares together fill the larger one. The procedure: two equal squares hold the same four right triangles. The space left over must therefore match: a-squared plus b-squared on one side, c-squared on the other. Check it by eye. Whatever you now hold about the claim, you earned by running the proof yourself.](/assets/pythagoras-proof-light.svg)
 
-## Epistemic status describes the receiver's relation to agent output
+The protocol is trustless in one sense: the receiver need not trust the sender's report. But the replay may still depend on a compiler or dataset, a sensor or service. Those dependencies belong inside the replay path, where the receiver can see what the claim requires.
+
+## The receiver's relation to agent output
 
 A transmitted claim carries no globally authoritative status. Instead, each receiver establishes knowledge by checking the agent's output. Hence, the epistemic status of a claim is relative to the receiver.
 
@@ -33,13 +35,15 @@ A transmitted claim carries no globally authoritative status. Instead, each rece
 | Runs it; the claim is refuted | **False** |
 | Cannot run it by any available route | **Untrue** |
 
+![How a claim earns its status. A claim rests on trusted roots below it, and its check runs at the point where the system can break it. The check returns true (ran and stood), false (ran and broke), or untrue (no passing check). The loop is the replay: another agent re-runs the check, and entitlement is what survives the re-run.](/assets/truth-compilation-light.svg)
+
 The trichotomy comes from [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true). We apply it here to agent output. A passing replay gives its receiver entitlement to the claim but emits no transferable truth bit.
 
 But ordinary observations need no bundled check. If the receiver can already check a claim from shared context, the context supplies the replay. Therefore, the rigor of a check depends on context boundaries. For example, the rules of integer addition need not be accompanied by their derivation.
 
 Time matters when replay makes it matter. A claim about a pinned artifact remains true for any receiver who can still replay its evidence, but a claim about the artifact's current state must run against the current artifact. So if a required service later disappears, the claim is untrue for a new knower who cannot run it; a later opposing verdict makes it false. A claim about the current weather is the everyday case.
 
-## Replay preserves one guarantee under misspecification
+## One guarantee under misspecification
 
 Replay clears testimonial uncertainty while specification uncertainty remains. A check can return deterministically and still measure the wrong property. It can miss relevant cases, encode a bad oracle, or depend on a poisoned artifact. So local replay guarantees only that the receiver can derive the encoded claim-level verdict without trusting the sender.
 
@@ -48,7 +52,7 @@ That narrow guarantee keeps the failure visible. A self-attested verdict compres
 1. Did the sender report the result faithfully?
 2. Did the procedure test what the claim says?
 
-Replay removes the first question but leaves the second open, where another agent can inspect, challenge, and replace the procedure. A replayable mistake is still a mistake, but it has a surface on which inquiry can continue.
+Replay removes the first question but leaves the second open. There another agent can inspect, challenge, and replace the procedure. A replayable mistake is still a mistake, but it has a surface on which inquiry can continue.
 
 A replayable claim needs no confidence score to stand in for entitlement. When the receiver can run the procedure and find out, it need not estimate whether the sender is likely to be right. Probability can remain the content of a claim, such as a weather forecast; it no longer has to stand in for the missing path from claim to evidence.
 
@@ -56,9 +60,9 @@ A replayable claim needs no confidence score to stand in for entitlement. When t
 
 Picture two otherwise identical audit agents. Both inspect the same benchmark and reach the same conclusions. The self-attesting agent returns labels and a headline rate. The trustless agent returns each claim with its replay. Their discovery capability is held fixed; only the epistemic form of their output changes. The first leaves the receiver with an attestation. The second lets the receiver find out.
 
-Two real audits approximate this contrast. Both employed agents against the same benchmark under opposite communication protocols, but their different methods, scopes, categories, and denominators preclude a controlled performance estimate.
+Two real audits approximate this contrast. Both employed agents against the same benchmark under opposite communication protocols. But their different methods, scopes, and denominators preclude a controlled performance estimate.
 
-[OpenAI's audit of SWE-bench Pro](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) used an automated filter and repeated investigator-agent passes. A researcher and five software engineers reviewed the results. The post reports 200 tasks labeled broken by the agent pipeline, 249 by the human campaign, and a headline estimate of roughly 30 percent. But the post does not publish the pipeline, the per-task labels, the annotations, or the disagreements. The author is “OpenAI,” so its agents and reviewers attest their own work.
+[OpenAI's audit of SWE-bench Pro](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) used an automated filter and repeated investigator-agent passes. A researcher adjudicated the agent summaries, and five software engineers separately reviewed each flagged task. The post reports 200 tasks labeled broken by the agent pipeline, 249 by the human campaign, and a headline estimate of roughly 30 percent. But the post does not publish the pipeline, the per-task labels, or the annotations and disagreements. The author is “OpenAI,” so its agents and reviewers attest their own work.
 
 The [public determinacy audit of SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) used agents under the trustless protocol. It reports a smaller, deliberately conservative floor. The audit mechanically witnesses 83 cases, and another 26 survive adversarial cross-family review. Together they make 109 of 728 public tasks, or 15.0 percent. Three more of the 731 public tasks fail their own grader on the gold patch and sit outside that denominator.
 
@@ -95,6 +99,10 @@ The [`ansible_20ef733e` receipt](https://github.com/kimjune01/swebench-pro-audit
 
 That replay establishes the receipt's local claim. But other interpretations of the task remain open: the claim reaches exactly as far as the check.
 
+## Related work
+
+The protocol belongs to the family whose value is a contract a consumer checks without trusting the producer. [Proof-carrying code](https://dl.acm.org/doi/10.1145/263699.263712) ships untrusted code with a safety proof the receiver verifies locally, and [verifiable computation](https://link.springer.com/chapter/10.1007/978-3-642-14623-7_25) reaches the same guarantee cryptographically where the check compiles to a circuit. Replay is the plain-execution case, universal and cheap to produce but costing the receiver a full re-run. [Reproducible builds](https://reproducible-builds.org/) and [artifact badging](https://www.acm.org/publications/policies/artifact-review-and-badging-current) practice re-derivation at artifact and paper granularity; the unit here is one claim, so a receiver checks what it needs without rebuilding a corpus. Provenance standards such as [W3C PROV](https://www.w3.org/TR/prov-dm/) and [in-toto](https://in-toto.io/) record how evidence was produced, and [*Verifiable Knowledge*](/verifiable-knowledge) assembles that stack into a full claim contract; the narrower point here is that a derivation record remains attestation until the receiver can re-run it. [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true) traces the trichotomy's lineage from Schlick through Dewey to Dummett: [verificationism's](https://en.wikipedia.org/wiki/Verificationism) truth tied to the method of verification, [pragmatism's](https://en.wikipedia.org/wiki/Pragmatism) warrant earned by inquiry. Here that lineage runs as engineering: the verification is a procedure the receiver executes. Where [the epistemology of testimony](https://plato.stanford.edu/entries/testimony-episteme/) treats a speaker's word as warrant the hearer accepts on trust, the protocol is the engineering refusal. Wherever a claim admits a deterministic re-derivation, the receiver need not accept testimony at all.
+
 ## Limits and scope
 
 Forged inputs and selective disclosure can corrupt the record; evaluation awareness and collusion remain possible. So artifact integrity and semantic adequacy are claims of their own, to be transmitted with checks of their own.
@@ -105,7 +113,7 @@ The audit's 109 receipts show the protocol operating at benchmark scale, but age
 
 ## Conclusion
 
-An agent should transmit more than its answer when another agent must decide what to know. The replayable-claims protocol sends the claim and whatever re-derives its claim-level verdict. The receiver runs it and acquires a relational status: true, false, or untrue.
+An agent should transmit more than its answer when another agent must decide what to know. The replayable-claims protocol sends the claim and whatever re-derives its claim-level verdict. The receiver runs it and acquires a relational status of true, false, or untrue.
 
 The protocol changes epistemic communication without requiring the receiver to trust the sender. In the SWE-bench Pro ablation, agents outside the protocol produced an opaque institutional estimate; agents under the protocol produced claims a stranger can rerun one at a time. The substantive findings point in the same direction while their epistemic outputs diverge.
 
