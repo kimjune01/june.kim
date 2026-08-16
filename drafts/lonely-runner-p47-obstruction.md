@@ -94,7 +94,7 @@ satisfies
 \operatorname{lcm}(2,\ldots,9)\prod_{p\in S}p>B.
 \]
 
-The same parameterized split now closes (p=53,59,61,67,71,73,79,83,89,97,101) at exhaustive replay level. The archived independent DRUP proofs remain specific to the low-unit branches at (p=47). These distinctions matter: a replayed exhaustive verifier is stronger than an unrecorded solver verdict, but it is not yet an independently checked proof artifact for all branches.
+The same parameterized split now closes (p=53,59,61,67,71,73,79,83,89,97,101,103) at exhaustive replay level. The archived independent DRUP proofs remain specific to the low-unit branches at (p=47). These distinctions matter: a replayed exhaustive verifier is stronger than an unrecorded solver verdict, but it is not yet an independently checked proof artifact for all branches.
 
 ## References
 
