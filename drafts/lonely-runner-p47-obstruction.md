@@ -1,6 +1,12 @@
-# A certified modular obstruction at (k=8,p=47)
+# From a p=47 obstruction to the nine-runner theorem
 
-Status: research draft, 2026-08-16. This is one prime-divisor result, **not** a proof of the nine-runner case or the general Lonely Runner Conjecture.
+Status: research draft, 2026-08-16. The local p=47 result below is one independently checked obstruction. A later literature recheck found that the nine-runner case had already been proved twice in late 2025. I subsequently replayed the complete 39-prime sieve from Trakulthongchai's proof. This is a reconstruction of a known theorem, **not** a novelty claim or a proof of the general Lonely Runner Conjecture.
+
+## Correction before the mathematics
+
+I selected nine runners as an open target from stale context. It was not open. Trakulthongchai announced proofs for nine and ten runners in November 2025; Rosenfeld independently announced a different nine-runner proof days later. Both have revised 2026 manuscripts. The mistake is methodological, not cosmetic: problem status is a time-dependent premise and must be rechecked against dated primary sources before a novelty claim.
+
+The attempted proof search was still useful. Its p=47 certificate independently cross-checks the boundary mechanism, and its first fourteen prime obstructions agree with the published sieve. But “I reproduced part of the proof before finding it” is not “I solved an open problem.”
 
 ## Result
 
@@ -70,7 +76,7 @@ The DRUP checker proves the augmented CNFs inconsistent. Separate mathematical a
 
 Each implication is recorded in the hypothesis graph and replayed where finite. The cover definition printed as (1/(k-1)) in the implementation section of the available Rosenfeld source conflicts with the preceding lemma and its claimed equivalence; (1/(k+1)) is the threshold used here.
 
-## What remains for nine runners
+## Resolution of the nine-runner case
 
 The explicit minimal-counterexample product bound is
 
@@ -79,25 +85,30 @@ B=\left(\frac{36^7}{8}\right)^8
 =84765698874878218361067180729674171436543015292348049288994557831877912686493696.
 \]
 
-Rosenfeld's argument would finish the nine-runner case once enough independently verified modular obstructions force a divisor larger than (B). If every prime from (47) through (233) works, the 37-prime set
+Trakulthongchai's proof makes the required computation tractable by lifting improper covers through moduli (p), (3p), and (9p). I replayed the author's unmodified verifier for the 39-prime set
 
 ```text
 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103,
 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163,
 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227,
-229, 233
+229, 233, 239, 241
 ```
 
-satisfies
+For every prime, the final improper set was empty and all intermediate cardinalities matched the published receipt. Hence every hypothetical counterexample's speed product is divisible by
 
 \[
-\operatorname{lcm}(2,\ldots,9)\prod_{p\in S}p>B.
+\prod_{p\in S}p
+=19570880530831227159611114469289180443865177656785618176063821114999202895619850591,
 \]
 
-The same parameterized split now closes (p=53,59,61,67,71,73,79,83,89,97,101,103) at exhaustive replay level. The archived independent DRUP proofs remain specific to the low-unit branches at (p=47). These distinctions matter: a replayed exhaustive verifier is stronger than an unrecorded solver verdict, but it is not yet an independently checked proof artifact for all branches.
+which is about (230.882) times larger than (B). The finite-checking bound and prime-divisor lemma therefore contradict the existence of a minimal counterexample. This reconstructs the published proof that the Lonely Runner Conjecture holds for nine runners.
+
+The complete local audit—including the pinned source commit, hashes, 39 intermediate rows, exact arithmetic test, and trust boundary—is in `/Users/junekim/Documents/lonely-runner/artifacts/nine-runner-sieve-audit.md`. The computation is independent replay, not a proof-producing certificate. Rosenfeld's separate prime-power proof provides corroboration through a materially different refinement.
 
 ## References
 
 - Hugo Rosenfeld, [*The lonely runner conjecture holds for eight runners*](https://arxiv.org/abs/2509.14111), 2025.
+- Tanupat Trakulthongchai, [*Nine and ten lonely runners*](https://arxiv.org/abs/2511.22427), revised 2026.
+- Matthieu Rosenfeld, [*The lonely runner conjecture holds for nine runners*](https://arxiv.org/abs/2512.01912), revised 2026.
 - Perarnau and Serra, [*The Lonely Runner Conjecture turns 60*](https://arxiv.org/abs/2409.20160), 2024.
 - Malikiosis, Santos, and Schymura, [*Linearly-exponential checking is enough for the Lonely Runner Conjecture and some of its variants*](https://doi.org/10.1017/fms.2025.10107), 2025.

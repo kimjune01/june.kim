@@ -4,9 +4,12 @@
 # See /the-proof-manual for the full analysis.
 #
 # Agent: load YAML, query by claim_type/domain/constructor.
-# Procedure: formalize → decompose → retrieve → generate → search → verify → diagnose → mutate.
+# Procedure: status_check → formalize → decompose → retrieve → generate → search → verify → diagnose → mutate.
 
 proof_loop:
+  - stage: status_check
+    question: "Do dated primary sources still support the problem status and novelty claim?"
+    failure: stale_problem_status
   - stage: formalize
     question: "What exactly would inhabit the target: a witness, bound, construction, or contradiction?"
     failure: bad_formalization
@@ -33,6 +36,8 @@ proof_loop:
     failure: unproductive_mutation
 
 failure_classes:
+  - id: stale_problem_status
+    response: retrieve_latest_primary_result_and_reframe
   - id: bad_formalization
     response: repair_statement
   - id: missing_lemma

@@ -16,22 +16,25 @@ He never specified *what*. This manual does. It doesn't prove your theory right.
 
 ## The procedure
 
-1. Formalize the claim. Decide what would count as a witness, bound, construction, or impossibility.
-2. Decompose it into lemmas. Separate the structural problem from the local calculations.
-3. Classify each lemma by claim and domain, then look up candidates in the [grid](/data/proof-manual.yml). Scan the whole row, not just your first instinct.
-4. Retrieve analogues. Look for the same shape in another theorem or domain.
-5. Check kill conditions and symmetries. Cross off the dead techniques before you start.
-6. Try the survivors in parallel when you can. Verify each step, not just the conclusion, and record the verification grade.
-7. Diagnose the failures. Repair the statement, invent a missing lemma, change domains, or escalate to the technique the failure names.
-8. Repeat until the proof closes or the conjecture breaks.
+1. Revalidate the problem's status against dated primary sources. Repeat this before claiming novelty; “open” is not stable metadata.
+2. Formalize the claim. Decide what would count as a witness, bound, construction, or impossibility.
+3. Decompose it into lemmas. Separate the structural problem from the local calculations.
+4. Classify each lemma by claim and domain, then look up candidates in the [grid](/data/proof-manual.yml). Scan the whole row, not just your first instinct.
+5. Retrieve analogues. Look for the same shape in another theorem or domain.
+6. Check kill conditions and symmetries. Cross off the dead techniques before you start.
+7. Try the survivors in parallel when you can. Verify each step, not just the conclusion, and record the verification grade.
+8. Diagnose the failures. Repair the statement, invent a missing lemma, change domains, or escalate to the technique the failure names.
+9. Repeat until the proof closes or the conjecture breaks.
 
 This is the proof loop:
 
 ```
-formalize → decompose → retrieve → generate → search
-    ↑                                      ↓
-    └──── mutate ← diagnose ← verify ──────┘
+status → formalize → decompose → retrieve → generate → search
+  ↑                                                   ↓
+  └────────── mutate ← diagnose ← verify ─────────────┘
 ```
+
+A stale status check can waste the whole loop: a proof may have appeared after problem selection, or a newer theorem may make the chosen route obsolete. Record the query date, theorem statement, and primary source—not just “believed open.” Literature discovery is not a new proof, but failing to do it can turn genuine proof search into accidental reproduction.
 
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
 
