@@ -1,10 +1,50 @@
 # The Proof Manual — structured taxonomy
 # Grounded in the Calculus of Inductive Constructions (CIC).
 # Six type constructors generate all proof techniques.
-# See /proof-manual for the full analysis.
+# See /the-proof-manual for the full analysis.
 #
 # Agent: load YAML, query by claim_type/domain/constructor.
-# Procedure: classify claim+domain → grid lookup → check kill conditions → escalate on failure.
+# Procedure: formalize → decompose → retrieve → generate → search → verify → diagnose → mutate.
+
+proof_loop:
+  - stage: formalize
+    question: "What exactly would inhabit the target: a witness, bound, construction, or contradiction?"
+    failure: bad_formalization
+  - stage: decompose
+    question: "Which intermediate lemmas separate structure from calculation?"
+    failure: missing_lemma
+  - stage: retrieve
+    question: "Where has this proof shape appeared before, possibly in another domain?"
+    failure: missing_analogue
+  - stage: generate
+    question: "Which techniques survive the kill conditions and symmetry checks?"
+    failure: technique_mismatch
+  - stage: search
+    question: "Which surviving branches can be explored independently?"
+    failure: search_exhaustion
+  - stage: verify
+    question: "Does every step check, and does the formal statement match the intended claim?"
+    failure: invalid_derivation
+  - stage: diagnose
+    question: "Was the failure logical, structural, representational, or computational?"
+    failure: undiagnosed_failure
+  - stage: mutate
+    question: "Should we repair the statement, add a lemma, change domains, or escalate techniques?"
+    failure: unproductive_mutation
+
+failure_classes:
+  - id: bad_formalization
+    response: repair_statement
+  - id: missing_lemma
+    response: invent_or_retrieve_lemma
+  - id: technique_mismatch
+    response: check_kill_condition_and_escalate
+  - id: symmetry_mismatch
+    response: change_representation_or_technique
+  - id: invalid_derivation
+    response: reject_and_repair
+  - id: search_exhaustion
+    response: reallocate_budget_or_decompose
 
 constructors:
   - name: pi

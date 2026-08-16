@@ -16,11 +16,24 @@ He never specified *what*. This manual does. It doesn't prove your theory right.
 
 ## The procedure
 
-1. Classify the claim (existence, bound, construction, ...) and the domain (discrete, algebraic, geometric, ...).
-2. Look up candidates in the [grid](/data/proof-manual.yml). Scan the whole row, not just your first instinct.
-3. Check kill conditions. Cross off the dead ones before you start.
-4. Check symmetries. A technique that assumes the wrong symmetry fails silently.
-5. Try the survivors. When one dies, the failure mode names the next.
+1. Formalize the claim. Decide what would count as a witness, bound, construction, or impossibility.
+2. Decompose it into lemmas. Separate the structural problem from the local calculations.
+3. Classify each lemma by claim and domain, then look up candidates in the [grid](/data/proof-manual.yml). Scan the whole row, not just your first instinct.
+4. Retrieve analogues. Look for the same shape in another theorem or domain.
+5. Check kill conditions and symmetries. Cross off the dead techniques before you start.
+6. Try the survivors in parallel when you can. Verify each step, not just the conclusion.
+7. Diagnose the failures. Repair the statement, invent a missing lemma, change domains, or escalate to the technique the failure names.
+8. Repeat until the proof closes or the conjecture breaks.
+
+This is the proof loop:
+
+```
+formalize → decompose → retrieve → generate → search
+    ↑                                      ↓
+    └──── mutate ← diagnose ← verify ──────┘
+```
+
+The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
 
 ## Kill conditions
 
@@ -113,7 +126,9 @@ Every proof decomposes into compositions of six [type constructors](https://lean
 | Quotient | Equivalence |
 | Truncation | Non-constructive existence |
 
-The grid's rows map to these: existence = Σ, impossibility = Π→False, construction = Σ with computability. Kill conditions are type errors — your proof term doesn't inhabit the target type. Lean's type checker rejects proofs for the same reasons the kill conditions predict.
+The grid's rows map to these: existence = Σ, impossibility = Π→False, construction = Σ with computability. This explains the target shape, but not the whole search. A failed proof may be a type error; it may also be a missing lemma, an unproductive decomposition, a bad formalization, or a search budget spent in the wrong branch. Lean can reject an invalid proof term. It cannot tell you whether you stated the right theorem or searched the right neighborhood.
+
+That distinction matters more now that proof generation is abundant. Verification answers *is this derivation valid?* The manual answers *what should we try, what did the failure teach us, and how should we change the search?*
 
 Pick your stuck conjecture. Run the procedure. If the manual doesn't surface a technique you haven't tried, it's incomplete — [tell me what's missing](https://github.com/kimjune01/june.kim/blob/master/src/data/proof-manual.yml).
 
