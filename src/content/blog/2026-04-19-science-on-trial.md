@@ -171,6 +171,20 @@ Yes. That is the argument. Real discovery is already routing around the credenti
 
 Science is happening, outside the sanctioned peer-reviewed journal process.
 
+### Update | August 15, 2026
+
+ArXiv closed that route for me. After holding two of my papers for seven weeks, its moderators declined both as needing "significant review and revision" before they would be publishable by a conventional journal. They supplied no paper-specific review. Then they imposed an author-level restriction: submit only papers already published in conventional scholarly journals, with a journal reference or DOI resolving to the journal's website. They may reconsider after a "significant number" of my articles have been conventionally published over a "reasonable period of time."
+
+The papers were *Verifiable Knowledge: A Protocol for Trustless Agents* and *The Hypothesis Graph: A Verifiable Semantic Memory for Coding Agents*. I had already obtained the required endorsement to submit to cs.AI; endorsement was not the issue.
+
+A preprint server now requires me to publish in journals before I can post preprints. The escape route loops back into the institution it was supposed to route around:
+
+> Need visibility to obtain conventional publication.
+>
+> Need conventional publication to obtain arXiv visibility.
+
+The decision is also a miniature of this essay's complaint. Science demands specific, inspectable evidence from claims. Its gatekeepers can issue a consequential, author-level judgment using an unspecified standard, withhold the review needed to correct the work, and require prior approval from another set of gatekeepers as the remedy. The scientific institution reserves for itself a form of authority it would reject as evidence in a paper.
+
 #### "But the outside jury can become a mob"
 
 Yes, outside scrutiny can become performative or punitive. Online auditors can be wrong; reputational damage can run ahead of adjudication; selective outrage is real. That is why the standard has to be verifiable claims, not vibes. The checker checks, and the checker is checkable in return. The inside, by contrast, has been publishing mob verdicts, credentialed and peer-reviewed and catastrophically wrong, regardless. Eugenics, [recovered memory](https://en.wikipedia.org/wiki/Recovered-memory_therapy), [cold fusion](https://en.wikipedia.org/wiki/Cold_fusion), ego depletion.
