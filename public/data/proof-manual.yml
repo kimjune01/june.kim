@@ -45,6 +45,31 @@ failure_classes:
     response: reject_and_repair
   - id: search_exhaustion
     response: reallocate_budget_or_decompose
+  - id: certificate_gap
+    response: use_proof_producing_solver_and_independent_checker
+  - id: instrumentation_overhead
+    response: reduce_instance_or_change_verifier
+  - id: timeout_unknown
+    response: record_unknown_never_false
+  - id: information_loss
+    response: retain_higher_order_structure_or_exact_representation
+
+verification_grades:
+  - grade: witness
+    proves: explicit_object_passes_recorded_checks
+    gap: statement_mismatch
+  - grade: verdict
+    proves: solver_reported_status
+    gap: encoding_or_tool_error
+  - grade: replay
+    proves: pinned_command_reproduces_status
+    gap: common_mode_tool_failure
+  - grade: certificate
+    proves: independent_checker_accepts_proof_artifact
+    gap: formal_statement_mismatch
+  - grade: semantic_match
+    proves: formal_statement_matches_intended_claim
+    gap: requires_human_judgment
 
 constructors:
   - name: pi

@@ -21,7 +21,7 @@ He never specified *what*. This manual does. It doesn't prove your theory right.
 3. Classify each lemma by claim and domain, then look up candidates in the [grid](/data/proof-manual.yml). Scan the whole row, not just your first instinct.
 4. Retrieve analogues. Look for the same shape in another theorem or domain.
 5. Check kill conditions and symmetries. Cross off the dead techniques before you start.
-6. Try the survivors in parallel when you can. Verify each step, not just the conclusion.
+6. Try the survivors in parallel when you can. Verify each step, not just the conclusion, and record the verification grade.
 7. Diagnose the failures. Repair the statement, invent a missing lemma, change domains, or escalate to the technique the failure names.
 8. Repeat until the proof closes or the conjecture breaks.
 
@@ -34,6 +34,20 @@ formalize → decompose → retrieve → generate → search
 ```
 
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
+
+## Verification has levels
+
+“The solver says UNSAT” is not the same result as a proof a stranger can check.
+
+| Grade | What you have | What can still fail |
+|---|---|---|
+| Witness | An explicit construction or counterexample | It may not match the intended statement |
+| Verdict | A solver returns SAT / UNSAT | Tool bugs, encoding errors, irreproducible state |
+| Replay | A pinned command reproduces the verdict | The same tool may repeat the same mistake |
+| Certificate | An independent checker verifies a proof artifact | The formal statement may still be wrong |
+| Semantic match | A human checks formal statement against intended claim | Nothing mechanical closes this gap |
+
+Verification also perturbs the search. Proof logging, named clauses, and assumption tracking can make a terminating solve time out. That timeout is not evidence against the claim; it is an instrumentation failure. Record it as `unknown`, then change the verifier or reduce the instance. Never compress `unknown` into `false`.
 
 ## Kill conditions
 
@@ -51,6 +65,9 @@ The part nobody writes down.
 | Invariant | No separating invariant visible | Reduction |
 | Potential method | No monotone potential | Game equilibrium |
 | Diagonalization | Uncountable candidates | Reduction |
+| Solver verdict | No independently checkable certificate | Proof-producing solver → independent checker |
+| Proof logging | Instrumented search no longer terminates | Reduce instance → export certificate |
+| Moment / spectral summary | Same summary, different target behavior | Higher-order structure → exact representation |
 
 The kill at step N names the technique at step N+1.
 
