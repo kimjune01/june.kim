@@ -53,6 +53,8 @@ failure_classes:
     response: record_unknown_never_false
   - id: information_loss
     response: retain_higher_order_structure_or_exact_representation
+  - id: unsound_strengthening
+    response: prove_counterexample_preservation_before_certifying
 
 verification_grades:
   - grade: witness

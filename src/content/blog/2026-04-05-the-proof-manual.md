@@ -49,6 +49,8 @@ The techniques are old. What changed is how quickly a mathematician—or an agen
 
 Verification also perturbs the search. Proof logging, named clauses, and assumption tracking can make a terminating solve time out. That timeout is not evidence against the claim; it is an instrumentation failure. Record it as `unknown`, then change the verifier or reduce the instance. Never compress `unknown` into `false`.
 
+A certificate verifies the formula it receives, including any symmetry breaks, cuts, or derived clauses—not the claim that those strengthenings are sound. Record a proof that each added constraint preserves every hypothetical counterexample. Otherwise a perfectly checked `UNSAT` result may certify only an accidentally stronger problem.
+
 ## Kill conditions
 
 The part nobody writes down.
@@ -67,6 +69,7 @@ The part nobody writes down.
 | Diagonalization | Uncountable candidates | Reduction |
 | Solver verdict | No independently checkable certificate | Proof-producing solver → independent checker |
 | Proof logging | Instrumented search no longer terminates | Reduce instance → export certificate |
+| Strengthened encoding | Symmetry break or derived clause lacks a preservation proof | Prove implication → certify augmented formula |
 | Moment / spectral summary | Same summary, different target behavior | Higher-order structure → exact representation |
 
 The kill at step N names the technique at step N+1.
