@@ -34,7 +34,10 @@ const dateStr = date.toISOString();
 const isPaper = variant === 'post-paper';
 const scholarDate = dateStr.slice(0, 10).replaceAll('-', '/');
 const pdfUrl = isPaper && fs.existsSync(`public/assets/${slug}.pdf`)
-  ? `https://june.kim/assets/${slug}.pdf`
+  // Scholar asks that an abstract page and its citation_pdf_url live in the
+  // same URL directory. The build creates this root-level alias while keeping
+  // the long-standing /assets URL available.
+  ? `https://june.kim/${slug}.pdf`
   : null;
 const tagsArray = typeof tags === 'string' ? tags.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : (tags || []);
 const excerpt = ''; // TODO: extract from content
@@ -76,7 +79,7 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": isPaper ? "ScholarlyArticle" : "BlogPosting",
     headline: title,
     url: `https://june.kim/${slug}`,
     datePublished: dateStr,
@@ -133,6 +136,15 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
       <div class="center">
         <h1>{monospace_title ? <code>{title}</code> : title}</h1>
         {subtitle && <p class="post-subtitle">{subtitle}</p>}
+        {isPaper && (
+          <p class="paper-byline">
+            <span class="citation_author">June Kim</span>
+            <span aria-hidden="true"> · </span>
+            <time class="citation_publication_date" datetime={dateStr.slice(0, 10)}>
+              {date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+            </time>
+          </p>
+        )}
       </div>
       <slot />
     </article>
@@ -237,7 +249,8 @@ const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/d
     }
     article.paper > h1, article.paper .center h1 { font-size: 1.9em; line-height: 1.2; margin-bottom: 0.4em; }
     .center .post-subtitle { font-size: 1.1em; font-style: italic; font-weight: normal; color: #666; margin: 0.15em 0 1.1em; }
-    article.paper .center .post-subtitle { font-size: 1.05em; color: #555; }
+     article.paper .center .post-subtitle { font-size: 1.05em; color: #555; }
+     article.paper .paper-byline { margin: 0.2em 0 1.4em; color: #555; font-size: 0.95em; }
     article.paper > h2 { font-size: 1.35em; margin-top: 1.8em; margin-bottom: 0.6em; border-bottom: 1px solid #eee; padding-bottom: 0.25em; }
     article.paper > h3 { font-size: 1.1em; margin-top: 1.4em; margin-bottom: 0.4em; }
     article.paper > h4 { font-size: 1.0em; margin-top: 1.1em; margin-bottom: 0.3em; font-style: italic; font-weight: normal; }

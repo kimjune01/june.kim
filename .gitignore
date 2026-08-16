@@ -26,6 +26,9 @@ infra/junebot/seed.zip
 public/assets/inquiry-loop-paper.pdf
 public/assets/methodeutic-harness-paper.pdf
 
+# Google Scholar aliases generated from public/assets by prepare-assets.mjs
+public/*.pdf
+
 # arXiv source bundles (build artifacts; rebuilt by md2arxiv)
 build/
 

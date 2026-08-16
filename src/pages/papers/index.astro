@@ -1,0 +1,38 @@
+---
+import fs from 'node:fs';
+import { getCollection } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
+
+const papers = (await getCollection('blog'))
+  .filter(({ data }) => data.variant === 'post-paper')
+  .map((paper) => {
+    const slug = paper.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    const date = paper.id.match(/^\d{4}-\d{2}-\d{2}/)?.[0] ?? '';
+    const hasPdf = fs.existsSync(`public/assets/${slug}.pdf`);
+    return { title: paper.data.title, subtitle: paper.data.subtitle, slug, date, hasPdf };
+  })
+  .sort((a, b) => b.date.localeCompare(a.date));
+---
+
+<BlogPost title="Papers" date={new Date('2026-01-01')} slug="papers">
+  <p>Preprints, technical reports, and research papers by June Kim. Each entry provides a freely accessible abstract page and full-text PDF.</p>
+
+  <ul class="paper-index">
+    {papers.map((paper) => (
+      <li>
+        <a href={`/${paper.slug}`}><strong>{paper.title}</strong></a>
+        {paper.subtitle && <span> | {paper.subtitle}</span>}
+        <br />
+        <small>
+          June Kim | {paper.date}
+          {paper.hasPdf && <span> | <a href={`/${paper.slug}.pdf`}>PDF</a></span>}
+        </small>
+      </li>
+    ))}
+  </ul>
+</BlogPost>
+
+<style>
+  .paper-index { padding-left: 0; list-style: none; }
+  .paper-index li { margin: 1.4rem 0; }
+</style>
