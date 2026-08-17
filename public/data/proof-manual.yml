@@ -42,6 +42,8 @@ failure_classes:
     response: repair_statement
   - id: quantifier_order_mismatch
     response: choose_later_objects_adversarially_after_earlier_parameters
+  - id: vacuous_certificate
+    response: specify_transformation_and_prove_invariant_preservation
   - id: missing_lemma
     response: invent_or_retrieve_lemma
   - id: technique_mismatch

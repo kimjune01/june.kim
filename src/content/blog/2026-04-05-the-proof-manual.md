@@ -38,6 +38,8 @@ A stale status check can waste the whole loop: a proof may have appeared after p
 
 Quantifier order deserves the same treatment. To test (\(\exists D\,\forall d\ge D\,\forall v\)), choose (\(v\)) *after* seeing (\(d\)); never test only a fixed collection of (\(v\)) while increasing the grid. Uniform discretization claims are especially vulnerable because the object can scale with the denominator and hide between every sampled point.
 
+Then audit the conclusion for operational content. “There exists a relation permitting descent” is not a lemma until the permitted transformation and its preserved invariant are stated. If the bare relation exists for every object in the domain, the adjective is carrying the entire proof and the hypothesis cannot yet be tested.
+
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
 
 ## Verification has levels
@@ -77,6 +79,7 @@ The part nobody writes down.
 | Strengthened encoding | Symmetry break or derived clause lacks a preservation proof | Prove implication → certify augmented formula |
 | Moment / spectral summary | Same summary, different target behavior | Higher-order structure → exact representation |
 | Uniform discretization | The object may scale with the chosen grid | Height-sensitive bound → fixed-object compactness |
+| Structural certificate | The certificate is automatic; an adjective hides the missing step | Define the transformation → prove invariant preservation |
 
 The kill at step N names the technique at step N+1.
 
