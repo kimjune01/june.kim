@@ -118,7 +118,7 @@ The part nobody writes down.
 | Loose cover capacity | Set sizes ignore witnesses with exclusive or incompatible blockers | Classify witness obligations → derive the exact cover minimum |
 | Continuous cover sampling | Preferred endpoints miss feasible components, or raw capacity double-counts events | Prove all-event completeness → count ownership intersections |
 | Support-only congestion | Repeated participant sets have no algebraic relation | Retain event phases and signed residuals → subtract occurrences |
-| Static load graph | Coverage edges forget when handoffs occur | Find a conserved deficit → retain timestamps on its cycles |
+| Static load graph | Coverage edges forget when and where handoffs occur | Find a conserved deficit → retain timestamps and shared coordinates on its cycles |
 
 The kill at step N names the technique at step N+1.
 
@@ -134,6 +134,10 @@ This is the proof analogue of an augmenting-path algorithm. The invariant is
 not “keep the partial solution optimal.” It is “keep it feasible above the
 threshold while searching for a free slot.” Test the frozen optimum first; if
 it fails, lower it only to the strongest scale justified by the final theorem.
+
+A conserved deficit is bookkeeping, not termination. Once it identifies the
+legal handoffs, look for the timestamp, ordering, or boundary condition that
+makes some refinement monotone; otherwise the same finite load may circulate.
 
 ## Symmetry mismatch
 
