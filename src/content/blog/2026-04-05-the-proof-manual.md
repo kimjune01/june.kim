@@ -42,6 +42,8 @@ Then audit the conclusion for operational content. “There exists a relation pe
 
 Audit composition too. Two unrelated certificates can be added into one artifact whose support appears to bridge both components. Before treating support as connectivity, factor out disjoint subcertificates or measure an invariant such as rank that cannot increase under cosmetic recombination.
 
+Audit computation against the theorem lattice. An exhaustive classification may be correct yet logically redundant because an older extremal theorem already gives a stronger bound on the entire domain. Run the computation as an independent audit if it is useful, but move the theorem—not the table—into the proof's load-bearing path.
+
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
 
 ## Verification has levels
@@ -83,6 +85,7 @@ The part nobody writes down.
 | Uniform discretization | The object may scale with the chosen grid | Height-sensitive bound → fixed-object compactness |
 | Structural certificate | The certificate is automatic; an adjective hides the missing step | Define the transformation → prove invariant preservation |
 | Composite certificate | Sums of unrelated certificates masquerade as a bridge | Remove decomposable supports → test rank or indecomposability |
+| Redundant classification | A general theorem already dominates every computed case | Retrieve the extremal theorem → keep computation as an audit |
 
 The kill at step N names the technique at step N+1.
 
