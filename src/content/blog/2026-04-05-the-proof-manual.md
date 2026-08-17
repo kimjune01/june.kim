@@ -54,6 +54,8 @@ For continuous window covers, ask whether feasibility is witnessed at an entry o
 
 Repeated overlap support need not imply a relation among the participants. Preserve the event coordinates and signed residuals before compressing a congested cluster. Subtracting two occurrences can cancel a shared affine phase and turn repeated overlap into a difference-set or lattice statement; discarding the coordinates first destroys that invariant.
 
+When borrowing from another field, transfer the proof decomposition before transferring any theorem. A useful analogue may suggest a dichotomy—recursively remove a locally reducible object, or classify the rigid core left behind—even when its domain-specific conclusion is irrelevant. Restate each branch in the target object's invariants and prove it there. Shared vocabulary such as “coverage,” “time,” or “load” is evidence for an experiment, not permission to import a lemma.
+
 Audit computation against the theorem lattice. An exhaustive classification may be correct yet logically redundant because an older extremal theorem already gives a stronger bound on the entire domain. Run the computation as an independent audit if it is useful, but move the theorem—not the table—into the proof's load-bearing path.
 
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.

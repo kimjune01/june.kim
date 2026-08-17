@@ -60,6 +60,8 @@ failure_classes:
     response: prove_boundary_event_completeness_then_count_ownership_intersections
   - id: support_only_congestion
     response: retain_event_phases_and_signed_residuals_then_subtract_occurrences
+  - id: analogy_overreach
+    response: transfer_the_proof_decomposition_then_reprove_each_domain_specific_lemma
   - id: missing_lemma
     response: invent_or_retrieve_lemma
   - id: technique_mismatch
