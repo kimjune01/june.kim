@@ -46,6 +46,8 @@ failure_classes:
     response: restore_original_antecedent_or_prove_a_wider_bound
   - id: boundary_interior_collapse
     response: split_strict_boundary_and_closed_cases_then_normalize_at_the_threshold
+  - id: noninvariant_arithmetic_condition
+    response: quotient_scaling_and_restate_on_primitive_representatives
   - id: vacuous_certificate
     response: specify_transformation_and_prove_invariant_preservation
   - id: decomposable_certificate

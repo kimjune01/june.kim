@@ -42,6 +42,8 @@ Carry theorem domains forward verbatim. A finite bound for *counterexamples* doe
 
 Separate the strict interior from the boundary of every sharp threshold. Equality cases often carry rigid extremizers that weaken the structural statement even though a counterexample would satisfy a strict inequality. When the threshold is rational, normalize there before searching: exact boundary equations may expose the small integer labels the proof needs. Test `<`, `=`, and `≤` as different hypotheses, and use a rational grid only as a necessary filter until the intervals between grid points are controlled.
 
+Quotient out invariances before stating an arithmetic hypothesis. If the target is unchanged by common dilation but “some coordinate is divisible by (m)” is not, divisibility is meaningful only for the primitive representative. Testing millions of primitive examples does not validate a theorem whose written quantifier still includes their dilations.
+
 Then audit the conclusion for operational content. “There exists a relation permitting descent” is not a lemma until the permitted transformation and its preserved invariant are stated. If the bare relation exists for every object in the domain, the adjective is carrying the entire proof and the hypothesis cannot yet be tested.
 
 Audit composition too. Two unrelated certificates can be added into one artifact whose support appears to bridge both components. Before treating support as connectivity, factor out disjoint subcertificates or measure an invariant such as rank that cannot increase under cosmetic recombination.
@@ -89,6 +91,7 @@ The part nobody writes down.
 | Uniform discretization | The object may scale with the chosen grid | Height-sensitive bound → fixed-object compactness |
 | Theorem-domain widening | A counterexample bound is applied to every near-extremizer | Restore the original antecedent → prove a separate wider bound |
 | Boundary/interior collapse | Equality extremizers obscure the stricter counterexample domain | Split `<`, `=`, `≤` → normalize at the sharp boundary |
+| Non-invariant arithmetic condition | Scaling preserves the target but changes divisibility | Pass to primitive representatives → restate the quantifier |
 | Structural certificate | The certificate is automatic; an adjective hides the missing step | Define the transformation → prove invariant preservation |
 | Composite certificate | Sums of unrelated certificates masquerade as a bridge | Remove decomposable supports → test rank or indecomposability |
 | Redundant classification | A general theorem already dominates every computed case | Retrieve the extremal theorem → keep computation as an audit |
