@@ -56,6 +56,8 @@ Repeated overlap support need not imply a relation among the participants. Prese
 
 When borrowing from another field, transfer the proof decomposition before transferring any theorem. A useful analogue may suggest a dichotomy—recursively remove a locally reducible object, or classify the rigid core left behind—even when its domain-specific conclusion is irrelevant. Restate each branch in the target object's invariants and prove it there. Shared vocabulary such as “coverage,” “time,” or “load” is evidence for an experiment, not permission to import a lemma.
 
+Separate certificate existence from certificate selection. A sweep, greedy order, or geometric pivot may repeatedly find the witnesses you need and still fail on an example where the full witness family proves the theorem. When a selection rule breaks, compute an order-independent invariant—such as the rank or span of every valid certificate—before weakening the conclusion. The failed algorithm may diagnose its own locality, not a mathematical obstruction.
+
 Audit computation against the theorem lattice. An exhaustive classification may be correct yet logically redundant because an older extremal theorem already gives a stronger bound on the entire domain. Run the computation as an independent audit if it is useful, but move the theorem—not the table—into the proof's load-bearing path.
 
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.

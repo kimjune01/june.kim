@@ -62,6 +62,8 @@ failure_classes:
     response: retain_event_phases_and_signed_residuals_then_subtract_occurrences
   - id: analogy_overreach
     response: transfer_the_proof_decomposition_then_reprove_each_domain_specific_lemma
+  - id: certificate_selection_overfit
+    response: compare_the_selected_certificate_with_the_span_of_all_valid_certificates
   - id: missing_lemma
     response: invent_or_retrieve_lemma
   - id: technique_mismatch
