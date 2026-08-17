@@ -11,7 +11,7 @@ proof_loop:
     question: "Do dated primary sources still support the problem status and novelty claim?"
     failure: stale_problem_status
   - stage: formalize
-    question: "What exactly would inhabit the target: a witness, bound, construction, or contradiction?"
+    question: "What exactly would inhabit the target, and which later-bound objects may depend on earlier choices?"
     failure: bad_formalization
   - stage: decompose
     question: "Which intermediate lemmas separate structure from calculation?"
@@ -40,6 +40,8 @@ failure_classes:
     response: retrieve_latest_primary_result_and_reframe
   - id: bad_formalization
     response: repair_statement
+  - id: quantifier_order_mismatch
+    response: choose_later_objects_adversarially_after_earlier_parameters
   - id: missing_lemma
     response: invent_or_retrieve_lemma
   - id: technique_mismatch

@@ -17,7 +17,7 @@ He never specified *what*. This manual does. It doesn't prove your theory right.
 ## The procedure
 
 1. Revalidate the problem's status against dated primary sources. Repeat this before claiming novelty; “open” is not stable metadata.
-2. Formalize the claim. Decide what would count as a witness, bound, construction, or impossibility.
+2. Formalize the claim and its quantifier order. Decide what would count as a witness, bound, construction, or impossibility; then let later-bound objects depend adversarially on every earlier choice.
 3. Decompose it into lemmas. Separate the structural problem from the local calculations.
 4. Classify each lemma by claim and domain, then look up candidates in the [grid](/data/proof-manual.yml). Scan the whole row, not just your first instinct.
 5. Retrieve analogues. Look for the same shape in another theorem or domain.
@@ -35,6 +35,8 @@ status → formalize → decompose → retrieve → generate → search
 ```
 
 A stale status check can waste the whole loop: a proof may have appeared after problem selection, or a newer theorem may make the chosen route obsolete. Record the query date, theorem statement, and primary source—not just “believed open.” Literature discovery is not a new proof, but failing to do it can turn genuine proof search into accidental reproduction.
+
+Quantifier order deserves the same treatment. To test (\(\exists D\,\forall d\ge D\,\forall v\)), choose (\(v\)) *after* seeing (\(d\)); never test only a fixed collection of (\(v\)) while increasing the grid. Uniform discretization claims are especially vulnerable because the object can scale with the denominator and hide between every sampled point.
 
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
 
@@ -74,6 +76,7 @@ The part nobody writes down.
 | Proof logging | Instrumented search no longer terminates | Reduce instance → export certificate |
 | Strengthened encoding | Symmetry break or derived clause lacks a preservation proof | Prove implication → certify augmented formula |
 | Moment / spectral summary | Same summary, different target behavior | Higher-order structure → exact representation |
+| Uniform discretization | The object may scale with the chosen grid | Height-sensitive bound → fixed-object compactness |
 
 The kill at step N names the technique at step N+1.
 
