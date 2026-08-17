@@ -50,6 +50,8 @@ failure_classes:
     response: factor_disjoint_subcertificates_and_test_rank
   - id: redundant_classification
     response: retrieve_dominating_extremal_theorem_and_keep_computation_as_audit
+  - id: near_tight_packing
+    response: compare_two_packings_sharing_all_but_one_piece_and_bound_replacement_distance_by_total_slack
   - id: analogy_overreach
     response: transfer_the_proof_decomposition_then_reprove_each_domain_specific_lemma
   - id: certificate_selection_overfit

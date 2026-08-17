@@ -58,6 +58,8 @@ failure_classes:
     response: classify_exclusive_witness_obligations_and_derive_exact_cover_minimum
   - id: continuous_cover_sampling
     response: prove_boundary_event_completeness_then_count_ownership_intersections
+  - id: near_tight_packing
+    response: compare_two_packings_sharing_all_but_one_piece_and_bound_replacement_distance_by_total_slack
   - id: support_only_congestion
     response: retain_event_phases_and_signed_residuals_then_subtract_occurrences
   - id: analogy_overreach
