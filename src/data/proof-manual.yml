@@ -56,6 +56,8 @@ failure_classes:
     response: retrieve_dominating_extremal_theorem_and_keep_computation_as_audit
   - id: loose_cover_capacity
     response: classify_exclusive_witness_obligations_and_derive_exact_cover_minimum
+  - id: continuous_cover_sampling
+    response: prove_boundary_event_completeness_then_count_ownership_intersections
   - id: missing_lemma
     response: invent_or_retrieve_lemma
   - id: technique_mismatch
