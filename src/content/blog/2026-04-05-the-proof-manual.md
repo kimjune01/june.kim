@@ -121,6 +121,19 @@ The part nobody writes down.
 
 The kill at step N names the technique at step N+1.
 
+## Preserve maneuvering room
+
+An inductive witness is often stronger than the larger problem needs. Freezing
+it at its exact optimum can destroy every extension even when a nearby,
+slightly weaker witness extends cleanly. Treat the surplus as a routing budget:
+identify the connected feasible component, move inside it, and update the
+remaining constraints only when a boundary event occurs.
+
+This is the proof analogue of an augmenting-path algorithm. The invariant is
+not “keep the partial solution optimal.” It is “keep it feasible above the
+threshold while searching for a free slot.” Test the frozen optimum first; if
+it fails, lower it only to the strongest scale justified by the final theorem.
+
 ## Symmetry mismatch
 
 If your problem lacks a symmetry your technique assumes, the technique produces a valid-looking argument with a hidden gap.
