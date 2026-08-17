@@ -54,6 +54,8 @@ failure_classes:
     response: factor_disjoint_subcertificates_and_test_rank
   - id: redundant_classification
     response: retrieve_dominating_extremal_theorem_and_keep_computation_as_audit
+  - id: loose_cover_capacity
+    response: classify_exclusive_witness_obligations_and_derive_exact_cover_minimum
   - id: missing_lemma
     response: invent_or_retrieve_lemma
   - id: technique_mismatch
