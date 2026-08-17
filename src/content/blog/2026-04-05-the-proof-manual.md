@@ -38,6 +38,8 @@ A stale status check can waste the whole loop: a proof may have appeared after p
 
 Quantifier order deserves the same treatment. To test (\(\exists D\,\forall d\ge D\,\forall v\)), choose (\(v\)) *after* seeing (\(d\)); never test only a fixed collection of (\(v\)) while increasing the grid. Uniform discretization claims are especially vulnerable because the object can scale with the denominator and hide between every sampled point.
 
+Carry theorem domains forward verbatim. A finite bound for *counterexamples* does not bound every object in a wider near-extremal band, even when every counterexample lies inside that band. Either retain the counterexample-only conclusion or derive a new bound for the wider antecedent.
+
 Then audit the conclusion for operational content. “There exists a relation permitting descent” is not a lemma until the permitted transformation and its preserved invariant are stated. If the bare relation exists for every object in the domain, the adjective is carrying the entire proof and the hypothesis cannot yet be tested.
 
 Audit composition too. Two unrelated certificates can be added into one artifact whose support appears to bridge both components. Before treating support as connectivity, factor out disjoint subcertificates or measure an invariant such as rank that cannot increase under cosmetic recombination.
@@ -83,6 +85,7 @@ The part nobody writes down.
 | Strengthened encoding | Symmetry break or derived clause lacks a preservation proof | Prove implication → certify augmented formula |
 | Moment / spectral summary | Same summary, different target behavior | Higher-order structure → exact representation |
 | Uniform discretization | The object may scale with the chosen grid | Height-sensitive bound → fixed-object compactness |
+| Theorem-domain widening | A counterexample bound is applied to every near-extremizer | Restore the original antecedent → prove a separate wider bound |
 | Structural certificate | The certificate is automatic; an adjective hides the missing step | Define the transformation → prove invariant preservation |
 | Composite certificate | Sums of unrelated certificates masquerade as a bridge | Remove decomposable supports → test rank or indecomposability |
 | Redundant classification | A general theorem already dominates every computed case | Retrieve the extremal theorem → keep computation as an audit |

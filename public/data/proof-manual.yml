@@ -42,6 +42,8 @@ failure_classes:
     response: repair_statement
   - id: quantifier_order_mismatch
     response: choose_later_objects_adversarially_after_earlier_parameters
+  - id: theorem_domain_widening
+    response: restore_original_antecedent_or_prove_a_wider_bound
   - id: vacuous_certificate
     response: specify_transformation_and_prove_invariant_preservation
   - id: decomposable_certificate
