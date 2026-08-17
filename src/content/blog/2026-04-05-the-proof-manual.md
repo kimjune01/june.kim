@@ -52,6 +52,8 @@ When a covering argument stalls at a loose union bound, classify the witnesses b
 
 For continuous window covers, ask whether feasibility is witnessed at an entry or exit event. Prove that reduction topologically—a nonempty proper closed feasible component has a boundary—before replacing the continuum by endpoints. Then count event ownership, not just interval measure. If raw capacities still cover the demand, measure duplicated ownership with intersection moments; odd Bonferroni truncations give certified upper bounds, while an unproved low-order truncation is only a hypothesis.
 
+Repeated overlap support need not imply a relation among the participants. Preserve the event coordinates and signed residuals before compressing a congested cluster. Subtracting two occurrences can cancel a shared affine phase and turn repeated overlap into a difference-set or lattice statement; discarding the coordinates first destroys that invariant.
+
 Audit computation against the theorem lattice. An exhaustive classification may be correct yet logically redundant because an older extremal theorem already gives a stronger bound on the entire domain. Run the computation as an independent audit if it is useful, but move the theorem—not the table—into the proof's load-bearing path.
 
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
@@ -101,6 +103,7 @@ The part nobody writes down.
 | Redundant classification | A general theorem already dominates every computed case | Retrieve the extremal theorem → keep computation as an audit |
 | Loose cover capacity | Set sizes ignore witnesses with exclusive or incompatible blockers | Classify witness obligations → derive the exact cover minimum |
 | Continuous cover sampling | Preferred endpoints miss feasible components, or raw capacity double-counts events | Prove all-event completeness → count ownership intersections |
+| Support-only congestion | Repeated participant sets have no algebraic relation | Retain event phases and signed residuals → subtract occurrences |
 
 The kill at step N names the technique at step N+1.
 
