@@ -119,6 +119,7 @@ The part nobody writes down.
 | Continuous cover sampling | Preferred endpoints miss feasible components, or raw capacity double-counts events | Prove all-event completeness → count ownership intersections |
 | Support-only congestion | Repeated participant sets have no algebraic relation | Retain event phases and signed residuals → subtract occurrences |
 | Static load graph | Coverage edges forget when and where handoffs occur | Find a conserved deficit → retain timestamps and shared coordinates on its cycles |
+| Finite-state potential | A covered state recurs without the target certificate | Add only state with a scale-free inequality; stop if exact state reconstructs the original problem |
 
 The kill at step N names the technique at step N+1.
 
