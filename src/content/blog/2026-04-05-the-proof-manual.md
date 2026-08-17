@@ -118,6 +118,7 @@ The part nobody writes down.
 | Loose cover capacity | Set sizes ignore witnesses with exclusive or incompatible blockers | Classify witness obligations → derive the exact cover minimum |
 | Continuous cover sampling | Preferred endpoints miss feasible components, or raw capacity double-counts events | Prove all-event completeness → count ownership intersections |
 | Support-only congestion | Repeated participant sets have no algebraic relation | Retain event phases and signed residuals → subtract occurrences |
+| Static load graph | Coverage edges forget when handoffs occur | Find a conserved deficit → retain timestamps on its cycles |
 
 The kill at step N names the technique at step N+1.
 
