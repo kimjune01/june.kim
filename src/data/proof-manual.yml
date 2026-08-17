@@ -44,6 +44,8 @@ failure_classes:
     response: choose_later_objects_adversarially_after_earlier_parameters
   - id: vacuous_certificate
     response: specify_transformation_and_prove_invariant_preservation
+  - id: decomposable_certificate
+    response: factor_disjoint_subcertificates_and_test_rank
   - id: missing_lemma
     response: invent_or_retrieve_lemma
   - id: technique_mismatch

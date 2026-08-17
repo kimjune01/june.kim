@@ -40,6 +40,8 @@ Quantifier order deserves the same treatment. To test (\(\exists D\,\forall d\ge
 
 Then audit the conclusion for operational content. “There exists a relation permitting descent” is not a lemma until the permitted transformation and its preserved invariant are stated. If the bare relation exists for every object in the domain, the adjective is carrying the entire proof and the hypothesis cannot yet be tested.
 
+Audit composition too. Two unrelated certificates can be added into one artifact whose support appears to bridge both components. Before treating support as connectivity, factor out disjoint subcertificates or measure an invariant such as rank that cannot increase under cosmetic recombination.
+
 The techniques are old. What changed is how quickly a mathematician—or an agent—can generate, reject, repair, and recombine them. Control is no longer just knowing what to try next. It is managing the loop.
 
 ## Verification has levels
@@ -80,6 +82,7 @@ The part nobody writes down.
 | Moment / spectral summary | Same summary, different target behavior | Higher-order structure → exact representation |
 | Uniform discretization | The object may scale with the chosen grid | Height-sensitive bound → fixed-object compactness |
 | Structural certificate | The certificate is automatic; an adjective hides the missing step | Define the transformation → prove invariant preservation |
+| Composite certificate | Sums of unrelated certificates masquerade as a bridge | Remove decomposable supports → test rank or indecomposability |
 
 The kill at step N names the technique at step N+1.
 
