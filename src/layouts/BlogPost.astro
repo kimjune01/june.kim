@@ -41,7 +41,7 @@ const pdfUrl = isPaper && fs.existsSync(`public/assets/${slug}.pdf`)
   : null;
 const tagsArray = typeof tags === 'string' ? tags.split(/[,\s]+/).map(t => t.trim()).filter(Boolean) : (tags || []);
 const excerpt = ''; // TODO: extract from content
-const ogImage = image ? `https://june.kim/${image}` : 'https://june.kim/assets/default-icon.png';
+const ogImage = image ? `https://june.kim${image.startsWith('/') ? '' : '/'}${image}` : 'https://june.kim/assets/default-icon.png';
 ---
 
 <!DOCTYPE html>
