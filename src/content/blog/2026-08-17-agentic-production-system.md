@@ -1,12 +1,9 @@
 ---
 variant: post-medium
 title: "Agentic Production System"
-subtitle: "Applying the Toyota Production System to LLM-agent work"
 tags: coding, methodology
 image: "/assets/sweep-cockpit.png"
 ---
-
-# How do you manage quality and cost when each component is unreliable alone?
 
 Add another component, and quality rises while cost explodes. Remove one, and cost falls while defects escape. This is the production problem with agents: the model is stochastic, tools fail, APIs return stale state, tests can pass without running, and a human cannot watch every transition. Redundancy's only move is to multiply the same unreliable parts.
 
