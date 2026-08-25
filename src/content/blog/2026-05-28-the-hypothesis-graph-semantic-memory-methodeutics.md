@@ -99,11 +99,22 @@ Without a perturbation and observable outcome, the graph degrades into a plausib
 
 That residue is what the memory typology calls the `smem`: persistent, typed, queryable, and owned by the harness rather than the model. A second agent need not inherit the whole conversation. It can enter at an open node with that node's objective, direct dependencies, versions, and receipts. Independent branches can proceed concurrently; a changed root invalidates only what depends on it. The graph in the field work is one markdown file per inquiry. The scheduler experiment makes these update rules explicit.
 
+The protocol separates four objects that prose handoffs tend to blur:
+
+| Object | Contains | Establishes |
+|---|---|---|
+| **Trial** | Command, inputs, predicate | What was tested |
+| **Receipt** | Trial and observed outcome | What the checker accepted |
+| **Warrant** | Receipt under current dependency versions | What another agent may rely on |
+| **Hypothesis graph** | Warrants and dependency edges | What remains current after revision |
+
 ## Shared memory that fails closed {#right-regime}
 
 One agent's checked work can become another agent's working memory without losing the conditions under which that work was earned.
 
 That boundary is dangerous. A worker may return late, repeat an old result, use a changed dependency, or disappear halfway through publication. In ordinary notes, the receiving agent has to notice. In the graph, the protocol notices: a claim names its version and parent versions, carries a receipt checked against frozen work, and enters memory only through an atomic publication. If any entitlement is stale or missing, nothing downstream unlocks. Refusing progress is safe.
+
+![Fail-closed publication into shared semantic memory. A worker submits a claim, receipt, dependency versions, and lease to an atomic gate. Valid current work enters shared memory and unlocks dependents. Stale, unsupported, or interrupted work leaves memory unchanged. When a root changes, dependent claims become historical while independent work survives.](/assets/fail-closed-shared-memory.svg)
 
 ### A bounded mechanism test {#memory-experiment}
 
