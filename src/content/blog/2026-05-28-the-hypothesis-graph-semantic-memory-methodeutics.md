@@ -6,11 +6,11 @@ tags: methodology, epistemology, coding
 keywords: hypothesis graph, methodeutics, abductive inference, agent memory, cognitive architectures, LLM agents, provenance, auditability, falsifiability, machine epistemics, post-cutoff evaluation
 ---
 
-*[Download PDF](https://june.kim/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.21939861](https://doi.org/10.5281/zenodo.21939861) (CC BY-SA 4.0). · Receipts: [the bench run](https://github.com/kimjune01/swebench-pro) ([DOI](https://doi.org/10.5281/zenodo.20691978)) · [the determinacy audit](https://github.com/kimjune01/swebench-pro-audit) ([DOI](https://doi.org/10.5281/zenodo.20738220)) · [the mechanism experiment](https://github.com/kimjune01/hygraph-mechanism) ([DOI](https://doi.org/10.5281/zenodo.20754118)), each reproducible from its own committed artifacts.*
+*Receipt: [the shared-memory experiment](https://github.com/kimjune01/hypothesis-graph-handoff-experiment), including preregistrations, retained failures, and replication. Prior archived version: [doi.org/10.5281/zenodo.21939861](https://doi.org/10.5281/zenodo.21939861) (CC BY-SA 4.0).*
 
 ## Abstract {-}
 
-The **hypothesis graph** is a data structure for coding agents that deepens their reasoning and makes them accountable. Implemented at the harness layer, its nodes are testable claims, its edges the refutations that name the next claim. It updates by inquiry, Peirce's typed loop of abduction, deduction, and induction. What is new is running that loop as mechanical harness operations around the one step no procedure reaches. That step, the abductive leap, stays in the model; the harness manufactures the surprise, fires the kill, and records the trail, instead of leaving the loop to a model's undifferentiated prose. This buys verifiable accountability and reasoning that persists past the context window, at no additional training cost, usable by any coding-agent harness that can run pinned trials and read their verdicts.
+Coding agents lose the warrant behind their conclusions: later agents receive prose or verdicts, then must either trust them or reconstruct the work. This paper introduces the **hypothesis graph**, a shared semantic memory whose nodes bind claims to replayable trials and whose edges record dependency, refutation, and revision. The model proposes hypotheses; the harness checks and stores them. In a bounded fail-closed experiment, the protocol preserved its declared invariants over 14,967 completely explored states and 39,288 transitions. A SQLite implementation matched an independent model across 20 frozen comparisons, passed six forced race and lease-boundary schedules and two pre-commit crash probes, and killed seven source mutants. The graph is not claimed to deepen reasoning. Its supported contribution is orthogonal: it lets verified work persist, move between agents, and fail closed when a worker submits stale or unsupported knowledge.
 
 ## Introduction {#introduction}
 
@@ -29,24 +29,23 @@ We were promised a junior developer with near-infinite patience. All we got was 
 | *Lost reasoning* | A *human-legible representation*: typed nodes a later run or a human reads and replays. |
 | *Review bottleneck* | Every step *grounded in a trial*: a reviewer accepts the work or resumes where it stuck. |
 
-Here we give the agent a trail of **verifiable knowledge**. The **hypothesis graph** is a semantic memory that holds an agent's reasoning while it works. The fix arrives with the inquiry that produced it: what was hypothesized, what was tested, what was ruled out. Each step carries a trial a stranger can rerun. The promise reverses the trust assumption by shifting the burden of proof outside the agent. The model still reasons, but each node it produces is checkable on its own at the harness layer, independent of the model.
+Here we give the agent a trail of **verifiable knowledge**. The **hypothesis graph** is shared semantic memory for an inquiry. A fix arrives with what was tried, what failed, and what remains supported. Each consequential claim carries a trial a stranger can rerun. The model still reasons; the harness decides what may enter shared memory.
 
-Two contributions run through this, and they are separable. The graph is the accountability substrate, and its value is argued by construction: every node replays. The externalized comparator is the capability mechanism, and its value is shown by ablation. The graph makes reasoning checkable; the comparator supplies the one verdict a self-graded agent cannot author for itself. Keeping them apart is what lets the ablation below read cleanly, where several arms share the graph and only the verdict source moves.
-
-What that buys is not incremental. On one contamination-free bug, an externalized comparator carried a weaker model to a fix the strongest released model could not reach without it (§(right-regime)): a capability lift, where a scaffold usually buys only automation.
+The contribution is a memory protocol, not a claim about deeper reasoning. The model proposes; the harness records dependencies, checks receipts, versions accepted knowledge, and refuses stale updates. This makes the graph useful even when it does not change what any one model can solve.
 
 ## The hypothesis graph {#hygraph}
 
 ### Requirements {#requirements}
 
-A semantic memory that holds an agent's live reasoning must clear four requirements at once:
+A useful semantic memory for inquiry must clear five requirements at once:
 
 - **Holds hypotheses.** Stores a hypothesis still under consideration, where prose, skill libraries, and retrieval keep only verified facts and established chunks: the hypothesis-shaped gap none of them fills.
 - **Refutable by test.** Each claim carries a kill condition: the executable test that can prove it wrong.
 - **Independently verifiable.** A stranger verifies a conclusion by rerunning its recorded trial, instead of re-deriving the reasoning or taking the author's word.
 - **Persistent memory.** The trail persists past the context window rather than being discarded once a patch passes.
+- **Fails closed.** A stale, invalid, or unsupported result cannot silently become current knowledge or unlock dependent work.
 
-Prior structures fill some of these roles (✓ native, ◐ with common extensions, ✗ needs another layer doing the work).
+The first four are representational requirements compared below. Fail-closed behavior belongs to the update protocol and is tested separately in §(right-regime).
 
 | Structure | Holds hypotheses | Includes tests | Independently verifiable | Persistent memory |
 |-------------------------------|:-------:|:------:|:------------:|:--------:|
@@ -57,7 +56,7 @@ Prior structures fill some of these roles (✓ native, ◐ with common extension
 | Argumentation (Dung 1995; Modgil & Prakken 2014) | ✓ | ◐ | ◐ | ◐ |
 | Event-sourced log / ReAct trace (Yao et al. 2023) | ✓ | ◐ | ◐ | ✓ |
 
-*The middle two columns are verification (a falsifiable trial a stranger can rerun), the outer two are the hypothesis-shaped gap and retention. Only the hypothesis graph clears all four in one append-only file.*
+*The middle two columns are verification; the outer two are the hypothesis-shaped gap and retention. Fail-closed publication is not inferred from this table.*
 
 An LLM is what finally fills it. Filling the graph takes a reasoner that reads a surprising failure, proposes candidate causes in open vocabulary, and turns each into an executable test, with no hand-built domain model. Classical inference engines could do this only inside a formalism encoded by hand, which is why the slot stayed a research program; the LLM populates it across arbitrary codebases, which is what makes the structure practical here.
 
@@ -89,7 +88,7 @@ The invariant yields an essential property that no benchmark can evaluate:
 
 This is, for inquiry, the analogue of a certificate a consumer checks without trusting the producer, and like the Merkle audit path or proof-carrying code, its value rests on a contract; a complexity bound is beside the point.
 
-Two grades of it matter. Where the trial is a deterministic command over pinned inputs, a compiler on a fixed toolchain, a test in a container, replay is *strong*: re-execution reproduces the recorded outcome, and the lead case (§(right-regime)) is here. Where the trial runs a model or a live service, replay is *artifact-level*: the recorded output is verified and the deterministic predicate re-run over it, the command standing as a provenance event rather than a reproducible computation. The honest scope is the first shading into the second as the system under test grows less deterministic. Pruning leaves all of it untouched: a pruned branch drops from the working frontier but stays in the record, so its nodes replay exactly as before.
+Two grades of it matter. Where the trial is a deterministic command over pinned inputs, replay is *strong*: re-execution reproduces the recorded outcome, as in the fail-closed experiment (§(right-regime)). Where the trial runs a model or live service, replay is *artifact-level*: the recorded output is preserved and a deterministic predicate is rerun over it. Pruning leaves both untouched: a branch drops from the working frontier but remains in the record.
 
 ### Knowledge maintenance {#knowledge-maintenance}
 
@@ -105,11 +104,11 @@ What the hypothesis graph adds is their composition in one append-only object: a
 
 This is the data structure for *testable* inquiry, and its entire power is the perturbation surface. Strip the ability to poke the system and read an outcome, and the same shape degrades into a plausibility tree, which is the confabulation failure mode it exists to prevent. Intuition is not verifiable from outside, so inquiry that has to be checked trades it for an explicit perturbation surface. The hypothesis graph is the verifiable serialization reasoning compiles to, so it can be checked by someone who does not trust you. Proof is to intuition as the hypothesis graph is to inquiry: not the thinking, the residue of the thinking that survives a stranger's replay.
 
-That residue is what the memory typology calls the `smem`: persistent, typed, queryable, and owned by the harness rather than the model. Those same properties make it an interface for agent interop: because the structure is typed and external, a second agent, a later run, or a human auditor reads and writes against one contract and can rerun any node rather than trust it (§(discussion)). The graph in this work is one markdown file per inquiry.
+That residue is what the memory typology calls the `smem`: persistent, typed, queryable, and owned by the harness rather than the model. A second agent need not inherit the whole conversation. It can enter at an open node with that node's objective, direct dependencies, versions, and receipts. Independent branches can proceed concurrently; a changed root invalidates only what depends on it. The graph in the field work is one markdown file per inquiry. The scheduler experiment makes these update rules explicit.
 
 ## Actionable epistemology {#epistemics}
 
-Knowing is an act to update the credence of a claim. This is the subject of *Verifiable Knowledge*; the property that matters here, a verdict a model cannot author for itself, is the one §(right-regime) turns into a capability lift. In the Hypothesis Graph, knowledge has the following properties:
+Knowing is an act that changes which claims one is entitled to use. This is the subject of *Verifiable Knowledge*; the property that matters here is that a verdict carries a receipt another agent can check. In the Hypothesis Graph, knowledge has the following properties:
 
 - **Three states.** Witnessed is true, a build presently passing; killed is false, a build gone red; open is *untrue*, a conjecture awaiting its test. These are the states of the entitlement ledger developed in *Verifiable Knowledge*, scoped here to one node and its kill edge.
 - **Credence.** A node carries a credence capped by the mode that earned it, low for abduction, higher once tested (Ramsey 1926), the step a bare LLM skips when it emits uniform confidence with no propagation along the chain.
@@ -122,7 +121,7 @@ With each round of inquiry the causal boundary sharpens, and a fix that respects
 
 This is one more projection of the protocol *Verifiable Knowledge* sets out, from where the agent stands, and its payoff is transfer. Paired with its trial, a node carries its warrant across intact; handed on the author's word, only the verdict crosses and the warrant is re-derivable from scratch.
 
-A coding agent is already a strong internal verifier, running the test and verifying that it passed. What it lacked was the protocol, extending credence beyond the context window. With the protocol, knowledge compounds for other agents and humans.
+A coding agent can already run a test. What it lacked was a protocol for carrying the result beyond one context without reducing its warrant to “trust me.” With the protocol, another agent can reuse the result, replay it, or see that it has gone stale.
 
 ## Methodeutics: a discipline of inquiry {#grounding}
 
@@ -191,7 +190,7 @@ We recast each issue as an inquiry on an engineered system: a failure trace, a c
 
 Because those three hold together, kill conditions over code are exact executions.
 
-One trial settles the predicate in this regime. In code the per-case response is mechanically observable, so a single passing test on a captured diff is a complete verdict that the diff satisfies the executable predicate for that case. That verdict speaks to the predicate alone: behaviors it doesn't cover are out of scope, a boundary that §(right-regime) shows is exactly where the differences live. Where such verdicts are aggregated, the right summary is counts and denominators rather than confidence intervals: per-case verdicts are exact, and aggregating them is bookkeeping.
+One trial settles the predicate in this regime. In code the per-case response is mechanically observable, so a single passing test on a captured diff is a complete verdict that the diff satisfies the executable predicate for that case. Behaviors the predicate does not cover remain out of scope. Where verdicts are aggregated, the right summary is counts and denominators rather than confidence intervals: per-case verdicts are exact, and aggregating them is bookkeeping.
 
 The three Peircean modes are how `inquire` builds the graph, each node typed by the mode that established it and capped at that mode's confidence:
 
@@ -215,271 +214,89 @@ A committed node is a conclusion, and an inquiry that reaches one rarely runs st
 
 ### Deterministic gating {#gating}
 
-The control loop is standard: the driver routes on `attest`'s verdict and re-entry route under a bounded attempt budget, and a failure re-enters `inquire` with the updated graph rather than retrying the patch, so the hypothesis graph doubles as the loop's checkpoint and no dead branch is re-proposed. That leaves the inner layer still owed a demonstration. The oracle the opening made the crux is what the gate leans on, and §(right-regime) isolates it on a single bug, where it does most of the work the bench number seems to credit to diagnosis.
+The control loop is standard: the driver routes on `attest`'s verdict under a bounded attempt budget, and a failure re-enters `inquire` with the updated graph rather than retrying the patch. The hypothesis graph doubles as the loop's checkpoint, so dead branches are not silently proposed again.
 
 ### Artifact availability {#artifact}
 
-All code and data are openly available, each developed in a public repository and archived under a DOI for permanence. `abductor`, the tool that mechanizes the gate, is developed at [github.com/kimjune01/abductor](https://github.com/kimjune01/abductor) and archived at [doi.org/10.5281/zenodo.20738162](https://doi.org/10.5281/zenodo.20738162) (v1.0.0, AGPL-3.0). The mechanism experiment of §(right-regime) is developed at [github.com/kimjune01/hygraph-mechanism](https://github.com/kimjune01/hygraph-mechanism) and archived at [doi.org/10.5281/zenodo.20754118](https://doi.org/10.5281/zenodo.20754118) (v1.1.0, CC BY-SA 4.0); the archive carries the preregistration, the rebuild-confirmed dataset, the regrade script, and the climb traces. Every reported result reproduces from the committed inputs of the archived version.
+All code and data are openly available. The shared-memory experiment of §(right-regime) lives at [github.com/kimjune01/hypothesis-graph-handoff-experiment](https://github.com/kimjune01/hypothesis-graph-handoff-experiment) under AGPL-3.0-or-later. It retains the preregistrations, failed first confirmation, independent model, source mutants, crash probes, raw counts, replication, and result hypothesis graph.
 
-## The mechanism by case study {#right-regime}
+## Shared memory that fails closed {#right-regime}
 
-What would prove that we had encoded reasoning into the harness, rather than just prompted a model into a better answer? The signal has to be one prompting alone can't produce:
+The graph's useful claim is not that it makes a model think harder. It is that one agent's checked work can become another agent's working memory without losing the conditions under which that work was earned.
 
-- Without the reasoning operation, the bare model can't reach the fix.
-- Handed the operation, it reaches the fix.
-- The fix generalizes to cases it was never shown.
+That boundary is dangerous. A worker may return late, repeat an old result, use a changed dependency, or disappear halfway through publication. In ordinary notes, the receiving agent has to notice. In the graph, the protocol notices: a claim names its version and parent versions, carries a receipt checked against frozen work, and enters memory only through an atomic publication. If any entitlement is stale or missing, nothing downstream unlocks. Refusing progress is safe.
 
-Here we demonstrate a surprising result on a single bug. Even Fable, the strongest released model, could not resolve it on its own; the methodeutic harness carried Sonnet 4.6 to the merged human fix's behavior on the committed probes.
+### The experiment {#memory-experiment}
 
-### Coding benchmarks measure translation ability {#bench-translation}
+We tested this mechanism on a small diamond graph, `R→A,B; A,B→J`, with two workers and a separate SQLite implementation. The reference model was declarative rather than copied from the scheduler. The trusted boundary included the checker, root authority, scheduler process, SQLite, clock, operating system, and storage; workers were allowed to crash, retry, delay, duplicate, corrupt, and reorder their calls.
 
-We first went looking for that signal on an established coding benchmark, and learned such benchmarks aren't built to show it. A SWE-bench-shaped coding benchmark hands the solver three things: the issue text, the repository at the buggy commit, and a hidden test the fix must turn from red to green. The issue text often hands over the specification, removing the need for a discovery step: finding the root cause and the general fix.
+The experiment was deliberately bounded. This is a mechanism demonstration, not a significance study.
 
-SWE-bench Pro ([Deng et al. 2025](https://arxiv.org/abs/2509.16941)) is the dominant such benchmark, the one OpenAI now recommends over Verified. For a competent model, the well-specified tasks are one-shot from the prompt, so there is no cause to discover. The underspecified ones are immune to discovery because the author's intent is hidden from the issue and repository. Our determinacy audit of all 728 public tasks measures this ([audit](https://github.com/kimjune01/swebench-pro-audit)).
+| Evidence layer | Frozen result |
+|---|---:|
+| Complete protocol exploration | 14,967 states; 39,288 transitions; zero violations |
+| Independent model–SQLite conformance | 20 comparisons across ten dispositions; zero mismatches |
+| Forced schedules | six race and lease-boundary schedules passed |
+| Process interruption | two pre-commit deaths reopened to the complete prior state |
+| Mutation sensitivity | seven source mutants executed and were killed |
 
-![SWE-bench Pro's 728 public tasks by determinacy. The green majority is one-shot, with nothing to discover; the 109-task underdetermined floor (15.0%) grades the author's unstated intent, undiscoverable from the materials.](/assets/swebench-pro-determinacy.svg)
+The exact schedules covered same-node double claim, both orders of publication versus root update, and publication immediately before, exactly at, and immediately after lease expiry. The mutations removed the checks we say matter: receipt validation, version entitlement, expiry, claim exclusivity, exact invalidation, and atomic publication. An unchanged replication produced the same result.
 
-With the tests as oracle, the harness resolves 95.3% of SWE-bench Pro's public split under the official grader ([bench run](https://github.com/kimjune01/swebench-pro)): what iterating against the answer key buys, an artifact of that regime rather than a leaderboard result, and evidence that the specification-to-implementation translation step is largely solved. So the interesting work is now discovery: a bug with a deep, discoverable cause. Implementation is no longer where the difficulty lives.
+The first confirmatory run did not pass. One malformed mutant failed during test collection, and the harness initially mistook any nonzero exit for a killed mutant. We retained the failure, changed the rule so only an executed assertion failure counts, froze the follow-up, and reran it. That correction is part of the receipt, not an inconvenience hidden behind the final table.
 
-Moreover, Pro's public set carried a risk we were not willing to take: contamination. So we went looking for a post-cutoff bug where discovery is the whole difficulty. Verus #2219 is one: a March 2026 issue, opened and fixed after the solve models' training cutoffs, so the case is contamination-free. The maintainer's narrow fix (PR #2230) passes its shipped test, and a general fix eventually landed too (PR #2501, merged 2026-06-05). The experiment is openly reproducible on [GitHub](https://github.com/kimjune01/hygraph-mechanism), with further analysis within.
+### Shared entry points {#shared-entry}
 
-### Verus #2219 {#verus-fit}
+The graph also makes handoff smaller and concurrency cleaner. On one frozen DAG, three workers received different open nodes within 7.699 ms and shared 3.443 seconds of actual overlap. Each entered through a mechanically generated 554-byte packet containing only its objective, direct prerequisites, versions, receipts, and output contract. The full chronological notes were 1,283 bytes.
 
-The bug is [verus-lang/verus#2219](https://github.com/verus-lang/verus/issues/2219): *ghost uses of never type invalidates borrowchecking*.
+This did **not** produce a meaningful wall-time speedup, and we do not claim one. The demonstrated benefit is structural: independent work can start without transferring the whole inquiry, while joins remain locked until their declared dependencies verify. When a root changed during work, the scheduler invalidated exactly its descendants and preserved the independent branch.
 
-Verus is a deductive verifier for Rust: you annotate a program with specifications and ghost proof code, Verus discharges the obligations through the Z3 SMT solver, and a passing run certifies the code meets its spec. The cardinal property of any verifier is *soundness*, that it never certify a program which violates its spec, because every proof built on top inherits that guarantee. An unsoundness, where the verifier blesses a program it owes a rejection, is the worst defect it can carry and the hardest to notice, since the symptom is silence. Nothing fails.
+### What the result supports {#memory-result}
 
-The correct fix must range over a whole class of program inputs. Two of them look identical at the `!` token and owe opposite verdicts:
+The result supports one narrow claim:
 
-```rust
-proof fn unsound(tracked s: S) {
-    ghost_terminal();  // "I STOP here!" ...a lie, proof-only, deleted before the program runs,
-    eat(s);            // so... oops! these two lines actually DO run. Verus thinks they don't,
-    eat(s);            // but `s` was already spent. OH NO: bad code waved through. THE BUG.
-}
+> A versioned, receipt-checked hypothesis graph can serve as shared semantic memory that fails closed: stale or unsupported worker output is rejected rather than silently becoming current knowledge.
 
-fn sound(tracked q: Q) {
-    real_terminal();             // this one really does STOP here (CRASH!)
-    proof { take(q); take(q); }  // so these genuinely never run, safe to skip. All good!
-}
-```
+“Can” matters. Complete exploration covered one frozen protocol model, not every implementation. The SQLite evidence covered a transition-complete basis and targeted adversarial schedules, not all possible storage failures. The checker itself remains trusted. Nothing here establishes Byzantine tolerance, semantic correctness of a bad specification, or better underlying model reasoning.
 
-Identical at the token, opposite at the root: the contrast the experiment needs. The burden of telling them apart falls upstream, which makes the check stateful and forces it to be exact. Other reasons it is a good bug to study:
-
-- The merged general fix took deep Verus knowledge and landed three months after the issue opened. Not trivial.
-- The symptom sits far from the cause: from the wrongly-accepted program, the fault sits four steps up the chain (§(verus-bug)), so localization has to climb to find it.
-- The project's own suite passes for *both* the narrow and the general fix, so it cannot see the distinction the fix has to make.
-
-### Diagnosis {#verus-bug}
-
-A *ghost* expression of type `!`, erased before compilation and so not actually diverging, still triggers rustc's never-type edge prune: Verus drops a live control-flow edge, skips the reachable code behind it, and verifies a program it owes a rejection. That is the unsoundness.
-
-![The #2219 unsoundness as a causal chain. The axis at the bottom is the crux: a ghost-erased uninhabited return (keep the edge) and genuine runtime divergence (prune) are identical at the token, opposite in handling.](/assets/verus-2219-unsoundness.svg)
-
-The narrow fix keys on the surface token: when the diverging expression is a literal `!`, keep the edge. The maintainer's first patch (#2230) does exactly this, and it is the ceiling every self-graded method reaches. The general fix keeps the edge for the whole class of uninhabited types the `!` token never names, which a surface-token fix cannot reach. That distinction is the XOR the experiment lives on.
-
-That diagnosis was not handed down; an inquiry climbed to it, and the climb is retained:
-
-> **H0 · observation** *(induction)*. `reported.rs` rejected pre-patch with Rust E0382, "use of moved value". *Edge:* is E0382 incidental? Vary the tracked type's copyability and the never-expression shape.
->
-> **H1 · the erased `!` is load-bearing** *(abduction)*. Trial `copy_int_never.rs`: erased `!` before a double-used Copy int. *Observed:* "3 verified, 0 errors", then a rustc ICE, "bad arg #0 (`!` ← `()`)". *Verdict:* the erased `!` corrupts MIR even where E0382 cannot fire. *Trajectory:* convergent on the erased ghost never-value.
->
-> **H2 · the source expression is incidental** *(abduction)*. Trial `never_let_binding.rs`: `let x: ! = arbitrary(); test(x)`. *Observed:* rejected, "never-to-any coercion not allowed in spec mode". *Verdict:* the explicit-coercion path is already covered; the uncovered path is the direct erased call in argument position. *Kill:* "all never coercions are uncovered."
->
-> **H3 · root cause** *(deduction)*. Spec calls erase to `erased_ghost_value` at the original Rust type; when that type is `!`, the injected verifier-only value is never-typed and breaks the MIR path.
->
-> **H4 · fix** *(deduction)*. Reject erased ghost calls whose adjusted Rust type is `!`, before erasure reaches MIR construction.
-
-*One inquiry into #2219 (Sonnet 4.6), condensed from the full record. It reached the surface-token narrow fix (the #2230 ceiling) and stalled at a candidate it could not rebuild to verify. One markdown file per inquiry; the runs left many: [pilot 11](https://github.com/kimjune01/hygraph-mechanism/tree/master/pilots/11-verus-2219).*
-
-### Experiment design {#verus-design}
-
-To demonstrate the mechanism, we hold one reproducible control and ablate the factors for attribution. Estimating how often the mechanism is responsible for the outcome is a separate, statistical question, out of scope here (§(null-regime) bounds where it engages).
-
-Here, we demonstrate two ablations of interest:
-
-- **Verification mechanism.** How each kill gets its verdict: by the model's own attestation (*self-attested*) or against a reference the model cannot author (*externally verified*). External means external to the model; this axis is defined in §(method).
-- **Methodeutic inquiry.** Whether the run runs the typed three-mode loop, and at which tier abduction is applied: written into the prompt, or lifted out as a tool call (`abductor`). The baseline leaves it to a bare prompt with neither.
-
-Six methods self-attest, one is externally verified, ordered from least to most intervention, with minimal and neutral sharing a row (identical settings, both run). *Enumeration* here is breadth of search rather than one guess, over suspect code sites (the *site-enumeration* arm) or a wide space of discriminating test programs (● present, ○ absent):
-
-| Experiment arm | Enumeration | Kill conditions | Externally verified |
-|---|:-:|:-:|:-:|
-| *minimal/neutral* prompt | ○ | ○ | ○ |
-| *site-enumeration* prompt | ● | ○ | ○ |
-| *abduction* prompt | ○ | ● | ○ |
-| *hypothesis graph* prompt | ○ | ● | ○ |
-| *self-verifier* harness | ● | ● | ○ |
-| *abductor*-enabled harness | ● | ● | ● |
-
-The *abduction* and *hypothesis graph* prompt arms carry identical factor settings above; they differ only in whether the run persists the structured graph across iterations, which the results (§(verus)) show makes no difference here. That the graph itself is not the active ingredient is the point: what moves the outcome is the verdict source, not the structure several arms share.
-
-Each arm writes a hypothesis graph by the same loop and runs three times. (Oracle here is metrological: an instrument checked against a reference, distinct from the probability-calibration of confidence scores.) We drew candidates from the localization-hard band the lead case sits in. Before any arm runs, the protocol preregisters one sentence per loop: testing X, predict Y, refuted by Z.
-
-For ecological accuracy, each model resides in its own native agent rather than a uniform rig we impose: Claude models in Claude Code, GPT-5.5 in codex, Composer 2.5 in Cursor. Our harness is a thin wrapper that drives each vendor's CLI non-interactively with the same stage prompt:
-
-```sh
-claude -p …       # Claude Code
-codex exec …      # codex
-cursor-agent …    # Cursor
-```
-
-The meta-loop owns only the stage contracts, the hypothesis graph, and the gate; every model-facing call goes through the vendor's own agent. Full configs, prompts, and per-arm logs live in [the mechanism repository](https://github.com/kimjune01/hygraph-mechanism).
-
-But external verification is necessary. It is not sufficient. A reference only helps as far as its cases cover the XOR the fix must draw (§(verus-bug)), so what matters next is where those correct verdicts come from and which side of the distinction each one reaches.
-
-### Making a tiny bench {#verus-bench}
-
-To attribute the lift to the mechanism, every arm has to be scored on the same mechanical ruler; otherwise "more general" stays an impression no one can check. The project's own suite is no such ruler: it passes for both the narrow and the general fix (§(verus-fit)). So we build one by hand, a tiny answer key. The case is one bug, so the bench is one bug. It holds three compiler states, the buggy commit (base) and the maintainer's narrow and general fixes, plus a handful of small test programs, the *probes*. A correct compiler owes each probe one *correct verdict*: `REJECT` for an unsound program, `ACCEPT` for a sound one. Grading a fix is then mechanical: does it return each probe's correct verdict?
-
-| Probe program | Golden assessment | Who supplied it |
-|---|:-:|---|
-| bug probes (uninhabited) | `REJECT` | base, by construction (free) |
-| divergence, in-bar | `ACCEPT` | the merged human fix (#2501) |
-
-The split is the whole asymmetry. Bug probes are uninhabited *by construction*, so their correct `REJECT` is free and base is wrong on exactly them. The gate (§(gate-general)) enumerates such cases and passes a fix only when it flips them all to `REJECT` with no sound case newly rejected, no human in the loop. Divergence probes are the hard side, sound and to be preserved, but base is no reference there and the gate's grammar holds no divergence-preserve shape, so the gate is blind to them. Their `ACCEPT` comes from a human, the merged fix #2501 (with one stretch case even #2501 declines), and stays held out of the gate. Passing it therefore tests whether a fix represents the rule rather than fits the gate. The easy side's verdict is free; the hard side's costs a human (§(enum-calib)).
-
-A recall probe rules out memorization: asked in isolation how #2219 was fixed, the model does not recover the patch, so its solution is reconstruction. Every verdict is from a forced-fresh, fingerprinted build; the frozen dataset and regrade script are committed.
-
-### Results {#verus}
-
-Which arm climbs past the narrow fix? The six self-attested methods plateaued on all eighteen draws, three each; only the externally-verified arm broke past ([Kamoi et al. 2024](https://arxiv.org/abs/2406.01297)).
-
-| Arm | Gate pass | Cases flipped | Outcome |
-|---|:-:|:-:|---|
-| minimal / neutral | ✗ | 114 | narrow plateau (#2230 slice) |
-| site-enumeration | ✗ | 114 | narrow plateau |
-| abduction | ✗ | 114 | narrow plateau |
-| hypothesis graph | ✗ | 114 | narrow plateau |
-| self-verifier | ✗ | 114 | narrow plateau |
-| `abductor` | ✓ | 269 | general on the bug-set, wide-but-broken on divergence |
-
-*Cases flipped is the modal of three draws; gate pass is the gate's verdict on its own cases.*
-
-The six self-attested methods all stopped at the narrow plateau, none reaching `pass=true`. Only the `abductor` arm broke off it, with zero valid-preserve rejections on the gate's own cases. Its fix is more general than the plateau but not yet the merged human fix: it stays wide-but-broken on the in-bar divergence case the gate never enumerated (§(gate-general)). The reach is real: it flips the whole bug-set and rejects two *out-of-grammar* held-outs the gate never showed it, applying its general predicate to cases it never saw.
-
-That isolates the mechanism on one model. The headline lift is a slice across two: the same bug handed to the strongest released model without the abductor, and to a weaker one with the abductor on a gate whose coverage includes the divergence case (§(enum-calib)); a gate silent on divergence leaves both arms wide-but-broken, as above.
-
-| | No abductor | + abductor (gate covering divergence) |
-|---|:--:|:--:|
-| **Fable 5** (strongest released) | wide-but-broken | #2501 behavior |
-| **Sonnet 4.6** | narrow (#2230) | #2501 behavior |
-
-*Two contamination-clean models, one harness, the gate covering divergence (§(enum-calib)). Without the abductor neither matches the merged fix, and they miss in opposite directions: Fable too wide, Sonnet too narrow. With it both reach #2501's behavior on the committed probes (including #2501's own over-conservatism on the stretch case), which the stronger model cannot reach on its own. The comparator returns only pass/fail on candidate behavior, never the patch or the predicate (§(enum-calib)), so the match is reconstruction, not lookup. One draw per cell.*
-
-### `abductor` {#gate-general}
-
-`abductor` is an open-source command-line tool anyone can run ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)): the diff of §(application), the surprise-manufacture, built as a standalone instrument on the program-analysis lineage that put counterexample search to work (§(lineage)). The name is legacy; what it does is provoke, not abduce. On this bug it carried a model past the plateau prompting alone could not clear. Our read of why is that it externalizes that surprise from the inquiry loop into three domain-general operations with no answer built in:
-
-- It *enumerates* a space of cases closed under the property's type-formers, wider than any one hypothesis.
-- It *calibrates* each case against a known-good baseline, the comparator the model cannot author, so the ground truth is external to it.
-- It *gates* on a single pass/fail signal the model iterates against.
-
-The prompt demands generality and supplies the signal, so the rule is the model's own reconstruction. Handed only the instruction to range over type-formers and judge, Fable *rebuilt `abductor` itself* from the goal alone (§(enum-calib)): its own 7,026-case gate over the uninhabited type-formers. A general construction permits that; a bespoke one, with the answer baked in, would not.
-
-The gate's coverage is the frontier, lever and limit at once. Where it covers, the uninhabited side, the model greps the codebase and widens its predicate to clear the cases the gate feeds, supplying the discovery while the gate gives direction. Where its grammar is silent, the divergence side, it over-generalizes: the fix lands general on the bug set and over-conservative on divergence, *wide but broken*, the §(verus-bug) XOR collapsed to an OR where the gate stayed silent. The lift it buys is a coarse mode gate. It is no recovery of the verifier's decision procedure: a fix keeping the edge for every ghost-mode call, with no inhabitedness query at all, grades identically on every probe. Supply the missing divergence verdicts (§(enum-calib)) and the arm reaches the human fix.
-
-The construction generalizes past this bug, and past verification: the same three operations reconcile any two accept-sets, a refactor against its original or a port against its source. They recover the disagreement from a compact sketch, so neither set need enter a context window or cross a wire. The full command surface and the cited lineage are in the [repository](https://github.com/kimjune01/abductor).
-
-### The surprise is not self-generable {#enum-calib}
-
-A model can bootstrap the *enumeration*, the combinatorial breadth, because that is mechanical: handed a vague prompt and no gate, Fable rebuilt one for itself (§(gate-general)). It cannot bootstrap the *correct verdicts*, the human-accepted answers. Its self-built gate labels each case with the very predicate under test, so the one case that needs a truth from outside its own belief, genuine divergence versus ghost-erasure, gets self-mislabeled as handled. One run shows both halves: a wide net the model built, and a blind spot exactly where its own labels could not reach. The claim is scoped to that self-grading circularity. It is not a proof that no model could ever produce a correct verdict some other way.
-
-So before crediting the verdict source, the cheaper explanations have to fall, and each has a control already in the ablation.
-
-*Did the abductor just search harder?* The self-verifier searched exactly as hard: handed the same prompt and no tool, it built its own case generator and brute-forced some 7,026 cases a round, the breadth the abductor enumerates, and it still plateaued: confirmation bias (§(grounding)) with a receipt, grading against its own belief, the one move the external comparator forbids. Enumeration sat on both sides of the comparison, so it is not the lever. Nor is reasoning depth: the abduction arm ran textbook bi-abduction to the semantic predicate the general fix turns on, named it in prose, self-validated it against its own programs, and still plateaued at the same narrow verdict as the one-line minimal arm. An arm can write down the correct predicate and certify it against its own belief; the patch ships narrow all the same. The two-model rerun sharpens the point: without the abductor the models miss in opposite directions, Fable too wide and Sonnet too narrow, and the abductor pulls both to the same #2501. More search does not correct two opposite errors onto one target; an external answer key does.
-
-*Was the model handed the fix?* It was handed correct verdicts on cases. It never saw the patch, the predicate, or the Rust API. The comparator returns only pass/fail on candidate behavior, so the model still localizes the fault four steps up the chain (§(verus-bug)) and writes the fix itself. This is why the signal is verdicts and not the issue text: where a benchmark leans on the issue to say what *fixed* means, and hands over the spec doing it, the gate says it in correct verdicts on cases, the more specific signal, grading whether the fix draws the exact behavioral boundary rather than whether it parsed a prose description.
-
-*A better scaffold, then?* The self-verifier is the scaffold control: the whole loop, enumeration and kill conditions included, with the external verdict the only piece removed. It plateaus beside the bare prompt. A scaffold without the answer key buys nothing here.
-
-*Just the stronger model?* The attribution rests on the within-model contrast, where the model is held fixed and only the verdict source moves. The cross-model grid (§(verus)) only illustrates the consequence; the within-model ablation is what proves the cause. It shows the lift is wide enough that a weaker model with the verdicts passes a stronger one without them.
-
-The whole ablation reduces to one causal diagram: across its arms, everything stays fixed but the verdict source, the one input the model cannot author.
-
-![Reading the diagram: each box is an action, read left to right. Four factors stay identical across the ablation's arms (model, loop, bug, graph), so none of them can be the cause; only the verdict source varies. Gray boxes the model can build for itself; the blue box is the one input it cannot author, and the blue path is the causal route. The gray arrow into the outcome is the implementation caveat, where codex walls.](/assets/verus-2219-lift-mechanism.svg)
-
-*Not one model's artifact.* The §(verus) lift is one model pair; extend the gate's coverage to the divergence case, verifying against the correct verdicts (#2501), and the same fix lands across four models in four native CLIs:
-
-| Verdict source | Narrow fix (#2230) | General fix (#2501) |
-|---|:-:|:-:|
-| self-attested, six methods | ● | ○ |
-| externally verified — *Fable* | ● | ● |
-| externally verified — *Sonnet 4.6* | ● | ● |
-| externally verified — *Composer 2.5* | ● | ● |
-| externally verified — *codex* | ● | ○ |
-
-codex clears the bug arm but cannot implement the divergence case, an implementation limit the verdicts do not remove.
-
-The convergence is coverage-bound: it shows the fix is reproducible across workflows once the gate covers divergence. It does not show three models independently rediscovered the predicate. The shared decline on the stretch case is most likely the gate funnelling every successful arm into the one behavior it rewards, which the human fix happens to share.
-
-Retrospectively the correct verdicts are free; prospectively, on a fresh bug with no merged fix, the easy side has one and the hard side does not. The division of labor is the deployment design: the model enumerates and fixes, the harness draws its verdicts from approved history, and the residual hard side gets named. Nothing is hidden.
-
-### The surprise becomes a tool call {#abduction-tool}
-
-Step back from the arms. What the traces catch is the models computing the diff by hand: the self-verifier recomputed the full symmetric difference every pass (§(enum-calib)), the tell that the XOR is the surprise abduction runs on, its input and not the leap. But a model grading its own cases can only check them against its own belief, so nothing surprises it, and it plateaued. The model could make the leap all along; what it lacked was a surprise it could not grade away, one from outside its own belief.
-
-That is the signal we went looking for. What lifts off the model is not abduction but the surprise that triggers it: the symmetric difference between what the model believes and what is true is a counterexample, and in coding diagnosis it runs as a tool call, the one we release as `abductor`: enumerate, calibrate, gate. The leap that answers the surprise stays in the model, uncoded, because everything we managed to mechanize turned out to be the test or the record, never the guess. That division, the harness manufacturing the surprise and the model making the leap, is the division of intellect the introduction set out to buy, and the run leaves behind the hypothesis graph the introduction promised, written by the experiment that needed it.
+The value is still substantial. *Verifiable Knowledge* gives a claim its receipt. The hypothesis graph adds dependency, version, and invalidation structure, so that receipt can travel across agents without becoming an unsupported assertion. One paper defines what may count as knowledge; this one defines how such knowledge is shared and revised.
 
 ## Discussion {#discussion}
 
-### Diagnostic frontier {#null-regime}
+### Memory is an entitlement, not a fact dump
 
-Implementation is the solved part. A competent model turns a well-specified issue into a passing patch, which is most of what a SWE-bench task rewards (§(bench-translation)) and most of what coding agents already do. What is left is *discovery*: the root cause when the symptom sits far from it, the general fix when the suite cannot tell it from a narrow one. That diagnostic step is the frontier, and it is where the mechanism engages.
+Most agent memory asks *what text should be retrieved?* The hypothesis graph asks a prior question: *what is this agent entitled to rely on?* A claim is current only at a declared version, under declared parent versions, with a receipt for the work actually claimed. Retrieval can then be ordinary and cheap because validity is not left to the reader's intuition.
 
-The band is narrow precisely because implementation is solved, so most bugs never reach the diagnostic step. On pilots from the merged-PR pool and beyond, a minimal baseline solved them unaided, from trivial fixes (qrtool #695, bat #3710) to the cases that most invited the machinery (slang-server #310, fjall #287). Two findings attribute the nulls. A **selection artifact**: the deployment pipeline's own triage fast-paths easy bugs around the graph ("a 1-line fix with a confirmed reproducer doesn't need a hypothesis graph"), so the merged pool is exactly the implementation-solved subset. And **baseline reach**: a capable model in a minimal loop fixes most reproducible bugs unaided. The band is bounded below by that reach and above by triage, which is why a population rate over an unselected pool measures the band's width and misses the mechanism; the Verus case is chosen to sit inside it. These nulls publish *attributed*, each arriving with the mechanism that produced it, so an unexplained null says stop where an attributed one says where to point the next instrument.
+This is the connection to *Verifiable Knowledge*. A receipt makes one claim checkable. The graph makes many such claims maintainable. Dependency edges say what a revision withdraws; version vectors distinguish current knowledge from history; atomic publication prevents half-written conclusions from entering shared state.
 
-Automation is a different axis. A faster loop, a parallel fan-out, a cheaper scaffold moves the same work along quicker, and none of it changes whether the agent can find the cause. The lift here is on the diagnostic axis, the distinction the scaffold-synergy results blur (§(rw-scaffolds)): a weaker model with better plumbing finishing sooner is a throughput gain, where a weaker model reaching a fix a stronger one could not is a capability gain.
+The guarantee is modest but practical. Bad input does not become good because it is structured. A trusted checker can still encode the wrong predicate. What the protocol prevents is narrower: stale or unsupported output entering as verified shared knowledge.
 
-### Verifiable agents
+### Concurrency follows from addressability
 
-The reframe is from treating an agent as a source of verdicts to a source of claims bound to evidence.
+Concurrency is not a separate trick added to the graph. It follows from explicit open nodes and joins. Workers can claim independent nodes without receiving the whole history. A join opens only when its parents verify. Less context crosses each boundary because the graph supplies a clean entry point: objective, direct prerequisites, receipts, and output contract.
 
-The failure mode is output that is confidently wrong and not cheaply verifiable, and it scales with model capability rather than against it, the default product of fluent generation. The Verus self-built gate is the instance (§(enum-calib)): green by the agent's own check and unsound at once, exposed only by the held-out probes replayed against the build. The same shape recurred throughout, in the wide-but-broken fix, the 4/4 false-green self-audit, and the recall-inflated resolve rate.
+The demonstration showed real overlap but no material speedup. Addressability and safe concurrency are structural properties; speed depends on branch cost, startup, contention, and the critical path. This paper claims the former and leaves the latter open.
 
-The substitution is accountability in place of trust, checkable line by line. The self-graded agent produced a verdict, its own gate green; the externally-oracled inquiry produced a record of typed nodes, each a hypothesis, an exact command, an observed outcome, and the edge the result generates, every consequential one replaying on a clean build. Such a record is audited step by step without extending trust to its author, and the better fix is identifiable independent of the system that produced it. That property, rather than the outcome of any single comparison, is what survives.
+### Accountability survives the author
 
-**Truth is buildable.** The node semantics of §(epistemics) is what gives the trace its force here. If a true claim is a build presently passing and its warrant lives in the edges, then a node without a replayable trial is not a node at all, as an uncheckable number is not a measurement. A resolve rate, however honest, is a verdict over 728 builds an auditor cannot inspect; a hypothesis graph is the inspectable chain.
+A prose handoff asks the next agent to trust the previous one. A graph handoff asks it to check a receipt or observe that the claim is no longer current. This changes the unit of trust from an author to a piece of work.
 
-**The cost asymmetry of fabrication.** A fabricated reasoning trace is expensive to sustain, because every fabricated node must survive a replay the author does not control. A confident narrative is cheap to produce, because nothing in it is bound to a procedure. A self-graded method's over-narrow fix is the cheap kind: it reads as complete, and closer reading does not reveal the flaw, while the receipt reveals it in one command. Verification is therefore part of the method rather than overhead on it. The same asymmetry governs failure: a trusted verdict that fails leaves nothing behind, whereas a recorded inquiry that fails leaves a trail naming the failed node. The Verus climb recorded its own corrections in trail, the narrow `is_never` fix refuted by the very cases the gate fed it, each a kill that generated the next edge and itself a replayable trial.
-
-**Hidden effort is not reasoning you can check.** The frontier labs ship "reasoning" as an opaque dial (`high`, `xhigh`, `ultrathink`): more private tokens burned before the answer, the model grading against its own belief, harder. The Verus result is where that runs out (§(enum-calib)). Effort scales the inducible half, the enumeration, and cannot manufacture the half that is not, a ground-truth oracle from outside the model's belief, so the self-verifier plateaus where a single externally-graded kill reaches the general fix. Whatever the dial buys ships nothing a stranger can rerun; an effort setting is the purest *take my word for it*, a larger number where a kill condition should be. The position here is the opposite: put the reasoning in the harness, typed and replayable, its level a trail the auditor checks instead of a knob the auditor trusts.
-
-**Accountability, in deployment.** The intro's promise was a claim that clears only when an independent party reruns its recorded trial (§(introduction)); the receipts deliver it. To a maintainer the agent and its operator are strangers, and with the trial attached that stops mattering: a red-on-master/green-with-fix test and a clean suite read identically whoever submitted them. This is the review bottleneck answered by making the check cheaper than reconstructing the reasoning.
-
-**Merit attaches to the work, not the doer.** An agent can produce many artifacts of any quality, so judging them by their author is backwards; judging the author by replaying the artifacts is the only direction that scales. Merit is the warrant a piece of work carries in itself, checkable without reference to who or what produced it: the hypothesis graph is a unit of work that ships with its own evidence, the receipts-first PR the corresponding practice, the maintainer who merges on the ledger alone an early instance.
+Local replay is the smallest form of that accountability. Selective invalidation is the compositional form: when a premise changes, dependent conclusions lose entitlement while independent work survives. The graph is useful not because every node is true forever, but because it records when a node may be used and what would make it stop being usable.
 
 ## Related work {#related-work}
 
-### Construct validity and contamination {#rw-swebench}
+### Agent memory and handoff {#rw-swebench}
 
-The SWE-bench family defines the Verified / Pro lineage, official harness, and contamination-resistant tier design. **SWE-Bench+** (Aleithan et al. 2024) manually audited the original bench: 32.67% solution leakage, 31% weak tests. **OpenAI's February 2026 audit** found a majority of audited Verified tasks have flawed tests and that frontier models reproduce exact gold patches; it stopped reporting Verified and recommends Pro. **Wang, Pradel & Liu** (ICSE 2026) show plausible patches pass tests yet diverge from developer intent; their axis is patches that pass but are wrong, ours (§(right-regime)) is tasks whose materials do not determine which passing behavior is intended. **ORACLE-SWE** ([arXiv:2604.07789](https://arxiv.org/abs/2604.07789)) quantifies the same handover, ablating the oracle and specification signals that leak through a task and measuring the resulting drop; **SLUMP** ([arXiv:2603.17104](https://arxiv.org/abs/2603.17104)) opens on the identical premise, that benchmarks supply the full specification upfront while real coding does not, and answers it by building an underspecified-by-design benchmark. Here we part from both on the verdict: they treat handover as a defect to fix with a better benchmark, while the determinacy audit (§(right-regime)) draws it as a category boundary, a spec-conformance instrument cannot be tuned into a measure of diagnostic inquiry because the two are different types. Evaluation surveys reach the same edge from the methodology side: scoring final outputs misses the in-run reasoning and failure causes, and trajectory-level assessment is the called-for remedy (Yehudai et al. 2025), which is what grading the trace rather than the patch (§(future-work)) would supply. **SWE-rebench** uses post-cutoff filtering as a parallel contamination strategy; **LiveCodeBench** (Jain et al. 2024) is the origin of post-cutoff (temporal-holdout) evaluation, and the standard objection to it applies here too, that training cutoffs are porous because RL post-training and inference-time retrieval can surface later content. The witnessed case (§(verus-bench)) is built against exactly that objection: it is post-cutoff and the solving model's weights predate the fix, so neither porosity nor retrieval supplies the answer. **HAL** (Stroebl et al. 2025) sets the cost-transparency precedent and the official **swe-bench/experiments** repo the per-instance publication norm (`trajs`/`logs`/`patch`/`report`); the receipts here extend both with gate traces, hypothesis graphs, and a re-gradeable cost ledger.
+Memory surveys distinguish episodic traces, semantic facts, and procedural skills, but persistent agent systems often store prose or retrieved chunks without an executable validity rule. CoALA (Sumers et al. 2024) supplies the cognitive-architecture vocabulary; AriGraph (Anokhin et al. 2024) supplies a graph-shaped memory precedent; provenance systems supply lineage; truth-maintenance systems supply dependency-directed revision. The hypothesis graph combines these around a narrower node contract: a claim, its dependency versions, and a replayable trial.
+
+The practical baseline is not no memory. It is a strong structured handoff: objective, state, evidence, decisions, and next steps. Such a handoff can be excellent. What it lacks natively is mechanical admission, versioned entitlement, atomic publication, and transitive invalidation. The shared-memory experiment isolates those protocol properties rather than asking a language-model judge which memo reads better.
 
 ### Agent scaffolds and SE-agent harnesses {#rw-scaffolds}
 
-Surveys and position papers now map the harness's responsibilities directly: the case for *programming with trust*, verification and analysis built into the agent rather than retrofitted after (Roychoudhury et al. 2025), the systematizing of agents for software engineering around verification, testing, and repair (Liu et al. 2024), and persistent, structured memory named among the open challenges for long-running agents (Wang et al. 2025). We answer with the structure none of them name: a Peirce-typed, kill-conditioned hypothesis-graph memory. The SWE-bench-targeted harnesses that exist, OpenHands (Wang et al. 2024), SWE-agent (Yang et al. 2024), and AutoCodeRover (Zhang et al. 2024/25), are ReAct-pattern loops (Yao et al. 2023) without it. **Voyager** (Wang et al. 2023) is the closest loop-shape precedent: embodied observe→hypothesize→test→commit, with a skill library where this work holds falsifiable claims. **SWE-Effi** ([arXiv:2509.09853](https://arxiv.org/abs/2509.09853)) is the sharpest published counter-position: effectiveness emerges from scaffold-model synergy rather than residing in the scaffold alone. Here we agree from the other direction, with the synergy named: the binding pair is gate × oracle, isolated in the controlled experiment of §(right-regime) rather than on a benchmark that cannot see it.
+Surveys and position papers place verification, analysis, and persistent structured memory at the harness layer (Roychoudhury et al. 2025; Liu et al. 2024; Wang et al. 2025). OpenHands, SWE-agent, and AutoCodeRover are ReAct-pattern coding loops; Voyager is a close loop-shape precedent, with tested skills where this work stores falsifiable claims.
 
-Recent results do report a weaker model with a scaffold beating a stronger one, on the automation axis rather than the capability one. **GradleFixer** ([arXiv:2510.08640](https://arxiv.org/abs/2510.08640)) has Gemini-2.5-Flash out-repair Gemini-2.5-Pro on Android builds, one generation apart inside a single family; the lift is *domain-specific* execution primitives for Gradle, so a model handed purpose-built tools for one build system doing better is expected. **Confucius Code Agent** ([arXiv:2512.10398](https://arxiv.org/abs/2512.10398)) has Sonnet 4.5 edge Opus 4.5 on SWE-bench Pro, 52.7 to 52.0, with the edge reversing once Opus runs the same scaffold (54.3), a scaffold effect rather than a capability crossing. Both externalize actions or notes; the diagnosis stays in the model.
+Two adjacent systems split the contribution differently. Theorem-of-Thought types abductive, deductive, and inductive reasoning within a query but does not maintain a persistent memory across inquiries. Cognitive Memory Manager extracts a typed DAG from completed trajectories and promotes patterns to skills. This work writes the graph during inquiry and uses failed trials and changed versions to route what may happen next.
 
-The lift in §(right-regime) parts from these on three counts: it is a frontier extension rather than a throughput gain; the externalized operation is *domain-general* (the released `abductor` carries no answer and no domain model, §(gate-general)) rather than a tool shaped to one build system; and a controlled ablation pins it to the verdict source alone, so it does not reverse when the stronger model is handed the same harness, the way a whole-scaffold swap does. The nearest comparator precedent, **SWT-Bench** ([arXiv:2406.12952](https://arxiv.org/abs/2406.12952)), grades generated tests by fail-on-original then pass-after-golden-patch, the same external-golden shape, but as an evaluation oracle for test generation. Ours is the runtime instrument an agent iterates against with the answer key hidden.
-
-Two concurrent developments arrived independently at adjacent points, each carrying one of the two components composed here. **Theorem-of-Thought** ([Abdaljalil et al. 2025](https://arxiv.org/abs/2506.07106)) types reasoning into abductive, deductive, and inductive specialist agents per query: the typed cycle, without a persistent typed memory across cycles. **Cognitive Memory Manager** ([Khalid & Arora 2026](https://openreview.net/forum?id=yCsHQnvvWY)) extracts a typed-node DAG by observing agent execution and mines it for patterns to promote to skills: the typed graph, mined descriptively where ours is generative (it routes the run). That convergence is independent. Provenance for the framing here is timestamped on the project blog ([The Hypothesis Graph](https://june.kim/the-hypothesis-graph), [Evidence has a trajectory](https://june.kim/evidence-has-a-trajectory)).
-
-The trichotomy these siblings reach for is Peirce's (1878, 1903). §(grounding) and §(lineage) wire the vocabulary to its sources, and the dated posts above timestamp this lineage's use of the hypothesis-graph primitive.
-
-| System | Domain | Reasoning-mode typing | Persistent structure & update | Termination gate |
-|--------------|--------|------------------|------------------|---------------|
-| Voyager (Wang et al. 2023) | Minecraft | None | Skill library; test-validated graduation | Test-pass on skill |
-| IDEA (He et al. 2025) | Interactive rule learning | Peirce-cited, agent-level | Working rule set | None explicit |
-| ADI (Gilda & Gilda 2026) | Algebraic invariants | Peirce, layered (L0/L1/L2) | Symbolic knowledge graph | None explicit |
-| AriGraph (Anokhin et al. 2024) | TextWorld | None | Knowledge graph (entities, relations, episodes) | None explicit |
-| CausaLab (Yang et al. 2026) | Causal discovery | Causal-typed (SCM) | Evolving structural causal model in a DSL | None explicit |
-| BeliefMem (Liao et al. 2026) | Partial-observability QA | None | Candidate set; Noisy-OR probabilistic update | Probabilistic threshold |
-| Theorem-of-Thought (Abdaljalil et al. 2025) | General reasoning | Abduction / deduction / induction, agent-level | Formal reasoning graph | NLI-guided Bayesian coherence |
-| CMM (Khalid & Arora 2026) | SE (coding agents) | 7 trajectory roles, extraction-time | Typed DAG; confidence decay | Human approval + retrieval-validated threshold |
-| This work | SE (industrial code) | Peirce, enforced at write time per stage | Hypothesis graph; mechanical kill predicates on the audit verdict | Deterministic finite-state |
-
-*Table 1. Comparison spine for adjacent typed-reasoning and graph-memory LLM-agent systems. Cell terseness is by design; prose nuance in §(typed-memory).*
+The distinction is not that graph-shaped memory is new by itself. The contribution is the semantic contract placed on its nodes and updates: replayable warrant, explicit dependency, versioned reuse, and fail-closed publication.
 
 ### Typed reasoning and graph-structured memory {#typed-memory}
 
@@ -491,85 +308,61 @@ The hypothesis graph sits at the intersection of three lineages: cognitive-archi
 
 Four 2026 systems each carry one component this work combines; what is new here is the *join*; each piece already exists in one of them. **FVDebug** ([arXiv:2510.15906](https://arxiv.org/abs/2510.15906)) builds an actual hypothesis graph for debugging, with a frontier and accumulated evidence, but selects the next node by asking the model, the arbiter this work removes. **From Hypotheses to Factors** ([arXiv:2604.26747](https://arxiv.org/abs/2604.26747)) runs the same perturb-and-falsify loop, falsifiable hypotheses behind a deterministic engine over an append-only trace, locked to quantitative finance where this work claims the general semantic-memory substrate. **Portable Agent Memory** ([arXiv:2605.11032](https://arxiv.org/abs/2605.11032)) is the nearest provenance memory, a Merkle-DAG that cites the Soar lineage and makes every node reconstructible by content-addressing, but it certifies *integrity* (the recorded bytes are untampered) where the replay invariant here certifies *warrant* (the node still survives its trial). And the provenance survey **From Agent Traces to Trust** ([arXiv:2606.04990](https://arxiv.org/abs/2606.04990)) enumerates exactly the relations this work mechanizes, Support, Contradict, Invalidate, and names "how provenance quality should be evaluated" as an open problem; the hypothesis graph is one answer, with replay as the quality bar and the kill condition as an executable edge rather than a descriptive label.
 
-What the mechanism experiment (§(right-regime)) adds to this comparison is which piece is decisive: not the graph structure, which several of these share, but where a kill edge gets its ground truth. FVDebug lets the model arbitrate the next step; the contrast that separates a narrow fix from a general one is whether the kill is graded against the model's own belief or against an external oracle, and the externalized form is released as `abductor` (enumerate a case space, calibrate against a known-good reference, gate). A model can rebuild the enumeration for itself but not that oracle (§(enum-calib)), which is the axis these neighbors leave implicit.
+The experiment adds an update rule to this comparison. A claim is not merely stored or assigned confidence: it is admitted with a receipt and dependency versions, then becomes historical when those dependencies change. This is the difference between graph-shaped storage and graph-maintained knowledge.
 
 A second cluster treats truth and uncertainty as first-class rather than a downstream score: **NARS**, **OpenCog's AtomSpace/PLN**, **Nanopublications** (Groth et al. 2010), and, closest in time, **Traxia** ([arXiv:2606.08256](https://arxiv.org/abs/2606.08256)), converging on these primitives two days after *Truth Is Buildable* (2026-06-04). Where each stops short of a replayable, kill-conditioned entitlement ledger is adjudicated in *Verifiable Knowledge*, the paper that owns the epistemology. What is specific *here* is the data structure: none makes that meaning the **semantic contract of a memory node**, truth operationalized by replayable edge structure rather than a stored label or textual provenance record.
 
 > *Production LLM memory systems with graph variants (Zep/Graphiti, Mem0), staged-hypothesis selection in science agents, deterministic gating in adjacent settings, and reflective memory systems (Reflexion, DebugMate) are surveyed in the appendix; they are adjacent on particular axes but do not change the comparison spine.*
 
-### Adversarial filtering and termination {#adversarial-termination}
-
-| System | Domain | Stage operated at | Visibility regime | Cross-family |
-|-------------------------|---------|------------|-----------------|----------|
-| Multi-Agent Debate (Liang et al. 2023/24, [arXiv:2305.19118](https://arxiv.org/abs/2305.19118)) | General reasoning | Patch / answer stage | Open (cross-visibility) | Single model family |
-| Refute-or-Promote (Agarwal 2026, [arXiv:2604.19049](https://arxiv.org/abs/2604.19049)) | Defect discovery | Review stage | Asymmetric context | Yes |
-| This work | SE (industrial code) | Pre-patch hypothesis stage | Blind challenge (no cross-visibility) | Yes (Sonnet + GPT-5.5) |
-
-*Table 2. Adversarial multi-model filtering: this work occupies the pre-patch / blind cell. Termination disciplines (λ_A's type-theoretic proofs, SafetyDrift's absorbing states) sit at composition or trajectory scope where this work's verdict-routed gate sits per-instance.*
-
-Closest in spirit is **POPPER** ([arXiv:2502.09858](https://arxiv.org/abs/2502.09858)), which runs agentic sequential hypothesis tests under e-value error control, the same sequential-testing machinery this project's `inquire` workflow uses to classify evidence. POPPER terminates statistically, on an error-rate bound over a population of tests; this work terminates mechanically, on a deterministic kill predicate over a single binary verdict, and persists the outcome as replayable memory where POPPER's tests are ephemeral.
-
 ## Limitations {#limitations}
 
-*The mechanism evidence is existence-grade.* One audited divergence, on one instance, in a program that was not preregistered when it ran. The pilots' nulls are confounded by a selection artifact we can name but not yet remove (the triage fast-path, §(null-regime)), and the localization-hard band where the mechanism should live has not been decisively tested; its one strong candidate did not reproduce at HEAD. Nothing here is a rate.
+*The result is bounded.* Complete exploration covers one small declarative graph to depth 6. The SQLite implementation is checked by a frozen conformance basis, forced schedules, crash points, and mutants, not by exhaustive exploration of SQLite itself. “Can fail closed” is supported; “hypothesis graphs are generally safe” is not.
 
-*The loop-versus-corpus control is unrun.* The externally-verified arm hands the model both an execution loop and a labeled set of must-flip cases; whether the lift comes from iterating against the gate or from the labeled corpus alone is untested. The separating control, a one-shot pass over the static cases with no loop, has not been run. (The fair same-criteria battery is in place, and #2501 was graded against the committed probes at its own toolchain and matches the automated fixes there; a full case-set co-grade of #2501 at a matched toolchain remains blocked by a toolchain mismatch.)
+*The checker is trusted.* A receipt establishes only the predicate the checker implements. A wrong specification can be checked perfectly and remain wrong. Root authority, scheduler code, SQLite, the operating system, clock, hash behavior, and storage are also inside the trusted boundary.
 
-*The smem is small and per-instance.* Hypothesis graphs in this work are one markdown file per inquiry; cross-instance accumulation is untested. That carries its own deflationary point: the file was never the bottleneck at any repo size, so heavier stores need to earn their keep at cross-instance scale, where the per-instance case never demanded them.
+*The memory is small and per-inquiry.* Retrieval quality, compaction, cross-repository accumulation, permissioning, and long-term storage repair remain untested.
 
-*How to refute this.* The central claims are built to fail loudly, each against a committed artifact a hostile auditor runs rather than a promise.
+*Concurrency is demonstrated, not accelerated.* Three workers overlapped on independent nodes, but wall time improved by only 1.83%. The graph creates safe entry points and dependency-aware joins; it does not guarantee useful speedup.
 
-- **The mechanism claim** dies if the Verus receipt fails to replay, or if a discriminating program shows the externally-oracled fix wrong where the maintainer's general fix is right. The clean, forced-fresh dataset and both patches are committed to check, and the flux trail at `flux-1613-trail-v1` is there for the same test on the auditability case.
-- **The encoding-boundary claim**, that the oracle is not self-generable, dies if a self-graded model reaches the hard side with labels it authored independently of the predicate under test. That would show the oracle is inducible after all, and closing the gate's coverage on that side is the next experiment's preregistered target.
-- **The methodology claim** dies if, as audited cases accumulate, an external oracle stops separating from self-grading everywhere a receipt can see. The oracle's source is then not the active ingredient, and the mechanism README names that null as this thesis's own falsifier.
-- **The attribution** dies if the oracle bracket fails to replicate from its preregistered sample.
-- **The novelty claim**, a capability lift driven by a domain-general reasoning tool, dies if the lift is shown to ride on domain-specific tooling rather than the general operation, or if a documented prior result already demonstrated the same from a tool that carries no answer and no domain model (§(rw-scaffolds)). The comparative search (§(search)) publishes the queries to re-run.
+*The comparison to prose is incomplete.* Bounded graph packets were smaller than full chronological notes, but a careful human can curate equally good packets. The demonstrated advantage is mechanical generation and validity tracking.
 
-*Generator staleness.* The checkpoints are fixed (Sonnet 4.6 era), and a more capable generator narrows the band where the mechanism is observable, since it resolves more cases unaided. The mechanism claim therefore survives only in the regime where verification is the bottleneck, which is also the regime the discussion argues matters.
+*How to refute this.* The fail-closed claim dies if an explored state violates an invariant, a model–SQLite projection diverges, a pre-commit death leaves partial state, or a declared mutant survives. The checks and the retained failed confirmation are public.
 
 ## Future work {#future-work}
 
-The program reorganizes around the smem, in order of leverage.
+The next work should test scale only where scale changes the mechanism.
 
-- **The preregistered mechanism hunt.** The Verus and flux cases define the target band: localization-hard, verification-bottlenecked bugs where the symptom sits far from the cause and the suite cannot see the difference between fixes. Each loop now carries its deductive step before it runs: testing X, predict Y, refuted by Z (`METHODOLOGY-preregistration.md`, `CANDIDATES-localization-hard.md`). Three to five audited existence cases, or the committed null, is the next paper.
-- **Coverage as the design lever, the oracle from approved history.** The Verus dissection (§(gate-general), §(enum-calib)) names two handles the next experiments turn directly. Gate *coverage* sets the generalization frontier, so widening the enumeration to the genuine-divergence-preserve shape is a falsifiable test of whether the model then carves out the XOR's hard side. And the oracle a model cannot induce is mined from human-approved history, the merged fix, the regression suite, the resolved-issue label, so calibrating `abductor` differentially against base *and* the approved fix is the concrete way to close a gate's blind spot without authoring a fresh oracle by hand. Prospectively, on a bug with no merged fix yet, the hard side has no correct verdict until a human spends the judgment.
-- **Conjecture: an agent cannot surprise itself.** Read the dissection one level up. Every warrant-producing step turns on a case the current hypothesis mishandles, the symmetric difference between what the inquirer believes and what is true. That case is the surprise, and the surprise is induction's to produce: it is what a test returns when the world disagrees with the deduced prediction. A test run against the agent's own belief returns no disagreement, so a self-grading agent generates no surprise, and abduction, which cannot fire without one, never re-fires. The agent supplies the leap and its deductions from within; the surprise it cannot, because induction against the self is not a test. That is why the externalized oracle was the active ingredient: it is the outside reference the inductive step needs and a single mind cannot be. Inquiry is the whole loop, abduction and deduction and induction together, and it completes only when its inductive step reaches past the agent; the external oracle is a constituent of that step, not a scaffold on it. The same pattern recurs across the companion posts (refutation in *What Cannot Be False Cannot Be True*, stranger-replay in *Verifiable Knowledge*, the fold in *Compress and Unfold*), which is suggestive rather than evidential and is kept here as a conjecture. We do not lean on it as a citation. It *dies* if a recorded trace reaches the same held-out general predicate from self-authored labels only, with no external label, replay, human-approved reference, or environmental execution entering before the discriminating step; lucky guesses (no warrant) and already-solved cases (the difference already empty) do not count.
-- **Conjecture: in-context diff computation degrades with size.** Hold the harness fixed and the claim is about the operands: a model's ability to compute the XOR *in its own context* should fall as the diff and case-space grow: a large structured operation attempted in prose rather than executed. Two regimes, one of them a conjecture. The *endpoint* needs no experiment: once the operands exceed the context window, in-context computation is impossible, so externalization is the only option at scale, and a codebase outgrows any finite window eventually. The *interior*, within the window but large, is the falsifiable part. Computing the XOR is a synthesis task, relating cases to one another to find the one the hypothesis mishandles, so the pairs to weigh grow with the square of the case-space and the load rises quadratically where a fact-lookup rises linearly; in-context accuracy should degrade as the operands grow, and faster than linearly. The underlying fall-off is the context-rot phenomenon (Chroma 2025); we have no direct measurement of XOR accuracy against diff size, and flag that rather than borrow a result that grades something else. It *dies* if a within-harness sweep over diff and case-space size shows in-context XOR accuracy flat or rising with size. The Verus receipt is a single point on that axis.
-- **The hypothesis graph as a type.** Specify the abstract data structure independently of this harness: operations (perturb-and-classify, generate-edge-from-kill, prune, replay), the soundness invariant (every node reconstructible from its recorded trial), and a serialization any agent can emit. The goal is an interchange format for auditable reasoning, so that "show your work" becomes a machine-checkable demand rather than a rhetorical one.
-- **Grade the trace, beyond the patch.** Bench design follows from the audit: report determinacy-aware denominators; build instruments whose oracle is expensive or absent and whose causes are hidden, because that is where method separates from reach; and score submissions on replayability, so a suite-green over-narrow fix (§(right-regime)) stops being indistinguishable from a root-cause one.
-- **Receipts-first contribution as the deployment lane.** The flux submission is the template: fix, discriminating receipt, soundness twin, full suite, replayable graph, residual flagged to the experts. Agent PRs are drowning in justified slop suspicion; the trace is the antidote, because it converts "trust my patch" into "audit my ledger." Scaling that lane (and measuring maintainer response to trace-backed PRs) tests attestation-displacing-trust ecologically. The first maintainer merge of a trace-backed fix on a maintainer-stuck issue is the lane's golden ticket: an adversarial expert accepting the work on its ledger, with the doer invisible to the verdict.
-- **Cross-instance smem accumulation.** Let the graph grow across instances within a repo, then across repos within a domain; the current work tests the smem only at per-instance scope.
-- **Concurrent diagnosis over a shared graph.** The monotone graph (nodes append, kills idempotent) permits a lock-free fan-out: parallel agents on one shared graph re-verifying each other's kills instead of trusting them, with transitive accountability the precondition that keeps it safe, a conflict-free blackboard for the inquiry layered over git's blackboard for the code. Running it, and measuring the wall-clock win, is the to-do.
+- **Larger shared graphs.** Increase depth, shared descendants, and simultaneous root changes until projection or invalidation cost becomes material.
+- **Long-lived memory.** Test retrieval, compaction, and selective forgetting across many inquiries without weakening receipt or dependency semantics.
+- **Strong handoff baselines.** Compare graph packets with equally informative curated packets on resumption, duplicated work, and stale-claim inheritance.
+- **Adversarial authority.** Move root admission and parts of checking outside the trusted boundary, then state the stronger fault model precisely.
+- **Interchange format.** Specify the abstract data type independently of this scheduler so different agents can publish and consume the same receipt-bearing nodes.
+- **Ecological concurrency.** Use tasks whose expensive intermediate results dominate startup and coordination overhead; measure speed only after safety continues to hold.
 
 ## Conclusion {#conclusion}
 
-In the domain where every step is checkable, an agent's reasoning can be made accountable rather than merely trusted. The hypothesis graph is a replayable record that submits each generated step to a world-facing trial and retains only what survives. The path from diagnosis to merge becomes a sequence of falsifiable commitments a third party can rerun rather than a verdict it must take on trust. This reduces the cost of relying on an agent from reproducing its work to rerunning its record. The guarantee holds only where the work is perturbable, where a trial can be run and read; extending that region is left open, and the method claims nothing beyond it.
+A coding agent does not need another place to put prose. It needs memory that distinguishes a reusable result from an unsupported assertion.
 
-Inside that checkable domain sits a bolder result. On a single contamination-free bug, the externalized comparator carried Sonnet 4.6 to a fix Fable could not reach without it: a capability lift, not the automation a scaffold usually buys. The within-model ablation attributes it to the verdict source, the one input the model cannot author, with no training involved. On a best-effort search we found no prior public report of this specific crossing, a weaker model reaching a post-cutoff fix a stronger one missed through a hidden external comparator, though weaker-model-with-scaffold results exist on the automation axis.
+The hypothesis graph supplies that distinction. A node binds a claim to a receipt and dependency versions. The graph admits it atomically, exposes independent entry points, and withdraws dependent knowledge when a premise changes. In the bounded experiment, this protocol survived complete model exploration, independent implementation comparisons, forced races, process deaths, and targeted source mutations.
 
-This work is independently funded by the author. Every claim here ties to a committed receipt, the nulls included.
+The claim is deliberately simple: a versioned, receipt-checked hypothesis graph can serve as shared semantic memory that fails closed. It does not make a model reason better. It makes checked work easier to carry forward without forgetting why it was trusted.
 
 ## Availability and reproducibility {#availability}
 
-- **Repositories.** [github.com/kimjune01/swebench-pro](https://github.com/kimjune01/swebench-pro) (the bench run; frozen tags `prereg-pro-v1`, `prereg-pro-v1-cheap`), [github.com/kimjune01/swebench-verified](https://github.com/kimjune01/swebench-verified) (prior-generation baseline, Zenodo-DOI'd), [github.com/kimjune01/swebench-pro-audit](https://github.com/kimjune01/swebench-pro-audit) (the determinacy audit; every claim one row in `CLAIMS.md`, all 728 verdicts in `COVERAGE.md`, mechanical spine re-derivable by grep), [github.com/kimjune01/determinacy](https://github.com/kimjune01/determinacy) (the audit as a portable tool for any SWE-bench-shaped bench; SWE-rebench run included), [github.com/kimjune01/hygraph-mechanism](https://github.com/kimjune01/hygraph-mechanism) (the mechanism experiment; the Verus #2219 lift with its clean, forced-fresh dataset and the 43,586-line climb trace, and the flux trail frozen at `flux-1613-trail-v1`; the README's artifact index maps every claim here to its committed path), [github.com/kimjune01/abductor](https://github.com/kimjune01/abductor) (the externalized kill condition as a standalone, domain-general instrument: enumerate, calibrate against a known-good baseline, gate, with the `/debug` skill that drives the loop).
-- **Provenance artifacts.** Per-instance trajectories, hypothesis graphs, captured diffs, gate traces, and cost ledger under `runs/scored/artifacts/`; preregistrations at the freeze SHAs; the OSS ledger (`pr-receipts.jsonl`) with the GraphQL query that recomputes every number it asserts.
-- **Models and disclosure.** No training, fine-tuning, or learned weights in the harness; each stage drives a vendor's shipped agentic CLI over the same typed contracts. The bench run paired a Sonnet 4.6 generator (extended thinking on) with a GPT-5.5 challenger (reasoning off, a point against reading the gate as model deliberation); the open-weight pair-swap ported the result wholesale, and each scored instance reads only its own artifacts. Versions and billing mode are in the cost ledger and the freeze SHAs.
-- **OSS deployment trace.** ~385 hypothesis graphs at [`kimjune01/sweep/repo-hypotheses/`](https://github.com/kimjune01/sweep), one per investigated issue; PR-level outcomes pinned at `kimjune01/kimjune01@paper-2026-05-28`.
-- **Replication.** Boxes, budget, the per-instance cost ledger (`COST_BASIS.md`), and the step-by-step rerun live in the run repo and the field guide *How Not to Run SWE-bench Pro*.
-- **Companion writing.** The instrument story and field guide: [*How Not to Run SWE-bench Pro*](/how-not-to-run-swebench-pro). The error corrected here, from the inside: *Precisely Wrong*. The epistemology the discussion rests on: *Verifiable Knowledge* ([DOI](https://doi.org/10.5281/zenodo.20754822)) and its frame *What Cannot Be False Cannot Be True*; its buildable-truth core in brief: *Truth Is Buildable*. Dated provenance posts establish parallel rather than derivative development: *Theory is load-bearing* (2026-03-17), *The proof manual* (2026-04-05), and *Type the question* (2026-04-08) predate ADI (2026-04-17); *Evidence has a trajectory* (2026-04-27) and *The Hypothesis Graph* (2026-04-28) predate CMM (2026-05-26).
-- **PDF.** Arxiv-shape build at [june.kim/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf](https://june.kim/assets/the-hypothesis-graph-semantic-memory-methodeutics.pdf), rebuilt from this markdown source by [md2arxiv](https://github.com/kimjune01/md2arxiv); the source is canonical.
-- **DOI.** Prior-generation verified artifact: Zenodo-DOI'd. Mechanism experiment ([hygraph-mechanism](https://github.com/kimjune01/hygraph-mechanism)): [10.5281/zenodo.20691973](https://doi.org/10.5281/zenodo.20691973). Pro bundle ([swebench-pro](https://github.com/kimjune01/swebench-pro)): [10.5281/zenodo.20691977](https://doi.org/10.5281/zenodo.20691977). This paper: [10.5281/zenodo.21939861](https://doi.org/10.5281/zenodo.21939861).
-- **License.** Skills released under **CC-BY-SA-NS** ([june.kim/cc-by-sa-ns](https://june.kim/cc-by-sa-ns)); repo-level terms in each `LICENSE.md`. The harness an outsider clones is the same harness that produced the published numbers.
+- **Shared-memory experiment.** [github.com/kimjune01/hypothesis-graph-handoff-experiment](https://github.com/kimjune01/hypothesis-graph-handoff-experiment): preregistrations, scheduler, independent model, bounded explorer, conformance basis, races, crash probes, mutations, retained failure, replication, and result hypothesis graph. AGPL-3.0-or-later.
+- **Field corpus.** Approximately 385 per-inquiry graphs at [`kimjune01/sweep/repo-hypotheses/`](https://github.com/kimjune01/sweep).
+- **Companion papers.** [*Verifiable Knowledge*](/verifiable-knowledge) defines the receipt-bearing knowledge unit; [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true) supplies its falsifiability boundary.
+- **Paper.** This markdown source is canonical. The DOI above identifies the prior archived version; this revision should receive a new versioned deposit after its PDF is rebuilt.
 
-**Reproducibility invitation.** *Nullius in verba.* Every number here is recomputable from committed artifacts: the bench verdicts by re-running the official grader on captured diffs, the audit's mechanical spine by grep, the flux divergence by replaying the receipt programs against both committed patches. Doubts should be filed as issues against the relevant repository; confirmed corrections fold into the next versioned artifact, as the retraction noted in §(right-regime) and the reversal this version reports already have.
+**Reproducibility invitation.** Re-run the frozen explorer, conformance traces, crash probes, and source mutants. A counterexample retracts every claim that depends on the failed invariant; the result graph names those dependencies explicitly.
 
 ## LLM collaboration disclosure {-}
 
-LLMs enter this work in three roles. *Subject of study*: the harness under evaluation uses frontier LLMs as generator and challenger, with versions, billing mode, and provenance disclosed in §(availability) and the artifacts. *Instrument*: model pairs adversarially verify the audit's two-expert tier (one constructs, an independent family refutes) and blind-judge the mechanism pilots, always with the mechanical layer (grep, grader, replay) holding the verdict. *Writing aid*: the prose was drafted and revised with Anthropic's Claude (Opus 4.8 and Fable 5) from human-authored outlines and session notes, with adversarial review from OpenAI's codex (GPT-5.5); the claims, methodology, numbers, and argument structure are the author's. No LLM decided what to publish.
+LLMs produced the field graphs and helped design, implement, and review the shared-memory experiment. Mechanical checks, SQLite state, and the independent model held every experimental verdict. The prose was drafted and revised with Anthropic's Claude and OpenAI's Codex from human-authored outlines and session notes; the claims, methodology, and publication decisions are the author's.
 
 ## Acknowledgments {-}
 
-We thank John Laird for endorsing this submission, and the flux maintainers for engaging with a stranger's receipts on their hardest open issue.
+We thank John Laird for comments that improved the paper's framing and abstract.
 
 ## References {-}
 
@@ -655,38 +448,6 @@ Works cited above, consolidated. Entries for which the text or the *Extended int
 - Zhang et al. (2024/25). *AutoCodeRover*: autonomous program improvement.
 - Zilberstein, N., Saliling & Silva, A. (2024). Outcome Separation Logic; tri-abduction for branch composition. arXiv:2305.04842.
 
-## Novelty and comparative search protocol {.appendix} {#search}
-
-- **Why this section exists.** Several claims here take the form *"we found no prior X."* Such claims are only as honest as the search they rest on. This section publishes the queries so an auditor can re-run the search and either confirm the gap or find what we missed.
-- **Sources searched.** Google Scholar; arXiv (cs.LG, cs.AI, cs.CL, cs.SE); ACL Anthology; OpenReview; GitHub code and repository search; public SWE-bench leaderboard and submission archives.
-- **Queries by claim.**
-  - **Peircean SE-agent loop.** *"Peirce" "LLM agent" abduction deduction induction software engineering*; *"abduction deduction induction" "LLM agent" "software engineering"*; *"Peirce" "SWE-bench" agent*.
-  - **Hypothesis-graph agent memory.** *"hypothesis graph" "LLM agent" memory*; *"belief graph" "LLM agent" memory hypothesis*; *"knowledge graph" "LLM agent" "hypothesis" "memory"*.
-  - **Blind multi-model hypothesis-stage filtering.** *"multi-agent" "code" "hypothesis" "SWE-bench"*; *"blind" "multi-agent" "code review" LLM*.
-  - **Trajectory-shape termination gates.** *"LLM agent" termination criteria trajectory*; *"finite state" "LLM agent" "termination"*.
-  - **Benchmark determinacy / construct-validity audits.** *"SWE-bench Pro" "construct validity"*; *"underdetermined" benchmark "problem statement" test*; *"specification" "ambiguity" "SWE-bench" audit*.
-  - **Full per-instance provenance on SWE-bench Pro.** *SWE-bench Pro leaderboard submissions trajectories cost ledger*; *site:github.com "swe-bench-pro" "trajs"*.
-  - **Sub-$1k Pro replication and per-instance cost ledger.** *"SWE-bench Pro" "cost per instance"*; *"SWE-rebench" cost per problem*.
-- **Caveats.** The search is best-effort and bounded by visible-web indexing; private industry work and non-indexed venues are not covered. Discoveries of overlapping prior work should be reported as issues for citation update.
-
-### Comparative search supporting the artifact claim
-
-The artifact claim (§(availability)), *no method documented publishes per-instance receipts at this depth on SWE-bench Pro*, requires a comparative search. The claim concerns receipts, with rate set aside. The bar: published per-instance trajectories, captured diffs, gate or evaluator traces, cost ledger, and reproducible run conditions.
-
-**Candidate audit (against the receipt bar).** Each top public submission or comparable report is checked for: published per-instance trajectories (T), captured diffs (D), evaluator/gate traces (G), per-instance cost ledger (C), reproducible frozen artifact (R), and resolve rate at or above ours on the same bench. Receipt-bar columns are *present* (✓), *partial* (◐), or *absent* (✗).
-
-| Submission / report | Bench | T | D | G | C | R | Rate ≥ ours | Notes |
-|--------------------|---------|---|---|---|---|---|----------------|--------------------|
-| Official `swebench/experiments` repo (multiple top entries) | Verified | ✓ | ✓ | ✗ | ✗ | ◐ | Various | Minimum publication norm: trajs/logs/patch.diff/report. No gate traces, no cost ledger. |
-| Top vendor leaderboard entries (Claude Code, OpenHands, SWE-agent, AutoCodeRover) | Verified | ◐ | ◐ | ✗ | ✗ | ✗ | Reported below 97% | Submissions report numbers; reproducible bundles and cost ledgers rarely published. |
-| SWE-bench Pro official page (Scale) | Pro | ◐ | ◐ | ✗ | ✗ | ✗ | N/A (curator) | Uncapped cost (250-turn limit). No per-instance cost ledger. |
-| Nilenso Pro trajectory analysis | Pro | ◐ | ✗ | ✗ | ◐ | ✗ | N/A (third-party) | Cost/token/time analysis across four frontier models. Not a submission. |
-| SWE-rebench public reports | rebench | ◐ | ◐ | ✗ | ✓ | ◐ | Below ours | Strong cost transparency (Cursor Composer 2.5 at \$0.23/problem). |
-| **This work: Verified** | Verified | ✓ | ✓ | ✓ | ✓ | ✓ | 426 / 438 eligible (97.3%) | Companion repo `swebench-verified`; Zenodo DOI; gate traces and cost ledger committed. |
-| **This work: Pro** | Pro | ✓ | ✓ | ✓ | ✓ | ✓ | 694/728 = 95.3%; open-weight pair 678/728 = 93.1% | Same frozen harness, whole eligible set, 0 incomplete; two model pairs under one bundle. Public-split, gate-oracle regime: an artifact claim, not a leaderboard claim (§(right-regime)). |
-
-**Reading.** No row above the two rows here combines all five receipt-bar columns (T/D/G/C/R) on the same bench. The claim is about receipt depth alone, leaving resolve rate out of it, and survives as long as the table reads this way; a citation showing a fuller combined receipt is the cleanest refutation.
-
 ## Extended intellectual lineage {.appendix} {#lineage}
 
 *Foundational sources grounding §(grounding), §(epistemics), §(hygraph), and §(related-work), collected here so Related Work stays focused on contemporary systems.*
@@ -699,7 +460,7 @@ The artifact claim (§(availability)), *no method documented publishes per-insta
 - **Ramsey 1926** (*Truth and Probability*): operational credence as betting odds; the hypothesis graph's node-level semantics descends from this work.
 - **James 1907**; **Dewey 1929**: the pragmatist commitment that truth is inseparable from action.
 - **Meehl 1967**; **Feynman 1974** ("Cargo Cult Science"): the difference between rigor-shaped activity and actual rigor, the standard §(right-regime) holds itself to.
-- **Kimball 1957; Tukey**: the Type III error, the exact answer to the wrong question; the failure mode the determinacy audit (§(right-regime)) is built to prevent, examined in the companion post Precisely Wrong.
+- **Kimball 1957; Tukey**: the Type III error, the exact answer to the wrong question; a reminder that a perfectly checked receipt can still encode the wrong predicate.
 
 ### The hypothesis graph's structural ancestors
 
