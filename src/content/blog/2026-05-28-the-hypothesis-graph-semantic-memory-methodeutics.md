@@ -99,7 +99,9 @@ Without a perturbation and observable outcome, the graph degrades into a plausib
 
 That residue is what the memory typology calls the `smem`: persistent, typed, queryable, and owned by the harness rather than the model. A second agent need not inherit the whole conversation. It can enter at an open node with that node's objective, direct dependencies, versions, and receipts. Independent branches can proceed concurrently; a changed root invalidates only what depends on it. The graph in the field work is one markdown file per inquiry. The scheduler experiment makes these update rules explicit.
 
-The protocol separates four objects that prose handoffs tend to blur:
+## Knowledge is an entitlement {#epistemics}
+
+Knowing changes which claims an agent is entitled to use. A verdict carries a receipt another agent can check; dependency versions determine whether its warrant remains current. The protocol separates four objects that prose handoffs tend to blur:
 
 | Object | Contains | Establishes |
 |---|---|---|
@@ -107,6 +109,8 @@ The protocol separates four objects that prose handoffs tend to blur:
 | **Receipt** | Trial and observed outcome | What the checker accepted |
 | **Warrant** | Receipt under current dependency versions | What another agent may rely on |
 | **Hypothesis graph** | Warrants and dependency edges | What remains current after revision |
+
+Paired with its trial, a node carries its warrant intact. Another agent can reuse the result, replay it, or see that it has gone stale.
 
 ## Shared memory that fails closed {#right-regime}
 
@@ -150,24 +154,7 @@ The result supports one narrow claim:
 
 The hypothesis graph adds dependency, version, and invalidation structure to the receipt supplied by *Verifiable Knowledge*. The receipt can then travel across agents without becoming an unsupported assertion. One paper defines what may count as knowledge; this one defines how such knowledge is shared and revised.
 
-## Knowledge is an entitlement {#epistemics}
-
-Knowing is an act that changes which claims one is entitled to use. This is the subject of *Verifiable Knowledge*; the property that matters here is that a verdict carries a receipt another agent can check. In the Hypothesis Graph, knowledge has the following properties:
-
-- **Three states.** Witnessed has passed its declared predicate; killed has failed it; open is *untrue*, a conjecture awaiting its test. These are the states of the entitlement ledger developed in *Verifiable Knowledge*, scoped here to one node and its kill edge.
-- **Credence.** A node carries a credence capped by the mode that earned it, low for abduction, higher once tested (Ramsey 1926), the step a bare LLM skips when it emits uniform confidence with no propagation along the chain.
-- **Survived belief.** A node counts as knowledge only after withstanding a trial, a verificationist criterion (Ayer 1936), indexed to the stakes of acting on it. Before trial, a claim is a hypothesis.
-- **Dependency connections.** Each conclusion records the claims on which its current entitlement depends.
-
-With each round of inquiry the dependency boundary sharpens. With each successful trial, a claim earns only the confidence its declared predicate supports.
-
-![A claim and its trial as one record. Left, the claim: a load resting on a span, *this bridge holds the load*. Right, the trial: a toothpick-and-gumdrop model bridge bearing a steel weight across two supports. Photo: Oregon Department of Transportation, CC BY 2.0.](/assets/bridge-trial-light.svg)
-
-Paired with its trial, a node carries its warrant intact; handed on the author's word, only the verdict crosses and the warrant is re-derivable from scratch.
-
-A coding agent can already run a test. What it lacked was a protocol for carrying the result beyond one context without reducing its warrant to “trust me.” With the protocol, another agent can reuse the result, replay it, or see that it has gone stale.
-
-## Inquiry separates three modes {#grounding}
+## Why inquiry produces this memory {#grounding}
 
 The model makes the leap to a candidate cause; the harness stages and checks what follows. In this precise and limited sense, the harness makes reasoning mechanical except for the leap, which it can only trigger. Peirce called this discipline **inquiry**.
 
