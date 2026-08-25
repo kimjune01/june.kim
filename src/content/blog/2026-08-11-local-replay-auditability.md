@@ -6,7 +6,7 @@ tags: coding, epistemology, methodology
 
 ## Abstract
 
-The epistemic status of an agent's output should be checkable without trusting the sender's self-attestation. Scores, labels, and Boolean verdicts cannot provide that guarantee on their own because they present the conclusion without the procedure. We propose a protocol that attaches verifiability to the claim: transmit the claim alongside its deterministic re-derivation. Replay clears testimonial uncertainty; specification uncertainty remains. We illustrate an epistemic ablation on two independent audits of [SWE-bench Pro](https://arxiv.org/abs/2509.16941) using opposite protocols. One published a self-attested estimate of roughly 30 percent broken tasks; the other, a 15.0 percent floor through 109 claim-level receipts.
+Agent outputs commonly cross boundaries as scores, labels, or verdicts, leaving receivers to trust the sender or reconstruct the inquiry. We introduce **local replay auditability**: a claim is transmitted with a procedure that independently re-creates its verdict. Replay removes testimonial uncertainty while leaving specification uncertainty visible. In a public audit of [SWE-bench Pro](https://arxiv.org/abs/2509.16941), the protocol produced 109 replayable claim-level receipts, establishing a conservative floor of 15.0 percent across 728 tasks. An independent audit reported an opaque estimate of roughly 30 percent, but differences in method and scope preclude comparison. The demonstrated result is epistemic: receivers can verify individual claims without trusting the sender.
 
 ## Entitlement loss at the boundary
 
