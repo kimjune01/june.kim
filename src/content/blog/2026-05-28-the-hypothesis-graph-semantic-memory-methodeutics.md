@@ -10,25 +10,25 @@ keywords: hypothesis graph, methodeutics, abductive inference, agent memory, cog
 
 ## Abstract {-}
 
-Coding agents lose the warrant behind their conclusions: later agents receive prose or verdicts, then must either trust them or reconstruct the work. This paper introduces the **hypothesis graph**, a shared semantic memory whose nodes bind claims to replayable trials and whose edges record dependency, refutation, and revision. The model proposes hypotheses; the harness checks and stores them. In a bounded fail-closed experiment, the protocol preserved its declared invariants over 14,967 completely explored states and 39,288 transitions. A SQLite implementation matched an independent model across 20 frozen comparisons, passed six forced race and lease-boundary schedules and two pre-commit crash probes, and killed seven source mutants. The graph is not claimed to deepen reasoning. Its supported contribution is orthogonal: it lets verified work persist, move between agents, and fail closed when a worker submits stale or unsupported knowledge.
+Coding agents lose the warrant behind their conclusions: later agents receive prose or verdicts, then must either trust them or reconstruct the work. This paper introduces the **hypothesis graph**, a shared semantic memory whose nodes bind claims to replayable trials and whose edges record dependency, refutation, and revision. The model proposes hypotheses; the harness checks and stores them. In a bounded fail-closed experiment, the protocol preserved its declared invariants over 14,967 completely explored states and 39,288 transitions. A SQLite implementation matched an independent model across 20 frozen comparisons, passed six forced race and lease-boundary schedules and two pre-commit crash probes, and killed seven source mutants. The graph preserves verified work across agents and rejects stale or unsupported knowledge; deeper reasoning is outside the claim.
 
 ## Introduction {#introduction}
 
-In coding agents, the LLM is wrapped in a harness: the verification, testing, and memory a software task needs. The field building these is moving up a level of abstraction, from the model to the harness. Roychoudhury et al. (2025) reframe the goal as *programming with trust*, arguing that deployment turns on verification, testing, and analysis built into the agent rather than on raw generation ([arXiv:2502.13767](https://arxiv.org/abs/2502.13767)). Liu et al. (2024) survey agents for software engineering and organize the field around those same missing pieces ([arXiv:2409.02977](https://arxiv.org/abs/2409.02977)); Yehudai et al. (2025) add that scoring final outputs misses the reasoning and failure causes inside a run, and call for trajectory-level assessment ([arXiv:2503.16416](https://arxiv.org/abs/2503.16416)); Wang et al. (2025) survey agentic-programming systems and list persistent, structured memory among the open challenges ([arXiv:2508.11126](https://arxiv.org/abs/2508.11126)).
-
 A patch passes the visible tests, but that's not enough: passing certifies only the cases the tests cover. An over-narrow patch passes them and is wrong off-suite. Confirming it means reconstructing the reasoning the agent never recorded, at a cost approaching that of producing it, so the work shifts from writing to checking. Code review is the bottleneck.
 
-When reasoning is discarded, each run rebuilds context from scratch. Even where agent memory adopts the cognitive-architecture lineage, as CoALA (Sumers et al. 2024) does in mapping it onto Soar (Laird 1987) and ACT-R, the semantic slot stores facts rather than a falsifiable structure, so the search is discarded once a patch passes. At best, a trail of blobs is saved as provenance.
+In coding agents, the LLM is wrapped in a harness: the verification, testing, and memory a software task needs. The field building these is moving up a level of abstraction, from the model to the harness. Roychoudhury et al. (2025) reframe the goal as *programming with trust*, arguing that deployment turns on verification, testing, and analysis built into the agent rather than on raw generation ([arXiv:2502.13767](https://arxiv.org/abs/2502.13767)). Liu et al. (2024) survey agents for software engineering and organize the field around those same missing pieces ([arXiv:2409.02977](https://arxiv.org/abs/2409.02977)); Yehudai et al. (2025) add that scoring final outputs misses the reasoning and failure causes inside a run, and call for trajectory-level assessment ([arXiv:2503.16416](https://arxiv.org/abs/2503.16416)); Wang et al. (2025) survey agentic-programming systems and list persistent, structured memory among the open challenges ([arXiv:2508.11126](https://arxiv.org/abs/2508.11126)).
+
+Discarding reasoning forces each run to rebuild context from scratch. Even where agent memory adopts the cognitive-architecture lineage, as CoALA (Sumers et al. 2024) does by mapping it onto Soar (Laird 1987) and ACT-R, the semantic slot stores facts rather than a falsifiable structure, so the search is discarded once a patch passes. At best, provenance saves a trail of blobs.
 
 We were promised a junior developer with near-infinite patience. All we got was tool calls in a loop: a cracked-up amnesiac contractor, leaving mistakes for maintainers to review.
 
 Here we give the agent a trail of **verifiable knowledge**. The **hypothesis graph** is shared semantic memory for an inquiry. A fix arrives with what was tried, what failed, and what remains supported. Each consequential claim carries a trial a stranger can rerun. The model still reasons; the harness decides what may enter shared memory.
 
-The contribution is a memory protocol, not a claim about deeper reasoning. The model proposes; the harness records dependencies, checks receipts, versions accepted knowledge, and refuses stale updates. This makes the graph useful even when it does not change what any one model can solve.
+The model proposes. The harness records dependencies and checks receipts; it versions accepted knowledge and refuses stale updates. The graph preserves checked work without changing what any one model can solve.
 
 ## The hypothesis graph {#hygraph}
 
-### Requirements {#requirements}
+### Five requirements {#requirements}
 
 A useful semantic memory for inquiry must clear five requirements at once:
 
@@ -44,14 +44,14 @@ The first four are representational requirements compared below. Fail-closed beh
 |-------------------------------|:-------:|:------:|:------------:|:--------:|
 | **Hypothesis graph** (this work) | ✓ | ✓ | ✓ | ✓ |
 | Truth-maintenance (Doyle 1979; de Kleer 1986) | ✓ | ◐ | ◐ | ◐ |
-| Provenance / lineage (W3C PROV, Moreau et al. 2013) | ◐ | ◐ | ◐ | ✓ |
+| Provenance / lineage ([W3C PROV](https://www.w3.org/TR/prov-overview/), Moreau et al. 2013) | ◐ | ◐ | ◐ | ✓ |
 | Search + proof tree (Clarke et al. 2000; Solar-Lezama et al. 2006) | ✓ | ◐ | ◐ | ◐ |
 | Argumentation (Dung 1995; Modgil & Prakken 2014) | ✓ | ◐ | ◐ | ◐ |
 | Event-sourced log / ReAct trace (Yao et al. 2023) | ✓ | ◐ | ◐ | ✓ |
 
 *The middle two columns are verification; the outer two are the hypothesis-shaped gap and retention. Fail-closed publication is not inferred from this table.*
 
-An LLM is what finally fills it. Filling the graph takes a reasoner that reads a surprising failure, proposes candidate causes in open vocabulary, and turns each into an executable test, with no hand-built domain model. Classical inference engines could do this only inside a formalism encoded by hand, which is why the slot stayed a research program; the LLM populates it across arbitrary codebases, which is what makes the structure practical here.
+An LLM finally populates the graph. Filling it takes a reasoner that reads a surprising failure, proposes candidate causes in open vocabulary, and turns each into an executable test, with no hand-built domain model. Classical inference engines could do this only inside a formalism encoded by hand, which is why the slot stayed a research program; the LLM populates it across arbitrary codebases, which is what makes the structure practical here.
 
 ### Graph semantics {#graph-semantics}
 
@@ -59,57 +59,57 @@ The graph uses two explicit edge types. An **inquiry edge** records how one fail
 
 > **Replay invariant.** Every committed conclusion is reconstructible from its recorded trial: the exact command, observed outcome, verdict, and credence cap. The checker and recorded environment remain trusted.
 
-The contract holds on the node's mechanical skeleton; the hypothesis prose the node also carries falls outside it, by design. The prose is the part an auditor would otherwise have to trust, and the recorded trial is what replaces trusting it, so the invariant draws its line exactly where checkability begins. The guarantee is narrow and named: the command, outcome, and verdict are checkable, while the mode label that caps a credence is a convention the writer is trusted to apply honestly.
+The contract covers the node's mechanical skeleton, not its hypothesis prose. The command, outcome, and verdict are checkable; the writer remains trusted to apply honestly the mode label that caps credence.
 
-### Operations {#operations}
+### Invariant-preserving operations {#operations}
 
 Five operations maintain the structure, each defined with the one-clause argument that it preserves the invariant, the way a balanced tree's insert is defined to restore balance:
 
 - **Create** (a smart constructor), append an open node: abduction writes a hypothesis, its kill condition, and the exact trial that will test it ("the bulb is dead", trial `swap in a fresh bulb`). *Preservation*: an open node claims no verdict yet, so it cannot enter verified memory.
 - **Read / replay**: ask which hypotheses are open, or reconstruct a committed conclusion by rerunning its trial. This replaces trust in the worker's unsupported verdict with trust in the declared checker and environment. *Preservation* is vacuous because read mutates nothing.
 - **Classify** (the update): a trial's outcome marks its node *killed* or *witnessed* and caps its credence at the mode that earned it, a verdict written once. *Preservation*: classify appends a verdict and never edits the recorded trial, so the node still replays to the same outcome.
-- **Link** (edge-from-kill): the manner of a hypothesis's death may suggest the next hypothesis (the live replacement bulb shifts attention to the dimmer, trial `bypass the dimmer to the wall`). *Preservation*: link only appends, and each successor begins open under Create's rule.
-- **Prune**: a dead branch leaves the working frontier while its record stays in place. *Preservation* is trivial, prune is a frontier-set operation that changes what is *live* and deletes nothing, so every pruned node replays exactly as before.
+- **Link** (edge-from-kill): how a hypothesis fails may suggest the next hypothesis (the live replacement bulb shifts attention to the dimmer, trial `bypass the dimmer to the wall`). *Preservation*: link only appends, and each successor begins open under Create's rule.
+- **Prune**: a dead branch leaves the working frontier while its record stays in place. *Preservation* is trivial. Prune is a frontier-set operation that changes what is *live* and deletes nothing, so every pruned node replays exactly as before.
 
 ![A hypothesis graph, two nodes and the edge between them, on the dead-light inquiry. The bulb hypothesis is killed by a cheap trial (swap in a fresh bulb, still dark); its death names the next node, the dimmer, which a second trial witnesses (bypass it to the wall, the light comes on). Each node binds a hypothesis to a trial, an observed outcome, and a credence capped by the mode that earned it: abduction proposes and stays low, induction is test-backed and rises. Every node rebuilds from its recorded trial, so an auditor replays the structure instead of trusting it.](/assets/hypothesis-graph-anatomy.svg)
 
-### Auditability {#auditability}
+### Replay makes audits local {#auditability}
 
 The invariant yields a local audit property:
 
 > **Local Replay Auditability.** Any single conclusion is checkable by rerunning that node's recorded trial, without reconstructing the inquiry or trusting the worker's unsupported verdict. The checker and recorded environment remain inside the trusted boundary.
 
-This is, for inquiry, the analogue of a certificate a consumer checks without trusting the producer, and like the Merkle audit path or proof-carrying code, its value rests on a contract; a complexity bound is beside the point.
+Local replay resembles a certificate that a consumer checks without trusting its producer. Like a Merkle audit path or [proof-carrying code](https://doi.org/10.1145/263699.263712), its value rests on a contract; a complexity bound is beside the point.
 
 Two grades of it matter. Where the trial is a deterministic command over pinned inputs, replay is *strong*: re-execution reproduces the recorded outcome, as in the fail-closed experiment (§(right-regime)). Where the trial runs a model or live service, replay is *artifact-level*: the recorded output is preserved and a deterministic predicate is rerun over it. Pruning leaves both untouched: a branch drops from the working frontier but remains in the record.
 
-### Knowledge maintenance {#knowledge-maintenance}
+### Kills drive revision {#knowledge-maintenance}
 
 The nodes are ordinary; what is novel is the edge semantics. A search tree finds; a proof tree justifies. The hypothesis graph is both at once, because the search path *is* the justification: every step was a trial.
 
-It sits at the confluence of older lineages: truth-maintenance and model-based diagnosis (de Kleer 1986; Reiter 1987; de Kleer & Williams 1987), sequential experimental design (Wald 1947; Vovk & Wang 2021), abstract argumentation (Dung 1995), and counterexample-guided refinement (CEGAR, Clarke et al. 2000; CEGIS, Solar-Lezama et al. 2006). Refinement is the closest kin: a counterexample *is* a kill that names the next experiment, the hypothesis graph's defining edge. What is novel is running it over an *open* hypothesis space abduced in domain vocabulary. Replayability stands in for the sound abstraction a closed setting supplies for free, with completeness as the price the open move forfeits (§(lineage)).
+Counterexample-guided refinement is the closest kin: a counterexample *is* a kill that names the next experiment, the hypothesis graph's defining edge. The graph runs refinement over an *open* hypothesis space abduced in domain vocabulary. Replayability stands in for the sound abstraction a closed setting supplies for free, with completeness as the price the open move forfeits (§(lineage)).
 
-The near neighbors each hold part of this and source the rest from outside themselves. A truth-maintenance system (Doyle 1979; de Kleer 1986) maintains belief status under assumptions, but the empirical trial and the kill-generated successor are external conventions. Provenance (W3C PROV, Moreau et al. 2013) records replayable activities, yet does not decide which hypothesis comes next. And the ReAct trace (Yao et al. 2023), the strongest mundane baseline, is an append-only log whose continuation policy the controller decides and the record never holds.
+A truth-maintenance system (Doyle 1979; de Kleer 1986) maintains belief status under assumptions, but the empirical trial and the kill-generated successor are external conventions. Provenance (W3C PROV, Moreau et al. 2013) records replayable activities, yet does not decide which hypothesis comes next. A ReAct trace (Yao et al. 2023) is an append-only log whose continuation policy the controller decides and the record never holds.
 
-What the hypothesis graph adds is their composition in one append-only object: an open-domain hypothesis, its executable trial, its kill condition, and the successor that kill names. That object belongs to the verifiable family whose value is a contract rather than a complexity bound, certificate transparency (Laurie et al., RFC 9162), proof-carrying code (Necula 1997), content-addressed provenance: a data structure paired with the protocol that writes and checks it.
+The graph composes an open-domain hypothesis with its executable trial. It also records the kill condition and the successor that the kill names. Its relatives include certificate transparency (Laurie et al., RFC 9162), proof-carrying code (Necula 1997), and content-addressed provenance. Each pairs a data structure with the protocol that writes and checks it.
 
 ### Semantic memory {#semantic-memory}
 
-This is the data structure for *testable* inquiry, and its entire power is the perturbation surface. Strip the ability to poke the system and read an outcome, and the same shape degrades into a plausibility tree, which is the confabulation failure mode it exists to prevent. Intuition is not verifiable from outside, so inquiry that has to be checked trades it for an explicit perturbation surface. The hypothesis graph is the verifiable serialization reasoning compiles to, so it can be checked by someone who does not trust you. Proof is to intuition as the hypothesis graph is to inquiry: not the thinking, the residue of the thinking that survives a stranger's replay.
+Without a perturbation and observable outcome, the graph degrades into a plausibility tree. Inquiry that has to be checked therefore trades private intuition for an explicit perturbation surface. The hypothesis graph is the verifiable serialization reasoning compiles to, so someone who does not trust you can check it. Proof is to intuition as the hypothesis graph is to inquiry: the residue of thinking that survives a stranger's replay.
 
 That residue is what the memory typology calls the `smem`: persistent, typed, queryable, and owned by the harness rather than the model. A second agent need not inherit the whole conversation. It can enter at an open node with that node's objective, direct dependencies, versions, and receipts. Independent branches can proceed concurrently; a changed root invalidates only what depends on it. The graph in the field work is one markdown file per inquiry. The scheduler experiment makes these update rules explicit.
 
 ## Shared memory that fails closed {#right-regime}
 
-The graph's useful claim is not that it makes a model think harder. It is that one agent's checked work can become another agent's working memory without losing the conditions under which that work was earned.
+One agent's checked work can become another agent's working memory without losing the conditions under which that work was earned.
 
 That boundary is dangerous. A worker may return late, repeat an old result, use a changed dependency, or disappear halfway through publication. In ordinary notes, the receiving agent has to notice. In the graph, the protocol notices: a claim names its version and parent versions, carries a receipt checked against frozen work, and enters memory only through an atomic publication. If any entitlement is stale or missing, nothing downstream unlocks. Refusing progress is safe.
 
-### The experiment {#memory-experiment}
+### A bounded mechanism test {#memory-experiment}
 
-We tested this mechanism on a small diamond graph, `R→A,B; A,B→J`, with two workers and a separate SQLite implementation. The reference model was declarative rather than copied from the scheduler. The trusted boundary included the checker, root authority, scheduler process, SQLite, clock, operating system, and storage; workers were allowed to crash, retry, delay, duplicate, corrupt, and reorder their calls.
+We tested this mechanism on a small diamond graph, `R→A,B; A,B→J`, with two workers and a separate SQLite implementation. The reference model was declarative rather than copied from the scheduler. The trusted boundary included the checker, root authority, scheduler process, SQLite, clock, operating system, and storage. The fault model allowed workers to crash, retry, delay, duplicate, corrupt, and reorder their calls.
 
-The experiment was deliberately bounded. This is a mechanism demonstration, not a significance study.
+The bounded experiment demonstrates the mechanism; it does not estimate population effects.
 
 | Evidence layer | Frozen result |
 |---|---:|
@@ -121,15 +121,15 @@ The experiment was deliberately bounded. This is a mechanism demonstration, not 
 
 The exact schedules covered same-node double claim, both orders of publication versus root update, and publication immediately before, exactly at, and immediately after lease expiry. The mutations removed the checks we say matter: receipt validation, version entitlement, expiry, claim exclusivity, exact invalidation, and atomic publication. An unchanged replication produced the same result.
 
-The first confirmatory run did not pass. One malformed mutant failed during test collection, and the harness initially mistook any nonzero exit for a killed mutant. We retained the failure, changed the rule so only an executed assertion failure counts, froze the follow-up, and reran it. That correction is part of the receipt, not an inconvenience hidden behind the final table.
+The first confirmatory run did not pass. One malformed mutant failed during test collection, and the harness initially mistook any nonzero exit for a killed mutant. We retained the failure, changed the rule so only an executed assertion failure counts, froze the follow-up, and reran it. The receipt therefore includes the correction and the failed first run.
 
 ### Shared entry points {#shared-entry}
 
-The graph also makes handoff smaller and concurrency cleaner. On one frozen DAG, three workers received different open nodes within 8 ms and shared 3.4 seconds of actual overlap. Each entered through a mechanically generated packet containing only its objective, direct prerequisites, versions, receipts, and output contract; each packet was less than half the size of the full chronological notes.
+The graph also makes handoff smaller and concurrency cleaner. On one frozen DAG, three workers received different open nodes within 8 ms and shared 3.4 seconds of actual overlap. Each packet was mechanically generated and less than half the size of the full chronological notes. It contained only the objective and direct prerequisites, plus versions, receipts, and the output contract.
 
-This did **not** produce a meaningful wall-time speedup, and we do not claim one. The demonstrated benefit is structural: independent work can start without transferring the whole inquiry, while joins remain locked until their declared dependencies verify. When a root changed during work, the scheduler invalidated exactly its descendants and preserved the independent branch.
+The run demonstrated structural concurrency, with no meaningful wall-time speedup. Independent work can start without transferring the whole inquiry, while joins remain locked until their declared dependencies verify. When a root changed during work, the scheduler invalidated exactly its descendants and preserved the independent branch.
 
-### What the result supports {#memory-result}
+### The bounded claim {#memory-result}
 
 The result supports one narrow claim:
 
@@ -137,9 +137,9 @@ The result supports one narrow claim:
 
 “Can” matters. Complete exploration covered one frozen protocol model, not every implementation. The SQLite evidence covered a transition-complete basis and targeted adversarial schedules, not all possible storage failures. The checker itself remains trusted. Nothing here establishes Byzantine tolerance, semantic correctness of a bad specification, or better underlying model reasoning.
 
-The value is still substantial. *Verifiable Knowledge* gives a claim its receipt. The hypothesis graph adds dependency, version, and invalidation structure, so that receipt can travel across agents without becoming an unsupported assertion. One paper defines what may count as knowledge; this one defines how such knowledge is shared and revised.
+The hypothesis graph adds dependency, version, and invalidation structure to the receipt supplied by *Verifiable Knowledge*. The receipt can then travel across agents without becoming an unsupported assertion. One paper defines what may count as knowledge; this one defines how such knowledge is shared and revised.
 
-## Actionable epistemology {#epistemics}
+## Knowledge is an entitlement {#epistemics}
 
 Knowing is an act that changes which claims one is entitled to use. This is the subject of *Verifiable Knowledge*; the property that matters here is that a verdict carries a receipt another agent can check. In the Hypothesis Graph, knowledge has the following properties:
 
@@ -152,13 +152,13 @@ With each round of inquiry the dependency boundary sharpens. With each successfu
 
 ![A claim and its trial as one record. Left, the claim: a load resting on a span, *this bridge holds the load*. Right, the trial: a toothpick-and-gumdrop model bridge bearing a steel weight across two supports. Photo: Oregon Department of Transportation, CC BY 2.0.](/assets/bridge-trial-light.svg)
 
-This is one more projection of the protocol *Verifiable Knowledge* sets out, from where the agent stands, and its payoff is transfer. Paired with its trial, a node carries its warrant across intact; handed on the author's word, only the verdict crosses and the warrant is re-derivable from scratch.
+Paired with its trial, a node carries its warrant intact; handed on the author's word, only the verdict crosses and the warrant is re-derivable from scratch.
 
 A coding agent can already run a test. What it lacked was a protocol for carrying the result beyond one context without reducing its warrant to “trust me.” With the protocol, another agent can reuse the result, replay it, or see that it has gone stale.
 
-## Methodeutics: a discipline of inquiry {#grounding}
+## Inquiry separates three modes {#grounding}
 
-A store of causal knowledge needs reasoning to be encoded into it. How can reasoning become mechanical enough for encoding? The insight, the leap to a candidate cause, stays with the model, but the harness needs a method to stage reasoning. Reasoning then becomes mechanical the way a proof is, through the discipline of checking ideas. In a precise and limited sense the harness stages and checks reasoning mechanically, everything but the leap, which it can only trigger. This discipline, Peirce called **inquiry**.
+The model makes the leap to a candidate cause; the harness stages and checks what follows. In this precise and limited sense, the harness makes reasoning mechanical except for the leap, which it can only trigger. Peirce called this discipline **inquiry**.
 
 His *Illustrations of the Logic of Science* (1878) and *Pragmatism as the Logic of Abduction* (1903) type the operations of inquiry into three irreducible modes.
 
@@ -170,7 +170,7 @@ His *Illustrations of the Logic of Science* (1878) and *Pragmatism as the Logic 
 
 No single mode carries a belief to its grade. Abduction proposes content but does not test it; induction tests but introduces no new explanatory content; deduction traces consequences but invents nothing. The credence a node ends up with is what traversing all three earns it, and that is what it means to call the modes typed: each is fixed by what it can't do.
 
-This is where readers balk: why is *abduction* responsible for theory? Isn't that deduction's job? No. Deduction neither generates the theory nor proves it; it unfolds the hypothesis into the predictions it must answer for. The theory was abduced, the predictions deduced, and induction does the testing.
+Abduction supplies the theory; deduction only unfolds it into predictions. Deduction neither generates the theory nor proves it. The theory was abduced, the predictions deduced, and induction does the testing.
 
 Keep them separate and each does its one job; collapse them and you get familiar failure modes:
 
@@ -180,15 +180,15 @@ Keep them separate and each does its one job; collapse them and you get familiar
 
 That collapse is exactly what modern LLM agents do by default, since a single forward pass proposes, predicts, evaluates, and rationalizes in undifferentiated prose. Methodeutics, Peirce's term for the methodology of inquiry, is how to conduct the typed-mode loop well. Encoded as skills, it constructs and maintains the `smem`.
 
-*Modes of reason and the irreducible three.* Around the act of testing, philosophy of science built an apparatus of real rigor: Bacon's induction (1620), Popper's falsifiability (1934), Meehl's "soft science" critique (1967), Pearl's causal calculus (2009). Justification got its method, every step of it. But it begins one step too late, taking the hypothesis as given and filing its origin under inspiration. The discipline built an epistemology of justification and little of discovery. Peirce named the missing operation, abduction; the discipline still filed the origin of hypotheses under inspiration. The harness gives it a first-class typed slot and triggers it, though the leap itself stays the model's.
+*Modes of reason and the irreducible three.* Around the act of testing, philosophy of science built an apparatus of real rigor: Bacon's induction (1620), Popper's falsifiability (1934), Meehl's "soft science" critique (1967), Pearl's causal calculus (2009). Justification got its method, every step of it. But it begins one step too late, taking the hypothesis as given and filing its origin under inspiration. Peirce named the missing operation, abduction. The harness gives abduction a typed slot and triggers it, though the leap remains the model's.
 
-## Methodeutics, applied {#application}
+## A diff provokes a hypothesis {#application}
 
 Putting the theory to work means generating hypotheses as typed nodes the harness can test, instead of trusting whatever a model guesses.
 
-*The surprise has a primitive, and it is a diff.* What the harness manufactures is not the hypothesis but the discrepancy that provokes one: a before snapshot, an after snapshot, and the perturbation that flipped, read as figure against the ground that held (Rubin's Gestalt terms). Separation logic calls the frame-inference half of this *bi-abduction* and scaled it to real codebases in Facebook Infer (Calcagno et al. 2009; O'Hearn 2019), borrowing Peirce's word for an operation that is not his abduction: it localizes where belief and code diverge, the surprise, and leaves the leap to what would explain it unmade. `inquire` works at the simplest level: one before/after diff, the frame inferred from the symptom. The extensions to branches and compositional cases are in the [lineage appendix](#lineage).
+*The surprise has a primitive, and it is a diff.* The harness manufactures the discrepancy that provokes a hypothesis: a before snapshot, an after snapshot, and the perturbation that flipped, read as figure against the ground that held (Rubin's Gestalt terms). Separation logic calls the frame-inference half of this *bi-abduction* and scaled it to real codebases in Facebook Infer (Calcagno et al. 2009; O'Hearn 2019). Its use of Peirce's word differs from his abduction: it localizes the surprise where belief and code diverge but leaves the explanatory leap unmade. `inquire` works at the simplest level, with one before/after diff and the frame inferred from the symptom. The extensions to branches and compositional cases are in the [lineage appendix](#lineage).
 
-The "XOR" used throughout is shorthand for that separation: the figure (what the fix must change) held apart from the ground (the frame that stays invariant). Where bi-abduction infers the frame to make a proof go through, the harness fires the same split as a check, computing the symmetric difference against a known-good oracle and keeping only the cases it flags. The XOR is the surprise, not the leap: it marks what a hypothesis must explain, and the explaining stays the model's.
+The "XOR" separates the figure (what the fix must change) from the ground (the invariant frame). The harness computes that symmetric difference against a known-good oracle and keeps the flagged cases. The XOR marks what a hypothesis must explain; the model still supplies the explanation.
 
 ![Bi-abduction on a dead fixture. With dimmer, fixture, and bulb all intact, the static scene names no suspect; the perturbation bypasses the dimmer to the wall, and the XOR isolates the figure (the dimmer) from the ground (fixture and bulb).](/assets/bi-abduction-dimmer.svg)
 
@@ -196,11 +196,11 @@ The "XOR" used throughout is shorthand for that separation: the figure (what the
 
 ![The hypothesis graph for the dead fixture. Abduction fans the observation into four typed candidate nodes; mechanical kill predicates fire on three (the socket, fixture, and bulb each cleared by a cheap test), the dimmer node is witnessed by the bypass and closes the last open hypothesis, and deduction derives the fix. Typed nodes, directed edges, all three modes in one inquiry.](/assets/hypothesis-graph-fixture.svg)
 
-Isn't generating that space just debugging? It is, and debugging has been automated for decades: spectrum-based fault localization, statistical and delta debugging, model-based diagnosis, and search-based program repair are mature fields (Jones et al. 2002; Liblit et al. 2005; Zeller & Hildebrandt 2002; Reiter 1987; Le Goues et al. 2012; Monperrus 2018). Debugging tools already automate the loop; what is new is that the hypothesis graph persists it. Every engineer, and every repair tool, runs some version of abduce a cause, kill it on evidence, witness the survivor, derive the fix. But the engineer runs it in their head, and the tools, whatever logs they keep, do not persist the search as a typed, replayable hypothesis graph.
+Isn't generating that space just debugging? It is. Spectrum-based fault localization, statistical and delta debugging, model-based diagnosis, and search-based program repair already automate the loop (Jones et al. 2002; Liblit et al. 2005; Zeller & Hildebrandt 2002; Reiter 1987; Le Goues et al. 2012; Monperrus 2018). The hypothesis graph adds persistence. Engineers run the search in their heads, and existing tools do not preserve it as a typed, replayable hypothesis graph.
 
-We implement this loop as a tool. *abductor* ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)) externalizes the surprise, the diff generation, outside the context window, so a model has to represent the rule instead of tabulating the case in front of it: it enumerates a space wider than the model's hypothesis, calibrates each case against a known-good baseline, and exposes one pass/fail gate, with the answer key held outside the model's view. A failing case is a counterexample that forces the next fix, the model's own leap, and the search records itself as the hypothesis graph, fixes as nodes and counterexamples as edges.
+We implement this loop as a tool. *abductor* ([github.com/kimjune01/abductor](https://github.com/kimjune01/abductor)) externalizes diff generation beyond the context window, so a model has to represent the rule instead of tabulating the case in front of it. The tool enumerates a space wider than the model's hypothesis, calibrates each case against a known-good baseline, and exposes one pass/fail gate while withholding the answer key. A failing case forces the model's next fix. The search records itself as a hypothesis graph, with fixes as nodes and counterexamples as edges.
 
-## The methodeutic harness {#method}
+## The harness checks the leap {#method}
 
 How do epistemology and debugging become an agentic harness? The loop that writes the graph needs four things:
 
@@ -209,11 +209,11 @@ How do epistemology and debugging become an agentic harness? The loop that write
 - **Three modes of reasoning.** Abduction, deduction, and induction stay typed and separate, each capped at its own confidence.
 - **Semantic memory.** The reasoning is recorded into the hypothesis graph and survives the context window.
 
-Concretely, this is a skill with a tool call in a loop: the outer deterministic driver invokes an agent via the `inquire` skill, who accesses the deterministic `abductor` tool. It mechanizes the surprise, the diff the model would otherwise have to compute by hand.
+The outer deterministic driver invokes an agent through the `inquire` skill, which accesses the deterministic `abductor` tool. It mechanizes the surprise, the diff the model would otherwise have to compute by hand.
 
 ![The `inquire` skill: Peirce's three modes as a procedure that writes the hypothesis graph. Induction fires a deterministic kill or witness with no model arbitrating. `implement` and `attest`, which read the survivors and verify the patch, follow below.](/assets/inquire-skill.svg)
 
-### The inquiry frame {#inquiry-frame}
+### Why code fits {#inquiry-frame}
 
 We recast each issue as an inquiry on an engineered system: a failure trace, a codebase, a root cause to find, and an intervention that must not regress the rest of the system. Code is the right substrate for the hypothesis graph because it combines three properties that other inquiry domains rarely bring together:
 
@@ -235,11 +235,11 @@ The three Peircean modes are how `inquire` builds the graph, each node typed by 
 
 `implement` then writes the surviving hypothesis, with an adversarial challenger critiquing the diff against the spec. `attest` runs the test suite, takes the grader's pass/fail verdict, and emits a re-entry route (`inquire`, `implement`, or `none`) from a fixed verdict→route table. The driver parses the verdict and the route; both are mechanical, and no model decides termination.
 
-### Hypothesis graph output {#recon-output}
+### Inquiry writes the graph {#recon-output}
 
 `inquire` emits the hypothesis graph: the structured-analysis document that precedes the patch. Kill conditions are mechanical predicates over the evidence trajectory, so a node dies when its predicate fires and not before. The graph persists across iterations; re-entry adds nodes rather than overwriting. The frontier closes only when every open hypothesis is killed (a test refutes it) or witnessed (a test confirms it).
 
-A committed node is a conclusion, and an inquiry that reaches one rarely runs straight. Following the `inquire` skill on a real bug, a single hypothesis flips across all three modes and a kill before it settles:
+A committed node is a conclusion, and an inquiry that reaches one rarely runs straight. Following the `inquire` skill on a real bug, the inquiry traverses all three modes and kills a hypothesis before it settles:
 
 > abduction → deduction → kill → abduction → deduction → induction → deduction → induction ⇒ induction
 
@@ -249,10 +249,6 @@ A committed node is a conclusion, and an inquiry that reaches one rarely runs st
 
 The control loop is standard: the driver routes on `attest`'s verdict under a bounded attempt budget, and a failure re-enters `inquire` with the updated graph rather than retrying the patch. The hypothesis graph doubles as the loop's checkpoint, so dead branches are not silently proposed again.
 
-### Artifact availability {#artifact}
-
-All code and data are openly available. The shared-memory experiment of §(right-regime) lives at [github.com/kimjune01/hypothesis-graph-handoff-experiment](https://github.com/kimjune01/hypothesis-graph-handoff-experiment) under AGPL-3.0-or-later. It retains the preregistrations, failed first confirmation, independent model, source mutants, crash probes, raw counts, replication, and result hypothesis graph.
-
 ## Discussion {#discussion}
 
 ### Memory is an entitlement, not a fact dump
@@ -261,13 +257,13 @@ Most agent memory asks *what text should be retrieved?* The hypothesis graph ask
 
 This is the connection to *Verifiable Knowledge*. A receipt makes one claim checkable. The graph makes many such claims maintainable. Dependency edges say what a revision withdraws; version vectors distinguish current knowledge from history; atomic publication prevents half-written conclusions from entering shared state.
 
-The guarantee is modest but practical. Bad input does not become good because it is structured. A trusted checker can still encode the wrong predicate. What the protocol prevents is narrower: stale or unsupported output entering as verified shared knowledge.
+Bad input does not become good because it is structured. A trusted checker can still encode the wrong predicate. What the protocol prevents is narrower: stale or unsupported output entering as verified shared knowledge.
 
 ### Concurrency follows from addressability
 
 Concurrency is not a separate trick added to the graph. It follows from explicit open nodes and joins. Workers can claim independent nodes without receiving the whole history. A join opens only when its parents verify. Less context crosses each boundary because the graph supplies a clean entry point: objective, direct prerequisites, receipts, and output contract.
 
-The demonstration showed real overlap but no material speedup. Addressability and safe concurrency are structural properties; speed depends on branch cost, startup, contention, and the critical path. This paper claims the former and leaves the latter open.
+The demonstration showed real overlap but no material speedup. Addressability and safe concurrency are structural properties. Speed depends on branch cost, startup, contention, and the critical path. This paper claims the former and leaves the latter open.
 
 ### Accountability survives the author
 
@@ -289,7 +285,7 @@ Surveys and position papers place verification, analysis, and persistent structu
 
 Two adjacent systems split the contribution differently. Theorem-of-Thought types abductive, deductive, and inductive reasoning within a query but does not maintain a persistent memory across inquiries. Cognitive Memory Manager extracts a typed DAG from completed trajectories and promotes patterns to skills. This work writes the graph during inquiry and uses failed trials and changed versions to route what may happen next.
 
-The distinction is not that graph-shaped memory is new by itself. The contribution is the semantic contract placed on its nodes and updates: replayable warrant, explicit dependency, versioned reuse, and fail-closed publication.
+The distinction is not that graph-shaped memory is new by itself. The contribution is the semantic contract on its nodes and updates. That contract combines replayable warrant with explicit dependency, versioned reuse, and fail-closed publication.
 
 ### Typed reasoning and graph-structured memory {#typed-memory}
 
@@ -299,27 +295,35 @@ The hypothesis graph sits at the intersection of three lineages: cognitive-archi
 
 **CMM** (Khalid & Arora 2026, [OpenReview](https://openreview.net/pdf?id=yCsHQnvvWY); a day before this draft) is the closest comparison: the same persistent typed DAG of reasoning artifacts, but observe-and-consume (it types a trajectory post hoc and graduates skills) where ours is perturb-and-falsify (kills fire live, the graph routes the run). The directions are opposite and complementary, the ~385 committed graphs in `sweep/repo-hypotheses/` exactly the corpus its graduation pipeline could consolidate.
 
-Four 2026 systems each carry one component this work combines; what is new here is the *join*; each piece already exists in one of them. **FVDebug** ([arXiv:2510.15906](https://arxiv.org/abs/2510.15906)) builds an actual hypothesis graph for debugging, with a frontier and accumulated evidence, but selects the next node by asking the model, the arbiter this work removes. **From Hypotheses to Factors** ([arXiv:2604.26747](https://arxiv.org/abs/2604.26747)) runs the same perturb-and-falsify loop, falsifiable hypotheses behind a deterministic engine over an append-only trace, locked to quantitative finance where this work claims the general semantic-memory substrate. **Portable Agent Memory** ([arXiv:2605.11032](https://arxiv.org/abs/2605.11032)) is the nearest provenance memory, a Merkle-DAG that cites the Soar lineage and makes every node reconstructible by content-addressing, but it certifies *integrity* (the recorded bytes are untampered) where the replay invariant here certifies *warrant* (the node still survives its trial). And the provenance survey **From Agent Traces to Trust** ([arXiv:2606.04990](https://arxiv.org/abs/2606.04990)) enumerates exactly the relations this work mechanizes, Support, Contradict, Invalidate, and names "how provenance quality should be evaluated" as an open problem; the hypothesis graph is one answer, with replay as the quality bar and the kill condition as an executable edge rather than a descriptive label.
+Four 2026 systems each carry one component this work combines.
+
+**FVDebug** ([arXiv:2510.15906](https://arxiv.org/abs/2510.15906)) builds a hypothesis graph for debugging, with a frontier and accumulated evidence. It asks the model to select the next node, retaining the arbiter this work removes.
+
+**From Hypotheses to Factors** ([arXiv:2604.26747](https://arxiv.org/abs/2604.26747)) runs the same perturb-and-falsify loop behind a deterministic engine over an append-only trace. It is confined to quantitative finance, while this work treats the graph as a general semantic-memory substrate.
+
+**Portable Agent Memory** ([arXiv:2605.11032](https://arxiv.org/abs/2605.11032)) is the nearest provenance memory. Its Merkle-DAG makes every node reconstructible by content addressing, but certifies *integrity* (the recorded bytes are untampered); the replay invariant here certifies *warrant* (the node still survives its trial).
+
+The provenance survey **From Agent Traces to Trust** ([arXiv:2606.04990](https://arxiv.org/abs/2606.04990)) enumerates the relations this work mechanizes, Support, Contradict, and Invalidate. It names "how provenance quality should be evaluated" as an open problem; the hypothesis graph answers with replay as the quality bar and the kill condition as an executable edge.
 
 The experiment adds an update rule to this comparison. A claim is not merely stored or assigned confidence: it is admitted with a receipt and dependency versions, then becomes historical when those dependencies change. This is the difference between graph-shaped storage and graph-maintained knowledge.
 
-A second cluster treats truth and uncertainty as first-class rather than a downstream score: **NARS**, **OpenCog's AtomSpace/PLN**, **Nanopublications** (Groth et al. 2010), and, closest in time, **Traxia** ([arXiv:2606.08256](https://arxiv.org/abs/2606.08256)), converging on these primitives two days after *Truth Is Buildable* (2026-06-04). Where each stops short of a replayable, kill-conditioned entitlement ledger is adjudicated in *Verifiable Knowledge*, the paper that owns the epistemology. What is specific *here* is the data structure: none makes that meaning the **semantic contract of a memory node**, truth operationalized by replayable edge structure rather than a stored label or textual provenance record.
+A second cluster treats truth and uncertainty as first-class rather than a downstream score: **NARS**, **OpenCog's AtomSpace/PLN**, **Nanopublications** (Groth et al. 2010), and **Traxia** ([arXiv:2606.08256](https://arxiv.org/abs/2606.08256)). *Verifiable Knowledge* adjudicates where each stops short of a replayable, kill-conditioned entitlement ledger. None makes that meaning the **semantic contract of a memory node**, with truth operationalized by replayable edge structure rather than a stored label or textual provenance record.
 
 > *Production LLM memory systems with graph variants (Zep/Graphiti, Mem0), staged-hypothesis selection in science agents, deterministic gating in adjacent settings, and reflective memory systems (Reflexion, DebugMate) are surveyed in the appendix; they are adjacent on particular axes but do not change the comparison spine.*
 
 ## Limitations {#limitations}
 
-*The result is bounded.* Complete exploration covers one small declarative graph to depth 6. The SQLite implementation is checked by a frozen conformance basis, forced schedules, crash points, and mutants, not by exhaustive exploration of SQLite itself. “Can fail closed” is supported; “hypothesis graphs are generally safe” is not.
+- *The result is bounded.* Complete exploration covers one small declarative graph to depth 6. The SQLite implementation is checked by a frozen conformance basis, forced schedules, crash points, and mutants, not by exhaustive exploration of SQLite itself. “Can fail closed” is supported; “hypothesis graphs are generally safe” is not.
 
-*The checker is trusted.* A receipt establishes only the predicate the checker implements. A wrong specification can be checked perfectly and remain wrong. Root authority, scheduler code, SQLite, the operating system, clock, hash behavior, and storage are also inside the trusted boundary.
+- *The checker is trusted.* A receipt establishes only the predicate the checker implements. A wrong specification can be checked perfectly and remain wrong. Root authority, scheduler code, SQLite, the operating system, clock, hash behavior, and storage are also inside the trusted boundary.
 
-*The memory is small and per-inquiry.* Retrieval quality, compaction, cross-repository accumulation, permissioning, and long-term storage repair remain untested.
+- *The memory is small and per-inquiry.* Retrieval quality, compaction, cross-repository accumulation, permissioning, and long-term storage repair remain untested.
 
-*Concurrency is demonstrated, not accelerated.* Three workers overlapped on independent nodes, but wall time improved by only 1.83%. The graph creates safe entry points and dependency-aware joins; it does not guarantee useful speedup.
+- *Concurrency is demonstrated, not accelerated.* Three workers overlapped on independent nodes, but wall time improved by only 1.83%. The graph creates safe entry points and dependency-aware joins; it does not guarantee useful speedup.
 
-*The comparison to prose is incomplete.* Bounded graph packets were smaller than full chronological notes, but a careful human can curate equally good packets. The demonstrated advantage is mechanical generation and validity tracking.
+- *The comparison to prose is incomplete.* Bounded graph packets were smaller than full chronological notes, but a careful human can curate equally good packets. The demonstrated advantage is mechanical generation and validity tracking.
 
-*How to refute this.* The fail-closed claim dies if an explored state violates an invariant, a model–SQLite projection diverges, a pre-commit death leaves partial state, or a declared mutant survives. The checks and the retained failed confirmation are public.
+- *How to refute this.* The fail-closed claim dies if an explored state violates an invariant, a model–SQLite projection diverges, a pre-commit death leaves partial state, or a declared mutant survives. The checks and the retained failed confirmation are public.
 
 ## Future work {#future-work}
 
@@ -338,7 +342,7 @@ A coding agent does not need another place to put prose. It needs memory that di
 
 The hypothesis graph supplies that distinction. A node binds a claim to a receipt and dependency versions. The graph admits it atomically, exposes independent entry points, and withdraws dependent knowledge when a premise changes. In the bounded experiment, this protocol survived complete model exploration, independent implementation comparisons, forced races, process deaths, and targeted source mutations.
 
-The claim is deliberately simple: a versioned, receipt-checked hypothesis graph can serve as shared semantic memory that fails closed. It does not make a model reason better. It makes checked work easier to carry forward without forgetting why it was trusted.
+A versioned, receipt-checked hypothesis graph can serve as shared semantic memory that fails closed. It makes checked work easier to carry forward without forgetting why it was trusted.
 
 ## Availability and reproducibility {#availability}
 
