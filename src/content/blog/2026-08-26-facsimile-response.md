@@ -2,6 +2,7 @@
 variant: post
 title: "Facsimile Response"
 tags: reflecting
+image: "/assets/facsimile-response.svg"
 ---
 
 A spark starts a wildfire. We find what threw it: a campfire, power line, cigarette, or machine. Now we know the cause. We assign fault, remove the ignition source, and prevent the same spark next time.
@@ -37,15 +38,13 @@ The earlier response still worked. Repeating it changed what the next fire would
 
 I call this a **facsimile response**. One agent encounters a situation, acts, and obtains an acceptable result. Another agent receives not the situation itself but a representation of it, then reproduces the response. The action has become detached from the conditions under which it succeeded.
 
-~~~text
-original situation → response → outcome
-          ↓ lossy transmission
-represented situation → copied response
-~~~
+![A full causal graph is compressed into a visible event and copied response; provenance traces the response backward, while perturbation tests whether the causal edge still holds.](/assets/facsimile-response.svg)
 
 This economy is necessary. We would be helpless if everyone had to rediscover every action from first principles. Facsimile response is fast, transmissible, and often correct. Its danger comes from the same economy: the response crosses between agents more easily than its warrant.
 
 What survives is visible. There was a spark and a fire, then suppression stopped it. What disappears is the causal neighborhood. This includes how fuel accumulated and why the fire propagated. It also includes what was exposed and whether suppression changes the next event.
+
+We cannot recognize a facsimile response by inspecting the response alone. A valid inheritance and a detached copy look the same until we perturb them. Provenance traces the response back to the conditions and alternatives that warranted it; a trial tests whether the claimed causal edge still holds.
 
 Other fields have named parts of this process:
 

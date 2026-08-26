@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif">
+  <title id="title">A facsimile response loses the causal conditions behind a successful action</title>
+  <desc id="desc">The original situation contains a causal graph of spark, dry fuel, wind, and combustible buildings leading to a wildfire, followed by suppression and survival. Lossy transmission preserves only visible fire, suppression, and survival. Provenance traces the copied response backward, while perturbation tests whether a claimed causal edge still holds.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/>
+    </marker>
+    <marker id="arrow-light" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#999"/>
+    </marker>
+    <style>
+      .label { font-size: 13px; font-weight: 650; letter-spacing: .08em; fill: #777; }
+      .node { fill: #fff; stroke: #555; stroke-width: 1.5; }
+      .response { fill: #f1f1f1; stroke: #333; stroke-width: 1.8; }
+      .lost { fill: #fff; stroke: #bbb; stroke-width: 1.2; stroke-dasharray: 5 4; }
+      .node-text { font-size: 15px; fill: #222; text-anchor: middle; dominant-baseline: middle; }
+      .small { font-size: 12px; fill: #777; }
+      .edge { fill: none; stroke: #555; stroke-width: 1.5; marker-end: url(#arrow); }
+      .faint-edge { fill: none; stroke: #aaa; stroke-width: 1.2; stroke-dasharray: 5 4; marker-end: url(#arrow-light); }
+      .divider { stroke: #ccc; stroke-width: 1.2; stroke-dasharray: 3 5; }
+      .probe { fill: #fafafa; stroke: #888; stroke-width: 1.2; }
+      .probe-title { font-size: 13px; font-weight: 650; fill: #333; }
+      .probe-text { font-size: 12px; fill: #666; }
+    </style>
+  </defs>
+
+  <text class="label" x="28" y="28">ORIGINAL SITUATION</text>
+
+  <rect class="node" x="28" y="50" width="116" height="38" rx="8"/>
+  <text class="node-text" x="86" y="69">spark</text>
+  <rect class="node" x="28" y="98" width="116" height="38" rx="8"/>
+  <text class="node-text" x="86" y="117">dry fuel</text>
+  <rect class="node" x="28" y="146" width="116" height="38" rx="8"/>
+  <text class="node-text" x="86" y="165">wind</text>
+  <rect class="node" x="28" y="194" width="116" height="38" rx="8"/>
+  <text class="node-text" x="86" y="213">buildings</text>
+
+  <path class="edge" d="M144 69 C190 69 184 119 230 119"/>
+  <path class="edge" d="M144 117 L230 117"/>
+  <path class="edge" d="M144 165 C190 165 184 121 230 121"/>
+  <path class="edge" d="M144 213 C196 213 188 127 230 123"/>
+
+  <rect class="node" x="232" y="98" width="124" height="44" rx="8"/>
+  <text class="node-text" x="294" y="120">wildfire</text>
+  <path class="edge" d="M356 120 L430 120"/>
+  <rect class="response" x="432" y="98" width="124" height="44" rx="8"/>
+  <text class="node-text" x="494" y="120">suppress</text>
+  <path class="edge" d="M556 120 L630 120"/>
+  <rect class="node" x="632" y="98" width="64" height="44" rx="8"/>
+  <text class="node-text" x="664" y="120">safe</text>
+
+  <line class="divider" x1="20" y1="258" x2="700" y2="258"/>
+  <text class="small" x="360" y="251" text-anchor="middle">lossy transmission</text>
+
+  <text class="label" x="28" y="290">TRANSMITTED FACSIMILE</text>
+
+  <rect class="lost" x="28" y="310" width="116" height="38" rx="8"/>
+  <text class="small" x="86" y="334" text-anchor="middle">conditions lost</text>
+  <path class="faint-edge" d="M144 329 L230 329"/>
+
+  <rect class="node" x="232" y="307" width="124" height="44" rx="8"/>
+  <text class="node-text" x="294" y="329">visible fire</text>
+  <path class="edge" d="M356 329 L430 329"/>
+  <rect class="response" x="432" y="307" width="124" height="44" rx="8"/>
+  <text class="node-text" x="494" y="329">suppress</text>
+  <path class="edge" d="M556 329 L630 329"/>
+  <rect class="node" x="632" y="307" width="64" height="44" rx="8"/>
+  <text class="node-text" x="664" y="329">safe</text>
+
+  <rect class="probe" x="28" y="385" width="308" height="68" rx="10"/>
+  <text class="probe-title" x="46" y="408">PROVENANCE</text>
+  <text class="probe-text" x="46" y="429">Trace the response back to the conditions</text>
+  <text class="probe-text" x="46" y="445">and alternatives that warranted it.</text>
+
+  <rect class="probe" x="356" y="385" width="340" height="68" rx="10"/>
+  <text class="probe-title" x="374" y="408">PERTURBATION</text>
+  <text class="probe-text" x="374" y="429">Change one cause and test whether the claimed</text>
+  <text class="probe-text" x="374" y="445">edge still holds.</text>
+</svg>
