@@ -53,6 +53,19 @@ This is not a defect. We would be helpless if everyone had to rediscover every a
 
 What survives is visible: there was a spark, there was a fire, and suppression stopped it. What disappears is the causal neighborhood: how the fuel accumulated, why the fire propagated, what was exposed, and whether suppression changes the next event.
 
+Other fields have named parts of this process:
+
+| Field | Name | What repeats |
+|:--|:--|:--|
+| Cognitive psychology | [Negative analogical transfer](https://pubmed.ncbi.nlm.nih.gov/2969945/) | A solution follows surface resemblance when the causal structure differs. |
+| Cultural learning | [Overimitation](https://pubmed.ncbi.nlm.nih.gov/21241282/) | People copy even causally irrelevant parts of a successful action. |
+| Organizational learning | [Competency trap](https://onlinelibrary.wiley.com/doi/10.1111/1467-8551.12066) | Success concentrates practice in one routine and suppresses exploration. |
+| Safety engineering | [Normalization of deviance](https://doi.org/10.1016/j.jsr.2022.11.005) | Repeated survival turns an unresolved risk into acceptable practice. |
+| Systems thinking | [Fixes that fail](https://thesystemsthinker.com/fixes-that-fail-why-faster-is-slower/) | A successful short-term response changes the system and worsens the future problem. |
+| Finance | [Disaster myopia](https://www.sciencedirect.com/science/article/abs/pii/S1566014112000088) | A long absence of loss lowers the estimated probability of catastrophe. |
+
+Each term begins at a different point: resemblance, imitation, reinforcement, accepted risk, feedback, or forgotten disaster. A facsimile response is the transmission step they share. The action crosses the boundary more faithfully than the conditions that warranted it.
+
 The same visible fire can come from different causal graphs. One spreads because wind carries embers. Another spreads through dense ground fuel. Another moves from house to house because the structures themselves burn. All initially call for water, evacuation, and containment. The emergency response need not settle the difference before acting.
 
 [Remediation does](/remediation).
