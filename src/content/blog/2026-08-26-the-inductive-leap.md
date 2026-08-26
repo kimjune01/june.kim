@@ -1,134 +1,159 @@
 ---
 variant: post-medium
-title: "The Inductive Leap"
+title: "Facsimile Response"
 tags: cognition, methodology
 ---
 
-You try something. It works. You try it again. It works again. Soon you stop calling it a trial and start calling it a rule.
+My grandmother tells me never to open the oven while the cake is rising.
 
-This is usually reasonable. I take the same route to work because it has usually been fast. I salt the onions before the tomatoes because the dish has usually turned out better. I put the important sentence first because readers have usually stayed with me. Experience would be useless if it could not travel from one situation to the next.
+She learned to bake with an oven that lost heat quickly. Opening its heavy door at the wrong moment could collapse the cake. I inherit the instruction but not the oven. It arrives intact, long after the condition that produced it has disappeared.
 
-The trouble begins when a memory of success becomes a claim about necessity.
+The instruction still sounds reasonable. Opening the door accomplishes nothing. Waiting costs little. The cakes come out fine. Every success appears to confirm the rule.
+
+At work, an alert wakes an engineer. She restarts the service and the alert clears. The next engineer finds the command in a runbook:
 
 ```text
-This worked here.
-This has worked often.
-This is how it works.
-This is how it must work.
+When this alert fires, restart the service.
 ```
 
-Each sentence is only a little stronger than the one before it. The distance accumulates quietly. By the last sentence, a trail through the world has become a law governing the world.
+The runbook does not contain the afternoon when the first engineer traced the problem to a memory leak. It does not say which version was running, what traffic looked like, or which other fixes she considered. The situation and its explanation have been compressed into a trigger and a response.
 
-I call that distance the inductive leap.
+Months later the same alert begins firing for a different reason. The restart still clears it temporarily. Automation makes the response faster and more reliable while the underlying fault compounds.
 
-## Induction is compression
+Nothing irrational has happened. Each person followed evidence inherited from someone with more direct experience.
 
-Induction is not a mistake. It is how finite creatures reuse experience.
+## From example to rule
 
-The world presents more cases than anyone can remember. We compress them: this restaurant is reliable, this interview question is revealing, this library is well designed, this kind of apology works. The compressed rule lets us act without reopening the entire history that produced it.
+The same compression appears in hiring.
 
-That is its virtue. It is also its loss.
+A manager hires three excellent people from the same university. The university becomes a positive signal. Other managers adopt it because the first manager has a strong team. Eventually the company recruits there deliberately, interviews more of its graduates, and hires more of them.
 
-The rule does not carry every condition of its successes. My route was fast during summer, before the school reopened. The onions tasted better in three dishes cooked with the same pan. The opening sentence helped essays selected by the same audience. Compression drops context so that a lesson can travel.
+The result is now everywhere: successful employees keep coming from the university.
 
-History compounds the loss. We usually encounter the practices that persisted, the companies that survived, the buildings still standing, and the advice remembered by people for whom it worked. Failures leave fewer descendants and fewer advocates. This is [survivorship bias](https://pmc.ncbi.nlm.nih.gov/articles/PMC9930538/): selecting on survival can make a trait associated with persistence look like its cause.
+What traveled between managers was easy to transmit:
 
-Read backward, a survivor's path looks unusually sensible. Each choice seems to prepare the next. But history is not a single path. Many causes converge on every outcome, while many nearby attempts disappear before they can enter the story. The visible trail may be evidence for a good procedure. It is not the procedure itself.
+> Graduates from here do well.
 
-Induction compresses the trail. The leap forgets that it was compressed.
+What did not travel was harder to state. Perhaps one recruiter had learned where the strongest students gathered. Perhaps the first three shared a professor, an internship, or a reason for joining this particular company. Perhaps the manager was unusually good at developing junior employees. The visible attribute crossed the boundary. Its causal neighborhood did not.
 
-## The ordinary leap
+Then the rule changes the evidence available to the company. Fewer candidates from elsewhere receive interviews. The organization cannot observe the performance of people it never hired. Repetition makes the original inference appear increasingly empirical because the inference now produces the population used to confirm it.
 
-The leap rarely announces itself as philosophy. It appears in ordinary advice.
+## Success can hide damage
 
-A manager hires three excellent employees from the same university and adds the university to the hiring rubric. A team ships two successful features after long planning cycles and concludes that planning produced the success. A cook follows a grandmother's recipe exactly because every deviation is said to ruin it. A programmer survives one painful rewrite and declares that rewrites always fail.
+Sometimes the response changes its environment slowly enough that its early successes are real.
 
-Each belief contains evidence. None identifies the cause by itself.
+For much of the twentieth century, a fire was something to extinguish. Each suppression protected trees, buildings, and people that day. But frequent fire is part of some ecosystems. Excluding it can allow dense vegetation and dead fuel to accumulate. The National Park Service now describes how suppressing all fires in Yosemite changed forests and could make later fires more severe; its current practice includes prescribed fire and managed wildfire alongside suppression ([NPS](https://www.nps.gov/yose/learn/nature/fireecology.htm)).
 
-The university may have supplied good candidates, or one recruiter may have known how to find them there. Planning may have helped, or the successful projects may have been the only ones important enough to receive long planning. The recipe may encode chemical constraints, or it may preserve ingredients that disappeared two generations ago. The rewrite may have failed because of its size rather than because replacement is inherently worse than repair.
+```text
+fire → suppress it → immediate danger falls
+```
 
-The leap turns a result into an explanation. Once the explanation settles into practice, it also changes what can be observed. The hiring rubric produces more graduates from that university. The planning process attaches itself to every important project. Nobody cooks the forbidden variation. Nobody attempts a small rewrite.
+The response worked. Repeating it changed what fire would mean next time.
 
-The rule then appears to confirm itself because it has suppressed its alternatives.
+The space shuttle program produced a more concentrated version of the same failure. Foam had struck shuttles on earlier flights without destroying them. The mission returned; the anomaly became familiar; continued success made the risk feel bounded. The Columbia Accident Investigation Board later treated this normalization of deviance as part of the organizational history of the disaster. Its report found that a foam strike was the accident's direct physical cause and examined how earlier anomalies had become accepted ([CAIB report](https://sma.nasa.gov/SignificantIncidents/assets/columbia-accident-investigation-board-report-volume-1.pdf)).
 
-## Trial is said to be expensive
+The lesson is not that the engineers lacked evidence. They had repeated observations:
 
-Whenever I propose iteration, someone objects that trial is expensive.
+```text
+foam strike → shuttle returns
+foam strike → shuttle returns
+foam strike → shuttle returns
+```
 
-Often it is. We cannot build two bridges and collapse one. We cannot run a second childhood with different parents. A company cannot replay the same five years under another strategy. Irreversible actions deserve more care than a slogan about experimentation can provide.
+The observations were true. Their compression was fatal.
 
-But this objection quietly assumes that the trial must be the size of the final decision.
+No single repetition announces that a boundary has been crossed. The next cake rises. The service recovers. The graduate performs well. The fire goes out. The shuttle returns.
 
-A trial need not reproduce the entire outcome. It needs to distinguish between the explanations that would change the next action.
+The action looks most reasonable immediately before it fails.
 
-Before changing the commute, leave fifteen minutes later on two ordinary mornings. Before rewriting the service, replace one boundary and observe what breaks. Before adopting the hiring rule, hide the university names from a batch of applications. Before doubling a recipe, cook two spoonfuls with different ratios. Before rearranging a public room, move loose chairs and watch where people put them back.
+## Facsimile response
 
-None of these trials proves a universal claim. That is not their job. Each purchases a small amount of information before a larger commitment.
+I call this a **facsimile response**.
 
-The relevant question is not:
+One agent encounters a situation, acts, and obtains an acceptable result. Another agent does not receive the original situation. It receives a representation: a story, example, rule, pattern, policy, demonstration, or runbook. The second agent recognizes the representation and reproduces the response.
+
+```text
+original situation → response → outcome
+          ↓ lossy transmission
+represented situation → copied response
+```
+
+The copied action is not a perfect copy either. It is an executable likeness, containing enough of the earlier act to repeat it somewhere else.
+
+This may be the cheapest useful compression available between agents:
+
+> When it looks like this, do what worked before.
+
+No causal model must be shared. The receiver need not understand the original search, rejected alternatives, local constraints, or mechanism. Recognition and imitation are enough.
+
+Most of the time, that is a feature.
+
+We would be helpless if every cook had to rediscover baking chemistry, every engineer had to rediscover the service, and every child had to personally test which warnings deserve attention. Induction lets finite creatures reuse experience. Facsimile response lets that experience cross agent boundaries through channels too narrow for its full history.
+
+The danger is not that the response is unreasonable. The danger is that its misuse looks exactly like its proper use.
+
+## The invisible boundary
+
+Every compressed response has a domain in which it remains useful. But the compression rarely contains a complete description of that domain. If it did, it might cost as much to transmit as the experience it replaced.
+
+The receiver therefore matches on what survived the channel:
+
+- the cake is rising;
+- the alert has this name;
+- the candidate attended this university;
+- there is a fire;
+- foam struck the shuttle.
+
+Resemblance substitutes for the omitted causal structure.
+
+When the hidden conditions remain stable, the response keeps working. When they change, the receiver cannot necessarily tell. The old oven and the new oven present the same cake. A memory leak and a deadlocked dependency can produce the same alert. Two candidates can share a university without sharing what made the earlier hires succeed.
+
+Worse, repetition may suppress the evidence that could expose the difference. Nobody opens the oven. Nobody leaves the service running long enough to diagnose it. Nobody hires the counterexample. Every successful response strengthens the association while narrowing the opportunity to learn whether something else would have worked.
+
+This is where induction becomes an inductive leap. Not when we learn from repetition, but when the repeated response becomes evidence that the compressed conditions still hold.
+
+> A facsimile response copies what survived while discarding the conditions that made it work.
+
+## Trial is not the alternative
+
+The answer is not to reject inherited responses and test everything ourselves.
+
+That would discard the economy that made the response valuable. Trials cost time, attention, material, and sometimes lives. Many actions are irreversible. We cannot build two bridges and collapse one, run a second childhood, or replay five years of a company under another strategy.
+
+The common objection to iteration begins here: trial is too expensive.
+
+But this assumes that the trial must be the size of the final decision. Usually we need something smaller. Not proof of the whole theory—just an observation capable of changing the next action.
+
+Before changing the commute, leave fifteen minutes later twice. Before rewriting the service, replace one boundary. Before expanding the hiring rule, hide university names from a sample. Before rearranging a public room, move loose chairs and watch where people return them. Before preserving the recipe, bake two spoonfuls of batter.
+
+The question is not:
 
 > Can we afford to test the whole decision?
 
 It is:
 
-> What is the smallest action that would make us choose differently?
+> What is the smallest action that could tell us this situation is not the old one?
 
-This is economy of search. A good trial is not merely cheap. It is discriminating: different live explanations predict different observations. If every possible result leaves the decision unchanged, the trial is ceremony. If one small result can kill an expensive path, the trial may be worth much more than it costs.
+This is economy of search. The facsimile response remains the default. A cheap trial checks its boundary.
 
-## Trials are fruitful
+## Buy disagreement
 
-We often describe trials as verification. First produce the idea; then check whether it works.
+The observation will usually be a proxy. Chair movement is not belonging. Interview performance is not future contribution. Test coverage is not correctness. Felt confidence is not safety.
 
-That understates their value. A trial can reveal a dimension that the idea did not contain.
+That is enough. A proxy need not decide the question. It only needs to discriminate cheaply between possibilities that imply different next actions.
 
-Move the chairs and discover that the problem was glare, not distance. Mask the university and discover that reviewers infer prestige from internships instead. Replace one software boundary and discover that the supposed module shares a database transaction with four others. Change the recipe and discover that everyone was preserving the old order because one obsolete stove heated unevenly.
+The trick is to remember that the eval is another compression. Optimize it hard enough and it can separate from what we care about—the family of failures described by [Goodhart's law](https://arxiv.org/abs/1803.04585). The proxy needs [a leash](/the-leash): limited authority, occasional comparison with later outcomes, and a stopping point.
 
-The result does more than accept or reject a proposal. It changes the space of proposals.
+An individual feeling can also be a cheap proxy. Shared feeling is expensive. A community must assemble attention, language, discussion, status negotiation, and some treatment of disagreement. It cannot convene over every inherited response or proposed alternative.
 
-This is the fruitfulness of trial: the world can answer in vocabulary we did not supply. Deduction cannot do that from inside a fixed model. Induction can suggest where to look, but another summary of past cases still inherits their categories. Contact with the world can produce a new distinction.
+Reusable evals amortize that judgment. Many agents can run a cheap check independently, reserving communal attention for results that are ambiguous, consequential, or surprising. The eval does not replace judgment. It decides where expensive judgment may be worth buying.
 
-That is why I resist replacing trials with confidence, experience, or consensus. Those are useful caches of earlier contact. They are not new contact.
+The attitude is neither “repeat the rule” nor “question everything.” Both waste information. It is:
 
-## A proxy is enough
+> Use the inherited response, then spend some of its savings on the cheapest useful disagreement with it.
 
-The cheap observation will rarely be the thing we ultimately care about.
+Often the rule wins. Good—the compression remains useful. Sometimes it loses before a larger commitment. Better. And sometimes the world reveals a difference that neither the inherited response nor its critic represented. That is the fruitful result: contact with the world has enlarged the vocabulary of the search.
 
-Chair movement is not belonging. Interview performance is not future contribution. Click-through is not reader understanding. Test coverage is not software correctness. These are proxies: observable signals that sometimes move with a harder objective.
+Induction deserves its place as one of our cheapest ways to learn and transmit action. Its danger comes from the same economy. The response crosses between agents more easily than its warrant.
 
-A proxy does not need to decide the question to be useful. It only needs to change our odds cheaply enough to improve the next choice.
-
-The trick is remembering what it is.
-
-Optimize a proxy hard enough and it can separate from its objective. This is the family of failures commonly gathered under [Goodhart's law](https://arxiv.org/abs/1803.04585). Empirical work on learned reward models finds the same hump: optimizing the proxy initially improves the intended result, then eventually makes it worse as optimization travels beyond the region where the relationship was learned ([Gao et al., 2023](https://arxiv.org/abs/2210.10760)). I have called the necessary bound [the leash](/the-leash).
-
-Feeling is a proxy too. So are expert judgment, community agreement, a customer survey, and a unit test. Calling one subjective and another objective hides their common structure. The useful differences are operational: What does the signal cost? Can different people obtain it independently? Does it still correlate with later outcomes? What would make us stop trusting it?
-
-An individual impression may be nearly free. A shared impression is not. To discover how a community feels, its members must attend, discuss, negotiate status and language, and somehow aggregate disagreement. A community cannot convene over every candidate it might reject.
-
-A reusable eval amortizes some of that judgment. The community pays to define an imperfect test; many people can then run it independently before consuming communal attention. The eval should filter or rank candidates, not declare truth. Ambiguous and consequential decisions can still rise to slower judgment.
-
-Cheap proxies make more trials possible. The leash keeps their cheapness from becoming authority.
-
-## Induction should open the next trial
-
-There is no escape from induction. Even choosing a trial depends on beliefs inherited from previous trials. The demand for evidence can itself become a delaying ritual, especially when action is reversible and the cost of waiting is real.
-
-My objection is narrower: induction should propose the next move, not close the search.
-
-A useful rule carries its own looseness. It says where it has worked, what it ignores, what cheap observation might weaken it, and how much commitment should occur before looking again. Confidence may rise with repeated success, but the cost of checking can fall too. Once a practice matters enough to copy widely, designing a reusable eval may be cheaper than repeatedly assembling communal conviction.
-
-The attitude is neither “trust the process” nor “question everything.” Questioning everything spends attention as carelessly as questioning nothing. The attitude is economic:
-
-> Preserve accumulated knowledge, then buy the cheapest useful disagreement with it.
-
-Sometimes the inherited rule wins immediately. Good. The trial has earned us confidence at low cost. Sometimes it loses. Better: it has prevented a larger commitment. And sometimes the world returns an answer that neither side knew how to ask for. That is the richest result, because the search now has somewhere new to go.
-
-## A note on where this came from
-
-I learned much of this attitude by reading Christopher Alexander. In [*The Timeless Way of Building*](/timeless-way-of-building), he describes a fundamental process: begin with the whole before you, make a local change, see whether it deepens the whole, and continue from the changed state. [His procedure applies patterns sequentially to a partially defined whole](https://library.uniteddiversity.coop/Ecological_Building/The_Timeless_Way_of_Building_Complete.pdf#page=375). It taught me to see design as unfolding rather than execution of a finished plan.
-
-I first tried to make him the antagonist of this essay. That was an inductive leap of my own. He described trial, revision, evolving communal pattern languages, and even bad patterns dying out. My memory had preserved his confident examples more vividly than his procedural qualifications.
-
-The remaining disagreement is smaller. Where Alexander sometimes trusted cultivated feeling to avoid prohibitively extensive experiments, I want to ask whether the experiment can be redesigned. Feeling may still judge the result. It need not bear the entire search cost.
-
-That question no longer belongs mainly to Alexander. It belongs anywhere inherited success is used to avoid fresh contact with the world.
+So keep the recipe, the runbook, the pattern, and the rule. Just leave enough slack for the present situation to say that it is not a facsimile of the past.
