@@ -44,8 +44,6 @@ This economy is necessary. We would be helpless if everyone had to rediscover ev
 
 What survives is visible. There was a spark and a fire, then suppression stopped it. What disappears is the causal neighborhood. This includes how fuel accumulated and why the fire propagated. It also includes what was exposed and whether suppression changes the next event.
 
-We cannot recognize a facsimile response by inspecting the response alone. A valid inheritance and a detached copy look the same until we perturb them. Provenance traces the response back to the conditions and alternatives that warranted it; a trial tests whether the claimed causal edge still holds.
-
 Other fields have named parts of this process:
 
 | Field | Name | What it names |
@@ -57,11 +55,9 @@ Other fields have named parts of this process:
 | Systems thinking | [Fixes that fail](https://thesystemsthinker.com/fixes-that-fail-why-faster-is-slower/) | A successful short-term response changes the system and worsens the future problem. |
 | Finance | [Disaster myopia](https://www.sciencedirect.com/science/article/abs/pii/S1566014112000088) | A long absence of loss lowers the estimated probability of catastrophe. |
 
-These are neighboring failures, not synonyms. Some begin with resemblance or imitation. Others begin with reinforcement, accepted risk, feedback, or forgotten disaster. Facsimile response names the narrower transmission step: the action crosses the boundary more faithfully than the conditions that warranted it.
+These are neighboring failures, not synonyms. Some begin with resemblance or imitation. Others begin with reinforcement, accepted risk, feedback, or forgotten disaster. Facsimile response names the narrower transmission step.
 
-The same visible fire can come from different causal graphs. One spreads because wind carries embers. Another spreads through dense ground fuel. A third spreads from house to house because the structures burn. All initially call for water, evacuation, and containment. The emergency response can act before settling the difference.
-
-[Remediation does](/remediation).
+A valid inheritance and a detached copy look alike until something perturbs them. Observing the same response again supplies more evidence for the response, but no counterfactual. One fire spreads because wind carries embers; another moves through ground fuel or from house to house. All initially call for water, evacuation, and containment. The emergency response can act before settling the difference. [Remediation cannot](/remediation).
 
 ~~~text
 response     → stop the present failure
@@ -69,20 +65,20 @@ recovery     → restore the previous state
 remediation  → alter the next situation
 ~~~
 
-Response can operate on the visible event. Remediation must ask which relations produced its scale. This requires an [abductive leap](https://plato.stanford.edu/entries/abduction/): perhaps the established model does not contain the relevant cause.
+Producing that counterfactual takes courage. The inherited response carries accumulated legitimacy. If it fails, the system failed; if a deviation fails, the person who tried it did. Institutions distribute the cost of obedience and concentrate the cost of learning.
 
-Bayesian updating cannot assign probability to a cause absent from the current hypothesis space. Abduction puts another possibility into that space. This is difficult when people's competence, authority, or identity rests on the established explanation. A new cause can sound like an accusation that earlier successes were misunderstood.
+History lets us borrow perturbations from people who already varied what we cannot. A case study preserves the situation, alternatives, and consequences well enough to narrow the causal graph. A positive example preserves only another response to copy.
 
-Organizations have invented roles to bear that accusation. The Church required the Promoter of the Faith, the historical “devil's advocate,” to prepare objections against canonizing a candidate. Shared belief pushed toward assent, so the Church gave doubt an office ([Catholic Encyclopedia](https://www.newadvent.org/cathen/01168b.htm)).
+Borrowed experience crosses a lossy channel too. Its value depends on provenance: where the response worked, under which conditions, against which alternatives, and with what downstream effects. Personal experience feels richer because we remember its causal neighborhood, but one life rarely contains enough variation to identify it.
 
-Independent accident investigations perform a related function. After Columbia was destroyed, its investigation board examined more than the foam strike. It also examined schedule pressure and communication barriers. The board examined organizational history and untested reliance on past success. It concluded that NASA's management practices were as much a cause as the foam ([CAIB report](https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20030066167.pdf)).
+Remediation therefore requires an [abductive leap](https://plato.stanford.edu/entries/abduction/). Bayesian updating cannot assign probability to a cause absent from the current hypothesis space; abduction puts another possibility into that space. To people whose competence or identity rests on the established explanation, the new cause can sound like an accusation that earlier successes were misunderstood.
 
-A longer causal graph can become another convincing story, so its important edges need observations that could disagree with them. The National Park Service measures plots before and after prescribed burns and follows them over time. It sometimes uses untreated controls to distinguish fire effects from other causes. Those causes include climate, moisture, and grazing. Its handbook recommends controls when managers need to attribute a change to prescribed fire rather than something else ([NPS Fire Monitoring Handbook](https://www.nps.gov/orgs/1965/upload/fire-effects-monitoring-handbook.pdf)).
+Some institutions give that accusation a role. The Church required its Promoter of the Faith, the historical “devil's advocate,” to prepare objections against canonization ([Catholic Encyclopedia](https://www.newadvent.org/cathen/01168b.htm)). After Columbia, an independent board looked past the foam strike to schedule pressure, communication barriers, and reliance on past success; it judged NASA's management practices as causal as the foam itself ([CAIB report](https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20030066167.pdf)).
 
-The trial substitutes a cheap test of one consequential relation for a catastrophic wildfire:
+More arrows can still make another convincing story. The National Park Service measures plots before and after prescribed burns and sometimes uses untreated controls to separate fire effects from climate, moisture, and grazing. Its handbook recommends controls when managers need to attribute a change to prescribed fire rather than something else ([NPS Fire Monitoring Handbook](https://www.nps.gov/orgs/1965/upload/fire-effects-monitoring-handbook.pdf)). A useful perturbation asks:
 
 > What is the smallest action that could tell us this edge is wrong?
 
-Induction still earns its place. Put out the fire and reuse what worked, then preserve the evidence and the response's boundary conditions: where it worked, when, for whom, against which alternatives, and with what downstream effects. Test causes outside the established model before rebuilding the same conditions.
+Put out the fire and reuse what worked. Then preserve enough of the fire to learn why the response worked, and enough courage to let another response disagree.
 
 The spark starts the fire. The landscape makes it a disaster.
