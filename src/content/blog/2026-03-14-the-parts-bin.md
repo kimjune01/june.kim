@@ -10,7 +10,7 @@ tags: cognition, methodology
 
 ### How to use this
 
-Every information-processing system is built from the same six operations. Most of them already exist. [The Natural Framework](/the-natural-framework) derives the six roles; [The Handshake](/the-handshake) gives each a contract. This post indexes the operations that satisfy them so an agent can look up what fits. Four steps:
+Every information-processing system is built from the same six operations. Most of them already exist. [The Natural Framework](/the-natural-framework) is the diagnostic: it identifies the broken operation. The Parts Bin is the prescription: it indexes the algorithms that can satisfy that operation's contract. [The Handshake](/the-handshake) defines those contracts. Five steps:
 
 **Describe.** A product manager says: "users sign up but never come back." An agent maps this to the six steps. Cache works. Users arrive and data is stored. Filter is missing. Users get everything, keep nothing. Consolidate is nil. Nothing changes between sessions.
 
