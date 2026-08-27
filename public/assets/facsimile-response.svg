@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-labelledby="title desc" font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif">
   <title id="title">A facsimile response loses the causal conditions behind a successful action</title>
-  <desc id="desc">The original situation contains a causal graph of spark, dry fuel, wind, and combustible buildings leading to a wildfire, followed by suppression and survival. Lossy transmission preserves only visible fire, suppression, and survival. Provenance traces the copied response backward, while perturbation tests whether a claimed causal edge still holds.</desc>
+  <desc id="desc">The original situation contains a causal graph of spark, dry fuel, wind, and combustible buildings leading to a wildfire, followed by spark suppression and fewer fires. Lossy transmission preserves only the spark, its suppression, and the absence of fire. Provenance traces the copied response backward, while perturbation tests whether a claimed causal edge still holds.</desc>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/>
@@ -44,10 +44,10 @@
   <text class="node-text" x="294" y="120">wildfire</text>
   <path class="edge" d="M356 120 L430 120"/>
   <rect class="response" x="432" y="98" width="124" height="44" rx="8"/>
-  <text class="node-text" x="494" y="120">suppress</text>
+  <text class="node-text" x="494" y="120">suppress sparks</text>
   <path class="edge" d="M556 120 L630 120"/>
   <rect class="node" x="632" y="98" width="64" height="44" rx="8"/>
-  <text class="node-text" x="664" y="120">safe</text>
+  <text class="node-text" x="664" y="120">fewer</text>
 
   <line class="divider" x1="20" y1="258" x2="700" y2="258"/>
   <text class="small" x="360" y="251" text-anchor="middle">lossy transmission</text>
@@ -59,13 +59,13 @@
   <path class="faint-edge" d="M144 329 L230 329"/>
 
   <rect class="node" x="232" y="307" width="124" height="44" rx="8"/>
-  <text class="node-text" x="294" y="329">visible fire</text>
+  <text class="node-text" x="294" y="329">visible spark</text>
   <path class="edge" d="M356 329 L430 329"/>
   <rect class="response" x="432" y="307" width="124" height="44" rx="8"/>
-  <text class="node-text" x="494" y="329">suppress</text>
+  <text class="node-text" x="494" y="329">suppress sparks</text>
   <path class="edge" d="M556 329 L630 329"/>
   <rect class="node" x="632" y="307" width="64" height="44" rx="8"/>
-  <text class="node-text" x="664" y="329">safe</text>
+  <text class="node-text" x="664" y="329">no fire</text>
 
   <rect class="probe" x="28" y="385" width="308" height="68" rx="10"/>
   <text class="probe-title" x="46" y="408">PROVENANCE</text>
@@ -74,6 +74,6 @@
 
   <rect class="probe" x="356" y="385" width="340" height="68" rx="10"/>
   <text class="probe-title" x="374" y="408">PERTURBATION</text>
-  <text class="probe-text" x="374" y="429">Change one cause and test whether the claimed</text>
-  <text class="probe-text" x="374" y="445">edge still holds.</text>
+  <text class="probe-text" x="374" y="429">Reverse the copied response when the broader</text>
+  <text class="probe-text" x="374" y="445">causal relation warrants it.</text>
 </svg>
