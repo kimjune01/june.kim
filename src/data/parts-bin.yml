@@ -9,7 +9,7 @@
 axes:
   universal:
     - name: pipeline_stage
-      values: [perceive, cache, filter, attend, consolidate, remember]
+      values: [perceive, cache, filter, attend, consolidate, transmit]
     - name: data_structure
       values: [flat, sequence, tree, graph, partial_order, embedding_space]
     - name: error_guarantee
@@ -80,7 +80,7 @@ planes:
     status: all_filled  # attend × partial_order filled by poset diverse top-k
   - name: "Plane 4: Pipeline stage × Error guarantee"
     axes: [pipeline_stage, error_guarantee]
-    status: all_filled  # cache × bounded filled by cover tree; remember × bounded/probabilistic are structural (lossless contract)
+    status: all_filled  # cache × bounded filled by cover tree; transmit × bounded/probabilistic are structural (lossless contract)
   #
   # Projections (blanks are shadows of known blanks, not new):
   #   data_structure × output_form (Attend, 6×3)
@@ -125,7 +125,7 @@ stage_structure_grid:
     graph: ["GNN training", "Temporal graph coarsening (prescription-soar)", "Self-supervised subgraph representation learning (blockchain)"]
     partial_order: ["Lattice learning (thin)"]
     embedding_space: ["Triplet-loss metric learning"]
-  - stage: remember
+  - stage: transmit
     flat: ["WAL append", "Quantization (Zhao 2023)", "Tick database append (kdb+/QuestDB)"]
     sequence: ["SSTable flush", "Delta-based episodic storage (Soar)", "NL episode stream / Generative Agents (Arunkumar 2026)"]
     tree: ["Git commit", "Blockchain append (consensus-validated WAL)"]
@@ -263,7 +263,7 @@ stage_temporality_grid:
   - stage: consolidate
     batch: ["PCA via SVD", "k-means++"]
     stream: ["Online SGD", "Incremental PCA"]
-  - stage: remember
+  - stage: transmit
     batch: "Checkpoint serialization"
     stream: ["WAL append", "SSTable flush"]
 

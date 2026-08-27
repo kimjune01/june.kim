@@ -22,7 +22,7 @@ Every information-processing system is built from the same six operations. Most 
 
 **Implement.** The four steps above produce a contract: broken slot, candidate operation, verified pre/postconditions. That's the PROBLEM.md that [Volley](/volley) expects as input. [Blind-blind-merge](/blind-blind-merge) it into code.
 
-Machine-readable version: [`src/data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/src/data/parts-bin.yml) (50+ operations with sources, preconditions, postconditions). Load the YAML, query by step and grid coordinates, return candidates that match the contract.
+Machine-readable version: [`src/data/parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/src/data/parts-bin.yml), with sources, preconditions, and postconditions for each operation. Load the YAML, query by step and grid coordinates, return candidates that match the contract.
 
 ### Six stages
 
