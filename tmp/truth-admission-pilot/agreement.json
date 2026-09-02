@@ -1,0 +1,124 @@
+[
+  {
+    "field": "is_empirical_claim",
+    "n": 50,
+    "agreement": 0.88,
+    "kappa": 0.7572815533980582,
+    "a_yes": 26,
+    "b_yes": 32,
+    "disagreement_ids": [
+      7,
+      14,
+      31,
+      42,
+      43,
+      47
+    ]
+  },
+  {
+    "field": "forward_claim",
+    "n": 50,
+    "agreement": 0.96,
+    "kappa": 0.9199999999999999,
+    "a_yes": 25,
+    "b_yes": 25,
+    "disagreement_ids": [
+      39,
+      42
+    ]
+  },
+  {
+    "field": "observable",
+    "n": 50,
+    "agreement": 0.82,
+    "kappa": 0.5794392523364484,
+    "a_yes": 31,
+    "b_yes": 40,
+    "disagreement_ids": [
+      5,
+      7,
+      14,
+      18,
+      28,
+      33,
+      43,
+      44,
+      50
+    ]
+  },
+  {
+    "field": "boundary",
+    "n": 50,
+    "agreement": 0.76,
+    "kappa": 0.5377503852080123,
+    "a_yes": 19,
+    "b_yes": 29,
+    "disagreement_ids": [
+      1,
+      4,
+      9,
+      12,
+      16,
+      18,
+      20,
+      22,
+      28,
+      29,
+      44,
+      48
+    ]
+  },
+  {
+    "field": "deadline",
+    "n": 50,
+    "agreement": 1.0,
+    "kappa": 1.0,
+    "a_yes": 15,
+    "b_yes": 15,
+    "disagreement_ids": []
+  },
+  {
+    "field": "known_resolution_source",
+    "n": 50,
+    "agreement": 0.88,
+    "kappa": 0.6907216494845362,
+    "a_yes": 39,
+    "b_yes": 35,
+    "disagreement_ids": [
+      8,
+      11,
+      17,
+      28,
+      38,
+      44
+    ]
+  },
+  {
+    "field": "identity_stable",
+    "n": 50,
+    "agreement": 0.88,
+    "kappa": 0.5033112582781458,
+    "a_yes": 42,
+    "b_yes": 44,
+    "disagreement_ids": [
+      5,
+      16,
+      18,
+      22,
+      40,
+      46
+    ]
+  },
+  {
+    "field": "admitted",
+    "n": 50,
+    "agreement": 0.96,
+    "kappa": 0.8106060606060604,
+    "a_yes": 6,
+    "b_yes": 6,
+    "disagreement_ids": [
+      12,
+      48
+    ]
+  }
+]
