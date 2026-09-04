@@ -1,0 +1,54 @@
+\documentclass[manuscript]{acmart}
+
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{graphicx}
+\usepackage{newunicodechar}
+\usepackage{xurl}
+
+\setlength{\emergencystretch}{3em}
+
+\newunicodechar{½}{\ensuremath{\tfrac{1}{2}}}
+\newunicodechar{−}{\ensuremath{-}}
+\newcounter{none}
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{%
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox\pandoc@box\fi}
+\makeatother
+
+\setcopyright{none}
+\settopmatter{printacmref=false}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\acmJournal{TEAC}
+\acmDOI{}
+\acmVolume{}
+\acmNumber{}
+\acmArticle{}
+\acmMonth{}
+\acmYear{2026}
+
+\title{The Power Diagram Auction: A Formally Verified VCG Mechanism for LLM Advertising}
+
+\author{June Kim}
+\orcid{0009-0005-3153-9396}
+\affiliation{%
+  \institution{Independent Researcher}
+  \city{Vancouver}
+  \state{British Columbia}
+  \country{Canada}
+}
+\email{june@june.kim}
+
+\begin{document}
+\input{body}
+\end{document}
