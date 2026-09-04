@@ -6,20 +6,20 @@ tags: coding, epistemology, methodology
 
 ## Abstract
 
-Agent outputs commonly cross boundaries as scores, labels, or verdicts, leaving receivers to trust the sender or reconstruct the inquiry. We introduce **local replay auditability**: a claim is transmitted with a procedure that independently re-creates its verdict. Replay removes testimonial uncertainty while leaving specification uncertainty visible. In a public audit of [SWE-bench Pro](https://arxiv.org/abs/2509.16941), the protocol produced 109 replayable claim-level receipts, establishing a conservative floor of 15.0 percent across 728 tasks. An independent audit reported an opaque estimate of roughly 30 percent, but differences in method and scope preclude comparison. The demonstrated result is epistemic: receivers can verify individual claims without trusting the sender.
+Agent outputs commonly cross boundaries as scores, labels, or verdicts. Receivers must then trust the sender or reconstruct the inquiry. We introduce **local replay auditability**, in which a claim travels with a procedure that independently re-creates its verdict. Replay removes testimonial uncertainty while leaving specification uncertainty visible. In a public audit of [SWE-bench Pro](https://arxiv.org/abs/2509.16941), the protocol produced 109 replayable claim-level receipts, establishing a conservative floor of 15.0 percent across 728 tasks. An independent audit reported an opaque estimate of roughly 30 percent, but differences in method and scope preclude comparison. The demonstrated result is epistemic: receivers can verify individual claims without trusting the sender.
 
 ## Entitlement loss at the boundary
 
-An agent finishes an inquiry and reports a verdict; a second agent receives that verdict and must decide whether to trust it, but the verdict is all it receives. A confidence score says how strongly the sender endorses its answer, but it doesn't give the receiver a way to find out.
+An agent finishes an inquiry and reports a verdict. A second agent receives only that verdict and must decide whether to trust it. A confidence score says how strongly the sender endorses its answer, but gives the receiver no way to find out.
 
-This is a communication failure as much as it is a verification failure. The sender may have run excellent tests, consulted several reviewers, and reached the right conclusion. But if only the verdict crosses the boundary, the receiver inherits the sender's self-assessment; the inquiry's entitlement never crosses. So internal deliberation may improve output quality, but its epistemic form is unchanged: the receiver must still take the sender's word.
+This is a communication failure as much as a verification failure. The sender may have run excellent tests, consulted several reviewers, and reached the right conclusion. But if only the verdict crosses the boundary, the receiver inherits the sender's self-assessment rather than the inquiry's entitlement. Internal deliberation may improve output quality, but it leaves the output's epistemic form unchanged: the receiver must still take the sender's word.
 
 A trustless protocol therefore changes what crosses. The sender transmits two things:
 
 1. The claim;
 2. Whatever another agent needs to re-derive its claim-level verdict deterministically.
 
-The second part is a procedure. A mathematical claim may carry a proof. A software claim may carry a test, commit, and environment. An empirical claim may point to an instrument record or a live service. If the claim is obvious in a shared context, the procedure may be implied.
+The second part is a procedure, such as a proof for a mathematical claim or a test, commit, and environment for a software claim. An empirical claim may instead point to an instrument record or live service. If the claim is obvious in a shared context, the procedure may be implied.
 
 ![The protocol, executed by the reader. The claim: the two smaller squares together fill the larger one. The procedure: two equal squares hold the same four right triangles. The space left over must therefore match: a-squared plus b-squared on one side, c-squared on the other. Check it by eye. Whatever you now hold about the claim, you earned by running the proof yourself.](/assets/pythagoras-proof-light.svg)
 
@@ -37,15 +37,15 @@ A transmitted claim carries no globally authoritative status. Instead, each rece
 
 ![How a claim earns its status. A claim rests on trusted roots below it, and its check runs at the point where the system can break it. The check returns true (ran and stood), false (ran and broke), or untrue (no passing check). The loop is the replay: another agent re-runs the check, and entitlement is what survives the re-run.](/assets/truth-compilation-light.svg)
 
-The trichotomy comes from [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true). We apply it here to agent output. A passing replay gives its receiver entitlement to the claim but emits no transferable truth bit.
+The trichotomy comes from [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true), and we apply it here to agent output. A passing replay gives its receiver entitlement to the claim but emits no transferable truth bit.
 
 But ordinary observations need no bundled check. If the receiver can already check a claim from shared context, the context supplies the replay. Therefore, the rigor of a check depends on context boundaries. For example, the rules of integer addition need not be accompanied by their derivation.
 
-Time matters when replay makes it matter. A claim about a pinned artifact remains true for any receiver who can still replay its evidence, but a claim about the artifact's current state must run against the current artifact. So if a required service later disappears, the claim is untrue for a new knower who cannot run it; a later opposing verdict makes it false. A claim about the current weather is the everyday case.
+Time matters when replay makes it matter. A claim about a pinned artifact remains true for any receiver who can still replay its evidence, whereas a claim about the artifact's current state must run against the current artifact. If a required service later disappears, that claim is untrue for a new knower who cannot run it; a later opposing verdict makes it false. Current weather is the everyday case.
 
 ## One guarantee under misspecification
 
-Replay clears testimonial uncertainty while specification uncertainty remains. A check can return deterministically and still measure the wrong property. It can miss relevant cases, encode a bad oracle, or depend on a poisoned artifact. So local replay guarantees only that the receiver can derive the encoded claim-level verdict without trusting the sender.
+Replay clears testimonial uncertainty while specification uncertainty remains. A check can return deterministically yet measure the wrong property by missing relevant cases, encoding a bad oracle, or depending on a poisoned artifact. Local replay therefore guarantees only that the receiver can derive the encoded claim-level verdict without trusting the sender.
 
 That narrow guarantee keeps the failure visible. A self-attested verdict compresses two questions into one:
 
@@ -58,15 +58,15 @@ A replayable claim needs no confidence score to stand in for entitlement. When t
 
 ## An epistemic ablation on SWE-bench Pro
 
-Picture two otherwise identical audit agents. Both inspect the same benchmark and reach the same conclusions. The self-attesting agent returns labels and a headline rate. The trustless agent returns each claim with its replay. Their discovery capability is held fixed; only the epistemic form of their output changes. The first leaves the receiver with an attestation. The second lets the receiver find out.
+Picture two otherwise identical audit agents that inspect the same benchmark and reach the same conclusions. Their discovery capability is held fixed; only the epistemic form of their output changes. The self-attesting agent returns labels and a headline rate, leaving the receiver with an attestation. The trustless agent returns each claim with its replay, letting the receiver find out.
 
-Two real audits approximate this contrast. Both employed agents against the same benchmark under opposite communication protocols. But their different methods, scopes, and denominators preclude a controlled performance estimate.
+Two real audits approximate this contrast by employing agents against the same benchmark under opposite communication protocols. Their different methods, scopes, and denominators, however, preclude a controlled performance estimate.
 
 [OpenAI's audit of SWE-bench Pro](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) used an automated filter and repeated investigator-agent passes. A researcher adjudicated the agent summaries, and five software engineers separately reviewed each flagged task. The post reports 200 tasks labeled broken by the agent pipeline, 249 by the human campaign, and a headline estimate of roughly 30 percent. But the post does not publish the pipeline, the per-task labels, or the annotations and disagreements. The author is “OpenAI,” so its agents and reviewers attest their own work.
 
-The [public determinacy audit of SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) used agents under the trustless protocol. It reports a smaller, deliberately conservative floor. The audit mechanically witnesses 83 cases, and another 26 survive adversarial cross-family review. Together they make 109 of 728 public tasks, or 15.0 percent. Three more of the 731 public tasks fail their own grader on the gold patch and sit outside that denominator.
+The [public determinacy audit of SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) used agents under the trustless protocol and reports a smaller, deliberately conservative floor. The audit mechanically witnesses 83 cases, while another 26 survive adversarial cross-family review. Together they make 109 of 728 public tasks, or 15.0 percent. Three more of the 731 public tasks fail their own grader on the gold patch and sit outside that denominator.
 
-Each claimed task links to its case materials and witness. Beside them the audit publishes twelve proposed cases that adversarial review killed. So a reader can reject the headline, enter at one row, and derive that row's verdict without trusting the auditor.
+Each claimed task links to its case materials and witness. The audit also publishes twelve proposed cases that adversarial review killed, allowing a reader to reject the headline, enter at one row, and derive that row's verdict without trusting the auditor.
 
 The ablation concerns epistemic output. OpenAI may be right about every one of its 249 labels, but the protocol leaves them untrue for an outside knower until their checks become replayable.
 
@@ -74,7 +74,7 @@ The diagnostic applies claim by claim. OpenAI publishes one detailed OpenLibrary
 
 ## One claim, replayed
 
-The audit classifies `ansible_20ef733e` as underdetermined. Its requirements ask the password-hashing filter to accept a bcrypt identifier and make the result visibly begin with that identifier. But the hidden test requires more. For one fixed secret and salt, the implementation must return this exact digest:
+The audit classifies `ansible_20ef733e` as underdetermined. Its requirements ask the password-hashing filter to accept a bcrypt identifier and make the result visibly begin with that identifier. The hidden test requires more: for one fixed secret and salt, the implementation must return this exact digest.
 
 ```text
 $2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm
@@ -95,7 +95,7 @@ git -C ansible-at-base grep -n -F "$DIGEST"
 # no match
 ```
 
-The [`ansible_20ef733e` receipt](https://github.com/kimjune01/swebench-pro-audit/tree/main/data/cases/ansible_20ef733e) pins the instance and supplies the complete case bundle and witness. The audit agent proposes what to inspect; the search produces the verdict. So a receiving agent can replay the claim without the producing agent, its trajectory, or its confidence.
+The [`ansible_20ef733e` receipt](https://github.com/kimjune01/swebench-pro-audit/tree/main/data/cases/ansible_20ef733e) pins the instance and supplies the complete case bundle and witness. The audit agent proposes what to inspect, and the search produces the verdict. A receiving agent can thus replay the claim without the producing agent, its trajectory, or its confidence.
 
 That replay establishes the receipt's local claim. But other interpretations of the task remain open: the claim reaches exactly as far as the check.
 
