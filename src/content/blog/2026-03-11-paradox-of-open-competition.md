@@ -31,7 +31,7 @@ Now consider the matrix. You're a customer choosing between two products:
 
 When the source is closed, both columns look credible for different reasons. The customer can't tell who built the better system. Marketing budgets decide.
 
-When the source is open, both columns look the same. Same code, same features, same bugfixes. The only difference is origin. The person who wrote it understands why each decision was made. The person who forked it only sees what was decided. When the customer hits a problem that isn't covered yet, they trust the one who built it from their needs. No cocktail parties, no networking events, no hackathons. The commit history is the trust signal.
+When the source is open, both columns can offer the same code, features, and bugfixes. The differences shift toward how each vendor understands the customer's needs and responds when the shared product falls short. Origin supplies evidence of that ability: the commit history records decisions and repairs. The vendor still has to earn the next request.
 
 When headcount is irrelevant to product quality, the social proof signal collapses with it. Open source makes the innovator's advantage *legible*.
 
@@ -65,9 +65,17 @@ Nobody gets fired for hiring IBM. That's been the saying for literal decades. Bu
 
 Small. Agile. Open. Trustworthy. Easy to help.
 
+## The Product Is an Improvement Loop
+
+As producing software gets cheaper, more of its value lies in the loop that adapts it to people's needs. Humans supply the priorities, constraints, and judgments that make an improvement worth keeping. A large [parts bin](/interface-driven-code-scavenging) lets each iteration inherit decisions, tests, and failure histories that another team has already paid to discover.
+
+When that feedback becomes a fix, regression test, or specification returned to [Canon](/canon), the learning becomes reusable. Those working at the copyleft frontier can adapt faster because each returned lesson advances their starting point. The ratchet accumulates experience as well as artifacts.
+
+When vendors offer the same product, clients pay for support, customization, feature requests, and reliable operation. The relationship carries expectations the shared code cannot settle: what must ship by Friday, which failures are tolerable, and who takes responsibility when something breaks. Clients fund adaptation; vendors draw from Canon to respond; returned improvements lower the cost of serving the next client. With portable data and documented customizations, the vendor has to keep earning the relationship.
+
 ## Where Moats Actually Are
 
-No amount of AI will replicate the trust that comes from being the person who built the thing, in public, with receipts. The commit history is the resume. The repo is the pitch deck. Those moats get *stronger* the more you open up.
+Public work gives clients evidence of how a vendor responds to real needs. The commit history is the resume. The repo is the pitch deck. Repeated delivery builds the trust that the next request depends on.
 
 The more you share, the harder you are to replace. The more you hide, the easier you are to clone.
 
