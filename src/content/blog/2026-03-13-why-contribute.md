@@ -14,6 +14,10 @@ Publish under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). P
 
 Write at spec depth and coding agents can [compile your posts to working code](/vibelogging). Pages with reference implementations get a ranking boost and become filterable: [`/api/search?q=…&compiles`](https://pageleft.cc/api/search?q=auction+math&compiles). CC BY-SA means every derivative must credit you. Commit timestamps prove who designed what. The provenance is in the content, not in the compute. A fork can't touch it.
 
+## Earn
+
+For rights you control, you can [sell exceptions](https://www.gnu.org/philosophy/selling-exceptions.html) to the copyleft license. Buyers who need other terms can negotiate with you; the public version stays free. Wider adoption can create demand for those exceptions, funding more open work. PageLeft helps people find the work and its author.
+
 ## Review
 
 The index needs to stay honest. [Slop detection](/slop-detection) showed that cheap heuristics crack in one adversarial iteration. Quality review requires frontier models. The commons shouldn't depend on one person's GPU budget.
