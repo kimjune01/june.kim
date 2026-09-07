@@ -1,11 +1,11 @@
 ---
 variant: post-medium
 title: "Interface-Driven Code Scavenging"
-tags: coding, methodology
+tags: coding, methodology, pageleft
 image: "/assets/scavenging-five-gates.png"
 ---
 
-*Part of the [methodology](/methodology) series. Applies [New Reading](/new-reading) to source code and runs [Verifiable Knowledge](/verifiable-knowledge) as a design protocol.*
+*Part of the [methodology](/methodology) and [PageLeft](/pageleft) series. Applies [New Reading](/new-reading) to source code and runs [Verifiable Knowledge](/verifiable-knowledge) as a design protocol.*
 
 I was preparing for a system design interview about a campaign-based notification service. The expected move was boxes and arrows: campaign service, scheduler, queue, workers, ledger, analytics. I kept wondering why I should invent the boxes before checking whether somebody had already built the system.
 
