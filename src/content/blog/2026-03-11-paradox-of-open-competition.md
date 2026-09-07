@@ -73,6 +73,8 @@ When that feedback becomes a fix, regression test, or specification returned to 
 
 When vendors offer the same product, clients pay for support, customization, feature requests, and reliable operation. The relationship carries expectations the shared code cannot settle: what must ship by Friday, which failures are tolerable, and who takes responsibility when something breaks. Clients fund adaptation; vendors draw from Canon to respond; returned improvements lower the cost of serving the next client. With portable data and documented customizations, the vendor has to keep earning the relationship.
 
+Less rent seeking, more innovation, more quality.
+
 ## Where Moats Actually Are
 
 Public work gives clients evidence of how a vendor responds to real needs. The commit history is the resume. The repo is the pitch deck. Repeated delivery builds the trust that the next request depends on.
