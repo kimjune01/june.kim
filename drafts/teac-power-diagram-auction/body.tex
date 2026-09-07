@@ -1,22 +1,21 @@
 \begin{abstract}
-Large language model (LLM) chat assistants are becoming an advertising
-surface. The previous surface, keyword search, shipped with broken
-incentives, and an industry grew to monetize the breakage; the new
-surface is a chance to get the incentives provably right on day one. The
-conversation embeds as a point \texttt{x} in a continuous space of
-hundreds of dimensions, and each advertiser declares a center \texttt{c}
-(their customer). The conceptual distance between them measures how
-closely they match. A reach \(\sigma\) (how widely they serve) and a bid
-\texttt{b} (what a conversion is worth) compare that distance against a
-willingness to pay. The slot beside the reply goes to the advertiser
-with the highest \(\log(b) - \|x-c\|^{2}/\sigma ^{2}\). The mechanism
-involves no model training or response modification. We prove in Lean 4,
-with zero \texttt{sorry}, that the rule's argmax allocation with Clarke
-payments forms a VCG mechanism. Truthful reporting is weakly dominant,
-the allocation maximizes welfare at every query point, and its
-territories form a power diagram with keyword auctions as the degenerate
-case. This mechanism allows an auction to sell regions of embedding
-space.
+Large language model (LLM) assistants create an advertising surface
+where conversations express intent beyond keywords. We develop an
+auction that combines targeting preferences and willingness to pay in a
+single report. Each conversation embeds as a point \texttt{x} in a
+continuous space of hundreds of dimensions, and each advertiser declares
+a center \texttt{c} (their customer). The conceptual distance between
+them measures how closely they match. A reach \(\sigma\) (how widely
+they serve) and a bid \texttt{b} (what a conversion is worth) compare
+that distance against a willingness to pay. The slot beside the reply
+goes to the advertiser with the highest
+\(\log(b) - \|x-c\|^{2}/\sigma ^{2}\). The mechanism involves no model
+training or response modification. We prove in Lean 4, with zero
+\texttt{sorry}, that the rule's argmax allocation with Clarke payments
+forms a VCG mechanism. Truthful reporting is weakly dominant, the
+allocation maximizes welfare at every query point, and its territories
+form a power diagram with keyword auctions as the degenerate case. This
+mechanism allows an auction to sell regions of embedding space.
 \end{abstract}
 
 \ccsdesc[500]{Theory of computation~Algorithmic game theory and mechanism design}
@@ -68,17 +67,18 @@ probe its market dynamics, and an \hyperref[explorer]{interactive
 explorer} renders the allocation live. The mechanism lacked a proof that
 it deserves the trust the proposal asks for.
 
-We supply the proof in Lean, so that trust in the mechanism reduces to
-\hyperref[formalization]{running a build command}. The contribution is
-one bridge lemma, \texttt{score\_eq\_log\_reportedVal}: the scoring rule
-is the logarithm of the value a report implies, unconditionally.
-Everything downstream is the classical VCG argument of
-\href{https://doi.org/10.2307/2977633}{Vickrey (1961)},
-\href{https://doi.org/10.1007/BF01726210}{Clarke (1971)}, and
-\href{https://doi.org/10.2307/1914085}{Groves (1973)}, executed
-formally. We also prove that the allocation is a power diagram for
-arbitrary heterogeneous reaches, and that the mechanism collapses to
-Vickrey's sealed-bid second-price auction at any keyword point.
+We connect a geometric bidding language to VCG and verify that
+connection in Lean. The formalization covers truthful reporting of
+center, reach, and bid. It identifies the allocation as a power diagram,
+using a lift when reaches differ, and recovers the single-item Vickrey
+auction at a shared center. These guarantees can be checked by
+\hyperref[formalization]{running a build command}. The bridge lemma,
+\texttt{score\_eq\_log\_reportedVal}, shows that the scoring rule is the
+logarithm of the value a report implies, without assuming truthful
+reporting. This identity connects the allocation to the classical
+incentive argument of \href{https://doi.org/10.2307/2977633}{Vickrey
+(1961)}, \href{https://doi.org/10.1007/BF01726210}{Clarke (1971)}, and
+\href{https://doi.org/10.2307/1914085}{Groves (1973)}.
 
 \section{Model}\label{model}
 
@@ -130,14 +130,16 @@ with a probability that decays rapidly with semantic distance. That is
 the object observed in impression advertising, not a binary relevance
 label.
 
-The Gaussian family is an approximation, and the best available one.
-Embedding coordinates are not human-interpretable, so a peak and a width
-are all an advertiser can meaningfully declare, and the Gaussian is the
-\href{https://en.wikipedia.org/wiki/Maximum_entropy_probability_distribution}{maximum-entropy}
-model of a conversion curve known only by those two. Any other decay
-imports structure for which the advertiser has no evidence. The theorems
-hold inside the family, and the Limits section says what stays outside
-it. The platform scores reports by
+Advertisers express their positioning in natural language and refine it
+by inspecting example queries, as described in
+\href{https://june.kim/buying-space-not-keywords}{Buying Space, Not
+Keywords} and
+\href{https://june.kim/marketing-speak-is-the-protocol}{Marketing-Speak
+Is the Protocol}. The mechanism represents that positioning with a
+center, a scalar reach, and a bid. We leave controls for specifying more
+detailed preference geometry outside the scope of this work. Separately,
+we assume true valuations belong to the isotropic Gaussian family; the
+theorems hold within that model. The platform scores reports by
 
 \[\mathrm{score}(x) = \log(b) - \|x - c\|^{2} / \sigma ^{2}\]
 
@@ -210,17 +212,21 @@ values the impression most (\texttt{winner\_maximizes\_welfare}).
 
 \subsection{The Incentive Theorem}\label{the-incentive-theorem}
 
-\texttt{vcg\_dsic} is the main incentive theorem: for any deviation
-report \texttt{r\textquotesingle{}}, truthful reporting yields at least
-the utility of reporting \texttt{r\textquotesingle{}}, regardless of
-what every other player reports. The Clarke payment depends only on
-others' reported values, so a player's report moves their allocation and
-never their price schedule (\texttt{welfareOthersWithout\_invariant});
-the four-case comparison then closes the argument. A false center can
-make the supplement advertiser win the running-shoe impression, but its
-utility still contains the small true supplement-conversion value, while
-its payment equals the value of the shoe advertiser it displaced. In the
-figure's instance, the supplement advertiser S's books at the shoe query
+\textbf{Theorem (Dominant-strategy incentive compatibility,
+\texttt{vcg\_dsic}).} Fix a query and the reports of all other
+advertisers. Under the stated allocation and payment rules, an
+advertiser whose true valuation belongs to the Gaussian family obtains
+at least as much quasilinear utility by reporting its true center,
+reach, and value as by submitting any alternative valid report.
+
+The Clarke payment depends only on others' reported values, so a
+player's report moves their allocation and never their price schedule
+(\texttt{welfareOthersWithout\_invariant}); the four-case comparison
+then closes the argument. A false center can make the supplement
+advertiser win the running-shoe impression, but its utility still
+contains the small true supplement-conversion value, while its payment
+equals the value of the shoe advertiser it displaced. In the figure's
+instance, the supplement advertiser S's books at the shoe query
 \texttt{x}:
 
 {\def\LTcaptype{none} % do not increment counter
@@ -395,14 +401,15 @@ assignment (\texttt{liftedPowerDist\_paraboloid},
 formulas are in PowerDiagram.lean). Aurenhammer proved diagrams of
 quadratic distance functions lift this way; the formalization
 instantiates his lift for this scoring rule and checks the algebra once.
-\hyperref[explorer]{The explorer} renders the cells live. Exact O(log N)
-point location is a fixed-low-dimension result and does not survive
-embedding dimension, but the lift still pays at serving time. Score
-comparisons are affine in the lifted query \((x, \|x\|^{2})\). So
-finding the winner is a maximum-inner-product search against static
-lifted sites, which approximate-nearest-neighbor indexes and cache
-layers serve sublinearly in practice, with the O(N) scan as the exact
-fallback.
+\hyperref[explorer]{The explorer} renders the cells live.
+
+The lift also helps at serving time. Score comparisons are affine in the
+lifted query \((x, \|x\|^{2})\), reducing winner selection to
+maximum-inner-product search over static advertiser vectors. Approximate
+indexes can retrieve candidates, but exact VCG clearing requires
+certifying the winner and runner-up. A full O(N) scan provides the exact
+fallback; the O(log N) point-location bounds available in fixed low
+dimensions do not extend to embedding dimension.
 
 \begin{figure}
 \centering
@@ -415,11 +422,11 @@ hyperplanes in E \(\times\) \(\mathbb{R}\).}
 
 \section{Keywords Recovered}\label{keywords-recovered}
 
-The migration path follows from the geometry: a keyword is a tiny
-circle, a report whose reach has shrunk to a point. Keyword auctions are
-the degenerate case of the embedding auction, so the general mechanism
-is backward compatible: adopting it strands no existing buyer. The claim
-is now a theorem pair.
+The mechanism contains the single-item Vickrey auction as a special
+case. Two results connect it to point-based keyword bidding: a report
+concentrates at its center as reach shrinks, and allocation and payment
+reduce exactly to Vickrey's rule when the query is every advertiser's
+shared center.
 
 \subsection{\texorpdfstring{The \(\sigma\) \(\rightarrow\) 0
 Limit}{The \textbackslash sigma \textbackslash rightarrow 0 Limit}}\label{the-sigma-rightarrow-0-limit}
@@ -447,9 +454,9 @@ the bid. The winner is a highest bidder
 (\texttt{winner\_maximizes\_bid\_of\_common\_center}), the Clarke pivot
 equals the highest competing bid
 (\texttt{vcgPayment\_common\_center\_second\_price}), and every loser
-pays nothing (\texttt{vcgPayment\_eq\_zero\_of\_loser}). That is
-Vickrey's sealed-bid second-price auction, allocation and payment both.
-A keyword auction is what the embedding auction does at a point.
+pays nothing (\texttt{vcgPayment\_eq\_zero\_of\_loser}). At a shared
+center, the embedding auction is Vickrey's sealed-bid second-price
+auction, allocation and payment both.
 
 \section{Optimality}\label{optimality}
 
@@ -458,15 +465,14 @@ expected welfare under the score-argmax allocation weakly dominates
 expected welfare under any rule the expectation operator evaluates,
 power-diagram or not (\texttt{integral\_efficiency},
 \texttt{gaussian\_optimality}; the theorem statements carry the exact
-quantifiers). \texttt{gaussian\_vcg\_weakly\_dominates} conjoins the
-three properties: welfare-optimal, dominant-strategy incentive
-compatible, equilibrium-efficient. The last is the welfare guarantee
-evaluated at truthful play, which \texttt{vcg\_strategyproof} certifies
-as a Nash equilibrium. Inside the game, a truthful report weakly
-dominates every deviation (\texttt{vcg\_dsic}); across allocation rules,
-the mechanism's expected welfare weakly dominates every rival the
-operator evaluates. The same order certifies the advertiser's best
-strategy and the platform's best mechanism.
+quantifiers). \texttt{gaussian\_vcg\_weakly\_dominates} brings welfare
+optimality and dominant-strategy incentive compatibility together with
+efficiency at truthful equilibrium. The equilibrium result follows by
+evaluating the welfare guarantee at truthful play, which
+\texttt{vcg\_strategyproof} certifies as a Nash equilibrium. Truthful
+reporting maximizes each advertiser's utility against fixed rival
+reports (\texttt{vcg\_dsic}). When all advertisers report truthfully,
+the allocation maximizes total advertiser value.
 
 The artifact separately proves the equilibrium-decomposition theorem of
 \href{https://arxiv.org/abs/1603.04641}{Ghani, Hedges, Winschel and Zahn
@@ -485,17 +491,17 @@ curves honest about where that willingness lives. The guarantee is also
 dimension-free, and the keyword language is not. A keyword is a point
 report whose territory vanishes in high dimension, so covering an
 embedding space with keywords takes exponentially many reports, while a
-Gaussian covers a region with three numbers.
+Gaussian describes a region with one center, one reach, and one bid.
 
 \begin{figure}
 \centering
-\pandocbounded{\includegraphics[keepaspectratio,alt={Simulated conversion values against distance from the true center, drawn along two directions of embedding space. Preferences need not be Gaussian for the model to be right about what a report can say: a peak and a width are all an advertiser can declare, and the isotropic Gaussian, equal weight in every dimension, is the maximum-entropy curve those two numbers justify.}]{vcg-fig5.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio,alt={Simulated conversion values against distance from the true center, drawn along two directions of embedding space. The isotropic Gaussian model assumes the same decay with distance in every direction. Natural-language positioning and example queries support report refinement; controls for more detailed preference geometry are outside the scope of this work.}]{vcg-fig5.pdf}}
 \caption{Simulated conversion values against distance from the true
-center, drawn along two directions of embedding space. Preferences need
-not be Gaussian for the model to be right about what a report can say: a
-peak and a width are all an advertiser can declare, and the isotropic
-Gaussian, equal weight in every dimension, is the maximum-entropy curve
-those two numbers justify.}
+center, drawn along two directions of embedding space. The isotropic
+Gaussian model assumes the same decay with distance in every direction.
+Natural-language positioning and example queries support report
+refinement; controls for more detailed preference geometry are outside
+the scope of this work.}
 \end{figure}
 
 The weak-order chain uses one modeling assumption,
@@ -579,9 +585,9 @@ in weights, and users cannot police it from inside either:
 \href{https://arxiv.org/abs/2409.15436}{evaluators shown chatbot
 responses with embedded ads} failed to detect the ads and preferred the
 responses that contained them. The power-diagram mechanism is the
-opposite limiting case. The scoring rule is public, the allocation is
-its argmax, the incentive guarantee is a compiled theorem, and the audit
-reduces to a build command.
+opposite limiting case. The public scoring rule determines the
+allocation, and the formal incentive guarantee is independently
+checkable.
 
 \subsection{Semantic Matching}\label{semantic-matching}
 
@@ -669,21 +675,14 @@ are harder, since spend depends on runner-up values, not cell mass), but
 its incentives and dynamics are open. \hyperref[simulations]{The
 simulations} suggest the dynamics are where the difficulty lives.
 
-\emph{Gaussian truth.} The Gaussian family is a bidding language, and
-every deployed auction clears one. The reigning language is the keyword,
-the \(\sigma\) \(\rightarrow\) 0 point mass of this same family. A
-bidding language buys expressiveness against clearing cost, the central
-tradeoff of the combinatorial-auction literature
-(\href{https://doi.org/10.1145/352871.352872}{Nisan, 2000}). On that
-frontier the isotropic Gaussian is the most expressive language
-currently known to admit sublinear clearing, exact VCG, and a compiled
-proof. Anisotropic preferences (elliptical rather than spherical reach)
-stay computable at O(N) per query but break the bridge lemma as stated;
-whether a lifted variant survives for quadratic-form preferences is the
-natural next theorem, since Aurenhammer's lift already accommodates
-general quadrics. Mixtures turn the score into a log-sum-exp whose
-bisectors admit no fixed-dimension lift, and the clearing speed and the
-proof leave with the geometry.
+\emph{Gaussian truth.} The isotropic Gaussian family gives the auction a
+compact bidding language and tractable geometry. Choosing that language
+trades expressiveness against clearing cost, as in combinatorial
+auctions (\href{https://doi.org/10.1145/352871.352872}{Nisan, 2000}).
+The incentive theorem assumes true valuations can be expressed in this
+language. Anisotropic Gaussian preferences retain the logarithmic
+bridge, but extending the formalization and geometric representation
+lies beyond this paper.
 
 \emph{Frozen embedder.} We hold the embedding model fixed. Retraining or
 replacing it moves every conversation point and every declared center at
@@ -728,10 +727,10 @@ first document a campaign produces. Advertisers think in positioning and
 users think in problems, so keywords became the middle vocabulary both
 sides had to learn, the compression lost the situation that makes a
 customer the right fit, and the platform that authored the vocabulary
-charged rent for the translation. But this report drops the translation,
-and adopting it strands no keyword buyer, because in
-\hyperref[keywords-recovered]{Keywords Recovered} the keyword auction
-embeds as one point of the general mechanism. The declaration also
+charged rent for the translation. This report drops the keyword
+translation while retaining a familiar auction at a shared center:
+\hyperref[keywords-recovered]{Keywords Recovered} proves that allocation
+and payment there reduce exactly to Vickrey's rule. The declaration also
 binds, because the incentive theorem covers all three fields, so no
 misdeclaration profits and the allocation-changing ones cost. Richer
 bidding languages have paid before;
@@ -789,8 +788,6 @@ The open problems:
 \item
   whether DSIC composes across open games (recorded open in the
   artifact, with the equilibrium half proved)
-\item
-  whether the bridge lemma reformulates for anisotropic preferences
 \item
   whether bidding dynamics converge once budgets enter the mechanism
 \end{itemize}
