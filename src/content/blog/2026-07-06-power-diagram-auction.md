@@ -53,7 +53,7 @@ Utility is quasilinear. Impressions are opt-in opportunities. The model does not
 
 The scoring rule is the embedding-space member of a known family. [Lahaie and Pennock (2007)](https://doi.org/10.1145/1250910.1250918) analyzed keyword scoring rules of the form `bid × quality^s`. With the score's logarithm taken in base `β`, ranking by score is ranking by `b · q^ln(β)` with quality `q = exp(-‖x-c‖²/σ²)`. The log base is therefore the squashing parameter, `s = ln(β)`, and the squashing-parameter literature transfers intact. Sweeping the log base is the platform's revenue-relevance dial.
 
-![The allocation is the upper envelope of the reported-value curves (their logs are the score parabolas). Winning intervals along the axis are the power-diagram cells. A bid sets each curve's height, a center its position, σ its width.](/assets/vcg-fig1.svg)
+![The upper envelope of three reported-value surfaces over a two-dimensional embedding space. Height shows reported value and color identifies the winner. Tall, narrow A and intermediate C win near their centers; broad, lower-bid B wins the surrounding queries. Curved color boundaries mark ties between the highest reported values.](/assets/vcg-fig1.svg)
 
 The formalization states everything over an arbitrary real inner product space. No finite-dimension hypothesis appears anywhere in the chain. The theorems hold for a 384-dimensional sentence embedding and for next year's wider one alike. Drawn in one and two dimensions, the figures show the structure that survives the trip up: cells, boundaries, argmax. Their proportions do not survive it. In three hundred dimensions distances concentrate and most of a cell's volume sits near its boundary. Pictures illustrate; theorems generalize.
 
