@@ -2,7 +2,7 @@ Dear Editors of ACM Transactions on Economics and Computation,
 
 Please consider “The Power Diagram Auction: A Formally Verified VCG Mechanism for LLM Advertising” as a Research Article.
 
-The paper proposes an embedding-space advertising auction and proves its core mechanism-design properties in Lean 4. Advertisers report a center, reach, and bid; an impression is allocated by a Gaussian score, and the winner pays the Clarke pivot. The formalization proves that truthful reporting is weakly dominant, the allocation maximizes welfare pointwise, and the resulting territories form a power diagram, with keyword auctions as a degenerate case. The topic sits directly at the intersection of mechanism design, electronic markets, and computational advertising.
+I began this work with a practical motivation: advertising could make chatbots available to people who cannot or would not pay for a subscription. But conversations express much more than keywords can capture. Embeddings preserve that richness; the auction should let advertisers bid on it. This paper develops a mechanism for allocating and pricing impressions directly in embedding space, with incentive and allocation guarantees formalized in Lean 4. I am submitting it to TEAC because the central problem is market design: how to fund conversational services while making truthful reporting optimal.
 
 The paper is original, is not under review elsewhere, and has not appeared in a peer-reviewed archival publication. A preprint is publicly archived on Zenodo at https://doi.org/10.5281/zenodo.21723924. The Lean formalization and implementation artifacts are also permanently archived and linked in the manuscript.
 

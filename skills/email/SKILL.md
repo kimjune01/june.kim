@@ -13,7 +13,7 @@ The test that governs everything: **could this sentence appear unchanged in anyo
 
 Three beats, in order, nothing else:
 
-1. **Context to their work.** One sentence naming the specific thing they made/wrote/found. Verifiable fact, not admiration. State it on their terms: a description they would sign, doing the job they built it for. Their fact deployed as your setup (the cost figure you're about to undercut, the claim you're about to break) is beat 2 wearing beat 1's clothes; save the turn for the turn.
+1. **An "I" observation about their work.** Start cold outreach with what the sender personally encountered: "I read...", "I found...", "I tested...", or "I noticed..." Follow it with the specific thing the recipient made, wrote, or found. This locates the observation in the sender instead of explaining the recipient's own work back to them. Use a verifiable fact, not admiration, and never start with autobiography such as "I am an auditor" or "I have been working on AI." State the recipient's work on its own terms: a description they would sign, doing the job they built it for. Their fact deployed as your setup (the cost figure you're about to undercut, the claim you're about to break) is beat 2 wearing beat 1's clothes; save the turn for the turn.
 2. **The thing you're showing them.** What it is and why it touches beat 1. State the relevant finding in one sentence. Add a link only as an optional receipt.
 3. **Quick actionable ask.** Executable in under a minute, or absent.
 
@@ -23,7 +23,7 @@ Cold versus reply. In a cold email, beat 1 is a researched fact about their work
 
 ## Attention and trust
 
-Assume the recipient triages from the sender, subject, and first two sentences. Most people do not maintain an inbox system that rewards unfamiliar mail, and they do not yet trust an AI with enough private context to filter semantic relevance for them. Earn the open before explaining the project.
+Assume the recipient triages from the sender, subject, and first two sentences. Most people do not maintain an inbox system that rewards unfamiliar mail, and they do not yet trust an AI with enough private context to filter semantic relevance for them. Earn the open before explaining the project. A cold opener should show the sender encountering the recipient's work: "I found your X while..." This is evidence of selection. "Your company does X" reads like a sales template explaining the recipient to themselves.
 
 AI makes researched personalization cheap. Naming a paper and paraphrasing its abstract no longer proves genuine selection. The credible signal is an object the sender already produced, a filed issue, a result, a receipt, or a precise uncertainty that could change the sender's work. Let the artifact carry trust. Do not compensate with more polished personalization.
 
@@ -110,6 +110,6 @@ Fifty-five words. Two commas and one colon across the whole email, each alone in
 
 ## Done test
 
-Read it as the recipient. (1) By the end of sentence one, do they know it was written for them specifically? (2) Does any sentence survive pasting into a different recipient's email unchanged? Cut or specify every sentence that does. (3) Is the ask executable in under a minute, or absent? (4) Is any sentence's subject an abstraction? Put the person or product back in the subject slot. (5) Read it aloud: would the sender say these sentences across a table?
+Read it as the recipient. (1) Does a cold email's first sentence begin with an "I" observation that proves how the sender encountered this recipient's work? (2) By the end of sentence one, do they know it was written for them specifically? (3) Does any sentence survive pasting into a different recipient's email unchanged? Cut or specify every sentence that does. (4) Is the ask executable in under a minute, or absent? (5) Is any sentence's subject an abstraction? Put the person or product back in the subject slot. (6) Read it aloud: would the sender say these sentences across a table?
 
 Then run the no-click test. Can the recipient understand the premise and answer without opening a link? Run the obligation test. Does a one-line reply close the loop, or does it accidentally enroll them in a project? Run the costly-signal test. Is the specificity backed by work the sender already did, or could an AI have produced it from the recipient's abstract alone?
