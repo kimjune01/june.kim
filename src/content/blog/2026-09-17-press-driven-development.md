@@ -1,6 +1,6 @@
 ---
 variant: post-medium
-title: "Press-Driven Development"
+title: "Benchmark-Driven Development"
 subtitle: "Why household robotics scores no longer predict a completed shift."
 tags: methodology, epistemology, cognition
 image: "/assets/press-driven-progress.png"
