@@ -111,14 +111,14 @@ For a robot sold to perform a job, the primary result should be **accepted work 
 
 Buyers should be able to tell how much of that progress they can put on next month's schedule.
 
-## Press-driven development
+## Benchmarks that remain unsolved
 
-A release now needs a result that distinguishes it from last week's release. Saturated benchmarks cannot supply one, so new benchmarks appear with more objects, longer horizons, or less familiar kitchens. ShowOnce-Hard has dropped its suffix. Two labs delayed their announcements because the benchmark they had selected was solved before their video finished rendering.
+Several evaluations retain substantial headroom:
 
-The easier response to an exhausted benchmark is to make it harder. Adding a crooked lid is harder. Checking whether the jar is sealed changes what the benchmark measures. Only the second addresses the customer's objection.
+- **ShiftBench Full.** Complete an eight-hour shift, including replenishment, cleanup, and recovery, at the quoted operating cost. No submission has passed both the physical and accounting checks.
+- **DiaperBench.** Change a diaper on a moving subject without contaminating the subject, operator, or surrounding environment. The clean-diaper training distribution has not transferred to production.
+- **BedtimeBench.** Put two children to bed and leave the room. Success is revoked if either child reappears. The benchmark has no fixed time horizon.
+- **TeenagerBench.** Obtain a completed household chore from an agent that understands the instruction and declines to execute it. Additional reasoning tokens have reduced performance.
+- **ParentingBench.** Raise a well-adjusted adult. The leading submission reports 99.8% on the first afternoon. Full evaluation takes eighteen years; the authors have requested that the remaining checks be replaced with a vision-language judge.
 
-[ShiftBench Ultra](https://bostondynamics.com/solutions/warehouse-automation/trailer-unloading/) was introduced to close this gap. Its initial release evaluates full shifts, except for charging, replenishment, and exceptional recovery. Those exclusions are scheduled for ShiftBench Ultra Real.
-
-The maintainers have since announced ShiftBench Ultra Real Verified, which adds customer acceptance. Its first prospective buyer asked whether the system could finish the night shift at the quoted price. The submission was excluded because it could not be evaluated from video.
-
-The remaining tasks are expected to saturate by Friday.
+The human baseline is under appeal.
