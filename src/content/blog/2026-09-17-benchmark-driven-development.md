@@ -113,13 +113,11 @@ Buyers should be able to tell how much of that progress they can put on next mon
 
 ## Benchmarks that remain unsolved
 
-Several evaluations retain substantial headroom:
-
-- **ShiftBench Full.** Complete an eight-hour shift, including replenishment, cleanup, and recovery, at the quoted operating cost. No submission has passed both the physical and accounting checks.
-- **DiaperBench.** Change a diaper on a moving subject without contaminating the subject, operator, or surrounding environment. The clean-diaper training distribution has not transferred to production.
-- **BrushBench.** Brush a person's teeth without injuring their gums. Two minutes of motion receives full credit; plaque removal requires a separate subscription to the evaluator.
-- **SandwichBench.** Make the sandwich the user actually wanted. The leading system passes visual inspection but has not generalized to the instruction “not that much mayonnaise.”
-- **CycleBench.** Ride to the shops, lock the bicycle, and return with both the groceries and the bicycle. Current results cover the outbound journey. Theft is classified as an infrastructure failure.
-- **IntimacyBench.** Make love with a consenting adult partner who wants to repeat the experience. Consent is revocable throughout the episode. The leading lab reports that its usual practice of retrying until success is incompatible with the protocol.
+- **ShiftBench Full.** Finish an eight-hour shift at the quoted cost. No submission passes both the physical and accounting checks.
+- **DiaperBench.** Change a diaper without spreading its contents. Training on clean diapers has not transferred to production.
+- **BrushBench.** Brush teeth without injuring gums. The grader measures duration; plaque removal is out of scope.
+- **SandwichBench.** Make the sandwich the user wanted. Generalization to “less mayonnaise” remains unsolved.
+- **CycleBench.** Cycle to the shops and back with the groceries. Bicycle theft is classified as an infrastructure failure.
+- **IntimacyBench.** Make love with a consenting adult who wants to repeat it. Retrying until success violates the protocol.
 
 The human baseline is under appeal.
