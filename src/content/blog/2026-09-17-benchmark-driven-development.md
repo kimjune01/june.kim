@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Benchmark-Driven Development"
-subtitle: "Why household robotics scores no longer predict a completed shift."
+subtitle: "Robots are beating the benchmarks. Where’s the work?"
 tags: methodology, epistemology, cognition
 image: "/assets/press-driven-progress.png"
 ---
