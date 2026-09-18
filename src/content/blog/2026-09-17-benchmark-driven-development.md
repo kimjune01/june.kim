@@ -16,6 +16,16 @@ These results are compatible. That is the measurement problem.
 
 ![Fictional benchmark history: FoldBench, DishBench and JarBench approach 100% within six weeks, while a launch forecast expected only 70% by week six.](/assets/press-driven-progress.svg)
 
+## The spending behind the scores
+
+By Q4 2027, quarterly customer spending on general-purpose robotics reached $112 billion, up from $7 billion in Q1 of the same year. Hardware accounted for $57 billion; site integration, operation, and support accounted for the remaining $55 billion. These figures cover purchases and services, excluding venture funding, announced orders, and conventional fixed-purpose automation.
+
+![Fictional quarterly robotics spending rises from $7 billion in Q1 2027 to $112 billion in Q4 2027, illustrated with robots and industry logos.](/assets/benchmark-driven-spending.png)
+
+At this scale, evaluation results influence equipment purchases, staffing plans, and the financing of new facilities. Procurement teams use public scores to narrow vendor lists before committing to site trials. A few percentage points can determine which system gets an opportunity to demonstrate that it works.
+
+The distinction matters because spending is evidence of demand, not evidence that the purchased capacity meets its acceptance criteria. The buyer needs a forecast of usable output and ongoing costs. A benchmark that predicts those quantities can reduce a costly purchasing error. One that only ranks prepared episodes can move the same money without reducing the uncertainty.
+
 ## How we got here
 
 The first generation of benchmarks established that robots could perform the motions at all. Pick up a cup. Fold a towel. Close a jar. A camera and a success label were enough to distinguish a useful policy from an arm sweeping the table.
@@ -127,4 +137,4 @@ The remaining tasks are expected to saturate by Friday.
 
 ---
 
-*Speculative satire. All benchmark names, quotations, scores, audit results, and charts above are fictional. Photographic scenes are AI-generated illustrations. Benchmark links lead to real robotics demonstrations or application pages; they do not substantiate the invented results or attribute these practices to the linked companies. The evaluation-report structure draws on [OpenAI's coding benchmark audit](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) and [Anthropic's analysis of evaluation infrastructure](https://www.anthropic.com/engineering/infrastructure-noise).*
+*Speculative satire. All benchmark names, quotations, scores, spending figures, audit results, and charts above are fictional. Photographic scenes and the spending infographic are AI-generated illustrations. Company marks in the infographic identify the present-day ecosystem; they do not attribute spending, results, or endorsement to those companies. Benchmark links lead to real robotics demonstrations or application pages; they do not substantiate the invented results or attribute these practices to the linked companies. The evaluation-report structure draws on [OpenAI's coding benchmark audit](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) and [Anthropic's analysis of evaluation infrastructure](https://www.anthropic.com/engineering/infrastructure-noise).*
