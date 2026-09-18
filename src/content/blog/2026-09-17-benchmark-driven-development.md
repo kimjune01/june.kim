@@ -58,7 +58,7 @@ FoldBench checks corner alignment. Sorting, transporting, and stacking the folde
 
 [CleanRoomBench](https://www.staubli.com/us/en/robotics/industries/pharma-healthcare/pharmaceutical-production-and-biotechnology/aseptic-drug-manufacturing.html) reports zero contamination events. Its grader inspects video for visible spills. The benchmark title does additional work.
 
-![Leaderboard: three robots exceed a human's 94.6% on prepared packing episodes. Shift completion and assistance are unreported for every entry.](/assets/press-driven-leaderboard.svg)
+![Leaderboard: Calvin-3 scores 99.2% against a human baseline of 98.9% on prepared packing episodes. Shift completion and assistance are unreported for every entry.](/assets/press-driven-leaderboard.svg)
 
 *Prepared episodes, fixed order mix. Dashes indicate unreported results.*
 
@@ -81,6 +81,10 @@ The customer protocol started with a stocked station and kept the clock running.
 Across 1,000 eight-hour shifts, three finished without assistance. The system averaged 704 accepted packages per shift with 96 minutes of human support. Trained workers using the same packing equipment averaged 760 on matched order batches, under the same independent quality checks.
 
 Each acceptance decision retained item scans, weight readings, inspection records, and the acceptance-rule version. A separate checker could reproduce the decision. Independent physical checks on sampled packages tested whether those records matched the contents and condition. Replaying a recorded weight did not establish that the scale was accurate.
+
+![A broken ceramic mug inside an intact shipping box, beside a scale and barcode scanner.](/assets/benchmark-broken-package.png)
+
+*Correct item. Correct weight. Broken handle.*
 
 We also challenged the checker with 200 deliberately defective packages containing missing items, wrong labels, or damaged contents. It passed four. We reported this false-pass rate separately; the output totals above count packages accepted by the procedure, not proven defect-free packages. Missing evidence was marked unverified.
 
@@ -110,6 +114,8 @@ For a robot sold to perform a job, the primary result should be **accepted work 
 - **Make completion independently checkable.** Retain the measurements needed to challenge a pass. When the evidence cannot establish completion, report it as unverified.
 
 Buyers should be able to tell how much of that progress they can put on next month's schedule.
+
+![A humanoid robot attempting a bench press with two large plates on each side of the barbell.](/assets/benchmark-bench-press.png)
 
 ## Benchmarks that remain unsolved
 

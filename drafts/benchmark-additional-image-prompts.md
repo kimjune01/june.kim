@@ -1,0 +1,14 @@
+Generated with built-in imagegen.
+
+## Broken package
+
+Asset: `/assets/benchmark-broken-package.png`
+
+Photorealistic editorial evidence photograph for a robotics benchmark audit blog post. Landscape 3:2 image, close-up overhead three-quarter view of an opened corrugated cardboard shipping box on a warehouse quality-inspection bench. A white ceramic coffee mug inside is visibly broken: its handle snapped off and resting beside the mug, a large obvious crack and two small ceramic fragments on brown packing paper. The mug is surrounded by too little crumpled paper padding. Box exterior looks mostly intact. A simple shipping label with a barcode but no legible names or addresses is attached to outer flap. On right edge a small digital shipping scale and a handheld barcode scanner are partially visible, suggesting the parcel passed weight and identity checks. Unbranded gray robot gripper out of focus in upper background, not touching the broken pieces. Natural practical warehouse lighting, restrained colors, convincing cardboard fibers and sharp ceramic fracture texture. Documentary inspection image, not dramatic advertising. No people, no blood, no injury, no logos, no title, no text overlays, no captions, no collage. Clearly show a real physical defect hidden inside otherwise acceptable packaging. This is a generated illustrative scene for speculative satire, not documentation of an actual incident.
+
+## Bench press
+
+Asset: `/assets/benchmark-bench-press.png`
+
+Photorealistic editorial photograph, landscape 3:2. A plausible silver and charcoal humanoid robot attempting a heavy barbell bench press in an ordinary commercial gym. Robot lying supine on a flat weight bench, metallic articulated back supported, feet planted on rubber floor, both five-finger mechanical hands wrapped around knurled bar slightly wider than shoulder width. Bar hovering just above its chest during a difficult repetition, elbows bent, believable symmetric loaded posture. Olympic bar loaded with EXACTLY TWO large black 45-pound plates on EACH side, four plates total, and collars. Capture three-quarter side view from foot end so both stacks of two plates, the robot's torso, and bent arms are clearly readable. Bar path aligned over chest, rack uprights and safety catches visible. Realistic engineered joints, minor scuffs, small neutral faceplate with no expression, not a superhero and not a toy. Neutral gym overhead light, softly blurred squat racks and exercise equipment behind, dry documentary humor from a machine doing an ordinary difficult human task. No logos, no text overlays, no captions, no charts, no sparks, no science-fiction effects, no humans needed. Visually emphasize the two plates per side and robot straining to complete the rep. This is an illustrative generated image for a satirical robotics benchmark article.
+
