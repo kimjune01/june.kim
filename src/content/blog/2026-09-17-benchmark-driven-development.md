@@ -62,7 +62,7 @@ FoldBench checks corner alignment. Sorting, transporting, and stacking the folde
 
 *Prepared episodes, fixed order mix. Dashes indicate unreported results.*
 
-## Same checkpoint, different score
+## Your lab may vary
 
 Independent replications have produced scores ranging from 61% to 99% using the same checkpoint. Differences in grippers, lighting, reset procedures, and evaluator versions account for much of the spread. The remaining variance is attributed to implementation details, which are unavailable.
 
