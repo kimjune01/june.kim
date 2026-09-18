@@ -6,13 +6,13 @@ tags: methodology, epistemology, cognition
 image: "/assets/press-driven-progress.png"
 ---
 
-Frontier robots now exceed the human baseline on 19 of the 22 most widely reported manipulation benchmarks. Six months ago, none did. This is substantial progress. It has also become difficult to determine what work those robots can be left to finish.
+Frontier robots now exceed the human baseline on 19 of the 22 most widely reported manipulation benchmarks. Six months ago, none did. It remains difficult to determine what work those robots can be left to finish.
 
-Recent releases exceed 99% on [FoldBench Verified](https://www.dyna.co/research/scaling-customer-deployments) and approach the scoring ceiling on [DishBench Pro](https://www.figure.ai/news/helix-02). Results on [ShowOnce-Hard](https://generalistai.com/blog/gen-1.5) suggest that the improvement extends to tasks specified through a single demonstration. Several evaluations have reached their anticipated saturation thresholds substantially earlier than their authors projected.
+Recent releases exceed 99% on [FoldBench Verified](https://www.dyna.co/research/scaling-customer-deployments) and approach the scoring ceiling on [DishBench Pro](https://www.figure.ai/news/helix-02). Results on [ShowOnce-Hard](https://generalistai.com/blog/gen-1.5) suggest that the improvement extends to tasks specified through a single demonstration. Several benchmarks saturated months ahead of projections.
 
 We reviewed the evaluation protocols behind these results and reran the leading packaging system against an eight-hour customer acceptance test. Its published score was 99.2%. Only 0.3% of shifts completed without human assistance.
 
-These results are compatible. That is the measurement problem.
+These results are compatible.
 
 ![Benchmark history: FoldBench, DishBench and JarBench approach 100% within six weeks, while a launch forecast expected only 70% by week six.](/assets/press-driven-progress.svg)
 
@@ -22,15 +22,15 @@ By Q4 2027, quarterly customer spending on general-purpose robotics reached $112
 
 ![Quarterly robotics spending rises from $7 billion in Q1 2027 to $112 billion in Q4 2027, illustrated with robots and industry logos.](/assets/benchmark-driven-spending.png)
 
-At this scale, evaluation results influence equipment purchases, staffing plans, and the financing of new facilities. Procurement teams use public scores to narrow vendor lists before committing to site trials. A few percentage points can determine which system gets an opportunity to demonstrate that it works.
+Procurement teams use public scores to shortlist vendors for site trials. A few percentage points can determine which system gets tested.
 
-The distinction matters because spending is evidence of demand, not evidence that the purchased capacity meets its acceptance criteria. The buyer needs a forecast of usable output and ongoing costs. A benchmark that predicts those quantities can reduce a costly purchasing error. One that only ranks prepared episodes can move the same money without reducing the uncertainty.
+Buyers need forecasts of usable output and ongoing costs. A benchmark that only ranks prepared episodes can move money without reducing purchasing uncertainty.
 
 ## How we got here
 
 The first generation of benchmarks established that robots could perform the motions at all. Pick up a cup. Fold a towel. Close a jar. A camera and a success label were enough to distinguish a useful policy from an arm sweeping the table.
 
-Once those tasks became reliable, benchmarks expanded to unfamiliar objects, longer sequences, and instructions supplied through demonstration videos. Each extension captured a real capability. Robots now recover grasps that would have ended an episode last year. They transfer skills between objects without a new training run.
+Once those tasks became reliable, benchmarks expanded to unfamiliar objects, longer sequences, and instructions supplied through demonstration videos. Robots now recover grasps that would have ended an episode last year. They transfer skills between objects without a new training run.
 
 The reporting format changed less. A percentage still summarizes episodes that begin with a prepared workspace and end when the visible action is complete. Readers increasingly interpret that percentage as the probability that a job gets done.
 
@@ -56,9 +56,7 @@ The latest [JarBench-Hard](https://generalistai.com/blog/gen-1.5) winner closes 
 
 FoldBench checks corner alignment. Sorting, transporting, and stacking the folded items fall outside the episode. The human baseline includes folding; the staffing estimate attached to the announcement includes the laundry room.
 
-[CleanRoomBench](https://www.staubli.com/us/en/robotics/industries/pharma-healthcare/pharmaceutical-production-and-biotechnology/aseptic-drug-manufacturing.html) reports zero contamination events. Its grader inspects video for visible spills. The result supports a claim about spills. The benchmark title does additional work.
-
-None of these tests is useless. Each measures something narrower than the work suggested by its name. Near saturation, the unmeasured part increasingly determines whether the system is useful.
+[CleanRoomBench](https://www.staubli.com/us/en/robotics/industries/pharma-healthcare/pharmaceutical-production-and-biotechnology/aseptic-drug-manufacturing.html) reports zero contamination events. Its grader inspects video for visible spills. The benchmark title does additional work.
 
 ![Leaderboard: three robots exceed a human's 94.6% on prepared packing episodes. Shift completion and assistance are unreported for every entry.](/assets/press-driven-leaderboard.svg)
 
@@ -68,7 +66,7 @@ None of these tests is useless. Each measures something narrower than the work s
 
 In our packaging evaluation, we held the robot, model checkpoint, and order mix fixed. We changed the episode boundary.
 
-The published protocol placed each order within reach, replenished consumables between episodes, and restored the workspace after a failure. These operations were performed by the evaluation team. They did not appear in the action trace and were not counted as interventions.
+The published protocol placed each order within reach, replenished consumables between episodes, and restored the workspace after a failure. The evaluation team performed these operations outside the action trace, so they were not counted as interventions.
 
 ![Warehouse scene of a technician replacing a label roll while robotic packing arms wait beside an open box.](/assets/press-driven-packing.png)
 
@@ -80,13 +78,13 @@ The published protocol placed each order within reach, replenished consumables b
 
 The customer protocol started with a stocked station and kept the clock running. Empty tape rolls, obstructed labels, fallen items, and requests for help remained inside the trial. An operator could assist, but that assistance was recorded.
 
-Across 1,000 eight-hour shifts, three finished without assistance. The system averaged 704 accepted packages per shift with 96 minutes of human support. Trained workers using the same packing equipment averaged 760 on matched order batches, under the same independent quality checks. The robot still produced substantial useful output. It also required a different staffing arrangement from the one suggested by its episode score.
+Across 1,000 eight-hour shifts, three finished without assistance. The system averaged 704 accepted packages per shift with 96 minutes of human support. Trained workers using the same packing equipment averaged 760 on matched order batches, under the same independent quality checks.
 
 Each acceptance decision retained item scans, weight readings, inspection records, and the acceptance-rule version. A separate checker could reproduce the decision. Independent physical checks on sampled packages tested whether those records matched the contents and condition. Replaying a recorded weight did not establish that the scale was accurate.
 
-We also challenged the checker with 200 deliberately defective packages containing missing items, wrong labels, or damaged contents. It passed four. We reported this false-pass rate separately; the output totals above count packages accepted by the procedure, not proven defect-free packages. Missing evidence was marked unverified. The checker needed an evaluation too.
+We also challenged the checker with 200 deliberately defective packages containing missing items, wrong labels, or damaged contents. It passed four. We reported this false-pass rate separately; the output totals above count packages accepted by the procedure, not proven defect-free packages. Missing evidence was marked unverified.
 
-A robot that needs help occasionally can be a good purchase. Whether one person can support two robots or twenty is a purchasing question the original score never asked. The relevant comparison is total cost per accepted package at the required service level, including equipment, maintenance, and human support. A slower system that covers an otherwise unstaffed shift may be worth more to the buyer.
+Whether one person can support two robots or twenty is a purchasing question the original score never asked. The relevant comparison is total cost per accepted package at the required service level, including equipment, maintenance, and human support. A slower system that covers an otherwise unstaffed shift may be worth more to the buyer.
 
 ![Audit comparing prepared packing trials with continuous shifts: 99.2% episode success, 0.3% unassisted shifts; 704 accepted packages per robot shift with 96 minutes of support, versus 760 packages per human shift.](/assets/press-driven-shift.svg)
 
@@ -96,8 +94,6 @@ The human baseline has become the most stable line on the chart. It was collecte
 
 The robots have since received new hands, additional demonstrations, and six months of training against the public tasks. The human number travels unchanged between releases. The maintainers declined to repeat the human trials because updating the baseline would compromise comparability with previous announcements.
 
-That comparison can answer a research question about performance under the original study conditions. It cannot establish that the system replaces a trained worker using ordinary equipment.
-
 For purchasing, we need the worker, tools, workload, and acceptance criteria to match the proposed deployment. We also need to count the people who prepare the robot's work and repair its mistakes. Moving their labor outside the frame does not remove it from the invoice.
 
 Human performance supplies the economic alternative. The customer still decides what quality is acceptable. A human's failure rate is not permission for a robot to ship defective work.
@@ -106,8 +102,6 @@ Human performance supplies the economic alternative. The customer still decides 
 
 For a robot sold to perform a job, the primary result should be **accepted work over a stated operating period**, accompanied by the resources and assistance required to produce it.
 
-That requires a few changes:
-
 - **Let the buyer define acceptance.** A package must contain the correct undamaged items. A jar must pass an appropriate closure check. A finished motion is intermediate evidence.
 - **Keep the clock running.** Include setup, replenishment, recovery, and cleanup when they belong to the promised service.
 - **Publish assistance.** Report frequency, duration, and the work the human performed. Distinguish autonomous output from assisted output.
@@ -115,19 +109,15 @@ That requires a few changes:
 - **Use a matched human baseline.** Evaluate trained workers with their normal tools on the same workload and quality standard.
 - **Make completion independently checkable.** Retain the measurements needed to challenge a pass. When the evidence cannot establish completion, report it as unverified.
 
-Component benchmarks still help explain where a system improved. A purchasing benchmark must establish whether those improvements survive the rest of the job.
-
-The robots are improving faster than expected. Buyers should be able to tell how much of that progress they can put on next month's schedule.
+Buyers should be able to tell how much of that progress they can put on next month's schedule.
 
 ## Press-driven development
 
-A release now needs a result that distinguishes it from last week's release. Saturated benchmarks cannot supply one, so new benchmarks appear with more objects, longer horizons, or less familiar kitchens. The cycle produces useful research and an expanding set of incompatible claims. ShowOnce-Hard has dropped its suffix. Two labs delayed their announcements because the benchmark they had selected was solved before their video finished rendering.
+A release now needs a result that distinguishes it from last week's release. Saturated benchmarks cannot supply one, so new benchmarks appear with more objects, longer horizons, or less familiar kitchens. ShowOnce-Hard has dropped its suffix. Two labs delayed their announcements because the benchmark they had selected was solved before their video finished rendering.
 
 The easier response to an exhausted benchmark is to make it harder. Adding a crooked lid is harder. Checking whether the jar is sealed changes what the benchmark measures. Only the second addresses the customer's objection.
 
 [ShiftBench Ultra](https://bostondynamics.com/solutions/warehouse-automation/trailer-unloading/) was introduced to close this gap. Its initial release evaluates full shifts, except for charging, replenishment, and exceptional recovery. Those exclusions are scheduled for ShiftBench Ultra Real.
-
-The name has advanced further than the boundary.
 
 The maintainers have since announced ShiftBench Ultra Real Verified, which adds customer acceptance. Its first prospective buyer asked whether the system could finish the night shift at the quoted price. The submission was excluded because it could not be evaluated from video.
 
