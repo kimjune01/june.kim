@@ -14,13 +14,13 @@ We reviewed the evaluation protocols behind these results and reran the leading 
 
 These results are compatible. That is the measurement problem.
 
-![Fictional benchmark history: FoldBench, DishBench and JarBench approach 100% within six weeks, while a launch forecast expected only 70% by week six.](/assets/press-driven-progress.svg)
+![Benchmark history: FoldBench, DishBench and JarBench approach 100% within six weeks, while a launch forecast expected only 70% by week six.](/assets/press-driven-progress.svg)
 
 ## The spending behind the scores
 
 By Q4 2027, quarterly customer spending on general-purpose robotics reached $112 billion, up from $7 billion in Q1 of the same year. Hardware accounted for $57 billion; site integration, operation, and support accounted for the remaining $55 billion. These figures cover purchases and services, excluding venture funding, announced orders, and conventional fixed-purpose automation.
 
-![Fictional quarterly robotics spending rises from $7 billion in Q1 2027 to $112 billion in Q4 2027, illustrated with robots and industry logos.](/assets/benchmark-driven-spending.png)
+![Quarterly robotics spending rises from $7 billion in Q1 2027 to $112 billion in Q4 2027, illustrated with robots and industry logos.](/assets/benchmark-driven-spending.png)
 
 At this scale, evaluation results influence equipment purchases, staffing plans, and the financing of new facilities. Procurement teams use public scores to narrow vendor lists before committing to site trials. A few percentage points can determine which system gets an opportunity to demonstrate that it works.
 
@@ -36,25 +36,23 @@ The reporting format changed less. A percentage still summarizes episodes that b
 
 The word *task* accommodates both meanings.
 
-![Generated scene of a robot folding a towel inside a marked evaluation area, with a cart of unsorted laundry outside it.](/assets/press-driven-fold.png)
+![A robot folding a towel inside a marked evaluation area, with a cart of unsorted laundry outside it.](/assets/press-driven-fold.png)
 
 > “We achieve human-level laundry performance across all evaluated textile configurations.”
 >
 > — *FoldBench Verified technical report*, abstract
 
-*Evaluation area outlined in black. Input preparation is provided by the harness. Generated illustration of the fictional benchmark.*
+*Evaluation area outlined in black. Input preparation is provided by the harness.*
 
 ## What the scores establish
 
 The latest [JarBench-Hard](https://generalistai.com/blog/gen-1.5) winner closes 998 of 1,000 jars. The evaluator checks whether the lid is seated in the final image. It does not measure whether the threads engaged correctly or whether the closure survives a leak test. Cross-threaded lids were removed during dataset cleaning because annotators disagreed about them.
 
-![Generated lab scene with two robotic grippers closing a jar and a visibly crooked lid on a foreground jar.](/assets/press-driven-jar.png)
+![Lab scene with two robotic grippers closing a jar and a visibly crooked lid on a foreground jar.](/assets/press-driven-jar.png)
 
 > “Closure success is determined from the terminal camera observation. Instrumented seal verification is left to future work.”
 >
 > — *JarBench-Hard*, evaluation protocol
-
-*Generated illustration of the fictional test setup.*
 
 FoldBench checks corner alignment. Sorting, transporting, and stacking the folded items fall outside the episode. The human baseline includes folding; the staffing estimate attached to the announcement includes the laundry room.
 
@@ -62,7 +60,7 @@ FoldBench checks corner alignment. Sorting, transporting, and stacking the folde
 
 None of these tests is useless. Each measures something narrower than the work suggested by its name. Near saturation, the unmeasured part increasingly determines whether the system is useful.
 
-![Fictional leaderboard: three robots exceed a human's 94.6% on prepared packing episodes. Shift completion and assistance are unreported for every entry.](/assets/press-driven-leaderboard.svg)
+![Leaderboard: three robots exceed a human's 94.6% on prepared packing episodes. Shift completion and assistance are unreported for every entry.](/assets/press-driven-leaderboard.svg)
 
 *Prepared episodes, fixed order mix. Dashes indicate unreported results.*
 
@@ -72,13 +70,13 @@ In our packaging evaluation, we held the robot, model checkpoint, and order mix 
 
 The published protocol placed each order within reach, replenished consumables between episodes, and restored the workspace after a failure. These operations were performed by the evaluation team. They did not appear in the action trace and were not counted as interventions.
 
-![Generated warehouse scene of a technician replacing a label roll while robotic packing arms wait beside an open box.](/assets/press-driven-packing.png)
+![Warehouse scene of a technician replacing a label roll while robotic packing arms wait beside an open box.](/assets/press-driven-packing.png)
 
 > “No human interventions were required during any scored episode.”
 >
 > — *PackBench Verified system card*, autonomy statement
 
-*Between scored episodes: label replenishment and workspace reset. Generated illustration of the fictional audit.*
+*Between scored episodes: label replenishment and workspace reset.*
 
 The customer protocol started with a stocked station and kept the clock running. Empty tape rolls, obstructed labels, fallen items, and requests for help remained inside the trial. An operator could assist, but that assistance was recorded.
 
@@ -90,7 +88,7 @@ We also challenged the checker with 200 deliberately defective packages containi
 
 A robot that needs help occasionally can be a good purchase. Whether one person can support two robots or twenty is a purchasing question the original score never asked. The relevant comparison is total cost per accepted package at the required service level, including equipment, maintenance, and human support. A slower system that covers an otherwise unstaffed shift may be worth more to the buyer.
 
-![Fictional audit comparing prepared packing trials with continuous shifts: 99.2% episode success, 0.3% unassisted shifts; 704 accepted packages per robot shift with 96 minutes of support, versus 760 packages per human shift.](/assets/press-driven-shift.svg)
+![Audit comparing prepared packing trials with continuous shifts: 99.2% episode success, 0.3% unassisted shifts; 704 accepted packages per robot shift with 96 minutes of support, versus 760 packages per human shift.](/assets/press-driven-shift.svg)
 
 ## Which human did the robot beat?
 
@@ -134,7 +132,3 @@ The name has advanced further than the boundary.
 The maintainers have since announced ShiftBench Ultra Real Verified, which adds customer acceptance. Its first prospective buyer asked whether the system could finish the night shift at the quoted price. The submission was excluded because it could not be evaluated from video.
 
 The remaining tasks are expected to saturate by Friday.
-
----
-
-*Speculative satire. All benchmark names, quotations, scores, spending figures, audit results, and charts above are fictional. Photographic scenes and the spending infographic are AI-generated illustrations. Company marks in the infographic identify the present-day ecosystem; they do not attribute spending, results, or endorsement to those companies. Benchmark links lead to real robotics demonstrations or application pages; they do not substantiate the invented results or attribute these practices to the linked companies. The evaluation-report structure draws on [OpenAI's coding benchmark audit](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) and [Anthropic's analysis of evaluation infrastructure](https://www.anthropic.com/engineering/infrastructure-noise).*
