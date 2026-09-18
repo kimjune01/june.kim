@@ -26,9 +26,25 @@ The reporting format changed less. A percentage still summarizes episodes that b
 
 The word *task* accommodates both meanings.
 
+![Generated scene of a robot folding a towel inside a marked evaluation area, with a cart of unsorted laundry outside it.](/assets/press-driven-fold.png)
+
+> “We achieve human-level laundry performance across all evaluated textile configurations.”
+>
+> — *FoldBench Verified technical report*, abstract
+
+*Evaluation area outlined in black. Input preparation is provided by the harness. Generated illustration of the fictional benchmark.*
+
 ## What the scores establish
 
 The latest [JarBench-Hard](https://generalistai.com/blog/gen-1.5) winner closes 998 of 1,000 jars. The evaluator checks whether the lid is seated in the final image. It does not measure whether the threads engaged correctly or whether the closure survives a leak test. Cross-threaded lids were removed during dataset cleaning because annotators disagreed about them.
+
+![Generated lab scene with two robotic grippers closing a jar and a visibly crooked lid on a foreground jar.](/assets/press-driven-jar.png)
+
+> “Closure success is determined from the terminal camera observation. Instrumented seal verification is left to future work.”
+>
+> — *JarBench-Hard*, evaluation protocol
+
+*Generated illustration of the fictional test setup.*
 
 FoldBench checks corner alignment. Sorting, transporting, and stacking the folded items fall outside the episode. The human baseline includes folding; the staffing estimate attached to the announcement includes the laundry room.
 
@@ -44,11 +60,23 @@ In our packaging evaluation, we held the robot, model checkpoint, and order mix 
 
 The published protocol placed each order within reach, replenished consumables between episodes, and restored the workspace after a failure. These operations were performed by the evaluation team. They did not appear in the action trace and were not counted as interventions.
 
+![Generated warehouse scene of a technician replacing a label roll while robotic packing arms wait beside an open box.](/assets/press-driven-packing.png)
+
+> “No human interventions were required during any scored episode.”
+>
+> — *PackBench Verified system card*, autonomy statement
+
+*Between scored episodes: label replenishment and workspace reset. Generated illustration of the fictional audit.*
+
 The customer protocol started with a stocked station and kept the clock running. Empty tape rolls, obstructed labels, fallen items, and requests for help remained inside the trial. An operator could assist, but that assistance was recorded.
 
 Across 1,000 eight-hour shifts, three finished without assistance. The system averaged 704 accepted packages per shift with 96 minutes of human support. Trained workers using the same packing equipment averaged 760 on matched order batches, under the same independent quality checks. The robot still produced substantial useful output. It also required a different staffing arrangement from the one suggested by its episode score.
 
-A robot that needs help occasionally can be a good purchase. Whether one person can support two robots or twenty is a purchasing question the original score never asked.
+Each acceptance decision retained item scans, weight readings, inspection records, and the acceptance-rule version. A separate checker could reproduce the decision. Independent physical checks on sampled packages tested whether those records matched the contents and condition. Replaying a recorded weight did not establish that the scale was accurate.
+
+We also challenged the checker with 200 deliberately defective packages containing missing items, wrong labels, or damaged contents. It passed four. We reported this false-pass rate separately; the output totals above count packages accepted by the procedure, not proven defect-free packages. Missing evidence was marked unverified. The checker needed an evaluation too.
+
+A robot that needs help occasionally can be a good purchase. Whether one person can support two robots or twenty is a purchasing question the original score never asked. The relevant comparison is total cost per accepted package at the required service level, including equipment, maintenance, and human support. A slower system that covers an otherwise unstaffed shift may be worth more to the buyer.
 
 ![Fictional audit comparing prepared packing trials with continuous shifts: 99.2% episode success, 0.3% unassisted shifts; 704 accepted packages per robot shift with 96 minutes of support, versus 760 packages per human shift.](/assets/press-driven-shift.svg)
 
@@ -83,6 +111,7 @@ That requires a few changes:
 - **Let the buyer define acceptance.** A package must contain the correct undamaged items. A jar must pass an appropriate closure check. A finished motion is intermediate evidence.
 - **Keep the clock running.** Include setup, replenishment, recovery, and cleanup when they belong to the promised service.
 - **Publish assistance.** Report frequency, duration, and the work the human performed. Distinguish autonomous output from assisted output.
+- **Identify the tested system.** Record the checkpoint, hands, sensors, control software, fixtures, and grader version. Results from one configuration do not automatically carry over to another.
 - **Use a matched human baseline.** Evaluate trained workers with their normal tools on the same workload and quality standard.
 - **Make completion independently checkable.** Retain the measurements needed to challenge a pass. When the evidence cannot establish completion, report it as unverified.
 
@@ -92,4 +121,4 @@ The robots are improving faster than expected. Buyers should be able to tell how
 
 ---
 
-*Speculative satire. All benchmark names, scores, audit results, and charts above are fictional. Benchmark links lead to real robotics demonstrations or application pages; they do not substantiate the invented results or attribute these practices to the linked companies. The evaluation-report structure draws on [OpenAI's coding benchmark audit](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) and [Anthropic's analysis of evaluation infrastructure](https://www.anthropic.com/engineering/infrastructure-noise).*
+*Speculative satire. All benchmark names, quotations, scores, audit results, and charts above are fictional. Photographic scenes are AI-generated illustrations. Benchmark links lead to real robotics demonstrations or application pages; they do not substantiate the invented results or attribute these practices to the linked companies. The evaluation-report structure draws on [OpenAI's coding benchmark audit](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) and [Anthropic's analysis of evaluation infrastructure](https://www.anthropic.com/engineering/infrastructure-noise).*
