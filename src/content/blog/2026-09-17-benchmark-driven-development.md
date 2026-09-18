@@ -54,6 +54,8 @@ None of these tests is useless. Each measures something narrower than the work s
 
 ![Fictional leaderboard: three robots exceed a human's 94.6% on prepared packing episodes. Shift completion and assistance are unreported for every entry.](/assets/press-driven-leaderboard.svg)
 
+*Prepared episodes, fixed order mix. Dashes indicate unreported results.*
+
 ## The environment is part of the result
 
 In our packaging evaluation, we held the robot, model checkpoint, and order mix fixed. We changed the episode boundary.
