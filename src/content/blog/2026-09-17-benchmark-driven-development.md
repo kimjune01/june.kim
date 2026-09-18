@@ -124,6 +124,6 @@ Buyers should be able to tell how much of that progress they can put on next mon
 - **BrushBench.** Brush teeth without injuring gums. The grader measures duration; plaque removal is out of scope.
 - **SandwichBench.** Make the sandwich the user wanted. Generalization to “less mayonnaise” remains unsolved.
 - **CycleBench.** Cycle to the shops and back with the groceries. Bicycle theft is classified as an infrastructure failure.
-- **IntimacyBench.** Make love with a consenting adult who wants to repeat it. Retrying until success violates the protocol.
+- **IntimacyBench.** Make love with a consenting adult who wants to repeat it. Success with women remains unverifiable.
 
 The human baseline is under appeal.
