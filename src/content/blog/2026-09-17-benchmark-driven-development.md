@@ -1,7 +1,7 @@
 ---
 variant: post-medium
 title: "Benchmark-Driven Development"
-subtitle: "Robots are beating the benchmarks. Where’s the work?"
+subtitle: "Robots are beating the benchmarks. Are we running out of benches?"
 tags: methodology, epistemology, cognition
 image: "/assets/press-driven-progress.png"
 ---
