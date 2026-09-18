@@ -16,7 +16,7 @@ These results are compatible.
 
 ![Benchmark history: FoldBench, DishBench and JarBench approach 100% within six weeks, while a launch forecast expected only 70% by week six.](/assets/press-driven-progress.svg)
 
-## The spending behind the scores
+## $112 billion riding on a percentage
 
 By Q4 2027, quarterly customer spending on general-purpose robotics reached $112 billion, up from $7 billion in Q1 of the same year. Hardware accounted for $57 billion; site integration, operation, and support accounted for the remaining $55 billion. These figures cover purchases and services, excluding venture funding, announced orders, and conventional fixed-purpose automation.
 
@@ -26,7 +26,7 @@ Procurement teams use public scores to shortlist vendors for site trials. A few 
 
 Buyers need forecasts of usable output and ongoing costs. A benchmark that only ranks prepared episodes can move money without reducing purchasing uncertainty.
 
-## How we got here
+## When a motion became a job
 
 The first generation of benchmarks established that robots could perform the motions at all. Pick up a cup. Fold a towel. Close a jar. A camera and a success label were enough to distinguish a useful policy from an arm sweeping the table.
 
@@ -44,7 +44,7 @@ The word *task* accommodates both meanings.
 
 *Evaluation area outlined in black. Input preparation is provided by the harness.*
 
-## What the scores establish
+## The lid is on. Is it closed?
 
 The latest [JarBench-Hard](https://generalistai.com/blog/gen-1.5) winner closes 998 of 1,000 jars. The evaluator checks whether the lid is seated in the final image. It does not measure whether the threads engaged correctly or whether the closure survives a leak test. Cross-threaded lids were removed during dataset cleaning because annotators disagreed about them.
 
@@ -62,7 +62,7 @@ FoldBench checks corner alignment. Sorting, transporting, and stacking the folde
 
 *Prepared episodes, fixed order mix. Dashes indicate unreported results.*
 
-## The environment is part of the result
+## Same checkpoint, different score
 
 Independent replications have produced scores ranging from 61% to 99% using the same checkpoint. Differences in grippers, lighting, reset procedures, and evaluator versions account for much of the spread. The remaining variance is attributed to implementation details, which are unavailable.
 
@@ -96,7 +96,7 @@ Whether one person can support two robots or twenty is a purchasing question the
 
 ![Audit comparing prepared packing trials with continuous shifts: 99.2% episode success, 0.3% unassisted shifts; 704 accepted packages per robot shift with 96 minutes of support, versus 760 packages per human shift.](/assets/press-driven-shift.svg)
 
-## Which human did the robot beat?
+## Humanity, frozen at baseline
 
 The human baseline has become the most stable line on the chart. It was collected once, before the third revision of the task set, using participants who received a ten-minute orientation.
 
@@ -106,7 +106,7 @@ For purchasing, we need the worker, tools, workload, and acceptance criteria to 
 
 Human performance supplies the economic alternative. The customer still decides what quality is acceptable. A human's failure rate is not permission for a robot to ship defective work.
 
-## What we should report instead
+## Put the night shift on the leaderboard
 
 For a robot sold to perform a job, the primary result should be **accepted work over a stated operating period**, accompanied by the resources and assistance required to produce it.
 
@@ -121,7 +121,7 @@ Buyers should be able to tell how much of that progress they can put on next mon
 
 ![A humanoid robot attempting a bench press with two large plates on each side of the barbell.](/assets/benchmark-bench-press.png)
 
-## Benchmarks that remain unsolved
+## The last unsaturated benches
 
 - **ShiftBench Full.** Finish an eight-hour shift at the quoted cost. No submission passes both the physical and accounting checks.
 - **DiaperBench.** Change a diaper without spreading its contents. Training on clean diapers has not transferred to production.
