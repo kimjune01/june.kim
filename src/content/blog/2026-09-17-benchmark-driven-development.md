@@ -8,7 +8,7 @@ image: "/assets/press-driven-progress.png"
 
 Frontier robots now exceed the human baseline on 19 of the 22 most widely reported manipulation benchmarks. Six months ago, none did. This is substantial progress. It has also become difficult to determine what work those robots can be left to finish.
 
-This week, [FoldBench Verified](https://www.dyna.co/research/scaling-customer-deployments) crossed 99%, [DishBench Pro](https://www.figure.ai/news/helix-02) was declared saturated, and [ShowOnce-Hard](https://generalistai.com/blog/gen-1.5) lost its suffix. Two labs delayed their announcements because the benchmark they had selected was solved before their video finished rendering.
+Recent releases exceed 99% on [FoldBench Verified](https://www.dyna.co/research/scaling-customer-deployments) and approach the scoring ceiling on [DishBench Pro](https://www.figure.ai/news/helix-02). Results on [ShowOnce-Hard](https://generalistai.com/blog/gen-1.5) suggest that the improvement extends to tasks specified through a single demonstration. Several evaluations have reached their anticipated saturation thresholds substantially earlier than their authors projected.
 
 We reviewed the evaluation protocols behind these results and reran the leading packaging system against an eight-hour customer acceptance test. Its published score was 99.2%. Only 0.3% of shifts completed without human assistance.
 
@@ -84,23 +84,13 @@ A robot that needs help occasionally can be a good purchase. Whether one person 
 
 The human baseline has become the most stable line on the chart. It was collected once, before the third revision of the task set, using participants who received a ten-minute orientation.
 
-The robots have since received new hands, additional demonstrations, and six months of training against the public tasks. The human number travels unchanged between releases.
+The robots have since received new hands, additional demonstrations, and six months of training against the public tasks. The human number travels unchanged between releases. The maintainers declined to repeat the human trials because updating the baseline would compromise comparability with previous announcements.
 
 That comparison can answer a research question about performance under the original study conditions. It cannot establish that the system replaces a trained worker using ordinary equipment.
 
 For purchasing, we need the worker, tools, workload, and acceptance criteria to match the proposed deployment. We also need to count the people who prepare the robot's work and repair its mistakes. Moving their labor outside the frame does not remove it from the invoice.
 
 Human performance supplies the economic alternative. The customer still decides what quality is acceptable. A human's failure rate is not permission for a robot to ship defective work.
-
-## Press-driven development
-
-A release now needs a result that distinguishes it from last week's release. Saturated benchmarks cannot supply one, so new benchmarks appear with more objects, longer horizons, or less familiar kitchens. The cycle produces useful research and an expanding set of incompatible claims.
-
-The easier response to an exhausted benchmark is to make it harder. Adding a crooked lid is harder. Checking whether the jar is sealed changes what the benchmark measures. Only the second addresses the customer's objection.
-
-[ShiftBench Ultra](https://bostondynamics.com/solutions/warehouse-automation/trailer-unloading/) was introduced to close this gap. Its initial release evaluates full shifts, except for charging, replenishment, and exceptional recovery. Those exclusions are scheduled for ShiftBench Ultra Real.
-
-The name has advanced further than the boundary.
 
 ## What we should report instead
 
@@ -118,6 +108,20 @@ That requires a few changes:
 Component benchmarks still help explain where a system improved. A purchasing benchmark must establish whether those improvements survive the rest of the job.
 
 The robots are improving faster than expected. Buyers should be able to tell how much of that progress they can put on next month's schedule.
+
+## Press-driven development
+
+A release now needs a result that distinguishes it from last week's release. Saturated benchmarks cannot supply one, so new benchmarks appear with more objects, longer horizons, or less familiar kitchens. The cycle produces useful research and an expanding set of incompatible claims. ShowOnce-Hard has dropped its suffix. Two labs delayed their announcements because the benchmark they had selected was solved before their video finished rendering.
+
+The easier response to an exhausted benchmark is to make it harder. Adding a crooked lid is harder. Checking whether the jar is sealed changes what the benchmark measures. Only the second addresses the customer's objection.
+
+[ShiftBench Ultra](https://bostondynamics.com/solutions/warehouse-automation/trailer-unloading/) was introduced to close this gap. Its initial release evaluates full shifts, except for charging, replenishment, and exceptional recovery. Those exclusions are scheduled for ShiftBench Ultra Real.
+
+The name has advanced further than the boundary.
+
+The maintainers have since announced ShiftBench Ultra Real Verified, which adds customer acceptance. Its first prospective buyer asked whether the system could finish the night shift at the quoted price. The submission was excluded because it could not be evaluated from video.
+
+The remaining tasks are expected to saturate by Friday.
 
 ---
 
