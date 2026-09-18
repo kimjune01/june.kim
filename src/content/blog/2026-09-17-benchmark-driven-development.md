@@ -3,7 +3,7 @@ variant: post-medium
 title: "Benchmark-Driven Development"
 subtitle: "Robots are beating the benchmarks. Are we running out of benches?"
 tags: methodology, epistemology, cognition
-image: "/assets/press-driven-progress.png"
+image: "/assets/benchmark-bench-press.png"
 ---
 
 Frontier robots now exceed the human baseline on 19 of the 22 most widely reported manipulation benchmarks. Six months ago, none did. It remains difficult to determine what work those robots can be left to finish.
