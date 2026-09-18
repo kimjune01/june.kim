@@ -64,6 +64,10 @@ FoldBench checks corner alignment. Sorting, transporting, and stacking the folde
 
 ## The environment is part of the result
 
+Independent replications have produced scores ranging from 61% to 99% using the same checkpoint. Differences in grippers, lighting, reset procedures, and evaluator versions account for much of the spread. The remaining variance is attributed to implementation details, which are unavailable.
+
+Even a perfectly reproducible score can measure the wrong thing.
+
 In our packaging evaluation, we held the robot, model checkpoint, and order mix fixed. We changed the episode boundary.
 
 The published protocol placed each order within reach, replenished consumables between episodes, and restored the workspace after a failure. The evaluation team performed these operations outside the action trace, so they were not counted as interventions.
