@@ -1,0 +1,1812 @@
+{
+  "upstream_commit": "f8ce71361165846101d02ebc83ad44e47ae44fc3",
+  "revision": "v1.2.7",
+  "sha256": {
+    "results/v1.2/jevbench-v1.2-results.json": "d239212ee6e4de538ffa4b6fd986bb0accb0bc77103da36fd443c8b7e58e7dc4",
+    "results/v1.2/jevbench-v1.2-per-task.json": "b7833dac329b95de8d33d565a45546874a6ea810589570ae5f69173c57cb1667",
+    "jevbench/composite_v12.py": "2c06af8f4c1ea1ab91756de42677daddd8a4d47f11e62c9b3fab06e520ff93cc",
+    "jevbench/scoring.py": "6aa17d212ea20a3eeb6876149367842e8462c11dcb54d73df062fb406368331e",
+    "jevbench/metrics.py": "4038c8423ad1cf28601afb6babe777b71f08e379b9ca125b09b52c0ac7d60515",
+    "jevbench/summarize.py": "aa5f24da407d004cd80bad1cd957b6987aba152591084c096d1de51dd9775cbe",
+    "datasets/public/hard.jsonl": "89e9e6becb33ed88c1de7d42dcc87531b2fb64cfaef4e1986faf7c37b3f80ebb",
+    "datasets/public/easy.jsonl": "231df3c2c8e88a1a8c137ebe85de96ba70fabd330849098ac7b3c52c70b7172b",
+    "datasets/public/original.jsonl": "5c2414edb3006b8bfcb70fda433f0f9ca015759433849f8d3104328a1f7c4180"
+  },
+  "aggregate_checks": [
+    {
+      "key": "jev-1.13.0",
+      "score": 75.40638246358375,
+      "axes": {
+        "intelligence": 90.4013594852636,
+        "calibration": 82.6528888888889,
+        "speed": 83.26811926100174,
+        "cost": 51.96616538951724
+      }
+    },
+    {
+      "key": "semif-qwen3.5-4b",
+      "score": 74.65132867650291,
+      "axes": {
+        "intelligence": 85.93783727687838,
+        "calibration": 72.60139737235289,
+        "speed": 83.70422262345133,
+        "cost": 59.46663998783557
+      }
+    },
+    {
+      "key": "djev",
+      "score": 74.25567554991632,
+      "axes": {
+        "intelligence": 88.36249481112495,
+        "calibration": 65.41450619010376,
+        "speed": 91.35677310946093,
+        "cost": 57.57524920597589
+      }
+    },
+    {
+      "key": "openjev-verdict-1.4",
+      "score": 72.53422721455438,
+      "axes": {
+        "intelligence": 58.05809810433098,
+        "calibration": 74.13545833230623,
+        "speed": 78.08595973190066,
+        "cost": 82.35883967864214
+      }
+    },
+    {
+      "key": "laya",
+      "score": 70.13544874366694,
+      "axes": {
+        "intelligence": 63.236024629860246,
+        "calibration": 62.46471590909091,
+        "speed": 71.05966297458822,
+        "cost": 86.20408526325653
+      }
+    },
+    {
+      "key": "open-alternative-jev",
+      "score": 69.81763011862198,
+      "axes": {
+        "intelligence": 75.57456413449565,
+        "calibration": 63.16501249259078,
+        "speed": 83.47780372641819,
+        "cost": 59.62620384142349
+      }
+    },
+    {
+      "key": "system-one-open",
+      "score": 68.86791381139408,
+      "axes": {
+        "intelligence": 79.52521793275218,
+        "calibration": 56.699696211408835,
+        "speed": 76.96012500732209,
+        "cost": 64.82109224519658
+      }
+    },
+    {
+      "key": "openjev-razorback16",
+      "score": 67.74973515791665,
+      "axes": {
+        "intelligence": 85.97654628476548,
+        "calibration": 64.76011611808524,
+        "speed": 83.1778984786352,
+        "cost": 45.49198106171689
+      }
+    },
+    {
+      "key": "simplejev-qwen3.8-27b",
+      "score": 67.2560226816453,
+      "axes": {
+        "intelligence": 89.70719178082192,
+        "calibration": 81.14491951146204,
+        "speed": 71.17954293639775,
+        "cost": 39.48943618731995
+      }
+    },
+    {
+      "key": "jeff",
+      "score": 66.91479638439421,
+      "axes": {
+        "intelligence": 63.87012245745123,
+        "calibration": 64.5620340909091,
+        "speed": 63.49232389662579,
+        "cost": 76.57596288088385
+      }
+    },
+    {
+      "key": "kev-0.6b",
+      "score": 66.69186146841801,
+      "axes": {
+        "intelligence": 67.3527397260274,
+        "calibration": 51.092162895835045,
+        "speed": 75.55649753874303,
+        "cost": 76.08691668696139
+      }
+    },
+    {
+      "key": "openjev-sglang",
+      "score": 66.30890721348011,
+      "axes": {
+        "intelligence": 88.8999584889996,
+        "calibration": 77.41176873901938,
+        "speed": 77.059799513554,
+        "cost": 36.45449272670061
+      }
+    },
+    {
+      "key": "openjev-verdict",
+      "score": 66.24680755315786,
+      "axes": {
+        "intelligence": 58.95359416078595,
+        "calibration": 51.29640397786167,
+        "speed": 76.68207818819491,
+        "cost": 83.05556459946698
+      }
+    },
+    {
+      "key": "gpt-5.6-luna",
+      "score": 66.20139303739391,
+      "axes": {
+        "intelligence": 96.821398920714,
+        "calibration": 89.79207658196586,
+        "speed": 77.5464346646158,
+        "cost": 28.490318789992514
+      }
+    },
+    {
+      "key": "open-jev-deberta-v3-large",
+      "score": 64.55909797869364,
+      "axes": {
+        "intelligence": 53.57632835201329,
+        "calibration": 66.3822600310561,
+        "speed": 65.97921316871283,
+        "cost": 74.02828721517696
+      }
+    },
+    {
+      "key": "simplejev-qwen3.6-35b-a3b",
+      "score": 63.763044992857026,
+      "axes": {
+        "intelligence": 86.24128268991282,
+        "calibration": 67.05838957604325,
+        "speed": 74.98811602029707,
+        "cost": 38.11671147049971
+      }
+    },
+    {
+      "key": "nimble-9b",
+      "score": 63.70684569843695,
+      "axes": {
+        "intelligence": 78.56408260689082,
+        "calibration": 64.51395363452104,
+        "speed": 82.5436896273356,
+        "cost": 39.371578866917346
+      }
+    },
+    {
+      "key": "kev-0.5b",
+      "score": 63.116521673951084,
+      "axes": {
+        "intelligence": 57.21793275217934,
+        "calibration": 47.367924010582875,
+        "speed": 76.95661397000733,
+        "cost": 76.08687775906971
+      }
+    },
+    {
+      "key": "gliner2.5-multi",
+      "score": 63.08521529439503,
+      "axes": {
+        "intelligence": 50.522709976477095,
+        "calibration": 56.141750517866484,
+        "speed": 67.79966551109104,
+        "cost": 82.35883967864214
+      }
+    },
+    {
+      "key": "kev-4b",
+      "score": 62.219652374192016,
+      "axes": {
+        "intelligence": 76.32108758821087,
+        "calibration": 41.97093961668896,
+        "speed": 75.73845187472214,
+        "cost": 61.77327904537152
+      }
+    },
+    {
+      "key": "gliner2.5-small",
+      "score": 62.051584875191445,
+      "axes": {
+        "intelligence": 49.03787878787879,
+        "calibration": 47.1625470589488,
+        "speed": 77.83454067554766,
+        "cost": 82.35883967864214
+      }
+    },
+    {
+      "key": "gemini-3.1-flash-lite",
+      "score": 60.90301774498108,
+      "axes": {
+        "intelligence": 90.29052511415526,
+        "calibration": 68.08811278368097,
+        "speed": 81.78762581772229,
+        "cost": 27.362399077259013
+      }
+    },
+    {
+      "key": "kev-8b",
+      "score": 58.32758240236927,
+      "axes": {
+        "intelligence": 79.4552200083022,
+        "calibration": 44.18419951086019,
+        "speed": 74.85933162711135,
+        "cost": 44.04134083457654
+      }
+    },
+    {
+      "key": "deepseek-flash",
+      "score": 57.81013328530241,
+      "axes": {
+        "intelligence": 96.0960806697108,
+        "calibration": 96.66517503108454,
+        "speed": 71.59823070734842,
+        "cost": 16.793370728606376
+      }
+    },
+    {
+      "key": "system-one-sg",
+      "score": 56.64442376483099,
+      "axes": {
+        "intelligence": 80.07363013698631,
+        "calibration": 36.764309957143894,
+        "speed": 84.3621367799104,
+        "cost": 41.45387606228526
+      }
+    },
+    {
+      "key": "gliner2",
+      "score": 53.036703605200245,
+      "axes": {
+        "intelligence": 56.03618375536185,
+        "calibration": 23.668537162731784,
+        "speed": 71.82859826025441,
+        "cost": 83.05556459946698
+      }
+    },
+    {
+      "key": "classifier-dev-fast",
+      "score": 84.83602134050503,
+      "axes": {
+        "intelligence": 90.07757368202573,
+        "calibration": 77.8658124426079,
+        "speed": 87.59107265834845,
+        "cost": 84.31363764158988
+      }
+    },
+    {
+      "key": "jqv",
+      "score": 67.16195181128404,
+      "axes": {
+        "intelligence": 76.13283520132836,
+        "calibration": 74.85945842449146,
+        "speed": 67.60016169685412,
+        "cost": 52.81129490202756
+      }
+    },
+    {
+      "key": "qwen3.8-27b",
+      "score": 25.471899547573617,
+      "axes": {
+        "intelligence": 74.60014515231052,
+        "calibration": 92.09887121241667,
+        "speed": 61.270489995780956,
+        "cost": 0
+      }
+    },
+    {
+      "key": "needle-3-tools",
+      "score": 19.21625883571747,
+      "axes": {
+        "intelligence": 39.53196347031963,
+        "calibration": null,
+        "speed": 52.842525649949984,
+        "cost": 65.27447796986436
+      }
+    },
+    {
+      "key": "needle-3",
+      "score": 16.756103122235842,
+      "axes": {
+        "intelligence": 22.417877404178775,
+        "calibration": null,
+        "speed": 59.92368509307548,
+        "cost": 58.68121468207322
+      }
+    }
+  ],
+  "ranked_count": 26,
+  "public_key_compatibility_passed": 231,
+  "task_counts": {
+    "easy": {
+      "public": 48,
+      "heldout_or_imported": 24
+    },
+    "standard": {
+      "public": 72,
+      "heldout_or_imported": 24
+    },
+    "judge": {
+      "public": 0,
+      "heldout_or_imported": 146
+    },
+    "hard": {
+      "public": 111,
+      "heldout_or_imported": 109
+    }
+  },
+  "single_task_exact_gold": {
+    "n": 1,
+    "n_probability": 1,
+    "accuracy": 1,
+    "ece": 0.35,
+    "mean_tvd": 0.0,
+    "calibration_score": 65.0,
+    "outcomes": [
+      {
+        "id": "hard-opus-b-probability-02",
+        "probs": {
+          "bad_push": 0.2,
+          "database_hardware": 0.15,
+          "upstream_provider": 0.65
+        },
+        "correct": true
+      }
+    ]
+  },
+  "single_task_sharpened": {
+    "n": 1,
+    "n_probability": 1,
+    "accuracy": 1,
+    "ece": 0.0,
+    "mean_tvd": 0.35,
+    "calibration_score": 82.5,
+    "outcomes": [
+      {
+        "id": "hard-opus-b-probability-02",
+        "probs": {
+          "bad_push": 0.0,
+          "upstream_provider": 1.0,
+          "database_hardware": 0.0
+        },
+        "correct": true
+      }
+    ]
+  },
+  "public_hard_gold": {
+    "n": 111,
+    "n_probability": 10,
+    "accuracy": 1,
+    "ece": 0.029976576576576583,
+    "mean_tvd": 0.0,
+    "calibration_score": 97.00234234234233,
+    "outcomes": [
+      {
+        "id": "hard-opus-a-long_policy-01",
+        "probs": {
+          "deny_vacancy_exclusion": 0.0,
+          "deny_repeated_seepage": 0.0,
+          "pay_subject_to_10000_sublimit": 0.0,
+          "pay_subject_to_15000_sublimit": 1.0,
+          "pay_full_estimate_less_deductible": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-long_policy-04",
+        "probs": {
+          "budget_holder": 0.0,
+          "department_head": 0.0,
+          "vp_and_finance_director": 0.0,
+          "cfo": 1.0,
+          "executive_committee": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-long_policy-08",
+        "probs": {
+          "full_repair_no_charge": 0.0,
+          "parts_covered_labour_charged": 1.0,
+          "pro_rata_replacement_credit": 0.0,
+          "not_covered": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-long_policy-09",
+        "probs": {
+          "no_license_required": 0.0,
+          "license_exception_lvs": 0.0,
+          "license_required": 1.0,
+          "shipment_prohibited": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-long_policy-11",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-long_policy-13",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-long_policy-17",
+        "probs": {
+          "security_incident_response": 0.0,
+          "no_page_ticket_only": 0.0,
+          "database_oncall": 1.0,
+          "vendor_support": 0.0,
+          "platform_oncall": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-long_policy-19",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-probability-03",
+        "probs": {
+          "no": 0.3818,
+          "yes": 0.6182
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-probability-04",
+        "probs": {
+          "early": 0.0667,
+          "late": 0.3333,
+          "on_time": 0.6
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-probability-07",
+        "probs": {
+          "escalated": 0.6667,
+          "reopened": 0.0833,
+          "resolved_first_contact": 0.25
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-probability-08",
+        "probs": {
+          "no": 0.71,
+          "yes": 0.29
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-temporal_numeric-03",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-temporal_numeric-06",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-temporal_numeric-07",
+        "probs": {
+          "sep_24": 0.0,
+          "sep_25": 0.0,
+          "sep_26": 1.0,
+          "sep_27": 0.0,
+          "sep_28": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-temporal_numeric-09",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-a-temporal_numeric-12",
+        "probs": {
+          "0": 0.0,
+          "1": 1.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-ambiguous-02",
+        "probs": {
+          "cannot_determine": 0.0,
+          "real_incident": 1.0,
+          "false_positive": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-ambiguous-03",
+        "probs": {
+          "within_limitation": 0.0,
+          "time_barred": 1.0,
+          "insufficient_information": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-ambiguous-07",
+        "probs": {
+          "within_policy": 1.0,
+          "over_limit": 0.0,
+          "insufficient_information": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-ambiguous-09",
+        "probs": {
+          "legitimate": 1.0,
+          "compromised": 0.0,
+          "inconclusive": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-ambiguous-10",
+        "probs": {
+          "ask_user_which_alex": 1.0,
+          "send_to_alex_moreno": 0.0,
+          "send_to_alexandra_lind": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-ambiguous-11",
+        "probs": {
+          "grade_correct": 0.0,
+          "grade_should_be_higher": 0.0,
+          "cannot_determine": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-ambiguous-13",
+        "probs": {
+          "cannot_determine": 1.0,
+          "charge_platform_team": 0.0,
+          "charge_data_team": 0.0,
+          "split_50_50": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-multi_hop-03",
+        "probs": {
+          "tier1_team_lead": 0.0,
+          "tier2_department_head": 0.0,
+          "tier3_cfo": 1.0,
+          "tier4_board": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-multi_hop-04",
+        "probs": {
+          "no_page_ticket_only": 0.0,
+          "ana": 0.0,
+          "bjorn": 1.0,
+          "chen": 0.0,
+          "dmitri": 0.0,
+          "esra": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-multi_hop-05",
+        "probs": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 1.0,
+          "3": 0.0,
+          "4": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-multi_hop-07",
+        "probs": {
+          "no_credit": 0.0,
+          "credit_10_percent": 0.0,
+          "credit_20_percent": 1.0,
+          "credit_25_percent": 0.0,
+          "credit_50_percent": 0.0,
+          "credit_full_month": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-multi_hop-08",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-probability-01",
+        "probs": {
+          "customer_wins": 0.25,
+          "customer_withdraws": 0.1,
+          "merchant_wins": 0.65
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-probability-02",
+        "probs": {
+          "bad_push": 0.2,
+          "database_hardware": 0.15,
+          "upstream_provider": 0.65
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-probability-03",
+        "probs": {
+          "no": 0.3125,
+          "yes": 0.6875
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-probability-04",
+        "probs": {
+          "attended": 0.8,
+          "late_cancellation": 0.12,
+          "no_show": 0.08
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-probability-06",
+        "probs": {
+          "modified": 0.0625,
+          "overturned": 0.25,
+          "upheld": 0.6875
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-tradeoff-01",
+        "probs": {
+          "escalate_to_security": 0.0,
+          "page_oncall": 0.0,
+          "escalate_to_engineering": 1.0,
+          "process_refund": 0.0,
+          "send_kb_article": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-tradeoff-03",
+        "probs": {
+          "order_a": 0.0,
+          "order_b": 1.0,
+          "order_c": 0.0,
+          "order_d": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-tradeoff-06",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-tradeoff-07",
+        "probs": {
+          "out_of_scope": 0.0,
+          "p3_backlog": 0.0,
+          "p2_fix_30d": 0.0,
+          "p1_fix_7d": 0.0,
+          "p0_fix_24h": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-tradeoff-08",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-b-tradeoff-12",
+        "probs": {
+          "wait_for_inspection": 0.0,
+          "refund_now": 1.0,
+          "offer_store_credit": 0.0,
+          "escalate_to_fraud_team": 0.0,
+          "deny_refund": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-long_policy-02",
+        "probs": {
+          "erase_all": 0.0,
+          "restrict_all_pending_legal_hold": 0.0,
+          "erase_but_retain_transaction_records": 1.0,
+          "reject_unverified_request": 0.0,
+          "erase_marketing_only": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-long_policy-03",
+        "probs": {
+          "eur_0": 0.0,
+          "eur_150": 0.0,
+          "eur_200": 0.0,
+          "eur_300": 0.0,
+          "eur_400": 1.0,
+          "eur_600": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-long_policy-04",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-long_policy-05",
+        "probs": {
+          "0": 0.0,
+          "1": 1.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-long_policy-08",
+        "probs": {
+          "0": 0.0,
+          "1": 1.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-long_policy-10",
+        "probs": {
+          "full_credit": 0.0,
+          "credit_minus_restocking_fee": 1.0,
+          "repair_or_replace_only": 0.0,
+          "reject_return": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-long_policy-11",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-probability-03",
+        "probs": {
+          "halvorsen_polymer": 0.1964,
+          "kuznets_technik": 0.6027,
+          "ortega_seal_works": 0.2009
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-temporal_numeric-02",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-temporal_numeric-03",
+        "probs": {
+          "eur_692_00": 1.0,
+          "eur_617_00": 0.0,
+          "eur_688_00": 0.0,
+          "eur_693_90": 0.0,
+          "eur_812_00": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-temporal_numeric-04",
+        "probs": {
+          "usd_2222_50": 0.0,
+          "usd_2303_01": 0.0,
+          "usd_2303_33": 0.0,
+          "usd_2335_00": 1.0,
+          "usd_2340_00": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-temporal_numeric-06",
+        "probs": {
+          "sep_15_office_chair": 0.0,
+          "sep_16_taxi": 0.0,
+          "sep_17_parking": 0.0,
+          "sep_18_book_set": 1.0,
+          "sep_21_client_dinner": 0.0,
+          "none_declined": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-temporal_numeric-08",
+        "probs": {
+          "eur_506_06": 0.0,
+          "eur_498_81": 1.0,
+          "eur_513_69": 0.0,
+          "eur_497_40": 0.0,
+          "eur_532_01": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-opus-c-temporal_numeric-12",
+        "probs": {
+          "covered": 0.0,
+          "expired_24_month_term": 0.0,
+          "expired_30_month_cap": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-adversarial-01",
+        "probs": {
+          "grant_access": 0.0,
+          "deny_missing_approval": 1.0,
+          "deny_inactive_user": 0.0,
+          "grant_owner_exception": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-adversarial-06",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-adversarial-07",
+        "probs": {
+          "retain_until_2031": 1.0,
+          "delete_now": 0.0,
+          "retain_indefinitely": 0.0,
+          "needs_signature_review": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-adversarial-08",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-adversarial-09",
+        "probs": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 1.0,
+          "3": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-adversarial-11",
+        "probs": {
+          "standard_research": 1.0,
+          "ethics_review": 0.0,
+          "major_grants": 0.0,
+          "manual_hold": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-01",
+        "probs": {
+          "reject_tier": 0.0,
+          "accept_s2_dusk": 1.0,
+          "reject_cutoff": 0.0,
+          "reroute_s3": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-02",
+        "probs": {
+          "heron_q2": 0.0,
+          "insufficient_information": 0.0,
+          "security_primary": 1.0,
+          "executive_bridge": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-05",
+        "probs": {
+          "pay_manager_approved": 0.0,
+          "require_finance_board": 0.0,
+          "reject_category": 0.0,
+          "require_director": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-07",
+        "probs": {
+          "manual_equivalency": 0.0,
+          "deny_score": 0.0,
+          "admit": 1.0,
+          "deny_prerequisite": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-08",
+        "probs": {
+          "safety_shutdown": 0.0,
+          "local_maintenance": 0.0,
+          "insufficient_log": 0.0,
+          "central_engineering": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-09",
+        "probs": {
+          "confirm_l3": 0.0,
+          "require_steward": 1.0,
+          "switch_l4": 0.0,
+          "reject_capacity": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-10",
+        "probs": {
+          "deny_sensitive": 0.0,
+          "needs_field_review": 0.0,
+          "reduce_to_30_days": 0.0,
+          "approve_45_days": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-multi_hop-12",
+        "probs": {
+          "wrong_issue_class": 0.0,
+          "expired": 0.0,
+          "covered_recurrence": 0.0,
+          "needs_authentication": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-02",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-04",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-05",
+        "probs": {
+          "0": 1.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-06",
+        "probs": {
+          "close_confirmed": 0.0,
+          "keep_open_unresolved": 1.0,
+          "close_agent_verified": 0.0,
+          "await_internal_metrics": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-08",
+        "probs": {
+          "on_time": 0.0,
+          "late": 1.0,
+          "indeterminate": 0.0,
+          "canceled": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-10",
+        "probs": {
+          "ready_one_review": 0.0,
+          "ready_two_reviews": 0.0,
+          "blocked_second_review": 1.0,
+          "blocked_failed_test": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-13",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-a-trap-15",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-01",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-02",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-05",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-08",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-10",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-14",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-15",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-judge_hard-18",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-long_policy-01",
+        "probs": {
+          "approve_all": 0.0,
+          "approve_meals_only": 0.0,
+          "approve_lodging_only": 0.0,
+          "reject_entire_claim": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-long_policy-02",
+        "probs": {
+          "analytics_owner_only": 0.0,
+          "privacy_only": 0.0,
+          "privacy_and_security": 0.0,
+          "deny_current_export": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-long_policy-05",
+        "probs": {
+          "delete_everything": 0.0,
+          "delete_profile_omar_april_and_table": 1.0,
+          "delete_only_profile": 0.0,
+          "delete_nothing": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-long_policy-06",
+        "probs": {
+          "harbor_neighbors": 0.0,
+          "east_ward": 1.0,
+          "river_arts": 0.0,
+          "no_award": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-routing_hard-01",
+        "probs": {
+          "spreadsheet_formula": 0.0,
+          "office_file_repair": 1.0,
+          "data_pipeline": 0.0,
+          "desktop_support": 0.0,
+          "finance_review": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-routing_hard-02",
+        "probs": {
+          "payment_disputes": 0.0,
+          "ledger_reconciliation": 1.0,
+          "mobile_app": 0.0,
+          "customer_support": 0.0,
+          "fraud_review": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-routing_hard-03",
+        "probs": {
+          "authoritative_dns": 0.0,
+          "network_dns": 1.0,
+          "tls_certificates": 0.0,
+          "api_platform": 0.0,
+          "endpoint_devices": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-routing_hard-07",
+        "probs": {
+          "code_signing": 0.0,
+          "release_notarization": 1.0,
+          "macos_runtime": 0.0,
+          "ci_infrastructure": 0.0,
+          "endpoint_security": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-routing_hard-09",
+        "probs": {
+          "vpn_network": 0.0,
+          "source_access": 1.0,
+          "git_client": 0.0,
+          "repository_admin": 0.0,
+          "identity_login": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-temporal_numeric-01",
+        "probs": {
+          "before_open": 0.0,
+          "within_window": 0.0,
+          "late_by_under_2h": 1.0,
+          "late_by_2h_or_more": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-temporal_numeric-02",
+        "probs": {
+          "at_least_100gb_below": 0.0,
+          "under_100gb_below": 0.0,
+          "exactly_equal": 0.0,
+          "over_limit": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-temporal_numeric-03",
+        "probs": {
+          "6_credits": 0.0,
+          "9_credits": 1.0,
+          "12_credits": 0.0,
+          "15_credits": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-b-temporal_numeric-04",
+        "probs": {
+          "pass": 1.0,
+          "narrow_fail": 0.0,
+          "clear_fail": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-03",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-05",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-07",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-08",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-09",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-10",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-11",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-13",
+        "probs": {
+          "no": 1.0,
+          "yes": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-judge_hard-15",
+        "probs": {
+          "no": 0.0,
+          "yes": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-multi_hop-07",
+        "probs": {
+          "reject_draw": 0.0,
+          "release_draw": 0.0,
+          "partial_release": 0.0,
+          "programme_review": 1.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-multi_hop-09",
+        "probs": {
+          "bus_substitution": 1.0,
+          "call_fen_cross": 0.0,
+          "pass_fen_cross": 0.0,
+          "terminate_oakmere": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-multi_hop-11",
+        "probs": {
+          "documentation_needed": 0.0,
+          "coverage_confirmed": 0.0,
+          "coverage_excluded": 1.0,
+          "adjuster_referral": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-multi_hop-12",
+        "probs": {
+          "digital_copy_only": 0.0,
+          "conservation_hold": 1.0,
+          "deny_request": 0.0,
+          "supervised_delivery": 0.0
+        },
+        "correct": true
+      },
+      {
+        "id": "hard-sol-c-multi_hop-13",
+        "probs": {
+          "scrap_lot": 0.0,
+          "normal_release": 1.0,
+          "rework": 0.0,
+          "engineering_review": 0.0
+        },
+        "correct": true
+      }
+    ]
+  },
+  "mutation_results": {
+    "missing_label": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "label keys mismatch: missing=['bad_push'] extra=[]",
+      "correct": false,
+      "predicted": null
+    },
+    "extra_label": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "label keys mismatch: missing=[] extra=['extraneous']",
+      "correct": false,
+      "predicted": null
+    },
+    "negative": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "prob['bad_push'] out of [0,1]: -0.1",
+      "correct": false,
+      "predicted": null
+    },
+    "nan": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "prob['bad_push'] is not finite",
+      "correct": false,
+      "predicted": null
+    },
+    "sum_zero": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "probs sum to 0.0, tolerance 0.001",
+      "correct": false,
+      "predicted": null
+    },
+    "rounding_1.01": {
+      "valid": true,
+      "strict_valid": false,
+      "renormalized": true,
+      "probs": {
+        "bad_push": 0.19801980198019803,
+        "database_hardware": 0.1485148514851485,
+        "upstream_provider": 0.6534653465346535
+      },
+      "predicted": "upstream_provider",
+      "correct": true
+    }
+  },
+  "label_only_maximum_score": 31.622776601683803,
+  "comparisons": {
+    "jev-1.13.0": {
+      "tiers": {
+        "easy": 1.0,
+        "standard": 0.9895833333333334,
+        "judge": 0.9452054794520548,
+        "hard": 0.740909090909091
+      },
+      "hard_counts": {
+        "c": 81,
+        "w": 30
+      },
+      "hard_by_family": {
+        "adversarial": {
+          "correct": 12,
+          "n": 12,
+          "accuracy": 1.0
+        },
+        "ambiguous": {
+          "correct": 11,
+          "n": 14,
+          "accuracy": 0.7857142857142857
+        },
+        "judge_hard": {
+          "correct": 26,
+          "n": 33,
+          "accuracy": 0.7878787878787878
+        },
+        "long_policy": {
+          "correct": 23,
+          "n": 38,
+          "accuracy": 0.6052631578947368
+        },
+        "multi_hop": {
+          "correct": 30,
+          "n": 35,
+          "accuracy": 0.8571428571428571
+        },
+        "probability": {
+          "correct": 16,
+          "n": 20,
+          "accuracy": 0.8
+        },
+        "routing_hard": {
+          "correct": 10,
+          "n": 10,
+          "accuracy": 1.0
+        },
+        "temporal_numeric": {
+          "correct": 8,
+          "n": 30,
+          "accuracy": 0.26666666666666666
+        },
+        "tradeoff": {
+          "correct": 11,
+          "n": 12,
+          "accuracy": 0.9166666666666666
+        },
+        "trap": {
+          "correct": 16,
+          "n": 16,
+          "accuracy": 1.0
+        }
+      },
+      "cost": {
+        "kind": "measured",
+        "usd_per_1000": 0.03991423595505617,
+        "basis": "public tariff x measured tokens (https://docs.typesafe.ai/models (output tokens not billed)) [corrected in v1.2.3: the price now averages each of the 314 v1.1 decisions once; see results/v1.2/cost-correction-v1.2.3.json] | public tariff x measured tokens (hard-tier run)",
+        "usd_per_1000_v11_tiers": 0.024698140127388538,
+        "usd_per_1000_hard": 0.06163175454545452,
+        "self_host_sensitivity": null
+      },
+      "speed": {
+        "p50_s_raw": 0.6524335257709026,
+        "p95_s_raw": 0.7221905551850795,
+        "p50_s_adjusted": 0.6524335257709026,
+        "p95_s_adjusted": 0.7221905551850795,
+        "adjustment": "none (production API)",
+        "run": "serial 242-decision standard+judge run",
+        "hardware": null,
+        "measured_where": "from a Hetzner server in Germany, network included",
+        "hard_tier_p50_s": 0.6717139892280102,
+        "hard_tier_p95_s": 0.8295219600200652
+      }
+    },
+    "gemini-3.1-flash-lite": {
+      "tiers": {
+        "easy": 1.0,
+        "standard": 0.9895833333333334,
+        "judge": 0.9315068493150684,
+        "hard": 0.75
+      },
+      "hard_counts": {
+        "c": 82,
+        "w": 29
+      },
+      "hard_by_family": {
+        "adversarial": {
+          "correct": 12,
+          "n": 12,
+          "accuracy": 1.0
+        },
+        "ambiguous": {
+          "correct": 11,
+          "n": 14,
+          "accuracy": 0.7857142857142857
+        },
+        "judge_hard": {
+          "correct": 29,
+          "n": 33,
+          "accuracy": 0.8787878787878788
+        },
+        "long_policy": {
+          "correct": 25,
+          "n": 38,
+          "accuracy": 0.6578947368421053
+        },
+        "multi_hop": {
+          "correct": 27,
+          "n": 35,
+          "accuracy": 0.7714285714285715
+        },
+        "probability": {
+          "correct": 18,
+          "n": 20,
+          "accuracy": 0.9
+        },
+        "routing_hard": {
+          "correct": 10,
+          "n": 10,
+          "accuracy": 1.0
+        },
+        "temporal_numeric": {
+          "correct": 9,
+          "n": 30,
+          "accuracy": 0.3
+        },
+        "tradeoff": {
+          "correct": 9,
+          "n": 12,
+          "accuracy": 0.75
+        },
+        "trap": {
+          "correct": 15,
+          "n": 16,
+          "accuracy": 0.9375
+        }
+      },
+      "cost": {
+        "kind": "measured",
+        "usd_per_1000": 0.26378698501872655,
+        "basis": "public tariff x measured tokens (https://ai.google.dev/gemini-api/docs/pricing (paid tier, read 2026-09-19)) [corrected in v1.2.3: the price now averages each of the 314 v1.1 decisions once; see results/v1.2/cost-correction-v1.2.3.json] | public tariff x measured tokens (hard-tier run)",
+        "usd_per_1000_v11_tiers": 0.17806050955414016,
+        "usd_per_1000_hard": 0.38614204545454534,
+        "self_host_sensitivity": null
+      },
+      "speed": {
+        "p50_s_raw": 0.756230715662241,
+        "p95_s_raw": 0.8761593606323003,
+        "p50_s_adjusted": 0.756230715662241,
+        "p95_s_adjusted": 0.8761593606323003,
+        "adjustment": "none (production API)",
+        "run": "serial 242-decision standard+judge run",
+        "hardware": null,
+        "measured_where": "from a Hetzner server in Germany, network included",
+        "hard_tier_p50_s": 0.7880580946803093,
+        "hard_tier_p95_s": 1.4522175978869198
+      }
+    },
+    "deepseek-flash": {
+      "tiers": {
+        "easy": 0.9861111111111112,
+        "standard": 0.9895833333333334,
+        "judge": 0.9315068493150684,
+        "hard": 0.95
+      },
+      "hard_counts": {
+        "c": 107,
+        "f": 3,
+        "w": 1
+      },
+      "hard_by_family": {
+        "adversarial": {
+          "correct": 12,
+          "n": 12,
+          "accuracy": 1.0
+        },
+        "ambiguous": {
+          "correct": 13,
+          "n": 14,
+          "accuracy": 0.9285714285714286
+        },
+        "judge_hard": {
+          "correct": 30,
+          "n": 33,
+          "accuracy": 0.9090909090909091
+        },
+        "long_policy": {
+          "correct": 34,
+          "n": 38,
+          "accuracy": 0.8947368421052632
+        },
+        "multi_hop": {
+          "correct": 35,
+          "n": 35,
+          "accuracy": 1.0
+        },
+        "probability": {
+          "correct": 19,
+          "n": 20,
+          "accuracy": 0.95
+        },
+        "routing_hard": {
+          "correct": 10,
+          "n": 10,
+          "accuracy": 1.0
+        },
+        "temporal_numeric": {
+          "correct": 28,
+          "n": 30,
+          "accuracy": 0.9333333333333333
+        },
+        "tradeoff": {
+          "correct": 12,
+          "n": 12,
+          "accuracy": 1.0
+        },
+        "trap": {
+          "correct": 16,
+          "n": 16,
+          "accuracy": 1.0
+        }
+      },
+      "cost": {
+        "kind": "measured",
+        "usd_per_1000": 0.593682584269663,
+        "basis": "public tariff x measured tokens (https://api-docs.deepseek.com/quick_start/pricing (cache-miss off-peak; the run is on a Saturday, off-peak all day)) [corrected in v1.2.3: the price now averages each of the 314 v1.1 decisions once; see results/v1.2/cost-correction-v1.2.3.json] | public tariff x measured tokens (hard-tier run)",
+        "usd_per_1000_v11_tiers": 0.2505138535031847,
+        "usd_per_1000_hard": 1.083477954545455,
+        "self_host_sensitivity": null
+      },
+      "speed": {
+        "p50_s_raw": 1.4163860343396664,
+        "p95_s_raw": 4.886470635980367,
+        "p50_s_adjusted": 1.4163860343396664,
+        "p95_s_adjusted": 4.886470635980367,
+        "adjustment": "none (production API)",
+        "run": "serial 242-decision standard+judge run",
+        "hardware": null,
+        "measured_where": "from a Hetzner server in Germany, network included",
+        "hard_tier_p50_s": 3.1479117795825005,
+        "hard_tier_p95_s": 27.954364685714225
+      }
+    }
+  },
+  "paired_public_hard": {
+    "gemini-3.1-flash-lite": {
+      "both_correct": 74,
+      "jev_only": 7,
+      "other_only": 8,
+      "neither_correct": 22,
+      "exact_mcnemar_p": 1,
+      "scope": "111 fixed public hard tasks; descriptive, not evidence of production representativeness"
+    },
+    "deepseek-flash": {
+      "both_correct": 79,
+      "jev_only": 2,
+      "other_only": 28,
+      "neither_correct": 2,
+      "exact_mcnemar_p": 8.67992639541626e-07,
+      "scope": "111 fixed public hard tasks; descriptive, not evidence of production representativeness"
+    }
+  },
+  "haiku_present": false,
+  "phishing_supplement": {
+    "commit": "1d56e8c64d029a9554a0874e2ef2901ed196e230",
+    "metrics_sha256": "8beb3f727dd48adc5163c398e73fae639bcc6eec568cfa1e243331843b334e69",
+    "confusion": {
+      "jev": {
+        "tp": 432,
+        "tn": 820,
+        "fp": 180,
+        "fn": 568,
+        "accuracy": 0.626,
+        "recall": 0.432,
+        "fpr": 0.18
+      },
+      "llm": {
+        "tp": 764,
+        "tn": 862,
+        "fp": 138,
+        "fn": 236,
+        "accuracy": 0.813,
+        "recall": 0.764,
+        "fpr": 0.138
+      }
+    },
+    "scope": "aggregate arithmetic and code/report inspection only; raw model responses not shipped",
+    "additional_jev_errors_per_1000": 186.99999999999994,
+    "reported_list_price_saving_per_1000": 0.42400000000000004,
+    "saving_usd_per_additional_error": 0.002267379679144386
+  },
+  "full_cohort_economics": {
+    "counts": {
+      "jev-1.13.0": {
+        "correct": 468,
+        "n": 534
+      },
+      "deepseek-flash": {
+        "correct": 511,
+        "n": 534
+      }
+    },
+    "deepseek_extra_usd_per_1000": 0.5537683483146069,
+    "deepseek_extra_correct_per_1000": 80.52434456928839,
+    "usd_per_additional_correct": 0.006877030186046513,
+    "scope": "aggregate 534-item mix; equal error costs; excludes latency, retries and downstream costs"
+  }
+}

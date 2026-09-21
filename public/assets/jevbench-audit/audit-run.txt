@@ -1,0 +1,182 @@
+{
+  "upstream_commit": "f8ce71361165846101d02ebc83ad44e47ae44fc3",
+  "revision": "v1.2.7",
+  "ranked_count": 26,
+  "public_key_compatibility_passed": 231,
+  "task_counts": {
+    "easy": {
+      "public": 48,
+      "heldout_or_imported": 24
+    },
+    "standard": {
+      "public": 72,
+      "heldout_or_imported": 24
+    },
+    "judge": {
+      "public": 0,
+      "heldout_or_imported": 146
+    },
+    "hard": {
+      "public": 111,
+      "heldout_or_imported": 109
+    }
+  },
+  "single_task_exact_gold": {
+    "n": 1,
+    "n_probability": 1,
+    "accuracy": 1,
+    "ece": 0.35,
+    "mean_tvd": 0.0,
+    "calibration_score": 65.0,
+    "outcomes": [
+      {
+        "id": "hard-opus-b-probability-02",
+        "probs": {
+          "bad_push": 0.2,
+          "database_hardware": 0.15,
+          "upstream_provider": 0.65
+        },
+        "correct": true
+      }
+    ]
+  },
+  "single_task_sharpened": {
+    "n": 1,
+    "n_probability": 1,
+    "accuracy": 1,
+    "ece": 0.0,
+    "mean_tvd": 0.35,
+    "calibration_score": 82.5,
+    "outcomes": [
+      {
+        "id": "hard-opus-b-probability-02",
+        "probs": {
+          "bad_push": 0.0,
+          "upstream_provider": 1.0,
+          "database_hardware": 0.0
+        },
+        "correct": true
+      }
+    ]
+  },
+  "mutation_results": {
+    "missing_label": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "label keys mismatch: missing=['bad_push'] extra=[]",
+      "correct": false,
+      "predicted": null
+    },
+    "extra_label": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "label keys mismatch: missing=[] extra=['extraneous']",
+      "correct": false,
+      "predicted": null
+    },
+    "negative": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "prob['bad_push'] out of [0,1]: -0.1",
+      "correct": false,
+      "predicted": null
+    },
+    "nan": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "prob['bad_push'] is not finite",
+      "correct": false,
+      "predicted": null
+    },
+    "sum_zero": {
+      "valid": false,
+      "strict_valid": false,
+      "renormalized": false,
+      "error": "probs sum to 0.0, tolerance 0.001",
+      "correct": false,
+      "predicted": null
+    },
+    "rounding_1.01": {
+      "valid": true,
+      "strict_valid": false,
+      "renormalized": true,
+      "probs": {
+        "bad_push": 0.19801980198019803,
+        "database_hardware": 0.1485148514851485,
+        "upstream_provider": 0.6534653465346535
+      },
+      "predicted": "upstream_provider",
+      "correct": true
+    }
+  },
+  "label_only_maximum_score": 31.622776601683803,
+  "paired_public_hard": {
+    "gemini-3.1-flash-lite": {
+      "both_correct": 74,
+      "jev_only": 7,
+      "other_only": 8,
+      "neither_correct": 22,
+      "exact_mcnemar_p": 1,
+      "scope": "111 fixed public hard tasks; descriptive, not evidence of production representativeness"
+    },
+    "deepseek-flash": {
+      "both_correct": 79,
+      "jev_only": 2,
+      "other_only": 28,
+      "neither_correct": 2,
+      "exact_mcnemar_p": 8.67992639541626e-07,
+      "scope": "111 fixed public hard tasks; descriptive, not evidence of production representativeness"
+    }
+  },
+  "haiku_present": false,
+  "phishing_supplement": {
+    "commit": "1d56e8c64d029a9554a0874e2ef2901ed196e230",
+    "metrics_sha256": "8beb3f727dd48adc5163c398e73fae639bcc6eec568cfa1e243331843b334e69",
+    "confusion": {
+      "jev": {
+        "tp": 432,
+        "tn": 820,
+        "fp": 180,
+        "fn": 568,
+        "accuracy": 0.626,
+        "recall": 0.432,
+        "fpr": 0.18
+      },
+      "llm": {
+        "tp": 764,
+        "tn": 862,
+        "fp": 138,
+        "fn": 236,
+        "accuracy": 0.813,
+        "recall": 0.764,
+        "fpr": 0.138
+      }
+    },
+    "scope": "aggregate arithmetic and code/report inspection only; raw model responses not shipped",
+    "additional_jev_errors_per_1000": 186.99999999999994,
+    "reported_list_price_saving_per_1000": 0.42400000000000004,
+    "saving_usd_per_additional_error": 0.002267379679144386
+  },
+  "full_cohort_economics": {
+    "counts": {
+      "jev-1.13.0": {
+        "correct": 468,
+        "n": 534
+      },
+      "deepseek-flash": {
+        "correct": 511,
+        "n": 534
+      }
+    },
+    "deepseek_extra_usd_per_1000": 0.5537683483146069,
+    "deepseek_extra_correct_per_1000": 80.52434456928839,
+    "usd_per_additional_correct": 0.006877030186046513,
+    "scope": "aggregate 534-item mix; equal error costs; excludes latency, retries and downstream costs"
+  }
+}
+Public-hard gold calibration: {'n': 111, 'n_probability': 10, 'accuracy': 1, 'ece': 0.029976576576576583, 'mean_tvd': 0.0, 'calibration_score': 97.00234234234233}
+PASS: all assertions; 31 aggregate rows; 231 public keys
