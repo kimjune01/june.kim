@@ -90,11 +90,11 @@ The hard questions were model-authored and cross-reviewed. The stated 95% human 
 
 ## Discussion
 
-My judgment is that **DeepSeek V4.1 Flash is the better default trade for most tasks we use AI for**. That preference extends beyond the benchmark's 534 decisions and depends on the value of correct work. On this measured mix, an additional correct answer costs less than a cent. For work whose errors require human review, correction or another attempt, that is a small accuracy premium.
+**I would start with DeepSeek V4.1 Flash. It would take more evidence to convince me to choose Jev.** On this measured mix, DeepSeek costs about $0.55 more per thousand decisions and returns about 81 additional correct answers. The accuracy difference is substantial; the absolute price difference is small. For work whose errors require human review or correction, less than a cent per additional correct answer is a modest premium.
 
-Jev's lower price matters at high volume when decisions are simple and errors are cheap or reliably caught downstream. Tight latency requirements can also favor it. Its accuracy on the easy and standard tiers supports testing a bounded classifier for those workloads. The phishing results show why that test must use the actual decision: a low token bill can coexist with substantially more mistakes.
+That sets the burden of proof for choosing Jev. I would want evidence from the intended workload that its accuracy is acceptable and that its lower cost or latency materially improves the application. Naming a possible use case does not supply that evidence. Neither does a large cost ratio when both absolute prices are low. Until that comparison exists, the measured accuracy advantage gives me a reason to prefer DeepSeek.
 
-I would choose DeepSeek first for work where correctness matters, then test whether a smaller classifier preserves the required accuracy. I would not use Jev's composite first place as a reason to reverse that order. The observed DeepSeek result already includes thinking cost; disabling thinking might improve its economics, but the accuracy of that cheaper configuration remains unmeasured here.
+This is a default under uncertainty, not a finding that DeepSeek wins on every workload. Its observed result already includes thinking cost. Disabling thinking might improve its economics, but the accuracy of that cheaper configuration remains unmeasured here. Jev's composite first place does not resolve either question.
 
 Separating distribution fidelity from confidence calibration would make JevBench's probability scores easier to interpret. Publishing public-item responses would make them independently checkable. Adding the optimized cheap-model baseline would make the cost comparison more complete. Show the measured accuracy, price and latency together, and let the application set the acceptable error rate. The overall rank assigns a value to mistakes that the buyer still has to determine.
 

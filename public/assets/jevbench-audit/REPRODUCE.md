@@ -44,4 +44,4 @@ The composite checks reproduce arithmetic conditional on the supplied aggregates
 
 The phishing supplement checks aggregate arithmetic and inspects the published method. It does not rerun the model calls, refit the signal classifier or independently validate the reported significance tests.
 
-The post's preference for DeepSeek V4.1 Flash across most AI work is a discussion judgment about the value of accuracy. The benchmark does not sample that broader workload distribution. Findings had not received a maintainer response when this draft was prepared.
+The post's preference for starting with DeepSeek V4.1 Flash is a discussion judgment about its measured accuracy advantage and small absolute price premium. Choosing Jev would require evidence that its cost or latency advantage matters on the intended workload at acceptable accuracy. The benchmark does not establish a universal winner. Findings had not received a maintainer response when this draft was prepared.
