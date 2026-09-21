@@ -30,7 +30,7 @@ Applying the official formula to this item alone gives:
 | 20%, 65%, 15%: exact gold | Yes | 0 | 65.0 |
 | 0%, 100%, 0%: unsupported certainty | Yes | 0.35 | 82.5 |
 
-This is a controlled probe of the objective, not a statistical estimate of calibration from one observation. It also does not show that sharpening every answer would improve the leaderboard: the two components use different denominators across the full suite.
+This controlled probe demonstrates the formula's ordering for one fixed pair of responses. Its scope is limited to that comparison. The two components use different denominators across the full suite, so establishing an effect on the leaderboard would require regrading the models' actual responses.
 
 The same mismatch appears across the full public hard set. All ten probability items receive their exact gold distributions; the other 101 receive one-hot gold labels. Every label passes and every probability distribution matches its target, yet the calibration score is **97.0023**. [Probe output.](/assets/jevbench-audit/audit-results.json)
 
@@ -38,9 +38,9 @@ The same mismatch appears across the full public hard set. All ten probability i
 
 Jev ranks first on the JevBench Score and third on its weighted-accuracy view, behind GPT-5.6 Luna and DeepSeek. The overall score combines accuracy, calibration, speed and cost through a geometric mean. Each transformed axis has 25% weight. [Formula.](https://github.com/fstandhartinger/jevbench/blob/f8ce71361165846101d02ebc83ad44e47ae44fc3/jevbench/composite_v12.py)
 
-A model that returns labels without probabilities has no calibration score, which the composite treats as zero and then floors to one. A hypothetical classifier scoring 100 on accuracy, speed and cost would therefore reach **31.6 out of 100** overall. This is a consequence of the formula, not an observed error rate.
+A model that returns labels without probabilities has no calibration score, which the composite treats as zero and then floors to one. A hypothetical classifier scoring 100 on accuracy, speed and cost would therefore reach **31.6 out of 100** overall.
 
-Nonproduction endpoint latencies are doubled, with another 0.15 seconds added to the benchmark authors' own servers. The authors clearly disclose that this adjustment approximates production load rather than measures it. Some self-hosted models are priced using estimated hosted tariffs. The resulting board compares models, deployment conditions and economic assumptions together.
+Nonproduction endpoint latencies are doubled, with another 0.15 seconds added to the benchmark authors' own servers. The authors label this adjustment as an assumption about production load. Some self-hosted models are priced using estimated hosted tariffs. The resulting board compares models, deployment conditions and economic assumptions together.
 
 The score changed after measurement, as the [revision history](https://github.com/fstandhartinger/jevbench/blob/f8ce71361165846101d02ebc83ad44e47ae44fc3/README.md) records. The work-in-progress score had three axes and assigned half its capability weight to hard tasks. The final score has four axes and assigns 30% of its accuracy weight to hard tasks. Earlier views remain available.
 
@@ -60,7 +60,7 @@ Jev is about fifteen times cheaper than the tested DeepSeek configuration, which
 
 The cost and accuracy of DeepSeek with thinking disabled and a short constrained label remain unmeasured here. The published comparison does not include that configuration, and I have not run it.
 
-Across all 534 decisions, Jev has 468 correct answers and DeepSeek 511. Using the costs for that same cohort, DeepSeek costs **$0.554 more per thousand decisions** and returns **80.5 more correct answers per thousand**. Dividing the cost difference by the accuracy difference gives **$0.00688 per additional correct answer**, about 0.69 cents. This calculation treats errors equally and excludes latency, retries and downstream costs; it is not the benchmark's tier-weighted accuracy score.
+Across all 534 decisions, Jev has 468 correct answers and DeepSeek 511. Using the costs for that same cohort, DeepSeek costs **$0.554 more per thousand decisions** and returns **80.5 more correct answers per thousand**. Dividing the cost difference by the accuracy difference gives **$0.00688 per additional correct answer**, about 0.69 cents. This calculation uses unweighted task counts and treats errors equally. It excludes latency, retries and downstream costs.
 
 ## Published artifacts
 
@@ -84,9 +84,9 @@ The same study reports higher accuracy after extracting five signals and fitting
 
 ## Validation and limits
 
-All 231 public keys pass the scorer when encoded as one-hot answers, though that checks compatibility rather than the semantic truth of each key. Malformed probability maps fail closed in the mutations I ran. The aggregate score arithmetic and all 26 ranks agree. The authors disclose their deployment assumptions, their nonaffiliation with TypeSafe and earlier cost corrections.
+All 231 public keys pass the scorer when encoded as one-hot answers. This checks each key's compatibility with the grader; semantic correctness across the full set remains unaudited. Malformed probability maps fail closed in the mutations I ran. The aggregate score arithmetic and all 26 ranks agree. The authors disclose their deployment assumptions, their nonaffiliation with TypeSafe and earlier cost corrections.
 
-The hard questions were model-authored and cross-reviewed. The stated 95% human performance is an authoring target, not a measured human baseline. I found no proven miskeyed label and performed no exhaustive semantic adjudication. The calibration witness proves a mismatch between a requested quantity and its evaluation; it does not prove that fixing it changes the winner.
+The hard questions were model-authored and cross-reviewed. The 95% human-performance target appears in the authoring specification; no measured human baseline is reported. I found no proven miskeyed label. The calibration witness establishes a mismatch between a requested quantity and its evaluation. Its effect on the winning rank remains unmeasured.
 
 ## Discussion
 
@@ -94,7 +94,7 @@ The hard questions were model-authored and cross-reviewed. The stated 95% human 
 
 That sets the burden of proof for choosing Jev. I would want evidence from the intended workload that its accuracy is acceptable and that its lower cost or latency materially improves the application. Naming a possible use case does not supply that evidence. Neither does a large cost ratio when both absolute prices are low. Until that comparison exists, the measured accuracy advantage gives me a reason to prefer DeepSeek.
 
-This is a default under uncertainty, not a finding that DeepSeek wins on every workload. Its observed result already includes thinking cost. Disabling thinking might improve its economics, but the accuracy of that cheaper configuration remains unmeasured here. Jev's composite first place does not resolve either question.
+This default follows from the available measurements. Its applicability to a particular workload still requires testing. DeepSeek's observed result already includes thinking cost. A configuration with thinking disabled would need its own accuracy and cost measurements.
 
 Separating distribution fidelity from confidence calibration would make JevBench's probability scores easier to interpret. Publishing public-item responses would make them independently checkable. Adding the optimized cheap-model baseline would make the cost comparison more complete. Show the measured accuracy, price and latency together, and let the application set the acceptable error rate. The overall rank assigns a value to mistakes that the buyer still has to determine.
 
