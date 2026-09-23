@@ -105,9 +105,9 @@ body:has(main.stats-book) #lang-toggle { display: none; }
 .stats-book .stats-symbol-summary > a { font-size: .78rem; }
 .stats-book .stats-credit { color: var(--stats-muted); border-top: 1px solid var(--stats-line); margin-top: 2rem; padding-top: 1rem; font-size: .7rem; line-height: 1.5; }
 .stats-book .stats-learning-links p { margin: 0 0 .35rem; }
-.stats-book .stats-chatgpt-icon { display: inline-block; width: 1em; height: 1em; margin-right: .35em; vertical-align: -.12em; }
-.stats-book .stats-chatgpt-icon-dark, :root.light .stats-book .stats-chatgpt-icon-light { display: none; }
-:root.light .stats-book .stats-chatgpt-icon-dark { display: inline-block; }
+.stats-book .stats-chatgpt-line { display: flex; align-items: center; gap: .4em; }
+.stats-book .stats-chatgpt-icon { display: block; flex: none; width: 1.6em; height: 1.6em; background: center / contain no-repeat url('/assets/openai-white-monoblossom.svg'); }
+:root.light .stats-book .stats-chatgpt-icon { background-image: url('/assets/openai-black-monoblossom.svg'); }
 .stats-book .stats-settings, .stats-book .stats-readouts-row { display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
 .stats-book .stats-salary-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .2rem 1rem; }
 .stats-book input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--stats-blue); }
