@@ -1,6 +1,5 @@
 ---
 import {course,openIntroCourse,chapterHref} from '../../../lib/statistics/course';
-import {quizLink} from '../../../lib/statistics/quiz-link';
 import ChapterTable from '../../../components/ChapterTable.astro';
 import Layout from '../../../layouts/Base.astro';
 import Neighbors from '../../../components/Neighbors.astro';
@@ -11,8 +10,7 @@ import Neighbors from '../../../components/Neighbors.astro';
     <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
 
     <h1>◒ Statistics</h1>
-    <p class="text-gray-400 mb-2">The reading guide follows <a href="https://www.openintro.org/book/os/">OpenIntro Statistics</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
-    <p class="text-gray-400 mb-6">Small experiments, diagrams, and plain English. Runnable Scheme and Python in the deeper chapters.</p>
+    <p class="text-gray-400 mb-6">An interactive introduction, from the first chance experiment to inference, experiment design, and regression. A deeper OpenIntro reading guide follows the course.</p>
 
     <div class="flex justify-center my-6">
       <svg viewBox="0 0 400 180" class="w-full max-w-md" role="img" aria-labelledby="statistics-outline-figure" style="font-family: ui-monospace, monospace;">
@@ -30,12 +28,12 @@ import Neighbors from '../../../components/Neighbors.astro';
     </div>
 
     <h2>Statistics through experiments</h2>
-    <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. Sixteen chapters take you from first definitions through a university introduction: describing data, sampling, inference, experiment design, and regression. No statistics or programming background needed. Click a question for a chapter quiz in ChatGPT.</p>
-    <ChapterTable chapters={course.map(chapter=>({href:chapterHref(chapter.slug),title:chapter.title,desc:chapter.desc,questionHref:quizLink(chapter.title,chapterHref(chapter.slug))}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
+    <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. These sixteen chapters need no statistics or programming background.</p>
+    <ChapterTable chapters={course.map(chapter=>({href:chapterHref(chapter.slug),title:chapter.title,desc:chapter.desc}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
 
     <h2>The OpenIntro reading guide</h2>
-    <p class="text-gray-400 mb-6">Go deeper with worked examples and runnable code. For the mathematics behind chance, follow the companion <a href="/reading/probability/">Introduction to Probability</a>.</p>
-    <ChapterTable chapters={openIntroCourse.map(chapter=>({...chapter,questionHref:quizLink(chapter.title,chapter.href)}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
+    <p class="text-gray-400 mb-6">Go deeper with worked examples and runnable Scheme and Python in this guide to <a href="https://www.openintro.org/book/os/">OpenIntro Statistics</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>). For the mathematics behind chance, follow the companion <a href="/reading/probability/">Introduction to Probability</a>.</p>
+    <ChapterTable chapters={openIntroCourse} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
 
     <p class="text-gray-500 text-sm mt-8">📺 <a href="https://www.youtube.com/user/joshstarmer">StatQuest videos ↗</a></p>
     <p class="text-gray-500 text-sm">OpenIntro Statistics is by David Diez, Mine Çetinkaya-Rundel, and Christopher Barr. The introductory chapters include their own source credits and licensing.</p>
