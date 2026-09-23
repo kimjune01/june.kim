@@ -1,4 +1,6 @@
 ---
+import RegressionLab from '../../../../components/statistics/RegressionLab';
+import '../../../../components/statistics/statistics.css';
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
@@ -16,7 +18,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; CC BY-SA 3.0 &middot; <a href="https://www.openintro.org/book/os/">Chapter 8</a></p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
-      <p class="text-lg" style="max-width:none">Regression fits a line y = b0 + b1*x to data. The least squares method minimizes the sum of squared residuals. R-squared measures the fraction of variance explained. Inference for the slope tells you whether the relationship is real.</p>
+      <p class="text-lg" style="max-width:none">Regression fits a line y = b0 + b1*x to data. The least squares method minimizes the sum of squared residuals. R-squared measures the fraction of variance explained. Inference for the slope measures uncertainty about the linear association under the model’s assumptions; it does not establish causation.</p>
     </div>
 
     <!-- SVG: Scatter plot with regression line and residual lines -->
@@ -68,6 +70,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <!-- 1. Least squares -->
+    <div class="stats-book"><RegressionLab client:visible /></div>
+
     <h3>Least squares line</h3>
     <p>The slope b1 = r * (sy / sx) and the intercept b0 = y-bar - b1 * x-bar. These minimize the sum of squared residuals. The correlation r measures linear association; the regression line passes through (x-bar, y-bar).</p>
 
@@ -87,8 +91,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
 (define ss-xy (apply + (map (lambda (x y) (* (- x x-bar) (- y y-bar))) xs ys)))
 (define ss-xx (apply + (map (lambda (x) (* (- x x-bar) (- x x-bar))) xs)))
 
-(define b1 (/ (exact->inexact ss-xy) (exact->inexact ss-xx)))
-(define b0 (- (exact->inexact y-bar) (* b1 (exact->inexact x-bar))))
+(define b1 (/ (* 1.0 ss-xy) (* 1.0 ss-xx)))
+(define b0 (- (* 1.0 y-bar) (* b1 (* 1.0 x-bar))))
 
 (display "b0 (intercept) = ") (display b0) (newline)
 (display "b1 (slope)     = ") (display b1) (newline)
@@ -137,8 +141,8 @@ print(f"Predicted y at x=5: {b0 + b1 * 5:.2f}")
 (define y-hats (map predict xs))
 (define residuals (map - ys y-hats))
 
-(display "Predicted: ") (display (map (lambda (yh) (exact->inexact yh)) y-hats)) (newline)
-(display "Residuals: ") (display (map (lambda (r) (exact->inexact r)) residuals)) (newline)
+(display "Predicted: ") (display (map (lambda (yh) (* 1.0 yh)) y-hats)) (newline)
+(display "Residuals: ") (display (map (lambda (r) (* 1.0 r)) residuals)) (newline)
 
 ; Sum of residuals should be ~0
 (define sum-resid (apply + residuals))
@@ -181,9 +185,9 @@ print(f"SSE: {sum(r**2 for r in residuals):.2f}")
 (define residuals (map (lambda (x y) (- y (+ b0 (* b1 x)))) xs ys))
 (define sse (apply + (map (lambda (e) (* e e)) residuals)))
 
-(define r-squared (- 1 (/ sse (exact->inexact sst))))
+(define r-squared (- 1 (/ sse (* 1.0 sst))))
 
-(display "SST = ") (display (exact->inexact sst)) (newline)
+(display "SST = ") (display (* 1.0 sst)) (newline)
 (display "SSE = ") (display sse) (newline)
 (display "R^2 = ") (display r-squared) (newline)
 (display "The model explains ")
@@ -227,7 +231,7 @@ print(f"Model explains {r_sq*100:.1f}% of variance")
 (define x-bar (/ (apply + xs) n))
 (define ss-xx (apply + (map (lambda (x) (* (- x x-bar) (- x x-bar))) xs)))
 
-(define se-b1 (sqrt (/ mse (exact->inexact ss-xx))))
+(define se-b1 (sqrt (/ mse (* 1.0 ss-xx))))
 (define t-stat (/ b1 se-b1))
 
 (display "b1     = ") (display b1) (newline)

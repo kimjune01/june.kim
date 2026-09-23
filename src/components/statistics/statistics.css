@@ -128,9 +128,9 @@ body:has(main.stats-book) #lang-toggle { display: none; }
 .stats-book .stats-interval { stroke: var(--stats-blue); stroke-width: 2; }
 .stats-book .stats-interval-miss { stroke: var(--stats-amber); stroke-width: 2; stroke-dasharray: 3 2; }
 .stats-book .stats-town { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; margin: 1rem 0; }
-.stats-book .stats-town span { aspect-ratio: 1; border-radius: 50%; background: var(--stats-line); border: 2px solid transparent; }
-.stats-book .stats-town .chosen { background: var(--stats-blue); }
-.stats-book .stats-town .court { background: transparent; border-color: var(--stats-amber); }
+.stats-book .stats-town span { aspect-ratio: 1; border-radius: 50%; background: transparent; border: 1px solid var(--stats-line); }
+.stats-book .stats-town .chosen { background: var(--stats-blue); border-color: var(--stats-blue); }
+.stats-book .stats-town .court { background: transparent; border: 2px solid var(--stats-amber); }
 .stats-book .stats-arrival h2 { margin: .5rem 0 1rem; font-size: 1.5rem; }
 .stats-book .stats-formula { font: 1.25rem/1.6 Charter, Georgia, serif; padding: .8rem 0; overflow-wrap: anywhere; }
 .stats-book .stats-arrival details { border-top: 1px solid var(--stats-line); font-size: .85rem; }
@@ -148,3 +148,6 @@ body:has(main.stats-book) #lang-toggle { display: none; }
   .stats-book .stats-needle { transition: none; }
   .stats-book .stats-coins-animate .stats-coin { animation: none; }
 }
+
+.stats-book .stats-selected-cell, .stats-book .stats-selected-row { background: var(--stats-inset); outline: 1px solid var(--stats-accent); outline-offset: -1px; }
+.stats-book .stats-actions button[aria-pressed="true"] { border-color: var(--stats-accent); box-shadow: inset 0 -2px var(--stats-accent); }

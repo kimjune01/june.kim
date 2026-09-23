@@ -1,4 +1,6 @@
 ---
+import ConditionalLab from '../../../../components/statistics/ConditionalLab';
+import '../../../../components/statistics/statistics.css';
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
@@ -70,6 +72,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
 
     <!-- 2. Conditional Probability -->
+    <div class="stats-book"><ConditionalLab client:visible /></div>
+
     <h3>Conditional probability</h3>
     <p>P(A | B) = P(A and B) / P(B). The probability of A, given that B happened. This is how we update probabilities with evidence.</p>
 
@@ -93,7 +97,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
   (/ (* p-positive-given-disease p-disease) p-positive))
 
 (display "P(disease | positive) = ")
-(display (exact->inexact p-disease-given-positive)) (newline)
+(display (* 1.0 p-disease-given-positive)) (newline)
 
 ; Even with a 95% accurate test, a positive result
 ; only means ~16% chance of disease when prevalence is 1%

@@ -70,11 +70,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
 (define score-2 900)
 
 (display "SAT score 1250, Z = ")
-(display (exact->inexact (z-score score-1 sat-mean sat-sd)))
+(display (* 1.0 (z-score score-1 sat-mean sat-sd)))
 (newline)
 
 (display "SAT score 900, Z = ")
-(display (exact->inexact (z-score score-2 sat-mean sat-sd)))
+(display (* 1.0 (z-score score-2 sat-mean sat-sd)))
 (newline)
 
 ; Reverse: what score is at Z = 2?
@@ -122,14 +122,14 @@ print(f"Score at Z=2: {sat_mean + 2 * sat_sd}")
 (define p 0.5)
 
 (display "P(7 heads in 10 flips) = ")
-(display (exact->inexact (binomial-pmf n p 7))) (newline)
+(display (* 1.0 (binomial-pmf n p 7))) (newline)
 
 ; Distribution of successes
 (display "Full distribution:") (newline)
 (let loop ((k 0))
   (when (<= k n)
     (display "  P(X=") (display k) (display ") = ")
-    (display (exact->inexact (binomial-pmf n p k)))
+    (display (* 1.0 (binomial-pmf n p k)))
     (newline)
     (loop (+ k 1))))
 `} />

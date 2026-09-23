@@ -1,4 +1,6 @@
 ---
+import LogisticLab from '../../../../components/statistics/LogisticLab';
+import '../../../../components/statistics/statistics.css';
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
@@ -98,7 +100,7 @@ print(f"Extra hour sleeping: +{b2} points")
 
     <!-- 2. Adjusted R-squared -->
     <h3>Adjusted R-squared</h3>
-    <p>R-squared always increases when you add a predictor, even a useless one. Adjusted R-squared penalizes for the number of predictors: R-adj = 1 - (SSE/(n-p-1)) / (SST/(n-1)). It only increases when the new predictor improves the model more than chance would predict.</p>
+    <p>For least-squares models with an intercept fitted to the same observations, adding predictors cannot decrease R-squared, even when they have no useful predictive signal. Adjusted R-squared penalizes for the number of predictors: R-adj = 1 - (SSE/(n-p-1)) / (SST/(n-1)). It increases only when the reduction in residual error outweighs this penalty; an increase alone does not establish that the predictor will help on new data.</p>
 
     <SchemeRepl client:visible initialCode={`; Adjusted R-squared
 ; Compares R^2 with and without penalty for extra predictors
@@ -171,6 +173,8 @@ for r in [0.0, 0.5, 0.7, 0.9, 0.95]:
 
 
     <!-- 4. Logistic regression -->
+    <div class="stats-book"><LogisticLab client:visible /></div>
+
     <h3>Logistic regression</h3>
     <p>For a binary outcome (0 or 1), linear regression can predict probabilities outside 0-1. Logistic regression fixes this by modeling the log-odds: log(p/(1-p)) = b0 + b1*x. Solving for p gives the sigmoid: p = 1 / (1 + e^-(b0+b1*x)). The coefficients represent changes in log-odds, not in probability.</p>
 
@@ -231,7 +235,7 @@ print(f"Decision boundary at x = {-b0/b1}")
 
 ; Example: if baseline odds = 1:3 (p=0.25)
 (define baseline-odds (/ 1 3))
-(display "Baseline odds: ") (display (exact->inexact baseline-odds)) (newline)
+(display "Baseline odds: ") (display (* 1.0 baseline-odds)) (newline)
 (define new-odds (* baseline-odds odds-ratio))
 (display "After x+1:     ") (display new-odds) (newline)
 ; Convert odds to probability

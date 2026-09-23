@@ -38,7 +38,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 (define se (sqrt (/ (* p0 (- 1 p0)) n)))
 (define z (/ (- p-hat p0) se))
 
-(display "p-hat = ") (display (exact->inexact p-hat)) (newline)
+(display "p-hat = ") (display (* 1.0 p-hat)) (newline)
 (display "SE    = ") (display se) (newline)
 (display "Z     = ") (display z) (newline)
 (display "Reject H0 at alpha=0.05? ")
@@ -119,11 +119,11 @@ print(f"Reject H0 at alpha=0.05? {'Yes' if abs(z) > 1.96 else 'No'}")
 (define se (sqrt (+ (/ (* p-pool (- 1 p-pool)) n1)
                     (/ (* p-pool (- 1 p-pool)) n2))))
 
-(define z (/ (- (exact->inexact p1) (exact->inexact p2)) se))
+(define z (/ (- (* 1.0 p1) (* 1.0 p2)) se))
 
-(display "p1     = ") (display (exact->inexact p1)) (newline)
-(display "p2     = ") (display (exact->inexact p2)) (newline)
-(display "pooled = ") (display (exact->inexact p-pool)) (newline)
+(display "p1     = ") (display (* 1.0 p1)) (newline)
+(display "p2     = ") (display (* 1.0 p2)) (newline)
+(display "pooled = ") (display (* 1.0 p-pool)) (newline)
 (display "Z      = ") (display z) (newline)
 (display "Reject H0 at alpha=0.05? ")
 (display (if (> (abs z) 1.96) "Yes" "No"))
@@ -169,7 +169,7 @@ print(f"Reject H0? {'Yes' if abs(z) > 1.96 else 'No'}")
 
 (display "Observed: ") (display observed) (newline)
 (display "Expected: ") (display expected) (newline)
-(display "Chi-sq   = ") (display (exact->inexact chi-sq)) (newline)
+(display "Chi-sq   = ") (display (* 1.0 chi-sq)) (newline)
 (display "df       = 5") (newline)
 ; Critical value at alpha=0.05, df=5 is 11.07
 (display "Reject H0? ")
@@ -215,7 +215,7 @@ print(f"Reject H0? {'Yes' if chi_sq > 11.07 else 'No'}")
                   (chi-term 30 e21) (chi-term 70 e22)))
 
 (display "Expected: ") (display (list e11 e12 e21 e22)) (newline)
-(display "Chi-sq = ") (display (exact->inexact chi-sq)) (newline)
+(display "Chi-sq = ") (display (* 1.0 chi-sq)) (newline)
 (display "df = 1") (newline)
 ; Critical value at alpha=0.05, df=1 is 3.84
 (display "Reject H0? ")

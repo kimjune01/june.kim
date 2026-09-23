@@ -59,14 +59,14 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
 ; Mean: sum / count
 (define (mean lst)
-  (exact->inexact (/ (apply + lst) (length lst))))
+  (* 1.0 (/ (apply + lst) (length lst))))
 
 (display "Data: ") (display data) (newline)
 (display "Mean: ") (display (mean data)) (newline)
 
 ; Median: middle value of sorted list
 (define (median lst)
-  (let* ((sorted (sort lst <))
+  (let* ((sorted (list-sort < lst))
          (n (length sorted))
          (mid (quotient n 2)))
     (if (odd? n)
@@ -119,13 +119,13 @@ print(f"Mode: {mode}")
 
 ; Standard deviation: square root of variance
 (define (std lst)
-  (sqrt (exact->inexact (variance lst))))
+  (sqrt (* 1.0 (variance lst))))
 
 (display "Std dev: ")
 (display (std data)) (newline)
 
 ; IQR: Q3 - Q1
-(define sorted (sort data <))
+(define sorted (list-sort < data))
 (define q1 (list-ref sorted 2))  ; 25th percentile
 (define q3 (list-ref sorted 6))  ; 75th percentile
 (display "Q1: ") (display q1) (newline)
@@ -158,10 +158,10 @@ print(f"Mode: {mode}")
 
 ; Row proportions
 (display "Treatment improvement rate: ")
-(display (exact->inexact (/ treatment-improved treatment-total)))
+(display (* 1.0 (/ treatment-improved treatment-total)))
 (newline)
 (display "Control improvement rate:   ")
-(display (exact->inexact (/ control-improved control-total)))
+(display (* 1.0 (/ control-improved control-total)))
 `} />
 
 

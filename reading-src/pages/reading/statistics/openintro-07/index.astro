@@ -146,9 +146,9 @@ print(f"Reject H0? {'Yes' if abs(t) > 2.045 else 'No'}")
 (define s-d (sqrt (/ ss (- n 1))))
 
 (define se (/ s-d (sqrt n)))
-(define t-stat (/ (exact->inexact d-bar) se))
+(define t-stat (/ (* 1.0 d-bar) se))
 
-(display "d-bar = ") (display (exact->inexact d-bar)) (newline)
+(display "d-bar = ") (display (* 1.0 d-bar)) (newline)
 (display "s_d   = ") (display s-d) (newline)
 (display "t     = ") (display t-stat) (newline)
 (display "df    = ") (display (- n 1)) (newline)
@@ -207,12 +207,12 @@ print(f"Reject H0? {'Yes' if abs(t) > 2.776 else 'No'}")
 (define msg (/ ssg 2))    ; df = k-1 = 2
 (define mse (/ sse 9))    ; df = n-k = 9
 
-(define f-stat (/ (exact->inexact msg) (exact->inexact mse)))
+(define f-stat (/ (* 1.0 msg) (* 1.0 mse)))
 
-(display "Group means: ") (display (list (exact->inexact ma) (exact->inexact mb) (exact->inexact mc))) (newline)
-(display "Grand mean:  ") (display (exact->inexact grand-mean)) (newline)
-(display "MSG = ") (display (exact->inexact msg)) (newline)
-(display "MSE = ") (display (exact->inexact mse)) (newline)
+(display "Group means: ") (display (list (* 1.0 ma) (* 1.0 mb) (* 1.0 mc))) (newline)
+(display "Grand mean:  ") (display (* 1.0 grand-mean)) (newline)
+(display "MSG = ") (display (* 1.0 msg)) (newline)
+(display "MSE = ") (display (* 1.0 mse)) (newline)
 (display "F   = ") (display f-stat) (newline)
 ; Critical F at alpha=0.05, df=(2,9): ~4.26
 (display "Reject H0? ")
