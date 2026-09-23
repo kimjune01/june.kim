@@ -1,0 +1,22 @@
+import React,{useState} from 'react';
+import {pairedComparison,welchComparison,formatP} from '../../../reading-src/lib/statistics/course-models';
+import {mean} from '../../../reading-src/lib/statistics/inference';
+const independentA=[48,52,47,55,50,49,53,46,51,54,45,50];
+const independentB=[49,51,46,54,52,48,50,47,55,53,44,51];
+const before=[40,60,50,75,55,90,45,80,65,85,70,95],changes=[-2,1,0,2,-1,1,-2,2,0,-1,1,-1];
+export default function MeansComparison(){
+ const [design,setDesign]=useState('independent'),[shift,setShift]=useState(3),[ignoring,setIgnoring]=useState(false);
+ const a=design==='paired'?before:independentA,b=design==='paired'?before.map((v,i)=>v+changes[i]+shift):independentB.map(v=>v+shift);
+ const result=design==='paired'?pairedComparison(a,b):welchComparison(a,b),unpaired=welchComparison(a,b);
+ const x=(value:number)=>Number((270+value*18).toFixed(3));
+ return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="means-comparison" aria-label="Compare numerical outcomes">
+  <p className="stats-eyebrow">The design chooses the standard error</p><p>These are constructed quiz-score examples. Choose two independent groups of twelve people, or twelve people measured twice. The paired example has large differences between people but much smaller changes within a person.</p>
+  <div className="stats-settings"><label className="stats-control">Study design<select aria-label="Comparison design" value={design} onChange={e=>{setDesign(e.target.value);setIgnoring(false);}}><option value="independent">Two independent groups</option><option value="paired">Same people measured twice</option></select></label><label className="stats-control">Shift the second set by<select aria-label="Mean shift" value={shift} onChange={e=>setShift(Number(e.target.value))}>{[0,3,6].map(n=><option key={n} value={n}>{n} points</option>)}</select></label></div>
+  <p>{design==='paired'?'Before':'Group A'} mean: {mean(a).toFixed(1)}. {design==='paired'?'After':'Group B'} mean: {mean(b).toFixed(1)}. Difference: <strong>{result.effect.toFixed(1)} points</strong>.</p>
+  <figure className="stats-histogram"><figcaption>95% interval for the mean difference · fixed −12 to 12 point scale</figcaption><svg viewBox="0 0 540 120" role="img" aria-label={`95 percent interval from ${result.low.toFixed(2)} to ${result.high.toFixed(2)} points`}><line x1={x(-12)} x2={x(12)} y1="65" y2="65" className="stats-grid"/><line x1={x(0)} x2={x(0)} y1="15" y2="75" className="stats-truth"/><line x1={x(result.low)} x2={x(result.high)} y1="45" y2="45" className="stats-interval"/><circle cx={x(result.effect)} cy="45" r="5" className="stats-bar"/>{[-10,0,10].map(v=><text key={v} x={x(v)} y="100" textAnchor="middle">{v} points</text>)}</svg></figure>
+  <p role="status">{design==='paired'?'Paired t':'Welch t'}: estimated difference {result.effect.toFixed(2)}, SE {result.se.toFixed(2)}, df {result.df.toFixed(1)}. 95% interval [{result.low.toFixed(2)}, {result.high.toFixed(2)}]. Two-sided p-value {formatP(result.p)} for a zero mean difference.</p>
+  {design==='paired'&&<><div className="stats-actions"><button type="button" onClick={()=>setIgnoring(!ignoring)}>Compare ignoring pairs</button></div>{ignoring&&<p className="stats-feedback">This ignores the known pairing: the independent-groups SE would be {unpaired.se.toFixed(2)}, compared with {result.se.toFixed(2)} for the differences. It is shown to expose the mismatch, not as a valid alternative analysis of these paired data.</p>}</>}
+  <details className="stats-data"><summary>Read the measurements</summary><div className="stats-table-scroll"><table><thead><tr><th scope="col">{design==='paired'?'Person':'Row (not a pair)'}</th><th scope="col">{design==='paired'?'Before':'A'}</th><th scope="col">{design==='paired'?'After':'B'}</th>{design==='paired'&&<th scope="col">Change</th>}</tr></thead><tbody>{a.map((v,i)=><tr key={i}><td>{i+1}</td><td>{v}</td><td>{b[i]}</td>{design==='paired'&&<td>{b[i]-v}</td>}</tr>)}</tbody></table></div></details>
+  <p className="stats-small">The paired method assumes independent people and approximately normal differences for this small sample. Welch’s method assumes independent groups and observations, with approximately normal populations for small samples; it allows unequal variances. Inspect data and design before using either method. Before-and-after changes alone do not establish causation.</p>
+ </section>;
+}

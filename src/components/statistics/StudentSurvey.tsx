@@ -1,0 +1,24 @@
+import React,{useState} from 'react';
+import {students,fiveNumbers,sampleVariance} from '../../../reading-src/lib/statistics/course-models';
+import {mean,sampleWithoutReplacement} from '../../../reading-src/lib/statistics/inference';
+import DistributionPlot from './DistributionPlot';
+export default function StudentSurvey(){
+ const [size,setSize]=useState(10),[variable,setVariable]=useState('minutes'),[width,setWidth]=useState(10);
+ const [sample,setSample]=useState<typeof students>([]),[longCommute,setLongCommute]=useState(false);
+ const data=sample.map((s,i)=>({...s,minutes:longCommute&&i===0?110:s.minutes}));
+ const values=data.map(s=>s.minutes),summary=values.length?fiveNumbers(values):null;
+ const counts=['Walk','Bike','Bus','Car'].map(mode=>({mode,count:data.filter(s=>s.mode===mode).length}));
+ return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="survey-lab" aria-label="Student survey experiment">
+  <p className="stats-eyebrow">A class of 60 fictional students</p><p>The full class roster is available. Draw a simple random sample without replacement; each student has the same chance of inclusion. Record usual travel mode and one-way travel time.</p>
+  <div className="stats-settings"><label className="stats-control">Students to survey<select aria-label="Student sample size" value={size} onChange={e=>{setSize(Number(e.target.value));setSample([]);setLongCommute(false);}}>{[10,20,60].map(n=><option value={n} key={n}>{n}</option>)}</select></label><label className="stats-control">Variable<select aria-label="Survey variable" value={variable} onChange={e=>setVariable(e.target.value)}><option value="minutes">Travel time · numerical</option><option value="mode">Travel mode · categorical</option></select></label></div>
+  <div className="stats-actions"><button type="button" onClick={()=>{setSample(sampleWithoutReplacement(students,size));setLongCommute(false);}}>Draw a student sample</button>{variable==='minutes'&&sample.length>0&&<button type="button" onClick={()=>setLongCommute(!longCommute)}>{longCommute?'Restore the reported time':'Try one 110-minute commute'}</button>}</div>
+  <p role="status">{sample.length?`${sample.length} students in this sample. ${size===60?'You surveyed the whole class: a census.':'A new draw can give different summaries.'}`:'No sample yet. Predict whether ten students will describe the whole class exactly.'}</p>
+  {variable==='minutes'?<>
+   <label className="stats-control">Histogram interval width<select aria-label="Histogram interval width" value={width} onChange={e=>setWidth(Number(e.target.value))}>{[5,10,20].map(n=><option value={n} key={n}>{n} minutes</option>)}</select></label>
+   <DistributionPlot values={values} min={0} max={120} bins={120/width} title="Travel times in the sample" unit="Minutes"/>
+   {summary&&<><div className="stats-readouts stats-readouts-row"><div><span className="stats-small">Mean</span><strong>{mean(values).toFixed(1)} min</strong></div><div><span className="stats-small">Median</span><strong>{summary.median.toFixed(1)} min</strong></div><div><span className="stats-small">Sample standard deviation</span><strong>{Math.sqrt(sampleVariance(values)).toFixed(1)} min</strong></div></div><p>Five-number summary: minimum {summary.min}, Q1 {summary.q1}, median {summary.median}, Q3 {summary.q3}, maximum {summary.max} minutes. IQR = {(summary.q3-summary.q1).toFixed(1)} minutes.</p><p className="stats-small">Quartiles here are medians of the lower and upper halves of the sorted data. Other software can use different conventions. The sample standard deviation uses n − 1. Changing the bin width changes the display, not these summaries.</p></>}
+   {longCommute&&<p className="stats-small">For this exploration, one selected student’s time is replaced with 110 minutes. It is an invented change to the current sample, not an extra student.</p>}
+  </>:<div className="stats-table-scroll"><table><caption>Travel mode frequency table</caption><thead><tr><th scope="col">Mode</th><th scope="col">Count</th><th scope="col">Sample proportion</th></tr></thead><tbody>{counts.map(c=><tr key={c.mode}><th scope="row">{c.mode}</th><td>{c.count}</td><td>{sample.length?`${(100*c.count/sample.length).toFixed(1)}%`:'—'}</td></tr>)}</tbody></table><p className="stats-small">Categories are labels. Their order is not a numerical scale; taking an average of the labels would not describe a travel mode.</p></div>}
+  {data.length>0&&<details className="stats-data"><summary>Read the individual observations</summary><div className="stats-table-scroll"><table><thead><tr><th scope="col">Student ID</th><th scope="col">Mode</th><th scope="col">Minutes</th></tr></thead><tbody>{data.map(s=><tr key={s.id}><td>{s.id}</td><td>{s.mode}</td><td>{s.minutes}</td></tr>)}</tbody></table></div></details>}
+ </section>;
+}
