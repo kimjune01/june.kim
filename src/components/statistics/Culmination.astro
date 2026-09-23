@@ -1,0 +1,10 @@
+---
+interface Props { title: string; kind?: string; href: string; }
+const { title, kind = 'An idea to take with you', href } = Astro.props;
+---
+<section class="stats-symbol-summary stats-arrival">
+  <p class="stats-eyebrow">{kind}</p>
+  <h2>{title}</h2>
+  <slot />
+  <a href={href}>Return to the experiment ↑</a>
+</section>
