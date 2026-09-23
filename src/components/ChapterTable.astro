@@ -3,6 +3,7 @@ interface Chapter {
   href: string;
   title: string;
   desc: string;
+  questionHref?: string;
 }
 
 interface Props {
@@ -31,7 +32,11 @@ const { chapters, icon, iconClass = '', startNumber = 1, descHeader = '' } = Ast
         <tr class={i < chapters.length - 1 ? 'border-b border-zinc-800' : ''}>
           <td class="py-2 pr-1 text-right text-gray-500 tabular-nums whitespace-nowrap align-top">{startNumber + i}.</td>
           <td class="py-2 px-2 text-gray-300 align-top"><a href={ch.href} style="background:transparent;padding:0">{ch.title}</a></td>
-          <td class="py-2 px-2 text-gray-400 align-top">{ch.desc}</td>
+          <td class="py-2 px-2 text-gray-400 align-top">
+            {ch.questionHref
+              ? <a href={ch.questionHref} target="_blank" rel="noopener noreferrer" aria-label={`${ch.desc} Open a ChatGPT quiz in a new tab`} style="background:transparent;padding:0;text-decoration:underline;text-underline-offset:3px">{ch.desc} ↗</a>
+              : ch.desc}
+          </td>
           {icon && (
             <td class="py-2 pl-1 align-top">
               <a href={ch.href} class={iconClass} style="background:transparent;padding:0">{icon}</a>

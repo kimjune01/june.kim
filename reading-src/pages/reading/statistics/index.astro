@@ -1,5 +1,6 @@
 ---
 import {course,chapterHref} from '../../../lib/statistics/course';
+import {quizLink} from '../../../lib/statistics/quiz-link';
 import ChapterTable from '../../../components/ChapterTable.astro';
 import Layout from '../../../layouts/Base.astro';
 import Neighbors from '../../../components/Neighbors.astro';
@@ -29,8 +30,8 @@ import Neighbors from '../../../components/Neighbors.astro';
     </div>
 
     <h2>Statistics through experiments</h2>
-    <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. Sixteen chapters take you from first definitions through a university introduction: describing data, sampling, inference, experiment design, and regression. No statistics or programming background needed.</p>
-    <ChapterTable chapters={course.map(chapter=>({href:chapterHref(chapter.slug),title:chapter.title,desc:chapter.desc}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
+    <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. Sixteen chapters take you from first definitions through a university introduction: describing data, sampling, inference, experiment design, and regression. No statistics or programming background needed. Click a question for a chapter quiz in ChatGPT.</p>
+    <ChapterTable chapters={course.map(chapter=>({href:chapterHref(chapter.slug),title:chapter.title,desc:chapter.desc,questionHref:quizLink(chapter.title,chapterHref(chapter.slug))}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
 
     <h2>The OpenIntro reading guide</h2>
     <p class="text-gray-400 mb-6">Go deeper with worked examples and runnable code. For the mathematics behind chance, follow the companion <a href="/reading/probability/">Introduction to Probability</a>.</p>
@@ -44,7 +45,7 @@ import Neighbors from '../../../components/Neighbors.astro';
       { href: '/reading/statistics/openintro-07/', title: 'Inference for Means', desc: 'How can we compare averages when the spread is estimated too?' },
       { href: '/reading/statistics/openintro-08/', title: 'Simple Linear Regression', desc: 'Which line best fits the data, and how should we read its misses?' },
       { href: '/reading/statistics/openintro-09/', title: 'Multiple and Logistic Regression', desc: 'What changes when we use several predictors or predict a yes-or-no outcome?' },
-    ]} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
+    ].map(chapter=>({...chapter,questionHref:quizLink(chapter.title,chapter.href)}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
 
     <p class="text-gray-500 text-sm mt-8">📺 <a href="https://www.youtube.com/user/joshstarmer">StatQuest videos ↗</a></p>
     <p class="text-gray-500 text-sm">OpenIntro Statistics is by David Diez, Mine Çetinkaya-Rundel, and Christopher Barr. The introductory chapters include their own source credits and licensing.</p>
