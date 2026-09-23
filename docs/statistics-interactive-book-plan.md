@@ -17,7 +17,7 @@ Make `/reading/statistics/` approachable for readers who know everyday arithmeti
 
 Add a beginner sequence of short, guided experiments, then connect it to the nine existing OpenIntro chapters. Improve those chapters with targeted activities and feedback as the sequence grows. Learning should come from making predictions, manipulating examples, interpreting results, and applying the idea in a different setting.
 
-The culmination of a section or chapter is a symbolic representation that compresses what the reader has learned. Following the ending of [General Intelligence](../src/content/blog/2026-03-14-general-intelligence.md), the expression should feel earned: familiar experiences become something compact enough to remember and use in the next chapter. This is a user-directed design principle; the research below does not independently establish the effectiveness of this particular reveal pattern.
+The culmination of a section or chapter is an earned formal idea: a definition, a symbolic representation, a relationship, or a theorem that compresses what the reader has learned. Following the ending of [General Intelligence](../src/content/blog/2026-03-14-general-intelligence.md), the expression should feel earned: familiar experiences become something compact enough to remember and use in the next chapter. This is a user-directed design principle; the research below does not independently establish the effectiveness of this particular reveal pattern.
 
 ## Learning outcomes
 
@@ -27,9 +27,9 @@ A reader finishing the introduction should be able to:
 - Describe data using center, spread, and shape, and explain what a summary leaves out.
 - Distinguish a population, a sample, an individual measurement, and an estimate.
 - Explain why increasing a random sample's size reduces sampling variability but does not repair a biased selection process.
-- Interpret repeated estimates and confidence-interval coverage without confusing them with the distribution of individual measurements.
+- Explain the Central Limit Theorem and its assumptions; interpret repeated estimates and confidence-interval coverage without confusing them with the distribution of individual measurements.
 - Explain a simulation-based test as comparing observed evidence with what a specified null model produces.
-- Read the chapter's concluding notation in ordinary language, connect its parts to the experiment, and use it in a fresh example.
+- Explain the chapter's concluding idea in ordinary language, connect it to the experiment, and use it in a fresh example.
 
 For each outcome, write a prediction prompt, an explanation, and a transfer question before implementing the activity. A transfer question changes the setting while preserving the statistical idea.
 
@@ -53,14 +53,14 @@ Use this as an authoring guide, with room for variation:
 3. **Experiment:** one main control initially, an obvious action button, and a result whose meaning is visible.
 4. **Explain:** connect what happened to the question, including ordinary random variation. Introduce one or two terms at a time.
 5. **Check:** after selected sections, ask a short question with explanation for every answer.
-6. **Compress:** toward the end of a section or chapter, assemble a symbolic representation from the experiences and words the reader now knows.
+6. **Compress:** toward the end of a section or chapter, name or state the definition, relationship, notation, or theorem that gathers the experiences the reader now understands.
 7. **Transfer:** let the reader unpack or use that representation in a different context, making it a tool for the next learning cycle.
 
 Target roughly 5–10 minutes for a chapter's main path as an initial design hypothesis, to be checked with readers. Allow additional exploration. Keep formal derivations and runnable code in optional deeper sections.
 
-## Symbolic culmination
+## Earned formal ideas
 
-Every new chapter must have an authored symbolic culmination. A substantial section may have its own smaller one when the concept is ready. Plan this representation when planning the activity, so the interaction teaches the meaning of its parts.
+Every new chapter must have an authored culmination. Choose its form to suit the discovery; a theorem such as the Central Limit Theorem is as meaningful an arrival as a formula. A substantial section may have its own smaller one when the concept is ready. Plan this representation when planning the activity, so the interaction teaches the meaning of its parts.
 
 Present the culmination as a quiet moment of arrival: “You can now write this.” Use standard statistical notation where it fits; a compact diagram can express a relationship better than a formula. Introduce it late enough to mean something, then leave it available as a reference.
 
@@ -73,22 +73,24 @@ The presentation has four parts:
 
 For example, after repeatedly pooling salaries and dividing the total equally, reveal the mean first as “total salary / number of people,” then as `x̄ = (x₁ + … + xₙ) / n`, and finally as `x̄ = (1/n) Σᵢ₌₁ⁿ xᵢ`. Selecting the summation highlights all the salaries; selecting `n` highlights the count. Give unfamiliar notation its own explanation. The reader earns a useful compression through understanding, while the explanation remains available regardless of quiz performance.
 
+Activities should sit beside the explanation they support. Show real results in the activity's conclusion where useful. A theorem reveal must distinguish observation from proof and give its assumptions; simulations illustrate a theorem rather than establish it.
+
 ### Proposed chapter culminations
 
-| Chapter | Symbolic representation | What the reader should be able to unpack |
+| Chapter | Earned idea | What the reader should be able to unpack |
 | --- | --- | --- |
 | How likely is it? | `P(A) = p`, illustrated by `P(blue) = 0.5` | `A` names the event, and `p` describes its chance under the model; it is distinct from the observed fraction. |
 | What happens when we repeat? | `X = number of heads in one round`, then `p̂ = X/n`, beside the histogram | One round produces one value of `X`; dividing by coins per round gives the observed proportion. The hat marks an estimate, not a new true probability. |
 | What does an average hide? | `x̄ = (1/n) Σᵢ₌₁ⁿ xᵢ`, accompanied by contrasting datasets with equal means | Each measurement, addition, count, and division corresponds to something the reader manipulated; the formula compresses center while omitting shape. |
 | What can a handful tell us? | `population (μ) → sample → estimate (x̄)` | `μ` is the target population mean; `x̄` is computed from the sampled observations. New samples can change the estimate without changing the target. |
 | Can more data mislead us? | A population-to-sample diagram with the selection rule explicitly on the arrow; a separate treatment-assignment diagram | Selection determines who is represented. Treatment assignment answers a different question. Increasing the selected sample size does not remove the selection rule. |
-| Why do estimates move? | `SE(X̄) = σ/√n` in the independent, identically distributed finite-variance model used for the activity | `σ` describes individual measurements; standard error describes the mean across repeated samples. State the assumptions beside the formula. |
+| Why do estimates move? | **Central Limit Theorem**, with the standard-error relationship as supporting notation | For independent, identically distributed observations with finite positive variance, standardized sample means approach a standard normal distribution as sample size grows. The population itself does not become normal. More repetitions reveal the sampling distribution; larger samples change it. |
 | How much uncertainty remains? | `estimate ± margin of error`, expanded into the particular interval formula used in the activity | This summarizes the symmetric interval construction just explored; repeated intervals have a stated coverage under its assumptions. It is not a universal formula for every kind of interval. |
 | Could chance explain this? | `p-value = Pₕ₀(result at least as extreme as observed)`, paired with a shaded null-distribution diagram | The probability is computed under the specified null model and chosen extremeness rule; it is not the probability that the null is true. |
 
 Use a running, chapter-local collection of these representations as the recap. In later chapters, reuse familiar symbols and allow their earlier explanation to be reopened. Existing OpenIntro chapters should likewise culminate in meaningful notation when their activities are revised; start from their established formulas and build the experience that makes those formulas legible.
 
-### Acceptance criteria for a symbolic culmination
+### Acceptance criteria for a culmination
 
 - The preceding activity gives meaning to every essential part of the representation.
 - New glyphs receive explicit readings: for example, “x-bar,” “sum,” and “n measurements.”
