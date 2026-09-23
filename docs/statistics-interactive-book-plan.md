@@ -1,6 +1,15 @@
 # Statistics: an interactive introduction
 
-Status: proposed implementation plan, 2026-09-22.
+Status: phase 1 implemented, 2026-09-22. Phases 2–4 remain planned.
+
+## Pilot implementation
+
+- Added `/reading/statistics/chance/` and `/reading/statistics/repeated-experiments/`, with a spinner, repeated-coin experiment, saved comparisons, six explanatory questions, and interactive symbolic summaries.
+- Updated the landing page to expose the beginner path and all nine existing chapters. Repaired chapter 5→6 navigation and the OpenIntro source links; added links back into the pilot.
+- Used Danielle Navarro’s *Learning Statistics with R* (CC BY-SA 4.0) as a model for conversational, concrete instructional prose. The new chapters include credit and licensing, with independently written examples and questions.
+- Components live in `src/components/statistics/`; `reading-src/components` is an existing symlink to `src/components`. Pure simulation functions live in `reading-src/lib/statistics/`.
+- Verified simulation accounting, setting resets, comparison alignment, feedback/retry behavior, and server-rendered SVG titles with tests. Checked TypeScript and the reading build, and exercised the pilot in Chrome at desktop and phone widths, in light and dark themes.
+- Informal sessions with beginner readers remain to be done. No learning-effectiveness claim is inferred from automated checks. The pilot has not been deployed.
 
 ## Purpose
 

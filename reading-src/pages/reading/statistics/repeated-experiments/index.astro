@@ -1,0 +1,84 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from '../../../../components/PrevNext.astro';
+import CoinExperiment from '../../../../components/statistics/CoinExperiment';
+import Question from '../../../../components/statistics/Question';
+import SymbolSummary from '../../../../components/statistics/SymbolSummary';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import '../../../../components/statistics/statistics.css';
+---
+
+<Layout title="What happens when we repeat? — Statistics through experiments" favicon="◒">
+  <main class="stats-book">
+    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
+    <p class="stats-kicker">Statistics through experiments · 02</p>
+    <h1>What happens when we repeat?</h1>
+    <p class="stats-deck">One handful of coins gives you a result. Many handfuls give you a shape.</p>
+
+    <p>Take ten fair coins and flip them together. Count the heads. You might get four, six, or some other number. Call that one <strong>round</strong>.</p>
+    <p>Now imagine doing it again and again. Before you try, which seems more likely: a count somewhere around the middle, or all ten coins landing heads?</p>
+    <p>Start with <strong>Flip one round</strong>. The coins show its result, and the chart records its head count. Each round adds one entry to the chart, however many coins you flipped.</p>
+
+    <CoinExperiment client:load />
+    <noscript><p>The experiment needs JavaScript. As a small example, five rounds of two coins might give head counts 1, 0, 2, 1, 1. A chart would record one round at zero heads, three rounds at one head, and one round at two heads.</p></noscript>
+
+    <h2>A shape made of ordinary surprises</h2>
+    <p>Run a hundred rounds, then a thousand more. Each individual count is still uncertain, but the collection begins to have a recognizable shape. With fair coins, the middle counts tend to turn up more often than the extremes.</p>
+    <p>Two coins make it easier to see why. There are four equally likely sequences: <strong>HH, HT, TH, TT</strong>. Two of them give one head. Only one gives two heads, and only one gives zero.</p>
+    <p>More coins allow many more sequences, and many lead to a middle-sized head count. An all-heads result still has just one sequence.</p>
+    <p>The bars show an <strong>observed distribution</strong>: how the recorded rounds are spread across possible head counts. Bar height is the percentage of rounds at each count. The model also has a <strong>probability distribution</strong>, which assigns a chance to every possible count. More rounds help the observed picture resemble it.</p>
+
+    <Question client:visible id="rounds-vs-coins" prompt="You keep ten coins per round and run another thousand rounds. What have you changed?"
+      choices={[
+        { label: 'The number of observations of the same experiment.', correct: true, feedback: 'You have more evidence about the same ten-coin experiment. The underlying chances of its possible counts have not changed.' },
+        { label: 'The chance that each coin lands heads.', correct: false, feedback: 'Each coin still has a 50% chance of heads. Repeating the experiment does not change the coins.' },
+        { label: 'The possible head counts in a single round.', correct: false, feedback: 'A round still contains ten coins, so its head count still runs from zero to ten. You are recording more rounds of that same size.' },
+      ]}
+      explanation="Coins per round defines the experiment. Number of rounds tells us how many times we observe it. More rounds make the observed distribution less noisy; they do not change its underlying model." />
+
+    <h2>More coins, or more rounds?</h2>
+    <p>These are different knobs, and it’s worth spending a moment with each.</p>
+    <p>Try <strong>two coins per round</strong>, run 1,000 rounds, and choose <strong>Keep for comparison</strong>. Then choose <strong>twenty coins per round</strong> and run 1,000 more. The old chart stays below, with its original settings.</p>
+    <p>In the <strong>Number of heads</strong> view, the two experiments occupy different ranges: zero to two heads, and zero to twenty. Switch to <strong>Proportion of heads</strong> to compare them on the same zero-to-100% scale.</p>
+    <p>Half the coins being heads is now in the same place on both charts. With more independent fair coins per round, the proportion tends to stay closer to half. All-heads rounds are common enough with two coins; with twenty, they are much rarer.</p>
+    <p class="stats-aside">Pay attention to the units. The <em>number</em> of heads has more room to vary when you flip more coins. The <em>proportion</em> of heads varies less. Both statements can be true.</p>
+
+    <h2>A name for the number we record</h2>
+    <p>The coins give us a sequence like H, T, H, H, T. We turn that sequence into a number: three heads.</p>
+    <p>A rule that assigns a number to a random outcome is called a <strong>random variable</strong>. Here the rule is “count the heads.” We’ll call that count <strong>X</strong>. It can change from round to round.</p>
+    <p>The number of coins you chose gets a shorter name too: <strong>n</strong>. To find the proportion of heads, divide the head count by the coin count. For that five-coin round, it is 3 ÷ 5 = 0.6, or 60%.</p>
+
+    <Question client:visible id="one-bar" prompt="You run 100 rounds with five coins in each round. The bar at three heads says 30%. What does it mean?"
+      choices={[
+        { label: 'Thirty of the rounds had exactly three heads.', correct: true, feedback: 'Each entry represents one whole round. Thirty out of 100 rounds is 30%, and each of those rounds had three heads.' },
+        { label: 'Thirty percent of all the coins were heads.', correct: false, feedback: 'This bar counts rounds with a particular result. To find the proportion across all coins, you would need the head counts from every bar.' },
+        { label: 'The coin’s probability of heads is 30%.', correct: false, feedback: 'The bar describes how often a whole round produced three heads. It does not directly give the chance of heads on one flip.' },
+      ]}
+      explanation="The horizontal position says which result: three heads in a round of five coins. The height says how often that result occurred: 30 of 100 rounds." />
+
+    <h2>The whole calculation, in three symbols</h2>
+    <p>You already know the operation: heads divided by coins. We can give its result a name, <strong>p̂</strong>, pronounced “p-hat.” The hat tells us it is an estimate made from observations.</p>
+    <SymbolSummary client:visible kind="proportion" />
+    <p>Remember <a href="/reading/statistics/chance/">p, the probability</a>? Our fair coin has p = 0.5. A round with three heads out of five gives p̂ = 0.6. One describes the model; the other describes our evidence. There is no contradiction.</p>
+
+    <Question client:visible id="rounds-transfer" prompt="You inspect a batch of 20 seeds. Fifteen sprout. If X counts sprouts and n counts seeds, what is p̂?"
+      choices={[
+        { label: '15: the number that sprouted.', correct: false, feedback: 'Fifteen is X, the count. To turn it into a proportion, divide by all 20 seeds in the batch.' },
+        { label: '0.75: the observed proportion that sprouted.', correct: true, feedback: 'You carried the same idea into a new setting: X / n = 15 / 20 = 0.75. It describes this batch and can help estimate the chance of sprouting.' },
+        { label: '0.75: a guarantee for every future batch.', correct: false, feedback: 'The calculation gives 0.75 for this batch. Another batch can differ, even under the same growing conditions.' },
+      ]}
+      explanation="p-hat = X / n = 15 / 20 = 0.75. The arithmetic describes the observed batch. Using it to make claims about other seeds also requires thinking about how those seeds were selected and grown." />
+
+    <h2>Words you met</h2>
+    <dl class="stats-words">
+      <dt>Round</dt><dd>One complete experiment: flip the chosen coins and count their heads.</dd>
+      <dt>Random variable</dt><dd>A rule assigning a number to a random outcome. Here, X counts heads.</dd>
+      <dt>Distribution</dt><dd>How values are spread out, together with their frequencies or probabilities.</dd>
+      <dt>Proportion</dt><dd>A part divided by the whole: three heads out of five coins is 0.6.</dd>
+      <dt>Estimate</dt><dd>A quantity calculated from data to learn about an unknown quantity.</dd>
+    </dl>
+    <p>This experiment has a formal name: the <strong>binomial model</strong>. You can meet its formula in <a href="/reading/statistics/openintro-04/">Distributions</a>. Or continue to <a href="/reading/statistics/openintro-01/">Introduction to Data</a> to start thinking about observations beyond coins.</p>
+    <ReadingCredit />
+    <PrevNext prev={{ href: '/reading/statistics/chance/', label: 'How likely is it?' }} next={{ href: '/reading/statistics/openintro-01/', label: 'Introduction to Data' }} />
+  </main>
+</Layout>

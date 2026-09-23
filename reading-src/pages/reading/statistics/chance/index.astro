@@ -1,0 +1,80 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from '../../../../components/PrevNext.astro';
+import Spinner from '../../../../components/statistics/Spinner';
+import Question from '../../../../components/statistics/Question';
+import SymbolSummary from '../../../../components/statistics/SymbolSummary';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import '../../../../components/statistics/statistics.css';
+---
+
+<Layout title="How likely is it? — Statistics through experiments" favicon="◒">
+  <main class="stats-book">
+    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
+    <p class="stats-kicker">Statistics through experiments · 01</p>
+    <h1>How likely is it?</h1>
+    <p class="stats-deck">You can know the chances and still be surprised by what happens. Let’s give that a try.</p>
+
+    <p>The wheel below has two colors. Its pointer can land in any direction, with each direction equally likely. Half the wheel is blue, so blue has half the chance.</p>
+    <p>Before you spin it ten times, take a guess: how many blue results will you get? Keep your guess in mind, then press <strong>Spin 10 times</strong>.</p>
+
+    <Spinner client:load />
+    <noscript><p>The spinner needs JavaScript. Here is a possible run instead: blue, blue, amber, blue, amber, amber, blue, blue, blue, amber. Six blue results in ten spins can happen even when each spin has a 50% chance of blue.</p></noscript>
+
+    <h2>The wheel makes no promises about ten spins</h2>
+    <p>Perhaps you got five blues. Perhaps you didn’t. Both are perfectly ordinary results. A half-blue wheel gives blue a 50% chance on <em>each</em> spin; it doesn’t keep a little ledger and stop at five.</p>
+    <p>Try a few more batches. The percentage you observe can move toward 50%, then away again. Over many independent spins it tends to settle near the wheel’s chance, but it needn’t get closer with every new spin.</p>
+
+    <Question client:visible id="chance-ten" prompt="A half-blue wheel is spun ten times. Which statement can we make before it starts?"
+      choices={[
+        { label: 'Exactly five spins will be blue.', correct: false, feedback: 'Five is a reasonable guess, but it is not a promise. Each new spin can land on either color.' },
+        { label: 'Each spin has a 50% chance of blue.', correct: true, feedback: 'The rule describes the chance on each spin. The total number of blues is still free to vary.' },
+        { label: 'If the first spin is blue, the next one favors amber.', correct: false, feedback: 'The first spin does not change the wheel. Amber still occupies half of it, so its chance stays at 50%.' },
+      ]}
+      explanation="Every spin uses the same half-blue wheel. Five blues is the average over many ten-spin experiments, but an individual experiment can produce any count from zero to ten." />
+
+    <h2>A name for the chance</h2>
+    <p><strong>Probability</strong> is a number from 0 to 1 that describes how likely an event is under a model. Here our model is especially simple: every direction on the wheel is equally likely.</p>
+    <p>Choose 25% blue. That is a probability of <strong>0.25</strong>, or one chance in four. At 0, blue cannot happen on this wheel. At 1, every spin is blue. Try those settings too; the ends help make the scale feel familiar.</p>
+    <p>One spin is a <strong>trial</strong>. The color it lands on is an <strong>outcome</strong>. An <strong>event</strong> is an outcome, or a group of outcomes, that we’re interested in. Our event is “lands on blue.”</p>
+    <p class="stats-aside">The wheel’s probability and your observed percentage answer different questions: <em>What are the chances?</em> and <em>What happened this time?</em> Keeping those apart will help throughout the book.</p>
+
+    <h2>Does a coin remember?</h2>
+    <p>Imagine a fair coin has just landed heads four times: H, H, H, H. It’s tempting to give tails the next turn. But a fair coin has no turn-taking rule.</p>
+    <p>When flips are <strong>independent</strong>, knowing earlier results does not change the chance of the next one. Our spinner works that way too. A streak leaves its colored areas exactly as they were.</p>
+
+    <Question client:visible id="chance-streak" prompt="You know the coin is fair and its flips are independent. After four heads, what is the chance of heads next?"
+      choices={[
+        { label: 'Less than half. Tails needs to catch up.', correct: false, feedback: 'There is no debt to repay. The coin’s next flip still has equal chances, however uneven the earlier record looks.' },
+        { label: 'Exactly half.', correct: true, feedback: 'Fair tells us the chance is one half. Independent tells us the previous flips do not change it.' },
+        { label: 'More than half. Heads is on a streak.', correct: false, feedback: 'The streak is a description of the past. With a known fair coin and independent flips, it does not change the next chance.' },
+      ]}
+      explanation="Fairness and independence are assumptions of this example. Under those assumptions, the next flip has a 50% chance of heads. If we did not know whether the coin was fair, the earlier results could help us investigate it." />
+
+    <h2>A little shorthand to take with you</h2>
+    <p>You have chosen an event and assigned it a chance. There is a compact way to write those two things together. Let <strong>A</strong> stand for the event, and <strong>p</strong> for its probability.</p>
+    <SymbolSummary client:visible kind="probability" />
+    <p>For the half-blue wheel, you can write <strong>P(blue) = 0.5</strong>. Read it aloud: “The probability of blue is one half.” The notation carries the idea you have already been using.</p>
+
+    <Question client:visible id="chance-transfer" prompt="A bag holds one blue counter and three amber ones. You mix them, draw one without looking, then put it back. What does P(blue) = 0.25 tell you?"
+      choices={[
+        { label: 'Every group of four draws must contain one blue.', correct: false, feedback: 'That would turn a chance into a schedule. Replacing the counter restores the same bag, but the next draw is still uncertain.' },
+        { label: 'Each well-mixed draw has one chance in four of being blue.', correct: true, feedback: 'A is now “draw a blue counter.” Its probability is still 0.25. The same notation works for a different experiment.' },
+        { label: 'Once you draw blue, its chance drops to zero.', correct: false, feedback: 'You put the counter back. All four counters are available again, including the blue one.' },
+      ]}
+      explanation="One of the four equally likely counters is blue. Replacing it and mixing again keeps that probability at one quarter on every draw. The observed fraction can differ." />
+
+    <h2>Words you met</h2>
+    <dl class="stats-words">
+      <dt>Trial</dt><dd>One performance of the experiment: a spin, a flip, or a draw.</dd>
+      <dt>Outcome</dt><dd>The result of a trial.</dd>
+      <dt>Event</dt><dd>The outcome or group of outcomes we care about.</dd>
+      <dt>Probability</dt><dd>A chance described by a number from 0 to 1.</dd>
+      <dt>Observed frequency</dt><dd>How often the event actually occurred. Dividing its count by the number of trials gives its relative frequency.</dd>
+      <dt>Independence</dt><dd>Knowing one result does not change the probability of another.</dd>
+    </dl>
+    <p>Next, we’ll flip a handful of coins at once and see what happens when we repeat the whole experiment. For the formal rules, visit <a href="/reading/statistics/openintro-03/">Probability</a>.</p>
+    <ReadingCredit />
+    <PrevNext prev={{ href: '/reading/statistics/', label: 'Statistics' }} next={{ href: '/reading/statistics/repeated-experiments/', label: 'What happens when we repeat?' }} />
+  </main>
+</Layout>

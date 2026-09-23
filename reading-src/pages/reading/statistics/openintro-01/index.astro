@@ -12,7 +12,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
 
     <h1>Introduction to Data</h1>
-    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; Ch. 1 &middot; <a href="https://openintro.org/book/operating-systems/">openintro.org/book/os</a></p>
+    <p class="text-gray-400 text-sm mb-6">OpenIntro Statistics &middot; Ch. 1 &middot; <a href="https://www.openintro.org/book/os/">openintro.org/book/os</a></p>
+
+    <p class="text-sm mb-6">New to statistics? Start with <a href="/reading/statistics/chance/">How likely is it?</a>, a short chapter you can experiment with.</p>
 
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Statistics begins with <strong>data</strong>. Every dataset is a collection of <strong>observations</strong> (rows) described by <strong>variables</strong> (columns). The type of variable and the way data was collected determine which methods apply.</p>
@@ -177,7 +179,7 @@ print(f"Mean age: {sum(ages) / len(ages)}")
     <p>OpenIntro introduces data with the county and email datasets. We use small inline datasets instead to keep examples self-contained. The original covers data matrices, scatterplots, and data collection pitfalls in more detail. The sampling code here is deterministic for reproducibility; real sampling uses proper random number generators.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
-      Want the full treatment? <a href="https://openintro.org/book/operating-systems/">Read OpenIntro Statistics, Ch. 1</a>.
+      Want the full treatment? <a href="https://www.openintro.org/book/os/">Read OpenIntro Statistics, Ch. 1</a>.
     </div>
 
     <PrevNext next={{ href: "/reading/statistics/openintro-02/", label: "Summarizing Data" }} />

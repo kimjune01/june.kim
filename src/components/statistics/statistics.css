@@ -121,6 +121,8 @@ body:has(.stats-book) #lang-toggle { display: none; }
 .stats-book .stats-start strong { display: block; font: 500 1.15rem/1.4 Charter, Georgia, serif; }
 .stats-book .stats-start span { display: block; font-size: .82rem; color: var(--stats-muted); margin-top: .3rem; }
 @media (max-width: 520px) {
+  .stats-book .stats-histogram text { font-size: 20px; }
+  .stats-book .stats-histogram .stats-chart-empty { font-size: 19px; }
   .stats-book .stats-spinner-layout { grid-template-columns: 1fr; gap: .5rem; }
   .stats-book .stats-readouts { grid-template-columns: 1fr 1fr; }
   .stats-book .stats-words { grid-template-columns: 1fr; gap: .2rem; }
