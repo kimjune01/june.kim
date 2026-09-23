@@ -17,7 +17,7 @@ export default function SymbolSummary({ kind }: { kind: keyof typeof symbols }) 
   const [active, setActive] = useState(0);
   const parts = symbols[kind];
   const button = (i: number) => <button type="button" className="stats-symbol" aria-pressed={active === i} onClick={() => setActive(i)}>{parts[i].symbol}</button>;
-  return <section className="stats-symbol-summary" aria-label="You can now write this">
+  return <section className="stats-symbol-summary bg-zinc-800 rounded-lg p-5 mb-8 callout" aria-label="You can now write this">
     <p className="stats-eyebrow">You can now write this</p>
     <div className="stats-equation" aria-label={kind === 'probability' ? 'P of A equals p' : 'p-hat equals X divided by n'}>
       {kind === 'probability' ? <>{button(0)}{button(1)}<span>=</span>{button(2)}</> : <>{button(0)}<span>=</span><span className="stats-fraction">{button(1)}{button(2)}</span></>}

@@ -8,7 +8,7 @@ export default function SamplingDistribution() {
   const [saved, setSaved] = useState<{ values: number[]; size: number; shape: PopulationShape } | null>(null);
   const population = populations[shape], center = mean(population), sd = populationSD(population);
   function run(repeats: number) { setMeans([...means, ...sampleMeans(population, size, repeats)].slice(-10000)); }
-  return <section className="stats-lab" id="means-lab" aria-label="Build a sampling distribution">
+  return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="means-lab" aria-label="Build a sampling distribution">
     <p className="stats-eyebrow">One sample becomes one mean</p>
     <div className="stats-settings"><label className="stats-control">Population shape<select aria-label="Population shape" value={shape} onChange={e => { setShape(e.target.value as PopulationShape); setMeans([]); setSaved(null); }}><option value="skewed">A long right tail</option><option value="bimodal">Two separated peaks</option><option value="uniform">An even spread</option></select></label>
     <label className="stats-control">Observations per sample<select aria-label="Observations per sample" value={size} onChange={e => { setSize(Number(e.target.value)); setMeans([]); }}>{[1, 2, 5, 10, 30, 100].map(n => <option key={n} value={n}>{n} {n === 1 ? 'observation' : 'observations'}</option>)}</select></label></div>

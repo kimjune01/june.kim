@@ -21,7 +21,7 @@ export default function Spinner() {
     setNotice(`${blue + result.blue} blue out of ${total + count} ${total + count === 1 ? 'spin' : 'spins'}. Last spin: ${result.outcomes.at(-1) ? 'blue' : 'amber'}.`);
   }
 
-  return <section id="spinner" className="stats-lab" aria-label="Spinner experiment">
+  return <section id="spinner" className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" aria-label="Spinner experiment">
     <div className="stats-lab-heading"><span className="stats-eyebrow">Your first experiment</span><span className="stats-tag">One spin, one outcome</span></div>
     <div className="stats-spinner-layout">
       <div className="stats-wheel-wrap">

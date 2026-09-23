@@ -6,7 +6,7 @@ export default function RegressionLab() {
  const points=outlier?[...regressionPoints,{x:9,y:2}]:regressionPoints;
  const best=fitLine(points),error=squaredError(points,{slope,intercept});
  const x=(v:number)=>40+v*45, y=(v:number)=>250-v*18;
- return <section className="stats-lab" id="regression-lab" aria-label="Fit a line experiment">
+ return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="regression-lab" aria-label="Fit a line experiment">
   <p className="stats-eyebrow">How close can your line get?</p>
   <p>Each dot is an invented observation. Move the line to make the vertical gaps small. Those gaps are <strong>residuals</strong>: observed value minus predicted value.</p>
   <div className="stats-settings"><label className="stats-control">Slope: {slope.toFixed(2)}<input aria-label="Line slope" type="range" min="-1" max="2" step=".01" value={slope} onChange={e=>setSlope(Number(e.target.value))}/></label><label className="stats-control">Intercept: {intercept.toFixed(2)}<input aria-label="Line intercept" type="range" min="-2" max="5" step=".01" value={intercept} onChange={e=>setIntercept(Number(e.target.value))}/></label></div>

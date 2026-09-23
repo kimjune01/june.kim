@@ -4,7 +4,7 @@ import Question from './Question';
 export default function ConditionalLab() {
  const [rate,setRate]=useState(1),[given,setGiven]=useState<'flag'|'defect'>('flag');
  const c=flagCounts(rate), denominator=given==='flag'?c.defectFlagged+c.goodFlagged:c.defectFlagged+c.defectMissed;
- return <section className="stats-lab" id="conditional-lab" aria-label="Conditional probability experiment">
+ return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="conditional-lab" aria-label="Conditional probability experiment">
   <p className="stats-eyebrow">What does a warning tell you?</p>
   <p>A fictional factory scanner flags 90% of defective items. It also flags 10% of good items. If an item gets flagged, is it probably defective? Predict first, then change how common defects are.</p>
   <label className="stats-control">Defective items in the factory<select value={rate} onChange={e=>setRate(Number(e.target.value))}>{[1,5,10,25,50].map(n=><option key={n} value={n}>{n}%</option>)}</select></label>

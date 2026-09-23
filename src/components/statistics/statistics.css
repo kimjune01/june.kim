@@ -1,45 +1,35 @@
 .stats-book {
-  --stats-blue: #7bb6f7;
-  --stats-amber: #e8b665;
-  --stats-ink: #e8e5df;
-  --stats-muted: #b0aaa0;
-  --stats-line: #49443d;
-  --stats-paper: #242320;
-  --stats-inset: #1d1c1a;
-  --stats-accent: #bed5a5;
-  color: var(--stats-ink);
+  --stats-blue: #60a5fa;
+  --stats-amber: #fbbf24;
+  --stats-ink: #d4d4d8;
+  --stats-muted: #a1a1aa;
+  --stats-line: #3f3f46;
+  --stats-paper: #27272a;
+  --stats-inset: #18181b;
+  --stats-accent: #93c5fd;
 }
 :root.light .stats-book {
-  --stats-blue: #2c65a2;
-  --stats-amber: #936315;
-  --stats-ink: #302e29;
-  --stats-muted: #645e53;
-  --stats-line: #d6cfbf;
-  --stats-paper: #f2efe6;
-  --stats-inset: #faf8f2;
-  --stats-accent: #426332;
+  --stats-blue: #1d4ed8;
+  --stats-amber: #a16207;
+  --stats-ink: #27272a;
+  --stats-muted: #52525b;
+  --stats-line: #d6d3d1;
+  --stats-paper: #f5f5f4;
+  --stats-inset: #fafaf9;
+  --stats-accent: #1d4ed8;
 }
-.stats-book .stats-kicker, .stats-book .stats-eyebrow, .stats-book .stats-tag {
+.stats-book .stats-eyebrow, .stats-book .stats-tag {
   font-family: system-ui, sans-serif;
   font-size: .65rem;
   letter-spacing: .09em;
   text-transform: uppercase;
   color: var(--stats-muted);
 }
-.stats-book .stats-kicker { margin: 1.7rem 0 .65rem; }
 body:has(main.stats-book) #lang-toggle { display: none; }
-.stats-book h1 { font-family: Charter, Georgia, serif !important; font-size: clamp(2rem, 6vw, 2.9rem); line-height: 1.08; letter-spacing: -.025em; margin-bottom: .7rem; }
-.stats-book .stats-deck { font-size: 1.12rem; color: var(--stats-muted); max-width: 52ch; margin-bottom: 2rem; }
-.stats-book h2 { margin-top: 2.6rem; }
-.stats-book p { line-height: 1.6; }
 .stats-book .stats-aside { border-left: 2px solid var(--stats-accent); padding-left: 1rem; margin: 1.6rem 0; }
 .stats-book .stats-small { font-family: system-ui, sans-serif; font-size: .72rem; line-height: 1.5; color: var(--stats-muted); }
 .stats-book .stats-lab, .stats-book .stats-check, .stats-book .stats-symbol-summary {
-  margin: 1.8rem 0;
-  padding: clamp(1rem, 3vw, 1.5rem);
-  border: 1px solid var(--stats-line);
-  border-radius: 12px;
-  background: var(--stats-paper);
+  margin-top: 1.8rem;
   scroll-margin-top: 3rem;
 }
 .stats-book .stats-lab:target { outline: 2px solid var(--stats-accent); outline-offset: 4px; }
@@ -104,7 +94,7 @@ body:has(main.stats-book) #lang-toggle { display: none; }
 .stats-book .stats-choices label.is-selected { border-color: var(--stats-accent); background: var(--stats-inset); }
 .stats-book .stats-choices input { flex: 0 0 auto; accent-color: var(--stats-accent); }
 .stats-book .stats-feedback { padding-top: .8rem; border-top: 1px solid var(--stats-line); font-size: .88rem; }
-.stats-book .stats-symbol-summary { border-top: 3px solid var(--stats-accent); margin-top: 2rem; }
+.stats-book .stats-symbol-summary { margin-top: 2rem; }
 .stats-book .stats-equation { display: flex; align-items: center; justify-content: center; gap: .4rem; padding: 1.3rem 0; font-size: 2.2rem; }
 .stats-book button.stats-symbol { font: italic 2.2rem Charter, Georgia, serif; border-color: transparent; padding: .25rem .4rem; background: transparent; border-radius: 4px; }
 .stats-book button.stats-symbol[aria-pressed="true"] { color: var(--stats-accent); border-bottom-color: var(--stats-accent); }
@@ -113,13 +103,7 @@ body:has(main.stats-book) #lang-toggle { display: none; }
 .stats-book .stats-fraction button:first-child { border-bottom: 1px solid var(--stats-muted); border-radius: 0; }
 .stats-book .stats-worked-example { font-size: .88rem; color: var(--stats-muted); }
 .stats-book .stats-symbol-summary > a { font-size: .78rem; }
-.stats-book .stats-words { display: grid; grid-template-columns: max-content 1fr; gap: .5rem 1rem; font-size: .85rem; margin: 1rem 0; }
-.stats-book .stats-words dt { font-weight: bold; }
-.stats-book .stats-words dd { margin: 0; }
 .stats-book .stats-credit { color: var(--stats-muted); border-top: 1px solid var(--stats-line); margin-top: 2rem; padding-top: 1rem; font-size: .7rem; line-height: 1.5; }
-.stats-book .stats-start { display: block; border: 1px solid var(--stats-line); padding: 1rem 1.2rem !important; margin: .7rem 0; border-radius: 8px !important; background: var(--stats-paper) !important; }
-.stats-book .stats-start strong { display: block; font: 500 1.15rem/1.4 Charter, Georgia, serif; }
-.stats-book .stats-start span { display: block; font-size: .82rem; color: var(--stats-muted); margin-top: .3rem; }
 .stats-book .stats-settings, .stats-book .stats-readouts-row { display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
 .stats-book .stats-salary-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .2rem 1rem; }
 .stats-book input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--stats-blue); }
@@ -131,7 +115,6 @@ body:has(main.stats-book) #lang-toggle { display: none; }
 .stats-book .stats-town span { aspect-ratio: 1; border-radius: 50%; background: transparent; border: 1px solid var(--stats-line); }
 .stats-book .stats-town .chosen { background: var(--stats-blue); border-color: var(--stats-blue); }
 .stats-book .stats-town .court { background: transparent; border: 2px solid var(--stats-amber); }
-.stats-book .stats-arrival h2 { margin: .5rem 0 1rem; font-size: 1.5rem; }
 .stats-book .stats-formula { font: 1.25rem/1.6 Charter, Georgia, serif; padding: .8rem 0; overflow-wrap: anywhere; }
 .stats-book .stats-arrival details { border-top: 1px solid var(--stats-line); font-size: .85rem; }
 @media (max-width: 520px) {
@@ -139,8 +122,6 @@ body:has(main.stats-book) #lang-toggle { display: none; }
   .stats-book .stats-histogram .stats-chart-empty { font-size: 19px; }
   .stats-book .stats-spinner-layout { grid-template-columns: 1fr; gap: .5rem; }
   .stats-book .stats-readouts { grid-template-columns: 1fr 1fr; }
-  .stats-book .stats-words { grid-template-columns: 1fr; gap: .2rem; }
-  .stats-book .stats-words dd { margin-bottom: .65rem; }
   .stats-book .stats-view { flex-wrap: wrap; }
   .stats-book .stats-symbol-reading { min-height: 12rem; }
 }

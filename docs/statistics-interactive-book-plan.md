@@ -4,6 +4,8 @@ Status: eight-chapter introductory path implemented, 2026-09-22. A first interac
 
 ## Current implementation
 
+- The statistics index and chapters follow the calculus textbook’s format: shared `Layout`, `ChapterTable`, `Neighbors`, and `PrevNext`; standard headings, source lines, callout utilities, and reference tables. Activity controls retain their behavior within the shared book styling. Contextual links connect seven introductory chapters to the companion probability textbook.
+
 - Completed chapters 3–8: describing data, samples, sampling bias and assignment, sampling distributions and the CLT, confidence intervals, and null-model testing. Each has two questions with answer-specific feedback, definitions in context, a concluding formal idea, and a new-context application.
 - Culminations now include definitions, relationships, and theorems. The CLT chapter explicitly distinguishes the fixed population, observations per sample, repetitions, standard error, and the theorem’s assumptions. Simulation illustrates the theorem rather than proving it.
 - Added reusable activities for salaries/outliers, town sampling, treatment assignment, sample means from three population shapes, interval coverage, and a one-sided exact binomial comparison. Integrated relevant activities into OpenIntro 1–2 and 4–7.

@@ -7,7 +7,7 @@ export default function DataExplorer() {
   const values = newcomer ? [...salaries, 1000] : salaries;
   const average = mean(values), middle = median(values), max = newcomer ? 1050 : 110;
   const x = (value: number) => 45 + value / max * 450;
-  return <section className="stats-lab" id="data-lab" aria-label="Salary experiment">
+  return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="data-lab" aria-label="Salary experiment">
     <p className="stats-eyebrow">Five people, five salaries</p>
     <p>Change a salary with its slider. The plot and summaries follow your changes. All amounts are fictional annual salaries.</p>
     <div className="stats-salary-controls">{salaries.map((salary, i) => <label className="stats-control" key={i}>Person {i + 1}: {money(salary)}<input type="range" min="0" max="100" step="1" value={salary} aria-label={`Salary for person ${i + 1}`} onChange={e => setSalaries(salaries.map((v, j) => j === i ? Number(e.target.value) : v))} /></label>)}</div>

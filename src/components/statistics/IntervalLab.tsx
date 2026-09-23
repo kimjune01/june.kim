@@ -9,7 +9,7 @@ export default function IntervalLab() {
   const min = Math.min(140, ...visible.map(i => i.low)) - 1, max = Math.max(200, ...visible.map(i => i.high)) + 1;
   const x = (value: number) => 45 + (value - min) / (max - min) * 450;
   function run(repeats: number) { setIntervals([...intervals, ...confidenceIntervals(size, confidence, repeats)].slice(-10000)); }
-  return <section className="stats-lab" id="interval-lab" aria-label="Confidence interval experiment">
+  return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="interval-lab" aria-label="Confidence interval experiment">
     <p className="stats-eyebrow">Give each estimate some room</p>
     <p>Each sample comes from a simulated normal population. Its standard deviation is known to be 10 cm. Its mean is hidden until you reveal it.</p>
     <div className="stats-settings"><label className="stats-control">Sample size<select aria-label="Interval sample size" value={size} onChange={e => { setSize(Number(e.target.value)); setIntervals([]); }}>{[5, 25, 100].map(n => <option key={n} value={n}>{n}</option>)}</select></label><label className="stats-control">Confidence level<select aria-label="Confidence level" value={confidence} onChange={e => { setConfidence(Number(e.target.value) as Confidence); setIntervals([]); }}>{[80, 95, 99].map(c => <option key={c} value={c}>{c}%</option>)}</select></label></div>

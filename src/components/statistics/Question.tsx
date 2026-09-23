@@ -7,7 +7,7 @@ export default function Question({ id, prompt, choices, explanation }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
   const [reviewed, setReviewed] = useState<number[]>([]);
   const [showExplanation, setShowExplanation] = useState(false);
-  return <section className="stats-check" aria-label="A moment to think">
+  return <section className="stats-check bg-zinc-800 rounded-lg p-5 mb-8 callout" aria-label="A moment to think">
     <p className="stats-eyebrow">A moment to think</p>
     <fieldset>
       <legend>{prompt}</legend>

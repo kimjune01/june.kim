@@ -2,53 +2,64 @@
 import ChapterTable from '../../../components/ChapterTable.astro';
 import Layout from '../../../layouts/Base.astro';
 import Neighbors from '../../../components/Neighbors.astro';
-import '../../../components/statistics/statistics.css';
 ---
 
 <Layout title="Statistics" favicon="◒">
-  <main class="stats-book">
-    <a href="/reading/" class="text-sm">← back to reading</a>
-    <p class="stats-kicker">A book you can experiment with</p>
-    <h1>Statistics</h1>
-    <p class="stats-deck">Make a guess. Try it. See what changes your mind.</p>
-    <p>A few coin flips can surprise you. A thousand rounds begin to reveal a pattern. Statistics gives us ways to describe those patterns and decide what they tell us.</p>
+  <main>
+    <a href="/reading/" class="text-sm mb-4 inline-block">&larr; back to reading</a>
 
-    <h2>Start here: statistics through experiments</h2>
-    <p>These short chapters start with something you can try. We’ll give each idea a name as we go, and arrive at definitions, formulas, and theorems once they have something familiar to say. You don’t need to know statistics or write code.</p>
-    <a class="stats-start" href="/reading/statistics/chance/">
-      <strong>01 · How likely is it? →</strong>
-      <span>Spin a wheel, follow a streak, and give chance a name.</span>
-    </a>
-    <a class="stats-start" href="/reading/statistics/repeated-experiments/">
-      <strong>02 · What happens when we repeat? →</strong>
-      <span>Flip a handful of coins. Repeat. Watch a distribution take shape.</span>
-    </a>
+    <h1>◒ Statistics</h1>
+    <p class="text-gray-400 mb-2">The reading guide follows <a href="https://www.openintro.org/book/os/">OpenIntro Statistics</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+    <p class="text-gray-400 mb-6">Small experiments, diagrams, and plain English. Runnable Scheme and Python in the deeper chapters.</p>
 
-<a class="stats-start" href="/reading/statistics/describing-data/"><strong>03 · What does an average hide? →</strong><span>Move salaries, add an outlier, and compare two kinds of average.</span></a>
-<a class="stats-start" href="/reading/statistics/samples/"><strong>04 · What can a handful tell us? →</strong><span>Sample a hidden town and compare your estimate with its target.</span></a>
-<a class="stats-start" href="/reading/statistics/sampling-fairly/"><strong>05 · Can more data mislead us? →</strong><span>Change who gets sampled, then change how treatments are assigned.</span></a>
-<a class="stats-start" href="/reading/statistics/estimates-vary/"><strong>06 · Why do estimates move? →</strong><span>Build a distribution of averages and meet the Central Limit Theorem.</span></a>
-<a class="stats-start" href="/reading/statistics/intervals/"><strong>07 · How much uncertainty remains? →</strong><span>Make intervals, reveal the truth, and see what confidence means.</span></a>
-<a class="stats-start" href="/reading/statistics/testing-a-claim/"><strong>08 · Could chance explain this? →</strong><span>Compare suspicious results with a fair-coin model.</span></a>
+    <div class="flex justify-center my-6">
+      <svg viewBox="0 0 400 180" class="w-full max-w-md" role="img" aria-labelledby="statistics-outline-figure" style="font-family: ui-monospace, monospace;">
+        <title id="statistics-outline-figure">Distribution of the number of heads in ten independent fair coin flips. Five heads is most likely; zero and ten are rare.</title>
+        <line x1="40" y1="130" x2="360" y2="130" stroke="currentColor" stroke-width="1" stroke-opacity="0.3" />
+        {[1, 10, 45, 120, 210, 252, 210, 120, 45, 10, 1].map((count, i) => (
+          <rect x={46 + i * 28} y={130 - count / 252 * 90} width="24" height={count / 252 * 90} fill={i === 5 ? '#f59e0b' : '#60a5fa'} fill-opacity="0.4" />
+        ))}
+        <text x="58" y="146" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">0</text>
+        <text x="198" y="146" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">5</text>
+        <text x="338" y="146" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">10</text>
+        <text x="200" y="22" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">ten fair coins, one head count</text>
+        <text x="200" y="168" text-anchor="middle" fill="currentColor" font-size="10" fill-opacity="0.5">number of heads → a distribution</text>
+      </svg>
+    </div>
 
-    <h2>Go deeper: the OpenIntro reading guide</h2>
-    <p>Work through the ideas in more detail, with diagrams and runnable examples. Each chapter can also serve as a reference when you have a particular question.</p>
+    <h2>Statistics through experiments</h2>
+    <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. No statistics or programming background needed.</p>
     <ChapterTable chapters={[
-      { href: '/reading/statistics/openintro-01/', title: 'Introduction to Data', desc: 'What are we observing, and how did we choose it?' },
-      { href: '/reading/statistics/openintro-02/', title: 'Summarizing Data', desc: 'What can an average tell us? What does it leave out?' },
-      { href: '/reading/statistics/openintro-03/', title: 'Probability', desc: 'How do chances combine or change with new information?' },
-      { href: '/reading/statistics/openintro-04/', title: 'Distributions', desc: 'The shapes that repeated experiments produce' },
-      { href: '/reading/statistics/openintro-05/', title: 'Foundations for Inference', desc: 'What can a sample tell us about a larger population?' },
-      { href: '/reading/statistics/openintro-06/', title: 'Inference for Proportions', desc: 'Comparing counts, percentages, and categories' },
-      { href: '/reading/statistics/openintro-07/', title: 'Inference for Means', desc: 'Comparing averages while accounting for uncertainty' },
-      { href: '/reading/statistics/openintro-08/', title: 'Simple Linear Regression', desc: 'Fitting a line and understanding what it misses' },
-      { href: '/reading/statistics/openintro-09/', title: 'Multiple and Logistic Regression', desc: 'Several predictors, and outcomes that are yes or no' },
-    ]} />
-    <p class="stats-credit">The reading guide is based on <a href="https://www.openintro.org/book/os/">OpenIntro Statistics</a> by David Diez, Mine Çetinkaya-Rundel, and Christopher Barr, and shared under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>. The introductory chapters credit their own sources.</p>
-    <p class="stats-small">For another way into the ideas: <a href="https://www.youtube.com/user/joshstarmer">StatQuest with Josh Starmer</a>.</p>
+      { href: '/reading/statistics/chance/', title: 'How likely is it?', desc: 'Probability, events, and independence: spin a wheel and follow a streak' },
+      { href: '/reading/statistics/repeated-experiments/', title: 'What happens when we repeat?', desc: 'Random variables and distributions: flip coins and watch a shape emerge' },
+      { href: '/reading/statistics/describing-data/', title: 'What does an average hide?', desc: 'Mean, median, and spread: move salaries and add an outlier' },
+      { href: '/reading/statistics/samples/', title: 'What can a handful tell us?', desc: 'Populations, samples, and estimates: measure a hidden town' },
+      { href: '/reading/statistics/sampling-fairly/', title: 'Can more data mislead us?', desc: 'Selection bias and random assignment: change who gets included' },
+      { href: '/reading/statistics/estimates-vary/', title: 'Why do estimates move?', desc: 'Sampling distributions, standard error, and the Central Limit Theorem' },
+      { href: '/reading/statistics/intervals/', title: 'How much uncertainty remains?', desc: 'Confidence intervals: reveal the truth and count what covers it' },
+      { href: '/reading/statistics/testing-a-claim/', title: 'Could chance explain this?', desc: 'Null models and p-values: compare suspicious results with fair coins' },
+    ]} icon="◒" iconClass="text-blue-300 hover:text-blue-200" />
+
+    <h2>The OpenIntro reading guide</h2>
+    <p class="text-gray-400 mb-6">Go deeper with worked examples and runnable code. For the mathematics behind chance, follow the companion <a href="/reading/probability/">Introduction to Probability</a>.</p>
+    <ChapterTable chapters={[
+      { href: '/reading/statistics/openintro-01/', title: 'Introduction to Data', desc: 'Observations, variables, and study design: what we measure and how we choose it' },
+      { href: '/reading/statistics/openintro-02/', title: 'Summarizing Data', desc: 'Center, spread, and tables: what a summary captures and leaves out' },
+      { href: '/reading/statistics/openintro-03/', title: 'Probability', desc: 'Events, conditional probability, and independence: how chances combine' },
+      { href: '/reading/statistics/openintro-04/', title: 'Distributions', desc: 'Normal, binomial, Poisson, and geometric: the shapes of repeated experiments' },
+      { href: '/reading/statistics/openintro-05/', title: 'Foundations for Inference', desc: 'Estimates, intervals, and tests: learning about a population from a sample' },
+      { href: '/reading/statistics/openintro-06/', title: 'Inference for Proportions', desc: 'Counts, percentages, and categories: comparing outcomes with uncertainty' },
+      { href: '/reading/statistics/openintro-07/', title: 'Inference for Means', desc: 't tests, paired data, and ANOVA: comparing averages' },
+      { href: '/reading/statistics/openintro-08/', title: 'Simple Linear Regression', desc: 'Least squares, residuals, and prediction: fitting a line and reading its errors' },
+      { href: '/reading/statistics/openintro-09/', title: 'Multiple and Logistic Regression', desc: 'Several predictors, adjusted fit, and probabilities for yes-or-no outcomes' },
+    ]} icon="◒" iconClass="text-blue-300 hover:text-blue-200" />
+
+    <p class="text-gray-500 text-sm mt-8">📺 Video explanations: <a href="https://www.youtube.com/user/joshstarmer">StatQuest with Josh Starmer</a>. Topic-matched videos appear near the end of the chapters.</p>
+    <p class="text-gray-500 text-sm">OpenIntro Statistics is by David Diez, Mine Çetinkaya-Rundel, and Christopher Barr. The introductory chapters include their own source credits and licensing.</p>
+
     <Neighbors>
       <ul class="neighbors">
-        <li><a href="/reading/probability/">🎰 Probability</a> — the mathematics behind chance</li>
+        <li><a href="/reading/probability/">🎰 Introduction to Probability</a> — the companion textbook, from events and counting to expectation and limit theorems</li>
         <li><a href="/reading/scientific-method/">🔬 Scientific Method</a> — evidence, significance, and replication</li>
         <li><a href="/reading/machine-learning/">🤖 Machine Learning</a> — learning patterns from data</li>
         <li><a href="/reading/information-theory/">📡 Information Theory</a> — measuring uncertainty and information</li>

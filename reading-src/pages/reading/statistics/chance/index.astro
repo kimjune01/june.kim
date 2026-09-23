@@ -2,6 +2,7 @@
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import PrevNext from '../../../../components/PrevNext.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
 import Spinner from '../../../../components/statistics/Spinner';
 import Question from '../../../../components/statistics/Question';
 import SymbolSummary from '../../../../components/statistics/SymbolSummary';
@@ -11,10 +12,12 @@ import '../../../../components/statistics/statistics.css';
 
 <Layout title="How likely is it? — Statistics through experiments" favicon="◒">
   <main class="stats-book">
-    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
-    <p class="stats-kicker">Statistics through experiments · 01</p>
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
     <h1>How likely is it?</h1>
-    <p class="stats-deck">You can know the chances and still be surprised by what happens. Let’s give that a try.</p>
+    <p class="text-gray-400 text-sm mb-6">Statistics through experiments · 1 of 8 · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p>
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">You can know the chances and still be surprised by what happens. Let’s give that a try.</p>
+    </div>
 
     <p>The wheel below has two colors. Its pointer can land in any direction, with each direction equally likely. Half the wheel is blue, so blue has half the chance.</p>
     <p>Before you spin it ten times, take a guess: how many blue results will you get? Keep your guess in mind, then press <strong>Spin 10 times</strong>.</p>
@@ -22,7 +25,7 @@ import '../../../../components/statistics/statistics.css';
     <Spinner client:load />
     <noscript><p>The spinner needs JavaScript. Here is a possible run instead: blue, blue, amber, blue, amber, amber, blue, blue, blue, amber. Six blue results in ten spins can happen even when each spin has a 50% chance of blue.</p></noscript>
 
-    <h2>The wheel makes no promises about ten spins</h2>
+    <h3>The wheel makes no promises about ten spins</h3>
     <p>Perhaps you got five blues. Perhaps you didn’t. Both are perfectly ordinary results. A half-blue wheel gives blue a 50% chance on <em>each</em> spin; it doesn’t keep a little ledger and stop at five.</p>
     <p>Try a few more batches. The percentage you observe can move toward 50%, then away again. Over many independent spins it tends to settle near the wheel’s chance, but it needn’t get closer with every new spin.</p>
 
@@ -34,13 +37,13 @@ import '../../../../components/statistics/statistics.css';
       ]}
       explanation="Every spin uses the same half-blue wheel. Five blues is the average over many ten-spin experiments, but an individual experiment can produce any count from zero to ten." />
 
-    <h2>A name for the chance</h2>
+    <h3>A name for the chance</h3>
     <p><strong>Probability</strong> is a number from 0 to 1 that describes how likely an event is under a model. Here our model is especially simple: every direction on the wheel is equally likely.</p>
     <p>Choose 25% blue. That is a probability of <strong>0.25</strong>, or one chance in four. At 0, blue cannot happen on this wheel. At 1, every spin is blue. Try those settings too; the ends help make the scale feel familiar.</p>
     <p>One spin is a <strong>trial</strong>. The color it lands on is an <strong>outcome</strong>. An <strong>event</strong> is an outcome, or a group of outcomes, that we’re interested in. Our event is “lands on blue.”</p>
     <p class="stats-aside">The wheel’s probability and your observed percentage answer different questions: <em>What are the chances?</em> and <em>What happened this time?</em> Keeping those apart will help throughout the book.</p>
 
-    <h2>Does a coin remember?</h2>
+    <h3>Does a coin remember?</h3>
     <p>Imagine a fair coin has just landed heads four times: H, H, H, H. It’s tempting to give tails the next turn. But a fair coin has no turn-taking rule.</p>
     <p>When flips are <strong>independent</strong>, knowing earlier results does not change the chance of the next one. Our spinner works that way too. A streak leaves its colored areas exactly as they were.</p>
 
@@ -52,7 +55,7 @@ import '../../../../components/statistics/statistics.css';
       ]}
       explanation="Fairness and independence are assumptions of this example. Under those assumptions, the next flip has a 50% chance of heads. If we did not know whether the coin was fair, the earlier results could help us investigate it." />
 
-    <h2>A little shorthand to take with you</h2>
+    <h3>A little shorthand to take with you</h3>
     <p>You have chosen an event and assigned it a chance. There is a compact way to write those two things together. Let <strong>A</strong> stand for the event, and <strong>p</strong> for its probability.</p>
     <SymbolSummary client:visible kind="probability" />
     <p>For the half-blue wheel, you can write <strong>P(blue) = 0.5</strong>. Read it aloud: “The probability of blue is one half.” The notation carries the idea you have already been using.</p>
@@ -65,19 +68,30 @@ import '../../../../components/statistics/statistics.css';
       ]}
       explanation="One of the four equally likely counters is blue. Replacing it and mixing again keeps that probability at one quarter on every draw. The observed fraction can differ." />
 
-    <h2>Words you met</h2>
-    <dl class="stats-words">
-      <dt>Trial</dt><dd>One performance of the experiment: a spin, a flip, or a draw.</dd>
-      <dt>Outcome</dt><dd>The result of a trial.</dd>
-      <dt>Event</dt><dd>The outcome or group of outcomes we care about.</dd>
-      <dt>Probability</dt><dd>A chance described by a number from 0 to 1.</dd>
-      <dt>Observed frequency</dt><dd>How often the event actually occurred. Dividing its count by the number of trials gives its relative frequency.</dd>
-      <dt>Independence</dt><dd>Knowing one result does not change the probability of another.</dd>
-    </dl>
-    <p>Next, we’ll flip a handful of coins at once and see what happens when we repeat the whole experiment. For the formal rules, visit <a href="/reading/statistics/openintro-03/">Probability</a>.</p>
-<StatQuest videos={[{"id": "oI3hZJqXJuc", "title": "The Main Ideas behind Probability Distributions", "note": "Connect the chance of an outcome with the shape of a whole distribution."}]} />
+    <h3>Words you met</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead>
+        <tbody>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Trial</th><td class="py-2">One performance of the experiment: a spin, a flip, or a draw.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Outcome</th><td class="py-2">The result of a trial.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Event</th><td class="py-2">The outcome or group of outcomes we care about.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Probability</th><td class="py-2">A chance described by a number from 0 to 1.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Observed frequency</th><td class="py-2">How often the event actually occurred. Dividing its count by the number of trials gives its relative frequency.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Independence</th><td class="py-2">Knowing one result does not change the probability of another.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <Neighbors>
+      <ul class="neighbors">
+        <li>Next, we’ll flip a handful of coins at once and see what happens when we repeat the whole experiment. For the formal rules, visit <a href="/reading/statistics/openintro-03/">Probability</a>.</li>
+        <li>For the mathematical foundations, the probability textbook’s <a href="/reading/probability/grinstead-01/">Discrete Probability</a> chapter develops sample spaces and events. Its <a href="/reading/probability/grinstead-08/">Law of Large Numbers</a> chapter explains why repeated trials help frequencies settle toward probabilities.</li>
+      </ul>
+    </Neighbors>
+
+    <StatQuest videos={[{"id": "oI3hZJqXJuc", "title": "The Main Ideas behind Probability Distributions", "note": "Connect the chance of an outcome with the shape of a whole distribution."}]} />
 
     <ReadingCredit />
-    <PrevNext prev={{ href: '/reading/statistics/', label: 'Statistics' }} next={{ href: '/reading/statistics/repeated-experiments/', label: 'What happens when we repeat?' }} />
+    <PrevNext prev={{ href: '/reading/statistics/', label: 'Statistics' }} next={{ href: '/reading/statistics/repeated-experiments/', label: 'What happens when we repeat? · 2 of 8' }} />
   </main>
 </Layout>

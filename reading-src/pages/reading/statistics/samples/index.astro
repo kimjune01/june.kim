@@ -2,6 +2,7 @@
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import PrevNext from '../../../../components/PrevNext.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
 import Question from '../../../../components/statistics/Question';
 import Culmination from '../../../../components/statistics/Culmination.astro';
 import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
@@ -10,21 +11,23 @@ import TownSampler from '../../../../components/statistics/TownSampler';
 ---
 <Layout title="What can a handful tell us? — Statistics through experiments" favicon="◒">
   <main class="stats-book">
-    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
-    <p class="stats-kicker">Statistics through experiments · 04</p>
+    <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
     <h1>What can a handful tell us?</h1>
-    <p class="stats-deck">You cannot measure everyone. A carefully chosen handful can still tell you something.</p>
+    <p class="text-gray-400 text-sm mb-6">Statistics through experiments · 4 of 8 · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p>
+    <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
+      <p class="text-lg" style="max-width:none">You cannot measure everyone. A carefully chosen handful can still tell you something.</p>
+    </div>
 
     <p>A small town wants to know the average height of its 200 adult residents. Measuring everyone would settle it, but suppose you only have time for ten people.</p>
     <p>The town is our <strong>population</strong>: the whole group we want to describe. The ten people we measure form a <strong>sample</strong>. Choose a sample below, then use its mean as your best guess before revealing the town.</p>
     <TownSampler client:load />
     <noscript><p>A random sample of ten residents can have a different mean from the whole town. Measuring all 200 residents gives the population mean exactly, assuming accurate measurements.</p></noscript>
-    <h2>One number to find, another to calculate</h2>
+    <h3>One number to find, another to calculate</h3>
     <p>The town has a definite average height before we measure anyone. That population mean is a <strong>parameter</strong>. A parameter describes the population, even when we do not know its value.</p>
     <p>The mean of the people we actually sampled is a <strong>statistic</strong>. A statistic is calculated from observed data. When we use it to guess the parameter, it acts as an <strong>estimate</strong>.</p>
     <p>Reveal the town, then draw a few more samples of the same size. The statistic moves. The parameter stays put. That is not a calculation going wrong; different people have different heights.</p>
 <Question client:visible id="sample-parameter" prompt="A sample of ten residents averages 172 cm. The whole town averages 170 cm. Which is the parameter?" choices={[{"label": "172 cm, because it came from our measurements.", "correct": false, "feedback": "That is the sample statistic. It estimates the parameter, but it describes the ten observed people."}, {"label": "170 cm, because it describes the population.", "correct": true, "feedback": "The parameter is the population mean. Revealing it lets us compare our estimate with its target."}, {"label": "Both numbers become parameters once we know them.", "correct": false, "feedback": "Knowing a number does not change what group it describes. Population versus sample is the distinction."}]} explanation="Parameter: a property of the population. Statistic: a quantity calculated from the sample. Unknown versus known is not the defining difference." />
-    <h2>What does a larger handful buy us?</h2>
+    <h3>What does a larger handful buy us?</h3>
     <p>Compare several samples of five with several samples of 100. Larger random samples generally give steadier estimates. An individual small sample can still land closer to the truth than an individual large one.</p>
     <p>The experiment samples <strong>without replacement</strong>: once someone is selected, they cannot appear again in that sample. At 200, you have measured the whole town. This is a <strong>census</strong>, and sampling uncertainty disappears for this population.</p>
     <p class="stats-aside">Even a census can have measurement errors or missing answers. Here the measurements are exact and everyone responds, so we can concentrate on the uncertainty caused by choosing a sample.</p>
@@ -34,12 +37,29 @@ import TownSampler from '../../../../components/statistics/TownSampler';
       <p>The arrow matters: an estimate can tell us about the population only when the way we obtained the sample supports that inference.</p>
     </Culmination>
 <Question client:visible id="sample-transfer" prompt="A library samples 50 loans to estimate the mean loan length for all loans last year. What would change if it drew a fresh random sample from that same year?" choices={[{"label": "The population mean for last year.", "correct": false, "feedback": "Those past loans stay the same. Sampling them again does not change their actual mean."}, {"label": "The sample mean might change.", "correct": true, "feedback": "A different set of loans can give a different estimate of the same fixed population mean."}]} explanation="New sample, possibly new estimate, same target population. The next chapter asks whether our way of selecting that sample represents the target fairly." />
-    <h2>Words you met</h2>
-    <dl class="stats-words"><dt>Population</dt><dd>The complete group your question concerns.</dd><dt>Sample</dt><dd>The cases selected from that population.</dd><dt>Parameter</dt><dd>A numerical property of the population.</dd><dt>Statistic</dt><dd>A quantity calculated from sample data.</dd><dt>Census</dt><dd>Measuring every member of the population.</dd></dl>
-    <p>For more on study design, see <a href="/reading/statistics/openintro-01/">Introduction to Data</a>. For estimates, see <a href="/reading/statistics/openintro-05/">Foundations for Inference</a>.</p>
-<StatQuest videos={[{"id": "vikkiwjQqfU", "title": "Population and Estimated Parameters", "note": "Revisit the distinction between the population and what a sample tells us."}]} />
+    <h3>Words you met</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead>
+        <tbody>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Population</th><td class="py-2">The complete group your question concerns.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Sample</th><td class="py-2">The cases selected from that population.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Parameter</th><td class="py-2">A numerical property of the population.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Statistic</th><td class="py-2">A quantity calculated from sample data.</td></tr>
+        <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Census</th><td class="py-2">Measuring every member of the population.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <Neighbors>
+      <ul class="neighbors">
+        <li>For more on study design, see <a href="/reading/statistics/openintro-01/">Introduction to Data</a>. For estimates, see <a href="/reading/statistics/openintro-05/">Foundations for Inference</a>.</li>
+        <li>For the counting behind choosing a sample without replacement, see <a href="/reading/probability/grinstead-03/">Combinatorics</a> in the probability textbook. Combinations count the different groups we could select.</li>
+      </ul>
+    </Neighbors>
+
+    <StatQuest videos={[{"id": "vikkiwjQqfU", "title": "Population and Estimated Parameters", "note": "Revisit the distinction between the population and what a sample tells us."}]} />
 
     <ReadingCredit />
-    <PrevNext prev={{ href: '/reading/statistics/describing-data/', label: 'What does an average hide?' }} next={{ href: '/reading/statistics/sampling-fairly/', label: 'Can more data mislead us?' }} />
+    <PrevNext prev={{ href: '/reading/statistics/describing-data/', label: 'What does an average hide? · 3 of 8' }} next={{ href: '/reading/statistics/sampling-fairly/', label: 'Can more data mislead us? · 5 of 8' }} />
   </main>
 </Layout>

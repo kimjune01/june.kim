@@ -6,7 +6,7 @@ export default function NullLab() {
   const extreme = counts.filter(count => count >= observed).length;
   const exact = fairCoinTail(20, observed) * 100;
   const formatted = exact < .01 ? exact.toFixed(6) : exact.toFixed(2);
-  return <section className="stats-lab" id="null-lab" aria-label="Test a fair-coin explanation">
+  return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="null-lab" aria-label="Test a fair-coin explanation">
     <p className="stats-eyebrow">A world where the coin really is fair</p>
     <p>Our question, chosen before looking at the data: does this coin favor heads? Every simulated experiment flips a fair coin 20 independent times.</p>
     <label className="stats-control">Observed heads in 20 flips<select aria-label="Observed heads" value={observed} onChange={e => setObserved(Number(e.target.value))}>{[10, 12, 14, 15, 16, 18, 20].map(n => <option key={n} value={n}>{n} heads</option>)}</select></label>

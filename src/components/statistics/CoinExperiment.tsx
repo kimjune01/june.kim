@@ -61,7 +61,7 @@ export default function CoinExperiment() {
   const domain = Math.max(result.coins, saved?.coins ?? 0);
   const maximumFrequency = (data: RoundResults) => data.total ? Math.max(...data.histogram) / data.total : 0;
   const ceiling = Math.max(0.1, Math.ceil(Math.max(maximumFrequency(result), saved ? maximumFrequency(saved) : 0) * 10) / 10);
-  return <section id="coin-experiment" className="stats-lab" aria-label="Repeated coin experiment">
+  return <section id="coin-experiment" className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" aria-label="Repeated coin experiment">
     <div className="stats-lab-heading"><span className="stats-eyebrow">Make a distribution</span><span className="stats-tag">One round, one entry</span></div>
     <label className="stats-control">Coins per round
       <select aria-label="Coins per round" value={result.coins} onChange={e => reset(Number(e.target.value))}>

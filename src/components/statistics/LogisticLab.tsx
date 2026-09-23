@@ -5,7 +5,7 @@ export default function LogisticLab() {
  const id=useId(),[hours,setHours]=useState(4),[coefficient,setCoefficient]=useState(.8);
  const p=logistic(-4+coefficient*hours), x=(v:number)=>45+v*45,y=(v:number)=>200-v*160;
  const path=Array.from({length:101},(_,i)=>`${i?'L':'M'}${x(i/10).toFixed(2)},${y(logistic(-4+coefficient*i/10)).toFixed(2)}`).join(' ');
- return <section className="stats-lab" id="logistic-lab" aria-label="Logistic probability experiment">
+ return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="logistic-lab" aria-label="Logistic probability experiment">
   <p className="stats-eyebrow">Predicting a yes or a no</p><p>Imagine a model for passing a practice test. A straight line could predict a probability below zero or above one. A logistic curve keeps the prediction between those limits.</p>
   <p className="stats-small">These coefficients are invented for exploration, not fitted to evidence about studying. The model is predictive; changing a slider does not establish a causal effect.</p>
   <div className="stats-settings"><label className="stats-control">Study hours: {hours}<input aria-label="Study hours" type="range" min="0" max="10" step=".5" value={hours} onChange={e=>setHours(Number(e.target.value))}/></label><label className="stats-control">Hour coefficient: {coefficient.toFixed(1)}<input aria-label="Hour coefficient" type="range" min="-.5" max="1.5" step=".1" value={coefficient} onChange={e=>setCoefficient(Number(e.target.value))}/></label></div>

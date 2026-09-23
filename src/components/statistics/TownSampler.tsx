@@ -8,7 +8,7 @@ export default function TownSampler({ compare = false }: { compare?: boolean }) 
   const truth = mean(town.map(p => p.height));
   const selected = new Set(sample.map(p => p.id));
   function draw() { setSample(sampleWithoutReplacement(town, size)); if (compare) setCourtSample(sampleWithoutReplacement(town.filter(p => p.court), size)); }
-  return <section className="stats-lab" id={compare ? 'bias-lab' : 'sampling-lab'} aria-label={compare ? 'Compare sampling rules' : 'Sample a hidden town'}>
+  return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id={compare ? 'bias-lab' : 'sampling-lab'} aria-label={compare ? 'Compare sampling rules' : 'Sample a hidden town'}>
     <p className="stats-eyebrow">A fictional town of 200 adults</p>
     <label className="stats-control">People to sample<select aria-label="People to sample" value={size} onChange={e => { setSize(Number(e.target.value)); setSample([]); setCourtSample([]); }}>{(compare ? [5, 10, 20, 40] : [5, 10, 20, 40, 100, 200]).map(n => <option key={n} value={n}>{n} people</option>)}</select></label>
     <p className="stats-small">Sample without replacement: nobody is measured twice in a single sample.</p>
