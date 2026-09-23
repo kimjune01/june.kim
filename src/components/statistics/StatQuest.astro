@@ -4,6 +4,7 @@ interface Props { videos: { id: string; title: string }[]; }
 const { videos } = Astro.props;
 const quizHref=chapterQuizLink(Astro.url.pathname);
 ---
-<aside class="text-gray-500 text-sm mt-8" aria-label="Related learning links">
-  <p>{videos.length > 0 && <>📺 StatQuest: {videos.map((video, index) => <span>{index > 0 && ' · '}<a href={`https://www.youtube.com/watch?v=${video.id}`}>{video.title} ↗</a></span>)} · </>}<a href={quizHref} target="_blank" rel="noopener noreferrer">Quiz me on this chapter ↗</a></p>
+<aside class="stats-learning-links text-gray-500 text-sm mt-8" aria-label="Related learning links">
+  {videos.length > 0 && <p>📺 StatQuest: {videos.map((video, index) => <span>{index > 0 && ' · '}<a href={`https://www.youtube.com/watch?v=${video.id}`}>{video.title} ↗</a></span>)}</p>}
+  <p><a href={quizHref} target="_blank" rel="noopener noreferrer"><img class="stats-chatgpt-icon stats-chatgpt-icon-light" src="/assets/openai-white-monoblossom.svg" width="16" height="16" alt="" /><img class="stats-chatgpt-icon stats-chatgpt-icon-dark" src="/assets/openai-black-monoblossom.svg" width="16" height="16" alt="" />Quiz me on this chapter ↗</a></p>
 </aside>
