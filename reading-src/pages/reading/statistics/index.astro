@@ -30,21 +30,21 @@ import Neighbors from '../../../components/Neighbors.astro';
 
     <h2>Statistics through experiments</h2>
     <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. Sixteen chapters take you from first definitions through a university introduction: describing data, sampling, inference, experiment design, and regression. No statistics or programming background needed.</p>
-    <ChapterTable chapters={course.map(chapter=>({href:chapterHref(chapter.slug),title:chapter.title,desc:chapter.desc}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" />
+    <ChapterTable chapters={course.map(chapter=>({href:chapterHref(chapter.slug),title:chapter.title,desc:chapter.desc}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
 
     <h2>The OpenIntro reading guide</h2>
     <p class="text-gray-400 mb-6">Go deeper with worked examples and runnable code. For the mathematics behind chance, follow the companion <a href="/reading/probability/">Introduction to Probability</a>.</p>
     <ChapterTable chapters={[
-      { href: '/reading/statistics/openintro-01/', title: 'Introduction to Data', desc: 'Observations, variables, and study design: what we measure and how we choose it' },
-      { href: '/reading/statistics/openintro-02/', title: 'Summarizing Data', desc: 'Center, spread, and tables: what a summary captures and leaves out' },
-      { href: '/reading/statistics/openintro-03/', title: 'Probability', desc: 'Events, conditional probability, and independence: how chances combine' },
-      { href: '/reading/statistics/openintro-04/', title: 'Distributions', desc: 'Normal, binomial, Poisson, and geometric: the shapes of repeated experiments' },
-      { href: '/reading/statistics/openintro-05/', title: 'Foundations for Inference', desc: 'Estimates, intervals, and tests: learning about a population from a sample' },
-      { href: '/reading/statistics/openintro-06/', title: 'Inference for Proportions', desc: 'Counts, percentages, and categories: comparing outcomes with uncertainty' },
-      { href: '/reading/statistics/openintro-07/', title: 'Inference for Means', desc: 't tests, paired data, and ANOVA: comparing averages' },
-      { href: '/reading/statistics/openintro-08/', title: 'Simple Linear Regression', desc: 'Least squares, residuals, and prediction: fitting a line and reading its errors' },
-      { href: '/reading/statistics/openintro-09/', title: 'Multiple and Logistic Regression', desc: 'Several predictors, adjusted fit, and probabilities for yes-or-no outcomes' },
-    ]} icon="◒" iconClass="text-blue-300 hover:text-blue-200" />
+      { href: '/reading/statistics/openintro-01/', title: 'Introduction to Data', desc: 'What should we measure, and how should we choose who enters a study?' },
+      { href: '/reading/statistics/openintro-02/', title: 'Summarizing Data', desc: 'When do center and spread reveal a pattern, and when do they hide one?' },
+      { href: '/reading/statistics/openintro-03/', title: 'Probability', desc: 'How do events combine, and when does knowing one change another?' },
+      { href: '/reading/statistics/openintro-04/', title: 'Distributions', desc: 'Which probability model fits the outcomes we are counting?' },
+      { href: '/reading/statistics/openintro-05/', title: 'Foundations for Inference', desc: 'How can a sample speak about a population without pretending certainty?' },
+      { href: '/reading/statistics/openintro-06/', title: 'Inference for Proportions', desc: 'How can we compare percentages when every count is noisy?' },
+      { href: '/reading/statistics/openintro-07/', title: 'Inference for Means', desc: 'How can we compare averages when the spread is estimated too?' },
+      { href: '/reading/statistics/openintro-08/', title: 'Simple Linear Regression', desc: 'Which line best fits the data, and how should we read its misses?' },
+      { href: '/reading/statistics/openintro-09/', title: 'Multiple and Logistic Regression', desc: 'What changes when we use several predictors or predict a yes-or-no outcome?' },
+    ]} icon="◒" iconClass="text-blue-300 hover:text-blue-200" descHeader="Question" />
 
     <p class="text-gray-500 text-sm mt-8">📺 <a href="https://www.youtube.com/user/joshstarmer">StatQuest videos ↗</a></p>
     <p class="text-gray-500 text-sm">OpenIntro Statistics is by David Diez, Mine Çetinkaya-Rundel, and Christopher Barr. The introductory chapters include their own source credits and licensing.</p>

@@ -10,9 +10,10 @@ interface Props {
   icon?: string;
   iconClass?: string;
   startNumber?: number;
+  descHeader?: string;
 }
 
-const { chapters, icon, iconClass = '', startNumber = 1 } = Astro.props;
+const { chapters, icon, iconClass = '', startNumber = 1, descHeader = '' } = Astro.props;
 ---
 
 <div class="overflow-x-auto">
@@ -21,7 +22,7 @@ const { chapters, icon, iconClass = '', startNumber = 1 } = Astro.props;
       <tr class="border-b border-zinc-700">
         <th class="py-2 pr-1 w-6"></th>
         <th class="text-left py-2 px-2 text-gray-400">Chapter</th>
-        <th class="py-2 px-2"></th>
+        <th class="text-left py-2 px-2 text-gray-400">{descHeader}</th>
         {icon && <th class="py-2 w-8"></th>}
       </tr>
     </thead>
