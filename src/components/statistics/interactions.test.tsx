@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import React, { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Question from './Question';
 import Spinner from './Spinner';
@@ -53,6 +54,12 @@ describe('explanatory questions', () => {
 });
 
 describe('experiments', () => {
+  it('renders SVG titles as text on the server for matching hydration', () => {
+    const server = document.createElement('div');
+    server.innerHTML = renderToString(<CoinExperiment />);
+    expect(server.querySelector('svg > title')?.textContent).toBe('Current experiment: distribution of head counts');
+    expect(server.querySelector('rect > title')?.textContent).toBe('0 heads (0%): 0 rounds');
+  });
   it('keeps model probability separate from observations and resets a changed model', () => {
     vi.spyOn(Math, 'random').mockReturnValue(0.1);
     render(<Spinner />);

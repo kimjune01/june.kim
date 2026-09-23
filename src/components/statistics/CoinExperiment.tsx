@@ -14,7 +14,7 @@ function Histogram({ result, view, domain, ceiling, saved = false }: { result: R
   return <figure className="stats-histogram">
     <figcaption>{label} · {result.coins} coins per round · {result.total.toLocaleString()} rounds</figcaption>
     <svg viewBox="0 0 540 238" role="img" aria-labelledby={`${id}-title ${id}-desc`}>
-      <title id={`${id}-title`}>{label}: distribution of {view === 'count' ? 'head counts' : 'head proportions'}</title>
+      <title id={`${id}-title`}>{`${label}: distribution of ${view === 'count' ? 'head counts' : 'head proportions'}`}</title>
       <desc id={`${id}-desc`}>Each bar shows the percentage of rounds with that result. {result.total ? `${result.total} rounds recorded. Exact values follow in the data table.` : 'Run a round to add the first result.'}</desc>
       {[0, 0.5, 1].map(fraction => <g key={fraction}>
         <line x1={left} x2={520} y1={baseline - fraction * height} y2={baseline - fraction * height} className="stats-grid" />
@@ -24,7 +24,7 @@ function Histogram({ result, view, domain, ceiling, saved = false }: { result: R
       {result.histogram.map((frequency, heads) => {
         const barHeight = result.total ? frequency / result.total / ceiling * height : 0;
         return <rect key={heads} x={position(heads) - barWidth / 2} y={baseline - barHeight} width={barWidth} height={barHeight}
-          className={saved ? 'stats-bar-saved' : 'stats-bar'}><title>{heads} heads ({Math.round(heads / result.coins * 100)}%): {frequency} rounds</title></rect>;
+          className={saved ? 'stats-bar-saved' : 'stats-bar'}><title>{`${heads} heads (${Math.round(heads / result.coins * 100)}%): ${frequency} rounds`}</title></rect>;
       })}
       {[0, scale / 2, scale].map((value, i) => <text key={i} x={position(i * (view === 'count' ? domain : result.coins) / 2)} y={baseline + 21} textAnchor="middle">{view === 'count' ? value : `${value * 100}%`}</text>)}
       <text x={284} y={233} textAnchor="middle">{view === 'count' ? 'Number of heads in one round' : 'Proportion of heads in one round'}</text>

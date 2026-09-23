@@ -10,8 +10,8 @@
   color: var(--stats-ink);
 }
 :root.light .stats-book {
-  --stats-blue: #367bc4;
-  --stats-amber: #c98a2b;
+  --stats-blue: #2c65a2;
+  --stats-amber: #936315;
   --stats-ink: #302e29;
   --stats-muted: #645e53;
   --stats-line: #d6cfbf;
@@ -27,6 +27,7 @@
   color: var(--stats-muted);
 }
 .stats-book .stats-kicker { margin: 1.7rem 0 .65rem; }
+body:has(.stats-book) #lang-toggle { display: none; }
 .stats-book h1 { font-family: Charter, Georgia, serif !important; font-size: clamp(2rem, 6vw, 2.9rem); line-height: 1.08; letter-spacing: -.025em; margin-bottom: .7rem; }
 .stats-book .stats-deck { font-size: 1.12rem; color: var(--stats-muted); max-width: 52ch; margin-bottom: 2rem; }
 .stats-book h2 { margin-top: 2.6rem; }
