@@ -1,10 +1,7 @@
 ---
-interface Props { videos: { id: string; title: string; note: string }[]; }
+interface Props { videos: { id: string; title: string }[]; }
 const { videos } = Astro.props;
 ---
 <aside class="text-gray-500 text-sm mt-8" aria-label="Related StatQuest videos">
-  <p>📺 Another way to see it: <strong>StatQuest with Josh Starmer</strong></p>
-  <ul>
-    {videos.map(video => <li class="mb-3"><a href={`https://www.youtube.com/watch?v=${video.id}`}>{video.title} ↗</a><span class="block mt-1 text-sm">{video.note}</span></li>)}
-  </ul>
+  <p>📺 StatQuest: {videos.map((video, index) => <span>{index > 0 && ' · '}<a href={`https://www.youtube.com/watch?v=${video.id}`}>{video.title} ↗</a></span>)}</p>
 </aside>
