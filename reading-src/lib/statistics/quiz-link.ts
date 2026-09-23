@@ -1,6 +1,15 @@
+import {course,openIntroCourse,chapterHref} from './course';
+
 /** Build a chapter-specific ChatGPT link with a quiz request. */
 export function quizLink(title: string, chapterPath: string): string {
   const chapterUrl = new URL(chapterPath, 'https://june.kim').href;
   const prompt = `Read ${chapterUrl} before quizzing me on "${title}". Treat this as a standalone session: use the linked chapter and this conversation, without assuming prior knowledge of me or tracking progress afterward. Run five checks, one question at a time: two conceptual multiple-choice questions, one interpretation of a chapter experiment or diagram, one short explanation, and one new application. After each answer, give immediate, specific feedback. If I am wrong, identify the specific gap, explain it briefly, and offer an optional pointer to the relevant chapter section or a verified authoritative source URL; never invent a link. Then ask me to explain what happened and why in my own words, briefly. Evaluate that explanation; if the gap remains, give a fresh retry on the same idea and wait for a sound explanation before moving on. If I was right, still ask for a brief explanation and check the reasoning. Do not reveal later answers. After the fifth check, recap what I understood and what to revisit. Start with question 1.`;
   return `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+}
+
+export function chapterQuizLink(chapterPath: string): string {
+  const path=new URL(chapterPath,'https://june.kim').pathname;
+  const chapter=course.find(item=>chapterHref(item.slug)===path) ?? openIntroCourse.find(item=>item.href===path);
+  if (!chapter) throw new Error(`Unknown statistics chapter: ${path}`);
+  return quizLink(chapter.title,path);
 }

@@ -18,3 +18,15 @@ export const course = [
  {slug:'reading-a-study',title:'Reading a Statistical Study',desc:'What can this study actually claim?'},
 ];
 export const chapterHref=(slug:string)=>`/reading/statistics/${slug}/`;
+
+export const openIntroCourse = [
+ { href: '/reading/statistics/openintro-01/', title: 'Introduction to Data', desc: 'What should we measure, and how should we choose who enters a study?' },
+ { href: '/reading/statistics/openintro-02/', title: 'Summarizing Data', desc: 'When do center and spread reveal a pattern, and when do they hide one?' },
+ { href: '/reading/statistics/openintro-03/', title: 'Probability', desc: 'How do events combine, and when does knowing one change another?' },
+ { href: '/reading/statistics/openintro-04/', title: 'Distributions', desc: 'Which probability model fits the outcomes we are counting?' },
+ { href: '/reading/statistics/openintro-05/', title: 'Foundations for Inference', desc: 'How can a sample speak about a population without pretending certainty?' },
+ { href: '/reading/statistics/openintro-06/', title: 'Inference for Proportions', desc: 'How can we compare percentages when every count is noisy?' },
+ { href: '/reading/statistics/openintro-07/', title: 'Inference for Means', desc: 'How can we compare averages when the spread is estimated too?' },
+ { href: '/reading/statistics/openintro-08/', title: 'Simple Linear Regression', desc: 'Which line best fits the data, and how should we read its misses?' },
+ { href: '/reading/statistics/openintro-09/', title: 'Multiple and Logistic Regression', desc: 'What changes when we use several predictors or predict a yes-or-no outcome?' },
+];

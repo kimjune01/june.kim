@@ -1,7 +1,9 @@
 ---
+import {chapterQuizLink} from '../../../reading-src/lib/statistics/quiz-link';
 interface Props { videos: { id: string; title: string }[]; }
 const { videos } = Astro.props;
+const quizHref=chapterQuizLink(Astro.url.pathname);
 ---
-<aside class="text-gray-500 text-sm mt-8" aria-label="Related StatQuest videos">
-  <p>📺 StatQuest: {videos.map((video, index) => <span>{index > 0 && ' · '}<a href={`https://www.youtube.com/watch?v=${video.id}`}>{video.title} ↗</a></span>)}</p>
+<aside class="text-gray-500 text-sm mt-8" aria-label="Related learning links">
+  <p>{videos.length > 0 && <>📺 StatQuest: {videos.map((video, index) => <span>{index > 0 && ' · '}<a href={`https://www.youtube.com/watch?v=${video.id}`}>{video.title} ↗</a></span>)} · </>}<a href={quizHref} target="_blank" rel="noopener noreferrer">Quiz me on this chapter ↗</a></p>
 </aside>
