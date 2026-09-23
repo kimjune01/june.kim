@@ -33,6 +33,24 @@ Add a beginner sequence of short, guided experiments, then connect it to the nin
 
 The culmination of a section or chapter is an earned formal idea: a definition, a symbolic representation, a relationship, or a theorem that compresses what the reader has learned. Following the ending of [General Intelligence](../src/content/blog/2026-03-14-general-intelligence.md), the expression should feel earned: familiar experiences become something compact enough to remember and use in the next chapter. This is a user-directed design principle; the research below does not independently establish the effectiveness of this particular reveal pattern.
 
+## University introductory-course scope
+
+The guided path extends through a typical first university statistics course, with interpretation and basic experiment design as the endpoint. The first eight chapters establish the foundations; the continuation applies them to studies with real decisions. Use OpenIntro Statistics’ core sequence as a coverage reference, not a claim of equivalence to a credit-bearing course.
+
+| Chapter | Question and activity | Earned idea |
+| --- | --- | --- |
+| 9. Planning an experiment | Design a classroom comparison; choose the assignment unit, allocation, outcome, and analysis rule. | The independent unit, random assignment, comparison, and prespecified measurement determine what a causal claim supports. |
+| 10. Comparing proportions | Collect an A/B experiment and shuffle its group labels under a no-effect model. | Difference in proportions; a two-sided randomization p-value; effect size versus evidence. |
+| 11. Comparing means | Compare independent groups, then preserve or break the pairing of repeated measurements. | Welch and paired t procedures; standard error and interval depend on the design. |
+| 12. Errors and power | Repeat studies while varying true effect, sample size, and significance threshold; examine multiple testing. | Type I/II errors, power, and a planned error rate. |
+| 13. Beyond two groups | Change categorical counts and the separation of three numerical groups. | Chi-square and ANOVA compare observed variation with a null model; an omnibus result does not identify every difference. |
+| 14. Relationships and prediction | Fit a line, add an influential observation, and inspect slope uncertainty. | Correlation, regression, residuals, and the distinction between association, prediction, and causation. |
+| 15. Reading a study | Interpret a classroom experiment from design through effect, interval, p-value, and limitations. | A defensible conclusion combines study design, effect size, uncertainty, and context. |
+
+Each chapter retains the calculus book’s shared layout and navigation, contextual probability-textbook links, relevant StatQuest videos, and feedback on transfer questions. Inferential procedures name their assumptions; simulations and constructed examples are labeled. Core coverage includes one-sample inference, two proportions, independent and paired means, categorical counts, ANOVA, and simple regression. Multiple and logistic regression remain optional continuations.
+
+Acceptance: a reader can state a null and alternative, distinguish a one- from two-sided question, interpret a p-value without reversing the conditioning, report an effect with uncertainty, recognize dependent observations, choose a basic comparison method, and propose a randomized experiment with a clear unit, outcome, and stopping rule.
+
 ## Learning outcomes
 
 A reader finishing the introduction should be able to:
