@@ -1,0 +1,55 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import RegressionLab from '../../../../components/statistics/RegressionLab';
+import '../../../../components/statistics/statistics.css';
+---
+<Layout title="What does a fitted line tell us? — Statistics through experiments" favicon="◒">
+ <main class="stats-book">
+  <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+  <h1>What does a fitted line tell us?</h1>
+  <CourseProgress slug="relationships-and-prediction" />
+  <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout"><p class="text-lg" style="max-width:none">A line compresses a relationship. Its residuals show what the compression leaves behind.</p></div>
+<p>Suppose we record hours of practice and a quiz score for each student. We now have two numerical variables per person. A scatterplot puts practice on the horizontal axis and score on the vertical axis. Each dot keeps one person’s measurements together.</p>
+ <p>Before fitting a line, look for direction, curvature, clusters, and unusual points. Then try moving the line below. Can you reduce the vertical gaps between the dots and their predictions?</p>
+ <RegressionLab inference client:load />
+ <h3>What the line says</h3>
+ <p>The <strong>slope</strong> is the change in predicted outcome for a one-unit increase in the predictor. If hours predict quiz points, a slope of two means two predicted points per additional hour. It describes an association unless the design and causal assumptions justify more.</p>
+ <p>The <strong>intercept</strong> is the prediction when the predictor is zero. Sometimes that has a useful meaning; sometimes zero lies far outside the observed range. An intercept is still needed to position the line even when it has little direct interpretation.</p>
+ <p>A <strong>residual</strong> is observed outcome minus predicted outcome. Least squares chooses the slope and intercept that minimize the sum of squared residuals. Adding an unusual point can change that choice substantially. A point far out along the predictor axis has <strong>leverage</strong>; whether it strongly changes the fitted line also depends on where its outcome falls.</p>
+ <h3>Association without units</h3>
+ <p><strong>Pearson’s correlation</strong>, r, summarizes the direction and strength of a linear relationship on a scale from −1 to 1. Positive values go with an upward tendency; negative values with a downward tendency. A value near zero does not rule out a strong curved relationship.</p>
+ <p>Correlation does not change when hours become minutes. The slope does: its units change. Neither a large correlation nor a steep slope can establish that practice caused the score differences. Motivation, prior knowledge, and access to help could affect both variables.</p>
+ <p>For an ordinary least-squares line with an intercept and one predictor, R² equals r². It is the fraction of the outcome’s sample variation around its mean accounted for by the fitted line. It is not the fraction of students predicted correctly, and it is not a fraction caused by the predictor.</p>
+ <Question client:visible id="regression-cause" prompt="Students who practice more tend to score higher in an observational survey. What does a positive slope establish?" choices={[{"label": "A positive linear association in these data.", "correct": true, "feedback": "The slope describes how the fitted prediction changes. A causal claim needs additional design or assumptions."}, {"label": "Each extra hour causes exactly the fitted number of points.", "correct": false, "feedback": "Other variables may influence both practice and scores. Individual outcomes also vary around the line."}]} explanation="Regression can describe or predict without identifying a causal effect. Begin with the study design before interpreting a coefficient." />
+ <h3>The fitted slope is an estimate too</h3>
+ <p>A different sample could produce a different slope. The activity displays a t interval and a two-sided test of zero population slope for the best-fitting line, independently of your trial line. Adding a point changes both the fit and its uncertainty.</p>
+ <p>The textbook t procedure assumes the mean relationship is linear, errors are independent and normally distributed, and their variance is constant across predictor values. Normality supports exact small-sample inference. Residual patterns can reveal curvature, changing spread, or unusual observations; independence is chiefly a question about data collection.</p>
+ <p>Plot residuals against the predictor or fitted values: a curve suggests a missed pattern, while a widening fan suggests changing variability. The activity’s dashed gaps show individual residuals; the deeper chapter develops the diagnostic view. Passing a visual check does not prove all assumptions true.</p>
+ <Culmination title="A fitted relationship, with room for uncertainty" href="#regression-lab">
+  <p class="stats-formula">ŷ = b₀ + b₁x<br />residual = y − ŷ<br />R² = 1 − Σ(y − ŷ)² / Σ(y − ȳ)²</p>
+  <p>The hat marks a prediction. b₀ positions the line; b₁ sets its slope. R² compares the remaining squared variation with the variation left by predicting the same mean for everyone.</p>
+  <p>For the classical simple-regression slope test, t = b₁/SE(b₁), with n − 2 degrees of freedom. We have estimated two line coefficients. This tests zero slope within the specified model; it does not test every possible relationship.</p>
+ </Culmination>
+ <Question client:visible id="regression-predict" prompt="Which is usually wider at the same predictor value: an interval for the population mean outcome or one for a new person\u2019s outcome?" choices={[{"label": "The interval for a new person’s outcome.", "correct": true, "feedback": "It includes uncertainty about the mean relationship plus the person-to-person scatter around it."}, {"label": "They are the same because both use the same fitted line.", "correct": false, "feedback": "The line estimates a mean. An individual can differ from that mean even if the line were known exactly."}]} explanation="A confidence interval for a mean response and a prediction interval for a new observation answer different questions. State which one you report." />
+ <p><strong>Extrapolation</strong> uses the line beyond the observed predictor range. A pattern seen over one to five hours need not continue to twenty hours. Good fit within the observed range does not supply evidence outside it.</p>
+  <h3>Words you met</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead><tbody>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Correlation</th><td class="py-2">A unit-free summary of a linear association’s direction and strength.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Slope</th><td class="py-2">The fitted change in outcome per unit increase in predictor.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Residual</th><td class="py-2">Observed outcome minus fitted prediction.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">R²</th><td class="py-2">The fraction of sample outcome variation accounted for by the fitted model, with an intercept.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Prediction interval</th><td class="py-2">An interval for a new individual outcome, including individual variation.</td></tr>
+  </tbody></table></div>
+  <Neighbors><ul class="neighbors"><li>Explore worked examples in <a href="/reading/statistics/openintro-08/">Simple Linear Regression</a>, then additional predictors and binary outcomes in <a href="/reading/statistics/openintro-09/">Multiple and Logistic Regression</a>.</li><li>For expectations, variance, and covariance, see <a href="/reading/probability/grinstead-06/">Expected Value and Variance</a>.</li></ul></Neighbors>
+  <StatQuest videos={[{"id": "xZ_z8KWkhXE", "title": "Pearson’s Correlation, Clearly Explained", "note": "Connect the scatterplot’s direction and strength with r."}, {"id": "PaFPbb66DxQ", "title": "Fitting a line to data, aka Least Squares, aka Linear Regression", "note": "Revisit why the best-fitting line minimizes squared residuals."}]} />
+  <ReadingCredit />
+  <CourseNavigation slug="relationships-and-prediction" />
+ </main>
+</Layout>

@@ -6,7 +6,7 @@ export default function MoreGroupsLab(){
  const groups=[0,1,2].map(g=>[-5,-3,-1,1,3,5].map(v=>50+g*separation+spread*v)),f=anova(groups);
  return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="groups-lab" aria-label="Compare more than two groups">
   <p className="stats-eyebrow">Counts or measurements?</p><p>These constructed examples let you change a pattern while holding other features fixed. They are not repeated random samples.</p>
-  <h3>Three categories: count the choices</h3><p>Ninety independently sampled people choose one of three lunch options. The null model gives each option probability one third, so each expected count is 30.</p>
+  <h3>Three categories: count the choices</h3><p>Ninety independently sampled people choose one of three meeting times. The null model gives each option probability one third, so each expected count is 30.</p>
   <label className="stats-control">Move choices from C to A<select aria-label="Count imbalance" value={imbalance} onChange={e=>setImbalance(Number(e.target.value))}>{[0,5,10,20,25].map(v=><option key={v} value={v}>{v} choices</option>)}</select></label>
   <table><thead><tr><th scope="col">Option</th><th scope="col">Observed</th><th scope="col">Expected under null</th></tr></thead><tbody>{counts.map((v,i)=><tr key={i}><th scope="row">{['A','B','C'][i]}</th><td>{v}</td><td>30</td></tr>)}</tbody></table>
   <p role="status">Chi-square statistic {chi.statistic.toFixed(2)}, df = 2. Right-tail p-value {formatP(chi.p)}.</p>

@@ -1,0 +1,54 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import MoreGroupsLab from '../../../../components/statistics/MoreGroupsLab';
+import '../../../../components/statistics/statistics.css';
+---
+<Layout title="What if there are more than two groups? — Statistics through experiments" favicon="◒">
+ <main class="stats-book">
+  <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+  <h1>What if there are more than two groups?</h1>
+  <CourseProgress slug="beyond-two-groups" />
+  <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout"><p class="text-lg" style="max-width:none">The kind of measurement tells us which differences to compare.</p></div>
+<p>A club offers three meeting times. Do members favor one, or are the choices equally popular? Elsewhere, students are randomly assigned to three groups that use different practice routines. Do their mean scores differ? Both questions involve three groups, but one records counts and the other records numerical measurements.</p>
+ <p>Below are two constructed examples. They are controls for exploring a calculation, not new random studies. Change the counts in the first. Then move the group means and the within-group spread in the second.</p>
+ <MoreGroupsLab client:load />
+ <h3>Counts: compare observed with expected</h3>
+ <p>If ninety independent members each choose one of three equally popular meeting times, the expected counts are thirty, thirty, and thirty. Actual counts need not match exactly. A <strong>chi-square goodness-of-fit test</strong> measures how far they depart from these prespecified proportions.</p>
+ <p>For each category, subtract the expected count from the observed count, square the gap, and divide by the expected count. Add the contributions. Bigger gaps produce a larger statistic. Squaring keeps opposite departures from canceling.</p>
+ <p>With three categories and fixed probabilities, two counts can vary freely; the third is fixed by the total. That gives two degrees of freedom. More generally it is k − 1 for k categories when no probabilities are estimated from the data. Estimating parameters can change that count.</p>
+ <p>The usual chi-square approximation needs independent observations and adequate <em>expected</em> counts. Having every expected count at least five is a common introductory screening rule. Sparse tables may need exact or simulation methods. Do not apply a chi-square test to percentages without their underlying counts.</p>
+ <Question client:visible id="groups-counts" prompt="Expected counts are 30, 30, and 30; observed counts are 50, 30, and 10. Can the positive and negative gaps cancel in chi-square?" choices={[{"label": "Yes, because 20 plus −20 is zero.", "correct": false, "feedback": "The procedure squares each gap before adding. Both departures count as disagreement with the model."}, {"label": "No. Each squared contribution is nonnegative.", "correct": true, "feedback": "The statistic is 400/30 + 0 + 400/30. Both departures make the fit worse."}]} explanation="A goodness-of-fit statistic measures the size of departures, not their signed total." />
+ <h3>Two categorical variables</h3>
+ <p>Suppose we record both year of study and preferred meeting time. A two-way table counts each combination. A <strong>chi-square test of independence</strong> compares the observed table with the counts expected if those two variables were independent.</p>
+ <p>For each cell, the expected count is its row total × its column total / the overall total. The statistic uses the same squared-gap rule; degrees of freedom are (rows − 1)(columns − 1). A small p-value supports an association. It does not tell us which variable caused the other or which cells explain all of the difference.</p>
+ <h3>Means: compare between with within</h3>
+ <p>Now try the numerical scores. Move the group means apart while holding within-group spread fixed. Then hold the means fixed and increase the spread. The same mean differences become less compelling when individual scores are much more variable.</p>
+ <p><strong>Analysis of variance</strong>, or ANOVA, compares variation between group means with variation within groups. Its null says all population means are equal. Its alternative says at least one differs. The F statistic is a ratio of those two variation estimates.</p>
+ <p>The classical one-way procedure assumes independent observations, approximately normal errors within each group, and equal population variances. Equal sample sizes help with some departures, but do not remove the assumptions. Strong variance differences may call for Welch’s ANOVA; clustered measurements need an analysis that respects the clusters.</p>
+ <Culmination title="Choose the comparison that matches the data" href="#groups-lab">
+  <p class="stats-formula">Counts: χ² = Σ(observed − expected)² / expected<br />Means: F = between-group mean square / within-group mean square</p>
+  <p>Both compare a pattern with what a null model can explain. Chi-square adds standardized count discrepancies. ANOVA compares variation estimates; under its null, their scales are comparable. A large statistic can be evidence against the corresponding null.</p>
+ </Culmination>
+ <Question client:visible id="groups-omnibus" prompt="An ANOVA gives a small p-value for three routines. What does that establish?" choices={[{"label": "Every pair of routines has different population means.", "correct": false, "feedback": "An omnibus test can reject because just one mean differs. It does not identify every pairwise difference."}, {"label": "There is evidence against the claim that all three population means are equal.", "correct": true, "feedback": "To locate differences, examine estimates and use planned contrasts or appropriate multiple-comparison methods."}]} explanation="An overall test answers an overall question. Following it with every unadjusted pairwise test creates additional opportunities for false discoveries." />
+ <p>Plot the groups and report differences with uncertainty. A single omnibus p-value is an invitation to understand the pattern, not a substitute for describing it.</p>
+  <h3>Words you met</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead><tbody>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Goodness of fit</th><td class="py-2">Agreement between observed category counts and a specified distribution.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Expected count</th><td class="py-2">A count predicted under the null model.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Test of independence</th><td class="py-2">A test for association between categorical variables.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">ANOVA</th><td class="py-2">A comparison of group means using between-group and within-group variation.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Omnibus test</th><td class="py-2">A test of a joint claim that does not identify every individual difference.</td></tr>
+  </tbody></table></div>
+  <Neighbors><ul class="neighbors"><li>Find chi-square examples in <a href="/reading/statistics/openintro-06/">Inference for Proportions</a> and ANOVA in <a href="/reading/statistics/openintro-07/">Inference for Means</a>.</li><li>Review <a href="/reading/statistics/errors-and-power/">multiple testing</a> before making many pairwise comparisons.</li></ul></Neighbors>
+  <StatQuest videos={[{"id": "NF5_btOaCig", "title": "Linear Models Part 2: t-tests and ANOVA", "note": "Connect comparisons of group means with the broader idea of a linear model."}]} />
+  <ReadingCredit />
+  <CourseNavigation slug="beyond-two-groups" />
+ </main>
+</Layout>

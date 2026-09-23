@@ -1,7 +1,8 @@
 ---
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
-import PrevNext from '../../../../components/PrevNext.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
 import Neighbors from '../../../../components/Neighbors.astro';
 import Question from '../../../../components/statistics/Question';
 import Culmination from '../../../../components/statistics/Culmination.astro';
@@ -13,7 +14,7 @@ import NullLab from '../../../../components/statistics/NullLab';
   <main class="stats-book">
     <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
     <h1>Could chance explain this?</h1>
-    <p class="text-gray-400 text-sm mb-6">Statistics through experiments · 8 of 8 · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p>
+    <CourseProgress slug="testing-a-claim" />
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">An unusual result needs a comparison: unusual under which explanation?</p>
     </div>
@@ -41,7 +42,7 @@ import NullLab from '../../../../components/statistics/NullLab';
 <Question client:visible id="pvalue-transfer" prompt="A properly designed A/B test reports p = 0.02. Which reading is justified?" choices={[{"label": "There is a 2% chance the no-difference hypothesis is true.", "correct": false, "feedback": "That reverses the conditioning. The calculation assumes the null model; it does not assign a probability to that hypothesis."}, {"label": "Under the null model, results at least this extreme have probability 2%.", "correct": true, "feedback": "This keeps the assumption and the result in their proper places. You would also want the estimated effect, its uncertainty, and the study design."}, {"label": "The new version improves the outcome by 2%.", "correct": false, "feedback": "The p-value is not an effect size. A small improvement can have a small p-value with enough data."}]} explanation="A test measures compatibility with a specified model. To make a decision, also consider effect size, uncertainty, study quality, and the consequences of being wrong." />
     <h3>Keep the question in view</h3>
     <p>A large p-value does not prove no effect. A small study may simply be too noisy to distinguish useful differences. A small p-value does not guarantee a useful effect either.</p>
-    <p>You now have a connected set of questions: What did we measure? Whom did we sample? How variable is our estimate? What would happen under a proposed explanation? The deeper chapters build methods around those questions.</p>
+    <p>You now have a connected set of questions: What did we measure? Whom did we sample? How variable is our estimate? What would happen under a proposed explanation? Next, we will design a classroom experiment and use those questions to compare groups.</p>
 
     <h3>Words you met</h3>
     <div class="overflow-x-auto">
@@ -66,6 +67,6 @@ import NullLab from '../../../../components/statistics/NullLab';
     <StatQuest videos={[{"id": "vemZtEM63GY", "title": "p-values: What they are and how to interpret them", "note": "Practice keeping the null assumption separate from the probability of the results."}]} />
 
     <ReadingCredit />
-    <PrevNext prev={{ href: '/reading/statistics/intervals/', label: 'How much uncertainty remains? · 7 of 8' }} next={{ href: '/reading/statistics/openintro-01/', label: 'Introduction to Data' }} />
+    <CourseNavigation slug="testing-a-claim" />
   </main>
 </Layout>

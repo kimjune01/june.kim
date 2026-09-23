@@ -1,0 +1,55 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import MeansComparison from '../../../../components/statistics/MeansComparison';
+import '../../../../components/statistics/statistics.css';
+---
+<Layout title="How different are these averages? — Statistics through experiments" favicon="◒">
+ <main class="stats-book">
+  <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+  <h1>How different are these averages?</h1>
+  <CourseProgress slug="comparing-means" />
+  <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout"><p class="text-lg" style="max-width:none">Two groups of people and two measurements of the same people need different comparisons.</p></div>
+<p>One group tries a new practice routine and another uses the usual routine. Their average scores differ by three points. Is three a clear signal, or small compared with the uncertainty in our estimate?</p>
+ <p>There is another way to collect scores: measure the same people before and after practice. A person who starts high may finish high under either routine. Keeping track of who is paired with whom can remove much of that person-to-person variation from the comparison.</p>
+ <p>The activity uses constructed measurements so you can isolate these ideas. First compare independent groups. Then switch to paired measurements and inspect the individual changes.</p>
+ <MeansComparison client:load />
+ <h3>Why a new distribution?</h3>
+ <p>Earlier we used a normal model with known population standard deviation. Usually we do not know that spread: we estimate it from the sample. The standard error is now uncertain too, especially with few observations.</p>
+ <p><strong>Student’s t distribution</strong> allows for that extra uncertainty. It is symmetric like the standard normal distribution, but has heavier tails. Its shape depends on <strong>degrees of freedom</strong>: the amount of independent information left after estimation. More degrees of freedom bring it closer to the normal distribution.</p>
+ <p>For a single sample mean, the statistic is t = (x̄ − μ₀)/(s/√n), where μ₀ is the proposed population mean. With independent, normally distributed observations it follows a t distribution with n − 1 degrees of freedom under the null. For larger samples the method can tolerate some non-normality, but extreme outliers and strong skew deserve attention.</p>
+ <h3>Two independent groups</h3>
+ <p>For separate groups, each sample mean adds uncertainty to the difference. <strong>Welch’s t procedure</strong> estimates those contributions separately and does not require equal population variances. Its degrees of freedom can be fractional; they are calculated from both groups’ sizes and variances.</p>
+ <p>Independent observations within and between groups are essential. Small samples need approximately normal populations for a reliable t approximation. Inspect the measurements and the design; a formula cannot detect classroom clustering or repair a biased sample.</p>
+ <Question client:visible id="means-pair" prompt="The same twelve students take a quiz before and after practice. What should a paired analysis summarize?" choices={[{"label": "The twelve within-student score changes.", "correct": true, "feedback": "Each person supplies one difference. The variability of those differences determines the standard error."}, {"label": "Two unrelated groups of twelve scores.", "correct": false, "feedback": "That discards which measurements belong together. The repeated measurements are not independent groups."}]} explanation="Pairing is a property of how data were collected, not an option chosen because it gives a smaller p-value." />
+ <h3>Let each person be their own comparison</h3>
+ <p>In a <strong>paired t procedure</strong>, subtract each before score from its matching after score. Now we have one sample of differences. Its mean is the estimated change; its standard deviation describes how much the changes vary between people.</p>
+ <p>A paired comparison can be much more precise when before and after scores move together. It is not automatically more precise for every dataset. The differences must be independent across pairs, and small-sample inference assumes their population is approximately normal. The original before and after scores need not each have the same spread.</p>
+ <p>Improvement after practice alone does not prove practice caused it. Familiarity with the quiz, outside study, or the passage of time could also matter. Pairing handles a dependence structure; a randomized control comparison handles a causal question.</p>
+ <Culmination title="Student’s t compares signal with estimated noise" href="#means-comparison">
+  <p class="stats-formula">t = (estimated difference − null difference) / SE</p>
+  <p>For independent groups, SE = √(s²<sub>A</sub>/n<sub>A</sub> + s²<sub>B</sub>/n<sub>B</sub>). For n matched pairs, SE = s<sub>d</sub>/√n, where s<sub>d</sub> is the standard deviation of the paired differences.</p>
+  <p>A 95% interval is the estimated difference ± t* × SE. The critical value t* comes from the appropriate t distribution. It is larger than 1.96 for finite degrees of freedom, reflecting the extra uncertainty in estimating spread.</p>
+ </Culmination>
+ <Question client:visible id="means-interval" prompt="A 95% interval for a mean difference runs from \u22121 to 7 points. What is a fair reading?" choices={[{"label": "The effect is exactly zero because zero is in the interval.", "correct": false, "feedback": "The interval also includes positive improvements. These data do not pin the difference down to zero."}, {"label": "The estimate remains compatible with zero and with some positive improvements.", "correct": true, "feedback": "The interval describes uncertainty under the model. Whether seven points or one point matters depends on the context."}]} explanation="For a matching two-sided t test at α = 0.05, including zero means we do not reject the zero-difference null. It does not establish equivalence; that requires a meaningful equivalence margin and an appropriate analysis." />
+ <p>Use the direction and units when reporting a result: “new routine minus usual routine, three points,” followed by its interval. A signed difference is easier to interpret than a t statistic alone.</p>
+  <h3>Words you met</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead><tbody>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Student’s t</th><td class="py-2">A family of heavier-tailed distributions used when estimating variability.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Degrees of freedom</th><td class="py-2">The independent information available to estimate variability in the procedure.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Welch’s procedure</th><td class="py-2">A comparison of independent means that allows unequal population variances.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Paired data</th><td class="py-2">Measurements linked by a person or another meaningful match.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Null difference</th><td class="py-2">The difference proposed by the null, often zero.</td></tr>
+  </tbody></table></div>
+  <Neighbors><ul class="neighbors"><li>Worked procedures: <a href="/reading/statistics/openintro-07/">Inference for Means</a>.</li><li>Return to <a href="/reading/statistics/estimates-vary/">sampling distributions and the CLT</a>, or explore the <a href="/reading/probability/grinstead-09/">Central Limit Theorem</a> in the probability textbook.</li></ul></Neighbors>
+  <StatQuest videos={[{"id": "nnBJeb_I-q8", "title": "Which t-test to use", "note": "Compare the questions answered by one-sample, independent-group, and paired t tests."}]} />
+  <ReadingCredit />
+  <CourseNavigation slug="comparing-means" />
+ </main>
+</Layout>

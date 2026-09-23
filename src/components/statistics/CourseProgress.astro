@@ -1,0 +1,7 @@
+---
+import {course} from '../../../reading-src/lib/statistics/course';
+interface Props {slug:string}
+const position=course.findIndex(c=>c.slug===Astro.props.slug)+1;
+if(!position)throw new Error(`Unknown statistics chapter: ${Astro.props.slug}`);
+---
+<p class="text-gray-400 text-sm mb-6">Statistics through experiments · {position} of {course.length} · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p>

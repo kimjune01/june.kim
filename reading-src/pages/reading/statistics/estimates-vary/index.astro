@@ -1,7 +1,8 @@
 ---
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
-import PrevNext from '../../../../components/PrevNext.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
 import Neighbors from '../../../../components/Neighbors.astro';
 import Question from '../../../../components/statistics/Question';
 import Culmination from '../../../../components/statistics/Culmination.astro';
@@ -13,7 +14,7 @@ import SamplingDistribution from '../../../../components/statistics/SamplingDist
   <main class="stats-book">
     <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
     <h1>Why do estimates move?</h1>
-    <p class="text-gray-400 text-sm mb-6">Statistics through experiments · 6 of 8 · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p>
+    <CourseProgress slug="estimates-vary" />
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Individual observations can be lopsided. Their averages have a surprising habit.</p>
     </div>
@@ -63,6 +64,6 @@ import SamplingDistribution from '../../../../components/statistics/SamplingDist
     <StatQuest videos={[{"id": "YAlJCEDH2uY", "title": "The Central Limit Theorem", "note": "Follow the change from individual observations to a distribution of averages."}]} />
 
     <ReadingCredit />
-    <PrevNext prev={{ href: '/reading/statistics/sampling-fairly/', label: 'Can more data mislead us? · 5 of 8' }} next={{ href: '/reading/statistics/intervals/', label: 'How much uncertainty remains? · 7 of 8' }} />
+    <CourseNavigation slug="estimates-vary" />
   </main>
 </Layout>

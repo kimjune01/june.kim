@@ -1,0 +1,54 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import PowerLab from '../../../../components/statistics/PowerLab';
+import '../../../../components/statistics/statistics.css';
+---
+<Layout title="What might our test miss? — Statistics through experiments" favicon="◒">
+ <main class="stats-book">
+  <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+  <h1>What might our test miss?</h1>
+  <CourseProgress slug="errors-and-power" />
+  <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout"><p class="text-lg" style="max-width:none">A test can sound an alarm when nothing changed, or stay quiet when something did.</p></div>
+<p>Imagine testing the same study procedure in many possible worlds. In one, the new lesson has no effect. In another, it adds five points on average. We get a fresh sample each time and apply exactly the same decision rule.</p>
+ <p>In an actual study we do not know which world we inhabit. In a simulation we can choose. That lets us count mistakes and learn what a significance threshold does.</p>
+ <PowerLab client:load />
+ <h3>Two kinds of mistake</h3>
+ <p>Start with a true difference of zero. Whenever the procedure rejects the no-difference null, it makes a <strong>Type I error</strong>, or false positive. The preselected threshold α controls that rejection probability under the null when the procedure’s assumptions hold. It is a property of repeated use, not the probability that this particular conclusion is false.</p>
+ <p>Now choose a real difference of five points. A test that fails to reject makes a <strong>Type II error</strong> for that alternative. Its probability is called β (“beta”). <strong>Power</strong>, 1 − β, is the probability of rejecting the null when that specified effect is real.</p>
+ <p>This activity assumes independent normal measurements with a known population standard deviation of ten points in each group. The two-sided z test therefore has an exact normal reference. Real studies commonly estimate variability and use t procedures; the same ideas about errors and power apply, but their calculations differ.</p>
+ <Question client:visible id="power-definition" prompt="A planned study has 80% power to detect a five-point effect. What does that mean?" choices={[{"label": "If the true effect is five points and the model holds, the test rejects about 80% of the time.", "correct": true, "feedback": "Power is conditional on a particular effect, design, threshold, and variability."}, {"label": "There is an 80% probability that the effect is five points.", "correct": false, "feedback": "Power does not assign a probability to the effect. It assumes that effect to evaluate the study procedure."}]} explanation="Always attach power to a specified alternative. The same study can have low power for a tiny change and high power for a large one." />
+ <h3>Make a small signal easier to hear</h3>
+ <p>Hold the true effect fixed and increase the sample size. The estimates become less scattered, so more clear the rejection threshold. Larger effects are also easier to detect. Greater measurement variability makes detection harder.</p>
+ <p>Lowering α asks for stronger evidence before rejecting. With everything else fixed, this reduces false positives but also reduces power. There is no universal threshold that removes both kinds of mistake.</p>
+ <p>Plan around the smallest effect that would change a decision, not the largest effect you hope to see. Estimate plausible variability, allow for missing outcomes, and choose a sample size before collecting results. A study can have enough power to detect a trivial effect, yet answer the practical question poorly.</p>
+ <h3>What if we keep looking?</h3>
+ <p>Open the multiple-tests panel. With twenty independent tests of true null hypotheses, each at α = 0.05, the probability of at least one false positive is about 64%. None of the individual tests changed; we gave chance more opportunities to produce a headline.</p>
+ <p>A simple <strong>Bonferroni correction</strong> tests each of m prespecified hypotheses at α/m. It controls the probability of any false rejection at no more than α even when the tests are dependent, provided the individual p-values are valid. It can be conservative. Other methods answer related questions, such as controlling the expected fraction of false discoveries.</p>
+ <p>Repeatedly checking one accumulating dataset and stopping at the first small p-value creates a related problem. A fixed-sample test assumes its planned stopping rule. Sequential designs can allow interim looks, but require methods designed for them. Exploratory analysis remains useful; label it and seek new data for confirmation.</p>
+ <Culmination title="Power describes a procedure in a specified world" href="#power-lab">
+  <p class="stats-formula">Type I error: reject a true null<br />Power = P(reject the null | specified real effect)<br />Type II error probability = 1 − power</p>
+  <p>Under m independent true-null tests each rejecting with probability α, P(at least one false positive) = 1 − (1 − α)<sup>m</sup>. Independence is needed for this equality; it is not needed for the Bonferroni bound.</p>
+ </Culmination>
+ <Question client:visible id="power-nonsignificant" prompt="A small study reports p = 0.20 and a wide interval. What should we conclude?" choices={[{"label": "The treatments are equivalent.", "correct": false, "feedback": "A noisy study may miss a meaningful effect. Equivalence needs a prespecified margin and evidence precise enough to fit within it."}, {"label": "The study did not clearly distinguish the effect from zero; the interval shows what remains plausible.", "correct": true, "feedback": "Read the range and study design rather than treating a non-rejection as proof of no effect."}]} explanation="A result can be inconclusive. That is a useful description of the evidence, not a failure to choose a side." />
+ <p>After a study, the effect estimate and confidence interval usually communicate uncertainty more directly than plugging the observed effect into a new power calculation. Power earns its place most clearly when deciding what study to run.</p>
+  <h3>Words you met</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead><tbody>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Type I error</th><td class="py-2">Rejecting the null when it is true.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Type II error</th><td class="py-2">Failing to reject the null under a specified alternative.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Power</th><td class="py-2">The probability of rejecting under a specified alternative.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Multiplicity</th><td class="py-2">Having several opportunities to make a false discovery.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Practical importance</th><td class="py-2">Whether the size of an effect matters for the decision at hand.</td></tr>
+  </tbody></table></div>
+  <Neighbors><ul class="neighbors"><li>Review <a href="/reading/statistics/testing-a-claim/">p-values</a> and <a href="/reading/statistics/intervals/">confidence intervals</a> together.</li><li>The complement and independence rules come from <a href="/reading/probability/grinstead-04/">Conditional Probability</a>.</li></ul></Neighbors>
+  <StatQuest videos={[{"id": "Rsc5znwR5FA", "title": "Statistical Power, Clearly Explained", "note": "See why sample size, variability, and effect size change the chance of detection."}, {"id": "HDCOUXE3HMM", "title": "p-hacking: What it is and how to avoid it", "note": "Connect repeated testing with the decisions made before analysis."}]} />
+  <ReadingCredit />
+  <CourseNavigation slug="errors-and-power" />
+ </main>
+</Layout>

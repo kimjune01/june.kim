@@ -1,0 +1,56 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import StudentSurvey from '../../../../components/statistics/StudentSurvey';
+import '../../../../components/statistics/statistics.css';
+---
+<Layout title="What can we learn from a student survey? — Statistics through experiments" favicon="◒">
+ <main class="stats-book">
+  <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+  <h1>What can we learn from a student survey?</h1>
+  <CourseProgress slug="student-surveys" />
+  <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout"><p class="text-lg" style="max-width:none">A list of answers becomes useful when we know what each answer measures.</p></div>
+<p>You want to know how students get to school and how long the journey takes. Asking everyone would be ideal, but you have time to ask only ten people. What could those ten answers tell you?</p>
+ <p>Below is an invented school of sixty students. Draw a random sample: every group of the chosen size has the same chance of being selected. Before drawing again, predict which summaries will stay close and which might move.</p>
+ <StudentSurvey client:load />
+ <noscript><p>The activity draws students from a fictional roster. Commute time is numerical; travel mode is categorical. Sampling again changes the observed summaries even though the roster stays the same.</p></noscript>
+ <h3>First, name the columns</h3>
+ <p>Each student is an <strong>observational unit</strong>. Their travel mode and commute time are <strong>variables</strong>: characteristics we record. A numerical variable describes an amount; a categorical variable places an observation in a group.</p>
+ <p>A student ID may look numerical, but averaging ID numbers tells us nothing about the students. Likewise, coding bus as 1 and bike as 2 does not make bike twice as much transport. The meaning of a variable determines which summaries make sense.</p>
+ <p>Switch to travel mode. The <strong>frequency</strong> is how many sampled students belong to each category; the <strong>relative frequency</strong> divides that count by the sample size. Three bus riders among ten students gives 3/10 = 30%. That describes the sample. It is not yet a claim that exactly 30% of the school rides the bus.</p>
+ <Question client:visible id="survey-variable" prompt="Which summary makes sense for travel mode?" choices={[{"label": "The proportion of sampled students who take the bus.", "correct": true, "feedback": "A count divided by the number of respondents summarizes this category."}, {"label": "The average of the codes Walk = 1, Bike = 2, Bus = 3, Car = 4.", "correct": false, "feedback": "Those numbers are arbitrary labels. Changing their codes would change the average without changing anyone’s journey."}]} explanation="Start with the meaning of the measurement. Categories support counts and proportions; numerical measurements also support arithmetic summaries." />
+ <h3>Look at the shape before the average</h3>
+ <p>Return to commute time. A <strong>histogram</strong> groups numerical values into intervals and counts how many fall in each. Change the interval width while keeping the same sample. The picture changes, but the measurements have not.</p>
+ <p>Look for a typical value, spread, gaps, and a long tail. A distribution with a long right tail is <strong>right-skewed</strong>. One unusually long commute can pull the mean to the right while barely moving the median. Try the 110-minute journey and compare.</p>
+ <p>The minimum, lower quartile, median, upper quartile, and maximum make the <strong>five-number summary</strong>. Quartiles mark roughly a quarter and three quarters of the way through the ordered values. Their difference, the <strong>interquartile range</strong>, describes the spread of the middle half. Software uses several quartile conventions; this activity takes the median of each half.</p>
+ <p>A common boxplot rule flags observations below Q₁ − 1.5 IQR or above Q₃ + 1.5 IQR. A flag invites a closer look. It is not permission to delete a real student with a difficult commute. Check the measurement, document corrections, and ask how the unusual observation affects the conclusion.</p>
+ <h3>Another way to describe spread</h3>
+ <p>The <strong>sample standard deviation</strong> measures spread around the mean, in minutes here. It grows when observations sit farther from the mean. Its calculation squares those distances, so unusually large distances matter a lot. The median and IQR are less sensitive to a single extreme value.</p>
+ <Culmination title="A summary is a deliberate compression" href="#survey-lab">
+  <p class="stats-formula">IQR = Q₃ − Q₁<br />s = √[Σ(xᵢ − x̄)² / (n − 1)]</p>
+  <p>The first expression keeps the middle half’s width. In the second, xᵢ is one measurement, x̄ is the sample mean, n is the sample size, and Σ means add. Subtract the mean, square each distance, add them, divide by n − 1, then take the square root.</p>
+  <p>Estimating the mean from the same data leaves only n − 1 freely varying deviations: they must sum to zero. Dividing by n − 1 makes s² an unbiased estimate of population variance for independent observations from the same distribution with finite variance. The square root s is the usual estimate of standard deviation.</p>
+ </Culmination>
+ <Question client:visible id="survey-repeat" prompt="Two random samples of ten students have different mean commute times. Must one sample be wrong?" choices={[{"label": "Yes. A correct sample must reproduce the school’s average.", "correct": false, "feedback": "Random sampling does not force a small sample to match the population exactly."}, {"label": "No. Different students can produce different sample summaries.", "correct": true, "feedback": "This natural variation is why we will study uncertainty rather than treating one sample as the whole school."}]} explanation="Description tells us what happened in these observations. Inference asks what they suggest beyond the observations, with uncertainty and a defensible sampling design." />
+ <p>Our buttons use a complete roster and everyone responds. A real hallway survey may miss absent students, early arrivals, or people who decline. Bigger samples do not automatically repair those omissions. The next chapters separate sample size from sample selection.</p>
+  <h3>Words you met</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead><tbody>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Observational unit</th><td class="py-2">The person or object represented by one observation.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Variable</th><td class="py-2">A measured characteristic, such as travel mode or commute time.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Relative frequency</th><td class="py-2">A category’s count divided by the total count.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Quartiles and IQR</th><td class="py-2">The quarter-way marks and the distance between the outer two.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Standard deviation</th><td class="py-2">A measure of spread around the mean, in the measurement’s units.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Descriptive statistics</th><td class="py-2">Summaries of the data actually observed.</td></tr>
+  </tbody></table></div>
+  <Neighbors><ul class="neighbors"><li>More examples: <a href="/reading/statistics/openintro-02/">Summarizing Data</a>.</li><li>The next chapter distinguishes a <a href="/reading/statistics/samples/">sample from its population</a>. For the mathematical version of spread, see <a href="/reading/probability/grinstead-06/">Expected Value and Variance</a>.</li></ul></Neighbors>
+  <StatQuest videos={[{"id": "qBigTkBLU6g", "title": "Histograms, Clearly Explained", "note": "See how grouping numerical values reveals a distribution."}, {"id": "fHLhBnmwUM0", "title": "Boxplots, Clearly Explained", "note": "Connect quartiles and unusual observations with another compact picture."}]} />
+  <ReadingCredit />
+  <CourseNavigation slug="student-surveys" />
+ </main>
+</Layout>

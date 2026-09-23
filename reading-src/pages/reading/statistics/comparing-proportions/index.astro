@@ -1,0 +1,53 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import ABExperiment from '../../../../components/statistics/ABExperiment';
+import '../../../../components/statistics/statistics.css';
+---
+<Layout title="Did the new version help? — Statistics through experiments" favicon="◒">
+ <main class="stats-book">
+  <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+  <h1>Did the new version help?</h1>
+  <CourseProgress slug="comparing-proportions" />
+  <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout"><p class="text-lg" style="max-width:none">A difference between two percentages is an estimate. Shuffling helps us ask how surprising it is.</p></div>
+<p>A website offers two versions of a sign-up page. Each visitor sees either A or B, assigned at random, and either signs up or does not. We want to know whether B changes the probability of signing up.</p>
+ <p>In this simulator you can see what a real experimenter cannot: the probabilities that generate the outcomes. Version A has a 30% sign-up probability. Choose B’s advantage, draw a study, and see how closely the observed difference follows it.</p>
+ <ABExperiment client:load />
+ <h3>Keep three quantities separate</h3>
+ <p>The <strong>population proportion</strong> is the underlying probability of success for a group. The <strong>sample proportion</strong> is successes divided by observed trials. A hat marks the estimate: p̂ is read “p-hat.” The <strong>effect estimate</strong> here is p̂<sub>B</sub> − p̂<sub>A</sub>.</p>
+ <p>If A gets 30% and B gets 40%, the difference is ten <strong>percentage points</strong>. The relative increase is ten divided by thirty, about 33%. Both describe the same change, but they answer different questions. A report should say which it uses.</p>
+ <p>For the activity’s model, visitors are independent, each appears once, and the success probability stays constant within each group. In practice, repeat visits, shared households, missing outcomes, or one visitor seeing both versions can require a different design or analysis.</p>
+ <Question client:visible id="ab-effect" prompt="A sign-up rate rises from 30% to 40%. What is the absolute difference?" choices={[{"label": "10 percentage points.", "correct": true, "feedback": "Subtract the two proportions: 0.40 − 0.30 = 0.10, which is ten percentage points."}, {"label": "A 10% relative increase.", "correct": false, "feedback": "Relative change divides the difference by the original rate. Here it is 10/30, about 33%."}]} explanation="State both the baseline and the scale. Ten percentage points and a 33% relative increase describe this same example." />
+ <h3>Build a world where the labels do not matter</h3>
+ <p>Under a sharp <strong>null hypothesis</strong> of no treatment effect for any visitor, each recorded response would be the same under A or B. We can keep the responses and repeatedly reassign the group labels, preserving the original group sizes. Every shuffle gives a difference that random assignment alone could produce.</p>
+ <p>That collection is a <strong>randomization distribution</strong>. It centers near zero. We compare our observed difference with it, counting shuffled differences at least as far from zero in either direction. This is a <strong>two-sided</strong> test: the alternative allows B to help or hurt.</p>
+ <p>Choose the direction before seeing the data. Choosing a favorable one-sided test afterward changes the error rate. Our simulated p-value includes a small correction: add one to both the extreme count and the number of shuffles. A finite simulation then cannot misleadingly report zero.</p>
+ <h3>How much might the rate change?</h3>
+ <p>The p-value asks about compatibility with the null. A <strong>confidence interval</strong> asks about the precision of the estimated difference. The activity shows a large-sample interval only when each group has at least ten successes and ten failures. That is a screening rule for this approximation, not a guarantee that any study passing it is sound.</p>
+ <p>Its standard error uses the two observed proportions separately. A normal-based test of equal proportions often instead pools them under the null. Our shuffle test and approximate interval also use different procedures, so their conclusions need not match exactly at a cutoff. For sparse counts, use an appropriate exact or simulation-based method rather than forcing this approximation.</p>
+ <Culmination title="Difference, uncertainty, and a null comparison" href="#ab-lab">
+  <p class="stats-formula">d̂ = p̂<sub>B</sub> − p̂<sub>A</sub><br />SE ≈ √[p̂<sub>A</sub>(1 − p̂<sub>A</sub>)/n<sub>A</sub> + p̂<sub>B</sub>(1 − p̂<sub>B</sub>)/n<sub>B</sub>]<br />Approximate 95% interval: d̂ ± 1.96 SE</p>
+  <p>Each group contributes uncertainty. Independent contributions add as variances inside the square root. The interval gives a range of differences compatible with the data under the approximation; the shuffle p-value compares the observed difference with a specified no-effect model.</p>
+ </Culmination>
+ <Question client:visible id="ab-interpret" prompt="A large experiment finds an increase of 0.2 percentage points with p = 0.001. What else matters?" choices={[{"label": "Whether that improvement is large enough to justify its costs, and how precisely it is estimated.", "correct": true, "feedback": "A precise, small effect can have a small p-value. The decision still needs the effect, interval, and context."}, {"label": "Nothing; p = 0.001 means the improvement is large.", "correct": false, "feedback": "A p-value does not measure the size of an improvement. Sample size also affects how easily a test detects a small difference."}]} explanation="Report the estimated change, its uncertainty, and the design. Statistical significance alone cannot decide whether a change is worthwhile." />
+ <p>Try setting the true advantage to zero and generating several studies. Some look more impressive than others. That variation is why a single low p-value is evidence within a model, not a certificate of truth.</p>
+  <h3>Words you met</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead><tbody>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Sample proportion</th><td class="py-2">The fraction of observed trials with the outcome of interest.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Percentage point</th><td class="py-2">One hundredth on the probability scale; used for differences between percentages.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Randomization distribution</th><td class="py-2">Statistics from possible treatment assignments under a specified null.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Two-sided test</th><td class="py-2">A comparison that allows departures in either direction.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Effect size</th><td class="py-2">The magnitude of a difference on a meaningful scale.</td></tr>
+  </tbody></table></div>
+  <Neighbors><ul class="neighbors"><li>Continue with formulas and examples in <a href="/reading/statistics/openintro-06/">Inference for Proportions</a>.</li><li>For independent yes-or-no trials, see the binomial model in <a href="/reading/probability/grinstead-05/">Important Distributions</a>.</li></ul></Neighbors>
+  <StatQuest videos={[{"id": "vemZtEM63GY", "title": "p-values: What they are and how to interpret them", "note": "Revisit the conditional meaning of a tail probability after building one yourself."}]} />
+  <ReadingCredit />
+  <CourseNavigation slug="comparing-proportions" />
+ </main>
+</Layout>

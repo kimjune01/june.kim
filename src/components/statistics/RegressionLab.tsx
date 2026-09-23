@@ -1,10 +1,12 @@
 import React, {useId,useState} from 'react';
 import {fitLine,regressionPoints,squaredError} from '../../../reading-src/lib/statistics/relationships';
 import Question from './Question';
-export default function RegressionLab() {
+import {regressionInference,formatP} from '../../../reading-src/lib/statistics/course-models';
+export default function RegressionLab({inference=false}:{inference?:boolean}) {
  const id=useId(), [slope,setSlope]=useState(.5), [intercept,setIntercept]=useState(2), [outlier,setOutlier]=useState(false);
  const points=outlier?[...regressionPoints,{x:9,y:2}]:regressionPoints;
  const best=fitLine(points),error=squaredError(points,{slope,intercept});
+ const result=inference?regressionInference(points):null;
  const x=(v:number)=>40+v*45, y=(v:number)=>250-v*18;
  return <section className="stats-lab bg-zinc-800 rounded-lg p-5 mb-8 callout" id="regression-lab" aria-label="Fit a line experiment">
   <p className="stats-eyebrow">How close can your line get?</p>
@@ -18,6 +20,7 @@ export default function RegressionLab() {
   <div className="stats-actions"><button type="button" onClick={()=>{setSlope(best.slope);setIntercept(best.intercept);}}>Show the least-squares line</button><button type="button" onClick={()=>setOutlier(!outlier)}>{outlier?'Remove the unusual point':'Add an unusual point'}</button></div>
   <p className="stats-small">Adding a point keeps your current line. Predict how the best line will change, then fit again. Axes stay fixed; parts of a trial line outside the plot are clipped.</p>
   <details className="stats-data"><summary>Read predictions and residuals</summary><div className="stats-table-scroll"><table><thead><tr><th scope="col">x</th><th scope="col">Observed y</th><th scope="col">Predicted y</th><th scope="col">Residual</th></tr></thead><tbody>{points.map((p,i)=><tr key={i}><td>{p.x}</td><td>{p.y}</td><td>{(intercept+slope*p.x).toFixed(2)}</td><td>{(p.y-intercept-slope*p.x).toFixed(2)}</td></tr>)}</tbody></table></div></details>
+  {result&&<div className="stats-feedback" aria-live="polite"><h3>Inference for the least-squares line</h3><p>Fitted slope: {result.slope.toFixed(3)}. 95% interval for the slope: [{result.low.toFixed(3)}, {result.high.toFixed(3)}]. Two-sided p-value for zero slope: {formatP(result.p)}. R² = {result.rSquared.toFixed(3)}.</p><p className="stats-small">These describe the best-fitting line for the current points, regardless of where you move your trial line. The t procedure uses {result.df} degrees of freedom and assumes a linear mean relationship with independent, normal, constant-variance errors. These invented points illustrate the calculation; they are not evidence from a sampled population.</p></div>}
   <details className="stats-extra"><summary>The line you have built</summary><p>ŷ = b₀ + b₁x. The hat on y marks a prediction. b₀ is the intercept; b₁ is the slope. Your current line is ŷ = {intercept.toFixed(2)} + ({slope.toFixed(2)})x. Least squares chooses the coefficients that minimize the sum of squared residuals, ∑(y − ŷ)².</p><p>A good fit does not establish causation. Extrapolating beyond observed x values needs additional justification.</p></details>
   <Question id="residual-transfer" prompt="One prediction is 3 units too high and another is 3 too low. Is the fit perfect because the errors cancel?" choices={[
    {label:'Yes; their total error is zero.',correct:false,feedback:'Both predictions missed. Adding signed errors can hide that; squaring keeps their contributions positive.'},

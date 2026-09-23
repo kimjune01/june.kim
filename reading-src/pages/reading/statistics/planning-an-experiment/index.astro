@@ -1,0 +1,54 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import Neighbors from '../../../../components/Neighbors.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import ExperimentDesigner from '../../../../components/statistics/ExperimentDesigner';
+import '../../../../components/statistics/statistics.css';
+---
+<Layout title="What makes a comparison fair? — Statistics through experiments" favicon="◒">
+ <main class="stats-book">
+  <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
+  <h1>What makes a comparison fair?</h1>
+  <CourseProgress slug="planning-an-experiment" />
+  <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout"><p class="text-lg" style="max-width:none">The most useful statistical decision often happens before anyone collects a number.</p></div>
+<p>A school has a new lesson and wants to know whether it improves learning. Twelve teachers volunteer, each with a class of twenty students. Half the classes will use the new lesson; half will continue with the usual lesson.</p>
+ <p>We could collect 240 test scores and calculate a difference. But first we need to decide what that difference could mean. Try designing the study below. Each choice changes the strength of the comparison.</p>
+ <ExperimentDesigner client:load />
+ <h3>Who gets the lesson?</h3>
+ <p>The new lesson is a <strong>treatment</strong>. The usual lesson is the <strong>control</strong>: a comparison that tells us what might happen without the change. A control need not mean doing nothing. Here it means continuing ordinary teaching.</p>
+ <p>If teachers choose their own group, enthusiasm or prior achievement could differ between groups. Such a <strong>confounder</strong> affects the outcome and is entangled with the treatment. We may then mistake a difference between teachers or students for a lesson effect.</p>
+ <p><strong>Random assignment</strong> gives the treatment allocation a known chance mechanism. It helps separate treatment from pre-existing differences on average across possible assignments. It does not guarantee perfectly matched groups in any one study.</p>
+ <p><strong>Random sampling</strong> answers a different question: who enters the study? Random assignment helps a causal comparison among participants; representative sampling supports extending results to a population. Volunteer classrooms can support a randomized experiment without representing every school.</p>
+ <Question client:visible id="design-random" prompt="Teachers volunteer, then their classrooms are randomly assigned. What does the random assignment chiefly support?" choices={[{"label": "A causal comparison of the lessons among the participating classrooms.", "correct": true, "feedback": "The assignment mechanism makes the groups comparable in expectation, provided the study is carried out and analyzed appropriately."}, {"label": "A claim that these classrooms represent every school.", "correct": false, "feedback": "Random assignment chooses treatment groups. It does not turn volunteer recruitment into a random sample of schools."}]} explanation="Recruitment and assignment serve different purposes. Ask how each happened before interpreting the result." />
+ <h3>Count the independent opportunities to learn</h3>
+ <p>Everyone in a classroom receives the same teacher-delivered lesson. The <strong>experimental unit</strong> is therefore a classroom: it is the unit independently assigned to treatment. Twenty students sharing a classroom are not twenty independent treatment assignments.</p>
+ <p>These groups are called <strong>clusters</strong>. Treating all 240 scores as independent can make uncertainty look too small. One simple analysis compares the twelve classroom means; a more detailed analysis models the clustering explicitly. Collecting more scores within one classroom helps describe that classroom, but adding independent classrooms supplies new treatment replications.</p>
+ <p>With only twelve classrooms, we may want similar classrooms on both sides. We can form six pairs using a pre-study measure, then randomly assign one classroom in each pair to each lesson. This is <strong>blocking</strong>. The analysis should respect those pairs, for example by examining six differences in classroom means.</p>
+ <h3>Decide what success will mean</h3>
+ <p>Choose a <strong>primary outcome</strong> before seeing results: the common quiz score after four weeks, for example. Decide how long to run the study, how to handle missing scores, and which exclusions are allowed. Recording this plan in advance is called <strong>preregistration</strong>. It makes the intended test distinguishable from later exploration.</p>
+ <p><strong>Blinding</strong> hides group identity when that helps prevent expectations from influencing a measurement. Teachers will know which lesson they teach, but someone grading coded quiz papers may not need to know. Explain participation clearly, obtain appropriate permission, and protect students’ records.</p>
+ <Culmination title="Design determines what a difference can mean" href="#design-lab">
+  <p>Recruit participants → choose the experimental unit → randomize within the planned design → measure the prespecified outcome → analyze at the level of independent assignment.</p>
+  <p>Randomization, control, and replication support a fair comparison. Blocking can reduce unwanted variation. Blinding can reduce measurement bias. None replaces careful implementation or honest reporting.</p>
+ </Culmination>
+ <Question client:visible id="design-units" prompt="A lesson is randomly assigned to twelve classrooms, each with twenty pupils. How many independently randomized units are there?" choices={[{"label": "240, because every pupil takes a quiz.", "correct": false, "feedback": "There are 240 measurements, but pupils in a classroom share the same assignment and classroom influences."}, {"label": "12, because the classroom receives the assignment.", "correct": true, "feedback": "The treatment has twelve independent units of assignment. A blocked design would also need to respect the six pairs."}]} explanation="Distinguish the number of measurements from the number of independent experimental units. This choice belongs in the design and the analysis." />
+ <p>A well-designed experiment can still give an uncertain answer. That is useful information: it tells us what the evidence can support. Next we will compare groups while keeping both the estimated difference and its uncertainty visible.</p>
+  <h3>Words you met</h3>
+  <div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="border-b border-zinc-700"><th scope="col" class="py-2 pr-4">Term</th><th scope="col" class="py-2">Meaning</th></tr></thead><tbody>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Treatment and control</th><td class="py-2">The condition being studied and its planned comparison.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Confounder</th><td class="py-2">A variable entangled with the explanatory variable that also influences the outcome.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Experimental unit</th><td class="py-2">The smallest unit independently assigned to a treatment.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Blocking</th><td class="py-2">Grouping similar units before randomizing within groups.</td></tr>
+   <tr class="border-b border-zinc-800"><th scope="row" class="py-2 pr-4">Preregistration</th><td class="py-2">Recording the study’s questions and analysis decisions before examining outcomes.</td></tr>
+  </tbody></table></div>
+  <Neighbors><ul class="neighbors"><li>Revisit <a href="/reading/statistics/sampling-fairly/">sampling and assignment</a>, or explore <a href="/reading/statistics/openintro-01/">Introduction to Data</a>.</li><li>For the probability language behind independent events, see <a href="/reading/probability/grinstead-04/">Conditional Probability</a>.</li></ul></Neighbors>
+  <StatQuest videos={[{"id": "67zCIqdeXpo", "title": "The sample size and the effective sample size", "note": "Why the number of recorded measurements need not be the number of independent observations."}, {"id": "HDCOUXE3HMM", "title": "p-hacking: What it is and how to avoid it", "note": "Why decisions about analysis belong before the results arrive."}]} />
+  <ReadingCredit />
+  <CourseNavigation slug="planning-an-experiment" />
+ </main>
+</Layout>

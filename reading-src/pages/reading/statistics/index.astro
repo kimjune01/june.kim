@@ -1,4 +1,5 @@
 ---
+import {course,chapterHref} from '../../../lib/statistics/course';
 import ChapterTable from '../../../components/ChapterTable.astro';
 import Layout from '../../../layouts/Base.astro';
 import Neighbors from '../../../components/Neighbors.astro';
@@ -28,17 +29,8 @@ import Neighbors from '../../../components/Neighbors.astro';
     </div>
 
     <h2>Statistics through experiments</h2>
-    <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. No statistics or programming background needed.</p>
-    <ChapterTable chapters={[
-      { href: '/reading/statistics/chance/', title: 'How likely is it?', desc: 'Probability, events, and independence: spin a wheel and follow a streak' },
-      { href: '/reading/statistics/repeated-experiments/', title: 'What happens when we repeat?', desc: 'Random variables and distributions: flip coins and watch a shape emerge' },
-      { href: '/reading/statistics/describing-data/', title: 'What does an average hide?', desc: 'Mean, median, and spread: move salaries and add an outlier' },
-      { href: '/reading/statistics/samples/', title: 'What can a handful tell us?', desc: 'Populations, samples, and estimates: measure a hidden town' },
-      { href: '/reading/statistics/sampling-fairly/', title: 'Can more data mislead us?', desc: 'Selection bias and random assignment: change who gets included' },
-      { href: '/reading/statistics/estimates-vary/', title: 'Why do estimates move?', desc: 'Sampling distributions, standard error, and the Central Limit Theorem' },
-      { href: '/reading/statistics/intervals/', title: 'How much uncertainty remains?', desc: 'Confidence intervals: reveal the truth and count what covers it' },
-      { href: '/reading/statistics/testing-a-claim/', title: 'Could chance explain this?', desc: 'Null models and p-values: compare suspicious results with fair coins' },
-    ]} icon="◒" iconClass="text-blue-300 hover:text-blue-200" />
+    <p class="text-gray-400 mb-6">Start here. Try an idea, give it a name, then arrive at the definition, formula, or theorem it helps you understand. Sixteen chapters take you from first definitions through a university introduction: describing data, sampling, inference, experiment design, and regression. No statistics or programming background needed.</p>
+    <ChapterTable chapters={course.map(chapter=>({href:chapterHref(chapter.slug),title:chapter.title,desc:chapter.desc}))} icon="◒" iconClass="text-blue-300 hover:text-blue-200" />
 
     <h2>The OpenIntro reading guide</h2>
     <p class="text-gray-400 mb-6">Go deeper with worked examples and runnable code. For the mathematics behind chance, follow the companion <a href="/reading/probability/">Introduction to Probability</a>.</p>

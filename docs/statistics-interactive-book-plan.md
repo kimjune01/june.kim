@@ -1,19 +1,20 @@
 # Statistics: an interactive introduction
 
-Status: eight-chapter introductory path implemented, 2026-09-22. A first interactive pass now reaches all nine OpenIntro chapters. Reader sessions and the deeper extensions listed below remain future work.
+Status: sixteen-chapter introductory course implemented, 2026-09-22. Interactive practice also reaches all nine OpenIntro chapters. Reader sessions and the optional extensions below remain future work.
 
 ## Current implementation
 
-- The statistics index and chapters follow the calculus textbook’s format: shared `Layout`, `ChapterTable`, `Neighbors`, and `PrevNext`; standard headings, source lines, callout utilities, and reference tables. Activity controls retain their behavior within the shared book styling. Contextual links connect seven introductory chapters to the companion probability textbook.
+- The statistics index and chapters follow the calculus textbook’s format: shared `Layout`, `ChapterTable`, `Neighbors`, and `PrevNext`; standard headings, source lines, callout utilities, and reference tables. Activity controls retain their behavior within the shared book styling. Contextual links connect the course to the companion probability textbook. A shared sixteen-chapter manifest powers the outline, progress labels, and previous/next links.
 
-- Completed chapters 3–8: describing data, samples, sampling bias and assignment, sampling distributions and the CLT, confidence intervals, and null-model testing. Each has two questions with answer-specific feedback, definitions in context, a concluding formal idea, and a new-context application.
+- Original foundational chapters: describing data, samples, sampling bias and assignment, sampling distributions and the CLT, confidence intervals, and null-model testing. Each has two questions with answer-specific feedback, definitions in context, a concluding formal idea, and a new-context application.
 - Culminations now include definitions, relationships, and theorems. The CLT chapter explicitly distinguishes the fixed population, observations per sample, repetitions, standard error, and the theorem’s assumptions. Simulation illustrates the theorem rather than proving it.
 - Added reusable activities for salaries/outliers, town sampling, treatment assignment, sample means from three population shapes, interval coverage, and a one-sided exact binomial comparison. Integrated relevant activities into OpenIntro 1–2 and 4–7.
 - Added conditional-probability counts to OpenIntro 3, adjustable least-squares lines and an influential point to OpenIntro 8, and a logistic probability/odds explorer to OpenIntro 9. These include transfer questions and expandable formal summaries.
-- Added direct, topic-matched StatQuest links near the end of 16 chapters, using [Josh Starmer’s official video index](https://statquest.org/video_index.html). The sampling-design chapter has no forced match. Videos supplement the text and do not gate progress or load third-party embeds.
+- Added direct, topic-matched StatQuest links near the end of 24 chapters, using [Josh Starmer’s official video index](https://statquest.org/video_index.html). The sampling-design chapter has no forced match. Videos supplement the text and do not gate progress or load third-party embeds.
 - Corrected small-sample mean inference to use t critical values with stated assumptions, replaced the old modular-arithmetic “random” sampling/assignment, qualified causal and R-squared claims, and repaired unsupported Scheme operations. All 34 existing Scheme examples now execute with the installed interpreter.
-- Verification: supplied-randomness model tests, UI behavior tests, TypeScript, all-site Vitest, reading build (526 pages), eight-chapter navigation/link checks, and Chrome interaction/layout checks. Removed the new temporary test files after they passed, per the author’s preference; retained pre-existing tests.
-- Still useful as later extensions: a dedicated A/B activity for OpenIntro 6, paired versus unpaired data in OpenIntro 7, and pooled versus group-specific regression in OpenIntro 9. These are additional practice beyond the activities delivered here. Reader sessions remain necessary before making claims about learning effectiveness.
+- Verification: supplied-randomness model tests, UI behavior tests, independent SciPy checks of the Welch/paired examples, TypeScript, all-site Vitest (61 checks before removing temporary tests), reading build (534 pages), sixteen-chapter navigation checks, local links and anchors across all 26 statistics pages, and Chrome interaction/layout checks. Removed the new temporary test files after they passed, per the author’s preference; retained pre-existing tests.
+- The university continuation adds classroom surveys, experiment design, A/B randomization, independent and paired t inference, errors and power, chi-square/ANOVA, regression inference, and a study-reading capstone. The A/B and paired-means activities are reused in OpenIntro 6 and 7. jStat supplies reference-distribution CDFs and quantiles; simulation remains explicit and local.
+- An optional later extension is pooled versus group-specific regression in OpenIntro 9. Reader sessions remain necessary before making claims about learning effectiveness.
 - Local implementation only; not deployed.
 
 ## Pilot implementation
@@ -35,17 +36,18 @@ The culmination of a section or chapter is an earned formal idea: a definition, 
 
 ## University introductory-course scope
 
-The guided path extends through a typical first university statistics course, with interpretation and basic experiment design as the endpoint. The first eight chapters establish the foundations; the continuation applies them to studies with real decisions. Use OpenIntro Statistics’ core sequence as a coverage reference, not a claim of equivalence to a credit-bearing course.
+The guided path extends through a typical first university statistics course, with interpretation and basic experiment design as the endpoint. The first nine chapters establish the foundations, including a student-survey chapter between averages and sampling. The continuation applies them to studies with real decisions. Use OpenIntro Statistics’ core sequence as a coverage reference, not a claim of equivalence to a credit-bearing course.
 
 | Chapter | Question and activity | Earned idea |
 | --- | --- | --- |
-| 9. Planning an experiment | Design a classroom comparison; choose the assignment unit, allocation, outcome, and analysis rule. | The independent unit, random assignment, comparison, and prespecified measurement determine what a causal claim supports. |
-| 10. Comparing proportions | Collect an A/B experiment and shuffle its group labels under a no-effect model. | Difference in proportions; a two-sided randomization p-value; effect size versus evidence. |
-| 11. Comparing means | Compare independent groups, then preserve or break the pairing of repeated measurements. | Welch and paired t procedures; standard error and interval depend on the design. |
-| 12. Errors and power | Repeat studies while varying true effect, sample size, and significance threshold; examine multiple testing. | Type I/II errors, power, and a planned error rate. |
-| 13. Beyond two groups | Change categorical counts and the separation of three numerical groups. | Chi-square and ANOVA compare observed variation with a null model; an omnibus result does not identify every difference. |
-| 14. Relationships and prediction | Fit a line, add an influential observation, and inspect slope uncertainty. | Correlation, regression, residuals, and the distinction between association, prediction, and causation. |
-| 15. Reading a study | Interpret a classroom experiment from design through effect, interval, p-value, and limitations. | A defensible conclusion combines study design, effect size, uncertainty, and context. |
+| 4. Student surveys | Draw students, switch between numerical and categorical variables, change histogram bins, and add an outlier. | Frequency tables, five-number summaries, IQR, sample standard deviation, and the distinction between description and inference. |
+| 10. Planning an experiment | Design a classroom comparison; choose the assignment unit, allocation, outcome, and analysis rule. | The independent unit, random assignment, comparison, and prespecified measurement determine what a causal claim supports. |
+| 11. Comparing proportions | Collect an A/B experiment and shuffle its group labels under a no-effect model. | Difference in proportions; a two-sided randomization p-value; effect size versus evidence. |
+| 12. Comparing means | Compare independent groups, then preserve or break the pairing of repeated measurements. | Welch and paired t procedures; standard error and interval depend on the design. |
+| 13. Errors and power | Repeat studies while varying true effect, sample size, and significance threshold; examine multiple testing. | Type I/II errors, power, and a planned error rate. |
+| 14. Beyond two groups | Change categorical counts and the separation of three numerical groups. | Chi-square and ANOVA compare observed variation with a null model; an omnibus result does not identify every difference. |
+| 15. Relationships and prediction | Fit a line, add an influential observation, and inspect slope uncertainty. | Correlation, regression, residuals, and the distinction between association, prediction, and causation. |
+| 16. Reading a study | Interpret a classroom experiment from design through effect, interval, p-value, and limitations. | A defensible conclusion combines study design, effect size, uncertainty, and context. |
 
 Each chapter retains the calculus book’s shared layout and navigation, contextual probability-textbook links, relevant StatQuest videos, and feedback on transfer questions. Inferential procedures name their assumptions; simulations and constructed examples are labeled. Core coverage includes one-sample inference, two proportions, independent and paired means, categorical counts, ANOVA, and simple regression. Multiple and logistic regression remain optional continuations.
 
@@ -56,11 +58,13 @@ Acceptance: a reader can state a null and alternative, distinguish a one- from t
 A reader finishing the introduction should be able to:
 
 - Distinguish a model's probability from the frequency observed in a finite experiment.
-- Describe data using center, spread, and shape, and explain what a summary leaves out.
+- Identify numerical and categorical variables; describe student-survey data with frequency tables, histograms, center, quartiles, and spread; explain what a summary leaves out.
 - Distinguish a population, a sample, an individual measurement, and an estimate.
 - Explain why increasing a random sample's size reduces sampling variability but does not repair a biased selection process.
 - Explain the Central Limit Theorem and its assumptions; interpret repeated estimates and confidence-interval coverage without confusing them with the distribution of individual measurements.
 - Explain a simulation-based test as comparing observed evidence with what a specified null model produces.
+- Interpret p-values, confidence intervals, power, and practical importance separately; choose basic proportion, mean, paired, categorical, and regression procedures with their assumptions.
+- Design a randomized comparison with an explicit experimental unit, control, primary outcome, stopping rule, and analysis that respects pairing or clustering.
 - Explain the chapter's concluding idea in ordinary language, connect it to the experiment, and use it in a fresh example.
 
 For each outcome, write a prediction prompt, an explanation, and a transfer question before implementing the activity. A transfer question changes the setting while preserving the statistical idea.
@@ -298,6 +302,7 @@ These are practical usability targets, not statistically reliable estimates of t
 
 These sources support the design direction; they do not validate this particular book before it is tried with readers.
 
+- [OpenIntro Statistics](https://www.openintro.org/book/os/) and its [simulation-based introductory course](https://www.openintro.org/book/ims/): coverage and sequencing references for the university continuation. New prose and activities are independently authored.
 - [ASA GAISE College Report (2016)](https://www.amstat.org/docs/default-source/amstat-documents/gaisecollege_full.pdf): conceptual understanding, purposeful technology, active learning, predictions, and assessment.
 - [Carvalho and colleagues: predict–explain–observe–explain](https://www.cmu.edu/teaching/teaching-as-research/carvalho.html): a modest exam benefit in a 75-student psychology-course study; an adaptable pattern rather than direct evidence about this statistics site.
 - [Podolefsky, Moore, and Perkins: implicit scaffolding](https://arxiv.org/abs/1306.6544): design framework and interview evidence for using controls, cues, constraints, and feedback to support exploration.

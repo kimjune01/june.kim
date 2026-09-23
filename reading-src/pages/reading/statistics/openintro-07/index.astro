@@ -1,6 +1,6 @@
 ---
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
-import IntervalLab from '../../../../components/statistics/IntervalLab';
+import MeansComparison from '../../../../components/statistics/MeansComparison';
 import '../../../../components/statistics/statistics.css';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
@@ -44,7 +44,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <!-- 1. One-sample t-test -->
-    <div class="stats-book"><p>First watch intervals from a normal population with known standard deviation. The t methods below account for estimating that spread too. <a href="/reading/statistics/intervals/">Read the guided introduction →</a></p><IntervalLab client:visible  /></div>
+    <div class="stats-book"><p>Compare independent groups with paired measurements before working through the t procedures. <a href="/reading/statistics/comparing-means/">Read the guided introduction →</a></p><MeansComparison client:visible /></div>
 
     <h3>One-sample t-test</h3>
     <p>Test whether a sample mean differs from a hypothesized value. The t-statistic replaces Z when sigma is unknown: t = (x-bar - mu0) / (s / sqrt(n)). It follows a <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>t-distribution</a> with n - 1 degrees of freedom. As n grows, t approaches Z.</p>

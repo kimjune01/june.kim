@@ -1,6 +1,6 @@
 ---
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
-import NullLab from '../../../../components/statistics/NullLab';
+import ABExperiment from '../../../../components/statistics/ABExperiment';
 import '../../../../components/statistics/statistics.css';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
@@ -22,7 +22,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <!-- 1. One-proportion Z-test -->
-    <div class="stats-book"><p>Begin with an exact coin model. The normal approximation below is another method, useful when its count conditions hold. <a href="/reading/statistics/testing-a-claim/">Read the guided introduction →</a></p><NullLab client:visible  /></div>
+    <div class="stats-book"><p>Try comparing two sign-up rates and shuffling treatment labels. The formulas below extend the comparison to common proportion procedures. <a href="/reading/statistics/comparing-proportions/">Read the guided introduction →</a></p><ABExperiment client:visible /></div>
 
     <h3>One-proportion Z-test</h3>
     <p>Test whether a sample proportion p-hat differs from a hypothesized value p0. The test statistic is Z = (p-hat - p0) / sqrt(p0 * (1 - p0) / n). Under the null, Z follows a standard normal distribution when n is large enough (np0 and n(1 - p0) both at least 10).</p>

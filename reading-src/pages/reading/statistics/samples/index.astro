@@ -1,7 +1,8 @@
 ---
 import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
-import PrevNext from '../../../../components/PrevNext.astro';
+import CourseNavigation from '../../../../components/statistics/CourseNavigation.astro';
+import CourseProgress from '../../../../components/statistics/CourseProgress.astro';
 import Neighbors from '../../../../components/Neighbors.astro';
 import Question from '../../../../components/statistics/Question';
 import Culmination from '../../../../components/statistics/Culmination.astro';
@@ -13,7 +14,7 @@ import TownSampler from '../../../../components/statistics/TownSampler';
   <main class="stats-book">
     <a href="/reading/statistics/" class="text-sm mb-4 inline-block">&larr; back to statistics</a>
     <h1>What can a handful tell us?</h1>
-    <p class="text-gray-400 text-sm mb-6">Statistics through experiments · 4 of 8 · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></p>
+    <CourseProgress slug="samples" />
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">You cannot measure everyone. A carefully chosen handful can still tell you something.</p>
     </div>
@@ -60,6 +61,6 @@ import TownSampler from '../../../../components/statistics/TownSampler';
     <StatQuest videos={[{"id": "vikkiwjQqfU", "title": "Population and Estimated Parameters", "note": "Revisit the distinction between the population and what a sample tells us."}]} />
 
     <ReadingCredit />
-    <PrevNext prev={{ href: '/reading/statistics/describing-data/', label: 'What does an average hide? · 3 of 8' }} next={{ href: '/reading/statistics/sampling-fairly/', label: 'Can more data mislead us? · 5 of 8' }} />
+    <CourseNavigation slug="samples" />
   </main>
 </Layout>

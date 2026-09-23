@@ -1,0 +1,9 @@
+---
+import PrevNext from '../PrevNext.astro';
+import {course,chapterHref} from '../../../reading-src/lib/statistics/course';
+interface Props {slug:string}
+const index=course.findIndex(c=>c.slug===Astro.props.slug);
+if(index<0)throw new Error(`Unknown statistics chapter: ${Astro.props.slug}`);
+const link=(i:number)=>({href:chapterHref(course[i].slug),label:`${course[i].title} · ${i+1} of ${course.length}`});
+---
+<PrevNext prev={index>0?link(index-1):{href:'/reading/statistics/',label:'Statistics'}} next={index<course.length-1?link(index+1):undefined} fin="End of the introductory course" />
