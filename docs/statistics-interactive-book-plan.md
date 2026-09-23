@@ -1,6 +1,18 @@
 # Statistics: an interactive introduction
 
-Status: phase 1 implemented, 2026-09-22. Phases 2–4 remain planned.
+Status: eight-chapter introductory path implemented, 2026-09-22. A first interactive pass now reaches all nine OpenIntro chapters. Reader sessions and the deeper extensions listed below remain future work.
+
+## Current implementation
+
+- Completed chapters 3–8: describing data, samples, sampling bias and assignment, sampling distributions and the CLT, confidence intervals, and null-model testing. Each has two questions with answer-specific feedback, definitions in context, a concluding formal idea, and a new-context application.
+- Culminations now include definitions, relationships, and theorems. The CLT chapter explicitly distinguishes the fixed population, observations per sample, repetitions, standard error, and the theorem’s assumptions. Simulation illustrates the theorem rather than proving it.
+- Added reusable activities for salaries/outliers, town sampling, treatment assignment, sample means from three population shapes, interval coverage, and a one-sided exact binomial comparison. Integrated relevant activities into OpenIntro 1–2 and 4–7.
+- Added conditional-probability counts to OpenIntro 3, adjustable least-squares lines and an influential point to OpenIntro 8, and a logistic probability/odds explorer to OpenIntro 9. These include transfer questions and expandable formal summaries.
+- Added direct, topic-matched StatQuest links near the end of 16 chapters, using [Josh Starmer’s official video index](https://statquest.org/video_index.html). The sampling-design chapter has no forced match. Videos supplement the text and do not gate progress or load third-party embeds.
+- Corrected small-sample mean inference to use t critical values with stated assumptions, replaced the old modular-arithmetic “random” sampling/assignment, qualified causal and R-squared claims, and repaired unsupported Scheme operations. All 34 existing Scheme examples now execute with the installed interpreter.
+- Verification: supplied-randomness model tests, UI behavior tests, TypeScript, all-site Vitest, reading build (526 pages), eight-chapter navigation/link checks, and Chrome interaction/layout checks. Removed the new temporary test files after they passed, per the author’s preference; retained pre-existing tests.
+- Still useful as later extensions: a dedicated A/B activity for OpenIntro 6, paired versus unpaired data in OpenIntro 7, and pooled versus group-specific regression in OpenIntro 9. These are additional practice beyond the activities delivered here. Reader sessions remain necessary before making claims about learning effectiveness.
+- Local implementation only; not deployed.
 
 ## Pilot implementation
 
@@ -216,25 +228,25 @@ Simulation requirements:
 
 ## Delivery sequence
 
-### Phase 1 — Pilot and entry point
+### Phase 1 — Pilot and entry point (implemented)
 
 Write chapter 1–2 learning objectives, culminating representations, questions, explanations, and behavior tests. Build the feedback component, symbolic summaries, spinner, and repeated-coin experiment. Add the beginner route to the index, list the nine existing chapters, repair chapter navigation, and address the landing-page/source-link issues.
 
 Deliverable: two complete chapters that a beginner can use without programming knowledge.
 
-### Phase 2 — Data and sampling
+### Phase 2 — Data and sampling (introductory chapters and initial integration implemented)
 
 Build chapters 3–5, carrying the same town/crowd dataset through description, estimation, and selection bias. Add random-assignment comparison as a separate section. Integrate the resulting activities into OpenIntro 1–2 and correct their affected examples.
 
 Deliverable: a continuous path from probability to describing and collecting data.
 
-### Phase 3 — Inference
+### Phase 3 — Inference (introductory chapters and initial integration implemented)
 
 Build chapters 6–8 and integrate the reusable activities into OpenIntro 4–7. Review inference wording, small-sample procedures, interval coverage, and null-model definitions together with the visuals.
 
 Deliverable: a complete beginner route ending at inference, with coherent links into formal methods.
 
-### Phase 4 — Relationships and deeper practice
+### Phase 4 — Relationships and deeper practice (initial activities implemented; reader refinement pending)
 
 Add conditional-probability activities and the regression interactions for OpenIntro 3, 8, and 9. Add a few later questions that revisit earlier concepts in new contexts. Adjust chapter boundaries and explanations using reader feedback.
 
@@ -244,7 +256,7 @@ Each phase should be independently usable. Reassess the next phase after the pil
 
 ## Verification and learning evaluation
 
-Follow the repository's test-first approach for implementation: write failing behavior tests, implement the smallest coherent slice, run the relevant checks, then commit the passing slice.
+Follow the repository's test-first approach for implementation: write failing behavior tests, implement the smallest coherent slice, run the relevant checks, then commit the passing slice. The author permits removing new temporary tests after they pass rather than maintaining a test suite for every chapter; retain existing repository tests.
 
 Meaningful automated checks include supplied-random-sequence outcomes, sample-without-replacement uniqueness, histogram accounting, mean/median edge cases, parameter-change resets, and question feedback state. Avoid flaky tests that require an unseeded simulation to land near a target percentage.
 
@@ -281,4 +293,4 @@ These sources support the design direction; they do not validate this particular
 - Whether advanced readers prefer embedded code immediately after each activity or in a chapter-end section.
 - Whether the introductory route needs further prerequisite explanations for fractions, percentages, or reading graphs.
 
-These decisions do not block the initial two-chapter pilot. This document plans the work; implementation and publication are subsequent tasks.
+These decisions now inform reader testing and a later refinement pass. The current implementation is usable locally; publication remains separate.
