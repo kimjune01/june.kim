@@ -1,4 +1,7 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import SamplingDistribution from '../../../../components/statistics/SamplingDistribution';
+import '../../../../components/statistics/statistics.css';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -18,9 +21,11 @@ import PrevNext from "../../../../components/PrevNext.astro";
       <p class="text-lg" style="max-width:none"><strong>Statistical inference</strong> draws conclusions about a population from a sample. Two main tools: <strong>confidence intervals</strong> estimate a parameter with a margin of error, and <strong>hypothesis tests</strong> evaluate whether evidence supports a claim. Both rest on the sampling distribution.</p>
     </div>
 
+    <div class="stats-book"><p>Keep the population fixed and watch how its sample means vary. <a href="/reading/statistics/estimates-vary/">Read the guided introduction →</a></p><SamplingDistribution client:visible  /></div>
+
     <!-- 1. Point Estimates and Sampling Distribution -->
     <h3>Point estimates and the sampling distribution</h3>
-    <p>A <strong>point estimate</strong> is a single number computed from data (like the sample mean). Different samples give different estimates. The distribution of all possible estimates is the <strong>sampling distribution</strong>. By the <a href="/reading/probability/grinstead-09/">🎰 Central Limit Theorem</a>, sample means are approximately normal for large n.</p>
+    <p>A <strong>point estimate</strong> is a single number computed from data (like the sample mean). Different samples give different estimates. The distribution of all possible estimates is the <strong>sampling distribution</strong>. By the <a href="/reading/probability/grinstead-09/">🎰 Central Limit Theorem</a>, means of independent observations from the same distribution with finite, positive variance are approximately normal for sufficiently large n. The population itself need not be normal.</p>
 
     <!-- SVG: Sampling distribution with rejection regions -->
     <div class="flex justify-center my-6">
@@ -57,7 +62,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 (define sample '(67 72 74 68 71 69 73 70 75 66))
 
 (define (mean lst)
-  (exact->inexact (/ (apply + lst) (length lst))))
+  (* 1.0 (/ (apply + lst) (length lst))))
 
 (define (std lst)
   (let ((m (mean lst)))
@@ -78,15 +83,16 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
     <!-- 2. Confidence Intervals -->
     <h3>Confidence intervals</h3>
-    <p>A <strong>95% confidence interval</strong> is: point estimate &plusmn; z* &times; SE, where z* = 1.96 for 95% confidence. Interpretation: if we repeated the sampling many times, 95% of intervals would contain the true parameter.</p>
+    <p>A confidence interval combines a point estimate with a margin of error. For independent observations from a normal population with unknown standard deviation, a <strong>95% t interval</strong> is x̄ &plusmn; t* &times; s/√n. Here n = 10, so there are 9 degrees of freedom and t* ≈ 2.262. Under those assumptions, the procedure covers the population mean in 95% of repeated samples. See <a href="/reading/statistics/intervals/">the interval experiment</a> for the coverage idea.</p>
 
     <SchemeRepl client:visible initialCode={`; 95% confidence interval for the mean
-; CI = x-bar +/- z* * SE
+; CI = x-bar +/- t* * SE
+; Independent normal observations; sigma unknown. Keep n = 10 for this cutoff.
 
 (define sample '(67 72 74 68 71 69 73 70 75 66))
 
 (define (mean lst)
-  (exact->inexact (/ (apply + lst) (length lst))))
+  (* 1.0 (/ (apply + lst) (length lst))))
 (define (std lst)
   (let ((m (mean lst)))
     (sqrt (/ (apply + (map (lambda (x) (* (- x m) (- x m))) lst))
@@ -94,9 +100,9 @@ import PrevNext from "../../../../components/PrevNext.astro";
 
 (define x-bar (mean sample))
 (define se (/ (std sample) (sqrt (length sample))))
-(define z-star 1.96)  ; for 95% confidence
+(define t-star 2.262157)  ; 95% confidence, df = 9 (n = 10)
 
-(define margin (* z-star se))
+(define margin (* t-star se))
 (define ci-lower (- x-bar margin))
 (define ci-upper (+ x-bar margin))
 
@@ -121,8 +127,8 @@ x_bar = sum(sample) / n
 s = math.sqrt(sum((x - x_bar)**2 for x in sample) / (n - 1))
 se = s / math.sqrt(n)
 
-z_star = 1.96  # 95% confidence
-margin = z_star * se
+t_star = 2.262157  # 95% confidence, df = 9; this cutoff assumes n = 10
+margin = t_star * se
 
 print(f"Point estimate: {x_bar:.1f}")
 print(f"Margin of error: {margin:.2f}")
@@ -133,7 +139,7 @@ print(f"95% CI: ({x_bar - margin:.2f}, {x_bar + margin:.2f})")
 
     <!-- 3. Hypothesis Testing -->
     <h3>Hypothesis testing and p-values</h3>
-    <p>Start with a <strong>null hypothesis</strong> H&#x2080; (no effect). Compute a <strong>test statistic</strong> and its <strong>p-value</strong>: the probability of seeing data this extreme if H&#x2080; is true. If p &lt; &alpha; (typically 0.05), reject H&#x2080;.</p>
+    <p>Start with a <strong>null hypothesis</strong> H&#x2080;, such as a specified population mean. The <strong>p-value</strong> is the probability, under the null model, of a test statistic at least as extreme as observed according to the chosen test. Set a decision threshold &alpha; before seeing the data. The example below uses a two-sided t test with 9 degrees of freedom and independent normal observations; its critical value assumes the ten observations shown.</p>
 
     <SchemeRepl client:visible initialCode={`; Hypothesis test: is the population mean = 70?
 ; H0: mu = 70
@@ -143,7 +149,7 @@ print(f"95% CI: ({x_bar - margin:.2f}, {x_bar + margin:.2f})")
 (define mu-0 70)  ; null hypothesis value
 
 (define (mean lst)
-  (exact->inexact (/ (apply + lst) (length lst))))
+  (* 1.0 (/ (apply + lst) (length lst))))
 (define (std lst)
   (let ((m (mean lst)))
     (sqrt (/ (apply + (map (lambda (x) (* (- x m) (- x m))) lst))
@@ -152,28 +158,28 @@ print(f"95% CI: ({x_bar - margin:.2f}, {x_bar + margin:.2f})")
 (define x-bar (mean sample))
 (define se (/ (std sample) (sqrt (length sample))))
 
-; Test statistic: Z = (x-bar - mu0) / SE
-(define z-stat (/ (- x-bar mu-0) se))
+; Test statistic: t = (x-bar - mu0) / SE
+(define t-stat (/ (- x-bar mu-0) se))
 
 (display "Sample mean:    ") (display x-bar) (newline)
 (display "Null value:     ") (display mu-0) (newline)
 (display "Std error:      ") (display se) (newline)
-(display "Z-statistic:    ") (display z-stat) (newline)
+(display "t-statistic:    ") (display t-stat) (newline)
 (newline)
 
 ; Decision at alpha = 0.05
-; Reject if |Z| > 1.96
+; Reject if |t| > 2.262157
 (define alpha 0.05)
-(display "Critical value: 1.96") (newline)
-(display "|Z| = ") (display (abs z-stat)) (newline)
+(display "Critical value: 2.262157") (newline)
+(display "|t| = ") (display (abs t-stat)) (newline)
 (display "Reject H0? ")
-(display (if (> (abs z-stat) 1.96) "Yes" "No"))
+(display (if (> (abs t-stat) 2.262157) "Yes" "No"))
 `} />
 
 
     <!-- 4. Significance Level -->
     <h3>Significance level and errors</h3>
-    <p>The <strong>significance level</strong> &alpha; is the threshold for rejecting H&#x2080;. Type I error: rejecting H&#x2080; when it is true (probability = &alpha;). Type II error: failing to reject H&#x2080; when it is false (probability = &beta;). <strong>Power</strong> = 1 - &beta;: the probability of correctly detecting a real effect.</p>
+    <p>The <strong>significance level</strong> &alpha; is the threshold for rejecting H&#x2080;. Type I error: rejecting H&#x2080; when it is true (probability at most &alpha; for a valid level-&alpha; test). Type II error: failing to reject H&#x2080; when it is false (probability = &beta;). <strong>Power</strong> = 1 - &beta;: the probability of correctly detecting a real effect.</p>
 
     <SchemeRepl client:visible initialCode={`; Error types in hypothesis testing
 
@@ -183,7 +189,7 @@ print(f"95% CI: ({x_bar - margin:.2f}, {x_bar + margin:.2f})")
 
 (define alpha 0.05)
 (display "Significance level (alpha): ") (display alpha) (newline)
-(display "P(Type I error) = alpha = ") (display alpha) (newline)
+(display "Type I error is controlled at alpha = ") (display alpha) (newline)
 (newline)
 
 ; If the true effect is small, power is low
@@ -219,12 +225,14 @@ print(f"95% CI: ({x_bar - margin:.2f}, {x_bar + margin:.2f})")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>OpenIntro builds inference from the sampling distribution of the sample proportion, then generalizes. We use the sample mean for clarity. The original covers decision errors with medical testing analogies and uses simulation to build intuition for sampling distributions. For large samples, the Z-test is equivalent to the t-test. Small-sample inference uses the t-distribution (covered in Ch. 7).</p>
+    <p>OpenIntro builds inference from the sampling distribution of the sample proportion, then generalizes. We use the sample mean for clarity. The original covers decision errors with medical testing analogies and uses simulation to build intuition for sampling distributions. With many degrees of freedom, t critical values approach normal critical values. The examples here use the t-distribution because the population standard deviation is estimated from ten observations; Ch. 7 develops this method further.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Want the full treatment? <a href="https://www.openintro.org/book/os/">Read OpenIntro Statistics, Ch. 5</a>.
     </div>
 
+
+<StatQuest videos={[{"id": "YAlJCEDH2uY", "title": "The Central Limit Theorem", "note": "Follow the change from individual observations to a distribution of averages."}, {"id": "TqOeMYtOc1w", "title": "Confidence Intervals", "note": "Revisit why repeated intervals can capture a fixed population quantity."}]} />
 
     <PrevNext prev={{ href: "/reading/statistics/openintro-04/", label: "Distributions" }} next={{ href: "/reading/statistics/openintro-06/", label: "Inference for Proportions" }} />
 

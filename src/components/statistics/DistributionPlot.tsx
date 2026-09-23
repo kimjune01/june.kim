@@ -8,8 +8,8 @@ export default function DistributionPlot({ values, min, max, bins = 40, title, u
   const id = useId();
   const counts = Array<number>(bins).fill(0);
   for (const value of values) if (value >= min && value <= max) counts[Math.min(bins - 1, Math.floor((value - min) / (max - min) * bins))]++;
-  const peak = Math.max(1, ...counts);
-  const x = (value: number) => 50 + (value - min) / (max - min) * 450;
+  const peak = Math.ceil(Math.max(2, ...counts) / 2) * 2;
+  const x = (value: number) => Number((50 + (value - min) / (max - min) * 450).toFixed(3));
   return <figure className="stats-histogram">
     <figcaption>{title}</figcaption>
     <svg viewBox="0 0 540 230" role="img" aria-labelledby={`${id}-title`}>

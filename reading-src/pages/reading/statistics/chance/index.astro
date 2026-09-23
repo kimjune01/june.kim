@@ -1,4 +1,5 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import PrevNext from '../../../../components/PrevNext.astro';
 import Spinner from '../../../../components/statistics/Spinner';
@@ -74,6 +75,8 @@ import '../../../../components/statistics/statistics.css';
       <dt>Independence</dt><dd>Knowing one result does not change the probability of another.</dd>
     </dl>
     <p>Next, we’ll flip a handful of coins at once and see what happens when we repeat the whole experiment. For the formal rules, visit <a href="/reading/statistics/openintro-03/">Probability</a>.</p>
+<StatQuest videos={[{"id": "oI3hZJqXJuc", "title": "The Main Ideas behind Probability Distributions", "note": "Connect the chance of an outcome with the shape of a whole distribution."}]} />
+
     <ReadingCredit />
     <PrevNext prev={{ href: '/reading/statistics/', label: 'Statistics' }} next={{ href: '/reading/statistics/repeated-experiments/', label: 'What happens when we repeat?' }} />
   </main>

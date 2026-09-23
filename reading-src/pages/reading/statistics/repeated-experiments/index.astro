@@ -1,4 +1,5 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import PrevNext from '../../../../components/PrevNext.astro';
 import CoinExperiment from '../../../../components/statistics/CoinExperiment';
@@ -77,8 +78,10 @@ import '../../../../components/statistics/statistics.css';
       <dt>Proportion</dt><dd>A part divided by the whole: three heads out of five coins is 0.6.</dd>
       <dt>Estimate</dt><dd>A quantity calculated from data to learn about an unknown quantity.</dd>
     </dl>
-    <p>This experiment has a formal name: the <strong>binomial model</strong>. You can meet its formula in <a href="/reading/statistics/openintro-04/">Distributions</a>. Or continue to <a href="/reading/statistics/openintro-01/">Introduction to Data</a> to start thinking about observations beyond coins.</p>
+    <p>This experiment has a formal name: the <strong>binomial model</strong>. You can meet its formula in <a href="/reading/statistics/openintro-04/">Distributions</a>. Or continue to <a href="/reading/statistics/describing-data/">What does an average hide?</a> to start thinking about observations beyond coins.</p>
+<StatQuest videos={[{"id": "J8jNoF-K8E8", "title": "The Binomial Distribution and Test", "note": "Connect repeated yes-or-no outcomes with their probability model."}]} />
+
     <ReadingCredit />
-    <PrevNext prev={{ href: '/reading/statistics/chance/', label: 'How likely is it?' }} next={{ href: '/reading/statistics/openintro-01/', label: 'Introduction to Data' }} />
+    <PrevNext prev={{ href: '/reading/statistics/chance/', label: 'How likely is it?' }} next={{ href: '/reading/statistics/describing-data/', label: 'What does an average hide?' }} />
   </main>
 </Layout>

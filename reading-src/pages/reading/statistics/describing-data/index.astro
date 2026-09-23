@@ -1,0 +1,49 @@
+---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from '../../../../components/PrevNext.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import '../../../../components/statistics/statistics.css';
+import DataExplorer from '../../../../components/statistics/DataExplorer';
+---
+<Layout title="What does an average hide? — Statistics through experiments" favicon="◒">
+  <main class="stats-book">
+    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
+    <p class="stats-kicker">Statistics through experiments · 03</p>
+    <h1>What does an average hide?</h1>
+    <p class="stats-deck">An average fits in a sentence. The people behind it rarely do.</p>
+
+    <p>Five people earn $40,000, $50,000, $60,000, $70,000, and $80,000 a year. If they pooled their salaries and shared the money equally, each would have $60,000. That equal share is their <strong>mean</strong>, one kind of average.</p>
+    <p>Now a person earning a million dollars joins them. Nobody else gets a raise. Before pressing the button, predict what happens to the average.</p>
+    <DataExplorer client:load />
+    <noscript><p>Adding the million-dollar salary raises the mean from $60,000 to about $216,667. The median rises only to $65,000.</p></noscript>
+    <h2>What did we measure?</h2>
+    <p>Each person gives us an <strong>observation</strong>. Salary is a <strong>variable</strong>: something we record that can differ from person to person. We could also record their occupation.</p>
+    <p>Salary is numerical; differences and averages have meaning. Occupation is categorical: teacher, cook, engineer. We can count how many people belong to each category, but an “average occupation” makes no sense. A number used as a label, such as a postal code, is categorical too.</p>
+    <h2>Two ways to find the middle</h2>
+    <p>The mean listens to every dollar. That is useful when you care about a total divided among people, but an unusually large value can pull it far from most observations.</p>
+    <p>The <strong>median</strong> asks a different question: after sorting the salaries, what is in the middle? With five people, it is the third salary. With six, we average the third and fourth. The newcomer moves our median from $60,000 to $65,000.</p>
+    <p>Neither summary is dishonest. They answer different questions. To describe what a middle-earning person receives, the median is often more helpful. To work out a total payroll from a head count, use the mean.</p>
+<Question client:visible id="salary-middle" prompt="You want to describe a middle-earning person in the six-person group. Which summary helps most?" choices={[{"label": "The mean, because it includes every dollar.", "correct": false, "feedback": "Including every dollar is useful for totals, but the million-dollar salary pulls the mean above what five of the six people earn."}, {"label": "The median, together with a look at the salaries.", "correct": true, "feedback": "The median locates the middle of the ordered salaries. The full data still show the very large salary that a single number hides."}, {"label": "Either number tells the whole story.", "correct": false, "feedback": "Both compress the data. Neither tells you that one person earns a million dollars."}]} explanation="Choose a summary to match the question. For a typical position in a strongly uneven salary distribution, the median is useful; keep the distribution in view." />
+    <h2>The same center can hide different lives</h2>
+    <p>Open <strong>Same mean, different spread</strong> in the experiment. Both groups average $60,000, but one bunches near that amount and the other stretches from $20,000 to $100,000. <strong>Spread</strong> describes how far apart values are.</p>
+    <p>One measure of spread is the <strong>standard deviation</strong>. It summarizes distance from the mean using squared differences. Its units are the original units: dollars here. You can meet the calculation later; for now, notice how it changes while the mean stays put.</p>
+    <Culmination title="The mean is an equal share" kind="You can now write this" href="#data-lab">
+      <p>You added the salaries, counted the people, and divided. Here is that whole operation in one line.</p>
+      <p class="stats-formula">x̄ = (x₁ + ⋯ + xₙ) / n</p>
+      <p><strong>x̄</strong>, “x-bar,” names the mean. Each <strong>x</strong> is one salary; the little number identifies whose. <strong>n</strong> counts the people. The dots mean “keep adding the remaining salaries.”</p>
+      <details><summary>An even shorter way to write the addition</summary><p>x̄ = (1/n) ∑ᵢ₌₁ⁿ xᵢ. The symbol ∑, “sum,” says to add all the values, from person 1 through person n. It is the same equal-sharing calculation.</p></details>
+      <p>A mean preserves the total per person. It does not preserve the shape of the group.</p>
+    </Culmination>
+<Question client:visible id="mean-transfer" prompt="Two caf\u00e9s both report a mean wait of five minutes. Can you conclude their customers have similarly predictable waits?" choices={[{"label": "Yes; equal means imply equal spread.", "correct": false, "feedback": "One caf\u00e9 might always take five minutes. Another might alternate between one and nine. Their means match, but their spreads differ."}, {"label": "No; we also need to see how the waits vary.", "correct": true, "feedback": "The mean compresses the total wait per customer. It leaves out how consistently customers receive that experience."}]} explanation="A summary answers a particular question. To compare predictability, examine spread as well as center." />
+    <h2>Words you met</h2>
+    <dl class="stats-words"><dt>Observation</dt><dd>One recorded case, such as a person.</dd><dt>Variable</dt><dd>An attribute recorded for each case.</dd><dt>Mean</dt><dd>The sum of numerical values divided by their count.</dd><dt>Median</dt><dd>The middle of the ordered values; average the two middle values for an even count.</dd><dt>Spread</dt><dd>How much the values vary.</dd></dl>
+    <p>For plots and the standard-deviation calculation, continue into <a href="/reading/statistics/openintro-02/">Summarizing Data</a>. Next, we’ll try learning about people we have not measured.</p>
+<StatQuest videos={[{"id": "SzZ6GpcfoQY", "title": "Estimating the Mean, Variance and Standard Deviation", "note": "Take the next step from describing center and spread to calculating them."}]} />
+
+    <ReadingCredit />
+    <PrevNext prev={{ href: '/reading/statistics/repeated-experiments/', label: 'What happens when we repeat?' }} next={{ href: '/reading/statistics/samples/', label: 'What can a handful tell us?' }} />
+  </main>
+</Layout>

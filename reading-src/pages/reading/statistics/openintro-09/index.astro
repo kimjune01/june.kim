@@ -1,4 +1,5 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -293,6 +294,8 @@ print(f"After x+1: p = {to_prob(new_odds):.3f}")
       <li><a href="https://en.wikipedia.org/wiki/Multicollinearity"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Multicollinearity</a></li>
     </ul>
     </Neighbors>
+
+<StatQuest videos={[{"id": "zITIFTsivN8", "title": "Multiple Regression", "note": "Extend a model from one predictor to several."}, {"id": "yIYKR4sgzI8", "title": "Logistic Regression", "note": "See why predicting a yes-or-no outcome calls for a probability curve."}]} />
 
     <PrevNext prev={{ href: "/reading/statistics/openintro-08/", label: "Simple Linear Regression" }} />
 

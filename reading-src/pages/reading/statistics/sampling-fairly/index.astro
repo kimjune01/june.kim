@@ -1,0 +1,47 @@
+---
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from '../../../../components/PrevNext.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import '../../../../components/statistics/statistics.css';
+import TownSampler from '../../../../components/statistics/TownSampler';
+import AssignmentLab from '../../../../components/statistics/AssignmentLab';
+---
+<Layout title="Can more data mislead us? — Statistics through experiments" favicon="◒">
+  <main class="stats-book">
+    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
+    <p class="stats-kicker">Statistics through experiments · 05</p>
+    <h1>Can more data mislead us?</h1>
+    <p class="stats-deck">A bigger sample can make you more certain about the wrong group.</p>
+
+    <p>Let’s return to the town. You could choose residents from the complete list, or save time by measuring people near the basketball court. Would forty people at the court necessarily tell you more about the town than ten chosen from anywhere?</p>
+    <p>In this fictional town, the court group happens to be taller. Try both selection rules. Increase the sample size and watch whether their estimates tell the same story.</p>
+    <TownSampler client:load compare />
+    <h2>Who had a chance to be included?</h2>
+    <p>The town-wide rule gives every resident an equal chance of selection. The court rule gives most residents no chance at all. That matters because inclusion is related to what we measure: height.</p>
+    <p>This is <strong>selection bias</strong>. A selection process can systematically overrepresent some kinds of observations and underrepresent others. More observations from the same restricted group do not fix that mismatch.</p>
+    <p>Choose forty people. The court sample now includes every member of its subgroup. Its mean is perfectly accurate for that subgroup and still misleading as a description of the whole town.</p>
+<Question client:visible id="bias-size" prompt="A website asks its visitors how many hours they spend online. Would a million responses remove the problem of estimating use among all adults?" choices={[{"label": "Yes; a million people must represent everyone.", "correct": false, "feedback": "Adults who rarely or never use that website are still underrepresented. The selection process matters even with a huge response count."}, {"label": "No; the people reached can still differ from the target population.", "correct": true, "feedback": "A larger count can make the visitor average precise without making it representative of all adults."}]} explanation="Random variation and selection bias are different problems. More responses can reduce the first while leaving the second intact." />
+    <h2>A different job for randomness</h2>
+    <p>Now suppose forty students try a study app. Students who choose the app score higher afterward. Did the app help?</p>
+    <p>Perhaps the keenest students chose it. Their existing preparation could explain both their choice and their scores. That alternative explanation is <strong>confounding</strong>: another factor is tangled up with the comparison we wanted to make.</p>
+    <p>In the next experiment, the app has exactly zero effect. Students begin with different levels of preparation. Compare letting students choose with assigning them randomly.</p>
+    <AssignmentLab client:visible />
+    <p><strong>Random assignment</strong> decides which treatment a participant receives. It makes treatment groups comparable on average across possible assignments, so pre-existing differences do not systematically favor a treatment. A particular assignment can still be unbalanced.</p>
+    <p>Random sampling and random assignment have different jobs. Sampling helps us represent a population; assignment helps us isolate a treatment’s effect among participants. A study can use either, both, or neither.</p>
+    <p class="stats-aside">Random assignment supports causal inference when the study is carried out appropriately—for example, outcomes are measured comparably and participants do not change one another’s treatments. Observational studies can also support causal claims, but need additional design and assumptions to address alternative explanations.</p>
+    <Culmination title="Keep both arrows in view" kind="Two design principles" href="#bias-lab">
+      <p class="stats-formula">Population → selection rule → sample</p>
+      <p>Ask who could be included. A larger sample does not automatically repair a biased selection rule.</p>
+      <p class="stats-formula">Participants → assignment rule → treatment groups</p>
+      <p>Ask what makes the groups comparable. Random assignment addresses systematic differences before treatment; it does not turn volunteers into a random sample of everyone.</p>
+    </Culmination>
+<Question client:visible id="assignment-transfer" prompt="Volunteers are randomly assigned to two exercise programs. What does this design directly help with?" choices={[{"label": "Making the volunteers representative of every adult.", "correct": false, "feedback": "Random assignment happens after recruitment. It does not change which adults volunteered."}, {"label": "Comparing the programs without systematically favoring one group at the start.", "correct": true, "feedback": "Assignment makes pre-existing differences balance on average. Chance imbalances and study conduct still need attention."}, {"label": "Ensuring both groups finish with identical outcomes.", "correct": false, "feedback": "Random assignment does not force outcomes to match. Treatment effects and random variation can create differences."}]} explanation="Selection concerns whom we study. Assignment concerns what happens to them. Keep those questions separate when deciding what a study supports." />
+    <h2>Words you met</h2>
+    <dl class="stats-words"><dt>Selection bias</dt><dd>Systematic distortion caused by who gets included.</dd><dt>Random sampling</dt><dd>Selecting observations by a chance-based rule from a population.</dd><dt>Random assignment</dt><dd>Using chance to allocate treatments among participants.</dd><dt>Confounding</dt><dd>An alternative factor entangled with the relationship being studied.</dd><dt>Association</dt><dd>Values of two variables vary together; that alone does not establish causation.</dd></dl>
+    <p>Explore other sampling and experimental designs in <a href="/reading/statistics/openintro-01/">Introduction to Data</a>.</p>
+    <ReadingCredit />
+    <PrevNext prev={{ href: '/reading/statistics/samples/', label: 'What can a handful tell us?' }} next={{ href: '/reading/statistics/estimates-vary/', label: 'Why do estimates move?' }} />
+  </main>
+</Layout>

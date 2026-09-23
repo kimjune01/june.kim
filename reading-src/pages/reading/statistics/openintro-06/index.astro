@@ -1,4 +1,7 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import NullLab from '../../../../components/statistics/NullLab';
+import '../../../../components/statistics/statistics.css';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -19,6 +22,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     </div>
 
     <!-- 1. One-proportion Z-test -->
+    <div class="stats-book"><p>Begin with an exact coin model. The normal approximation below is another method, useful when its count conditions hold. <a href="/reading/statistics/testing-a-claim/">Read the guided introduction →</a></p><NullLab client:visible  /></div>
+
     <h3>One-proportion Z-test</h3>
     <p>Test whether a sample proportion p-hat differs from a hypothesized value p0. The test statistic is Z = (p-hat - p0) / sqrt(p0 * (1 - p0) / n). Under the null, Z follows a standard normal distribution when n is large enough (np0 and n(1 - p0) both at least 10).</p>
 
@@ -268,6 +273,8 @@ print(f"Reject H0? {'Yes' if chi_sq > 3.84 else 'No'}")
       <li><a href="https://en.wikipedia.org/wiki/Goodness_of_fit"><img src="/reading/wikipedia.svg" alt="wp" style="display:inline;height:1em;vertical-align:-0.1em;margin-right:0.2em;"/>Goodness of fit</a></li>
     </ul>
     </Neighbors>
+
+<StatQuest videos={[{"id": "vemZtEM63GY", "title": "p-values: What they are and how to interpret them", "note": "Practice keeping the null assumption separate from the probability of the results."}]} />
 
     <PrevNext prev={{ href: "/reading/statistics/openintro-05/", label: "Foundations for Inference" }} next={{ href: "/reading/statistics/openintro-07/", label: "Inference for Means" }} />
 

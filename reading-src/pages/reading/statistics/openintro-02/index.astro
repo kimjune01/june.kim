@@ -1,4 +1,7 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import DataExplorer from '../../../../components/statistics/DataExplorer';
+import '../../../../components/statistics/statistics.css';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -17,6 +20,8 @@ import PrevNext from "../../../../components/PrevNext.astro";
     <div class="bg-zinc-800 rounded-lg p-5 mb-8 callout">
       <p class="text-lg" style="max-width:none">Raw data is noise until you summarize it. <strong>Center</strong> (mean, median), <strong>spread</strong> (standard deviation, IQR), and <strong>shape</strong> (skew, modality) compress a dataset into a few numbers. Visualizations like histograms and box plots make the structure visible.</p>
     </div>
+
+    <div class="stats-book"><p>What happens to an average when one very large value arrives? Change the salaries to find out. <a href="/reading/statistics/describing-data/">Read the guided introduction →</a></p><DataExplorer client:visible  /></div>
 
     <!-- 1. Measures of Center -->
     <h3>Mean, median, mode</h3>
@@ -178,6 +183,8 @@ print(f"Mode: {mode}")
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Want the full treatment? <a href="https://www.openintro.org/book/os/">Read OpenIntro Statistics, Ch. 2</a>.
     </div>
+
+<StatQuest videos={[{"id": "SzZ6GpcfoQY", "title": "Estimating the Mean, Variance and Standard Deviation", "note": "Take the next step from describing center and spread to calculating them."}]} />
 
     <PrevNext prev={{ href: "/reading/statistics/openintro-01/", label: "Introduction to Data" }} next={{ href: "/reading/statistics/openintro-03/", label: "Probability" }} />
 

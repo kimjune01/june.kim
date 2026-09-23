@@ -1,4 +1,7 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import CoinExperiment from '../../../../components/statistics/CoinExperiment';
+import '../../../../components/statistics/statistics.css';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -95,6 +98,8 @@ print(f"Score at Z=2: {sat_mean + 2 * sat_sd}")
 
 
     <!-- 2. Binomial Distribution -->
+    <div class="stats-book"><p>A round of coins produces one count. Repeat rounds to see which counts are common. <a href="/reading/statistics/repeated-experiments/">Read the guided introduction →</a></p><CoinExperiment client:visible  /></div>
+
     <h3>Binomial distribution</h3>
     <p>The <strong>binomial distribution</strong> counts successes in n independent trials, each with probability p. P(X = k) = C(n,k) * p^k * (1-p)^(n-k). Mean = np, standard deviation = sqrt(np(1-p)).</p>
 
@@ -190,6 +195,8 @@ print(f"Score at Z=2: {sat_mean + 2 * sat_sd}")
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Want the full treatment? <a href="https://www.openintro.org/book/os/">Read OpenIntro Statistics, Ch. 4</a>.
     </div>
+
+<StatQuest videos={[{"id": "J8jNoF-K8E8", "title": "The Binomial Distribution and Test", "note": "Connect repeated yes-or-no outcomes with their probability model."}]} />
 
     <PrevNext prev={{ href: "/reading/statistics/openintro-03/", label: "Probability" }} next={{ href: "/reading/statistics/openintro-05/", label: "Foundations for Inference" }} />
 

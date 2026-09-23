@@ -1,4 +1,5 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -328,6 +329,8 @@ print(f"Reject H0? {'Yes' if abs(t) > 2.571 else 'No'}")
     </ul>
     </Neighbors>
 
+
+<StatQuest videos={[{"id": "PaFPbb66DxQ", "title": "Fitting a line to data: Least Squares", "note": "Watch the line-fitting idea develop from the distances it leaves behind."}]} />
 
     <PrevNext prev={{ href: "/reading/statistics/openintro-07/", label: "Inference for Means" }} next={{ href: "/reading/statistics/openintro-09/", label: "Multiple and Logistic Regression" }} />
 

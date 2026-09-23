@@ -1,4 +1,5 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -172,6 +173,8 @@ print(f"Base rate matters.")
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Want the full treatment? <a href="https://www.openintro.org/book/os/">Read OpenIntro Statistics, Ch. 3</a>.
     </div>
+
+<StatQuest videos={[{"id": "_IgyaD7vOOA", "title": "Conditional Probability", "note": "See how knowing something changes the group over which we count."}]} />
 
     <PrevNext prev={{ href: "/reading/statistics/openintro-02/", label: "Summarizing Data" }} next={{ href: "/reading/statistics/openintro-04/", label: "Distributions" }} />
 

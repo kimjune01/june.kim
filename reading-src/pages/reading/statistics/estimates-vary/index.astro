@@ -1,0 +1,49 @@
+---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from '../../../../components/PrevNext.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import '../../../../components/statistics/statistics.css';
+import SamplingDistribution from '../../../../components/statistics/SamplingDistribution';
+---
+<Layout title="Why do estimates move? — Statistics through experiments" favicon="◒">
+  <main class="stats-book">
+    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
+    <p class="stats-kicker">Statistics through experiments · 06</p>
+    <h1>Why do estimates move?</h1>
+    <p class="stats-deck">Individual observations can be lopsided. Their averages have a surprising habit.</p>
+
+    <p>You have seen a sample mean move when you draw another sample. What if we kept every one of those estimates? They would form a distribution of their own.</p>
+    <p>The upper chart below describes individual values in a population. Start with one observation per sample and take 500 samples. With just one observation, each “average” is the observation itself. The two shapes should look similar, allowing for random variation.</p>
+    <p>Choose <strong>Keep these means</strong>. Then increase observations per sample to 30 and take 500 new samples. Predict which chart will change.</p>
+    <SamplingDistribution client:load />
+    <noscript><p>Repeated averages from a right-skewed population tend to cluster more tightly and form a more symmetric shape as sample size grows. The population itself remains right-skewed.</p></noscript>
+    <h2>One dot stands for a whole sample</h2>
+    <p>The lower chart is an observed picture of a <strong>sampling distribution</strong>: the distribution of a statistic across repeated samples drawn by the same rule. Each entry is a sample mean, not an individual measurement.</p>
+    <p>Try the other population shapes. An even spread, a long tail, and two separated peaks look quite different. Yet averages of many independent observations tend toward a common, rounded shape.</p>
+    <p>Increasing the number of samples makes that picture clearer. Increasing the number of <em>observations per sample</em> changes the distribution of the mean itself. These are the two different knobs you met with coins.</p>
+<Question client:visible id="clt-repetitions" prompt="You keep 30 observations per sample and collect 500 more sample means. What changes?" choices={[{"label": "The population becomes more bell-shaped.", "correct": false, "feedback": "The population has not changed. We are only taking more samples from it."}, {"label": "The true sampling distribution becomes narrower.", "correct": false, "feedback": "Its spread depends on the population and sample size. Recording more repetitions reveals that spread more clearly."}, {"label": "The observed picture of the same sampling distribution gets fuller.", "correct": true, "feedback": "You have more repeated estimates of the same size. Their underlying distribution stays the same."}]} explanation="Sample size determines the behavior of each mean. Repetition count determines how many examples of that behavior we have recorded." />
+    <h2>A name for steadier estimates</h2>
+    <p>The standard deviation of a sampling distribution is called its <strong>standard error</strong>. It describes how much an estimate varies from sample to sample. The population’s standard deviation describes how much individuals vary.</p>
+    <p>For the independent draws here, multiplying sample size by four halves the standard error of the mean. Taking four times as many samples of the old size would not do that.</p>
+    <Culmination title="The Central Limit Theorem" kind="You have met a theorem" href="#means-lab">
+      <p>For independent observations drawn from the same distribution with finite, positive variance, the distribution of their <strong>standardized mean approaches a standard normal distribution</strong> as sample size grows.</p>
+      <p>In ordinary units: for sufficiently large samples, the means are approximately bell-shaped around the population mean, with standard error equal to the population standard deviation divided by the square root of sample size.</p>
+      <p class="stats-formula">SE(x̄) = σ / √n</p>
+      <p><strong>σ</strong>, “sigma,” is the population standard deviation. <strong>n</strong> is observations per sample. <strong>SE</strong> measures the spread of sample means. This standard-error relationship is exact under these assumptions; the bell shape is an approximation.</p>
+      <details><summary>What does “standardized” mean?</summary><p>Subtract the population mean μ, then divide by the standard error: (x̄ − μ) / (σ / √n). This puts the estimate’s distance from its target in units of sampling uncertainty. That distribution approaches a normal distribution centered at zero with standard deviation one.</p></details>
+      <p>The population does not have to become normal. There is no universal “30 is enough” rule: strong skew or rare extremes can demand much larger samples. Dependence or infinite variance can break this version of the theorem.</p>
+      <p class="stats-small">The experiments illustrate the theorem; they do not prove it. See <a href="https://online.stat.psu.edu/stat414/Lesson27">Penn State’s Central Limit Theorem lesson</a> for a mathematical treatment.</p>
+    </Culmination>
+<Question client:visible id="clt-transfer" prompt="Delivery times have a long right tail. You average 100 independent deliveries from the same process. What does the CLT suggest?" choices={[{"label": "The individual delivery times become approximately normal.", "correct": false, "feedback": "Averaging does not change individual deliveries. Their distribution can keep its long tail."}, {"label": "Repeated sample means may be approximately normal, if 100 is large enough for this distribution.", "correct": true, "feedback": "The theorem concerns means across repeated samples. Finite variance and independence matter, and 100 is not an automatic guarantee of a good approximation."}, {"label": "Every sample mean equals the population mean.", "correct": false, "feedback": "Means still vary. Their standard error is smaller than the spread of individual deliveries, but it is not zero."}]} explanation="The theorem is about a distribution of averages, under stated conditions. A separate idea, the law of large numbers, says that the average settles toward the population mean; it does not by itself supply a bell shape." />
+    <h2>Words you met</h2>
+    <dl class="stats-words"><dt>Sampling variability</dt><dd>The change in an estimate across different samples.</dd><dt>Sampling distribution</dt><dd>The distribution of a statistic over repeated samples of the same size and design.</dd><dt>Standard error</dt><dd>The standard deviation of a sampling distribution.</dd><dt>Central Limit Theorem</dt><dd>Under its conditions, standardized sample means approach a standard normal distribution.</dd></dl>
+    <p>For the next mathematical steps, see <a href="/reading/statistics/openintro-05/">Foundations for Inference</a> and <a href="/reading/statistics/openintro-07/">Inference for Means</a>.</p>
+<StatQuest videos={[{"id": "YAlJCEDH2uY", "title": "The Central Limit Theorem", "note": "Follow the change from individual observations to a distribution of averages."}]} />
+
+    <ReadingCredit />
+    <PrevNext prev={{ href: '/reading/statistics/sampling-fairly/', label: 'Can more data mislead us?' }} next={{ href: '/reading/statistics/intervals/', label: 'How much uncertainty remains?' }} />
+  </main>
+</Layout>

@@ -1,0 +1,47 @@
+---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from '../../../../components/PrevNext.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import '../../../../components/statistics/statistics.css';
+import IntervalLab from '../../../../components/statistics/IntervalLab';
+---
+<Layout title="How much uncertainty remains? — Statistics through experiments" favicon="◒">
+  <main class="stats-book">
+    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
+    <p class="stats-kicker">Statistics through experiments · 07</p>
+    <h1>How much uncertainty remains?</h1>
+    <p class="stats-deck">A single estimate is useful. Giving it some room helps us express what we do not know.</p>
+
+    <p>If different samples give different estimates, reporting “the mean is 171.2 cm” leaves something out. How uncertain is that estimate?</p>
+    <p>One response is to build an <strong>interval</strong>: a lower and upper value around the estimate. Below, each sample gets its own interval. Make a few, predict whether they will all contain the true population mean, then reveal it.</p>
+    <IntervalLab client:load />
+    <noscript><p>With this model’s known standard deviation of 10 cm and samples of 25, a 95% interval extends about 3.92 cm either side of the sample mean. Some repeated intervals miss the fixed population mean.</p></noscript>
+    <h2>The interval moves; the truth does not</h2>
+    <p>Each horizontal line comes from a different sample. Once revealed, the vertical line shows the single population mean they are trying to capture. Some intervals reach across it. Others miss.</p>
+    <p>A <strong>95% confidence level</strong> describes the method: across repeated sampling under its assumptions, 95% of the intervals it produces contain the true parameter. A batch of 100 need not contain exactly 95 successes.</p>
+    <p>After an interval has been calculated, its endpoints are fixed and the population mean is fixed. It either contains the mean or it does not. The 95% describes the procedure’s long-run <strong>coverage</strong>, rather than assigning a 95% probability to that fixed parameter being in this particular interval.</p>
+<Question client:visible id="interval-meaning" prompt="A 95% confidence interval for mean height is 167\u2013175 cm. What is it designed to estimate?" choices={[{"label": "A range containing 95% of individual heights.", "correct": false, "feedback": "This interval estimates the population mean. Individual heights have their own, usually much wider, distribution."}, {"label": "The population mean, using a method with 95% long-run coverage.", "correct": true, "feedback": "The target is one population average. The coverage statement concerns intervals built from repeated samples."}, {"label": "A range that must contain the next sample mean.", "correct": false, "feedback": "Another sample mean is a different random quantity. This interval method targets the fixed population mean."}]} explanation="Always name the target of an interval. Here it is a mean, not individual people or the next observation." />
+    <h2>Two ways to change the width</h2>
+    <p>Keep sample size fixed and switch from 80% confidence to 99%. The intervals widen. A method that catches the truth more often needs more room.</p>
+    <p>Now keep confidence fixed and increase sample size. The intervals narrow because sample means vary less. You gain precision without lowering the confidence level.</p>
+    <p class="stats-aside">This experiment uses independent observations from a normal population whose standard deviation is known. That choice makes the interval method exact even for small samples. Real studies usually estimate the standard deviation too; then a <em>t</em> interval is often appropriate, with conditions to check.</p>
+    <Culmination title="Confidence belongs to a method" kind="A definition to keep" href="#interval-lab">
+      <p>A <strong>confidence interval</strong> is a range produced by a procedure designed to cover the target parameter at a stated rate over repeated samples, under specified assumptions.</p>
+      <p class="stats-formula">estimate ± margin of error</p>
+      <p>For this experiment’s 95% intervals, the margin is about 1.96 standard errors. With 25 observations, that is 1.96 × 10 / √25 = 3.92 cm.</p>
+      <details><summary>The compact version</summary><p>x̄ ± z* σ / √n. The sample mean x̄ is the center. The known population standard deviation σ and sample size n give the standard error. The multiplier z* sets the confidence level: about 1.96 for 95%. This exact construction requires independent normal observations and known σ.</p></details>
+      <p>The margin accounts for sampling uncertainty in the model. It does not repair biased recruitment or inaccurate measurements.</p>
+    </Culmination>
+<Question client:visible id="interval-transfer" prompt="A factory wants a narrower interval for mean package weight while keeping the same confidence level and sampling design. What helps?" choices={[{"label": "Measure more independently selected packages.", "correct": true, "feedback": "More observations reduce the standard error of the mean. Under the same valid method, the interval becomes narrower."}, {"label": "Raise the confidence level from 95% to 99%.", "correct": false, "feedback": "Higher confidence requires a wider interval when the data and method are otherwise unchanged."}, {"label": "Keep drawing samples until one gives a pleasing interval.", "correct": false, "feedback": "Choosing which result to report changes the procedure. Its advertised coverage no longer automatically applies."}]} explanation="Precision comes from reducing uncertainty, not choosing a convenient result. Plan the sampling and reporting rule before examining the results." />
+    <h2>Words you met</h2>
+    <dl class="stats-words"><dt>Confidence interval</dt><dd>An interval from a procedure with a stated long-run coverage rate.</dd><dt>Confidence level</dt><dd>The coverage rate the method is designed to achieve under its assumptions.</dd><dt>Coverage</dt><dd>Whether an interval contains its target; across repetitions, the proportion that do.</dd><dt>Margin of error</dt><dd>The amount added to and subtracted from the estimate in a symmetric interval.</dd></dl>
+    <p>Continue into <a href="/reading/statistics/openintro-07/">Inference for Means</a> to account for an unknown population standard deviation.</p>
+<StatQuest videos={[{"id": "TqOeMYtOc1w", "title": "Confidence Intervals", "note": "Revisit why repeated intervals can capture a fixed population quantity."}]} />
+
+    <ReadingCredit />
+    <PrevNext prev={{ href: '/reading/statistics/estimates-vary/', label: 'Why do estimates move?' }} next={{ href: '/reading/statistics/testing-a-claim/', label: 'Could chance explain this?' }} />
+  </main>
+</Layout>

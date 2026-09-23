@@ -1,0 +1,17 @@
+---
+interface Props { videos: { id: string; title: string; note: string }[]; }
+const { videos } = Astro.props;
+---
+<aside class="statquest-watch" aria-label="Related StatQuest videos">
+  <p><strong>Another way to see it</strong> · StatQuest with Josh Starmer</p>
+  <ul>
+    {videos.map(video => <li><a href={`https://www.youtube.com/watch?v=${video.id}`}>{video.title} ↗</a><span>{video.note}</span></li>)}
+  </ul>
+</aside>
+<style>
+.statquest-watch { margin: 2rem 0; padding: 1rem 1.2rem; border-left: 2px solid #80946e; font-size: .85rem; }
+.statquest-watch p { margin: 0 0 .5rem; }
+.statquest-watch ul { list-style: none; padding: 0; margin: 0; }
+.statquest-watch li + li { margin-top: .75rem; }
+.statquest-watch span { display: block; margin-top: .2rem; font-size: .8rem; opacity: .8; }
+</style>

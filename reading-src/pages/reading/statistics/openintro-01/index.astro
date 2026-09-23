@@ -1,4 +1,7 @@
 ---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import TownSampler from '../../../../components/statistics/TownSampler';
+import '../../../../components/statistics/statistics.css';
 import Layout from '../../../../layouts/Base.astro';
 import Repl from '../../../../components/Repl';
 import SchemeRepl from '../../../../components/SchemeRepl';
@@ -79,7 +82,7 @@ import PrevNext from "../../../../components/PrevNext.astro";
 (define (mean lst)
   (/ (apply + lst) (length lst)))
 (display "Mean age: ")
-(display (exact->inexact (mean ages)))
+(display (* 1.0 (mean ages)))
 `} />
 
     <div class="python-block my-2" style="display:none">
@@ -104,7 +107,7 @@ print(f"Mean age: {sum(ages) / len(ages)}")
 
     <!-- 2. Study Design -->
     <h3>Study design: observational vs. experimental</h3>
-    <p>An <strong>observational study</strong> records data without intervening. An <strong>experiment</strong> assigns treatments to subjects. Only experiments can establish <strong>causation</strong>. Observational studies show association. The distinction matters: if you observe that coffee drinkers live longer, that does not mean coffee causes longevity.</p>
+    <p>An <strong>observational study</strong> records data without intervening. An <strong>experiment</strong> assigns treatments to subjects. Random assignment supports <strong>causal inference</strong> by preventing systematic differences in who receives a treatment, provided the study is carried out appropriately. Observational causal claims need additional design and assumptions to address confounding. The distinction matters: if you observe that coffee drinkers live longer, that does not mean coffee causes longevity.</p>
 
     <SchemeRepl client:visible initialCode={`; Observational: measure what exists
 ; Experimental: assign treatment, measure outcome
@@ -112,9 +115,9 @@ print(f"Mean age: {sum(ages) / len(ages)}")
 ; Simulate an experiment: randomize to treatment/control
 (define subjects '(1 2 3 4 5 6 7 8 9 10))
 
-; Simple random assignment
+; Independent random assignment: group sizes can differ
 (define (assign-group id)
-  (if (< (modulo (* id 7) 10) 5) "treatment" "control"))
+  (if (= (random-integer 2) 0) "treatment" "control"))
 
 (for-each
   (lambda (id)
@@ -126,10 +129,12 @@ print(f"Mean age: {sum(ages) / len(ages)}")
   subjects)
 
 ; Key question: was treatment randomly assigned?
-; Yes -> experiment -> can infer causation
-; No  -> observational -> association only
+; Random assignment supports causal attribution under study assumptions.
+; It does not make these subjects representative of everyone.
 `} />
 
+
+    <div class="stats-book"><p>Try two ways of choosing residents before comparing sampling strategies. <a href="/reading/statistics/sampling-fairly/">Read the guided introduction →</a></p><TownSampler client:visible compare /></div>
 
     <!-- 3. Sampling -->
     <h3>Sampling strategies</h3>
@@ -138,19 +143,23 @@ print(f"Mean age: {sum(ages) / len(ages)}")
     <SchemeRepl client:visible initialCode={`; Simple random sample: every member equally likely
 (define population '(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20))
 
-; Pseudo-random selection using modular arithmetic
-(define (simple-random-sample pop size seed)
-  (let loop ((remaining pop) (selected '()) (s seed) (count 0))
+ ; Choose a uniform index from the remaining list, then remove that case.
+(define (remove-at lst index)
+  (if (= index 0) (cdr lst)
+    (cons (car lst) (remove-at (cdr lst) (- index 1)))))
+(define (simple-random-sample pop size)
+  (let loop ((remaining pop) (selected '()) (count 0))
     (if (or (= count size) (null? remaining))
       (reverse selected)
-      (if (< (modulo (* s 13) 17) 8)
-        (loop (cdr remaining) (cons (car remaining) selected) (+ s 3) (+ count 1))
-        (loop (cdr remaining) selected (+ s 7) count)))))
+      (let ((index (random-integer (length remaining))))
+        (loop (remove-at remaining index)
+              (cons (list-ref remaining index) selected)
+              (+ count 1))))))
 
 (display "Population: ")
 (display population) (newline)
 
-(define sample (simple-random-sample population 5 3))
+(define sample (simple-random-sample population 5))
 (display "Random sample of 5: ")
 (display sample) (newline)
 (display "Sample size: ")
@@ -176,11 +185,13 @@ print(f"Mean age: {sum(ages) / len(ages)}")
 
     <!-- Translation notes -->
     <h3>Translation notes</h3>
-    <p>OpenIntro introduces data with the county and email datasets. We use small inline datasets instead to keep examples self-contained. The original covers data matrices, scatterplots, and data collection pitfalls in more detail. The sampling code here is deterministic for reproducibility; real sampling uses proper random number generators.</p>
+    <p>OpenIntro introduces data with the county and email datasets. We use small inline datasets instead to keep examples self-contained. The original covers data matrices, scatterplots, and data collection pitfalls in more detail. The sampling code chooses uniformly from the remaining cases without replacement; rerunning it can give a different sample.</p>
 
     <div class="bg-zinc-800 rounded-lg p-4 text-center text-sm text-gray-400 mt-10">
       Want the full treatment? <a href="https://www.openintro.org/book/os/">Read OpenIntro Statistics, Ch. 1</a>.
     </div>
+
+<StatQuest videos={[{"id": "vikkiwjQqfU", "title": "Population and Estimated Parameters", "note": "Revisit the distinction between the population and what a sample tells us."}]} />
 
     <PrevNext next={{ href: "/reading/statistics/openintro-02/", label: "Summarizing Data" }} />
 

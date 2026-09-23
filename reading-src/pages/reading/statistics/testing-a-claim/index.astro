@@ -1,0 +1,51 @@
+---
+import StatQuest from '../../../../components/statistics/StatQuest.astro';
+import Layout from '../../../../layouts/Base.astro';
+import PrevNext from '../../../../components/PrevNext.astro';
+import Question from '../../../../components/statistics/Question';
+import Culmination from '../../../../components/statistics/Culmination.astro';
+import ReadingCredit from '../../../../components/statistics/ReadingCredit.astro';
+import '../../../../components/statistics/statistics.css';
+import NullLab from '../../../../components/statistics/NullLab';
+---
+<Layout title="Could chance explain this? — Statistics through experiments" favicon="◒">
+  <main class="stats-book">
+    <a href="/reading/statistics/" class="text-sm">← back to statistics</a>
+    <p class="stats-kicker">Statistics through experiments · 08</p>
+    <h1>Could chance explain this?</h1>
+    <p class="stats-deck">An unusual result needs a comparison: unusual under which explanation?</p>
+
+    <p>Suppose you suspect a coin favors heads. Before flipping it, you decide to flip exactly twenty times and look for unusually many heads. You get fifteen.</p>
+    <p>A fair coin can do that. The question is how often it would produce a result <em>at least as far in the direction we were looking for</em>. Try repeating the twenty-flip experiment with a fair coin below.</p>
+    <NullLab client:load />
+    <noscript><p>For twenty independent fair flips, the probability of fifteen or more heads is about 2.07%. This is a one-sided comparison chosen to look for a bias toward heads.</p></noscript>
+    <h2>Give the explanation a fair trial</h2>
+    <p>The <strong>null model</strong> is our comparison model: independent flips, each with a 50% chance of heads. The <strong>test statistic</strong> is the number of heads in twenty flips. Each simulated experiment gives one value of that statistic.</p>
+    <p>We count fifteen, sixteen, and every larger result through twenty. A result of eighteen heads would be even more evidence in the direction we specified, so it belongs in the comparison too.</p>
+    <p>The fraction of simulated counts at least fifteen estimates a <strong>p-value</strong>. The exact probability here is about 0.0207, or 2.07%. Simulation gets noisier when the events we count are rare. Seeing zero qualifying results in a short simulation does not make the true probability zero.</p>
+<Question client:visible id="null-tail" prompt="Why do we count sixteen heads as well as exactly fifteen?" choices={[{"label": "Because we chose evidence in the direction of unusually many heads.", "correct": true, "feedback": "Sixteen is farther in that direction. The tail includes the observed result and more extreme ones under the preselected rule."}, {"label": "Because any outcome except ten heads proves unfairness.", "correct": false, "feedback": "Fair flips naturally produce counts other than ten. A test evaluates how surprising the observed direction and magnitude are under the model."}, {"label": "Because larger counts are more likely under a fair coin.", "correct": false, "feedback": "Very large counts are rarer under fairness. We include them because they are at least as extreme, not because they are more likely."}]} explanation="A p-value uses a comparison rule specified for the question. Here that rule is \u201cthis many heads or more.\u201d A two-sided question would require a rule covering departures in both directions." />
+    <h2>What should we conclude?</h2>
+    <p>Fifteen or more heads is uncommon under this null model. That gives us evidence against it. It does not tell us the probability that the coin is fair: we calculated the probability of results <em>assuming</em> fairness.</p>
+    <p>Sometimes a study needs a decision rule. A <strong>significance threshold</strong>, often written α (“alpha”), is chosen before seeing the data. For example, reject the null when p ≤ 0.05.</p>
+    <p>Even a fair coin sometimes crosses that threshold. Such a rejection is a <strong>false positive</strong>. For a valid test, the threshold limits the long-run false-positive rate under the null; with discrete counts, the actual rate can be lower than the threshold.</p>
+    <p class="stats-aside">The activity lets you change the hypothetical observation to understand the comparison. In an actual study, changing the question, stopping rule, or reported result after looking at the evidence can invalidate the advertised error rate.</p>
+    <Culmination title="A p-value is a conditional comparison" kind="You can now read this" href="#null-lab">
+      <p class="stats-formula">p-value = P(X ≥ 15 | fair, independent flips)</p>
+      <p><strong>X</strong> counts heads in twenty flips. <strong>≥</strong> means “at least.” The vertical bar means “given”: calculate the probability <em>under this model</em>.</p>
+      <p>More generally, a p-value is the probability, under the specified null model, of a test statistic at least as extreme as the observed one according to the test’s comparison rule.</p>
+      <p>It is not the probability that the null is true, and it is not the size or practical importance of an effect.</p>
+    </Culmination>
+<Question client:visible id="pvalue-transfer" prompt="A properly designed A/B test reports p = 0.02. Which reading is justified?" choices={[{"label": "There is a 2% chance the no-difference hypothesis is true.", "correct": false, "feedback": "That reverses the conditioning. The calculation assumes the null model; it does not assign a probability to that hypothesis."}, {"label": "Under the null model, results at least this extreme have probability 2%.", "correct": true, "feedback": "This keeps the assumption and the result in their proper places. You would also want the estimated effect, its uncertainty, and the study design."}, {"label": "The new version improves the outcome by 2%.", "correct": false, "feedback": "The p-value is not an effect size. A small improvement can have a small p-value with enough data."}]} explanation="A test measures compatibility with a specified model. To make a decision, also consider effect size, uncertainty, study quality, and the consequences of being wrong." />
+    <h2>Keep the question in view</h2>
+    <p>A large p-value does not prove no effect. A small study may simply be too noisy to distinguish useful differences. A small p-value does not guarantee a useful effect either.</p>
+    <p>You now have a connected set of questions: What did we measure? Whom did we sample? How variable is our estimate? What would happen under a proposed explanation? The deeper chapters build methods around those questions.</p>
+
+    <h2>Words you met</h2>
+    <dl class="stats-words"><dt>Null model</dt><dd>The probability model used as the reference for a test.</dd><dt>Test statistic</dt><dd>A numerical summary of the evidence relevant to the test.</dd><dt>p-value</dt><dd>A tail probability calculated under the null model.</dd><dt>Significance threshold</dt><dd>A preselected cutoff for the testing decision.</dd><dt>False positive</dt><dd>Rejecting the null when it is true.</dd></dl>
+    <p>See <a href="/reading/statistics/openintro-05/">Foundations for Inference</a> and <a href="/reading/statistics/openintro-06/">Inference for Proportions</a> for tests beyond this coin. Or follow the OpenIntro guide from its first chapter.</p>
+<StatQuest videos={[{"id": "vemZtEM63GY", "title": "p-values: What they are and how to interpret them", "note": "Practice keeping the null assumption separate from the probability of the results."}]} />
+
+    <ReadingCredit />
+    <PrevNext prev={{ href: '/reading/statistics/intervals/', label: 'How much uncertainty remains?' }} next={{ href: '/reading/statistics/openintro-01/', label: 'Introduction to Data' }} />
+  </main>
+</Layout>

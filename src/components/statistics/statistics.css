@@ -27,7 +27,7 @@
   color: var(--stats-muted);
 }
 .stats-book .stats-kicker { margin: 1.7rem 0 .65rem; }
-body:has(.stats-book) #lang-toggle { display: none; }
+body:has(main.stats-book) #lang-toggle { display: none; }
 .stats-book h1 { font-family: Charter, Georgia, serif !important; font-size: clamp(2rem, 6vw, 2.9rem); line-height: 1.08; letter-spacing: -.025em; margin-bottom: .7rem; }
 .stats-book .stats-deck { font-size: 1.12rem; color: var(--stats-muted); max-width: 52ch; margin-bottom: 2rem; }
 .stats-book h2 { margin-top: 2.6rem; }
