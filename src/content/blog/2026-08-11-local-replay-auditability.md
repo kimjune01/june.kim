@@ -35,7 +35,7 @@ A transmitted claim carries no globally authoritative status. Instead, each rece
 | Runs it; the claim is refuted | **False** |
 | Cannot run it by any available route | **Untrue** |
 
-![How a claim earns its status. A claim rests on trusted roots below it, and its check runs at the point where the system can break it. The check returns true (ran and stood), false (ran and broke), or untrue (no passing check). The loop is the replay: another agent re-runs the check, and entitlement is what survives the re-run.](/assets/truth-compilation-light.svg)
+![How a claim earns its status. A claim rests on trusted roots below it, and its check runs at the point where the system can break it. The check returns true (ran and stood), false (ran and broke), or untrue (no completed check yielding a verdict). The loop is the replay: another agent re-runs the check, and entitlement is what survives the re-run.](/assets/truth-compilation-light.svg)
 
 The trichotomy comes from [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true), and we apply it here to agent output. A passing replay gives its receiver entitlement to the claim but emits no transferable truth bit.
 
