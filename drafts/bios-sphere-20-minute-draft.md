@@ -3,13 +3,14 @@
 Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2026.
 
 - **Length:** 20 minutes, including demonstration and transitions; Q&A separate.
+- **Editorial direction:** Adopt GPT-6 Astra’s seven-part structure: durable inquiry is the main story; Junebot makes it concrete.
 - **Central claim:** Knowledge can accumulate as a quantifiable collection of replayable claims.
 - **Through-line:** Keep the procedure for finding out, including when the inquiry has not produced a verdict. The next agent can continue the work.
 - **One running example:** Junebot’s public post identifiers and dated source filenames.
 - **Audience takeaway:** Ask an agent to leave a scoped claim, its check, its result or reason for remaining unresolved, and what the check depends on.
 - **Evidence status:** The filename mismatch and repair are documented in repository history. The receipt handoff, paused inquiry, and illustrated ledger below are proposed reconstructions, not recordings of the original agents’ behavior.
 
-## 0:00–2:00 — The bot can find my post. Can it read it?
+## 0:00–3:00 — Two green checks, one broken bot
 
 - Introduce Junebot in one sentence: a chatbot that answers questions about my blog.
 - Show one task: “Find this post and read it before answering.”
@@ -23,20 +24,10 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 - **Say:** “The link works. The upload succeeded. What have we actually established about the bot reading the post?”
 - **Visual:** One post, one reader call, one failure. Keep cloud architecture off this slide.
 
-## 2:00–4:00 — What does the next agent inherit?
+## 3:00–5:00 — Replace “done” with a claim
 
-- Imagine the agent’s context ends halfway through investigating this failure.
-- We have already checked the directory identifier and found the expected source file. We suspect the reader’s filename lookup.
-- A fresh agent receiving only “probably a filename issue” must recover what was checked and what was merely guessed.
-- Even an unresolved investigation has produced useful work: identified inputs, ruled-out possibilities, and a precise next test.
-- State the thesis early: **“Knowledge can accumulate as a quantifiable collection of replayable claims.”**
-- Connect it to the earlier idea: knowledge is buildable when its grounds can be reconstructed. Those builds become reusable when their procedures survive the handoff.
-- **Say:** “I want the next agent to inherit the work, including the part we haven’t settled.”
-- **Visual:** A conversation ends; a small record of checked facts and an open claim remains.
-
-## 4:00–6:00 — Verification becomes a durable procedure
-
-- Give the open claim a precise scope: “This public identifier retrieves the expected source from this package using this reader version.”
+- State the thesis: **“Knowledge can accumulate as a quantifiable collection of replayable claims.”** A result becomes reusable when its grounds survive the handoff.
+- Give the claim a precise scope: “This public identifier retrieves the expected source from this package using this reader version.”
 - Show its check in plain language:
   - Take the identifier from the directory.
   - Invoke the packaged reader with that identifier.
@@ -48,7 +39,7 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 - State the scope once: retrieving the right source does not establish that the model’s eventual answer interprets it correctly.
 - **Visual:** A single claim card with four labels: Claim / Inputs / Check / State.
 
-## 6:00–9:00 — Why the protocol needs “untrue”
+## 5:00–8:00 — Three inquiry states
 
 - Make the perspective shift explicit: **“Now put yourself in the receiving agent’s position: you have the report, but not package B.”** The audience has seen the historical outcome; this receiver has not independently earned it.
 - Present three possible states of the inquiry:
@@ -65,10 +56,11 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 - This record gives the next investigator a place to resume. It also explains what would make another attempt possible.
 - **Visual:** The same claim card in three states. An unresolved card includes the blocker and pending check, not just a question mark.
 
-## 9:00–12:00 — Resume the inquiry without rebuilding it
+## 8:00–11:00 — Let another agent resume
 
 - Use a short prepared recording or static walkthrough, explicitly labeled a reconstruction.
-- Give a second agent only the retained claim record and its prerequisites. The producer’s conversation is absent.
+- End the first agent’s context. Give a second agent only the retained claim record and its prerequisites. The producer’s conversation is absent.
+- **Say:** “I want the next agent to inherit the work, including the part we haven’t settled.”
 - Make the previously missing package available.
 - Execute the pending check against the old reader: the read fails to return the expected source. The previously untrue claim now has a false verdict for that version.
 - Apply the historical repair: resolve the public identifier to the dated source filename.
@@ -79,7 +71,7 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 - Do not turn that walkthrough into a measured speedup claim. It shows the information carried across the boundary.
 - **Timing:** Allow at most 60–75 seconds for the recording; use the remaining time to explain the changing states.
 
-## 12:00–15:00 — Connect the claims: the hypothesis graph
+## 11:00–14:00 — Connect the records
 
 - The record grows beyond one claim. Draw a small graph:
   - The directory identifies this post.
@@ -99,7 +91,7 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 - **Say:** “The graph tells the next agent what it can reuse, what changed, and where to continue.”
 - **Visual:** Build one graph incrementally. Use an outlined node for the unverified deployment claim. Do not run a live deployment on stage.
 
-## 15:00–18:00 — What, exactly, has accumulated?
+## 14:00–17:00 — Accumulation becomes inspectable
 
 - Show an illustrative ledger with six declared claims. Explain that these are teaching records, not measured conference-demo results:
   - Directory emits this post’s public identifier — true at the named directory version.
@@ -116,7 +108,7 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 - **Say:** “The inventory can tell us what stands, what failed, and what still needs a verdict.”
 - **Visual:** Six short rows beside the same graph, with versions visible but no hash strings to read aloud.
 
-## 18:00–20:00 — What to ask your agent for tomorrow
+## 17:00–20:00 — Answer “done”
 
 - Return to the opening “done” message and replace it with one claim card.
 - Answer the title: **“For this task, done means the declared completion conditions have current supporting checks. Any unresolved requirement remains visible.”**
@@ -127,8 +119,9 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
   - The dependencies that would require rechecking if they changed.
 - Keep unresolved inquiries with their pending checks. Keep refutations with what they ruled out. Let checked results become premises under their stated conditions.
 - Give the practical first step: choose one recurring agent task and make this record part of its completion or handoff output.
+- Address “Isn’t this testing plus dependency tracking?” directly: those ingredients are familiar. The contract keeps the claim, scope, check, dependencies, and inquiry state together across handoffs, including work with no verdict yet.
 - Acknowledge the boundary once: the procedure can test the wrong property. Keeping it explicit allows the next person to inspect and improve it; replay does not settle adequacy by itself.
-- **Closing:** “When an agent stops, the work shouldn’t disappear with it. Leave the next agent a claim it can check—or an inquiry it can continue.”
+- **Closing:** “Finish the task. Keep what lets the next agent check it—and what lets it continue.”
 - **Final screen:** Links to Replayable Claims, The Hypothesis Graph, and the eventual demo artifact. Invite discussion about which recurring checks people wish their agents retained.
 
 ## Preparation notes — outside the spoken 20 minutes

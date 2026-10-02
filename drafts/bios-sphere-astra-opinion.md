@@ -36,7 +36,7 @@ Preserve those facts, the candidate explanation, and the executable next step. O
 
 ## Incorporated into the draft
 
-The new draft introduces the accumulation thesis by minute 4, teaches the three states at minutes 6–9, resumes the inquiry at minutes 9–12, introduces the graph at minutes 12–15, and makes the collection inspectable at minutes 15–18. It retains deployment as one dependency and closes with a completion/handoff practice.
+Following the author’s decision to adopt Astra’s structure, the main draft now uses its seven timings: 0–3 opening failure, 3–5 scoped claim, 5–8 three states, 8–11 resumed inquiry, 11–14 graph, 14–17 inspectable accumulation, and 17–20 completion and handoff. It retains deployment as one dependency and keeps the counting caveat brief.
 
 The original notes remain in `bios-sphere-talk-notes.md`; the new draft is `bios-sphere-20-minute-draft.md`.
 
