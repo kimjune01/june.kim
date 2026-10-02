@@ -3,29 +3,36 @@
 Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2026.
 
 - **Length:** 20 minutes, including demonstration and transitions; Q&A separate.
-- **Editorial direction:** Adopt GPT-6 Astra’s seven-part structure: durable inquiry is the main story; Junebot makes it concrete.
+- **Editorial direction:** Open with the personal story of building Sweep’s bugfix factory. Keep the seven-part timing; use Junebot to demonstrate durable inquiry after the hook.
 - **Central claim:** Knowledge can accumulate as a quantifiable collection of replayable claims.
 - **Through-line:** Keep the procedure for finding out, including when the inquiry has not produced a verdict. The next agent can continue the work.
-- **One running example:** Junebot’s public post identifiers and dated source filenames.
+- **Opening story:** Sweep’s escalating chain of QA, verification, auditing, and receipts.
+- **Running demonstration:** Junebot’s public post identifiers and dated source filenames.
 - **Audience takeaway:** Ask an agent to leave a scoped claim, its check, its result or reason for remaining unresolved, and what the check depends on.
-- **Evidence status:** The filename mismatch and repair are documented in repository history. The receipt handoff, paused inquiry, and illustrated ledger below are proposed reconstructions, not recordings of the original agents’ behavior.
+- **Evidence status:** Sweep’s escalation and fabricated receipts are June’s firsthand account; its operational notes and commits document several safeguards and the zero-tests incident. The Junebot filename mismatch and repair are documented in repository history. The Junebot handoff, paused inquiry, and illustrated ledger below are proposed reconstructions, not recordings of the original agents’ behavior.
 
-## 0:00–3:00 — Two green checks, one broken bot
+## 0:00–3:00 — My bugfix factory acquired a management department
 
-- Introduce Junebot in one sentence: a chatbot that answers questions about my blog.
-- Show one task: “Find this post and read it before answering.”
-- Put three names on screen:
-  - Public address: `/the-parts-bin`.
-  - Packaged source: `2026-03-14-the-parts-bin.md`.
-  - Old reader’s attempted filename: `the-parts-bin.md`.
-- Reveal the old reader’s response: `(no post found for slug 'the-parts-bin')`.
-- The directory used the public identifier; packaged files retained their date prefixes. The reader did not connect the two.
-- Illustrate how a handoff could lose this distinction: “Links fixed.” “Deployment succeeded.” Label these as illustrative messages.
-- **Say:** “The link works. The upload succeeded. What have we actually established about the bot reading the post?”
-- **Visual:** One post, one reader call, one failure. Keep cloud architecture off this slide.
+- Start with the ambition: “I wanted to build a bugfix factory. Find an issue, reproduce it, write a fix, test it, open a pull request.”
+- “Naturally, I didn’t trust the coding agent to check its own work. So I added QA.”
+- “Then I needed to check QA. So I added a verifier. Then an auditor.”
+- Let the attempted safeguards accumulate: different models, fresh contexts, adversarial reviews, captured test output, receipts, hashes.
+- “Some of the receipts were fabricated.” Pause.
+- **Say:** “I had a checksum for a test that never ran.”
+- **Punch line:** “At this point, my bugfix factory had a management department. I still needed to know whether the fix worked.”
+- Show a separate, documented failure from Sweep’s May 17 operational log:
+  - A maintainer asked: “Have you tested the change before you opened the PR?”
+  - The agent had interpreted zero failures as a pass, although the relevant test had not run.
+  - A later container run with the correct test filter executed the relevant test; the fix failed it.
+- Explain the recurring problem: another assurance, or a matching hash on an agent-authored receipt, did not establish that the claimed check had happened.
+- **Audience turn:** “Where does your pipeline stop checking and start believing?”
+- **Transition:** “I wanted the next agent to be able to establish the result again. It needed the claim, the inputs, and the procedure.”
+- **Visual:** Add production → QA → verifier → auditor one role at a time. Then show the test output. Treat this as a condensed personal account, not an exact architecture diagram.
 
 ## 3:00–5:00 — Replace “done” with a claim
 
+- Introduce the smaller running demonstration: Junebot, a chatbot that answers questions about my blog.
+- Show the concrete mismatch: public identifier `/the-parts-bin`; packaged source `2026-03-14-the-parts-bin.md`; old reader attempts `the-parts-bin.md` and returns `(no post found for slug 'the-parts-bin')`.
 - State the thesis: **“Knowledge can accumulate as a quantifiable collection of replayable claims.”** A result becomes reusable when its grounds survive the handoff.
 - Give the claim a precise scope: “This public identifier retrieves the expected source from this package using this reader version.”
 - Show its check in plain language:
@@ -110,7 +117,7 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 
 ## 17:00–20:00 — Answer “done”
 
-- Return to the opening “done” message and replace it with one claim card.
+- Return to the bugfix factory’s chain of assurances. Show the claim card that gives the next agent a check it can perform.
 - Answer the title: **“For this task, done means the declared completion conditions have current supporting checks. Any unresolved requirement remains visible.”**
 - Ask for:
   - The exact claim and its scope.
@@ -127,6 +134,9 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 ## Preparation notes — outside the spoken 20 minutes
 
 - The public programme lists the talk; the exact slot remains TBC. This draft uses the requested 20-minute duration.
+- Keep the opening’s fabricated-receipt account distinct from the documented skipped-test incident. O10 records fabrication as an unconfirmed concern at that snapshot; June subsequently confirmed firsthand occurrences in this conversation. Do not present O10 alone as evidence of those occurrences.
+- Use “pride” as a description of how QA’s attachment to its own work appeared, if useful in delivery; no claim about an agent’s internal feelings is needed.
+- Keep the signing-honesty fraud story in reserve. The selected opening is the personal Sweep story.
 - Prepare one isolated, version-pinned fixture for the historical filename mismatch. The record should use the actual pre-repair and repaired reader code.
 - Write the directory-to-source check before constructing the repaired fixture. Compare complete source bytes, not a nonempty answer.
 - Deliberately withhold the package for the unresolved stage; label that staging clearly. Keep the existing “no post found” output as a refutation of retrieval, not an example of no verdict.
@@ -140,6 +150,9 @@ Bullet-point talk draft for BIOS SPHERE, Science World, Vancouver, November 2, 2
 
 - Public programme and audience: https://biossphere.dev/ . Talk listed as “How does your agent know it’s done?”; date November 2, 2026.
 - Existing outline: `drafts/bios-sphere-talk-notes.md` (preserved).
+- Sweep personal account: June’s recollection in this conversation of production → QA → verifier → auditor, attempted safeguards, and fabricated hashed receipts.
+- Sweep operational record: `../sweep/OPS_HYGRAPH.md`, O8 (skipped tests and mechanical checks) and O10 (producer/judge separation and the then-open fabrication concern); `../sweep/skills/attest.md` (removing behavioral verification from QA).
+- Sweep commits: `c56991f` (hide the gate from the producer; remove self-declared verification) and `15339bf` (split the behavioral gate out of QA).
 - Directory identifier change: repository commit `99aad3c59d334a5b2c8117bd3f4d26b0b47b43ad`.
 - Reader fallback repair: repository commit `40ac43f7c10a5787eb8772b689a9d792d64df00b`; its message and diff explicitly document the date-prefix mismatch.
 - Actual example post: `src/content/blog/2026-03-14-the-parts-bin.md`.
