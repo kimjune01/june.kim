@@ -10,7 +10,7 @@ tags: coding, epistemology, methodology
 
 ## Abstract
 
-An agent's verdict does not by itself give its recipient a way to check the claim. We propose local replay auditability as a communication requirement: transmit the claim together with what lets the receiver independently derive its verdict. We specify the receiver's obligations, distinguish a refutation from an unavailable or failed execution, and delimit the resulting entitlement. For an identified input and a deterministic check that completes, replay replaces reliance on the sender's reported verdict with a local computation; whether that check adequately tests the substantive claim remains a separate question. A self-contained executable example holds the claim fixed while varying access to its evidence. A bounded replay from a SWE-bench Pro audit then illustrates why verifying an artifact-level fact does not establish a broader interpretation of that fact. The contribution is a protocol argument and worked implementation, not an estimate of improved agent performance.
+Knowledge can be accumulated as a quantifiable collection of replayable claims. This extends the proposition that knowledge is buildable: a claim whose grounds can be reconstructed can become a durable unit that another agent checks and builds upon. We propose local replay auditability as the communication requirement for that unit. A claim travels with what lets its receiver derive a verdict, distinguishing true, false, and untrue according to whether inquiry supports it, refutes it, or has earned no verdict. For identified inputs and a deterministic check that completes, replay replaces reliance on the sender's report with a local computation; the adequacy of the check remains open to challenge. The hypothesis graph adds dependencies and versions, allowing the collection to grow, retain refutations, and withdraw stale warrant. A self-contained example and a bounded benchmark-audit replay demonstrate the local checking step on which that accumulation depends.
 
 ## Entitlement loss at the boundary
 
@@ -18,7 +18,11 @@ An agent finishes an inquiry and reports a verdict. A second agent receives that
 
 The communication problem persists even when the sender did excellent work. If the evidence and procedure are lost at the boundary, the recipient must trust the report or reconstruct the inquiry. The proposal is to preserve the means of checking at the granularity of the claim being reused. The sender transmits two things: **the claim, and whatever the receiver needs to derive its claim-level verdict**. We call this requirement *local replay auditability*. Local means that the sender's report is not the authority for the resulting verdict; it does not mean that every dependency resides on the receiver's machine.
 
-This paper develops the pairwise communication requirement. It specifies what a receiver must establish before assigning a status, shows why execution failure must remain distinct from refutation, and demonstrates how a reproducible check can support a narrower claim than the surrounding argument. It does not introduce a new verification algorithm. Its proposed contribution is the communication contract and the explicit boundary between a replayed verdict and the adequacy of the claim it is used to support.
+[*Truth Is Buildable*](/truth-is-buildable) argues that knowing requires a build: a claim has grounds whose derivation can be inspected. The extension here is accumulation. **Knowledge can be accumulated as a quantifiable collection of replayable claims.** Each claim retains the means of establishing its status, so the collection can outlive the agents and conversations that produced it.
+
+A replayable claim is the unit that makes this possible. Another agent can check it, add a result of its own, continue an unfinished investigation, or discover that a stored result no longer applies. Once the grounds survive the handoff, checked work can become someone else's premise.
+
+The [hypothesis graph](/the-hypothesis-graph-semantic-memory-methodeutics) develops this into shared memory: claims carry trials, dependencies, and versions, so agents can divide an inquiry and revise its conclusions without reconstructing everything. This paper specifies the communication step that makes such reuse checkable. It asks what must travel with a claim, what verdict the receiver has earned, and how far that verdict entitles the receiver to proceed.
 
 ## What must cross the boundary
 
@@ -49,7 +53,7 @@ A check that refutes a claim and a check that yields no verdict require differen
 | Preconditions hold; the check refutes the claim | **False** |
 | No valid verdict is available | **Untrue** |
 
-The terminology follows [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true): entitlement is warrant earned through inquiry, conditional on the check's scope and assumptions. The third status preserves that requirement even when an unchecked claim happens to be correct.
+The terminology follows [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true): entitlement is warrant earned through inquiry, conditional on the check's scope and assumptions. The third status preserves that requirement even when an unchecked claim happens to be correct. It also preserves unfinished inquiry: an untested hypothesis remains open to investigation, while a refuted hypothesis records an alternative already ruled out under the declared check.
 
 Two receivers can have different statuses because one can run the check and the other cannot. They need not disagree about reality. A previous passing result remains a record of that earlier inquiry; a changed artifact or unavailable service does not retroactively refute it. A claim about the current state requires a current check. For a historical claim, the evidence must continue to identify the historical object.
 
@@ -64,11 +68,35 @@ Two questions are compressed into a bare verdict:
 
 Replay can answer the first locally. It leaves the second available for inspection and dispute.
 
-The conditional argument is simple. Fix a check, its identified inputs, and the execution assumptions needed for a deterministic verdict. If a receiver obtains those inputs and the check completes validly, its verdict follows from that computation. Changing the sender's name, confidence, or reported result does not change it. Two conforming receivers obtain the same verdict under these assumptions. This is a consequence of executing the same decision procedure, not a new theorem about agent correctness.
+The conditional argument is simple. Fix a check, its identified inputs, and the execution assumptions needed for a deterministic verdict. If a receiver obtains those inputs and the check completes validly, its verdict follows from that computation. Changing the sender's name, confidence, or reported result does not change it. Two conforming receivers obtain the same verdict under these assumptions. The verdict follows the declared computation across the agent boundary.
 
 The independence is limited to the sender's report of this result. Replay does not establish that the sender actually ran the procedure earlier, that the inputs faithfully represent an external event, or that the sender disclosed all relevant cases. It also does not remove trust in the receiver's runtime or in declared terminal observations. Rather than proving the report honest, the receiver no longer needs that report to determine this result.
 
 Specification uncertainty remains even after a pass. The check may encode the wrong property, omit relevant cases, or rely on a mistaken model of the task. An identical error can reproduce indefinitely. A receiver must either justify the connection between predicate and proposition or state the narrower claim that the predicate actually establishes. Confidence estimates remain useful for uncertain measurements, statistical conclusions, and adequacy judgments; replay replaces their use as a substitute for an available computation.
+
+## Knowledge that can accumulate
+
+A collection grows when an inquiry contributes a claim with grounds another agent can replay. The record identifies the proposition, its scope, its check, and the dependencies under which its verdict holds. Repeating an assertion does not create another result. Replaying an existing claim can renew its warrant; establishing a distinct claim adds something the collection did not contain before.
+
+That makes accumulation quantifiable. For a declared collection, receiver, and context, one can count the distinct claims with current passing checks, the recorded refutations, and the claims still awaiting a verdict. One can also identify which results survive a changed premise and which require renewed inquiry. A refutation contributes a checked result about what failed; the refuted proposition does not become an accepted premise. **Untrue keeps the inventory of proposed claims separate from the inventory of earned results.**
+
+These counts require an explicit rule for claim identity and granularity. Splitting one proposition into ten sentences must not silently become ten units of added knowledge. Counts describe the chosen collection at its stated granularity; the claims retain their different scope, importance, and evidential strength. The measurable object is the collection and its checked state, with every counted result open to inspection.
+
+Accumulation therefore includes revision. The historical record can keep growing while the set of currently warranted claims shrinks after a dependency changes. Preserving both lets an agent distinguish what was learned, what can still be used, and what needs to be checked again. The hypothesis graph supplies the dependency structure for maintaining that distinction.
+
+## From a checked claim to shared inquiry
+
+A receipt makes one claim checkable. The [hypothesis graph](/the-hypothesis-graph-semantic-memory-methodeutics) adds the structure that makes many such claims maintainable. A node binds a claim to its trial and outcome; dependency edges record the premises used; versions identify when that warrant applies. Publication rules admit checked work and reject stale or unsupported updates. Replay supplies the checkable unit, while these additional rules govern its reuse.
+
+Consider a software task with two branches. One agent checks that a parser handles a specified date format. Another checks that an authorization rule rejects an unauthenticated request. An integration claim depends on both. A later agent can enter at the integration node, inspect its prerequisites, and replay the relevant trials without inheriting either worker's whole conversation. Independent branches can proceed concurrently, while the integration step waits for their results.
+
+Now change the date-format requirement. The parser result and the dependent integration claim lose their entitlement for the new requirement; the independent authorization result remains usable under its own conditions. Their earlier receipts still describe what was checked. The update withdraws current reuse without asserting that the historical results were false. Versioned dependencies make that distinction actionable.
+
+The three statuses matter throughout this inquiry. **True** supplies a checked premise within its scope. **False** preserves a refutation that can guide the next hypothesis. **Untrue** keeps a proposed claim from entering as an established premise while allowing the inquiry to retain it. The reason for an unresolved status matters too: an unrun trial, missing evidence, and an unavailable service call for different next steps. The status records the lack of a verdict; the accompanying record tells the next agent what remains to be done.
+
+This also preserves useful failures. The graph records how a refuted hypothesis motivated its successor, so a new worker can see why the inquiry changed direction instead of proposing the same dead branch again. Handoff carries the current frontier of the inquiry together with the checks that produced it.
+
+The hypothesis-graph paper reports a bounded implementation in which receipts, dependency versions, and atomic publication kept stale or unsupported output from becoming current shared knowledge. It demonstrates concurrent work and selective invalidation, without establishing a general speedup. [*Verifiable Knowledge*](/verifiable-knowledge) develops the population-level consequence: a shared canon whose entries remain available for challenge and revision. Extending the collection across many inquiries requires retrieval, root admission, and maintenance. The pairwise protocol supplies the replayable unit; the graph organizes its dependencies; the canon is the accumulated collection.
 
 ## One claim, with and without its check
 
@@ -106,7 +134,7 @@ For a completely self-contained fixture, set `spec = b'Choose a variant.\n'`, `t
 
 The last two rows are negative controls for newly identified artifacts. They are not valid replays of the original artifact after an undetected change. This distinction prevents an identity failure from masquerading as a refutation. A receiver can obtain true or false only after resolving which object is being checked.
 
-A small accompanying implementation adds file loading and reports an unreadable input as unresolved. All eight implementation checks passed: the original audit case below, a synthetic pass, two synthetic refutations, unavailable bytes, altered bytes, missing files, and a directory supplied in place of a file. These checks establish the illustrated implementation behavior. They do not measure audit accuracy, time saved, or the effect on agents' decisions.
+A small accompanying implementation adds file loading and reports an unreadable input as unresolved. All eight implementation checks passed: the original audit case below, a synthetic pass, two synthetic refutations, unavailable bytes, altered bytes, missing files, and a directory supplied in place of a file. These checks establish the illustrated implementation behavior; effects on audit accuracy, time, and agents' decisions remain separate evaluation questions.
 
 ## A bounded replay from SWE-bench Pro
 
@@ -133,9 +161,9 @@ This is the practical value of keeping entitlement attached to a bounded claim: 
 
 [Reproducible builds](https://reproducible-builds.org/) and [artifact review](https://www.acm.org/publications/policies/artifact-review-and-badging-current) likewise provide concrete ways to check outputs. [W3C PROV](https://www.w3.org/TR/prov-dm/) and [in-toto](https://in-toto.io/) help identify derivations and dependencies. These mechanisms can supply the proposed contract. The emphasis here is on keeping a particular proposition, its decision procedure, and the receiver's resulting status together. Providing provenance is useful even when replay is impossible; it should not be mistaken for a locally derived verdict.
 
-Claim-level auditability is also an explicit objective of [Rasheed et al. (2026)](https://arxiv.org/abs/2602.13855), who propose provenance coverage, provenance soundness, contradiction transparency, and audit effort as evaluation dimensions. [Hans and Bilionis (2026)](https://arxiv.org/abs/2607.02134) make paper claims replication targets tied to evidence and validation checks. Our proposal complements these approaches with a receiver-side distinction between an evaluated predicate, a refutation, and a check that never yielded a valid verdict. Claim-level evidence and executable validation are shared concerns, not novelty claims for this paper.
+Claim-level auditability is also an explicit objective of [Rasheed et al. (2026)](https://arxiv.org/abs/2602.13855), who propose provenance coverage, provenance soundness, contradiction transparency, and audit effort as evaluation dimensions. [Hans and Bilionis (2026)](https://arxiv.org/abs/2607.02134) make paper claims replication targets tied to evidence and validation checks. Our proposal complements these approaches by specifying what a receiver may carry forward from a check: a supported claim, a refutation, or an unresolved inquiry. That distinction connects claim-level validation to the admission and revision of shared memory.
 
-The epistemology of testimony asks when another's report warrants belief [Hardwig (1991)](https://doi.org/10.2307/2027007). Here the question is narrower: which reliance on a report becomes unnecessary when the receiver can perform the relevant check? The companion [*Verifiable Knowledge*](/verifiable-knowledge) develops the broader contract and its social implications; [*The Hypothesis Graph*](/the-hypothesis-graph-semantic-memory-methodeutics) concerns composition and revision of claim dependencies. This paper isolates the pairwise act and supplies its operational distinctions and worked case without requiring those manuscripts to execute the example.
+The epistemology of testimony asks when another's report warrants belief [Hardwig (1991)](https://doi.org/10.2307/2027007). Here the question is narrower: which reliance on a report becomes unnecessary when the receiver can perform the relevant check? The companion [*Verifiable Knowledge*](/verifiable-knowledge) develops the broader contract and its social implications; [*The Hypothesis Graph*](/the-hypothesis-graph-semantic-memory-methodeutics) concerns composition and revision of claim dependencies. The pairwise contract developed here is the point at which a sender's result becomes a receiver's checkable premise. The worked case stands on its own; the graph shows why preserving that contract matters beyond a single verification.
 
 ## Limits and evaluation agenda
 
@@ -145,11 +173,13 @@ Selective disclosure, forged observations, and a bad predicate can survive every
 
 Cost also matters. Re-running an expensive computation may be wasteful, and an inaccessible artifact can make a correct claim unresolved. A cached or certified verdict may be a reasonable operational choice. The distinction to preserve is whether the receiver has performed the check, could perform it, or is proceeding on an attestation.
 
-A future efficacy study should hold claims, artifacts, and decision tasks fixed while varying the evidence supplied to receivers. It should include incorrect claims, inadequate checks, unavailable inputs, and valid refutations, then measure classification accuracy and verification cost under a specified resource budget. Merely observing that a supplied checker can run does not establish a practical improvement. The current contribution stops at the protocol argument, the bounded replay, and the implementation controls.
+A future efficacy study should hold claims, artifacts, and decision tasks fixed while varying the evidence supplied to receivers. It should include incorrect claims, inadequate checks, unavailable inputs, and valid refutations, then measure classification accuracy and verification cost under a specified resource budget. The communication contract and worked replay establish the local step. Its consequences for shared inquiry also call for evaluations of resumption, repeated work, and inheritance of stale claims against equally informative handoffs.
 
 ## Conclusion
 
-An agent can transmit the means of checking a claim instead of only reporting its verdict. For an identified input and a deterministic check that completes, the receiver can derive that verdict without relying on the sender's report. The result must retain the scope of the check: unavailable evidence is not a refutation, and a reproducible predicate is not automatically an adequate test of a broader claim. Local replay auditability makes those distinctions explicit at the point where one agent's output becomes another's evidence.
+If knowledge is buildable, its results can be kept as a collection of replayable claims. Local replay auditability preserves the grounds of each claim as it crosses an agent boundary. A receiver can establish a result, retain a refutation, or leave a claim untrue until a verdict is earned. The collection then has an inspectable state: what stands, what failed, and what remains open.
+
+The hypothesis graph makes that collection maintainable. Dependencies and versions let agents resume, divide, and revise the work; a changed premise withdraws dependent warrant, and a failed trial informs the next hypothesis. Knowledge accumulates through results whose grounds survive their authors and whose current standing can still be checked.
 
 ## References
 
@@ -167,3 +197,4 @@ An agent can transmit the means of checking a claim instead of only reporting it
 12. Hardwig, J. (1991). *The Role of Trust in Knowledge.* The Journal of Philosophy 88(12).
 13. Rasheed, R. A., Banerjee, S., Mukherjee, A., and Hazra, R. (2026). *From Fluent to Verifiable: Claim-Level Auditability for Deep Research Agents.* arXiv:2602.13855.
 14. Hans, A., and Bilionis, I. (2026). *Coding-agents can replicate scientific machine learning papers.* arXiv:2607.02134.
+15. Kim, J. (2026). *Truth Is Buildable.* [Foundational essay](/truth-is-buildable).
