@@ -39,15 +39,17 @@ The procedure must expose an outcome that would count against the claim. Attachi
 
 ## Receiver-relative status
 
-The labels **true**, **false**, and **untrue** describe the receiver's entitlement under a particular check and context. They do not assign three intrinsic truth values to the world. Here, entitlement means the warrant obtained by completing the declared check, conditional on its scope and assumptions.
+A check that refutes a claim and a check that yields no verdict require different protocol outcomes. Calling an unchecked claim false would turn missing evidence into a refutation; calling it true would award entitlement without a check. The protocol therefore needs a third status.
 
-| Receiver's completed inquiry | Status under the declared check |
+**Untrue means no verdict has been earned by this receiver. It does not mean false.** True and false record the two verdicts of a completed check; untrue records the absence of either, including a check not yet run. These statuses describe the receiver's entitlement under the declared check and context, rather than three intrinsic truth values of the world.
+
+| Receiver's inquiry | Status under the declared check |
 |---|---|
 | Preconditions hold; the check supports the claim | **True** |
 | Preconditions hold; the check refutes the claim | **False** |
 | No valid verdict is available | **Untrue** |
 
-“Untrue” is deliberately distinct from “false”: it names the absence of an earned verdict, including a check not yet run. In implementation terms the labels are supported, refuted, and unresolved. The terminology comes from the companion epistemology [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true), where truth is tied to a knower's inquiry. The protocol here requires only this operational distinction; its behavior does not depend on accepting a general theory of truth.
+The terminology follows [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true): entitlement is warrant earned through inquiry, conditional on the check's scope and assumptions. The third status preserves that requirement even when an unchecked claim happens to be correct.
 
 Two receivers can have different statuses because one can run the check and the other cannot. They need not disagree about reality. A previous passing result remains a record of that earlier inquiry; a changed artifact or unavailable service does not retroactively refute it. A claim about the current state requires a current check. For a historical claim, the evidence must continue to identify the historical object.
 
