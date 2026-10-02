@@ -4,127 +4,164 @@ title: "Replayable Claims: Epistemic Status Without Trusting the Sender"
 tags: coding, epistemology, methodology
 ---
 
+<!-- pdf-skip -->
+[Download the runnable example and its complete inputs](/assets/replayable-claims-example.zip).
+<!-- /pdf-skip -->
+
 ## Abstract
 
-Agent outputs commonly cross boundaries as scores, labels, or verdicts. Receivers must then trust the sender or reconstruct the inquiry. We introduce **local replay auditability**, in which a claim travels with a procedure that independently re-creates its verdict. Replay removes testimonial uncertainty while leaving specification uncertainty visible. In a public audit of [SWE-bench Pro](https://arxiv.org/abs/2509.16941), the protocol produced 109 replayable claim-level receipts, establishing a conservative floor of 15.0 percent across 728 tasks. An independent audit reported an opaque estimate of roughly 30 percent, but differences in method and scope preclude comparison. The demonstrated result is epistemic: receivers can verify individual claims without trusting the sender.
+An agent's verdict does not by itself give its recipient a way to check the claim. We propose local replay auditability as a communication requirement: transmit the claim together with what lets the receiver independently derive its verdict. We specify the receiver's obligations, distinguish a refutation from an unavailable or failed execution, and delimit the resulting entitlement. For an identified input and a deterministic check that completes, replay replaces reliance on the sender's reported verdict with a local computation; whether that check adequately tests the substantive claim remains a separate question. A self-contained executable example holds the claim fixed while varying access to its evidence. A bounded replay from a SWE-bench Pro audit then illustrates why verifying an artifact-level fact does not establish a broader interpretation of that fact. The contribution is a protocol argument and worked implementation, not an estimate of improved agent performance.
 
 ## Entitlement loss at the boundary
 
-An agent finishes an inquiry and reports a verdict. A second agent receives only that verdict and must decide whether to trust it. A confidence score says how strongly the sender endorses its answer, but gives the receiver no way to find out.
+An agent finishes an inquiry and reports a verdict. A second agent receives that verdict and must decide whether to use it. A score, label, or signed execution log can tell the receiver what the sender endorses. Without an independent check, it cannot settle whether the encoded result holds.
 
-This is a communication failure as much as a verification failure. The sender may have run excellent tests, consulted several reviewers, and reached the right conclusion. But if only the verdict crosses the boundary, the receiver inherits the sender's self-assessment rather than the inquiry's entitlement. Internal deliberation may improve output quality, but it leaves the output's epistemic form unchanged: the receiver must still take the sender's word.
+The communication problem persists even when the sender did excellent work. If the evidence and procedure are lost at the boundary, the recipient must trust the report or reconstruct the inquiry. The proposal is to preserve the means of checking at the granularity of the claim being reused. The sender transmits two things: **the claim, and whatever the receiver needs to derive its claim-level verdict**. We call this requirement *local replay auditability*. Local means that the sender's report is not the authority for the resulting verdict; it does not mean that every dependency resides on the receiver's machine.
 
-A trustless protocol therefore changes what crosses. The sender transmits two things:
+This paper develops the pairwise communication requirement. It specifies what a receiver must establish before assigning a status, shows why execution failure must remain distinct from refutation, and demonstrates how a reproducible check can support a narrower claim than the surrounding argument. It does not introduce a new verification algorithm. Its proposed contribution is the communication contract and the explicit boundary between a replayed verdict and the adequacy of the claim it is used to support.
 
-1. The claim;
-2. Whatever another agent needs to re-derive its claim-level verdict deterministically.
+## What must cross the boundary
 
-The second part is a procedure, such as a proof for a mathematical claim or a test, commit, and environment for a software claim. An empirical claim may instead point to an instrument record or live service. If the claim is obvious in a shared context, the procedure may be implied.
+A replayable claim may carry a proof and checker, a test and software environment, or data with an analysis procedure. No single file schema fits all three. The receiver nevertheless needs answers to four questions.
 
-![The protocol, executed by the reader. The claim: the two smaller squares together fill the larger one. The procedure: two equal squares hold the same four right triangles. The space left over must therefore match: a-squared plus b-squared on one side, c-squared on the other. Check it by eye. Whatever you now hold about the claim, you earned by running the proof yourself.](/assets/pythagoras-proof-light.svg)
-
-The protocol is trustless in one sense: the receiver need not trust the sender's report. But the replay may still depend on a compiler or dataset, a sensor or service. Those dependencies belong inside the replay path, where the receiver can see what the claim requires.
-
-## The receiver's relation to agent output
-
-A transmitted claim carries no globally authoritative status. Instead, each receiver establishes knowledge by checking the agent's output. Hence, the epistemic status of a claim is relative to the receiver.
-
-| The receiver's relation to the agent's claim | Epistemic status |
+| Obligation | What the receiver must be able to establish |
 |---|---|
-| Runs it; the claim survives | **True** |
-| Runs it; the claim is refuted | **False** |
-| Cannot run it by any available route | **Untrue** |
+| Claim and scope | Which proposition is being checked, about which object and time? |
+| Input identity | Which artifacts and dependencies does this particular check use? |
+| Decision procedure | What operation yields support or refutation, and what counts as a valid completion? |
+| Trust boundary | Which runtime, observations, assumptions, and access conditions remain outside that operation? |
 
-![How a claim earns its status. A claim rests on trusted roots below it, and its check runs at the point where the system can break it. The check returns true (ran and stood), false (ran and broke), or untrue (no completed check yielding a verdict). The loop is the replay: another agent re-runs the check, and entitlement is what survives the re-run.](/assets/truth-compilation-light.svg)
+These are information requirements, not mandatory fields. Shared context can supply an input or procedure. Conversely, a URL alone may fail to identify a changing artifact. A content hash fixes bytes relative to a declared identifier; it does not certify who collected those bytes or whether the collection was complete. A stored measurement permits replay of an analysis, not a repetition of the historical event that produced it.
 
-The trichotomy comes from [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true), and we apply it here to agent output. A passing replay gives its receiver entitlement to the claim but emits no transferable truth bit.
+The receiver first resolves the claim's scope and required inputs. It then checks the applicable identity and execution preconditions, inspects or accepts the proposed decision procedure, and runs it. Only a valid completion yields a verdict. Missing evidence, a different input version, a timeout, or a runtime error leaves the check unresolved. Such failures are not evidence against the claim unless the claim itself concerns that failure: a program crashing can refute a claim that it does not crash, but a broken test harness need not refute a claim about the program.
 
-But ordinary observations need no bundled check. If the receiver can already check a claim from shared context, the context supplies the replay. Therefore, the rigor of a check depends on context boundaries. For example, the rules of integer addition need not be accompanied by their derivation.
+The procedure must expose an outcome that would count against the claim. Attaching a program that always returns success makes the output executable without making the intended claim answerable to evidence. Inspecting this connection remains a substantive part of verification.
 
-Time matters when replay makes it matter. A claim about a pinned artifact remains true for any receiver who can still replay its evidence, whereas a claim about the artifact's current state must run against the current artifact. If a required service later disappears, that claim is untrue for a new knower who cannot run it; a later opposing verdict makes it false. Current weather is the everyday case.
+## Receiver-relative status
 
-## One guarantee under misspecification
+The labels **true**, **false**, and **untrue** describe the receiver's entitlement under a particular check and context. They do not assign three intrinsic truth values to the world. Here, entitlement means the warrant obtained by completing the declared check, conditional on its scope and assumptions.
 
-Replay clears testimonial uncertainty while specification uncertainty remains. A check can return deterministically yet measure the wrong property by missing relevant cases, encoding a bad oracle, or depending on a poisoned artifact. Local replay therefore guarantees only that the receiver can derive the encoded claim-level verdict without trusting the sender.
+| Receiver's completed inquiry | Status under the declared check |
+|---|---|
+| Preconditions hold; the check supports the claim | **True** |
+| Preconditions hold; the check refutes the claim | **False** |
+| No valid verdict is available | **Untrue** |
 
-That narrow guarantee keeps the failure visible. A self-attested verdict compresses two questions into one:
+“Untrue” is deliberately distinct from “false”: it names the absence of an earned verdict, including a check not yet run. In implementation terms the labels are supported, refuted, and unresolved. The terminology comes from the companion epistemology [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true), where truth is tied to a knower's inquiry. The protocol here requires only this operational distinction; its behavior does not depend on accepting a general theory of truth.
 
-1. Did the sender report the result faithfully?
-2. Did the procedure test what the claim says?
+Two receivers can have different statuses because one can run the check and the other cannot. They need not disagree about reality. A previous passing result remains a record of that earlier inquiry; a changed artifact or unavailable service does not retroactively refute it. A claim about the current state requires a current check. For a historical claim, the evidence must continue to identify the historical object.
 
-Replay removes the first question but leaves the second open. There another agent can inspect, challenge, and replace the procedure. A replayable mistake is still a mistake, but it has a surface on which inquiry can continue.
+Status therefore needs its scope attached. “True under this check on these inputs” must not silently become “the broader claim is correct.” Conflicting checks must retain their separate procedures, contexts, and results; this three-way status does not adjudicate between them.
 
-A replayable claim needs no confidence score to stand in for entitlement. When the receiver can run the procedure and find out, it need not estimate whether the sender is likely to be right. Probability can remain the content of a claim, such as a weather forecast; it no longer has to stand in for the missing path from claim to evidence.
+## The guarantee and its boundary
 
-## An epistemic ablation on SWE-bench Pro
+Two questions are compressed into a bare verdict:
 
-Picture two otherwise identical audit agents that inspect the same benchmark and reach the same conclusions. Their discovery capability is held fixed; only the epistemic form of their output changes. The self-attesting agent returns labels and a headline rate, leaving the receiver with an attestation. The trustless agent returns each claim with its replay, letting the receiver find out.
+1. Does the declared procedure yield the reported result on the identified inputs?
+2. Does that procedure adequately test the substantive claim?
 
-Two real audits approximate this contrast by employing agents against the same benchmark under opposite communication protocols. Their different methods, scopes, and denominators, however, preclude a controlled performance estimate.
+Replay can answer the first locally. It leaves the second available for inspection and dispute.
 
-[OpenAI's audit of SWE-bench Pro](https://openai.com/index/separating-signal-from-noise-coding-evaluations/) used an automated filter and repeated investigator-agent passes. A researcher adjudicated the agent summaries, and five software engineers separately reviewed each flagged task. The post reports 200 tasks labeled broken by the agent pipeline, 249 by the human campaign, and a headline estimate of roughly 30 percent. But the post does not publish the pipeline, the per-task labels, or the annotations and disagreements. The author is “OpenAI,” so its agents and reviewers attest their own work.
+The conditional argument is simple. Fix a check, its identified inputs, and the execution assumptions needed for a deterministic verdict. If a receiver obtains those inputs and the check completes validly, its verdict follows from that computation. Changing the sender's name, confidence, or reported result does not change it. Two conforming receivers obtain the same verdict under these assumptions. This is a consequence of executing the same decision procedure, not a new theorem about agent correctness.
 
-The [public determinacy audit of SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) used agents under the trustless protocol and reports a smaller, deliberately conservative floor. The audit mechanically witnesses 83 cases, while another 26 survive adversarial cross-family review. Together they make 109 of 728 public tasks, or 15.0 percent. Three more of the 731 public tasks fail their own grader on the gold patch and sit outside that denominator.
+The independence is limited to the sender's report of this result. Replay does not establish that the sender actually ran the procedure earlier, that the inputs faithfully represent an external event, or that the sender disclosed all relevant cases. It also does not remove trust in the receiver's runtime or in declared terminal observations. Rather than proving the report honest, the receiver no longer needs that report to determine this result.
 
-Each claimed task links to its case materials and witness. The audit also publishes twelve proposed cases that adversarial review killed, allowing a reader to reject the headline, enter at one row, and derive that row's verdict without trusting the auditor.
+Specification uncertainty remains even after a pass. The check may encode the wrong property, omit relevant cases, or rely on a mistaken model of the task. An identical error can reproduce indefinitely. A receiver must either justify the connection between predicate and proposition or state the narrower claim that the predicate actually establishes. Confidence estimates remain useful for uncertain measurements, statistical conclusions, and adequacy judgments; replay replaces their use as a substitute for an available computation.
 
-The ablation concerns epistemic output. OpenAI may be right about every one of its 249 labels, but the protocol leaves them untrue for an outside knower until their checks become replayable.
+## One claim, with and without its check
 
-The diagnostic applies claim by claim. OpenAI publishes one detailed OpenLibrary example whose prompt and test conflict by one leading space. SWE-bench Pro's public artifacts let a reader cross-examine that example, so the example can acquire a status the unpublished aggregate cannot. One document can contain true, false, and untrue claims at once.
+Hold the claim and intended artifacts fixed:
 
-## One claim, replayed
+> The byte string `DIGEST` occurs in `hidden_test.diff` and does not occur in `spec.md`.
 
-The audit classifies `ansible_20ef733e` as underdetermined. Its requirements ask the password-hashing filter to accept a bcrypt identifier and make the result visibly begin with that identifier. The hidden test requires more: for one fixed secret and salt, the implementation must return this exact digest.
+The filenames refer to the same declared content hashes in each message. A message containing this sentence and “true” leaves a receiver with only the sender's assertion, unless it already has an independent route to the inputs and check. Adding an execution log supplies more detail but still reports someone else's execution. Adding the identified files and the predicate below lets the receiver derive the result. This is an analytical contrast between messages, not an experiment comparing agent populations.
+
+The full decision procedure is small. `pins` is the ordered pair of expected SHA-256 digests for the two files; `None` denotes unavailable bytes.
+
+```python
+from hashlib import sha256
+
+DIGEST = b'$2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm'
+
+def verify(spec, test, pins):
+    if spec is None or test is None:
+        return 'untrue'
+    actual = (sha256(spec).hexdigest(), sha256(test).hexdigest())
+    if actual != pins:
+        return 'untrue'
+    return 'true' if DIGEST in test and DIGEST not in spec else 'false'
+```
+
+For a completely self-contained fixture, set `spec = b'Choose a variant.\n'`, `test = DIGEST + b'\n'`, and `pins = (sha256(spec).hexdigest(), sha256(test).hexdigest())`. The result is `true`. These invented inputs demonstrate the predicate; they make no claim about a real benchmark. The literal-occurrence proposition and the code agree by inspection: membership is a byte-substring search over both complete inputs. In this small case, the receiver can also check the result directly from the printed bytes.
+
+| Change to the fixture or its availability | Expected status |
+|---|---|
+| Supply both original inputs and their pins | True |
+| Withhold either input | Untrue |
+| Alter an input but retain its original pin | Untrue |
+| Put `DIGEST` in both files and pin the new inputs | False |
+| Remove `DIGEST` from the test and pin the new inputs | False |
+
+The last two rows are negative controls for newly identified artifacts. They are not valid replays of the original artifact after an undetected change. This distinction prevents an identity failure from masquerading as a refutation. A receiver can obtain true or false only after resolving which object is being checked.
+
+A small accompanying implementation adds file loading and reports an unreadable input as unresolved. All eight implementation checks passed: the original audit case below, a synthetic pass, two synthetic refutations, unavailable bytes, altered bytes, missing files, and a directory supplied in place of a file. These checks establish the illustrated implementation behavior. They do not measure audit accuracy, time saved, or the effect on agents' decisions.
+
+## A bounded replay from SWE-bench Pro
+
+The companion determinacy audit of [SWE-bench Pro](https://arxiv.org/abs/2509.16941) reports 109 retained cases across 728 tasks in [*A Determinacy Audit of SWE-bench Pro*](/a-determinacy-audit-of-swebench-pro), combining mechanical evidence and adversarial reading judgments. Those results motivate claim-level evidence, but they are not an evaluation of the communication protocol. Replaying an artifact query, reconsidering a reading judgment, and validating an aggregate defect rate are different tasks.
+
+We use only one artifact-level claim from `ansible_20ef733e`. Its supplied requirements concern selecting a bcrypt identifier in a password-hashing filter. Line 201 of its hidden-test diff contains the exact digest printed above. The complete supplied specification does not contain that byte string. Applying the displayed verifier to the two pinned files returns `true`.
+
+The supplemental bundle contains both complete files, the checker, and its controls. The files are unchanged copies from audit commit `354b3c02a2e055fcd332488600d251338c841380`. Their sizes are 3,102 bytes (`spec.md`) and 13,921 bytes (`hidden_test.diff`). The full content identifiers are:
 
 ```text
-$2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm
+spec.md:
+fae1311400dbefa18a6bddfeb7714786e714da902d39c42b6c79dcb57b98cc07
+hidden_test.diff:
+667326cd33774402904c22131a3c8ed59e54ab7c118b9eeae6cea20f83d3d0c4
 ```
 
-The receipt's claim: this exact graded constant appears in the hidden test but nowhere in the specification or base-commit source available to the solver. From the materialized case, its search is compact:
+This check establishes literal occurrence and absence in these two files. It does **not** establish absence from the base repository, inability to compute the digest, or underdetermination of the benchmark task. A result can be determined by an algorithm without appearing literally in its specification. Establishing underdetermination requires a further argument that the solver's full materials permit alternatives the grader distinguishes. That argument is not supplied by the substring search.
 
-```sh
-DIGEST='$2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm'
+This is the practical value of keeping entitlement attached to a bounded claim: the receiver can accept the byte-level result while withholding judgment on the audit's interpretation. A replayable receipt makes the boundary inspectable; it does not make every inference drawn from the receipt sound. The same burden applies to this audit and to any institutional report. Different audits' headline rates cannot isolate the effect of their communication protocols.
 
-rg -n -F "$DIGEST" spec.md
-# no match
+## Relationship to existing verification practices
 
-rg -n -F "$DIGEST" hidden_test.diff
-# 201:+    assert_hash("$2$12$123456789012345678901ufd3hZRrev.WXCbemqGIV/gmWaTGLImm",
+[Proof-carrying code](https://dl.acm.org/doi/10.1145/263699.263712) already lets a consumer check a producer's artifact against a stated policy. [Verifiable computation](https://doi.org/10.1007/978-3-642-14623-7_25) supplies cryptographic techniques for checking outsourced computation. These establish precedents for verification without accepting a producer's verdict. Local replay does not compete with their formal guarantees or claim a cheaper verification algorithm; either can implement a claim's checking step.
 
-git -C ansible-at-base grep -n -F "$DIGEST"
-# no match
-```
+[Reproducible builds](https://reproducible-builds.org/) and [artifact review](https://www.acm.org/publications/policies/artifact-review-and-badging-current) likewise provide concrete ways to check outputs. [W3C PROV](https://www.w3.org/TR/prov-dm/) and [in-toto](https://in-toto.io/) help identify derivations and dependencies. These mechanisms can supply the proposed contract. The emphasis here is on keeping a particular proposition, its decision procedure, and the receiver's resulting status together. Providing provenance is useful even when replay is impossible; it should not be mistaken for a locally derived verdict.
 
-The [`ansible_20ef733e` receipt](https://github.com/kimjune01/swebench-pro-audit/tree/main/data/cases/ansible_20ef733e) pins the instance and supplies the complete case bundle and witness. The audit agent proposes what to inspect, and the search produces the verdict. A receiving agent can thus replay the claim without the producing agent, its trajectory, or its confidence.
+Claim-level auditability is also an explicit objective of [Rasheed et al. (2026)](https://arxiv.org/abs/2602.13855), who propose provenance coverage, provenance soundness, contradiction transparency, and audit effort as evaluation dimensions. [Hans and Bilionis (2026)](https://arxiv.org/abs/2607.02134) make paper claims replication targets tied to evidence and validation checks. Our proposal complements these approaches with a receiver-side distinction between an evaluated predicate, a refutation, and a check that never yielded a valid verdict. Claim-level evidence and executable validation are shared concerns, not novelty claims for this paper.
 
-That replay establishes the receipt's local claim. But other interpretations of the task remain open: the claim reaches exactly as far as the check.
+The epistemology of testimony asks when another's report warrants belief [Hardwig (1991)](https://doi.org/10.2307/2027007). Here the question is narrower: which reliance on a report becomes unnecessary when the receiver can perform the relevant check? The companion [*Verifiable Knowledge*](/verifiable-knowledge) develops the broader contract and its social implications; [*The Hypothesis Graph*](/the-hypothesis-graph-semantic-memory-methodeutics) concerns composition and revision of claim dependencies. This paper isolates the pairwise act and supplies its operational distinctions and worked case without requiring those manuscripts to execute the example.
 
-## Related work
+## Limits and evaluation agenda
 
-The protocol belongs to the family whose value is a contract a consumer checks without trusting the producer. [Proof-carrying code](https://dl.acm.org/doi/10.1145/263699.263712) ships untrusted code with a safety proof the receiver verifies locally, and [verifiable computation](https://link.springer.com/chapter/10.1007/978-3-642-14623-7_25) reaches the same guarantee cryptographically where the check compiles to a circuit. Replay is the plain-execution case, universal and cheap to produce but costing the receiver a full re-run. [Reproducible builds](https://reproducible-builds.org/) and [artifact badging](https://www.acm.org/publications/policies/artifact-review-and-badging-current) practice re-derivation at artifact and paper granularity; the unit here is one claim, so a receiver checks what it needs without rebuilding a corpus. Provenance standards such as [W3C PROV](https://www.w3.org/TR/prov-dm/) and [in-toto](https://in-toto.io/) record how evidence was produced, and [*Verifiable Knowledge*](/verifiable-knowledge) assembles that stack into a full claim contract; the narrower point here is that a derivation record remains attestation until the receiver can re-run it. [*What Cannot Be False Cannot Be True*](/what-cannot-be-false-cannot-be-true) traces the trichotomy's lineage from Schlick through Dewey to Dummett: [verificationism's](https://en.wikipedia.org/wiki/Verificationism) truth tied to the method of verification, [pragmatism's](https://en.wikipedia.org/wiki/Pragmatism) warrant earned by inquiry. Here that lineage runs as engineering: the verification is a procedure the receiver executes. Where [the epistemology of testimony](https://plato.stanford.edu/entries/testimony-episteme/) treats a speaker's word as warrant the hearer accepts on trust, the protocol is the engineering refusal. Wherever a claim admits a deterministic re-derivation, the receiver need not accept testimony at all.
+The protocol is most directly applicable when a claim admits a feasible check over accessible, identified inputs. For nondeterministic procedures, a seed alone may not fix the verdict: the execution context or a statistical acceptance rule must also be specified. Repeating an analysis on a historical record checks that analysis, not the original measurement. A live service introduces access and timing conditions. The guarantee must be weakened whenever the conditions for the declared replay do not hold.
 
-## Limits and scope
+Selective disclosure, forged observations, and a bad predicate can survive every replay. A hash supplied alongside fabricated data binds the claim to those bytes without authenticating their origin. An adequate deployment therefore needs its own policy for accepting roots and running supplied code. Such policies remain within the receiver's trusted boundary. The protocol exposes these dependencies; it does not settle them recursively by assertion.
 
-Forged inputs and selective disclosure can corrupt the record; evaluation awareness and collusion remain possible. So artifact integrity and semantic adequacy are claims of their own, to be transmitted with checks of their own.
+Cost also matters. Re-running an expensive computation may be wasteful, and an inaccessible artifact can make a correct claim unresolved. A cached or certified verdict may be a reasonable operational choice. The distinction to preserve is whether the receiver has performed the check, could perform it, or is proceeding on an attestation.
 
-Replay also costs time, compute, and access. A live service may vanish. A physical experiment may be too expensive to repeat. In each case the protocol exposes the limit in the agent's output; a confidence score would only price it in and remain static.
-
-The audit's 109 receipts show the protocol operating at benchmark scale, but agent capability and audit speed stay outside its claim. Other applications appear in the broader [benchmark-audit method](/how-to-audit-a-benchmark). Population-level accumulation belongs to [*Verifiable Knowledge*](/verifiable-knowledge), and the graph that composes replayable claims belongs to [*The Hypothesis Graph*](/the-hypothesis-graph-semantic-memory-methodeutics). Here we isolate the act between them: one agent sends a claim, and another derives its epistemic status.
+A future efficacy study should hold claims, artifacts, and decision tasks fixed while varying the evidence supplied to receivers. It should include incorrect claims, inadequate checks, unavailable inputs, and valid refutations, then measure classification accuracy and verification cost under a specified resource budget. Merely observing that a supplied checker can run does not establish a practical improvement. The current contribution stops at the protocol argument, the bounded replay, and the implementation controls.
 
 ## Conclusion
 
-An agent should transmit more than its answer when another agent must decide what to know. The replayable-claims protocol sends the claim and whatever re-derives its claim-level verdict. The receiver runs it and acquires a relational status of true, false, or untrue.
-
-The protocol changes epistemic communication without requiring the receiver to trust the sender. In the SWE-bench Pro ablation, agents outside the protocol produced an opaque institutional estimate; agents under the protocol produced claims a stranger can rerun one at a time. The substantive findings point in the same direction while their epistemic outputs diverge.
-
-Show the claim. Also show how to find out.
+An agent can transmit the means of checking a claim instead of only reporting its verdict. For an identified input and a deterministic check that completes, the receiver can derive that verdict without relying on the sender's report. The result must retain the scope of the check: unavailable evidence is not a refutation, and a reproducible predicate is not automatically an adequate test of a broader claim. Local replay auditability makes those distinctions explicit at the point where one agent's output becomes another's evidence.
 
 ## References
 
-1. Xiang Deng, Jeff Da, Edwin Pan, et al. *SWE-Bench Pro: Can AI Agents Solve Long-Horizon Software Engineering Tasks?* [arXiv:2509.16941](https://arxiv.org/abs/2509.16941), 2025.
-2. OpenAI. *Separating signal from noise in coding evaluations.* [openai.com](https://openai.com/index/separating-signal-from-noise-coding-evaluations/), July 2026.
-3. June Kim. *A Determinacy Audit of SWE-bench Pro.* [doi:10.5281/zenodo.20738219](https://doi.org/10.5281/zenodo.20738219), June 2026. Live artifact: [github.com/kimjune01/swebench-pro-audit](https://github.com/kimjune01/swebench-pro-audit); web version: [june.kim](https://june.kim/a-determinacy-audit-of-swebench-pro).
-4. June Kim. *What Cannot Be False Cannot Be True.* [doi:10.5281/zenodo.20754645](https://doi.org/10.5281/zenodo.20754645), June 2026. Web version: [june.kim](https://june.kim/what-cannot-be-false-cannot-be-true).
-5. June Kim. *Verifiable Knowledge.* [doi:10.5281/zenodo.20754823](https://doi.org/10.5281/zenodo.20754823), June 2026. Web version: [june.kim](https://june.kim/verifiable-knowledge).
-6. June Kim. *The Hypothesis Graph: A Verifiable Semantic Memory for Coding Agents.* [doi:10.5281/zenodo.21939861](https://doi.org/10.5281/zenodo.21939861), May 2026. Web version: [june.kim](https://june.kim/the-hypothesis-graph-semantic-memory-methodeutics).
-7. June Kim. *How to Audit a Benchmark.* [doi:10.5281/zenodo.21939914](https://doi.org/10.5281/zenodo.21939914), July 2026. Web version: [june.kim](https://june.kim/how-to-audit-a-benchmark).
+1. Deng, X., Da, J., Pan, E., et al. (2025). *SWE-Bench Pro: Can AI Agents Solve Long-Horizon Software Engineering Tasks?* arXiv:2509.16941.
+2. Kim, J. (2026). *A Determinacy Audit of SWE-bench Pro.* [Companion article](/a-determinacy-audit-of-swebench-pro).
+3. Kim, J. (2026). *What Cannot Be False Cannot Be True.* [Companion article](/what-cannot-be-false-cannot-be-true).
+4. Kim, J. (2026). *Verifiable Knowledge.* [Companion article](/verifiable-knowledge).
+5. Kim, J. (2026). *The Hypothesis Graph: A Verifiable Semantic Memory for Coding Agents.* [Companion article](/the-hypothesis-graph-semantic-memory-methodeutics).
+6. Necula, G. C. (1997). *Proof-Carrying Code.* POPL '97.
+7. Gennaro, R., Gentry, C., and Parno, B. (2010). *Non-interactive Verifiable Computing: Outsourcing Computation to Untrusted Workers.* CRYPTO 2010.
+8. Lamb, C., and Zacchiroli, S. (2022). *Reproducible Builds: Increasing the Integrity of Software Supply Chains.* IEEE Software 39(2).
+9. ACM (2020). *Artifact Review and Badging*, version 1.1.
+10. Moreau, L., and Missier, P., eds. (2013). *PROV-DM: The PROV Data Model.* W3C Recommendation.
+11. Torres-Arias, S., et al. (2019). *in-toto: Providing Farm-to-Table Guarantees for Bits and Bytes.* USENIX Security.
+12. Hardwig, J. (1991). *The Role of Trust in Knowledge.* The Journal of Philosophy 88(12).
+13. Rasheed, R. A., Banerjee, S., Mukherjee, A., and Hazra, R. (2026). *From Fluent to Verifiable: Claim-Level Auditability for Deep Research Agents.* arXiv:2602.13855.
+14. Hans, A., and Bilionis, I. (2026). *Coding-agents can replicate scientific machine learning papers.* arXiv:2607.02134.
