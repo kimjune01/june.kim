@@ -8,10 +8,14 @@ keywords: SWE-bench Pro, construct validity, determinacy, underdetermined specif
 ---
 
 <!-- pdf-skip -->
-*A construct-validity audit of SWE-bench Pro, the contamination-resistant benchmark OpenAI now recommends in place of Verified. The paper is a live, re-runnable GitHub artifact; this is its readable preprint. Every number links to a receipt a skeptic re-runs.*
+*A construct-validity audit of SWE-bench Pro, the benchmark OpenAI recommended in place of Verified before withdrawing that recommendation in July 2026. The paper is a live, re-runnable GitHub artifact; this is its readable preprint. Every number links to a receipt a skeptic re-runs.*
 
 *[Download PDF](/assets/a-determinacy-audit-of-swebench-pro.pdf) · arxiv-shape preprint, rebuilt from this source. · Live artifact: [github.com/kimjune01/swebench-pro-audit](https://github.com/kimjune01/swebench-pro-audit) · Archived at [doi.org/10.5281/zenodo.20738219](https://doi.org/10.5281/zenodo.20738219) (CC BY-SA).*
 <!-- /pdf-skip -->
+
+**Addendum — October 9, 2026.** OpenAI [withdrew its recommendation of SWE-bench Pro on July 8](https://openai.com/index/separating-signal-from-noise-coding-evaluations/), after an audit estimated that roughly 30% of its public tasks were broken. [Epoch AI's September 1 review](https://epoch.ai/benchmarks/swe-bench-pro/review) subsequently rated Pro as Flawed, drawing on OpenAI, Jonathan Gabor, Datacurve, and Poolside.
+
+These findings concern overlapping but different questions. This audit reports a 15% lower bound for tasks whose materials do not determine the behavior their hidden tests require, under the criteria below. The broader audits also examine other defects, including tests that accept incomplete solutions. Their percentages cannot be added to this one, and agreement on the general problem does not independently validate each finding here. The [audit repo](https://github.com/kimjune01/swebench-pro-audit) contains the evidence for checking those findings.
 
 ## Abstract {-}
 
@@ -85,7 +89,7 @@ Prior audits establish *that* agentic coding benchmarks misgrade:
 - Golds fail their own verifiers (Datacurve; scattered SWE-bench issues).
 - Plausible patches diverge from intent ([Wang, Pradel, Liu](https://arxiv.org/abs/2503.15223), ICSE 2026).
 
-All catalog *that* the oracle is broken. This audit asks *what the brokenness buys*: on the benchmark OpenAI now recommends, how much of the public set is underdetermined independent of any contamination claim.
+All catalog *that* the oracle is broken. This audit asks *what the brokenness buys*: on SWE-bench Pro, how much of the public set is underdetermined independent of any contamination claim.
 
 Two distinctions place it. First, it is **model-free**. The mechanical tiers run shipped golds through the benchmark's own verifier and grep the base-commit source, so a finding is a measured execution fact, not a model's opinion. That is the failure mode of the auditor genre: [BenchGuard](https://arxiv.org/abs/2604.24955) (Tu et al. 2026) is an LLM auditor of agent benchmarks, cheap and reproducible, but it matches expert-identified issues only about 83% and runs on science benchmarks, not coding. Cheapness and agent-runnability are shared with that genre, so we claim neither as novelty; the method novelty is determinism plus the causal framing.
 
@@ -107,7 +111,7 @@ Second, the position is already in the literature; the measurement is not. [Gori
 
 ## Conclusion {#conclusion}
 
-SWE-bench Pro is not debunked, and this audit needs no contamination claim. The finding is narrower and more useful: on the benchmark OpenAI now recommends, a measurable floor of the public set does not pin the behavior it grades. At least 11.4% is provably underdetermined from committed receipts, and 15.0% with a two-expert reading-judgment tier verified by two independent model families, with three broken golds and at least one feature mismatch alongside. A raw Pro score therefore conflates solving the stated problem with recovering the author's unstated choice. Reporting against a determinacy-aware denominator, and publishing which instances are underdetermined, separates the part of the benchmark that measures capability from the part that scores whether you matched an unstated choice.
+SWE-bench Pro is not debunked, and this audit needs no contamination claim. The finding is narrower and more useful: on SWE-bench Pro, a measurable floor of the public set does not pin the behavior it grades. At least 11.4% is provably underdetermined from committed receipts, and 15.0% with a two-expert reading-judgment tier verified by two independent model families, with three broken golds and at least one feature mismatch alongside. A raw Pro score therefore conflates solving the stated problem with recovering the author's unstated choice. Reporting against a determinacy-aware denominator, and publishing which instances are underdetermined, separates the part of the benchmark that measures capability from the part that scores whether you matched an unstated choice.
 
 The whole audit, every per-case receipt, and the code that regenerates these tables are the artifact, not this preprint: [github.com/kimjune01/swebench-pro-audit](https://github.com/kimjune01/swebench-pro-audit), archived at [doi.org/10.5281/zenodo.20738219](https://doi.org/10.5281/zenodo.20738219).
 
