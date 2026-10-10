@@ -6,18 +6,18 @@ numbersections: false
 tags: methodology, epistemology
 ---
 
-*[Download PDF](/assets/how-to-audit-a-benchmark.pdf) · arxiv-shape preprint, rebuilt from this source. · Archived at [doi.org/10.5281/zenodo.21939914](https://doi.org/10.5281/zenodo.21939914) (CC BY-SA 4.0).*
+*Revised October 10, 2026: added alternative-submission replay and narrowed the DeepSWE v1.1 conclusions. The [archived PDF](/assets/how-to-audit-a-benchmark.pdf) and [Zenodo edition](https://doi.org/10.5281/zenodo.21939914) predate this revision (CC BY-SA 4.0).*
 
-Over the past few months I audited ten benchmarks in eleven audit passes: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), [MirrorCode](https://github.com/kimjune01/mirrorcode-audit), [FrontierCode](/auditing-frontiercode), [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit), and [SlopCodeBench](/auditing-slopcodebench). They broke in different places, and DeepSWE, re-audited after its revision, mostly held. This post compresses the lenses into a checklist a stranger can run.
+Over the past few months I audited ten benchmarks in eleven audit passes: [SWE-bench Verified](/swebench-verified) (as a runner), [DeepSWE](/auditing-deepswe) and [its revision](/auditing-deepswe-v1-1), [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro), [ProgramBench](/programbench-measures-recall), [τ-bench's contamination story](/reprice-contamination), [Terminal-Bench](/terminal-bench-frame), [MirrorCode](https://github.com/kimjune01/mirrorcode-audit), [FrontierCode](/auditing-frontiercode), [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit), and [SlopCodeBench](/auditing-slopcodebench). They broke in different places. Re-auditing DeepSWE confirmed improved reference-solution replay, but missed grader interference with alternative submissions. This post compresses the lenses into a checklist a stranger can run.
 
-*Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode, one of the audits drawn on here. An interest disclosure, not a funding one; it changes none of the receipts, which is the point of check 4 below.*
+*Disclosure: I applied for a role at Epoch AI, which co-produced MirrorCode, one of the audits drawn on here. An interest disclosure, not a funding one; it changes none of the receipts, which is the point of check 5 below.*
 
 | audit | broke at | finding |
 |---|---|---|
 | [SWE-bench Verified](/swebench-verified), as runner | the run itself | test-edit exploit caught; 44 unrunnable tasks scored zero |
 | [DeepSWE](/auditing-deepswe) | gold | 4 of 113 answer keys fail their own verifiers |
-| [DeepSWE v1.1](/auditing-deepswe-v1-1) | mostly held | determinacy floor 2.7%; verdict receipts still unretrievable |
-| [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) | spec | proven floor of 15% underdetermined |
+| [DeepSWE v1.1](/auditing-deepswe-v1-1) | gold recovery; grader coverage gap | 112/113 reference solutions pass; subsequent replay confirms two grader-induced false negatives |
+| [SWE-bench Pro](/a-determinacy-audit-of-swebench-pro) | spec | reported floor of 15% underdetermined |
 | [ProgramBench](/programbench-measures-recall) | oracle | 21 recall-only witnesses; 29 self-capturing goldens |
 | [τ-bench](/reprice-contamination) | decay | memorized answer passes 0% regenerated, leaked query 100% |
 | [Terminal-Bench](/terminal-bench-frame) | frame | 83 of 83 pass after off-task destruction |
@@ -28,7 +28,7 @@ Over the past few months I audited ten benchmarks in eleven audit passes: [SWE-b
 
 A benchmark is a measurement instrument, and an instrument makes a contract. Above every clause sits the claim: the capability the headline advertises has to be the one the metric measures (the *claim* clause), or the number is precise about the wrong thing. The instruction pins the target (the *spec* clause). The grader checks the target (the *oracle* clause). The grader guards everything the task never named (the *frame* clause: a run that completes the task by wrecking unrelated state must not pass). The answer key passes its own test (the *gold* clause). The headline number means what the leaderboard says it means (the *score* clause). And the number survives its own publication (the *decay* clause).
 
-Each clause can be broken, each break is a distinct sin, and each sin has a check. The checks below are ordered by cost, and the order carries the lesson: every severe defect in these audits surfaced before any model ran. Cost here means compute and cash; several of the free checks still cost an afternoon of reading.
+Each clause can be broken, each break is a distinct sin, and each sin has a check. The checks below are ordered by cost, and the order carries the lesson: the checks can use shipped artifacts and existing model submissions before commissioning new model runs. Cost here means compute and cash; several of the free checks still cost an afternoon of reading.
 
 The clauses are not independent, and that is the one thing this list got wrong for a while. A mitigation for one clause can be a regression in another. [Frontier-Bench](https://github.com/kimjune01/frontier-bench-audit) runs every task with the verifier in its own container, which kills a real attack where agent-produced code double-forks a daemon and overwrites the reward file after the tests write it. It buys that by tearing down the agent's container before the verifier starts, so the state a frame check would read no longer exists. Sound oracle-integrity fix, straight subtraction from the frame. Neither the rubric nor the review pipeline registers the trade, because nothing scores a clause against its neighbours. When a maker hardens one clause, ask which other clause paid for it.
 
@@ -38,13 +38,14 @@ The clauses are not independent, and that is the one thing this list got wrong f
 | 2 | read the paper against the repo | free | wrong rulebook | a week and $1,000 on the wrong task |
 | 3 | ask how tasks were selected | free | selection by failure | 0% floor read as a frontier |
 | 4 | recompute the headline | free | score | footer says 113, mean divides by 111 |
-| 5 | retrieve one receipt | free | unfalsifiable verdicts | `has_model_patch: true`, every path 404 |
+| 5 | retrieve one receipt | free | unfalsifiable verdicts | patch flagged as available; attempted paths failed in July 2026 |
 | 6 | run the answer key | ~$1 | gold | 4/113, 3/731, 6/89 golds fail |
-| 7 | read what the assertions pin | cheap | oracle | 21 recall witnesses, 29 self-capturing goldens |
-| 8 | probe what pins the graded value | cheap | spec | 15% proven underdetermined |
-| 9 | mutate the gold and regrade | cheap | frame | `rm -rf .git` still scores 1 |
-| 10 | ask what survives publication | reading | decay | memorized 0%, leaked query 100% |
-| 11 | audit the run | varies | run | restored tests bought 46 points |
+| 7 | replay alternative submissions | cheap | oracle | hidden tests break otherwise passing submissions |
+| 8 | read what the assertions pin | cheap | oracle | 21 recall witnesses, 29 self-capturing goldens |
+| 9 | probe what pins the graded value | cheap | spec | 15% reported underdetermined |
+| 10 | mutate the gold and regrade | cheap | frame | `rm -rf .git` still scores 1 |
+| 11 | ask what survives publication | reading | decay | memorized 0%, leaked query 100% |
+| 12 | audit the run | varies | run | restored tests bought 46 points |
 
 ## 1. Read the claim against the construct
 
@@ -70,13 +71,13 @@ Then check the statistics against what the data can carry. Confidence intervals 
 
 ## 5. Retrieve one receipt
 
-Free, and it tests whether the benchmark is falsifiable at the verdict level. Pick one scored trial and try to reach the artifact behind it. On [DeepSWE](/auditing-deepswe), `has_model_patch: true` was a flag, and every path to the patch itself returned 404. A verdict whose receipt cannot be retrieved is a promise, and a benchmark built of promises is not an instrument anyone can check, including its authors.
+Free, and it tests whether the benchmark is falsifiable at the verdict level. Pick one scored trial and try to reach the artifact behind it. During my July 2026 [DeepSWE v1.1 audit](/auditing-deepswe-v1-1), the artifact paths I tried were unavailable despite metadata indicating that patches existed. On October 9, I retrieved the patches and verifier reports for all three trials selected for a follow-up check. Record the date, paths tried, and access result: a failed retrieval establishes an access problem at that time, not that the artifact does not exist. One reachable receipt establishes access for that trial; it does not establish complete coverage.
 
 While you're there, look for the conflicts-of-interest statement. None of a producer's commercial relationships are conflicts when the artifact is marketing; each of them is a conflict when the artifact is asked to be science.
 
 ## 6. Run the answer key
 
-Costs about a dollar, and it has caught a defect in every benchmark I've pointed it at. Apply each task's own reference solution and run the task's own grader. That's the whole check. [DeepSWE](/auditing-deepswe): 4 of 113 golds failed their own verifiers. [SWE-bench Pro](/how-not-to-run-swebench-pro): 3 of 731. [Terminal-Bench 2.1](/terminal-bench-frame): 6 of 89.
+In my DeepSWE run this cost under a dollar; the cost depends on the benchmark and environment. Apply each task's own reference solution and run the task's own grader. That's the whole check. [DeepSWE](/auditing-deepswe): 4 of 113 golds failed their own verifiers. [SWE-bench Pro](/how-not-to-run-swebench-pro): 3 of 731. [Terminal-Bench 2.1](/terminal-bench-frame): 6 of 89.
 
 An answer key asserted correct but never run against its own test is a confabulation, a plausible artifact nobody checked, and a task whose gold cannot pass cannot anchor any verdict built on it. A panel of annotators signing off on the reference solutions does not substitute, because attestation is reading and the defect only shows under execution; every failing gold above shipped from a benchmark whose authors believed it correct. This is the highest-yield dollar in benchmark auditing, it requires no model, and it doubles as the pre-ship check the makers should have run.
 
@@ -84,7 +85,17 @@ When golds fail, quarantine rather than adjudicate. Some failures are your harne
 
 Before running it, check whether they already do. Frontier-Bench instructs every runner to execute the oracle five times before trusting a result and validates it in CI on every task PR, which is the first time this check has come back empty by policy rather than by luck. That is the outcome the check exists to produce, and a maker who has internalized it deserves the credit in writing.
 
-## 7. Read what the assertions pin
+## 7. Replay alternative submissions
+
+A passing reference solution establishes that the grader accepts that solution in that environment. It does not establish that the grader accepts other correct solutions. My DeepSWE v1.1 audit overreached here: improved gold replay became a broader reassurance about scoring. [Epoch’s subsequent review](https://epoch.ai/benchmarks/deepswe/review) identified interference between hidden and agent-written tests. Reproducing two cases showed that minimal test-only repairs made all scored tests pass without changing production code.
+
+Start with published submissions, so the check needs no new model run. Include submissions that add tests, edit existing tests, or share helpers across files. Replay the exact submitted patch through the verifier’s preparation steps. Inspect compilation and setup failures before treating them as implementation failures. For any suspected interference, make the smallest repair that isolates it, preserve the hidden assertions, and rerun every configured scored test. If failures remain, the interference is real but does not by itself establish that the submission deserved a passing score.
+
+On October 9, 2026, this check reproduced two of Epoch’s examples. In `onedump`, renaming three agent tests that collided with hidden test names made all 88 configured scored nodes pass. In `actionlint`, restoring a test helper removed by the verifier made all 200 pass. Both published submissions had received zero. These were local macOS runs using the pinned source and official test selections, not exact Docker replays; the [scripts, patches, and logs](/assets/deepswe-epoch-validation-2026-10-09.zip) record that boundary. They support two false-negative findings, not validation of Epoch’s full list or proof of complete implementation correctness.
+
+Gold replay checks one accepted implementation. Alternative-submission replay checks whether the grader rejects another for reasons outside the task requirements. Requiring both would have exposed the coverage gap in my v1.1 audit and blocked its broad reassurance. Finding these particular bugs would still have depended on the submissions selected. Record that selection; passing a few examples does not establish a low error rate.
+
+## 8. Read what the assertions pin
 
 Cheap, and it catches oracle sins, where the grader checks the wrong thing. Open the tests and classify every exact-value assertion by one question: how would a solver without the reference obtain this value? [ProgramBench](/programbench-measures-recall) sorted into three bins. Discoverable values come from the materials at hand. Brute-searchable values live in a finite space too large for the budget. Recall-only values are the output of a hash, a cipher, a codec, something no observation reproduces, and one such value behind a conjunctive metric puts the whole task beyond the stated construct. Twenty-one ProgramBench programs carried a verified recall witness, which is why a zero-percent resolve rate across nine models measured recall rather than the reconstruction the paper claimed.
 
@@ -92,15 +103,15 @@ The same read catches goldens that encode one implementation's incidentals where
 
 Then ask a question one step earlier: where do the verifier's inputs come from? On a benchmark that grades in a separate container, some of them arrive from the run and some are baked into the verifier's own image, and the tests look identical either way. In Frontier-Bench's `cargo-flight-dispatch` the verifier image copies its own pristine `/app/data/`, then executes the agent's code against that copy. The verdict is a function of the artifact and a *restored* world rather than the world the run actually left. Damage to those inputs is not merely unnoticed; it is undone before grading. Call it environment reconstitution, and treat it as the self-capturing golden's structural cousin: in both, the grader supplies the conditions of its own success. Its census is cheap, since the reconstituted paths are visible in the verifier's Dockerfile.
 
-## 8. Probe what pins the graded value
+## 9. Probe what pins the graded value
 
-Cheap and mostly mechanical, and it catches spec sins, where passing means recovering the author's unstated choice rather than solving the stated problem. The [determinacy audit](/a-determinacy-audit-of-swebench-pro) runs in two tiers. The mechanical spine: a model proposes what to grep for, the exact file and string a from-codebase solver would need to find, and you run the grep yourself; when the graded constant appears nowhere outside the gold patch and the hidden test, no reading of the materials produces it, and the verdict rests on the grep, so the tier carries no model judgment. That alone proved 11.4% of SWE-bench Pro underdetermined.
+Cheap and mostly mechanical, and it catches spec sins, where passing means recovering the author's unstated choice rather than solving the stated problem. The [determinacy audit](/a-determinacy-audit-of-swebench-pro) runs in two tiers. The mechanical spine: a model proposes a graded constant and where a solver might find it, then a search checks the visible materials. The original audit classified 11.4% of SWE-bench Pro in this tier. The search result is mechanical; the conclusion needs a separate warrant. A literal can be absent yet derivable from an algorithm, a convention, or other supplied values. Record why those routes cannot determine it, or exhibit two implementations consistent with the visible contract that the hidden grader treats differently. A grep miss alone is not proof of underdetermination.
 
-The judgment tier: one model family constructs two faithful readings of the prose with verbatim spans, an independent family tries to refute the split, and only survivors count. Together, a proven floor of 15% on Pro; the same instrument put [DeepSWE v1.1's](/auditing-deepswe-v1-1) floor at about 2.7%, which is what a tight benchmark looks like.
+The judgment tier: one model family constructs two faithful readings of the prose with verbatim spans, an independent family tries to refute the split, and only survivors count. Together, the audit reported a 15% floor on Pro. The same instrument put [DeepSWE v1.1's](/auditing-deepswe-v1-1) floor at about 2.7%. That lower bound does not show that defects are rare: the search can miss cases, and this check says nothing about grader interference.
 
-The classes are worth memorizing because they recur everywhere. *Airtight*: the graded constant exists only in the gold and the test. *Misdetermined*: the codebase determines one value and the test grades another. *Plural*: the codebase or the prose licenses two readings and the test pins one silently. Claim underdetermination only on positive evidence, never on a failure to find a convention, and report a floor rather than a rate.
+The classes are worth memorizing because they recur everywhere. *Airtight*: the graded value is neither supplied nor derivable from the visible contract, with positive evidence for that conclusion. *Misdetermined*: the codebase determines one value and the test grades another. *Plural*: the codebase or the prose licenses two readings and the test pins one silently. Claim underdetermination only on positive evidence, never on a failure to find a convention, and report a floor when the search was targeted rather than representative.
 
-## 9. Mutate the gold and regrade
+## 10. Mutate the gold and regrade
 
 Cheap, model-free, and it catches the frame sin, the one clause almost no benchmark writes down: the grader must guard what the task never named. Take the reference solution, append one careless accident, `rm -rf .git` or a deleted file the solution never touched, and re-run the official grader. [On Terminal-Bench 2.1](/terminal-bench-frame), 40 of 83 gold-passing tasks still scored 1 after a careless deletion inside their own workspace, and all 83 passed after off-task user assets were wiped, an outcome final-state grading entails. The reward ordering that falls out is the sin in one row: a destructive completion scores 1, a safe failure scores 0, and the outcome users fear most outranks the harmless one.
 
@@ -112,13 +123,13 @@ Then look for the exception and invert it. Terminal-Bench had exactly one task w
 
 The frame check generalizes to any benchmark that grades environment state, and the fix generalizes too: manifest the world at agent handoff, diff the final state against it, and gate the delta on the reference solution's own footprint. The oracle the benchmark already ships is the frame it never wrote. Since separate-verifier isolation is where harnesses are heading for good security reasons, this is a harness-architecture finding more than a benchmark one, and the capture belongs in the runner where every dataset on it inherits the fix.
 
-## 10. Ask what survives publication
+## 11. Ask what survives publication
 
 A reading of the design, no run required, and it catches decay sins. Once instances reach the public web, a high score is ambiguous between getting better at the task and getting better at remembering the answer, and [regeneration only re-prices that ambiguity](/reprice-contamination) when the scored target co-varies with the regenerated world. If the correct answer is a fixed point of the whole grader family, regeneration does nothing, and memorizing it survives. So ask three questions. What exactly is scored, the state or the artifact? Would the scored value change on a reseeded instance? And against which adversary does the claim hold: a verbatim replayer, a memorizer with cheap transport, or a model fine-tuned on the generator itself?
 
 The concrete case that separates the questions: on regenerated τ-bench worlds, a memorized final answer passes zero percent of instances while a leaked state-general query passes every one, because the query is what the grader scores and the query never changes. So state the conclusion scoped to an adversary, since "resists verbatim replay" and "resists fixed-answer memorization" are different claims, and a benchmark that cannot say which one its number makes hasn't priced its own decay.
 
-## 11. If a score is the claim, audit the run
+## 12. If a score is the claim, audit the run
 
 Everything above audits the instrument. When someone reports a number, the run is a second instrument with its own sins, and [I committed most of them myself](/how-not-to-run-swebench-pro) before learning to name them. Oracle leakage through the prompt: restoring held-out tests bought 46 points on a 50-instance sample, half the benchmark's apparent difficulty. Oracle leakage through the capture: grade a raw diff and you grade the agent's tampering with the tests.
 
@@ -132,15 +143,15 @@ Audit yourself first. Every campaign in this series began with a false positive 
 
 Make the validity gate symmetric. When I added the witness check above, I first used it only to void suspicious *findings*, leaving suspicious exonerations to stand. That is backwards in the direction that flatters the auditor, and it hid a bug for two more tasks: a broken splice was scoring as the grader catching damage. A gate that fires on one verdict and not its opposite is not a gate, it is a thumb. Void both directions or neither, and publish the failing runs so a reader can tell which.
 
-Report floors, never rates. A defect you can exhibit is a lower bound; the tier you couldn't adjudicate stays out of the count, and the number only grows with more search.
+Match the numerical claim to the sampling method. Targeted searches establish defect floors: confirmed cases divided by the stated task population, with unresolved cases listed separately. A low floor cannot establish a low defect rate. Representative sampling can support a rate estimate with uncertainty, provided the sampling and adjudication procedures support that inference. State which kind of claim you are making.
 
-Make every claim a rerun. The warrant is the re-derivable receipt, the pinned image, the committed diff, the grader's own reward file, never the model's say-so and never yours. An audit is a rerun, so it has to be re-runnable to be an audit.
+Make every claim inspectable. Record the benchmark version and commit, environment or image digest, task and trial IDs, artifact retrieval date, commands, and results. Distinguish source inspection, reproduced failure, and a controlled repair that changes the outcome. Preserve logs and patches, including environment deviations, so another reader can rerun an execution claim or check an argument from the source. A model's judgment can guide the search; it cannot replace the receipt.
 
-Bound the claim. "Three things hold, and no more" beats a diagnosis you can't support; cause-finding is the maintainer's job, and an auditor who adjudicates beyond the receipts is spending credibility the receipts didn't earn.
+Bound the claim. "Three things hold, and no more" beats a diagnosis you can't support; attribute a cause only when the evidence isolates it. A controlled repair can support that attribution; otherwise report the cause as unresolved.
 
 Give right of reply. Send the findings to the authors before or as you publish, link their response when it comes, and file the actionable part where they work, as an issue or a PR. The audits in this series that produced fixes are the ones that arrived as fixes.
 
-And build the instrument so it can come back empty. An audit that always finds sins is a press release. The determinacy floor of 2.7% on DeepSWE v1.1 and the 26 Terminal-Bench tasks that caught the deletion are as much the method working as the failures are, because a check that cannot exonerate cannot convict.
+And build the instrument so it can come back empty. Record successful controls as precisely as failures: the 26 Terminal-Bench tasks that caught the deletion passed that specific check. DeepSWE v1.1's improved gold replay passed a different check. Neither result clears untested failure modes, and a low defect floor is not an exoneration. Distinguish passed, failed, unresolved, and not tested for each check.
 
 Name the cure, not only the disease. When the finding is that a number measures the wrong thing, say what number would measure the right one, and the maker has something concrete to argue with instead of a diagnosis to wave off. For MirrorCode the cure is a preregistered profile, whole-task success and time-to-success against program size, in place of one collapsed percentage. Hold the proposed metric to the same standard as the audit: I floated a tidy speed-and-accuracy pair first, and it took a round of review to see the accuracy interval was leaning on a test-independence assumption the suites do not meet.
 
