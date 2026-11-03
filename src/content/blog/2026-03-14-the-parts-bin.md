@@ -16,7 +16,7 @@ Every information-processing system is built from the same six operations. Most 
 
 **Diagnose.** The agent isolates Filter. Then drills deeper: is it the precondition (wrong input from upstream), the operation (wrong mechanism), the postcondition (contract not satisfied), the fidelity (contract satisfied but too lossy), or the scale (right operation, wrong timescale)?
 
-**Prescribe.** The agent queries the grid. The retention problem is Filter × flat data × predicate semantics. Candidates: threshold filtering, Bloom filter, propensity score gate. The agent ranks by fidelity and cost, returns the short list.
+**Prescribe.** The agent queries the grid. The retention problem is Filter × flat data × predicate semantics. Candidates: threshold filtering, propensity score gate. The agent ranks by fidelity and cost, returns the short list.
 
 **Validate.** The agent checks that the prescribed operation's postcondition matches the next step's precondition. Threshold filtering outputs a strictly smaller subset. Does Attend expect that? Yes. Ship it.
 
@@ -30,9 +30,9 @@ Machine-readable version: [`src/data/parts-bin.yml`](https://github.com/kimjune0
 
 **Cache** (encoded → indexed): hash tables, B-trees, inverted indexes. [Idreos (2018)](https://stratos.seas.harvard.edu/publications/periodic-table-data-structures) built a periodic table from five design primitives. Soar's [RETE network](https://en.wikipedia.org/wiki/Rete_algorithm) is the exemplar: match cost stays proportional to change, not total knowledge.
 
-**Filter** (indexed → selected, strictly smaller): WHERE clauses, k-NN radius pruning, Pareto filtering, [graph causal filters](/return-to-sender). One per selection semantic: predicate, similarity, dominance, causal. The [derivation](/the-natural-framework#six-steps) proves a gate must exist whenever outputs are a proper subset of inputs. Filter decides *which items pass*. Attend decides *how the survivors relate*.
+**Filter** (indexed → selected, strictly smaller): WHERE clauses, k-NN radius pruning, Pareto filtering, [graph causal filters](/return-to-sender). One per selection semantic: predicate, similarity, dominance, causal. The [derivation](/the-natural-framework#corollary-1) proves a gate must exist whenever outputs are a proper subset of inputs. Filter decides *which items pass*. Attend decides *how the survivors relate*.
 
-**Attend** ((policy, selected) → ranked, diverse, bounded): MMR, [git bisect](https://git-scm.com/docs/git-bisect-lk2009), dot-product attention, [poset diverse top-k](/filling-the-blanks#3-diverse-top-k-from-a-poset). git bisect is the surprise: a version control tool doing the same job as MCTS, picking the single query that maximizes worst-case elimination on a DAG. The grid found it; domain expertise wouldn't. Policy is a routing function; control separates from data ([derived](/the-natural-framework#six-steps)). Most ranking algorithms satisfy order but miss diversity and bound. [Soar](/diagnosis-soar)'s [staged preference resolution](https://soar.eecs.umich.edu/soar_manual/02_TheSoarArchitecture/) is the rare exception: reject, then better/worse, then best/worst, then indifferent — order, diversity, and bound in one mechanism. Forty years of agent-building produced it.
+**Attend** ((policy, selected) → ranked, diverse, bounded): MMR, [git bisect](https://git-scm.com/docs/git-bisect-lk2009), dot-product attention, [poset diverse top-k](/filling-the-blanks#3-diverse-top-k-from-a-poset). git bisect is the surprise: a version control tool doing the same job as MCTS, picking the single query that maximizes worst-case elimination on a DAG. The grid found it; domain expertise wouldn't. Policy is a routing function; control separates from data ([derived](/the-natural-framework#corollary-2)). Most ranking algorithms satisfy order but miss diversity and bound. [Soar](/diagnosis-soar)'s [staged preference resolution](https://soar.eecs.umich.edu/soar_manual/02_TheSoarArchitecture/) is the rare exception: reject, then better/worse, then best/worst, then indifferent — order, diversity, and bound in one mechanism. Forty years of agent-building produced it.
 
 **Consolidate** (persisted → policy′): gradient descent, decision tree induction, [EBC/chunking](https://en.wikipedia.org/wiki/Soar_(cognitive_architecture)), [partial evaluation](https://en.wikipedia.org/wiki/Partial_evaluation). The backward pass: reads from Transmit, writes to the substrate, reshaping how each forward stage processes next cycle. Its inner loop is itself a pipe (perceive, filter, attend, transmit) and the [data processing inequality](/the-handshake#data-processing-inequality) guarantees termination. [I-Con (2025)](https://mhamilton.net/icon) built a periodic table for this column; a blank cell predicted a new algorithm that beat the state of the art. Soar is the most instructive failure: every forward stage worked, but Consolidate was [missing for episodic and semantic memory](/diagnosis-soar#the-forgetting-asymmetry). The stores grew without bound and [perception narrowed to compensate](/diagnosis-soar#the-dominoes) — a clogged drain forcing the valve shut.
 
@@ -62,7 +62,7 @@ Six stage-specific:
 <li><strong>Supervision signal</strong> <em>(Consolidate)</em>: unsupervised, supervised, self-supervised</li>
 </ol>
 
-Select a plane to explore. Data is pulled from [`parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/_data/parts-bin.yml). Add a grid there and it appears here.
+Select a plane to explore. Data is pulled from [`parts-bin.yml`](https://github.com/kimjune01/june.kim/blob/master/src/data/parts-bin.yml). Add a grid there and it appears here.
 
 <iframe src="/assets/pivot-table.html" style="width:100%;border:none;min-height:320px;" id="pivot-frame"></iframe>
 <script>

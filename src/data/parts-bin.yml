@@ -1,9 +1,8 @@
 # The Parts Bin — structured taxonomy
 # Derived from The Natural Framework proof.
-# Ten axes define the design space. Five planes are worth drawing.
+# Eleven axes define the design space (ten in the post, plus identification_control).
 # See /the-parts-bin for the full analysis.
 #
-# Jekyll: {{ site.data.parts-bin.columns }}
 # Agent:  load YAML, query by step/store/grid coordinates.
 
 axes:
@@ -89,7 +88,7 @@ planes:
 # Plane 5 data: stage × data structure (canonical algorithm per cell)
 stage_structure_grid:
   - stage: perceive
-    flat: "JSON parsing"
+    flat: ["JSON parsing", "Quantization (Zhao 2023)"]
     sequence: ["A/D conversion", "Sinusoidal positional encoding (Vaswani 2017)", "FIX/ITCH protocol parsing"]
     tree: "XML parsing"
     graph: ["Edge list parsing", "RAG retrieval (Zhao 2023)", "MCP tool protocol (Arunkumar 2026)", "ABI event log decoding"]
@@ -119,14 +118,14 @@ stage_structure_grid:
     refs:
       graph: "https://doi.org/10.14778/2536258.2536263"
   - stage: consolidate
-    flat: ["Gradient descent", "Delta-bar-delta (Soar)", "EMA convergence gate (prescription-soar)", "Scaling laws (Zhao 2023)", "RLHF (Zhao 2023)", "DPO (Zhao 2023)", "LoRA (Zhao 2023)", "Warmup + inverse-sqrt schedule (Vaswani 2017)", "AMM curve update (x·y=k)", "HFT strategy parameter optimization"]
+    flat: ["Gradient descent", "Delta-bar-delta (Soar)", "EMA convergence gate (prescription-soar)", "RLHF (Zhao 2023)", "DPO (Zhao 2023)", "LoRA (Zhao 2023)", "Warmup + inverse-sqrt schedule (Vaswani 2017)", "AMM curve update (x·y=k)", "HFT strategy parameter optimization"]
     sequence: ["Grammar induction", "Instruction tuning / SFT (Zhao 2023)", "Reflexion / verbal reinforcement (Arunkumar 2026)", "Episodic→semantic compression / MemInsight (Arunkumar 2026)", "Difficulty adjustment (Bitcoin)"]
     tree: ["Decision tree induction", "EBC/Chunking (Soar)", "Partial evaluation (Futamura, 1971)"]
     graph: ["GNN training", "Temporal graph coarsening (prescription-soar)", "Self-supervised subgraph representation learning (blockchain)"]
     partial_order: ["Lattice learning (thin)"]
     embedding_space: ["Triplet-loss metric learning"]
   - stage: transmit
-    flat: ["WAL append", "Quantization (Zhao 2023)", "Tick database append (kdb+/QuestDB)"]
+    flat: ["WAL append", "Tick database append (kdb+/QuestDB)"]
     sequence: ["SSTable flush", "Delta-based episodic storage (Soar)", "NL episode stream / Generative Agents (Arunkumar 2026)"]
     tree: ["Git commit", "Blockchain append (consensus-validated WAL)"]
     graph: ["Graph DB commit"]
@@ -415,6 +414,14 @@ columns:
         cost: "O(n)"
         ref: "https://docs.soliditylang.org/en/latest/abi-spec.html"
         source: "Ethereum ABI specification (Wood, 2014)"
+      - name: Quantization
+        precondition: Trained model weights in FP32/FP16
+        postcondition: Weights stored at reduced precision (INT8/INT4), behavior approximately preserved
+        iteration_stable: true
+        fidelity: lossy  # precision reduction, bounded error; lossy, so Perceive (fixed codebook), not Transmit
+        variation: none
+        cost: "O(n) to quantize"
+        source: "Dettmers et al. (2022); Zhao et al. (2023) §9.5"
 
   # ── Cache ─────────────────────────────────────────────────
   - name: cache
@@ -1330,14 +1337,6 @@ columns:
         cost: "O(1) per step"
         ref: "https://arxiv.org/abs/1706.03762"
         source: "Vaswani et al. (2017)"
-      - name: Scaling laws
-        precondition: Compute budget + data budget + parameter count
-        postcondition: Predicted loss as power law of compute, data, and parameters — guides allocation before training
-        iteration_stable: true
-        fidelity: lossy  # empirical fit, not exact
-        variation: none
-        cost: "O(1) to evaluate"
-        source: "Kaplan et al. (2020); Hoffmann et al. (2022); Zhao et al. (2023) §4.3"
       - name: RLHF
         precondition: Pre-trained model + human preference comparisons
         postcondition: Reward model trained on preferences, policy optimized against it via PPO
@@ -1495,14 +1494,6 @@ columns:
         fidelity: lossless
         variation: none
         cost: "O(n)"
-      - name: Quantization
-        precondition: Trained model weights in FP32/FP16
-        postcondition: Weights stored at reduced precision (INT8/INT4), behavior approximately preserved
-        iteration_stable: true
-        fidelity: lossy  # precision reduction, bounded error
-        variation: none
-        cost: "O(n) to quantize"
-        source: "Dettmers et al. (2022); Zhao et al. (2023) §9.5"
       - name: NL episode stream (Generative Agents)
         precondition: Agent observations and actions as natural language
         postcondition: Timestamped episode stream persisted, retrievable by recency/importance/relevance
