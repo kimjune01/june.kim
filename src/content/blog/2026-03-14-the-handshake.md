@@ -41,7 +41,7 @@ A morphism that preserves its contract through composition is *contract-preservi
 
 Compaction reorganizes a cache but guarantees nothing about future processing. Consolidation guarantees the system changes. Wrong morphism type, same slot.
 
-The contracts encode a second axis: which store. Perceive, Cache, Filter, and Transmit operate on the data stream. Attend reads policy from the substrate ([Corollary 2](/the-natural-framework#six-steps)). Consolidate writes policy back into the substrate as the backward pass. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
+The contracts encode a second axis: which store. Perceive, Cache, Filter, and Transmit operate on the data stream. Attend reads policy from the substrate ([Corollary 2](/the-natural-framework#corollary-2)). Consolidate writes policy back into the substrate as the backward pass. The separation is derived: if policy shares a pool with data, variance corrupts the governing criterion within one iteration.
 
 Four claims follow from the contracts:
 1. **If contracts match, algorithms are swappable.** Interface programming. Defensible now. (`swappable`)
@@ -87,7 +87,7 @@ Rate-distortion theory provides the analogy: each morphism has a distortion cost
 
 The budget gets spent in the competitive core: Filter, Attend, Consolidate. The mechanism inside that core has a name. [Desimone & Duncan (1995)](https://doi.org/10.1146/annurev.ne.18.030195.001205) described biased competition: stimuli compete for neural representation, top-down bias resolves the competition. [The Natural Framework](/the-natural-framework) derives the same separation: control must be independent of data (Corollary 2), stored separately (Corollary 3), and applied through a read interface (Attend). Desimone & Duncan observed it in neurons. The derivation shows it must exist in any bounded selective system.
 
-The formalization came later, piecewise. [Reynolds & Heeger (2009)](https://doi.org/10.1016/j.neuron.2009.01.002) gave a normalization model, [Boerlin & Bhatt (2011)](https://arxiv.org/abs/1108.1277) gave a spike-coding model. Nobody placed biased competition inside a category.
+The formalization came later, piecewise. [Reynolds & Heeger (2009)](https://doi.org/10.1016/j.neuron.2009.01.002) gave a normalization model, [Boerlin & Denève (2011)](https://doi.org/10.1371/journal.pcbi.1001080) gave a spike-coding model. Nobody placed biased competition inside a category.
 
 Filter and Attend are the morphisms that implement biased competition. Filter suppresses losers (guarantee: output strictly smaller). Attend ranks survivors with lateral inhibition (guarantee: winners are dissimilar). One candidate model for the diversity guarantee is the [Determinantal Point Process](https://arxiv.org/abs/1207.6083), a probability distribution over subsets that assigns higher weight to diverse selections. DPPs are well-defined probability measures on subsets.
 
@@ -104,7 +104,7 @@ Three open directions:
 
 ### Trace
 
-Joyal, Street, Verity (1996): traced monoidal categories. The feedback loop (Transmit → Perceive) has the structure of a categorical trace (`TracedPipeline`): output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch.
+[Joyal, Street, and Verity (1996)](https://doi.org/10.1017/S0305004100074338): traced monoidal categories. The feedback loop (Transmit → Perceive) has the structure of a categorical trace (`TracedPipeline`): output feeds back as input. The correct typing depends on how environment and internal state interact: what feeds back, what enters from outside, what exits as behavior. Formalizing this requires specifying those components and verifying that the resulting morphism satisfies the trace axioms in Stoch.
 
 In the simpler view: ignore the environment boundary, and the six-step composition is a self-map in Stoch, a Markov chain on information states. But bare Markov chains never worked for cognition: n-grams plateau, PageRank has no taste.
 
@@ -138,22 +138,25 @@ The information budget constrains all three: the budget must balance, the credit
 
 ### Type check
 
-The death conditions apply within a single domain. The next question is whether the structure translates across domains. Eilenberg & Mac Lane (1945): functors preserve composition. If domain A (neurons) and domain B (immune system) both implement six roles with compatible type signatures, the mapping between them is a candidate functor: object map, morphism map, composition preservation. Verifying this requires defining both categories explicitly. The vocabulary makes the translation precise enough to attempt.
+The death conditions apply within a single domain. The next question is whether the structure translates across domains. [Eilenberg & Mac Lane (1945)](https://doi.org/10.1090/S0002-9947-1945-0013131-6): functors preserve composition. If domain A (neurons) and domain B (immune system) both implement six roles with compatible type signatures, the mapping between them is a candidate functor: object map, morphism map, composition preservation. Verifying this requires defining both categories explicitly. The vocabulary makes the translation precise enough to attempt.
 
 Prior art:
-- Phillips & Wilson (2010) — categorical cognition, representations not flow
-- Coecke (2010) — DisCoCat, syntax → semantics functors, meaning not processing
-- Rosen (1991) — (M,R)-systems, biological closure, not pipeline composition
-- Spivak (2013) — operad of wiring diagrams, composable modules, not cognitive
-- Bradley (2021) — enriched categories of language, probability as hom-objects, semantics not processing
-- Desimone & Duncan (1995) — biased competition, empirical mechanism, no math
-- Reynolds & Heeger (2009) — normalization model of attention, quantitative but not categorical
+- [Campbell (1960)](https://doi.org/10.1037/h0040373) — blind variation and selective retention across evolution, learning, and science; one selection step, untyped
+- [Miller (1978)](https://en.wikipedia.org/wiki/Living_systems) — living systems theory, the same information-processing subsystems from cell to society; inventory, no composition
+- [Hull, Langman, & Glenn (2001)](https://doi.org/10.1017/S0140525X01004162) — one account of selection for biology, immunology, and behavior; process, no contracts
+- [Phillips & Wilson (2010)](https://doi.org/10.1371/journal.pcbi.1000858) — categorical cognition, representations not flow
+- [Coecke, Sadrzadeh, & Clark (2010)](https://arxiv.org/abs/1003.4394) — DisCoCat, syntax → semantics functors, meaning not processing
+- [Rosen (1991)](https://en.wikipedia.org/wiki/Robert_Rosen_(biologist)) — (M,R)-systems, biological closure, not pipeline composition
+- [Spivak (2013)](https://arxiv.org/abs/1305.0297) — operad of wiring diagrams, composable modules, not cognitive
+- [Bradley, Terilla, & Vlassopoulos (2021)](https://arxiv.org/abs/2106.07890) — enriched categories of language, probability as hom-objects, semantics not processing
+- [Desimone & Duncan (1995)](https://doi.org/10.1146/annurev.ne.18.030195.001205) — biased competition, empirical mechanism, no math
+- [Reynolds & Heeger (2009)](https://doi.org/10.1016/j.neuron.2009.01.002) — normalization model of attention, quantitative but not categorical
 
-The gap: the sequential processing pipeline as morphisms in a Markov category with traced feedback across domains. Representations (Phillips), meaning (Coecke), closure (Rosen), semantics (Bradley), mechanism (Desimone & Duncan). All structure, no flow.
+The gap: typed flow. Campbell, Hull, and Miller trace the flow across domains, untyped: selection is one step, and nothing checks the composition. The categorical work has the types, applied to representation (Phillips), meaning (Coecke), closure (Rosen), and semantics (Bradley). Desimone & Duncan and Reynolds & Heeger give the mechanism without the category. The join is new: the processing pipeline as morphisms in a Markov category, selection split into a gate and a diversity-enforcing ranker, each postcondition checked as the next precondition, with traced feedback across domains.
 
 ### Hard question, answered
 
-Research asks: "construct η and μ explicitly and prove the monad laws." The Giry monad provides them. Dirac delta and integration. These are well-defined, natural, and have clear information-processing interpretations. The monad laws hold for the Giry monad. This is proven mathematics (Giry 1982).
+Research asks: "construct η and μ explicitly and prove the monad laws." The Giry monad provides them. Dirac delta and integration. These are well-defined, natural, and have clear information-processing interpretations. The monad laws hold for the Giry monad. This is proven mathematics ([Giry 1982](https://doi.org/10.1007/BFb0092872)).
 
 The six roles are morphisms inside the Giry monad's Kleisli category. Five compose forward; Consolidate reads from Transmit and writes to the substrate. The composition argument is by induction. Base case: one cycle. Five forward morphisms compose; each postcondition matches the next precondition; Transmit's output matches Perceive's input. Consolidate reads persisted outcomes and reshapes parameters for the next cycle.
 
@@ -199,7 +202,7 @@ Transmit is the last forward stage: it emits ranked output for the next cycle's 
 **"Filter and Attend could be one step."**
 They operate on different stores. Filter gates the data stream: does this item pass the criterion? Attend reads the policy store and applies it: given the survivors, which are worth pursuing? One is per-item admissibility. The other is slate-level ranking with diversity. Merging them conflates "does it pass?" with "how does it relate to everything else that passed?" Those are different questions with different inputs. [The Parts Bin](/the-parts-bin) catalogs operations for each. The catalogs do not overlap.
 
-Survival over many iterations forces the separation. The [stochasticity proof](/the-natural-framework#six-steps) shows Attend must be stochastic: a deterministic selector over a finite state space eventually cycles, diversity dies, the loop dies. Filter requires the opposite: reliable gating, because false positives compound over iterations. Each bad item that passes propagates downstream and is never re-filtered. One function cannot satisfy both contracts across unbounded iterations.
+Survival over many iterations forces the separation. The [stochasticity proof](/the-natural-framework#stochasticity) shows Attend must be stochastic: a deterministic selector over a finite state space eventually cycles, diversity dies, the loop dies. Filter requires the opposite: reliable gating, because false positives compound over iterations. Each bad item that passes propagates downstream and is never re-filtered. One function cannot satisfy both contracts across unbounded iterations.
 
 A merged function could internally decompose into a reliable gating phase followed by a stochastic ranking phase. But internal decomposition *is* role separation. The framework does not require separate executables, only distinct morphisms with distinct contracts.
 
