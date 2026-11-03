@@ -3,6 +3,8 @@ variant: post
 title: "Bios Sphere Talk"
 ---
 
+*[Slides](https://docs.google.com/presentation/d/1PNXNSMPYl1X3Ugg2xMpusawjKSbtDRIQyhOLjmy3TkE/edit?slide=id.h58e7b5466c2aa825_0_69#slide=id.h58e7b5466c2aa825_0_69)*
+
 There's a lot of talk about how we can make better agents. But these agents aren't exactly reliable. If they were perfect, us software engineers would be writing compilable prose all day without looking at the compiled code. For now, we still have to check agent outputs in code reviews. You can ask other agents to review, but even the review agents still output slop and junk sometimes. But we're not going back to manual coding, that would be like going back to the stone age. So how do we maintain quality in agent outputs?
 
 To find out, I needed more agentic experience and experiment samples. So I went out looking for the problems in open source. The issues were on github, and PRs needed to be reviewed by maintainers on real projects. What would it take to get these coding agents to pass maintainers' scrutiny?
