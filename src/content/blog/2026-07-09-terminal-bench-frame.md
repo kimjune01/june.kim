@@ -206,7 +206,7 @@ The whole audit, every per-task receipt, and the code that regenerates these tab
 
 ## Disclosure {-}
 
-We shared these findings with the Terminal-Bench corresponding authors on July 9, 2026, with a standing right of reply; any response will be linked here. The actionable recommendations are filed as [terminal-bench#1459](https://github.com/harbor-framework/terminal-bench/issues/1459).
+We shared these findings with the Terminal-Bench corresponding authors on July 9, 2026, with a standing right of reply; any response will be linked here. The actionable recommendations are filed as [terminal-bench#1429](https://github.com/harbor-framework/terminal-bench/issues/1429).
 
 ## References {-}
 
